@@ -1,3 +1,21 @@
+# Various IDEs and Editors
+**/*~
+
+# Mac OSX temporary files
+**/.DS_Store
+
+# dfx temporary files
+.dfx/
+
+# vessel packages
+.vessel
+
+dist/
+*.
+!/.gitignore
+*/.dfx/*
+
+
 # https://github.com/github/gitignore/blob/2bb963b16a1957c865335e53537036c2e97399b5/Global/macOS.gitignore
 
 # General
@@ -227,3 +245,6 @@ blockchain/**/secrets/gen
 # ignore compiled solidity contracts
 bin
 bin/*
+
+# ignore declarations
+src/declarations
