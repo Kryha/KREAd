@@ -13,8 +13,7 @@
   },
   "workspaces": [
     "frontend/",
-    "backend/",
-    "types/"
+    "backend/"
   ],
   "browserslist": [
     "last 2 chrome version",
