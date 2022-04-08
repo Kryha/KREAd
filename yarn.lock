@@ -7278,7 +7278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@npm:^2.1.2, fsevents@npm:^2.1.3, fsevents@npm:~2.3.2":
+"fsevents@npm:^2.1.2, fsevents@npm:^2.1.3, fsevents@~2.3.2":
   version: 2.3.2
   resolution: "fsevents@npm:2.3.2"
   dependencies:
@@ -12967,17 +12967,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:1.18.1":
-  version: 1.18.1
-  resolution: "resolve@npm:1.18.1"
-  dependencies:
-    is-core-module: ^2.0.0
-    path-parse: ^1.0.6
-  checksum: bab3686fa87576ac7e7f68481e25494f99b8413f3bc5048c5284eabe021f98917a50c625f8a1920a87ffc347b076c12a4a685d46d5fc98f337cf2dd3792014f4
-  languageName: node
-  linkType: hard
-
-"resolve@npm:^1.10.0, resolve@npm:^1.12.0, resolve@npm:^1.14.2, resolve@npm:^1.17.0, resolve@npm:^1.18.1, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.0, resolve@npm:^1.3.2":
+"resolve@^1.14.2, resolve@^1.19.0, resolve@^1.20.0, resolve@^1.22.0, resolve@npm:^1.10.0, resolve@npm:^1.12.0, resolve@npm:^1.17.0, resolve@npm:^1.18.1, resolve@npm:^1.3.2":
   version: 1.22.0
   resolution: "resolve@npm:1.22.0"
   dependencies:
@@ -12990,13 +12980,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^2.0.0-next.3":
+resolve@^2.0.0-next.3:
   version: 2.0.0-next.3
   resolution: "resolve@npm:2.0.0-next.3"
   dependencies:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
   checksum: f34b3b93ada77d64a6d590c06a83e198f3a827624c4ec972260905fa6c4d612164fbf0200d16d2beefea4ad1755b001f4a9a1293d8fc2322a8f7d6bf692c4ff5
+  languageName: node
+  linkType: hard
+
+"resolve@npm:1.18.1":
+  version: 1.18.1
+  resolution: "resolve@npm:1.18.1"
+  dependencies:
+    is-core-module: ^2.0.0
+    path-parse: ^1.0.6
+  checksum: bab3686fa87576ac7e7f68481e25494f99b8413f3bc5048c5284eabe021f98917a50c625f8a1920a87ffc347b076c12a4a685d46d5fc98f337cf2dd3792014f4
   languageName: node
   linkType: hard
 

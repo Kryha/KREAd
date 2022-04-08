@@ -2,18 +2,18 @@
   "name": "agoric",
   "private": true,
   "version": "0.0.1",
-  "description": "Agoric First Prototype",
+  "description": "Agoric Project First Prototype",
   "scripts": {
     "build": "yarn workspaces foreach --parallel run build",
     "test": "yarn workspaces foreach --parallel run test",
     "coverage": "yarn workspaces foreach --parallel run coverage",
     "format": "prettier --write --loglevel warn '**/*.*'",
-    "lint": "yarn workspaces foreach --parallel run lint"
+    "lint": "yarn workspaces foreach --parallel run lint",
+    "refreshVSToken": "vsts-npm-auth -config .npmrc"
   },
   "workspaces": [
     "frontend/",
-    "backend/",
-    "types/"
+    "backend/"
   ],
   "browserslist": [
     "last 2 chrome version",
