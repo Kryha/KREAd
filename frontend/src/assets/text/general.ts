@@ -1,7 +1,7 @@
 export const general = {
-  notFound: "This screen doesn't exist.",
+  notFound: "this screen doesn't exist.",
   dataNotFound: "data not found",
-  goHome: "Go to home screen",
+  goHome: "go to home screen",
   appName: "Agoric Character Builder",
   character: "character",
   characters: "characters",
