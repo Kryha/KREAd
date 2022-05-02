@@ -5,6 +5,19 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@agoric/types@file:../types::locator=frontend%40workspace%3Afrontend":
+  version: 0.0.0
+  resolution: "@agoric/types@file:../types#../types::hash=77c5f6&locator=frontend%40workspace%3Afrontend"
+  checksum: b50f90b2279dc1a268a6f91d186253664a396dfce495165029ea9a15efb49265cc1e9fe3dde87d3156f4a129e79fc656ac1d60dc036ba5b416473d09197fe56d
+  languageName: node
+  linkType: hard
+
+"@agoric/types@workspace:types":
+  version: 0.0.0-use.local
+  resolution: "@agoric/types@workspace:types"
+  languageName: unknown
+  linkType: soft
+
 "@ampproject/remapping@npm:^2.1.0":
   version: 2.1.2
   resolution: "@ampproject/remapping@npm:2.1.2"
@@ -7534,6 +7547,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:frontend"
   dependencies:
+    "@agoric/types": ../types
     "@emotion/react": ^11.9.0
     "@emotion/styled": ^11.8.1
     "@mui/material": ^5.6.3
