@@ -13,5 +13,5 @@ export const general = {
   color: "color",
   sortBy: "sort by",
   latest: "latest",
-  equiped: "equiped",
+  equiped: "equipped",
 };
