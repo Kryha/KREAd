@@ -46,12 +46,39 @@ export const Label = styled.p<TextProps>`
    ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};
 `;
 
+export const BoldLabel = styled(Label)`
+  font-family: Aktiv Grotesk Medium;
+`;
+
+
 export const MenuItemName = styled.h3<TextProps>`
   font-family: Aktiv Grotesk Medium;
   font-weight: ${fontWeight.light};
   font-size: ${fontSize.title};
   line-height: 22px;
     :first-letter {
+    text-transform: capitalize;
+  }
+   ${({ customColor }): string => `color: ${customColor || color.black};`};
+`;
+
+export const NavigationTitle = styled.h3<TextProps>`
+  font-family: Aktiv Grotesk Medium;
+  font-weight: ${fontWeight.light};
+  font-size: ${fontSize.subTitle};
+  line-height: 18px;
+  :first-letter {
+    text-transform: capitalize;
+  }
+   ${({ customColor }): string => `color: ${customColor || color.black};`};
+`;
+
+export const TitleText = styled.h3<TextProps>`
+  font-family: Aktiv Grotesk Medium;
+  font-weight: ${fontWeight.light};
+  font-size: 24px;
+  line-height: 31px;
+  :first-letter {
     text-transform: capitalize;
   }
    ${({ customColor }): string => `color: ${customColor || color.black};`};

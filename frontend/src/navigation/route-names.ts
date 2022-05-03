@@ -1,3 +1,6 @@
 export const routes = {
-  root:  "/",
+  root: "/",
+  character: "/character",
+  shop: "/shop",
+  inventory: "/inventory",
 };

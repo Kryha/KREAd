@@ -23,7 +23,7 @@ export const Menu = styled(Card)`
     border-radius: ${margins.medium};
     box-shadow: none;
   }
-`
+`;
 
 export const MenuHeader = styled.div`
   display: flex;

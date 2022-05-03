@@ -1,6 +1,6 @@
 
 import { FC } from 'react';
-import { Items } from "@agoric/types";
+import { Item } from "@agoric/types";
 
 import { ImageCard, Img, Info, InfoContainer, InfoWrapper, MenuItemWrapper } from "./styles";
 import { Badge, Label, MenuItemName } from "../atoms";
@@ -10,7 +10,7 @@ import { text } from "../../assets/text";
 
 
 interface MenuItemProps {
-  items: Items[];
+  items: Item[];
 };
 
 export const MenuItem: FC<MenuItemProps> = ({ items }) => {

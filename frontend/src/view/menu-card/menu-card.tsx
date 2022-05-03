@@ -1,6 +1,6 @@
 
 import { FC } from 'react';
-import { Items } from "@agoric/types";
+import { Item } from "@agoric/types";
 import CardContent from '@mui/material/CardContent';
 import { CardHeader } from "@mui/material";
 import { ArrowUpRightIcon, text } from "../../assets";
@@ -13,7 +13,7 @@ import { routes } from "../../navigation";
 
 interface MenuCardProps {
   title: string;
-  items: Items[];
+  items: Item[];
   amount: number;
 };
 
