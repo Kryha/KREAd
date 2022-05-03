@@ -1,9 +1,9 @@
-import { FC } from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
+import { FC, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import SelectForm from '@mui/material/Select';
+
+import { FormBox, Label, SelectArrow, StyledSelect } from "./styles";
+
 
 interface Options {
   label: string;
@@ -17,21 +17,28 @@ interface SelectProps {
   options: Options[];
 };
 
-export const Select: FC<SelectProps> = ({ label, handleChange, input, options }) => {
+export const Select: FC<SelectProps> = ({ label, input, options }) => {
+  const [age, setAge] = useState("");
+
+  const handleChange = (event: any) => {
+    setAge(event.target.value);
+  };
+
   return (
-    <Box>
+    <FormBox>
       <FormControl fullWidth>
-        <InputLabel>{label}</InputLabel>
-        <SelectForm
-          value={input}
+        <Label>{label}</Label>
+        <StyledSelect
+          value={age}
           label={label}
           onChange={handleChange}
+          IconComponent={props => (<SelectArrow {...props} />)}
         >
           {options.map((option) => (
             <MenuItem value={option.value} key={option.value}>{option.label}</MenuItem>
           ))}
-        </SelectForm>
+        </StyledSelect>
       </FormControl>
-    </Box>
+    </FormBox>
   );
 }
