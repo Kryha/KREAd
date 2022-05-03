@@ -6,3 +6,4 @@ export * from "./vertical-info";
 export * from "./shop-card";
 export * from "./item-card";
 export * from "./input-fields";
+export * from "./switch-selector";
