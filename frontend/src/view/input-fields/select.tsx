@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 
@@ -17,19 +17,13 @@ interface SelectProps {
   options: Options[];
 };
 
-export const Select: FC<SelectProps> = ({ label, input, options }) => {
-  const [age, setAge] = useState("");
-
-  const handleChange = (event: any) => {
-    setAge(event.target.value);
-  };
-
+export const Select: FC<SelectProps> = ({ label, input, options, handleChange }) => {
   return (
     <FormBox>
       <FormControl fullWidth>
         <Label>{label}</Label>
         <StyledSelect
-          value={age}
+          value={input}
           label={label}
           onChange={handleChange}
           IconComponent={props => (<SelectArrow {...props} />)}
