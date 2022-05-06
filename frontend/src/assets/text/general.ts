@@ -14,4 +14,5 @@ export const general = {
   sortBy: "sort by",
   latest: "latest",
   equipped: "equipped",
+  showFull: "show full",
 };
