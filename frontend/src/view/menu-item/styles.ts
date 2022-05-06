@@ -19,11 +19,6 @@ export const ImageCard = styled.div`
   border-radius: ${margins.medium};
 `;
 
-export const Img = styled.img`
-  width: 80px;
-  height: 80px;
-`;
-
 export const InfoWrapper = styled.div`
   display: flex;
   flex-direction: row;
