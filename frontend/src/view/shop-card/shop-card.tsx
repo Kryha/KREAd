@@ -1,57 +1,47 @@
 import { FC } from "react";
+import { Item } from "@agoric/types";
+
+import { text } from "../../assets";
+import { color } from "../../design";
+import { Badge, BoldLabel, Label, TitleText } from "../atoms";
+import { PriceInRun } from "../price-in-run";
 
 import {
   Product,
-  Image1,
-  CharacterMasks,
+  CharacterImage,
   Content,
-  Image,
+  ImageContainer,
   Footer,
   Tag,
-  Masks,
-  RUN001,
-  TitleText,
   TitleWrapper,
-  TitleContainer,
-  OwnerText,
   OwnedByContainer,
-  MediumText
 } from "./styles";
 
 interface ShopCardProps {
-  image: string;
-  title: string;
-  owner: string;
-  category: string;
-  version: string;
+  item: Item;
 }
 
-export const ShopCard: FC<ShopCardProps> = ({ image, title, owner, category, version }) => {
+export const ShopCard: FC<ShopCardProps> = ({ item }) => {
   return (
     <Product>
-      <Image>
-        <Image1>
-          <CharacterMasks src={image} />
-        </Image1>
-      </Image>
       <Content>
+        <ImageContainer>
+          <CharacterImage src={item.image} />
+        </ImageContainer>
         <TitleWrapper>
-          <TitleContainer>
-            <TitleText>{title}</TitleText>
-          </TitleContainer>
+          <TitleText>{item.name}</TitleText>
           <OwnedByContainer>
-            <OwnerText>{owner}</OwnerText>
+            <BoldLabel customColor={color.black}>{text.param.itemId(item.id)}</BoldLabel>
           </OwnedByContainer>
         </TitleWrapper>
         <Footer>
           <Tag>
-            <Masks>
-              <MediumText>{category}</MediumText>
-            </Masks>
+            <Badge>
+              <Label>{item.category}</Label>
+            </Badge>
+            <Label>{text.param.oneOutOf(item.amount)}</Label>
           </Tag>
-          <RUN001>
-            <MediumText>{version}</MediumText>
-          </RUN001>
+          <PriceInRun price={item.price} />
         </Footer>
       </Content>
     </Product>
