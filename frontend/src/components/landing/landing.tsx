@@ -16,6 +16,7 @@ export const Landing: FC = () => {
       </SecondaryButton>}
     >
       <BaseCharacter width={width} height={height} />
+      {/* TODO: do something with expanding */}
       <ExpandButton><ExpandIcon />{text.general.showFull}</ExpandButton>
     </BaseRoute >
   );
