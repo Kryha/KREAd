@@ -66,17 +66,18 @@ export const PrimaryButton = styled.button<ButtonProps>`
   background: ${(props): string => props.backgroundColor || color.black};
   color: ${(props): string => props.fontColor || color.white};
   &:hover {
-    background: ${(props): string => props.backgroundColor || color.black};
+    background: ${(props): string => props.backgroundColor || color.white};
     border: 2px solid ${color.black};
+    color: ${color.black};
     box-sizing: border-box;
   }
   &:active {
     background: ${(props): string => props.backgroundColor || color.black};
-    border: 2px solid ${color.black};
+    border: 2px solid ${color.darkGrey};
     box-sizing: border-box;
   }
   &:focus {
-    border: 2px solid ${color.black};
+    border: 2px solid ${color.darkGrey};
     outline: none;
     box-sizing: border-box;
   }

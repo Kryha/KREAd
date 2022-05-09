@@ -3,6 +3,7 @@ import { navigation } from "./navigation";
 import { general } from "./general";
 import { param } from "./param";
 import { store } from "./store";
+import { products } from "./products";
 
 export const text = {
   error,
@@ -10,4 +11,5 @@ export const text = {
   general,
   param,
   store,
+  products,
 };

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { BaseCharacterIcon } from "../../assets";
+import { margins } from "../../design";
 import { SecondaryButton } from "../../view";
 
 interface ImageProps {
@@ -10,7 +11,7 @@ export const ExpandButton = styled(SecondaryButton)`;
   position: absolute;
   z-index: 10;
   left: 45%;
-  bottom: 40px;
+  bottom: ${margins.big};
 `;
 
 export const BaseCharacter = styled(BaseCharacterIcon) <ImageProps>`

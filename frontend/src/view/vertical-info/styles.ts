@@ -1,52 +1,78 @@
 import styled from "styled-components";
+import { color, margins } from "../../design";
 
-export const Info = styled.div`
-  width: 15px;
+import { Label } from "../atoms";
+
+interface DirectionProps {
+  isRight: boolean;
+}
+
+export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 5px 0;
   align-items: center;
-  min-height: 95px;
-`;
-export const NumberInfo = styled.span`
-  color: var(--licorice);
-  font-family: var(--font-family-aktiv_grotesk-medium);
-  font-size: var(--font-size-xxxs);
-  font-weight: 500;
-  font-style: normal;
+  padding: 0px 0px ${margins.mini};
+  margin: 0px;
 `;
 
-export const GeneralInfo = styled.span`
-  color: var(--star-dust);
-  font-family: var(--font-family-aktiv_grotesk-medium);
-  font-size: var(--font-size-xxxs);
-  font-weight: 500;
-  font-style: normal;
+export const Code = styled(Label) <DirectionProps>`
+
+  margin: ${margins.mini} 0px;
+  text-transform: uppercase;
+  font-family: Aktiv Grotesk Medium;
+  flex: none;
+  order: 3;
+  flex-grow: 0;
+  ${({ isRight }): string => {
+    return isRight
+      ? `
+      transform: rotate(90deg);
+        `
+      : `
+      transform: rotate(-90deg);
+      `;
+  }}
 `;
 
-export const Text = styled.div`
-  ${NumberInfo}
-  min-height: 15px;
-  margin-top: 10px;
-  margin-left: 0;
-  min-width: 46px;
-  transform: rotate(-90deg);
-  letter-spacing: 0.48px;
+export const Id = styled(Code) <DirectionProps>`
+  margin: ${margins.medium} 0px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 `;
 
-export const Line = styled.div`
-  width: 1px;
-  height: 16px;
-  margin-top: 24px;
-  margin-left: 1px;
-  border: 1px solid #A1A1A1;
-  transform: rotate(-90deg);
+export const Dash = styled.div<DirectionProps>`
+  width: ${margins.small};
+  border: 1px solid ${color.darkGrey};
+  margin: ${margins.mini} 0px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  ${({ isRight }): string => {
+    return isRight
+      ? `
+      transform: rotate(90deg);
+        `
+      : `
+      transform: rotate(-90deg);
+      `;
+  }}
 `;
-export const InfoContainer = styled.div`
-  ${GeneralInfo}
-  min-height: 15px;
-  margin-top: 5px;
-  min-width: 9px;
-  transform: rotate(-90deg);
-  letter-spacing: 0.48px;
+
+export const DiagonalContainer = styled.div`
+  box-sizing: border-box;
+  width: 13px;
+  height: 13px;
+  border: 1px solid ${color.grey};
+  position: relative;
+  margin: ${margins.medium} ${margins.small};
+`;
+
+export const Diagonal = styled.div`
+  border: 1px solid ${color.grey};
+  transform: rotate(135deg);
+  left: -2px;
+  position: absolute;
+  width: 14px;
+  top: 4.5px;
 `;
