@@ -29,15 +29,6 @@ export const ElementContainer = styled.div`
   z-index: 100;
 `;
 
-export const Image = styled.img`
-  width: 99px;
-  height: 144px;
-  left: 8px;
-  top: 10px;
-  border-radius: 24px;
-  margin-top: 45px;
-`;
-
 export const NoImage = styled.div`
   width: 104px;
   height: 100px;

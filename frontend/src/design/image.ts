@@ -3,6 +3,8 @@ export const imageSize = {
   extraSmall: "80px",
   small: "100px",
   medium: "104px",
-  large: "320px",
-  extraLarge: "342px",
+  mediumLarge: "144px",
+  large: "256px",
+  extralarge: "320px",
+  extraExtraLarge: "342px",
 };
