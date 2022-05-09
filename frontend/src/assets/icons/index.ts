@@ -43,6 +43,7 @@ import MidBackground3 from "./mid_background_03.png";
 import Noseline1 from "./noseline_01.png";
 import NoseLine2 from "./noseline_02.png";
 import Noseline3 from "./noseline_03.png";
+import { ReactComponent as CardElementIcon } from "./element.svg";
 
 export {
   ErrorIcon,
@@ -90,4 +91,5 @@ export {
   Noseline1,
   NoseLine2,
   Noseline3,
+  CardElementIcon,
 };

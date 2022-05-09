@@ -25,8 +25,9 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
         </Row>
       </LeftItemContainer>
       <RightItemContainer>
-
-        <RightEquippedItemCard item={findEquipped(items.mask)} code={text.products.mask} />
+        <RightItems>
+          <RightEquippedItemCard item={findEquipped(items.mask)} code={text.products.mask} />
+        </RightItems>
         <Row>
           <RightEquippedItemCard item={findEquipped(items.noseline)} code={text.products.noseline} />
           <RightEquippedItemCard item={findEquipped(items.airResevoir)} code={text.products.airResevoir} />
@@ -35,7 +36,6 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <RightEquippedItemCard item={findEquipped(items.liquid)} code={text.products.liquid} />
           <RightEquippedItemCard item={findEquipped(items.frontMask)} code={text.products.frontMask} />
         </Row>
-
       </RightItemContainer>
     </>
   );

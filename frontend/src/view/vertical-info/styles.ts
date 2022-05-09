@@ -43,7 +43,7 @@ export const Id = styled(Code) <DirectionProps>`
 
 export const Dash = styled.div<DirectionProps>`
   width: ${margins.small};
-  border: 1px solid ${color.darkGrey};
+  border: 0.5px solid ${color.darkGrey};
   margin: ${margins.mini} 0px;
   flex: none;
   order: 1;
