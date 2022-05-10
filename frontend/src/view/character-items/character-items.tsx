@@ -15,7 +15,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
   return (
     <>
       <LeftItemContainer>
-        <LeftEquippedItemCard item={findEquipped(items.hair)} code={text.products.hair} marginTop={margins.large} />
+        <LeftEquippedItemCard item={findEquipped(items.hair)} code={text.products.hair} marginTop={margins.big} height={imageSize.mediumLarge} />
         <Row>
           <LeftEquippedItemCard item={findEquipped(items.headPiece)} code={text.products.headPiece} width={imageSize.large} height={imageSize.large} marginLeft={`-${margins.extraLarge}`} />
           <LeftEquippedItemCard item={findEquipped(items.clothing)} code={text.products.clothing} width={imageSize.medium} height={imageSize.mediumLarge} marginTop={`-${margins.big}`} />
