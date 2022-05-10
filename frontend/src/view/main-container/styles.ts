@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
-export const MainPageContainer = styled.div`
-  overflow-y: scroll;
-`;
+export const MainPageContainer = styled.div``;
 
 export const MainWrap = styled.div`
   width: 100%;

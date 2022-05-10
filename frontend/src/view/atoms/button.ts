@@ -10,8 +10,8 @@ interface ButtonProps {
 }
 
 export const ButtonBase = styled.button<ButtonProps>`
-  ::first-letter {
-    text-transform: capitalize;
+  &::first-letter {
+    text-transform: uppercase;
   };
   font-family: Aktiv Grotesk Medium;
   display: inline-block;
@@ -46,6 +46,9 @@ export const ButtonBase = styled.button<ButtonProps>`
 `;
 
 export const PrimaryButton = styled.button<ButtonProps>`
+  &::first-letter {
+    text-transform: uppercase;
+  };
   transition: all 0.4s ease 0s;
   display: flex;
   flex-direction: row;

@@ -15,4 +15,5 @@ export const general = {
   latest: "latest",
   equipped: "equipped",
   showFull: "show full",
+  createNew: "create new",
 };

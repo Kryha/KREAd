@@ -10,8 +10,8 @@ import AirResevoir1 from "./air_resevoir_01.png";
 import AirResevoir2 from "./air_resevoir_02.png";
 import AirResevoir3 from "./air_resevoir_03.png";
 import AirResevoir4 from "./air_resevoir_04.png";
-import Background1 from "./background_2_01.png";
-import Background2 from "./background_2_02.png";
+import Background1 from "./background_01.png";
+import Background2 from "./background_02.png";
 import Clothing1 from "./clothing_01.png";
 import Clothing2 from "./clothing_02.png";
 import Clothing3 from "./clothing_03.png";
@@ -43,6 +43,9 @@ import MidBackground3 from "./mid_background_03.png";
 import Noseline1 from "./noseline_01.png";
 import NoseLine2 from "./noseline_02.png";
 import Noseline3 from "./noseline_03.png";
+import Liquid4 from "./liquid_04.png";
+import CharacterBase from "./character-base.png";
+import Empty from "./empty.png";
 import { ReactComponent as CardElementIcon } from "./element.svg";
 
 export {
@@ -92,4 +95,7 @@ export {
   NoseLine2,
   Noseline3,
   CardElementIcon,
+  Liquid4,
+  CharacterBase,
+  Empty,
 };

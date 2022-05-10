@@ -7,4 +7,5 @@ export const imageSize = {
   large: "256px",
   extralarge: "320px",
   extraExtraLarge: "342px",
+  gigantic: "550px",
 };
