@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { text, CloseIcon, MenuIcon, ExpandIcon } from "../../assets";
+import { CloseIcon, ExpandIcon, MenuIcon, text } from "../../assets";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { BaseRoute, SecondaryButton } from "../../view";
