@@ -14,7 +14,7 @@ export const NavigationTab: FC = () => {
   const currentTab = location.pathname;
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box>
       <NavTabs
         value={currentTab}
         TabIndicatorProps={{
