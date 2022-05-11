@@ -1,13 +1,14 @@
 import { FC, useState } from "react";
 
-import { CloseIcon, MenuIcon, text } from "../../assets";
+import { CloseIcon, ExpandIcon, MenuIcon, text } from "../../assets";
+import { useViewport } from "../../hooks";
 
-import { BaseCharacter, BaseRoute, CharacterCard, CharacterItems, SecondaryButton } from "../../view";
-import { FakeCharcters } from "./fake-characters";
-import { Items } from "./fake-item-data";
+import { BaseRoute, SecondaryButton } from "../../view";
+import { BaseCharacter, ExpandButton } from "./styles";
 
 export const Landing: FC = () => {
   const [openCharacters, setOpenCharacters] = useState(false);
+  const { width, height } = useViewport();
 
   return (
     <BaseRoute sideNavigation={
@@ -16,13 +17,9 @@ export const Landing: FC = () => {
         {openCharacters ? <CloseIcon /> : <MenuIcon />}
       </SecondaryButton>}
     >
-      <BaseCharacter character={FakeCharcters[0]} isZoomed={openCharacters} />
-      {Boolean(!openCharacters) && (
-        <CharacterItems items={Items} />
-      )}
-      {Boolean(openCharacters) && (
-        <CharacterCard characters={FakeCharcters} />
-      )}
+      {/* TODO: do something with expanding */}
+      <BaseCharacter width={width} height={height} />
+      <ExpandButton><ExpandIcon />{text.general.showFull}</ExpandButton>
     </BaseRoute >
   );
 };

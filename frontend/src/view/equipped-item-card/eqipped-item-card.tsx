@@ -1,18 +1,13 @@
 import { Item } from "@agoric/types";
 import { FC } from "react";
+import { ImageProps } from "../atoms";
 import { ItemCard } from "../item-card";
 import { VerticalInfo } from "../vertical-info";
 import { EquippedContainer } from "./styles";
 
-interface EquippedItemCardProps {
+interface EquippedItemCardProps extends ImageProps {
   item: Item | undefined;
   code: string;
-  width?: string;
-  height?: string;
-  marginTop?: string | undefined;
-  marginLeft?: string | undefined;
-  marginRight?: string | undefined;
-  marginBottom?: string | undefined;
 };
 
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {

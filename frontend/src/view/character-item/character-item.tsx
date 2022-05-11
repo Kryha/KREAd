@@ -5,10 +5,6 @@ import { Character } from "@agoric/types";
 import { ImageCard, Info, InfoContainer, InfoWrapper, CharacterItemWrapper } from "./styles";
 import { Badge, Label, MenuItemName } from "../atoms";
 import { text } from "../../assets/text";
-import { BaseCharacter } from "../base-character";
-
-
-
 interface CharacterItemProps {
   character: Character;
 };
@@ -19,7 +15,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character }) => {
       <>
         <Info>
           <ImageCard>
-            <BaseCharacter character={character} isZoomed={false} size="mini" />
+            {/* TODO: add character image */}
           </ImageCard>
           <InfoWrapper>
             <InfoContainer>
