@@ -12,4 +12,3 @@ export * from "./menu-card";
 export * from "./menu-item";
 export * from "./price-in-run";
 export * from "./base-route";
-export * from "./equipped-item-card";

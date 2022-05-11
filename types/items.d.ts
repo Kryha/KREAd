@@ -1,7 +1,6 @@
 export interface Item {
   name: string;
   id: string;
-  code: string;
   image: string;
   equipped: boolean;
   category: string;

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { imageSize } from "../../design";
-import { Img } from "../atoms";
+import { ImageProps, Img } from "../atoms";
 import {
   Diagonal,
   ElementWrapper,
@@ -9,14 +9,8 @@ import {
   NoImage,
   Card,
 } from "./styles";
-interface ItemCardProps {
+interface ItemCardProps extends ImageProps {
   image: string | undefined;
-  width?: string | undefined;
-  height?: string | undefined;
-  marginTop?: string | undefined;
-  marginLeft?: string | undefined;
-  marginRight?: string | undefined;
-  marginBottom?: string | undefined;
 }
 
 export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
