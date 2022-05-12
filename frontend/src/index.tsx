@@ -1,8 +1,11 @@
-import 'ses';
+// import 'ses';
+import '@endo/init';
+
+
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-lockdown();
+// lockdown();
 // lockdown({
 //         __allowUnsafeMonkeyPatching__: 'unsafe',
 //         errorTaming: 'unsafe',
