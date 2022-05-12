@@ -17,7 +17,7 @@ export const NavTab = styled(Link)`
 `;
 
 export const NavTitle = styled(NavigationTitle)`
-  padding: 0px 13px 13px 13px;
+  padding: 13px;
 `;
 
 export const NavTabs = styled(Tabs)`
