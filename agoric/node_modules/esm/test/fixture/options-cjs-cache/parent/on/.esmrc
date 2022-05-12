@@ -1,0 +1,7 @@
+{
+  cjs: {
+    cache: true,
+    vars: true
+  },
+  debug: true
+}

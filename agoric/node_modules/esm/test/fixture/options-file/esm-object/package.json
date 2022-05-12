@@ -1,0 +1,8 @@
+{
+  "name": "esm-object",
+  "private": true,
+  "esm": {
+    "debug": true,
+    "mode": "all"
+  }
+}

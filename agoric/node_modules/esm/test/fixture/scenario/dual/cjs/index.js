@@ -1,0 +1,1 @@
+require("../dual/index.js")

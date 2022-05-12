@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "target": "es6",
+    "types": []
+  },
+  "exlcude": ["node_modules"]
+}

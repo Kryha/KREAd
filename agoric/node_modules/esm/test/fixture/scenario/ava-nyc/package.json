@@ -1,0 +1,9 @@
+{
+  "name": "ava-nyc",
+  "private": true,
+  "ava": {
+    "require": [
+      "../../../../index.js"
+    ]
+  }
+}

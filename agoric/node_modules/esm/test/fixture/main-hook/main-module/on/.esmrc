@@ -1,0 +1,8 @@
+{
+  cjs: {
+    cache: true,
+    namedExports: true
+  },
+  debug: true,
+  mode: "strict"
+}

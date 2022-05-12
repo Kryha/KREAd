@@ -1,0 +1,5 @@
+{
+  await: true,
+  cjs: false,
+  debug: true
+}

@@ -1,0 +1,30 @@
+build: off
+deploy: off
+image: Visual Studio 2017
+shallow_clone: true
+version: '{build}'
+
+environment:
+  nvs_version: 1.5.2
+  matrix:
+    - nodejs_version: 12
+    - nodejs_version: 11
+    - nodejs_version: 10
+    - nodejs_version: 8
+
+cache:
+  - '%APPDATA%\npm-cache'
+
+install:
+  - git clone -b v%nvs_version% --depth 1 https://github.com/jasongin/nvs %APPDATA%\nvs > nul 2>&1
+  - set PATH=%APPDATA%\nvs;%PATH%
+  - nvs add %nodejs_version% > nul 2>&1
+  - nvs use %nodejs_version% > nul 2>&1
+  - npm i -g npm
+  - appveyor-retry npm i > nul 2>&1
+
+test_script:
+  - nvs -v
+  - node -v
+  - npm -v
+  - npm test
