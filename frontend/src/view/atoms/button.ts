@@ -53,7 +53,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 13px 20px;
+  padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
   font-family: Aktiv Grotesk Medium;
@@ -65,7 +65,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
+
   background: ${(props): string => props.backgroundColor || color.black};
   color: ${(props): string => props.fontColor || color.white};
   &:hover {
@@ -115,7 +115,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || color.white};
   color: ${(props): string => props.fontColor || color.black};
-  padding: 8px 8px 8px 16px;
+  padding: 10px 16px;
   > svg {
     margin: 0px 6px;
   }

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { imageSize } from "../../design/image";
 
-interface ImageProps {
+export interface ImageProps {
   width?: string;
   height?: string;
   marginTop?: string | undefined;

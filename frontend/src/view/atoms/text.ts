@@ -7,8 +7,9 @@ interface TextProps {
 }
 
 export const Heading = styled.h1<TextProps>`
-  font-size: 52px;
-  line-height: 52px;
+  font-family: Aktiv Grotesk Medium;
+  font-size: 40px;
+  line-height: 44px;
   white-space: normal;
   word-break: keep-all;
   white-space: pre-wrap;
@@ -79,6 +80,17 @@ export const TitleText = styled.h3<TextProps>`
   font-size: 24px;
   line-height: 31px;
   :first-letter {
+    text-transform: capitalize;
+  }
+   ${({ customColor }): string => `color: ${customColor || color.black};`};
+`;
+
+export const BodyText = styled.p<TextProps>`
+  font-family: Aktiv Grotesk Regular;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 31px;
+    :first-letter {
     text-transform: capitalize;
   }
    ${({ customColor }): string => `color: ${customColor || color.black};`};

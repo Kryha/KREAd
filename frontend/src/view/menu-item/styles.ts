@@ -1,22 +1,14 @@
 import styled from "styled-components";
 import { color, margins } from "../../design";
-import { MenuItemName } from "../atoms";
+import { Label, MenuItemName } from "../atoms";
 
-export const MenuItemWrapper = styled.div``;
+export const EquippedLabel = styled(Label)``;
 
-export const Info = styled.div`
+export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
-  margin: 24px 0px;
-`;
-
-export const ImageCard = styled.div`
-  background: ${color.gradientLight};
-  border: 1px solid ${color.grey};
-  box-sizing: border-box;
-  border-radius: ${margins.medium};
+  padding: 16px 0px;
 `;
 
 export const InfoWrapper = styled.div`
@@ -25,7 +17,24 @@ export const InfoWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0px;
-  margin: 0px ${margins.medium};
+  margin: 0px 0px 0px ${margins.medium};
+  width: 551px;
+`;
+
+
+export const InventoryItem = styled.img`
+  position: absolute;
+`;
+
+export const FilledInventoryItem = styled.img`
+  position: absolute;
+`;
+export const MenuItemWrapper = styled.div``;
+
+export const Divider = styled.div`
+  width: 48px;
+  border: 1px solid #D0D0D0;
+  transform: rotate(90deg);
 `;
 
 export const InfoContainer = styled.div`
@@ -37,4 +46,62 @@ export const InfoContainer = styled.div`
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
+`;
+interface InfoProps {
+  selected: boolean;
+};
+
+export const Info = styled.div<InfoProps>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  margin: 24px 0px;
+  cursor: pointer;
+  ${({ selected }): string => {
+    return selected
+      ? `
+        ${FilledInventoryItem} {
+
+        }
+        `
+      : `
+       ${FilledInventoryItem} {
+        display: none;
+        }
+      `;
+  }};
+  :not(:hover) {
+    ${InventoryItem} {
+      display: none;
+    }
+  }
+  :hover {
+    ${EquippedLabel} {
+      display: none;
+    }
+    ${InfoContainer} {
+      margin-right: 0px;
+    }
+    ${ButtonContainer} {
+      margin-left: -30px;
+    }
+    ${InfoWrapper} {
+      width: 320px;
+    }
+  }
+  :not(:hover) {
+    ${ButtonContainer} {
+      display: none;
+    }
+  }
+`;
+
+export const ImageCard = styled.div`
+  // background: ${color.gradientLight};
+  // border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  width: 80px;
+  height: 80px;
 `;

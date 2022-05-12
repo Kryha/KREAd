@@ -47,6 +47,13 @@ import Liquid4 from "./liquid_04.png";
 import CharacterBase from "./character-base.png";
 import Empty from "./empty.png";
 import { ReactComponent as CardElementIcon } from "./element.svg";
+import { ReactComponent as SmallElementIcon } from "./element-small.svg";
+import { ReactComponent as NotificationIcon } from "./element.svg";
+import UnnamedCreator from "./unnamed-creator.png";
+import SmallEl from "./small-el.png";
+import { ReactComponent as InventoryItemIcon } from "./Inventoy-Item.svg";
+import CharacterItemIcon from "./Character-Item.png";
+import CharacterItemFilledIcon from "./Character-Item-Filled.png";
 
 export {
   ErrorIcon,
@@ -98,4 +105,11 @@ export {
   Liquid4,
   CharacterBase,
   Empty,
+  SmallElementIcon,
+  NotificationIcon,
+  UnnamedCreator,
+  SmallEl,
+  InventoryItemIcon,
+  CharacterItemIcon,
+  CharacterItemFilledIcon,
 };

@@ -1,23 +1,24 @@
 import styled from "styled-components";
-import { BaseCharacterIcon } from "../../assets";
-import { margins } from "../../design";
-import { SecondaryButton } from "../../view";
+
+import { CharacterWrapper, ExpandButton } from "../../view/base-character/styles";
 
 interface ImageProps {
-  width: number;
-  height: number;
+  isZoomed?: boolean;
 }
-export const ExpandButton = styled(SecondaryButton)`;
-  position: absolute;
-  z-index: 10;
-  left: 45%;
-  bottom: ${margins.big};
-`;
 
-export const BaseCharacter = styled(BaseCharacterIcon) <ImageProps>`
-  position: absolute;
-  left: 30%;
-  top: -13px;
-  z-index: 1;
-  ${({ width, height }): string => `width: ${width * 0.4}px; height: ${height}px;`};
+export const LandingContainer = styled.div <ImageProps>`
+${({ isZoomed }): string => {
+    return isZoomed
+      ? `
+     ${CharacterWrapper} {
+        left: 20%;
+        top: -380px;
+      }
+      ${ExpandButton} {
+        bottom: 17%;
+        left: 53%;
+      }
+        `
+      : "";
+  }};
 `;

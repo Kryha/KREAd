@@ -14,6 +14,8 @@ export const general = {
   sortBy: "sort by",
   latest: "latest",
   equipped: "equipped",
-  showFull: "show full",
-  createNew: "create new",
+  showFull: "Show full",
+  createNew: "Create new",
+  choose: "Choose",
+  sell: "Sell",
 };

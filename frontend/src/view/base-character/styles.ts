@@ -9,7 +9,7 @@ interface ImageProps {
   height: number;
   zIndex?: number;
   isZoomed?: boolean;
-  size?: "mini" | "medium" | "normal";
+  size?: "mini" | "medium" | "normal" | "large" | "extraLarge";
 }
 
 export const ExpandButton = styled(SecondaryButton)`;
@@ -17,6 +17,7 @@ export const ExpandButton = styled(SecondaryButton)`;
   z-index: 300;
   left: 38%;
   bottom: ${margins.big};
+  padding: 8px 16px 8px 16px;
 `;
 
 export const CharacterIcon = styled.img<ImageProps>`
@@ -26,22 +27,29 @@ export const CharacterIcon = styled.img<ImageProps>`
   ${({ width, height }): string => `min-width: ${width * 0.4}px; max-width: ${width * 0.4}px; width: ${width * 0.4}px; height: ${height}px;`};
 `;
 
-export const CharacterWrapper = styled.div<ImageProps>`
+
+export const CharacterWrapper = styled.div`
   position: absolute;
   top: 0;
   right: 30.16%;
   margin: 0;
+`;
 
+export const CharacterContainer = styled.div<ImageProps>`
   ${({ size, width, height }): string => {
     switch (size) {
       case "mini":
-        return `zoom:0.1; `;
+        return `zoom:0.075; `;
       case "medium":
         return `width: 354px; height: 320px;`;
       case "normal":
         return `width: ${width * 0.4}px; height: ${height}px;`;
+      case "large":
+        return `zoom: 1.6;`;
+      case "extraLarge":
+        return `zoom: 2.4;`;
       default:
-        return ``;
+        return `width: ${width * 0.4}px; height: ${height}px;`;
     }
   }};
 `;

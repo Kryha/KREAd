@@ -1,5 +1,8 @@
 import { Item } from "@agoric/types";
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../navigation";
+
 import { ItemCard } from "../item-card";
 import { VerticalInfo } from "../vertical-info";
 import { EquippedContainer } from "./styles";
@@ -16,8 +19,9 @@ interface EquippedItemCardProps {
 };
 
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+  const navigate = useNavigate();
   return (
-    <EquippedContainer>
+    <EquippedContainer onClick={() => item ? navigate(`${routes.character}/${item.id}`, { state: { id: item?.id } }) : <></>}>
       <VerticalInfo code={code} id={item?.id} />
       <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
     </EquippedContainer>
@@ -25,8 +29,9 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, wi
 };
 
 export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+  const navigate = useNavigate();
   return (
-    <EquippedContainer>
+    <EquippedContainer onClick={() => item ? navigate(`${routes.character}/${item.id}`, { state: { id: item?.id } }) : <></>}>
       <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
       <VerticalInfo code={code} id={item?.id} isRight />
     </EquippedContainer>

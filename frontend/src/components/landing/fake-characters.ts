@@ -7,12 +7,12 @@ export const FakeCharcters: Character[] = [
     name: "character 1",
     items: Items,
     id: "7899",
-    equipped: false,
+    equipped: true,
   },
   {
     name: "character 2",
     items: Items,
     id: "7899",
-    equipped: true,
+    equipped: false,
   },
 ];

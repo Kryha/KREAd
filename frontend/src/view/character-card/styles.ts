@@ -55,7 +55,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const CharacterContent = styled.div`
-  padding: 0px ${margins.big} 0px ${margins.medium};
+  padding: 24px ${margins.big} 0px ${margins.medium};
 `;
 
 export const CharacterItemContainer = styled.div`
@@ -70,7 +70,7 @@ export const CardActionsContainer = styled.div`
   flex-direction: row;
   align-items: flex-end;
   justify-content: flex-end;
-  margin-right: ${margins.small};
-  margin-bottom: ${margins.mini};
+  margin-right: 30px;
+  margin-bottom: 30px;
   box-shadow: none;
 `;
