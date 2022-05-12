@@ -68,9 +68,9 @@ export const NavigationTitle = styled.h3<TextProps>`
   font-weight: ${fontWeight.light};
   font-size: ${fontSize.subTitle};
   line-height: 18px;
-  :first-letter {
+  ::first-letter {
     text-transform: capitalize;
-  }
+  };
    ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 

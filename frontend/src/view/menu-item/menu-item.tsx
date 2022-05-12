@@ -41,7 +41,7 @@ export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, m
               )}
               <ButtonContainer>
                 <Divider />
-                {item.equipped ? <PrimaryButton>{"Equip"}</PrimaryButton> : <SecondaryButton>{"Unequip"}</SecondaryButton>}
+                {item.equipped ? <PrimaryButton>{text.character.unequip}</PrimaryButton> : <SecondaryButton>{text.character.equip}</SecondaryButton>}
               </ButtonContainer>
             </InfoWrapper>
           </Info>

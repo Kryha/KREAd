@@ -36,7 +36,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick }) =>
             )}
             <ButtonContainer>
               <Divider />
-              {character.equipped ? <PrimaryButton>{"Equip"}</PrimaryButton> : <SecondaryButton>{"Unequip"}</SecondaryButton>}
+              {character.equipped ? <PrimaryButton>{text.character.unequip}</PrimaryButton> : <SecondaryButton>{text.character.equip}</SecondaryButton>}
             </ButtonContainer>
           </InfoWrapper>
         </Info>

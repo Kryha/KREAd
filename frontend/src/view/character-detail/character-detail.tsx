@@ -6,9 +6,18 @@ import { CardHeader } from "@mui/material";
 
 import { text, UnnamedCreator } from "../../assets";
 import { GO_BACK } from "../../constants";
-import { color } from "../../design";
+import { color, imageSize } from "../../design";
 import { routes } from "../../navigation";
-import { Badge, BodyText, BoldLabel, Heading, HorizontalDivider, Label, PrimaryButton, SecondaryButton } from "../atoms";
+import {
+  Badge,
+  BodyText,
+  BoldLabel,
+  Heading,
+  HorizontalDivider,
+  Label,
+  PrimaryButton,
+  SecondaryButton
+} from "../atoms";
 
 import { ItemCard } from "../item-card";
 import { SectionTitle } from "../section-titile";
@@ -32,7 +41,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character }) => {
               <TitleContainer>
                 <Heading>{character.name}</Heading>
                 <SubTitleContainer>
-                  <Badge>{"Tempt scavenger"}</Badge>
+                  <Badge>{character.category}</Badge>
                   <BoldLabel customColor={color.black}>{text.param.itemId(character.id)}</BoldLabel>
                 </SubTitleContainer>
               </TitleContainer>
@@ -51,24 +60,24 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character }) => {
         <Content>
           <DetailContent>
             <HorizontalDivider />
-            <SectionTitle title={"Story"} index={"01"} />
+            <SectionTitle title={text.character.story} index={text.character.zeroOne} />
             <StoryContainer>
               <SignContainer>
-                <Label>{"creators"}</Label>
-                <ItemCard image={UnnamedCreator} width={"26.95px"} height={"60px"} />
+                <Label>{text.character.creators}</Label>
+                <ItemCard image={UnnamedCreator} width={imageSize.minute} height={imageSize.tiny} />
               </SignContainer>
-              <BodyText>{"A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology."}</BodyText>
+              <BodyText>{character.description}</BodyText>
             </StoryContainer>
-            <SectionTitle title={"Stats"} index={"02"} />
-            <SectionTitle title={"Items"} index={"03"} />
-            <SectionTitle title={"Details"} index={"04"} />
-            <SectionTitle title={"Project"} index={"05"} />
-            <SectionTitle title={"Item Activity"} index={"06"} />
+            <SectionTitle title={text.character.stats} index={text.character.zeroTwo} />
+            <SectionTitle title={text.character.items} index={text.character.zeroThree} />
+            <SectionTitle title={text.character.details} index={text.character.zeroFour} />
+            <SectionTitle title={text.character.project} index={text.character.zeroFive} />
+            <SectionTitle title={text.character.itemActivity} index={text.character.zeroSix} />
           </DetailContent>
         </Content>
         <CardActionsContainer>
           {/* TODO: link to store */}
-          <PrimaryButton type="submit" onClick={() => navigate(routes.root)}>{"Delete character"}</PrimaryButton>
+          <PrimaryButton onClick={() => navigate(routes.root)}>{text.character.deleteCharacter}</PrimaryButton>
         </CardActionsContainer>
       </Detail>
     </DetailWrapper>

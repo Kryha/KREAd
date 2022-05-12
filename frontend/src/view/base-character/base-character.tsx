@@ -4,7 +4,7 @@ import { CharacterContainer, CharacterIcon, CharacterWrapper, ExpandButton, Item
 import { Character } from "@agoric/types";
 import { useViewport } from "../../hooks";
 import { CharacterBase, Empty, ExpandIcon, text } from "../../assets";
-import { zIndex } from "../../design";
+import { color, zIndex } from "../../design";
 import { findEquipped } from "../../util";
 
 interface BaseCharacterProps {
@@ -32,7 +32,7 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ character, isZoomed, siz
         <ItemIcon src={findEquipped(character.items.clothing)?.image || Empty} alt={findEquipped(character.items.clothing)?.name || text.character.clothing} width={width} height={height} />
       </CharacterContainer>
       {/* TODO: do something with expanding */}
-      {size === "mini" ? <></> : <ExpandButton><ExpandIcon />{text.general.showFull}</ExpandButton>}
+      {size === "mini" ? <></> : <ExpandButton backgroundColor={color.white}><ExpandIcon />{text.general.showFull}</ExpandButton>}
     </CharacterWrapper>
   );
 };

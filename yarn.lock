@@ -7,8 +7,8 @@ __metadata:
 
 "@agoric/types@file:../types::locator=frontend%40workspace%3Afrontend":
   version: 0.0.0
-  resolution: "@agoric/types@file:../types#../types::hash=ae32a1&locator=frontend%40workspace%3Afrontend"
-  checksum: e36181bce60735a08b708d5957265998efabb9fa466169819bd19643f76d662fd7951866006db3eef9b78be4dfaf66f0800a5ee8e951edaf9407f4773e1385d5
+  resolution: "@agoric/types@file:../types#../types::hash=4f64f3&locator=frontend%40workspace%3Afrontend"
+  checksum: e4562fcbadf0ea1a0acaaf6c40e317d26481f13ee6c7e3d7ffa980dc6ae82026dc5587c277f9c152329de21738883a1d60b7080d42e45f67deb56f1714f131e1
   languageName: node
   linkType: hard
 

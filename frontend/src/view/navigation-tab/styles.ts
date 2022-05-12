@@ -18,6 +18,11 @@ export const NavTab = styled(Link)`
 
 export const NavTitle = styled(NavigationTitle)`
   padding: 0px 13px 13px 13px;
+  && {
+      ::first-letter {
+    text-transform: capitalize;
+  };
+  }
 `;
 
 export const NavTabs = styled(Tabs)`
