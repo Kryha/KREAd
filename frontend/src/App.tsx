@@ -2,12 +2,15 @@ import './App.css';
 
 import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from './navigation';
+import { ServiceStateProvider } from './context/service';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <ServiceStateProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </ServiceStateProvider>
   );
 }
 

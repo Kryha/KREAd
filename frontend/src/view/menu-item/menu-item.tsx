@@ -1,6 +1,6 @@
 
 import { FC } from 'react';
-import { Item } from "@agoric/types";
+import { Item } from "../../types";
 
 import { ImageCard, Info, InfoContainer, InfoWrapper, MenuItemWrapper } from "./styles";
 import { Badge, Img, Label, MenuItemName } from "../atoms";

@@ -1,10 +1,11 @@
-import { Box, InputLabel, Select } from "@mui/material";
+// TODO: replace @mui components
+// import { Box, InputLabel, Select } from "@mui/material";
 import styled from "styled-components";
 import { SelectArrowIcon } from "../../assets";
 
 import { color, margins } from "../../design";
 
-export const StyledSelect = styled(Select)`
+export const StyledSelect = styled.select`
   && {
     border: 0.5px solid ${color.grey};
     box-sizing: border-box;
@@ -19,7 +20,7 @@ export const StyledSelect = styled(Select)`
   }
 `;
 
-export const Label = styled(InputLabel)`
+export const Label = styled.label`
   && {
     margin-top: -8px;
     padding-left: 16px;
@@ -31,7 +32,7 @@ export const Label = styled(InputLabel)`
   }
 `;
 
-export const FormBox = styled(Box)`
+export const FormBox = styled.div`
   width: 140px;
 `;
 

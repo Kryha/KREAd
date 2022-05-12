@@ -1,4 +1,6 @@
-import { Card, CardActions } from "@mui/material";
+// TODO: replace @mui components
+
+// import { Card, CardActions } from "@mui/material";
 import styled from "styled-components";
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider } from "../atoms/lines";
@@ -14,7 +16,7 @@ export const ArrowContainer = styled.div`
 `;
 
 
-export const Menu = styled(Card)`
+export const Menu = styled.div`
   && {
     width: 526px;
     background: ${color.white};
@@ -61,7 +63,7 @@ export const MenuItemContainer = styled.div`
   padding: ${margins.big} ${margins.medium} ${margins.big} ${margins.mini};
 `;
 
-export const CardActionsContainer = styled(CardActions)`
+export const CardActionsContainer = styled.div`
   && {
     display: flex;
     flex-direction: row;

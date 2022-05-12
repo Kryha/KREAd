@@ -1,4 +1,5 @@
-import Tabs from '@mui/material/Tabs';
+// TODO: replace @mui components
+// import Tabs from '@mui/material/Tabs';
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
@@ -20,7 +21,7 @@ export const NavTitle = styled(NavigationTitle)`
   padding: 0px 13px 13px 13px;
 `;
 
-export const NavTabs = styled(Tabs)`
+export const NavTabs = styled.div`
   && {
     border-bottom: 1px solid #D0D0D0;
   }

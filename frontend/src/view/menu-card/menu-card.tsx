@@ -1,8 +1,9 @@
 
 import { FC } from 'react';
-import { Item } from "@agoric/types";
-import CardContent from '@mui/material/CardContent';
-import { CardHeader } from "@mui/material";
+import { Item } from "../../types/item";
+// TODO: replace @mui components
+// import CardContent from '@mui/material/CardContent';
+// import { CardHeader } from "@mui/material";
 import { ArrowUpRightIcon, text } from "../../assets";
 import { ArrowContainer, CardActionsContainer, Divider, InfoContainer, Menu, MenuContainer, MenuContent, MenuHeader } from "./styles";
 import { Label, MenuText, OutlinedButton } from "../atoms";
@@ -21,7 +22,8 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount }) => {
   const navigate = useNavigate();
   return (
     <Menu>
-      <CardHeader component={() => (
+      {/* <CardHeader component={() => ( */}
+      <div>
         <MenuHeader>
           <MenuContainer>
             <MenuText>{title}</MenuText>
@@ -34,13 +36,15 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount }) => {
             </InfoContainer>
           </MenuContainer>
         </MenuHeader>
-      )}
-      />
-      <CardContent>
+      </div>
+
+      {/* <CardContent> */}
+      <div>
         <MenuContent>
           <MenuItem items={items} />
         </MenuContent>
-      </CardContent>
+      </div>
+      {/* </CardContent> */}
       <CardActionsContainer>
         {/* TODO: link to store */}
         <OutlinedButton type="submit" onClick={() => navigate(routes.root)}>{text.store.buyAtStore} <ArrowUpRightIcon /></OutlinedButton>

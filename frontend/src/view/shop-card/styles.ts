@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { Card, CardContent } from "@mui/material";
+// TODO: replace @mui components
+// import { Card, CardContent } from "@mui/material";
 import { color, margins } from "../../design";
 
-export const Product = styled(Card)`
+export const Product = styled.div` // <- @mui/Card
   && {
     width: 402px;
     background: ${color.white};
@@ -33,7 +34,7 @@ export const CharacterImage = styled.img`
   height: 320px;
 `;
 
-export const Content = styled(CardContent)`
+export const Content = styled.div` // <- @mui/CardContent
  && {
    padding: 0 24px 24px 24px;
  }

@@ -1,9 +1,10 @@
 import { FC } from "react";
+import { FCProps } from "../../types";
 import { NavigationTab } from "../navigation-tab";
 
 import { TopbarContainer } from "./styles";
 
-interface BaseRouteProps {
+interface BaseRouteProps extends FCProps {
   sideNavigation: React.ReactNode;
 };
 

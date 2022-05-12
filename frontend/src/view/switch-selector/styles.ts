@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import Button from '@mui/material/Button';
-
+// TODO: replace @mui components
+// import Button from '@mui/material/Button';
 import { color, margins } from "../../design";
 
-export const SwitchButtonLeft = styled(Button)`
+export const SwitchButtonLeft = styled.button` // <- @mui/Button
   && {
     font-family: Aktiv Grotesk Medium;
     font-size: 12px;
@@ -22,7 +22,7 @@ export const SwitchButtonLeft = styled(Button)`
   }
 `;
 
-export const SwitchButtonRight = styled(Button)`
+export const SwitchButtonRight = styled.button` // <- @mui/Button
   && {
     font-family: Aktiv Grotesk Medium;
     font-size: 12px;
