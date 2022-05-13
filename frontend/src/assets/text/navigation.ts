@@ -4,5 +4,5 @@ export const navigation = {
   character: "character",
   shop: "shop",
   inventory: "inventory",
-  myCharacters: "My characters",
+  myCharacters: "my characters",
 };

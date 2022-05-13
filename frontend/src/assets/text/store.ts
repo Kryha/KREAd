@@ -1,3 +1,3 @@
 export const store = {
-  buyAtStore: "Buy at store",
+  buyAtStore: "buy at store",
 };

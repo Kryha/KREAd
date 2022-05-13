@@ -9,7 +9,7 @@ export const character = {
   background: "background",
   airResevoir: "air resevoir",
   clothing: "clothing",
-  equip: "Equip",
+  equip: "equip",
   sell: "sell",
   unequip: "Unequip",
   story: "story",
