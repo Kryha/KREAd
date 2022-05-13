@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color, margins } from "../../design";
+import { margins } from "../../design";
 import { Label, MenuItemName } from "../atoms";
 
 export const EquippedLabel = styled(Label)``;
@@ -98,8 +98,6 @@ export const Info = styled.div<InfoProps>`
 `;
 
 export const ImageCard = styled.div`
-  // background: ${color.gradientLight};
-  // border: 1px solid ${color.grey};
   box-sizing: border-box;
   border-radius: ${margins.medium};
   width: 80px;

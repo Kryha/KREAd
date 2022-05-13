@@ -1,4 +1,3 @@
-
 import { FC, useCallback } from 'react';
 import { Item } from "@agoric/types";
 
