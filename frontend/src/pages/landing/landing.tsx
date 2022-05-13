@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { CloseIcon, ExpandIcon, MenuIcon, text } from "../../assets";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { BaseRoute, SecondaryButton } from "../../view";
+import { BaseRoute, SecondaryButton } from "../../components";
 import { BaseCharacter, ExpandButton } from "./styles";
 
 export const Landing: FC = () => {
