@@ -7,3 +7,16 @@ export interface Item {
   price: number;
   amount: number;
 }
+
+export interface CharacterItems {
+  noseline: Item[];
+  midBackground: Item[];
+  mask: Item[];
+  headPiece: Item[];
+  hair: Item[];
+  frontMask: Item[];
+  liquid: Item[];
+  background: Item[];
+  airResevoir: Item[];
+  clothing: Item[];
+}
