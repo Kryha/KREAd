@@ -4,7 +4,7 @@ import { CardElementIcon } from "../../assets";
 
 export const ElementWrapper = styled.div`
   position: relative;
-    width: 120px;
+  width: 120px;
   height: 120px;
   overflow: hidden;
 `;
