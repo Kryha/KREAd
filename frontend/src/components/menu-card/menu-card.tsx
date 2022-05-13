@@ -1,6 +1,6 @@
 
 import { FC } from 'react';
-import { Item } from "@agoric/types";
+import { Item } from "../../interfaces";
 import CardContent from '@mui/material/CardContent';
 import { CardHeader } from "@mui/material";
 import { ArrowUpRightIcon, text } from "../../assets";

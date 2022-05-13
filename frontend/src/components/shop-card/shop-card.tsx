@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Item } from "@agoric/types";
+import { Item } from "../../interfaces";
 
 import { text } from "../../assets";
 import { color } from "../../design";
