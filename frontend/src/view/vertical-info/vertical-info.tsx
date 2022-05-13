@@ -2,7 +2,7 @@ import { FC } from "react";
 import { text } from "../../assets";
 
 import { color } from "../../design";
-import { Code, Dash, Diagonal, DiagonalContainer, Id, InfoContainer } from "./styles";
+import { CategoryCode, Dash, Diagonal, DiagonalContainer, Id, InfoContainer } from "./styles";
 
 interface VerticalInfoProps {
   code: string;
@@ -21,7 +21,7 @@ export const VerticalInfo: FC<VerticalInfoProps> = ({ code, id, isRight = false 
         </DiagonalContainer>
       }
       <Dash isRight={isRight} />
-      <Code isRight={isRight}>{code}</Code>
+      <CategoryCode isRight={isRight}>{code}</CategoryCode>
     </InfoContainer>
   );
 }

@@ -15,7 +15,7 @@ export const InfoContainer = styled.div`
   margin: 0px;
 `;
 
-export const Code = styled(Label) <DirectionProps>`
+export const CategoryCode = styled(Label) <DirectionProps>`
 
   margin: ${margins.mini} 0px;
   text-transform: uppercase;
@@ -34,7 +34,7 @@ export const Code = styled(Label) <DirectionProps>`
   }}
 `;
 
-export const Id = styled(Code) <DirectionProps>`
+export const Id = styled(CategoryCode) <DirectionProps>`
   margin: ${margins.medium} 0px;
   flex: none;
   order: 0;

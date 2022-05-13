@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
 import { NavigationTitle } from "../atoms";
+import { color } from "../../design";
 
 export const NavTab = styled(Link)`
   display: flex;
@@ -22,6 +23,6 @@ export const NavTitle = styled(NavigationTitle)`
 
 export const NavTabs = styled(Tabs)`
   && {
-    border-bottom: 1px solid #D0D0D0;
+    border-bottom: 1px solid ${color.grey};
   }
 `;
