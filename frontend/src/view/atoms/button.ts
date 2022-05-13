@@ -11,8 +11,8 @@ interface ButtonProps {
 }
 
 export const ButtonBase = styled.button<ButtonProps>`
-  &::first-letter {
-    text-transform: uppercase;
+  ::first-letter {
+    text-transform: capitalize;
   };
   font-family: Aktiv Grotesk Medium;
   display: inline-block;
@@ -69,18 +69,17 @@ export const PrimaryButton = styled.div<ButtonProps>`
   background: ${(props): string => props.backgroundColor || color.black};
   color: ${(props): string => props.fontColor || color.white};
   &:hover {
-    background: ${(props): string => props.backgroundColor || color.white};
+    background: ${(props): string => props.backgroundColor || color.black};
     border: 2px solid ${color.black};
-    color: ${color.black};
     box-sizing: border-box;
   }
   &:active {
     background: ${(props): string => props.backgroundColor || color.black};
-    border: 2px solid ${color.darkGrey};
+    border: 2px solid ${color.black};
     box-sizing: border-box;
   }
   &:focus {
-    border: 2px solid ${color.darkGrey};
+    border: 2px solid ${color.black};
     outline: none;
     box-sizing: border-box;
   }

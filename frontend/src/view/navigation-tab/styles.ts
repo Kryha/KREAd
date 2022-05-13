@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
 import { NavigationTitle } from "../atoms";
+import { color } from "../../design";
 
 export const NavTab = styled(Link)`
   display: flex;
@@ -18,15 +19,10 @@ export const NavTab = styled(Link)`
 
 export const NavTitle = styled(NavigationTitle)`
   padding: 0px 13px 13px 13px;
-  && {
-      ::first-letter {
-    text-transform: capitalize;
-  };
-  }
 `;
 
 export const NavTabs = styled(Tabs)`
   && {
-    border-bottom: 1px solid #D0D0D0;
+    border-bottom: 1px solid ${color.grey};
   }
 `;
