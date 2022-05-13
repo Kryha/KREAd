@@ -1,4 +1,4 @@
-import { CharacterItems } from "./items";
+import { CharacterItems } from "./item.interfaces";
 
 export interface Character {
   name: string;
