@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { DetailSectionSegment } from "../../components/detail-section-segment";
+import { DetailSectionSegment } from "./detail-section-segment";
 import { Item } from "../../interfaces";
 
 import { DetailSectionWrap } from "./styles";
+import { DetailSectionHeader } from "./detail-section-header";
 
 const mockedItem: Item = {
   name: "My Item",
@@ -19,10 +20,20 @@ const mockedItem: Item = {
 export const DetailSection: FC = () => {
   return (
     <DetailSectionWrap>
+      <DetailSectionHeader item={mockedItem}/>
       <DetailSectionSegment title="Story" index={1} image={mockedItem.image}>
         {mockedItem.description}
       </DetailSectionSegment>
       <DetailSectionSegment title="Stats" index={2}>
+        {mockedItem.description}
+      </DetailSectionSegment>
+      <DetailSectionSegment title="Project" index={3}>
+        {mockedItem.description}
+      </DetailSectionSegment>
+      <DetailSectionSegment title="Details" index={4}>
+        {mockedItem.description}
+      </DetailSectionSegment>
+      <DetailSectionSegment title="Item Activity" index={5}>
         {mockedItem.description}
       </DetailSectionSegment>
     </DetailSectionWrap>
