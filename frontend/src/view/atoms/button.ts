@@ -65,7 +65,7 @@ export const PrimaryButton = styled.div<ButtonProps>`
   box-sizing: border-box;
   align-items: center;
   letter-spacing: 0.05em;
-
+  text-transform: uppercase;
   background: ${(props): string => props.backgroundColor || color.black};
   color: ${(props): string => props.fontColor || color.white};
   &:hover {
