@@ -7,6 +7,7 @@ export interface Item {
   category: string;
   price: number;
   amount: number;
+  description: string;
 }
 
 export interface CharacterItems {

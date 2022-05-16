@@ -7,7 +7,7 @@ interface PageContainerProps {
   sidebarContent: React.ReactNode;
 }
 
-export const PageContainer: FC<PageContainerProps> = ({ children, mainContent, sidebarContent }) => {
+export const PageContainer: FC<PageContainerProps> = ({ mainContent, sidebarContent }) => {
   return (
     <PageWrap>
       {mainContent}

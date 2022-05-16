@@ -23,6 +23,7 @@ export const Items: CharacterItems = {
       category: "noseline",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "noseline",
@@ -33,6 +34,7 @@ export const Items: CharacterItems = {
       category: "noseline",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "noseline",
@@ -43,6 +45,7 @@ export const Items: CharacterItems = {
       category: "noseline",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   midBackground: [
@@ -55,6 +58,7 @@ export const Items: CharacterItems = {
       category: "mid background",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mid background",
@@ -65,6 +69,7 @@ export const Items: CharacterItems = {
       category: "mid background",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mid background",
@@ -75,6 +80,7 @@ export const Items: CharacterItems = {
       category: "mid background",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   mask: [
@@ -87,6 +93,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mask",
@@ -97,6 +104,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mask",
@@ -107,6 +115,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mask",
@@ -117,6 +126,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mask",
@@ -127,6 +137,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mask",
@@ -137,6 +148,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mask",
@@ -147,6 +159,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "mask",
@@ -157,6 +170,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   headPiece: [
@@ -169,6 +183,7 @@ export const Items: CharacterItems = {
       category: "head piece",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "head piece",
@@ -179,6 +194,7 @@ export const Items: CharacterItems = {
       category: "head piece",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "head piece",
@@ -189,6 +205,7 @@ export const Items: CharacterItems = {
       category: "head piece",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "head piece",
@@ -199,6 +216,7 @@ export const Items: CharacterItems = {
       category: "head piece",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "head piece",
@@ -209,6 +227,7 @@ export const Items: CharacterItems = {
       category: "head piece",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   hair: [
@@ -221,6 +240,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "hair",
@@ -231,6 +251,7 @@ export const Items: CharacterItems = {
       category: "hair",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "hair",
@@ -241,6 +262,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   frontMask: [
@@ -253,6 +275,7 @@ export const Items: CharacterItems = {
       category: "front mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "Front mask",
@@ -263,6 +286,7 @@ export const Items: CharacterItems = {
       category: "mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "Front mask",
@@ -273,6 +297,7 @@ export const Items: CharacterItems = {
       category: "front mask",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   liquid: [
@@ -285,6 +310,7 @@ export const Items: CharacterItems = {
       category: "liquid",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   background: [
@@ -297,6 +323,7 @@ export const Items: CharacterItems = {
       category: "background",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "background",
@@ -307,6 +334,7 @@ export const Items: CharacterItems = {
       category: "background",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   airResevoir: [
@@ -319,6 +347,7 @@ export const Items: CharacterItems = {
       category: "air resevoir",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "air resevoir",
@@ -329,6 +358,7 @@ export const Items: CharacterItems = {
       category: "air resevoir",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "air resevoir",
@@ -339,6 +369,7 @@ export const Items: CharacterItems = {
       category: "air resevoir",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "air resevoir",
@@ -349,6 +380,7 @@ export const Items: CharacterItems = {
       category: "air resevoir",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
   clothing: [
@@ -361,6 +393,7 @@ export const Items: CharacterItems = {
       category: "clothing",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "clothing",
@@ -371,6 +404,7 @@ export const Items: CharacterItems = {
       category: "clothing",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "clothing",
@@ -381,6 +415,7 @@ export const Items: CharacterItems = {
       category: "clothing",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "clothing",
@@ -391,6 +426,7 @@ export const Items: CharacterItems = {
       category: "clothing",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "clothing",
@@ -401,6 +437,7 @@ export const Items: CharacterItems = {
       category: "clothing",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
     {
       name: "clothing",
@@ -411,6 +448,7 @@ export const Items: CharacterItems = {
       category: "clothing",
       price: 12.0943,
       amount: 13,
+      description: "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone."
     },
   ],
 };
