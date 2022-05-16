@@ -11,7 +11,7 @@ export const character = {
   clothing: "clothing",
   equip: "equip",
   sell: "sell",
-  unequip: "Unequip",
+  unequip: "unequip",
   story: "story",
   zeroOne: "01",
   zeroTwo: "02",
