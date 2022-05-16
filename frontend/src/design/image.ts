@@ -5,6 +5,7 @@ export const imageSize = {
   small: "100px",
   medium: "104px",
   mediumLarge: "144px",
+  big: "200px",
   large: "256px",
   extralarge: "320px",
   extraExtraLarge: "342px",

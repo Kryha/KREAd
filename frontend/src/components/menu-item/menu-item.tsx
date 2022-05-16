@@ -1,9 +1,8 @@
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Item } from "../../interfaces";
 
 import { ButtonContainer, Divider, EquippedLabel, FilledInventoryItem, ImageCard, Info, InfoContainer, InfoWrapper, InventoryItem, MenuItemWrapper } from "./styles";
-import { ImageProps, Img, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
-import { HorizontalDivider } from "../atoms/lines";
+import { ImageProps, Img, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { CharacterItemFilledIcon, CharacterItemIcon } from "../../assets";
 interface MenuItemProps extends ImageProps {
@@ -11,18 +10,10 @@ interface MenuItemProps extends ImageProps {
 };
 
 export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, marginLeft }) => {
-  const moveArrayItem = useCallback(
-    () => {
-      const allItems = [...items];
-      const fromIndex = items.findIndex((item) => item.equipped === true);
-      allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
-      return allItems;
-    }, [items]);
 
-  const sortedItems = moveArrayItem();
   return (
     <MenuItemWrapper>
-      {sortedItems.map((item) => (
+      {items.map((item) => (
         <>
           <Info selected={false}>
             <InventoryItem src={CharacterItemIcon} />
@@ -35,18 +26,13 @@ export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, m
                 <MenuItemName>{item.name}</MenuItemName>
                 <Label>{text.param.itemId(item.id)}</Label>
               </InfoContainer>
-              {Boolean(item.equipped) && (
-                <EquippedLabel>{text.general.equipped}</EquippedLabel>
-              )}
+              <EquippedLabel>{text.general.equipped}</EquippedLabel>
               <ButtonContainer>
                 <Divider />
-                {item.equipped ? <PrimaryButton>{text.character.unequip}</PrimaryButton> : <SecondaryButton>{text.character.equip}</SecondaryButton>}
+                <PrimaryButton>{text.character.unequip}</PrimaryButton>
               </ButtonContainer>
             </InfoWrapper>
           </Info>
-          {Boolean(item.equipped) && (
-            <HorizontalDivider />
-          )}
         </>
       ))}
     </MenuItemWrapper>

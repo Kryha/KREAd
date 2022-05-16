@@ -7,8 +7,8 @@ import { LandingContainer } from "./styles";
 import { useMyCharacter } from "../../service";
 
 export const Landing: FC = () => {
-  const [openTab, setOpenTab] = useState(false);
   const { data: character, isLoading } = useMyCharacter();
+  const [openTab, setOpenTab] = useState(false);
 
   if (isLoading) return <LoadingPage />;
 

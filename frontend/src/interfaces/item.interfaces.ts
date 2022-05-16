@@ -1,23 +1,20 @@
+import { Detail, Slots } from "./character.interfaces";
 export interface Item {
   name: string;
-  id: string;
-  code: string;
-  image: string;
-  equipped: boolean;
   category: string;
+  id: string;
+  description: string;
+  image: string;
+  level: number;
+  rarity: number;
+  effectiveness?: number;
+  layerComplexity?: number;
+  forged: string;
+  baseMaterial: string;
+  colors: string[];
+  projectDescription: string;
   price: number;
-  amount: number;
-}
-
-export interface CharacterItems {
-  noseline: Item[];
-  midBackground: Item[];
-  mask: Item[];
-  headPiece: Item[];
-  hair: Item[];
-  frontMask: Item[];
-  liquid: Item[];
-  background: Item[];
-  airResevoir: Item[];
-  clothing: Item[];
-}
+  details: Detail;
+  date: string;
+  slots: Slots[];
+};

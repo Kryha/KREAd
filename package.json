@@ -31,5 +31,6 @@
     "React"
   ],
   "author": "kryha",
-  "license": "ISC"
+  "license": "ISC",
+  "packageManager": "yarn@1.22.18"
 }
