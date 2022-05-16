@@ -1,13 +1,20 @@
 import { FC, useState } from "react";
-import { CloseIcon, ExpandIcon, MenuIcon, text } from "../../assets";
+
+import { CloseIcon, MenuIcon, text } from "../../assets";
 import { color } from "../../design";
-import { useViewport } from "../../hooks";
-import { BaseRoute, SecondaryButton } from "../../components";
-import { BaseCharacter, ExpandButton } from "./styles";
+import { BaseCharacter, BaseRoute, CharacterItems, LoadingPage, SecondaryButton } from "../../components";
+import { LandingContainer } from "./styles";
+import { useMyCharacter } from "../../service";
 
 export const Landing: FC = () => {
   const [openTab, setOpenTab] = useState(false);
-  const { width, height } = useViewport();
+  const { data: character, isLoading } = useMyCharacter();
+
+  if (isLoading) return <LoadingPage />;
+
+  // TODO: get an empty page
+  if (!character) return <></>;
+
   return (
     <BaseRoute sideNavigation={
       <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
@@ -15,9 +22,13 @@ export const Landing: FC = () => {
         {openTab ? <CloseIcon /> : <MenuIcon />}
       </SecondaryButton>}
     >
-      <BaseCharacter width={width} height={height} />
-      {/* TODO: do something with expanding */}
-      <ExpandButton><ExpandIcon />{text.general.showFull}</ExpandButton>
+      <LandingContainer isZoomed={openTab}>
+        <BaseCharacter character={character} isZoomed={openTab} size={openTab ? "large" : "normal"} />
+      </LandingContainer>
+
+      {Boolean(!openTab) && (
+        <CharacterItems items={character.items} />
+      )}
     </BaseRoute >
   );
 };
