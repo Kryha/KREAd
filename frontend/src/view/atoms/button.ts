@@ -7,6 +7,7 @@ interface ButtonProps {
   fontColor?: string;
   borderColor?: string;
   visible?: boolean;
+  disabled?: boolean;
 }
 
 export const ButtonBase = styled.button<ButtonProps>`
@@ -45,12 +46,15 @@ export const ButtonBase = styled.button<ButtonProps>`
   }};
 `;
 
-export const PrimaryButton = styled.button<ButtonProps>`
+export const PrimaryButton = styled.div<ButtonProps>`
+  &::first-letter {
+    text-transform: uppercase;
+  };
   transition: all 0.4s ease 0s;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 13px 20px;
+  padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
   font-family: Aktiv Grotesk Medium;
@@ -59,7 +63,6 @@ export const PrimaryButton = styled.button<ButtonProps>`
   line-height: 18px;
   border: 2px solid ${color.black};
   box-sizing: border-box;
-  display: flex;
   align-items: center;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -109,15 +112,15 @@ export const PrimaryButton = styled.button<ButtonProps>`
 
 export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   border: 1px solid ${(props): string => props.borderColor || color.grey};
-  background-color: ${(props): string => props.backgroundColor || color.white};
+  background-color: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
-  padding: 8px 8px 8px 16px;
+  padding: 10px 16px;
   > svg {
     margin: 0px 6px;
   }
   &:hover {
     border: 1px solid ${color.black};
-    background-color: ${color.white};
+    background-color: transparent;
     color: ${color.black};
   }
   &:active {

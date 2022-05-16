@@ -1,4 +1,5 @@
 export const imageSize = {
+  minute: "26px",
   tiny: "56px",
   extraSmall: "80px",
   small: "100px",

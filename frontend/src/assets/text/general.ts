@@ -16,4 +16,6 @@ export const general = {
   equipped: "equipped",
   showFull: "show full",
   createNew: "create new",
+  choose: "choose",
+  sell: "sell",
 };

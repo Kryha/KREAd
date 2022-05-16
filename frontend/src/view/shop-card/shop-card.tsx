@@ -3,7 +3,7 @@ import { Item } from "@agoric/types";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import { Badge, BoldLabel, Label, TitleText } from "../atoms";
+import { BoldLabel, Label, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
 
 import {
@@ -36,9 +36,7 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
         </TitleWrapper>
         <Footer>
           <Tag>
-            <Badge>
-              <Label>{item.category}</Label>
-            </Badge>
+            <Label>{item.category}</Label>
             <Label>{text.param.oneOutOf(item.amount)}</Label>
           </Tag>
           <PriceInRun price={item.price} />

@@ -5,4 +5,6 @@ export interface Character {
   items: CharacterItems;
   id: string;
   equipped: boolean;
+  description: string;
+  category: string;
 }
