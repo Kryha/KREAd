@@ -2,17 +2,24 @@ import styled from "styled-components";
 import { color } from "../../design";
 import { CardElementIcon } from "../../assets";
 
+export const Card = styled(CardElementIcon)`
+  position: absolute;
+  left: 0;
+  top: 0;
+`;
+
 export const ElementWrapper = styled.div`
   position: relative;
   width: 120px;
   height: 120px;
   overflow: hidden;
-`;
-
-export const Card = styled(CardElementIcon)`
-  position: absolute;
-  left: 0;
-  top: 0;
+  cursor: pointer;
+  &:hover {
+    ${Card} {
+      > rect {
+        stroke: ${color.black};
+      }
+  }
 `;
 
 export const ElementContainer = styled.div`
