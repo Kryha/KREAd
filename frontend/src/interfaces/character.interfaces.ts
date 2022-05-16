@@ -5,16 +5,16 @@ export interface Slots {
 };
 
 export interface CharacterItems {
-  noseline: Item | null;
-  midBackground: Item | null;
-  mask: Item | null;
-  headPiece: Item | null;
-  hair: Item | null;
-  frontMask: Item | null;
-  liquid: Item | null;
-  background: Item | null;
-  airResevoir: Item | null;
-  clothing: Item | null;
+  noseline: Item | undefined;
+  midBackground: Item | undefined;
+  mask: Item | undefined;
+  headPiece: Item | undefined;
+  hair: Item | undefined;
+  frontMask: Item | undefined;
+  liquid: Item | undefined;
+  background: Item | undefined;
+  airResevoir: Item | undefined;
+  clothing: Item | undefined;
 };
 
 export interface Detail {
