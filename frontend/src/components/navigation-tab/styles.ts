@@ -9,12 +9,15 @@ export const NavTab = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 16px;
+  padding: 24px;
   font-family: Aktiv Grotesk Medium;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  color: #141414;
+  font-size: 18px;
+  line-height: 20.5px;
+  color:${color.black};
+  :first-letter {
+    text-transform: capitalize;
+  }
 `;
 
 export const NavTitle = styled(NavigationTitle)`

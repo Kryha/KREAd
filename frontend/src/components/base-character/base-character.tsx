@@ -5,6 +5,7 @@ import { CharacterContainer, CharacterIcon, CharacterWrapper, ExpandButton, Item
 import { useViewport } from "../../hooks";
 import { CharacterBase, Empty, ExpandIcon, text } from "../../assets";
 import { color, zIndex } from "../../design";
+import { ButtonText } from "../atoms";
 
 interface BaseCharacterProps {
   character: Character;
@@ -31,7 +32,7 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ character, isZoomed, siz
         <ItemIcon src={character.items.clothing?.image || Empty} alt={character.items.clothing?.name || text.character.clothing} width={width} height={height} />
       </CharacterContainer>
       {/* TODO: do something with expanding */}
-      {size === "mini" ? <></> : <ExpandButton backgroundColor={color.white}><ExpandIcon />{text.general.showFull}</ExpandButton>}
+      {size === "mini" ? <></> : <ExpandButton backgroundColor={color.white}><ExpandIcon /><ButtonText>{text.general.showFull}</ButtonText></ExpandButton>}
     </CharacterWrapper>
   );
 };

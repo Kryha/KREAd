@@ -24,9 +24,9 @@ export const NavigationTab: FC = () => {
           }
         }}
       >
-        <Tab label={<NavTitle>{text.navigation.character}</NavTitle>} value={routes.root} to={routes.root} component={NavTab} />
-        <Tab label={<NavTitle>{text.navigation.shop}</NavTitle>} value={routes.shop} to={routes.shop} component={NavTab} />
-        <Tab label={<NavTitle>{text.navigation.inventory}</NavTitle>} value={routes.inventory} to={routes.inventory} component={NavTab} />
+        <Tab sx={{ textTransform: "none" }} label={<NavTitle>{text.navigation.character}</NavTitle>} value={routes.root} to={routes.root} component={NavTab} />
+        <Tab sx={{ textTransform: "none" }} label={<NavTitle>{text.navigation.shop}</NavTitle>} value={routes.shop} to={routes.shop} component={NavTab} />
+        <Tab sx={{ textTransform: "none" }} label={<NavTitle>{text.navigation.inventory}</NavTitle>} value={routes.inventory} to={routes.inventory} component={NavTab} />
       </NavTabs>
     </Box>
   );

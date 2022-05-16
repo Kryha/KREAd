@@ -11,3 +11,11 @@ export const useMyCharacter = (): UseQueryResult<Character> => {
     return FakeCharcters[0];
   });
 };
+
+export const useMyCharacters = (): UseQueryResult<Character[]> => {
+  return useQuery(["characters"], async () => {
+    //  TODO: intergrate me
+
+    return FakeCharcters;
+  });
+};
