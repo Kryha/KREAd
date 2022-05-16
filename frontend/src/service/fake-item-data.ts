@@ -1,4 +1,4 @@
-import { CharacterItems } from "@agoric/types";
+import { CharacterItems } from "../interfaces";
 import {
   AirResevoir1,
   Background1,

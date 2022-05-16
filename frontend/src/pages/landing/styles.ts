@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BaseCharacterIcon } from "../../assets";
-import { SecondaryButton } from "../../view";
+import { SecondaryButton } from "../../components";
 
 interface ImageProps {
   width: number;

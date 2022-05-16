@@ -1,4 +1,4 @@
-import { Character, Item } from "@agoric/types";
+import { Character, Item } from "../interfaces";
 
 export const findEquipped = (items: Item[]) => items.find((item) => item.equipped === true);
 

@@ -1,4 +1,4 @@
-import { Character } from "@agoric/types";
+import { Character } from "../interfaces";
 import { Items } from "./fake-item-data";
 
 

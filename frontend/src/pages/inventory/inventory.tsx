@@ -1,11 +1,11 @@
 import { FC } from "react";
-import { BaseRoute } from "../../view"
+import { BaseRoute } from "../../components"
 
-export const Shop: FC = () => {
+export const Inventory: FC = () => {
   return (
     // TODO: Add side bar component
     <BaseRoute sideNavigation={undefined}>
-      <h1>Shop</h1>
+      <h1>Inventory</h1>
     </BaseRoute>
   );
 }

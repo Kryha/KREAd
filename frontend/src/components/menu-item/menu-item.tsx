@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react';
-import { Item } from "@agoric/types";
+import { Item } from "../../interfaces";
 
 import { ButtonContainer, Divider, EquippedLabel, FilledInventoryItem, ImageCard, Info, InfoContainer, InfoWrapper, InventoryItem, MenuItemWrapper } from "./styles";
 import { ImageProps, Img, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";

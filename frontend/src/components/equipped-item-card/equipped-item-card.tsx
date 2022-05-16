@@ -1,4 +1,4 @@
-import { Item } from "@agoric/types";
+import { Item } from "../../interfaces";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
