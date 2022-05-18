@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { color } from "../../design";
 
 interface MainProps {
   height: number;

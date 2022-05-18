@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { CardHeader } from "@mui/material";
 
 import { text, UnnamedCreator } from "../../assets";
-import { GO_BACK } from "../../constants";
 import { color, imageSize } from "../../design";
 import { routes } from "../../navigation";
 import {

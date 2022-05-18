@@ -14,10 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { CharacterDetail } from "../character-detail";
 import { Character } from "../../interfaces";
-import { useMyCharacters } from "../../service";
-import { LoadingPage } from "../content-loader";
-
-
 interface CharacterCardProps {
   id: string;
   characters: Character[];
@@ -34,7 +30,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
       const fromIndex = characters.findIndex((character) => character.characterId === id);
       allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
       return allItems;
-    }, [characters]);
+    }, [characters, id]);
 
   const showInfo = (values: Character) => {
     setShowDetail(!showDetail);
