@@ -12,7 +12,7 @@ export const Landing: FC = () => {
   const [openTab, setOpenTab] = useState(false);
 
   if (isLoadingCharacter || isLoadingCharacters) return <LoadingPage />;
-  console.log(characters)
+
   // TODO: get an empty page
   if (!character || !characters || !characters.length) return <></>;
 

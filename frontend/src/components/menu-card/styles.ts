@@ -21,8 +21,8 @@ export const ArrowContainer = styled.div`
 `;
 
 export const Close = styled(CloseIcon)`
-  width: 40px;
-  height: 40px;
+  width: ${margins.big};
+  height: ${margins.big};
   cursor: pointer;
 `;
 

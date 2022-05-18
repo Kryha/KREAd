@@ -10,8 +10,8 @@ import { Card as CardIcon, ElementWrapper, ElementContainer as Element } from ".
 export const DetailWrapper = styled.div`
   position: absolute;
   z-index: 1000;
-  left: 40px;
-  bottom: 40px;
+  left: ${margins.big};
+  bottom: ${margins.big};
   width: 720px;
   height: 604px;
   overflow-y: scroll;
@@ -23,10 +23,9 @@ export const ElementContainer = styled(CardElementIcon)`
   overflow: hidden;
 `;
 
-
 export const Content = styled(CardContent)`
   && {
-    padding: 0px 16px;
+    padding: 0px ${margins.small};;
   }
 `;
 
@@ -42,9 +41,9 @@ export const SubTitleContainer = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 0px;
-  margin-top: 16px;
+  margin-top: ${margins.small};
   ${Badge} {
-    margin-right: 8px;
+    margin-right: ${margins.mini};
     color: ${color.darkGrey};
     ::first-letter {
       text-transform: capitalize;
@@ -61,8 +60,8 @@ export const ArrowContainer = styled.div`
 `;
 
 export const Close = styled(CloseIcon)`
-  width: 40px;
-  height: 40px;
+  width: ${margins.big};
+  height: ${margins.big};
   cursor: pointer;
 `;
 
@@ -98,7 +97,7 @@ export const InfoContainer = styled.div`
   align-items: flex-start;
   padding: 0px;
   ${PrimaryButton} {
-    margin-right: 8px;
+    margin-right: ${margins.mini};
   }
 `;
 
@@ -147,7 +146,7 @@ export const SignContainer = styled.div`
   padding: 0px;
   margin-right: 80px;
   ${Label} {
-    margin-bottom: 16px;
+    margin-bottom: ${margins.small};
   }
   ${CardIcon} {
     width: 140px;

@@ -91,7 +91,7 @@ export const ImageCard = styled.div`
   position: relative;
   height: 96px;
   margin-left: 8px;
-margin-top: 16px;
+  margin-top: 16px;
   ${CharacterWrapper}{
     left: 15px;
   }

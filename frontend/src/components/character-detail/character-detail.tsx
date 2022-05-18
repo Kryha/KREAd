@@ -83,11 +83,6 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
               </SignContainer>
               <BodyText>{character.description}</BodyText>
             </StoryContainer>
-            {/* <SectionTitle title={text.character.stats} index={text.character.zeroTwo} />
-            <SectionTitle title={text.character.items} index={text.character.zeroThree} />
-            <SectionTitle title={text.character.details} index={text.character.zeroFour} />
-            <SectionTitle title={text.character.project} index={text.character.zeroFive} />
-            <SectionTitle title={text.character.itemActivity} index={text.character.zeroSix} /> */}
           </DetailContent>
         </Content>
         <CardActionsContainer>

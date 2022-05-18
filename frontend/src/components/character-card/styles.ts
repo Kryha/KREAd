@@ -22,7 +22,7 @@ export const CharacterWrapper = styled(Card)`
     box-sizing: border-box;
     border-radius: ${margins.medium};
     box-shadow: none;
-    right: 40px;
+    right: ${margins.big};
     top: 101px;
     position: absolute;
     z-index: 10000;
