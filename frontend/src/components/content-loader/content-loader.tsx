@@ -1,8 +1,9 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Spinner, SpinnerContainer } from "./styles";
 
 interface ContentLoaderProps {
   loading: boolean;
+  children?: React.ReactNode;
 }
 
 export const LoadingPage: FC = () => (
