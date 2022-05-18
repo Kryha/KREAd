@@ -46,10 +46,8 @@ export const ButtonBase = styled.button<ButtonProps>`
   }};
 `;
 
-export const PrimaryButton = styled.div<ButtonProps>`
-  &::first-letter {
-    text-transform: uppercase;
-  };
+export const PrimaryButton = styled.button<ButtonProps>`
+  text-transform: capitalize;
   transition: all 0.4s ease 0s;
   display: flex;
   flex-direction: row;
@@ -65,11 +63,11 @@ export const PrimaryButton = styled.div<ButtonProps>`
   box-sizing: border-box;
   align-items: center;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
   background: ${(props): string => props.backgroundColor || color.black};
   color: ${(props): string => props.fontColor || color.white};
   &:hover {
-    background: ${(props): string => props.backgroundColor || color.black};
+    color: ${(props): string => props.fontColor || color.black};
+    background: ${(props): string => props.backgroundColor || color.white};
     border: 2px solid ${color.black};
     box-sizing: border-box;
   }
