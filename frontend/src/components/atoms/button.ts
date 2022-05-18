@@ -41,8 +41,8 @@ export const ButtonBase = styled.button<ButtonProps>`
       : "";
   }};
   ${({ visible }): string => {
-    return visible ? `display: none;` :
-      ``;
+    return visible ? "display: none;" :
+      "";
   }};
 `;
 

@@ -1,12 +1,12 @@
-import { FC } from 'react';
-import { useLocation } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
+import { FC } from "react";
+import { useLocation } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
 
 import { text } from "../../assets";
 import { routes } from "../../navigation";
 import { NavTabs, NavTab, NavTitle } from "./styles";
-import { color } from "../../design";;
+import { color } from "../../design";
 
 
 export const NavigationTab: FC = () => {

@@ -1,6 +1,6 @@
 
 import { FC } from "react";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import { SwitchButtonLeft, SwitchButtonRight } from "./styles";
 
@@ -16,4 +16,4 @@ export const SwitchSelector: FC<SwitchSelectorProps> = ({ buttonOneText, buttonT
       <SwitchButtonRight>{buttonTwoText}</SwitchButtonRight>
     </ButtonGroup>
   );
-}
+};
