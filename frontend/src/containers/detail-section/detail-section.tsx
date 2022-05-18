@@ -10,6 +10,8 @@ import { Items } from "../../service/fake-item-data";
 
 const mockedItem = Items[0];
 
+// TODO: Make index dynamic
+
 export const DetailSection: FC = () => {
   return (
     <DetailSectionWrap>

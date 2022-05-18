@@ -4,7 +4,7 @@ import { DetailSectionHeaderWrap } from "./styles";
 import { Item } from "../../../interfaces";
 
 interface DetailSectionHeaderProps {
-  item: Item
+  item: Item;
 };
 
 export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item }) => {
