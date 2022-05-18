@@ -18,4 +18,6 @@ export const general = {
   createNew: "create new",
   choose: "choose",
   sell: "sell",
+  category: "category",
+  loadMore: "load more",
 };

@@ -25,6 +25,7 @@ import SmallEl from "./small-el.png";
 import { ReactComponent as InventoryItemIcon } from "./Inventoy-Item.svg";
 import CharacterItemIcon from "./Character-Item.png";
 import CharacterItemFilledIcon from "./Character-Item-Filled.png";
+import { ReactComponent as RefreshIcon } from "./refresh.svg";
 
 export {
   ErrorIcon,
@@ -54,4 +55,5 @@ export {
   InventoryItemIcon,
   CharacterItemIcon,
   CharacterItemFilledIcon,
+  RefreshIcon,
 };

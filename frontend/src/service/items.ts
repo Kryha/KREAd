@@ -5,9 +5,9 @@ import { Items } from "./fake-item-data";
 
 
 export const useItems = (): UseQueryResult<Item[]> => {
-  return useQuery(["character"], async () => {
+  return useQuery(["items"], async () => {
     //  TODO: intergrate me
 
-    return Items[0];
+    return Items;
   });
 };
