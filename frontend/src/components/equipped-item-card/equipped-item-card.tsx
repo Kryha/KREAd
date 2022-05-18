@@ -21,7 +21,7 @@ interface EquippedItemCardProps {
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
   const navigate = useNavigate();
   return (
-    <EquippedContainer onClick={() => item ? navigate(`${routes.character}/${item.id}`, { state: { id: item?.id } }) : <></>}>
+    <EquippedContainer onClick={() => item ? navigate(`${routes.items}/${item.id}`, { state: { id: item?.id } }) : <></>}>
       <VerticalInfo code={code} id={item?.id} />
       <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
     </EquippedContainer>
@@ -31,7 +31,7 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, wi
 export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
   const navigate = useNavigate();
   return (
-    <EquippedContainer onClick={() => item ? navigate(`${routes.character}/${item.id}`, { state: { id: item?.id } }) : <></>}>
+    <EquippedContainer onClick={() => item ? navigate(`${routes.items}/${item.id}`, { state: { id: item?.id } }) : <></>}>
       <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
       <VerticalInfo code={code} id={item?.id} isRight />
     </EquippedContainer>
