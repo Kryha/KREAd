@@ -2,7 +2,7 @@ import { Item } from "./item.interfaces";
 
 export interface Slots {
   // TODO: Figure out this type
-};
+}
 
 export interface CharacterItems {
   noseline: Item | undefined;
@@ -15,7 +15,7 @@ export interface CharacterItems {
   background: Item | undefined;
   airResevoir: Item | undefined;
   clothing: Item | undefined;
-};
+}
 
 export interface Detail {
   boardAddress: string;
@@ -23,7 +23,7 @@ export interface Detail {
   standard: string;
   artist: string;
   metadata: any;
-};
+}
 
 export interface Activity {
   event: string;
@@ -31,7 +31,7 @@ export interface Activity {
   to: string;
   from: string;
   date: string;
-};
+}
 export interface Character {
   name: string;
   type: string;
@@ -44,4 +44,4 @@ export interface Character {
   itemActivity: Activity;
   price: number;
   slots: Slots[];
-};
+}

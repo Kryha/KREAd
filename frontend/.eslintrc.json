@@ -25,6 +25,8 @@
       "warn",
       { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }
     ],
+    "@typescript-eslint/no-empty-interface": "warn",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
 
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error"

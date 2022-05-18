@@ -8,7 +8,7 @@ import { Diamond, PriceContainer } from "./styles";
 
 interface PriceInRunProps {
   price: number;
-};
+}
 
 export const PriceInRun: FC<PriceInRunProps> = ({ price }) => {
   return (
