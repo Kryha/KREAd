@@ -5,10 +5,10 @@ import { DetailSectionHeaderDetails, DetailSectionHeaderTop, DetailSectionHeader
 
 import { Item } from "../../../interfaces";
 
-
 interface DetailSectionHeaderProps {
   item: Item;
-};
+}
+
 // TODO: Pass item actions as props (equip, sell)
 export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item }) => {
   return (
@@ -18,8 +18,7 @@ export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item }) => {
         <DetailSectionHeaderNavigation />
       </DetailSectionHeaderTop>
 
-      <DetailSectionHeaderDetails>
-      </DetailSectionHeaderDetails>
+      <DetailSectionHeaderDetails></DetailSectionHeaderDetails>
     </DetailSectionHeaderWrap>
   );
 };

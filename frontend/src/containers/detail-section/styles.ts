@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color, margins } from '../../design';
+import { color, margins } from "../../design";
 
 export const DetailSectionWrap = styled.section`
   background-color: ${color.lightGrey};

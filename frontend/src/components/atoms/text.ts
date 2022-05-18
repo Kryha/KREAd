@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 import { color, fontSize, fontWeight } from "../../design";
 
@@ -41,25 +40,24 @@ export const Label = styled.p<TextProps>`
   font-size: 12px;
   line-height: 15px;
   letter-spacing: 0.04em;
-    :first-letter {
+  :first-letter {
     text-transform: capitalize;
   }
-   ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};
+  ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};
 `;
 
 export const BoldLabel = styled(Label)`
   font-family: Aktiv Grotesk Medium;
 `;
 
-
 export const MenuItemName = styled.h3<TextProps>`
   font-family: Aktiv Grotesk Medium;
   font-weight: ${fontWeight.light};
   font-size: ${fontSize.title};
   line-height: 22px;
-    :first-letter {
+  :first-letter {
     text-transform: capitalize;
-  };
+  }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
@@ -70,7 +68,7 @@ export const NavigationTitle = styled.h3<TextProps>`
   line-height: 18px;
   :first-letter {
     text-transform: capitalize;
-  };
+  }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
@@ -81,7 +79,7 @@ export const TitleText = styled.h3<TextProps>`
   line-height: 31px;
   :first-letter {
     text-transform: capitalize;
-  };
+  }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
@@ -92,17 +90,17 @@ export const BodyText = styled.p<TextProps>`
   line-height: 31px;
   :first-letter {
     text-transform: capitalize;
-  };
+  }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
 export const PageTitle = styled.h1<TextProps>`
   color: ${color.black};
-  font-family: 'Aktiv Grotesk Medium';
+  font-family: "Aktiv Grotesk Medium";
   font-weight: ${fontWeight.medium};
   font-size: 32px;
   line-height: 52px;
   :first-letter {
     text-transform: capitalize;
-  };
-`
+  }
+`;

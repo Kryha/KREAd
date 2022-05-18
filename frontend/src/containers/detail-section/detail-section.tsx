@@ -4,7 +4,6 @@ import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionWrap } from "./styles";
 
-
 // Temporary mocked item
 import { Items } from "../../service/fake-item-data";
 
@@ -14,7 +13,7 @@ export const DetailSection: FC = () => {
   const item = Items[0];
   return (
     <DetailSectionWrap>
-      <DetailSectionHeader item={item}/>
+      <DetailSectionHeader item={item} />
       <DetailSectionSegment title="Story" index={1} image={item.image}>
         {item.description}
       </DetailSectionSegment>
@@ -31,5 +30,5 @@ export const DetailSection: FC = () => {
         {item.description}
       </DetailSectionSegment>
     </DetailSectionWrap>
-  )
+  );
 };
