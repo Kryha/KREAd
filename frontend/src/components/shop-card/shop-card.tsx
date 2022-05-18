@@ -3,7 +3,7 @@ import { Item } from "../../interfaces";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import { BoldLabel, Label, TitleText } from "../atoms";
+import { Badge, BoldLabel, Label, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
 
 import {
@@ -36,7 +36,7 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
         </TitleWrapper>
         <Footer>
           <Tag>
-            <Label>{item.category}</Label>
+            <Badge><Label>{item.category}</Label></Badge>
             <Label>{text.param.oneOutOf(item.price)}</Label>
           </Tag>
           <PriceInRun price={item.price} />
