@@ -10,7 +10,7 @@ import { LeftItemContainer, RightItemContainer, Row, RightItems } from "./styles
 
 interface CharacterItemsProps {
   items: Items;
-};
+}
 
 // TODO: update component with item slots
 export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {

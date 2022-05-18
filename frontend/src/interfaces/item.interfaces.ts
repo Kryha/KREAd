@@ -17,4 +17,4 @@ export interface Item {
   details: Detail;
   date: string;
   slots: Slots[];
-};
+}

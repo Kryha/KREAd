@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider } from "../atoms/lines";
-import CardContent from '@mui/material/CardContent';
+import CardContent from "@mui/material/CardContent";
 
 export const Content = styled(CardContent)`
   && {

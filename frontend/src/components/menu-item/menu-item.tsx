@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC } from "react";
 import { Item } from "../../interfaces";
 
 import { ButtonContainer, Divider, EquippedLabel, FilledInventoryItem, ImageCard, Info, InfoContainer, InfoWrapper, InventoryItem, MenuItemWrapper } from "./styles";
@@ -7,7 +7,7 @@ import { text } from "../../assets/text";
 import { CharacterItemFilledIcon, CharacterItemIcon } from "../../assets";
 interface MenuItemProps extends ImageProps {
   items: Item[];
-};
+}
 
 export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, marginLeft }) => {
 
@@ -37,4 +37,4 @@ export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, m
       ))}
     </MenuItemWrapper>
   );
-}
+};

@@ -16,7 +16,7 @@ interface EquippedItemCardProps {
   marginLeft?: string | undefined;
   marginRight?: string | undefined;
   marginBottom?: string | undefined;
-};
+}
 
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
   const navigate = useNavigate();

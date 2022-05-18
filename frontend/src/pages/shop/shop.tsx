@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { RefreshIcon, text } from "../../assets";
-import { BaseRoute, ErrorView, HorizontalDivider, Label, LoadingPage, SecondaryButton, Select, ShopCard, SwitchSelector } from "../../components"
+import { BaseRoute, ErrorView, HorizontalDivider, Label, LoadingPage, SecondaryButton, Select, ShopCard, SwitchSelector } from "../../components";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useItems } from "../../service";
@@ -45,8 +45,8 @@ export const Shop: FC = () => {
         </FilterWrapper>
         <ItemWrapper height={height}>
           <ItemContainer>
-            {items.map((item) => (
-              <ShopCard item={item} />
+            {items.map((item, index) => (
+              <ShopCard item={item} key={index} />
             ))}
           </ItemContainer>
           {/* TODO: do something with it */}
@@ -57,4 +57,4 @@ export const Shop: FC = () => {
       </ShopWrapper>
     </BaseRoute>
   );
-}
+};

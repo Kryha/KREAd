@@ -1,6 +1,6 @@
-import Tabs from '@mui/material/Tabs';
+import Tabs from "@mui/material/Tabs";
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import { NavigationTitle } from "../atoms";
 import { color } from "../../design";
