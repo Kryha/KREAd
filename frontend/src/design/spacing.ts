@@ -7,6 +7,7 @@ export const margins = {
   big: "40px",
   extraLarge: "70px",
   huge: "100px",
+  gigantic: "120px",
 };
 
 export const zIndex = {
