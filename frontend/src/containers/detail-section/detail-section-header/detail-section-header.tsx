@@ -12,5 +12,5 @@ export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item }) => {
     <DetailSectionHeaderWrap>
       <h1>{item.name}</h1>
     </DetailSectionHeaderWrap>
-  )
-}
+  );
+};
