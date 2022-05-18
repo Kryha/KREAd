@@ -2,6 +2,7 @@ import { FC } from "react";
 import { DetailSectionSegmentWrap } from "./styles";
 
 interface DetailSectionSegmentProps {
+  children?: React.ReactNode,
   title: string,
   index: number,
   image?: string
