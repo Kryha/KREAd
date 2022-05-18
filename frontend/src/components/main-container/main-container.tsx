@@ -2,7 +2,11 @@ import { FC } from "react";
 
 import { MainWrap, MainPageContainer } from "./styles";
 
-export const MainContainer: FC = ({ children }) => {
+interface MainContainerProps {
+  children: React.ReactNode;
+}
+
+export const MainContainer: FC<MainContainerProps> = ({ children }) => {
   return (
     <MainWrap>
       {/* TODO: Addd navigation */}
