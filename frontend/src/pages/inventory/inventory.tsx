@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { BaseRoute } from "../../components"
+import { BaseRoute } from "../../components";
 
 export const Inventory: FC = () => {
   return (
@@ -8,4 +8,4 @@ export const Inventory: FC = () => {
       <h1>Inventory</h1>
     </BaseRoute>
   );
-}
+};

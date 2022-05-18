@@ -49,7 +49,7 @@ export const InfoContainer = styled.div`
 `;
 interface InfoProps {
   selected: boolean;
-};
+}
 
 export const Info = styled.div<InfoProps>`
   display: flex;

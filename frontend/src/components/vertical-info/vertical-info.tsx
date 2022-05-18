@@ -24,4 +24,4 @@ export const VerticalInfo: FC<VerticalInfoProps> = ({ code, id, isRight = false 
       <CategoryCode isRight={isRight}>{code}</CategoryCode>
     </InfoContainer>
   );
-}
+};

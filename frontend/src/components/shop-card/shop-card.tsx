@@ -44,4 +44,4 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
       </Content>
     </Product>
   );
-}
+};

@@ -1,5 +1,5 @@
 
-import { FC } from 'react';
+import { FC } from "react";
 import { Item } from "../../interfaces";
 import { CardHeader } from "@mui/material";
 import { ArrowUpRightIcon, text } from "../../assets";
@@ -25,7 +25,7 @@ interface MenuCardProps extends ImageProps {
   title: string;
   items: Item[];
   amount: number;
-};
+}
 
 export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, height, marginTop, marginLeft }) => {
   const navigate = useNavigate();
@@ -57,4 +57,4 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
       </CardActionsContainer>
     </Menu>
   );
-}
+};

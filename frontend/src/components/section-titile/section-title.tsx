@@ -7,7 +7,7 @@ import { SectionTitleWrapper } from "./styles";
 interface SectionTitleProps {
   title: string;
   index: string;
-};
+}
 
 export const SectionTitle: FC<SectionTitleProps> = ({ title, index }) => {
   return (
