@@ -4,13 +4,19 @@ import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionWrap } from "./styles";
 
-// Temporary mocked item
-import { Items } from "../../service/fake-item-data";
+import { LoadingPage } from "../../components";
+
+import { useItem } from "../../service";
 
 // TODO: Make index dynamic
-// TODO: Define state management to grab selected Item
 export const DetailSection: FC = () => {
-  const item = Items[0];
+  const { data: item, isLoading: isLoadingItem } = useItem();
+
+  if (isLoadingItem) return <LoadingPage />;
+
+  // TODO: get an empty section
+  if (!item) return <></>;
+
   return (
     <DetailSectionWrap>
       <DetailSectionHeader item={item} />

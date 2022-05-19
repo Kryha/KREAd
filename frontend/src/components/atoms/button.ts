@@ -26,7 +26,7 @@ export const ButtonBase = styled.button<ButtonProps>`
   padding: 3px 8px 3px 16px;
   background: ${(props): string => props.backgroundColor || color.black};
   font-weight: ${fontWeight.light};
-  color: ${(props): string => props.fontColor || color.black};
+  color: ${(props): string => props.fontColor || color.white};
   border: none;
   ${({ disabled }): string => {
     return disabled
@@ -61,9 +61,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   align-items: center;
   letter-spacing: 0.05em;
   background: ${(props): string => props.backgroundColor || color.black};
-  ${ButtonText} {
-    color: ${(props): string => props.fontColor || color.white};
-  }
+  color: ${(props): string => props.fontColor || color.white};
   &:hover {
     color: ${(props): string => props.fontColor || color.black};
     background: ${(props): string => props.backgroundColor || color.white};
@@ -114,9 +112,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
 export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
-  ${ButtonText} {
-    color: ${(props): string => props.fontColor || color.black};
-  }
+  color: ${(props): string => props.fontColor || color.black};
   padding: 10px 16px;
   > svg {
     margin: 0px 6px;
