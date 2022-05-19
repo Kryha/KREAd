@@ -14,25 +14,25 @@ export const DetailSection: FC = () => {
 
   if (isLoadingItem) return <LoadingPage />;
 
-  // TODO: get an empty section
+  // TODO: get an empty section view
   if (!item) return <></>;
 
   return (
     <DetailSectionWrap>
       <DetailSectionHeader item={item} />
-      <DetailSectionSegment title="Story" index={1} image={item.image}>
+      <DetailSectionSegment title="Story" sectionIndex={1}>
         {item.description}
       </DetailSectionSegment>
-      <DetailSectionSegment title="Stats" index={2}>
+      <DetailSectionSegment title="Stats" sectionIndex={2}>
         {item.description}
       </DetailSectionSegment>
-      <DetailSectionSegment title="Project" index={3}>
+      <DetailSectionSegment title="Project" sectionIndex={3}>
         {item.description}
       </DetailSectionSegment>
-      <DetailSectionSegment title="Details" index={4}>
+      <DetailSectionSegment title="Details" sectionIndex={4}>
         {item.description}
       </DetailSectionSegment>
-      <DetailSectionSegment title="Item Activity" index={5}>
+      <DetailSectionSegment title="Item Activity" sectionIndex={5}>
         {item.description}
       </DetailSectionSegment>
     </DetailSectionWrap>
