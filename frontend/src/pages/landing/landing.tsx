@@ -1,34 +1,36 @@
 import { FC, useState } from "react";
 
-import { CloseIcon, ExpandIcon, MenuIcon, text } from "../../assets";
+import { CloseIcon, MenuIcon, text } from "../../assets";
 import { color } from "../../design";
-import { useViewport } from "../../hooks";
-import { BaseRoute, CharacterItems, LoadingPage, SecondaryButton } from "../../components";
-import { BaseCharacter, ExpandButton } from "./styles";
-import { useMyCharacter } from "../../service";
+import { BaseCharacter, BaseRoute, ButtonText, CharacterCard, CharacterItems, LoadingPage, SecondaryButton } from "../../components";
+import { LandingContainer } from "./styles";
+import { useMyCharacter, useMyCharacters } from "../../service";
 
 export const Landing: FC = () => {
-  const { data: character, isLoading } = useMyCharacter();
+  const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
+  const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
   const [openTab, setOpenTab] = useState(false);
-  const { width, height } = useViewport();
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoadingCharacter || isLoadingCharacters) return <LoadingPage />;
 
   // TODO: get an empty page
-  if (!character) return <></>;
+  if (!character || !characters || !characters.length) return <></>;
 
   return (
     <BaseRoute sideNavigation={
       <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
-        {text.navigation.myCharacters}
+        <ButtonText>{text.navigation.myCharacters}</ButtonText>
         {openTab ? <CloseIcon /> : <MenuIcon />}
       </SecondaryButton>}
     >
-      <BaseCharacter width={width} height={height} />
-      {/* TODO: do something with expanding */}
-      <ExpandButton><ExpandIcon />{text.general.showFull}</ExpandButton>
+      <LandingContainer isZoomed={openTab}>
+        <BaseCharacter character={character} isZoomed={openTab} size={openTab ? "large" : "normal"} />
+      </LandingContainer>
       {Boolean(!openTab) && (
         <CharacterItems items={character.items} />
+      )}
+      {Boolean(openTab) && (
+        <CharacterCard id={character.characterId} characters={characters} />
       )}
     </BaseRoute >
   );

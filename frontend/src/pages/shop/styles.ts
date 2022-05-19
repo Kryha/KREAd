@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { Label } from "../../components";
+import { margins } from "../../design";
 
 interface ShopProps {
   height: number;
-};
+}
 
 export const ShopWrapper = styled.div`
-  margin: 40px 40px 120px 40px;
+  margin: ${margins.big} ${margins.big} 120px ${margins.big};
   position: relative;
 `;
 
@@ -50,14 +51,14 @@ export const ItemWrapper = styled.div<ShopProps>`
 export const ItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
-  padding-top: 40px;
+  gap: ${margins.big};
+  padding-top: ${margins.big};
   align-items: flex-start;
 `;
 
 export const LoadMore = styled.div`
   margin-bottom: 150px;
-  margin-top: 40px;
+  margin-top: ${margins.big};
   display: flex;
   align-items: center;
   justify-content: center;

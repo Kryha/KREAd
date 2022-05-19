@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { color, fontWeight } from "../../design";
+import { ButtonText } from "./text";
 
 interface ButtonProps {
   backgroundColor?: string;
@@ -47,13 +48,9 @@ export const ButtonBase = styled.button<ButtonProps>`
 `;
 
 export const PrimaryButton = styled.div<ButtonProps>`
-  &::first-letter {
-    text-transform: uppercase;
-  };
   transition: all 0.4s ease 0s;
-  display: flex;
+  display: table-cell;
   flex-direction: row;
-  align-items: center;
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
@@ -65,16 +62,18 @@ export const PrimaryButton = styled.div<ButtonProps>`
   box-sizing: border-box;
   align-items: center;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
+  display: flex;
   background: ${(props): string => props.backgroundColor || color.black};
-  color: ${(props): string => props.fontColor || color.white};
+  ${ButtonText} {
+    color: ${(props): string => props.fontColor || color.white};
+  }
   &:hover {
-    background: ${(props): string => props.backgroundColor || color.black};
+    background: ${(props): string => props.backgroundColor || color.white};
     border: 2px solid ${color.black};
     box-sizing: border-box;
   }
   &:active {
-    background: ${(props): string => props.backgroundColor || color.black};
+    background: ${(props): string => props.backgroundColor || color.white};
     border: 2px solid ${color.black};
     box-sizing: border-box;
   }
@@ -86,12 +85,16 @@ export const PrimaryButton = styled.div<ButtonProps>`
   ${({ disabled }): string => {
     return disabled
       ? `
-      color: ${color.white};
+      ${ButtonText} {
+        color: ${color.white};
+      }
       background: ${color.grey};
       opacity: 0.4;
       border: 2px solid ${color.grey};
       &:hover {
-        color: ${color.white};
+        ${ButtonText} {
+          color: ${color.white};
+        }
         background: ${color.grey};
         opacity: 0.4;
         border: 2px solid ${color.grey};
@@ -113,20 +116,26 @@ export const PrimaryButton = styled.div<ButtonProps>`
 export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
-  color: ${(props): string => props.fontColor || color.black};
+  ${ButtonText} {
+    color: ${(props): string => props.fontColor || color.black};
+  }
   padding: 10px 16px;
   > svg {
     margin: 0px 6px;
   }
   &:hover {
     border: 1px solid ${color.black};
-    background-color: transparent;
-    color: ${color.black};
+    background-color: ${(props): string => props.backgroundColor || "transparent"};
+    ${ButtonText} {
+      color: ${(props): string => props.fontColor || color.black};
+    }
   }
   &:active {
     background: ${color.lightGrey};
     border: 1px solid ${color.black};
-    color: ${color.black};
+    ${ButtonText} {
+      color: ${color.black};
+    }
     box-sizing: border-box;
   }
   &:focus {
@@ -137,21 +146,29 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   ${({ disabled }): string => {
     return disabled
       ? `
-      color: ${color.grey};
+      ${ButtonText} {
+        color: ${color.grey};
+      }
       background: ${color.white};
       border: 1px solid ${color.grey};
       &:hover {
-        color: ${color.grey};
+        ${ButtonText} {
+          color: ${color.grey};
+        }
         background: ${color.white};
         border: 1px solid ${color.grey};
       }
       &:focus {
-         color: ${color.grey};
+        ${ButtonText} {
+          color: ${color.grey};
+        }
         background: ${color.white};
         border: 1px solid ${color.grey};
       }
       &:active {
-         color: ${color.grey};
+        ${ButtonText} {
+          color: ${color.grey};
+        }
         background: ${color.white};
         border: 1px solid ${color.grey};
       }
@@ -185,9 +202,13 @@ export const TertiaryButton = styled(PrimaryButton) <ButtonProps>`
   ${({ disabled }): string => {
     return disabled
       ? `
-      color: ${color.white};
-      &:hover {
+      ${ButtonText} {
         color: ${color.white};
+      }
+      &:hover {
+        ${ButtonText} {
+          color: ${color.white};
+        }
         opacity: 0.4;
       }
       &:focus {

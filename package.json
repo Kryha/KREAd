@@ -12,9 +12,7 @@
     "refreshVSToken": "vsts-npm-auth -config .npmrc"
   },
   "workspaces": [
-    "frontend/",
-    "backend/",
-    "types/"
+    "frontend/"
   ],
   "browserslist": [
     "last 2 chrome version",
