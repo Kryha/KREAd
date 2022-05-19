@@ -28,11 +28,6 @@ export const ImageContainer = styled.div`
   margin-bottom: 24px;
 `;
 
-export const CharacterImage = styled.img`
-  width: 354px;
-  height: 320px;
-`;
-
 export const Content = styled(CardContent)`
  && {
    padding: 0 24px 24px 24px;

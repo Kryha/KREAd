@@ -96,6 +96,17 @@ export const BodyText = styled.p<TextProps>`
    ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
+export const PageTitle = styled.h1<TextProps>`
+  color: ${color.black};
+  font-family: "Aktiv Grotesk Medium";
+  font-weight: ${fontWeight.medium};
+  font-size: 32px;
+  line-height: 52px;
+  :first-letter {
+    text-transform: capitalize;
+  }
+`;
+
 export const ButtonText = styled.h3<TextProps>`
   font-family: Aktiv Grotesk Medium;
   font-weight: 500;

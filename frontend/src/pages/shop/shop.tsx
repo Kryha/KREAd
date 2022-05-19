@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { text } from "../../assets";
-import { BaseRoute, ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, SecondaryButton, ShopCard, SwitchSelector } from "../../components";
+import { BaseRoute, ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, SecondaryButton, ShopCard, SwitchSelector, Title } from "../../components";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useItems } from "../../service";
@@ -26,7 +26,7 @@ export const Shop: FC = () => {
 
   return (
     // TODO: Add side bar component
-    <BaseRoute sideNavigation={undefined}>
+    <BaseRoute sideNavigation={<Title items={items.length} title={text.navigation.shop} />}>
       <ShopWrapper>
         <FilterWrapper>
           <FilterContainer>
