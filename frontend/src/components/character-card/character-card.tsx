@@ -1,5 +1,5 @@
-import { FC, useCallback, useState } from 'react';
-import CardContent from '@mui/material/CardContent';
+import { FC, useCallback, useState } from "react";
+import CardContent from "@mui/material/CardContent";
 
 
 import { ArrowUpRightIcon, text } from "../../assets";
@@ -17,7 +17,7 @@ import { Character } from "../../interfaces";
 interface CharacterCardProps {
   id: string;
   characters: Character[];
-};
+}
 
 export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
   const navigate = useNavigate();
@@ -63,4 +63,4 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
       )}
     </>
   );
-}
+};

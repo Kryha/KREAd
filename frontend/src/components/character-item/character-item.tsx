@@ -24,7 +24,7 @@ interface CharacterItemProps {
   character: Character;
   onClick: (values: Character) => void;
   id: string;
-};
+}
 
 export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }) => {
   const [select, setSelected] = useState(false);
@@ -57,4 +57,4 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
       </>
     </CharacterItemWrapper>
   );
-}
+};

@@ -3,7 +3,7 @@ import { Card, CardActions } from "@mui/material";
 import { CardElementIcon, CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
-import CardContent from '@mui/material/CardContent';
+import CardContent from "@mui/material/CardContent";
 import { Badge, Label, PrimaryButton } from "../atoms";
 import { Card as CardIcon, ElementWrapper, ElementContainer as Element } from "../item-card/styles";
 

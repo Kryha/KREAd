@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 interface MainProps {
   height: number;
-};
+}
 
 export const MainPageContainer = styled.div``;
 

@@ -35,7 +35,7 @@ export const FilledInventoryItem = styled.img`
 
 interface InfoProps {
   selected: boolean;
-};
+}
 
 export const Info = styled.div<InfoProps>`
   display: flex;

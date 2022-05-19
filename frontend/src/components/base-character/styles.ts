@@ -18,6 +18,7 @@ export const ExpandButton = styled(SecondaryButton)`;
   left: 38%;
   bottom: ${margins.big};
   padding: 8px 16px 8px 16px;
+
 `;
 
 export const CharacterIcon = styled.img<ImageProps>`
@@ -34,20 +35,20 @@ export const CharacterWrapper = styled.div`
   right: 30.16%;
   margin: 0;
 `;
-
+/* eslint-disable indent */
 export const CharacterContainer = styled.div<ImageProps>`
   ${({ size, width, height }): string => {
     switch (size) {
       case "mini":
-        return `zoom:0.075; `;
+        return "zoom:0.075; ";
       case "medium":
-        return `width: 354px; height: 320px;`;
+        return "width: 354px; height: 320px;";
       case "normal":
         return `width: ${width * 0.4}px; height: ${height}px;`;
       case "large":
-        return `zoom: 1.6;`;
+        return "zoom: 1.6;";
       case "extraLarge":
-        return `zoom: 2.4;`;
+        return "zoom: 2.4;";
       default:
         return `width: ${width * 0.4}px; height: ${height}px;`;
     }

@@ -40,7 +40,7 @@ import { Character } from "../../interfaces";
 interface EquippedItemCardProps {
   character: Character | undefined;
   onClick: () => void;
-};
+}
 
 export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick }) => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 
 import { Character } from "../../interfaces";
 import { CharacterContainer, CharacterIcon, CharacterWrapper, ExpandButton, ItemIcon } from "./styles";
@@ -11,7 +11,7 @@ interface BaseCharacterProps {
   character: Character;
   isZoomed: boolean;
   size?: "mini" | "medium" | "normal" | "large" | "extraLarge";
-};
+}
 
 export const BaseCharacter: FC<BaseCharacterProps> = ({ character, isZoomed, size = "normal" }) => {
   const { width, height } = useViewport();
