@@ -25,7 +25,6 @@ export const Shop: FC = () => {
   if (!items || !items.length) return <ErrorView />;
 
   return (
-    // TODO: Add side bar component
     <BaseRoute sideNavigation={<Title items={items.length} title={text.navigation.shop} />}>
       <ShopWrapper>
         <FilterWrapper>
