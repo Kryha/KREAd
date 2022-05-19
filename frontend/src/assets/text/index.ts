@@ -5,6 +5,7 @@ import { param } from "./param";
 import { store } from "./store";
 import { products } from "./products";
 import { character } from "./character";
+import { item } from "./item";
 
 export const text = {
   error,
@@ -14,4 +15,5 @@ export const text = {
   store,
   products,
   character,
+  item,
 };

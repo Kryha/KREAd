@@ -10,6 +10,7 @@ import {
 } from "./styles";
 
 import { Item } from "../../../interfaces";
+import { text } from "../../../assets";
 
 interface DetailSectionHeaderProps {
   item: Item;
@@ -26,7 +27,7 @@ export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item }) => {
 
       <DetailSectionHeaderDetails>
         <CategoryButton>{item.category}</CategoryButton>
-        <DetailSectionHeaderId>{item.id}</DetailSectionHeaderId>
+        <DetailSectionHeaderId>{text.param.itemId(item.id)}</DetailSectionHeaderId>
       </DetailSectionHeaderDetails>
     </DetailSectionHeaderWrap>
   );
