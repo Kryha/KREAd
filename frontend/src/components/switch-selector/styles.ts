@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Button from "@mui/material/Button";
 
 import { color, margins } from "../../design";
+import { ButtonGroup } from "@mui/material";
 
 export const SwitchButtonLeft = styled(Button)`
   && {
@@ -38,5 +39,11 @@ export const SwitchButtonRight = styled(Button)`
       border: 1px solid ${color.grey};
       color: ${color.black};
     }
+  }
+`;
+
+export const Group = styled(ButtonGroup)`
+  && {
+    align-items: flex-start;
   }
 `;

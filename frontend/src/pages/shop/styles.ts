@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { RefreshIcon } from "../../assets";
 import { Label } from "../../components";
 import { margins } from "../../design";
 
@@ -62,4 +63,8 @@ export const LoadMore = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const Refresh = styled(RefreshIcon)`
+  margin-left: ${margins.mini};
 `;

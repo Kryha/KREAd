@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { RefreshIcon, text } from "../../assets";
-import { BaseRoute, ErrorView, HorizontalDivider, Label, LoadingPage, SecondaryButton, Select, ShopCard, SwitchSelector } from "../../components";
+import { text } from "../../assets";
+import { BaseRoute, ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, SecondaryButton, ShopCard, SwitchSelector } from "../../components";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useItems } from "../../service";
@@ -10,13 +10,13 @@ import {
   ItemContainer,
   ItemWrapper,
   LoadMore,
+  Refresh,
   SelectorContainer,
   ShopWrapper,
   SortByContainer
 } from "./styles";
 
 export const Shop: FC = () => {
-  const handleChange = () => { };
   const { data: items, isLoading: isLoadingItems } = useItems();
   const { height } = useViewport();
 
@@ -32,13 +32,14 @@ export const Shop: FC = () => {
           <FilterContainer>
             <SelectorContainer>
               <SwitchSelector buttonOneText={text.character.items} buttonTwoText={text.character.characters} />
-              <Select label={text.general.category} input={text.general.category} handleChange={() => handleChange()} options={[]} />
-              <Select label={text.general.price} input={text.general.price} handleChange={() => handleChange()} options={[]} />
-              <Select label={text.general.color} input={text.general.color} handleChange={() => handleChange()} options={[]} />
+              {/* TODO: add filters children component */}
+              <Filters label={text.general.category}></Filters>
+              <Filters label={text.general.price} />
+              <Filters label={text.general.color} />
             </SelectorContainer>
             <SortByContainer>
               <Label customColor={color.black}>{text.general.sortBy}</Label>
-              <Select label={text.general.color} input={text.general.color} handleChange={() => handleChange()} options={[]} />
+              <Filters label={text.general.color} />
             </SortByContainer>
           </FilterContainer>
           <HorizontalDivider />
@@ -49,9 +50,9 @@ export const Shop: FC = () => {
               <ShopCard item={item} key={index} />
             ))}
           </ItemContainer>
-          {/* TODO: do something with it */}
+          {/* TODO: do something with load more */}
           <LoadMore>
-            <SecondaryButton>{text.general.loadMore}<RefreshIcon /></SecondaryButton>
+            <SecondaryButton><ButtonText>{text.general.loadMore}</ButtonText><Refresh /></SecondaryButton>
           </LoadMore>
         </ItemWrapper>
       </ShopWrapper>
