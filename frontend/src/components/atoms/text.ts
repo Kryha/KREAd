@@ -104,3 +104,14 @@ export const PageTitle = styled.h1<TextProps>`
     text-transform: capitalize;
   }
 `;
+
+export const ButtonText = styled.h3<TextProps>`
+  font-family: Aktiv Grotesk Medium;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  :first-letter {
+    text-transform: capitalize;
+  };
+  ${({ customColor }): string => `color: ${customColor || color.black};`};
+`;
