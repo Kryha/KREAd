@@ -15,7 +15,7 @@ import {
   MenuHeader,
   Content,
 } from "./styles";
-import { ImageProps, Label, MenuText, OutlinedButton } from "../atoms";
+import { ButtonText, ImageProps, Label, MenuText, OutlinedButton } from "../atoms";
 import { MenuItem } from "../menu-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -53,7 +53,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
       </Content>
       <CardActionsContainer>
         {/* TODO: link to store */}
-        <OutlinedButton type="submit" onClick={() => navigate(routes.root)}>{text.store.buyAtStore} <ArrowUpRightIcon /></OutlinedButton>
+        <OutlinedButton type="submit" onClick={() => navigate(routes.root)}><ButtonText>{text.store.buyAtStore}</ButtonText><ArrowUpRightIcon /></OutlinedButton>
       </CardActionsContainer>
     </Menu>
   );

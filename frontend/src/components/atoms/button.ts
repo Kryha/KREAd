@@ -119,7 +119,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   ${ButtonText} {
     color: ${(props): string => props.fontColor || color.black};
   }
-  padding: 10px 16px;
+  padding: 8px 16px;
   > svg {
     margin: 0px 6px;
   }

@@ -7,8 +7,8 @@ import { ButtonGroup } from "@mui/material";
 export const SwitchButtonLeft = styled(Button)`
   && {
     font-family: Aktiv Grotesk Medium;
-    font-size: 14px;
-    line-height: 18px;
+    font-size: 12px;
+    line-height: 15px;
     background: ${color.black};
     border: 1px solid ${color.black};
     box-sizing: border-box;
@@ -27,8 +27,8 @@ export const SwitchButtonLeft = styled(Button)`
 export const SwitchButtonRight = styled(Button)`
   && {
     font-family: Aktiv Grotesk Medium;
-    font-size: 14px;
-    line-height: 18px;
+    font-size: 12px;
+    line-height: 15px;
     background: ${color.white};
     border: 1px solid ${color.grey};
     box-sizing: border-box;

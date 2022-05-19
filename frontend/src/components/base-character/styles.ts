@@ -17,8 +17,6 @@ export const ExpandButton = styled(SecondaryButton)`;
   z-index: 300;
   left: 38%;
   bottom: ${margins.big};
-  padding: 8px 16px 8px 16px;
-
 `;
 
 export const CharacterIcon = styled.img<ImageProps>`

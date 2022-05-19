@@ -110,8 +110,8 @@ export const PageTitle = styled.h1<TextProps>`
 export const ButtonText = styled.h3<TextProps>`
   font-family: Aktiv Grotesk Medium;
   font-weight: 500;
-  font-size: 14px;
-  line-height: 18px;
+  font-size: 12px;
+  line-height: 15px;
   :first-letter {
     text-transform: capitalize;
   };
