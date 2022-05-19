@@ -37,4 +37,4 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
       </ElementContainer>
     </ElementWrapper>
   );
-}
+};

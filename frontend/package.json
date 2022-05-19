@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:fix": "npx eslint . --ext .ts,.tsx --fix"
   },
   "browserslist": {
     "production": [
@@ -43,6 +44,11 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.21"
+    "@types/styled-components": "^5.1.21",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "eslint-config-react-app": "^7.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0"
   }
 }
