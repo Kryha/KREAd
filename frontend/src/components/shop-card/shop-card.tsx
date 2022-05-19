@@ -2,13 +2,12 @@ import { FC } from "react";
 import { Item } from "../../interfaces";
 
 import { text } from "../../assets";
-import { color } from "../../design";
-import { BoldLabel, Label, TitleText } from "../atoms";
+import { color, imageSize } from "../../design";
+import { Badge, BoldLabel, Img, Label, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
 
 import {
   Product,
-  CharacterImage,
   Content,
   ImageContainer,
   Footer,
@@ -26,7 +25,8 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
     <Product>
       <Content>
         <ImageContainer>
-          <CharacterImage src={item.image} />
+          {/* TODO: use slots */}
+          <Img src={item.image} width="1200px" height="1200px" marginTop={`-${imageSize.gigantic}`} marginLeft={`-${imageSize.large}`} />
         </ImageContainer>
         <TitleWrapper>
           <TitleText>{item.name}</TitleText>
@@ -36,7 +36,7 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
         </TitleWrapper>
         <Footer>
           <Tag>
-            <Label>{item.category}</Label>
+            <Badge><Label>{item.category}</Label></Badge>
             <Label>{text.param.oneOutOf(item.price)}</Label>
           </Tag>
           <PriceInRun price={item.price} />

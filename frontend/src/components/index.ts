@@ -19,3 +19,5 @@ export * from "./base-character";
 export * from "./character-card";
 export * from "./character-detail";
 export * from "./character-item";
+export * from "./filters";
+export * from "./title";
