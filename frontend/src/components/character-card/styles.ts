@@ -1,32 +1,20 @@
-import { Card, CardActions } from "@mui/material";
+import { Card } from "@mui/material";
 import styled from "styled-components";
-import { CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider } from "../atoms/lines";
-import CardContent from "@mui/material/CardContent";
-
-export const Content = styled(CardContent)`
-  && {
-    padding: 0px 16px;
-  }
-`;
 
 export const ArrowContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: ${margins.mini};
+  border: 1px solid ${color.grey};
   box-sizing: border-box;
   border-radius: ${margins.medium};
 `;
 
-export const Close = styled(CloseIcon)`
-  width: ${margins.big};
-  height: ${margins.big};
-  cursor: pointer;
-`;
 
-export const Menu = styled(Card)`
+export const CharacterWrapper = styled(Card)`
   && {
     width: 526px;
     background: ${color.white};
@@ -34,18 +22,20 @@ export const Menu = styled(Card)`
     box-sizing: border-box;
     border-radius: ${margins.medium};
     box-shadow: none;
-    max-height: 688px;
-    overflow-y: scroll;
+    right: ${margins.big};
+    top: 101px;
+    position: absolute;
+    z-index: 10000;
   }
 `;
 
-export const MenuHeader = styled.div`
+export const CharacterHeader = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${margins.big} ${margins.big} ${margins.medium} ${margins.big};
 `;
 
-export const MenuContainer = styled.div`
+export const CharacterContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -64,25 +54,23 @@ export const Divider = styled(HeaderHorizontalDivider)`
   width: ${margins.big};
 `;
 
-export const MenuContent = styled.div`
-  padding: 0px ${margins.medium} 0px ${margins.medium};
+export const CharacterContent = styled.div`
+  padding: 24px ${margins.big} 0px ${margins.medium};
 `;
 
-export const MenuItemContainer = styled.div`
+export const CharacterItemContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: ${margins.big} ${margins.medium} ${margins.big} ${margins.mini};
 `;
 
-export const CardActionsContainer = styled(CardActions)`
-  && {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: flex-end;
-    margin-bottom: ${margins.large};
-    margin-right: ${margins.large};
-    box-shadow: none;
-  }
+export const CardActionsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-right: 30px;
+  margin-bottom: 30px;
+  box-shadow: none;
 `;

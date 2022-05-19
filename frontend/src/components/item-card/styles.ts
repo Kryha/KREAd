@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color } from "../../design";
+import { color, margins } from "../../design";
 import { CardElementIcon } from "../../assets";
 
 export const Card = styled(CardElementIcon)`
@@ -49,7 +49,7 @@ export const Diagonal = styled.div`
   border: 1px solid ${color.grey};
   transform: rotate(135deg);
   width: 120px;
-  top: 40px;
+  top: ${margins.big};
   position: absolute;
   left: -17px;
 `;

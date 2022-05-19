@@ -3,18 +3,21 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import { NavigationTitle } from "../atoms";
-import { color } from "../../design";
+import { color, margins } from "../../design";
 
 export const NavTab = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 16px;
+  padding: ${margins.medium};
   font-family: Aktiv Grotesk Medium;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  color: #141414;
+  font-size: 18px;
+  line-height: 20.5px;
+  color:${color.black};
+  :first-letter {
+    text-transform: capitalize;
+  }
 `;
 
 export const NavTitle = styled(NavigationTitle)`
