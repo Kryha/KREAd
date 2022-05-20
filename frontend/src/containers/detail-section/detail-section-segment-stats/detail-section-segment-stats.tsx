@@ -3,6 +3,7 @@ import { FC } from "react";
 import { text } from "../../../assets";
 
 import { Item } from "../../../interfaces";
+import { DetailSectionColorPalette } from "../detail-section-color-palette";
 import { DetailSectionElement } from "../detail-section-element";
 import { DetailSectionProgressBar } from "../detail-section-progress-bar";
 import { DetailSectionBody, DetailSectionBodyBigBold } from "../detail-section-segment/styles";
@@ -30,6 +31,9 @@ export const DetailSectionSegmentStats: FC<DetailSectionSegmentStatsProps> = ({ 
       </DetailSectionElement>
       <DetailSectionElement title={text.item.baseMaterial}>
         <DetailSectionBody>{item.baseMaterial}</DetailSectionBody>
+      </DetailSectionElement>
+      <DetailSectionElement title={text.item.colors}>
+        <DetailSectionColorPalette hexCodeList={item.colors} />
       </DetailSectionElement>
     </DetailSectionSegmentStatsWrap>
   );
