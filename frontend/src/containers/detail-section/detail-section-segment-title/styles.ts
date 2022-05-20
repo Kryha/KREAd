@@ -3,7 +3,7 @@ import { color, fontSize, fontWeight, margins } from "../../../design";
 
 export const DetailSectionSegmentTitleWrap = styled.header`
   position: relative;
-  padding-bottom: ${margins.mini};
+  padding-bottom: ${margins.large};
   h2 {
     font-size: ${fontSize.sectionTitle};
     font-weight: ${fontWeight.medium};
