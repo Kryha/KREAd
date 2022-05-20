@@ -4,6 +4,7 @@ import { OutlinedButton } from "../../../components";
 import { color, margins, fontWeight, fontSize } from "../../../design";
 
 export const DetailSectionHeaderWrap = styled.header`
+  position: relative;
   display: flex;
   flex-flow: column nowrap;
   padding-bottom: ${margins.big};

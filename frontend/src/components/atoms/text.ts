@@ -112,6 +112,6 @@ export const ButtonText = styled.h3<TextProps>`
   line-height: 18px;
   :first-letter {
     text-transform: capitalize;
-  };
+  }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;

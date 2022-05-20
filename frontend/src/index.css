@@ -3,7 +3,7 @@
 }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Aktiv Grotesk Regular', sans-serif;
+  font-family:  'Aktiv Grotesk Regular',-apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

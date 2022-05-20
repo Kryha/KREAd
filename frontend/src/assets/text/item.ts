@@ -1,3 +1,18 @@
 export const item = {
   creators: "creators",
+  level: "level",
+  effectiveness: "effectiveness",
+  layerComplexity: "layer complexity",
+  forged: "forged",
+  baseMaterial: "base material",
+  colors: "colors",
+  contractAddress: "contract address",
+  boardId: "board id",
+  artist: "artist",
+  metadata: "metadata",
+  event: "event",
+  price: "price",
+  from: "from",
+  to: "to",
+  date: "date",
 };
