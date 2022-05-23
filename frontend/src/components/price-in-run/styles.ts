@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
-import { color, margins } from "../../design";
+import { color, margins, zIndex } from "../../design";
 
 export const PriceContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
+  z-index: ${zIndex.background};
 `;
 
 export const Diamond = styled.div`

@@ -40,7 +40,7 @@ export const CharacterContainer = styled.div<ImageProps>`
       case "mini":
         return "zoom:0.075; ";
       case "medium":
-        return "width: 354px; height: 320px;";
+        return "zoom: 0.317;";
       case "normal":
         return `width: ${width * 0.4}px; height: ${height}px;`;
       case "large":

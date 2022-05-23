@@ -1,35 +1,34 @@
-import { FC } from "react";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import { FC, useState } from "react";
 
-import { FormBox, Label, SelectArrow, StyledSelect } from "./styles";
-import { SelectChangeEvent } from "@mui/material";
+import { Tick, SelectBox, StyledSelect } from "./styles";
+import { ButtonText } from "../atoms";
+import { color } from "../../design";
 
-interface Options {
+export interface Options {
   label: string;
   value: string;
 }
 
 interface SelectProps {
   label: string;
-  input: string;
-  handleChange: (event: SelectChangeEvent<unknown>) => void;
+  handleChange: (selected: string) => void;
   options: Options[];
 }
 
-export const Select: FC<SelectProps> = ({ label, input, options, handleChange }) => {
+export const Select: FC<SelectProps> = ({ label, options, handleChange }) => {
+  const [selected, setSelected] = useState(-1);
   return (
-    <FormBox>
-      <FormControl fullWidth>
-        <Label>{label}</Label>
-        <StyledSelect value={input} label={label} onChange={handleChange} IconComponent={(props) => <SelectArrow {...props} />}>
-          {options.map((option) => (
-            <MenuItem value={option.value} key={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
+    <SelectBox>
+      <StyledSelect selected={selected === -1} onClick={() => { handleChange(""); setSelected(-1); }}>
+        <ButtonText customColor={selected === -1 ? color.black : color.darkGrey}>{label}</ButtonText>
+        <Tick />
+      </StyledSelect>
+      {options.map((option, index) => (
+        <StyledSelect selected={selected === index} key={index} onClick={() => { handleChange(options[index].value); setSelected(index); }}>
+          <ButtonText customColor={selected === index ? color.black : color.darkGrey}>{option.label}</ButtonText>
+          <Tick />
         </StyledSelect>
-      </FormControl>
-    </FormBox>
+      ))}
+    </SelectBox>
   );
 };
