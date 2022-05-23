@@ -21,3 +21,4 @@ export * from "./character-detail";
 export * from "./character-item";
 export * from "./filters";
 export * from "./title";
+export * from "./character-shop-card";
