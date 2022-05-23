@@ -3,8 +3,7 @@ import { color, fontWeight, margins } from "../../../design";
 
 export const DetailSectionProgressBarWrap = styled.div`
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
+  flex-flow: row nowrap;
   gap: ${margins.medium};
   label {
     display: none;
@@ -14,6 +13,7 @@ export const DetailSectionProgressBarWrap = styled.div`
     border: 1px solid ${color.grey};
     border-radius: 2px;
     padding: 2px;
+    width: 100%;
   }
   progress {
     color: ${color.black};
@@ -32,5 +32,6 @@ export const DetailSectionProgressBarWrap = styled.div`
   }
   span {
     font-weight: ${fontWeight.regular};
+    min-width: 65px;
   }
 `;

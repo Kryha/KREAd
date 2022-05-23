@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { FlexRow } from "../../../components";
 import { ButtonInfo } from "../../../components/button-info";
 import { DetailSectionElemenTitle, DetailSectionElementWrap } from "./styles";
 
@@ -11,10 +12,10 @@ interface DetailSectionElementProps {
 export const DetailSectionElement: FC<DetailSectionElementProps> = ({ title, children, info }) => {
   return (
     <DetailSectionElementWrap>
-      <div>
+      <FlexRow>
         <DetailSectionElemenTitle>{title}</DetailSectionElemenTitle>
         {info && <ButtonInfo title={title} info={info} />}
-      </div>
+      </FlexRow>
       {children}
     </DetailSectionElementWrap>
   );

@@ -1,13 +1,10 @@
 import styled from "styled-components";
-import { BodyText } from "../../../components";
 import { color, fontSize, fontWeight, margins } from "../../../design";
 
 export const DetailSectionElementWrap = styled.div`
   display: block;
-  ${BodyText} {
-    font-size: ${fontSize.tiny};
-    color: blue;
-  }
+  width: 100%;
+  margin-bottom: ${margins.medium};
 `;
 
 export const DetailSectionElemenTitle = styled.h3`

@@ -3,7 +3,6 @@ import { margins } from "../../../design";
 
 export const DetailSectionSegmentStatsWrap = styled.div`
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  gap: ${margins.extraLarge};
+  flex-flow: column nowrap;
+  gap: ${margins.large};
 `;

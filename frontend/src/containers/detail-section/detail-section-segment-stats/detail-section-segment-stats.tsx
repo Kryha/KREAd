@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 import { text } from "../../../assets";
+import { FlexColumn, FlexRow } from "../../../components";
 
 import { Item } from "../../../interfaces";
 import { DetailSectionColorPalette } from "../detail-section-color-palette";
@@ -17,23 +18,29 @@ interface DetailSectionSegmentStatsProps {
 export const DetailSectionSegmentStats: FC<DetailSectionSegmentStatsProps> = ({ item }) => {
   return (
     <DetailSectionSegmentStatsWrap>
-      <DetailSectionElement title={text.item.level} info={text.item.levelInfo}>
-        <DetailSectionBodyBigBold>{item.level}</DetailSectionBodyBigBold>
-      </DetailSectionElement>
-      <div>
-        <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo}>
-          <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness} />
+      <FlexRow>
+        <DetailSectionElement title={text.item.level} info={text.item.levelInfo}>
+          <DetailSectionBodyBigBold>{item.level}</DetailSectionBodyBigBold>
         </DetailSectionElement>
-        <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo}>
-          <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity} />
+        <FlexColumn>
+          <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo}>
+            <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness} />
+          </DetailSectionElement>
+          <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo}>
+            <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity} />
+          </DetailSectionElement>
+        </FlexColumn>
+      </FlexRow>
+
+      <FlexRow>
+        <DetailSectionElement title={text.item.forged}>
+          <DetailSectionBody>{item.forged}</DetailSectionBody>
         </DetailSectionElement>
-      </div>
-      <DetailSectionElement title={text.item.forged}>
-        <DetailSectionBody>{item.forged}</DetailSectionBody>
-      </DetailSectionElement>
-      <DetailSectionElement title={text.item.baseMaterial}>
-        <DetailSectionBody>{item.baseMaterial}</DetailSectionBody>
-      </DetailSectionElement>
+        <DetailSectionElement title={text.item.baseMaterial}>
+          <DetailSectionBody>{item.baseMaterial}</DetailSectionBody>
+        </DetailSectionElement>
+      </FlexRow>
+
       <DetailSectionElement title={text.item.colors}>
         <DetailSectionColorPalette hexCodeList={item.colors} />
       </DetailSectionElement>
