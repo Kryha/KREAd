@@ -18,4 +18,5 @@ export const item = {
   from: "from",
   to: "to",
   date: "date",
+  view: "view",
 };

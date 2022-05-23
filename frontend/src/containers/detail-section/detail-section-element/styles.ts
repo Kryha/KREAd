@@ -13,6 +13,6 @@ export const DetailSectionElemenTitle = styled.h3`
   font-size: ${fontSize.title};
   font-weight: ${fontWeight.medium};
   text-transform: capitalize;
-  margin-bottom: ${margins.mini};
-  margin-right: ${margins.medium};
+  margin-bottom: ${margins.small};
+  min-width: 170px;
 `;

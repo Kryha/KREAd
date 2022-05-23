@@ -1,7 +1,7 @@
 import { Item } from "./item.interfaces";
 
 export interface Slots {
-  // TODO: Figure out this type
+  items: Item[];
 }
 
 export interface CharacterItems {
@@ -18,11 +18,11 @@ export interface CharacterItems {
 }
 
 export interface Detail {
-  boardAddress: string;
+  boardId: string;
   contractAddresss: string;
   standard: string;
   artist: string;
-  metadata: any;
+  metadata: string;
 }
 
 export interface Activity {
