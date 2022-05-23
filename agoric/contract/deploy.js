@@ -111,9 +111,9 @@ export default async function deployContract(
     CONTRACT_NAME,
     INSTALLATION_BOARD_ID,
   };
-  const defaultsFolder = pathResolve(`../../frontend/src/service/conf`);
+  const defaultsFolder = pathResolve(`../../ui/src/service/conf`);
   const defaultsFile = pathResolve(
-    `../../frontend/src/service/conf/installationConstants.js`,
+    `../../ui/src/service/conf/installationConstants.js`,
   );
   console.log('writing', defaultsFile);
   const defaultsContents = `\

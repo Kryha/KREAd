@@ -9,8 +9,7 @@
   "workspaces": [
     "api",
     "contract",
-    "_agstate/agoric-servers",
-    "ui"
+    "_agstate/agoric-servers"
   ],
   "devDependencies": {
     "@endo/eslint-plugin": "^0.3.10",

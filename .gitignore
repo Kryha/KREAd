@@ -34,7 +34,7 @@ node_modules
 agoric/_agstate/yarn-links/
 .idea/
 .vscode/
-agoric/ui/.cache/
-agoric/ui/dist/
-agoric/ui/build
+ui/.cache/
+ui/dist/
+ui/build
 

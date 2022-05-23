@@ -8,7 +8,7 @@ import { E } from '@endo/eventual-send';
 import '@agoric/zoe/exported.js';
 // import { AmountMath } from '@agoric/ertp';
 
-import installationConstants from '../../frontend/src/service/conf/installationConstants.js';
+import installationConstants from '../../ui/src/service/conf/installationConstants.js';
 
 // import { cards } from './cards.js';
 
@@ -181,7 +181,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
     CONTRACT_NAME,
   };
 
-  const defaultsFile = pathResolve(`../../frontend/src/service/conf/defaults.js`);
+  const defaultsFile = pathResolve(`../../ui/src/service/conf/defaults.js`);
   console.log('writing', defaultsFile);
   const defaultsContents = `\
 // GENERATED FROM ${pathResolve('./deploy.js')}
