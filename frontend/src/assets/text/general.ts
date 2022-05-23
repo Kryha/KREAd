@@ -15,4 +15,9 @@ export const general = {
   choose: "choose",
   sell: "sell",
   loadMore: "load more",
+  category: "category",
+  price: "price",
+  color: "color",
+  sortBy: "sort by",
+  latest: "latest",
 };
