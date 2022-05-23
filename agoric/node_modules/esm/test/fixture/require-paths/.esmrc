@@ -1,6 +1,0 @@
-{
-  cjs: {
-    vars: true
-  },
-  debug: true
-}

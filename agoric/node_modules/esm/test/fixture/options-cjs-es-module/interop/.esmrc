@@ -1,6 +1,0 @@
-{
-  cjs: {
-    interop: true
-  },
-  debug: true
-}

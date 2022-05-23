@@ -1,7 +1,0 @@
-{
-  "name": "module-alias",
-  "private": true,
-  "_moduleAliases": {
-    "@alias": "./alias.js"
-  }
-}

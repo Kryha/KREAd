@@ -1,3 +1,0 @@
-if (true) {
-  import"nested"
-}

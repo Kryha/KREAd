@@ -1,6 +1,0 @@
-{
-  cjs: {
-    esModule: true
-  },
-  debug: true
-}

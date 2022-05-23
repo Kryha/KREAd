@@ -1,6 +1,0 @@
-{
-  cjs: {
-    cache: true
-  },
-  debug: true
-}

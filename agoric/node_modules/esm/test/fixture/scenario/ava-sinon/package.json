@@ -1,9 +1,0 @@
-{
-  "name": "ava-sinon",
-  "private": true,
-  "ava": {
-    "require": [
-      "../../../../index.js"
-    ]
-  }
-}
