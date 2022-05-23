@@ -29,3 +29,12 @@ yarn-error.log*
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+node_modules
+agoric/_agstate/yarn-links/
+.idea/
+.vscode/
+agoric/ui/.cache/
+agoric/ui/dist/
+agoric/ui/build
+
