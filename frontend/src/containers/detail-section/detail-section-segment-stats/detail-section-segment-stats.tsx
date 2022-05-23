@@ -17,15 +17,17 @@ interface DetailSectionSegmentStatsProps {
 export const DetailSectionSegmentStats: FC<DetailSectionSegmentStatsProps> = ({ item }) => {
   return (
     <DetailSectionSegmentStatsWrap>
-      <DetailSectionElement title={text.item.level}>
+      <DetailSectionElement title={text.item.level} info={text.item.levelInfo}>
         <DetailSectionBodyBigBold>{item.level}</DetailSectionBodyBigBold>
       </DetailSectionElement>
-      <DetailSectionElement title={text.item.effectiveness}>
-        <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness} />
-      </DetailSectionElement>
-      <DetailSectionElement title={text.item.layerComplexity}>
-        <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity} />
-      </DetailSectionElement>
+      <div>
+        <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo}>
+          <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness} />
+        </DetailSectionElement>
+        <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo}>
+          <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity} />
+        </DetailSectionElement>
+      </div>
       <DetailSectionElement title={text.item.forged}>
         <DetailSectionBody>{item.forged}</DetailSectionBody>
       </DetailSectionElement>

@@ -11,9 +11,11 @@ export const DetailSectionElementWrap = styled.div`
 `;
 
 export const DetailSectionElemenTitle = styled.h3`
+  display: inline-block;
   color: ${color.darkGrey};
   font-size: ${fontSize.title};
   font-weight: ${fontWeight.medium};
   text-transform: capitalize;
   margin-bottom: ${margins.mini};
+  margin-right: ${margins.medium};
 `;

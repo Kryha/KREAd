@@ -1,8 +1,11 @@
 export const item = {
   creators: "creators",
   level: "level",
+  levelInfo: "This is the level of your item...",
   effectiveness: "effectiveness",
+  effectivenessInfo: "This reflects how effective your item is...",
   layerComplexity: "layer complexity",
+  layerComplexityInfo: "This tells you how complex your layer is...",
   forged: "forged",
   baseMaterial: "base material",
   colors: "colors",
