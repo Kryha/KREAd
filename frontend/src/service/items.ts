@@ -4,6 +4,7 @@ import { useQuery, UseQueryResult } from "react-query";
 import { Items } from "./fake-item-data";
 import { useMemo } from "react";
 import { sortItems } from "../util";
+import { MAX_PRICE, MIN_PRICE } from "../constants";
 
 export const useItems = (): UseQueryResult<Item[]> => {
   return useQuery(["items"], async () => {
@@ -23,7 +24,7 @@ export const useMyItems = (): UseQueryResult<Item[]> => {
 
 export const useFilteredItems = (category: string, sorting: string, price: { min: number, max: number }, color: string): { data: Item[]; isLoading: boolean } => {
   const { data, isLoading } = useItems();
-  const changedRange = price.min === 0 && price.max === 10000;
+  const changedRange = price.min === MIN_PRICE && price.max === MAX_PRICE;
 
   return useMemo(() => {
     if (!data) return { data: [], isLoading };

@@ -1,21 +1,19 @@
 import styled from "styled-components";
-import { Card, CardContent } from "@mui/material";
+
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
 
-export const Product = styled(Card)`
-  && {
-    width: 402px;
-    background: ${color.white};
-    border: 1px solid ${color.grey};
-    box-sizing: border-box;
-    border-radius: ${margins.medium};
-    box-shadow: none;
-    padding-top: 24px;
-    border-radius: 24px;
-    align-items: center;
-    min-height: 485px;
-  }
+export const Product = styled.div`
+  width: 402px;
+  background: ${color.white};
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  box-shadow: none;
+  padding-top: ${margins.medium};
+  align-items: center;
+  min-height: 485px;
+  cursor: pointer;
 `;
 
 export const ImageContainer = styled.div`
@@ -25,14 +23,12 @@ export const ImageContainer = styled.div`
   width: 354px;
   height: 320px;
   box-sizing: border-box;
-  border-radius: 24px;
-  margin-bottom: 24px;
+  border-radius: ${margins.medium};
+  margin-bottom: ${margins.medium};
 `;
 
-export const Content = styled(CardContent)`
- && {
-   padding: 0 24px 24px 24px;
- }
+export const Content = styled.div`
+  padding: 0 ${margins.medium} ${margins.medium} ${margins.medium};
 `;
 
 export const TitleWrapper = styled.div`
@@ -44,11 +40,11 @@ export const TitleWrapper = styled.div`
 `;
 
 export const OwnedByContainer = styled.div`
-  margin-top: 8px;
+  margin-top: ${margins.mini};
 `;
 
 export const Footer = styled.div`
-  margin-top: 16px;
+  margin-top: ${margins.small};
   display: flex;
   align-items: space-between;
   justify-content: space-between;
@@ -57,7 +53,7 @@ export const Footer = styled.div`
 export const Tag = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: ${margins.small};
 `;
 
 interface ImageProps {

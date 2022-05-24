@@ -18,7 +18,7 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ character, isZoomed, siz
 
   return (
     <CharacterWrapper>
-      <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size} >
+      <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size}>
         <CharacterIcon width={width} height={height} src={CharacterBase} />
         <ItemIcon src={character.items.hair?.image || Empty} alt={character.items.hair?.name || text.character.hair} width={width} height={height} />
         <ItemIcon src={character.items.headPiece?.image || Empty} alt={character.items.headPiece?.name || text.character.headPiece} width={width} height={height} />

@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { text } from "../../assets";
 import { BaseRoute, ButtonText, CharacterShopCard, ColorSelector, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, PriceSelector, SecondaryButton, Select, ShopCard, SwitchSelector, Title } from "../../components";
+import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useCharacters, useFilteredItems } from "../../service";
@@ -23,7 +24,7 @@ export const Shop: FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
-  const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: 0, max: 10000 });
+  const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [viewItems, setViewItems] = useState(true);
   const { data: items, isLoading: isLoadingItems } = useFilteredItems(selectedCategory, selectedSorting, selectedPrice, selectedColor);
   const { data: characters, isLoading: isLoadingCharacters } = useCharacters();
@@ -54,7 +55,7 @@ export const Shop: FC = () => {
     setSelectedColor("");
     setSelectedSorting("");
     setSelectedCategory("");
-    setSelectedPrice({ min: 0, max: 10000 });
+    setSelectedPrice({ min: MIN_PRICE, max: MAX_PRICE });
   };
 
   return (
@@ -68,7 +69,7 @@ export const Shop: FC = () => {
                 <Filters label={text.filters.category}><Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} /></Filters>
               )}
               {/* TODO: get actual min and max values */}
-              <Filters label={text.filters.price}><PriceSelector handleChange={handlePriceChange} min={0} max={10000} /></Filters>
+              <Filters label={text.filters.price}><PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} /></Filters>
               <Filters label={text.filters.color}><ColorSelector handleChange={handleColorChange} colors={colors} /></Filters>
             </SelectorContainer>
             <SortByContainer>
@@ -106,6 +107,6 @@ export const Shop: FC = () => {
           </ItemWrapper>
         }
       </ShopWrapper>
-    </BaseRoute >
+    </BaseRoute>
   );
 };
