@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { text } from "../../assets/text";
+import { DetailSectionColorPalette } from "../../containers/detail-section/detail-section-color-palette";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
 
 import { ButtonContainer, ColorBox, ColorContainer } from "./styles";
@@ -19,7 +20,9 @@ export const ColorSelector: FC<ColorSelectorProps> = ({ handleChange }) => {
       <ColorContainer>
         {colors.map((color, index) => (
           // TODO: add color component.
-          <div key={index} onClick={() => { setSelected(index); setColor(color); }}>{color}</div>
+          <div key={index} onClick={() => { setSelected(index); setColor(color); }}>
+            <DetailSectionColorPalette hexCodeList={colors} />
+          </div>
         ))}
       </ColorContainer>
       <ButtonContainer>
