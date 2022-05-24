@@ -71,6 +71,9 @@ export const PrimaryButton = styled.div<ButtonProps>`
     background: ${(props): string => props.backgroundColor || color.white};
     border: 2px solid ${color.black};
     box-sizing: border-box;
+    ${ButtonText} {
+      color: ${(props): string => props.fontColor || color.black};
+    }
   }
   &:active {
     background: ${(props): string => props.backgroundColor || color.white};
@@ -119,7 +122,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   ${ButtonText} {
     color: ${(props): string => props.fontColor || color.black};
   }
-  padding: 10px 16px;
+  padding: 8px 16px;
   > svg {
     margin: 0px 6px;
   }

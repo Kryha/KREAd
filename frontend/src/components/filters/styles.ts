@@ -76,11 +76,13 @@ export const FiltersContainer = styled.div<FilterProps>`
 `;
 
 export const FilterOption = styled.div<FilterProps>`
+  z-index: 1000;
   ${({ isOpen }): string => {
     return isOpen
       ? `
         position: absolute;
         margin-top: 14px;
+        z-index: 1000;
         `
       : `
         display: none;

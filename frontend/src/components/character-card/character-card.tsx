@@ -8,7 +8,7 @@ import {
   CharacterWrapper,
   CharacterContent,
 } from "./styles";
-import { OutlinedButton } from "../atoms";
+import { ButtonText, OutlinedButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -54,7 +54,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
           </CharacterContent>
           <CardActionsContainer>
             {/* TODO: link to create new */}
-            <OutlinedButton type="submit" onClick={() => navigate(routes.root)}>{text.general.createNew} <ArrowUpRightIcon /></OutlinedButton>
+            <OutlinedButton type="submit" onClick={() => navigate(routes.root)}><ButtonText>{text.general.createNew}</ButtonText><ArrowUpRightIcon /></OutlinedButton>
           </CardActionsContainer>
         </CardContent>
       </CharacterWrapper>

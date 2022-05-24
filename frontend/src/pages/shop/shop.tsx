@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { text } from "../../assets";
 import { BaseRoute, ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, SecondaryButton, ShopCard, SwitchSelector, Title } from "../../components";
 import { color } from "../../design";
@@ -17,6 +17,7 @@ import {
 } from "./styles";
 
 export const Shop: FC = () => {
+  const [viewItems, setViewItems] = useState(true);
   const { data: items, isLoading: isLoadingItems } = useItems();
   const { height } = useViewport();
 
@@ -24,15 +25,22 @@ export const Shop: FC = () => {
 
   if (!items || !items.length) return <ErrorView />;
 
+  const handleView = (changeView: boolean) => {
+    // TODO: send to backend for some magic
+    setViewItems(!changeView);
+  };
+
   return (
     <BaseRoute sideNavigation={<Title items={items.length} title={text.navigation.shop} />}>
       <ShopWrapper>
         <FilterWrapper>
           <FilterContainer>
             <SelectorContainer>
-              <SwitchSelector buttonOneText={text.character.items} buttonTwoText={text.character.characters} />
+              <SwitchSelector buttonOneText={text.character.items} buttonTwoText={text.character.characters} handleView={handleView} />
               {/* TODO: add filters children component */}
-              <Filters label={text.general.category}></Filters>
+              {Boolean(viewItems) && (
+                <Filters label={text.general.category}></Filters>
+              )}
               <Filters label={text.general.price} />
               <Filters label={text.general.color} />
             </SelectorContainer>
