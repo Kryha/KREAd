@@ -1,21 +1,18 @@
 import styled from "styled-components";
-import { Card, CardContent } from "@mui/material";
 import { color, margins } from "../../design";
 import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 
-export const Product = styled(Card)`
-  && {
-    width: 402px;
-    background: ${color.white};
-    border: 1px solid ${color.grey};
-    box-sizing: border-box;
-    border-radius: ${margins.medium};
-    box-shadow: none;
-    padding-top: 24px;
-    border-radius: 24px;
-    align-items: center;
-    min-height: 485px;
-  }
+export const Product = styled.div`
+  width: 402px;
+  background: ${color.white};
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  box-shadow: none;
+  padding-top: 24px;
+  border-radius: 24px;
+  align-items: center;
+  min-height: 485px;
 `;
 
 export const ImageContainer = styled.div`
@@ -37,10 +34,8 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const Content = styled(CardContent)`
- && {
+export const Content = styled.div`
    padding: 0 24px 24px 24px;
- }
 `;
 
 export const TitleWrapper = styled.div`
@@ -62,8 +57,9 @@ export const Footer = styled.div`
   justify-content: flex-end;
 `;
 
-export const Tag = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
+export const Element = styled.div`
+ width: 345px;
+ height: 320px;
+ border: 1px solid ${color.grey};
+ border-radius: ${margins.medium};
 `;

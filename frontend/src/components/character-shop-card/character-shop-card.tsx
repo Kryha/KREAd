@@ -13,6 +13,7 @@ import {
   Footer,
   TitleWrapper,
   OwnedByContainer,
+  Element,
 } from "./styles";
 import { BaseCharacter } from "../base-character";
 
@@ -25,6 +26,7 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character }) => 
     <Product>
       <Content>
         <ImageContainer>
+          <Element />
           <BaseCharacter character={character} isZoomed={false} size="medium" />
         </ImageContainer>
         <TitleWrapper>

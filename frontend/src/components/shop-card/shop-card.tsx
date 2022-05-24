@@ -14,6 +14,7 @@ import {
   Tag,
   TitleWrapper,
   OwnedByContainer,
+  ItemImage,
 } from "./styles";
 
 interface ShopCardProps {
@@ -26,7 +27,7 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
       <Content>
         <ImageContainer>
           {/* TODO: use slots */}
-          <Img src={item.image} width="1200px" height="1200px" marginTop={`-${imageSize.gigantic}`} marginLeft={`-${imageSize.large}`} />
+          <ItemImage src={item.image} category={item.category} />
         </ImageContainer>
         <TitleWrapper>
           <TitleText>{item.name}</TitleText>

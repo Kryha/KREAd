@@ -17,6 +17,7 @@ export const ExpandButton = styled(SecondaryButton)`;
   z-index: 300;
   left: 38%;
   bottom: ${margins.big};
+  padding: 2px 16px;
 `;
 
 export const CharacterIcon = styled.img<ImageProps>`
@@ -40,13 +41,13 @@ export const CharacterContainer = styled.div<ImageProps>`
       case "mini":
         return "zoom:0.075; ";
       case "medium":
-        return "zoom: 0.317;";
+        return "zoom: 0.3079;";
       case "normal":
         return `width: ${width * 0.4}px; height: ${height}px;`;
       case "large":
         return "zoom: 1.6;";
       case "extraLarge":
-        return "zoom: 2.4;";
+        return "zoom: 1.8;";
       default:
         return `width: ${width * 0.4}px; height: ${height}px;`;
     }
