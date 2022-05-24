@@ -2,8 +2,8 @@ import { FC } from "react";
 import { Item } from "../../interfaces";
 
 import { text } from "../../assets";
-import { color, imageSize } from "../../design";
-import { Badge, BoldLabel, Img, Label, TitleText } from "../atoms";
+import { color } from "../../design";
+import { Badge, BoldLabel, Label, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
 
 import {

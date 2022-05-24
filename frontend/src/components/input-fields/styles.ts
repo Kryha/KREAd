@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { TickIcon, RangeIcon } from "../../assets";
+import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
 import { color, margins } from "../../design";
 import { ButtonText, SecondaryButton, BodyText, Input } from "../atoms";
 
@@ -180,4 +181,21 @@ export const InputContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
+`;
+
+export const ColorWrapper = styled.div<SelectProps>`
+  cursor: pointer;
+    ${({ selected }): string => {
+    return selected
+      ? `
+      ${DetailSectionColorPaletteWrap} {
+        svg {
+          border: 1px solid ${color.black};
+        }
+      }
+      `
+      : `
+
+      `;
+  }};
 `;

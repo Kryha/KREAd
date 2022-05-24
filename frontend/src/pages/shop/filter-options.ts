@@ -1,16 +1,16 @@
 import { Options } from "../../components";
 
 export const categories: Options[] = [
-  { label: "head pieces", value: "headPiece" },
+  { label: "head pieces", value: "head piece" },
   { label: "noselines", value: "noseline" },
-  { label: "front masks", value: "frontMask" },
+  { label: "front masks", value: "front mask" },
   { label: "liquids", value: "liquid" },
-  { label: "masks", value: "masks" },
-  { label: "air resevoirs", value: "airResevoir" },
+  { label: "masks", value: "mask" },
+  { label: "air resevoirs", value: "air resevoir" },
   { label: "clothing", value: "clothing" },
   { label: "hair", value: "hair" },
-  { label: "background I", value: "background1" },
-  { label: "background II", value: "background2" },
+  { label: "background I", value: "background" },
+  { label: "background II", value: "mid background" },
 ];
 
 export const sorting: Options[] = [
