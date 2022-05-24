@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import { RefreshIcon } from "../../assets";
 import { Label } from "../../components";
 import { margins } from "../../design";
 
 interface ShopProps {
   height: number;
-};
+}
 
 export const ShopWrapper = styled.div`
   margin: ${margins.big} ${margins.big} 120px ${margins.big};
@@ -62,4 +63,8 @@ export const LoadMore = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const Refresh = styled(RefreshIcon)`
+  margin-left: ${margins.mini};
 `;

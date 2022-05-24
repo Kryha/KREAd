@@ -26,4 +26,5 @@ export const character = {
   project: "project",
   itemActivity: "item activity",
   deleteCharacter: "delete character",
+  characters: "characters",
 };

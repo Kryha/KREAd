@@ -15,6 +15,6 @@ export const useItem = (): UseQueryResult<Item> => {
   return useQuery(["item"], async () => {
     //  TODO: intergrate me
 
-    return Items[0];
+    return Items;
   });
 };

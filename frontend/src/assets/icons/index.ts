@@ -3,7 +3,6 @@ import { ReactComponent as SelectArrowIcon } from "./select-arrow.svg";
 import { ReactComponent as ArrowUpRightIcon } from "./arrow-up-right.svg";
 import { ReactComponent as MenuIcon } from "./menu.svg";
 import { ReactComponent as CloseIcon } from "./close.svg";
-import { ReactComponent as BaseCharacterIcon } from "./base-character.svg";
 import { ReactComponent as ExpandIcon } from "./expand.svg";
 import AirResevoir1 from "./air_resevoir_01.png";
 import Background1 from "./background_01.png";
@@ -26,6 +25,8 @@ import { ReactComponent as InventoryItemIcon } from "./Inventoy-Item.svg";
 import CharacterItemIcon from "./Character-Item.png";
 import CharacterItemFilledIcon from "./Character-Item-Filled.png";
 import { ReactComponent as LinkExternalIcon } from "./icon-link-external.svg";
+import { ReactComponent as RefreshIcon } from "./refresh.svg";
+import { ReactComponent as TriangleIcon } from "./triangle.svg";
 
 export {
   ErrorIcon,
@@ -33,7 +34,6 @@ export {
   ArrowUpRightIcon,
   MenuIcon,
   CloseIcon,
-  BaseCharacterIcon,
   ExpandIcon,
   AirResevoir1,
   Background1,
@@ -56,4 +56,6 @@ export {
   CharacterItemIcon,
   CharacterItemFilledIcon,
   LinkExternalIcon,
+  RefreshIcon,
+  TriangleIcon,
 };
