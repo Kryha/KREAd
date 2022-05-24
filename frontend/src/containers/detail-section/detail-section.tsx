@@ -26,15 +26,16 @@ export const DetailSection: FC = () => {
   return (
     <DetailSectionWrap>
       <DetailSectionHeader item={item} />
+      <DetailSectionSegment title="Stats" sectionIndex={2}>
+        <DetailSectionSegmentStats item={item} />
+      </DetailSectionSegment>
       <DetailSectionSegment title="Item Activity" sectionIndex={5}>
         <DetailSectionSegmentActivity item={item} />
       </DetailSectionSegment>
       <DetailSectionSegment title="Story" sectionIndex={1}>
         <DetailSectionSegmentStory item={item} />
       </DetailSectionSegment>
-      <DetailSectionSegment title="Stats" sectionIndex={2}>
-        <DetailSectionSegmentStats item={item} />
-      </DetailSectionSegment>
+
       <DetailSectionSegment title="Project" sectionIndex={3}>
         {item.description}
       </DetailSectionSegment>

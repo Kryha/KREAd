@@ -1,9 +1,19 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { color, fontSize, margins } from "../../design";
 
 export const TooltipWrap = styled.section`
   display: inline-block;
   position: relative;
+`;
+
+const TooltipAnimation = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 `;
 
 export const TooltipContent = styled.div`
@@ -13,12 +23,14 @@ export const TooltipContent = styled.div`
   border: solid 1px ${color.grey};
   left: 50%;
   transform: translateX(-50%);
-  padding: ${margins.small} ${margins.medium};
+  padding: ${margins.medium} ${margins.medium};
   color: ${color.black};
-  background: ${color.white};
+  background: ${color.lightGrey};
   font-size: ${fontSize.medium};
   z-index: 100;
   white-space: nowrap;
+  box-sizing: border-box;
+  animation: ${TooltipAnimation} 0.5s;
   h3 {
     font-size: ${fontSize.title};
     text-transform: capitalize;
@@ -28,20 +40,20 @@ export const TooltipContent = styled.div`
     font-size: ${fontSize.subTitle};
   }
   &.top {
-    top: calc(${margins.large} * -1);
+    top: calc(${margins.mini} * -1);
   }
   &.bottom {
-    bottom: calc(${margins.large} * -1);
+    bottom: calc(${margins.mini} * -1);
   }
   &.left {
     left: auto;
-    right: calc(100% + ${margins.large});
+    right: calc(100% + ${margins.mini});
     top: 50%;
-    transform: translateX(0) translateY(-50%);
+    transform: translateX(0) translateY(0);
   }
   &.right {
-    left: calc(100% + ${margins.large});
+    left: calc(100% + ${margins.mini});
     top: 50%;
-    transform: translateX(0) translateY(-50%);
+    transform: translateX(0) translateY(0);
   }
 `;

@@ -9,26 +9,19 @@ interface TooltipProps {
 }
 
 // TODO: Fix position so it doesn't get covered by parent container
+// TODO: Make it smart so that if the viewport is smaller it finds a better position to pop
 export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }) => {
-  let timeout: number;
   const [active, setActive] = useState(false);
 
-  const showTip = () => {
-    timeout = setTimeout(() => {
-      setActive(true);
-    }, 400) as unknown as number;
-  };
+  const showTip = () => setActive(true);
 
-  const hideTip = () => {
-    clearInterval(timeout);
-    setActive(false);
-  };
+  const hideTip = () => setActive(false);
 
   return (
-    <TooltipWrap onMouseEnter={showTip} onMouseLeave={hideTip}>
+    <TooltipWrap onClick={showTip} onBlur={hideTip}>
       {children}
       {active && (
-        <TooltipContent className={`${position || "right"}`}>
+        <TooltipContent className={`${position || "left"}`}>
           <h3>{title}</h3>
           <p>{content}</p>
         </TooltipContent>
