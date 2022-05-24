@@ -7,13 +7,14 @@ export const DetailSectionSegmentDetailsWrap = styled.div`
   ${FlexRow} {
     gap: ${margins.mini};
   }
-  a {
-    text-decoration: none;
-    color: ${color.black};
-    font-size: ${fontSize.small};
-    font-weight: ${fontWeight.light};
-  }
   ${DetailSectionBody} {
     text-transform: capitalize;
   }
+`;
+
+export const DetailSectionSegmentDetailsLink = styled.a`
+  text-decoration: none;
+  color: ${color.black};
+  font-size: ${fontSize.small};
+  font-weight: ${fontWeight.light};
 `;

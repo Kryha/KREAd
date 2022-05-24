@@ -5,33 +5,32 @@ export const DetailSectionProgressBarWrap = styled.div`
   display: flex;
   flex-flow: row nowrap;
   gap: ${margins.medium};
-  label {
-    display: none;
-  }
-  progress[value] {
+`;
+
+export const DetailSectionProgress = styled.progress`
+  color: ${color.black};
+  border: 1px solid ${color.grey};
+  border-radius: 2px;
+  padding: 2px;
+  &[value] {
     color: ${color.black};
     border: 1px solid ${color.grey};
     border-radius: 2px;
     padding: 2px;
     width: 100%;
   }
-  progress {
-    color: ${color.black};
-    border: 1px solid ${color.grey};
-    border-radius: 2px;
-    padding: 2px;
-  }
-  progress::-webkit-progress-bar {
+  &::-webkit-progress-bar {
     background-color: transparent;
   }
-  progress::-webkit-progress-value {
+  &::-webkit-progress-value {
     background-color: ${color.black};
   }
-  progress::-moz-progress-bar {
+  &::-moz-progress-bar {
     background-color: transparent;
   }
-  span {
-    font-weight: ${fontWeight.regular};
-    min-width: 65px;
-  }
+`;
+
+export const DetailSectionProgressDigits = styled.span`
+  font-weight: ${fontWeight.regular};
+  min-width: 65px;
 `;

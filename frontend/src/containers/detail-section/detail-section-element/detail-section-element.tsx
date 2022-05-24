@@ -16,7 +16,7 @@ export const DetailSectionElement: FC<DetailSectionElementProps> = ({ title, chi
     <DetailSectionElementWrap>
       <FlexRow>
         <DetailSectionElemenTitle>{title}</DetailSectionElemenTitle>
-        {info && <ButtonInfo title={title} info={info} infoPosition={infoPosition} />}
+        {!!info && <ButtonInfo title={title} info={info} infoPosition={infoPosition} />}
       </FlexRow>
       {children}
     </DetailSectionElementWrap>

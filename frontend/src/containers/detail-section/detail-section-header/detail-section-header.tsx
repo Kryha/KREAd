@@ -11,6 +11,7 @@ import {
 
 import { Item } from "../../../interfaces";
 import { text } from "../../../assets";
+import { SectionHeader } from "../../../components";
 
 interface DetailSectionHeaderProps {
   item: Item;
@@ -21,7 +22,7 @@ export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item }) => {
   return (
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>
-        <h1>{item.name}</h1>
+        <SectionHeader>{item.name}</SectionHeader>
         <DetailSectionHeaderNavigation />
       </DetailSectionHeaderTop>
 

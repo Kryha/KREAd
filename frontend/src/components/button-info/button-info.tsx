@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { text } from "../../assets";
 import { InfoPosition } from "../../interfaces/layout.types";
 import { SecondaryButton } from "../atoms";
 import { Tooltip } from "../tooltip";
@@ -14,7 +15,7 @@ export const ButtonInfo: FC<ButtonInfoProps> = ({ title, info, infoPosition }) =
   return (
     <ButtonInfoWrap>
       <Tooltip title={title} content={info} position={infoPosition}>
-        <SecondaryButton>i</SecondaryButton>
+        <SecondaryButton>{text.general.info}</SecondaryButton>
       </Tooltip>
     </ButtonInfoWrap>
   );

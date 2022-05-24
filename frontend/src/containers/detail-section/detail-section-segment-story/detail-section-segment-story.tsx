@@ -6,6 +6,7 @@ import { Label } from "../../../components";
 import { Item } from "../../../interfaces";
 import {
   DetailSectionSegmentStoryCreators,
+  DetailSectionSegmentStoryCreatorsImg,
   DetailSectionSegmentStoryCreatorsImgContainer,
   DetailSectionSegmentStoryDescription,
   DetailSectionSegmentStoryImg,
@@ -24,7 +25,7 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
         <DetailSectionSegmentStoryCreators>
           <Label>{text.item.creators}</Label>
           <DetailSectionSegmentStoryCreatorsImgContainer>
-            <img alt={item.name} src={UnnamedCreator} />
+            <DetailSectionSegmentStoryCreatorsImg alt={item.name} src={UnnamedCreator} />
           </DetailSectionSegmentStoryCreatorsImgContainer>
         </DetailSectionSegmentStoryCreators>
         <DetailSectionSegmentStoryDescription>{item.description}</DetailSectionSegmentStoryDescription>

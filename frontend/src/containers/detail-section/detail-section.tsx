@@ -11,11 +11,13 @@ import { DetailSectionSegmentStory } from "./detail-section-segment-story";
 import { DetailSectionSegmentStats } from "./detail-section-segment-stats";
 import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
+import { text } from "../../assets";
 
-// TODO: make Detail Section polymorphic and render Item or Character data conditionally
+// TODO: make Detail Section polymorphic and render Item or Character data conditionally based on type
 // TODO: Make index dynamic
 export const DetailSection: FC = () => {
-  const { data: item, isLoading: isLoadingItem } = useItem();
+  const MOCKED_ITEM_ID = "12344";
+  const { data: item, isLoading: isLoadingItem } = useItem(MOCKED_ITEM_ID);
 
   if (isLoadingItem) return <LoadingPage />;
 
@@ -26,19 +28,19 @@ export const DetailSection: FC = () => {
   return (
     <DetailSectionWrap>
       <DetailSectionHeader item={item} />
-      <DetailSectionSegment title="Story" sectionIndex={1}>
+      <DetailSectionSegment title={text.item.story} sectionIndex={1}>
         <DetailSectionSegmentStory item={item} />
       </DetailSectionSegment>
-      <DetailSectionSegment title="Stats" sectionIndex={2}>
+      <DetailSectionSegment title={text.item.stats} sectionIndex={2}>
         <DetailSectionSegmentStats item={item} />
       </DetailSectionSegment>
-      <DetailSectionSegment title="Project" sectionIndex={3}>
+      <DetailSectionSegment title={text.item.project} sectionIndex={3}>
         {item.description}
       </DetailSectionSegment>
-      <DetailSectionSegment title="Details" sectionIndex={4}>
+      <DetailSectionSegment title={text.item.details} sectionIndex={4}>
         <DetailSectionSegmentDetails item={item} />
       </DetailSectionSegment>
-      <DetailSectionSegment title="Item Activity" sectionIndex={5}>
+      <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5}>
         <DetailSectionSegmentActivity item={item} />
       </DetailSectionSegment>
     </DetailSectionWrap>

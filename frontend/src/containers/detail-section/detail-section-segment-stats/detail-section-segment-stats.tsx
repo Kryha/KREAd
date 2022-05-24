@@ -24,10 +24,10 @@ export const DetailSectionSegmentStats: FC<DetailSectionSegmentStatsProps> = ({ 
         </DetailSectionElement>
         <FlexColumn>
           <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo} infoPosition="left">
-            <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness} />
+            <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness || 0} />
           </DetailSectionElement>
           <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo} infoPosition="left">
-            <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity} />
+            <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity || 0} />
           </DetailSectionElement>
         </FlexColumn>
       </FlexRow>

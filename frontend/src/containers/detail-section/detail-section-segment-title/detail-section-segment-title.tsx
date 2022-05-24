@@ -1,6 +1,7 @@
 import { FC } from "react";
+import { text } from "../../../assets";
 
-import { DetailSectionSegmentIndex, DetailSectionSegmentTitleWrap } from "./styles";
+import { DetailSectionSegmentIndex, DetailSectionSegmentTitleWrap, DetailSectionSegmentHeader } from "./styles";
 
 interface DetailSectionSegmentTitleProps {
   title: string;
@@ -10,8 +11,8 @@ interface DetailSectionSegmentTitleProps {
 export const DetailSectionSegmentTitle: FC<DetailSectionSegmentTitleProps> = ({ title, sectionIndex }) => {
   return (
     <DetailSectionSegmentTitleWrap>
-      <DetailSectionSegmentIndex>0{sectionIndex}</DetailSectionSegmentIndex>
-      <h2>{title}</h2>
+      <DetailSectionSegmentIndex>{text.param.withZeroPrefix(sectionIndex)}</DetailSectionSegmentIndex>
+      <DetailSectionSegmentHeader>{title}</DetailSectionSegmentHeader>
     </DetailSectionSegmentTitleWrap>
   );
 };

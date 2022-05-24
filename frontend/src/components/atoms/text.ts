@@ -105,17 +105,6 @@ export const PageTitle = styled.h1<TextProps>`
   }
 `;
 
-export const PageTitle = styled.h1<TextProps>`
-  color: ${color.black};
-  font-family: "Aktiv Grotesk Medium";
-  font-weight: ${fontWeight.medium};
-  font-size: 32px;
-  line-height: 52px;
-  :first-letter {
-    text-transform: capitalize;
-  }
-`;
-
 export const ButtonText = styled.h3<TextProps>`
   font-family: Aktiv Grotesk Medium;
   font-weight: 500;
@@ -125,4 +114,10 @@ export const ButtonText = styled.h3<TextProps>`
     text-transform: capitalize;
   }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
+`;
+
+export const SectionHeader = styled.h1`
+  font-size: 32px;
+  font-weight: ${fontWeight.medium};
+  line-hight: 40px;
 `;

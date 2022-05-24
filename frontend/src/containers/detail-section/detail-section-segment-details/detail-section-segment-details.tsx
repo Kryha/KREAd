@@ -5,7 +5,7 @@ import { FlexRow } from "../../../components";
 import { Item } from "../../../interfaces";
 import { DetailSectionElement } from "../detail-section-element";
 import { DetailSectionBody } from "../detail-section-segment/styles";
-import { DetailSectionSegmentDetailsWrap } from "./styles";
+import { DetailSectionSegmentDetailsWrap, DetailSectionSegmentDetailsLink } from "./styles";
 
 import { LinkExternalIcon } from "../../../assets/icons";
 import { truncateAddress } from "../../../util";
@@ -23,16 +23,19 @@ export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> =
           <DetailSectionBody>{truncateAddress(item.details.contractAddresss)}</DetailSectionBody>
         </DetailSectionElement>
         <DetailSectionElement title={text.item.boardId}>
-          <DetailSectionBody>#{item.details.boardId}</DetailSectionBody>
+          <DetailSectionBody>
+            {text.item.boardIdHash}
+            {item.details.boardId}
+          </DetailSectionBody>
         </DetailSectionElement>
         <DetailSectionElement title={text.item.artist}>
           <DetailSectionBody>{item.details.artist}</DetailSectionBody>
         </DetailSectionElement>
         <DetailSectionElement title={text.item.metadata}>
           <DetailSectionBody>
-            <a href={item.details.metadata} target="_blank" rel="noreferrer">
+            <DetailSectionSegmentDetailsLink href={item.details.metadata} target="_blank" rel="noreferrer">
               {text.item.view} <LinkExternalIcon />
-            </a>
+            </DetailSectionSegmentDetailsLink>
           </DetailSectionBody>
         </DetailSectionElement>
       </FlexRow>

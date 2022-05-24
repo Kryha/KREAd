@@ -22,7 +22,7 @@ export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }
     <TooltipWrap onClick={showTip} onBlur={hideTip}>
       {children}
       {active && (
-        <TooltipContent className={`${position || "left"}`}>
+        <TooltipContent className={position || "left"}>
           <h3>{title}</h3>
           <p>{content}</p>
         </TooltipContent>

@@ -24,9 +24,10 @@ export const DetailSectionSegmentStoryCreatorsImgContainer = styled.div`
   text-align: center;
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
-  img {
-    object-fit: contain;
-  }
+`;
+
+export const DetailSectionSegmentStoryCreatorsImg = styled.img`
+  object-fit: contain;
 `;
 
 export const DetailSectionSegmentStoryDescription = styled.p`

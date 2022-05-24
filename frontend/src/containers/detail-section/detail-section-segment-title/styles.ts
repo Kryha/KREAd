@@ -4,11 +4,15 @@ import { color, fontSize, fontWeight, margins } from "../../../design";
 export const DetailSectionSegmentTitleWrap = styled.header`
   position: relative;
   padding-bottom: ${margins.large};
-  h2 {
-    font-size: ${fontSize.sectionTitle};
-    font-weight: ${fontWeight.medium};
-    position: relative;
-    left: 30px;
+`;
+
+export const DetailSectionSegmentHeader = styled.h2`
+  font-size: ${fontSize.sectionTitle};
+  font-weight: ${fontWeight.medium};
+  position: relative;
+  left: 30px;
+  &::first-letter {
+    text-transform: capitalize;
   }
 `;
 

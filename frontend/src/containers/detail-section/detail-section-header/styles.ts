@@ -16,11 +16,6 @@ export const DetailSectionHeaderTop = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  h1 {
-    font-size: 32px;
-    font-weight: ${fontWeight.medium};
-    line-hight: 40px;
-  }
   margin-bottom: ${margins.small};
 `;
 
