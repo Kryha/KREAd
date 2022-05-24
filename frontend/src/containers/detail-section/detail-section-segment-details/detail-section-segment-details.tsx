@@ -7,7 +7,7 @@ import { DetailSectionElement } from "../detail-section-element";
 import { DetailSectionBody } from "../detail-section-segment/styles";
 import { DetailSectionSegmentDetailsWrap } from "./styles";
 
-import { ArrowUpRightIcon } from "../../../assets/icons";
+import { LinkExternalIcon } from "../../../assets/icons";
 import { truncateAddress } from "../../../util";
 
 interface DetailSectionSegmentDetailsProps {
@@ -31,7 +31,7 @@ export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> =
         <DetailSectionElement title={text.item.metadata}>
           <DetailSectionBody>
             <a href={item.details.metadata} target="_blank" rel="noreferrer">
-              {text.item.view} <ArrowUpRightIcon />
+              {text.item.view} <LinkExternalIcon />
             </a>
           </DetailSectionBody>
         </DetailSectionElement>
