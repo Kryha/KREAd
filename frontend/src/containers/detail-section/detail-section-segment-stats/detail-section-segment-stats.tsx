@@ -19,14 +19,14 @@ export const DetailSectionSegmentStats: FC<DetailSectionSegmentStatsProps> = ({ 
   return (
     <DetailSectionSegmentStatsWrap>
       <FlexRow>
-        <DetailSectionElement title={text.item.level} info={text.item.levelInfo}>
+        <DetailSectionElement title={text.item.level} info={text.item.levelInfo} infoPosition="right">
           <DetailSectionBodyBigBold>{item.level}</DetailSectionBodyBigBold>
         </DetailSectionElement>
         <FlexColumn>
-          <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo}>
+          <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo} infoPosition="left">
             <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness} />
           </DetailSectionElement>
-          <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo}>
+          <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo} infoPosition="left">
             <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity} />
           </DetailSectionElement>
         </FlexColumn>

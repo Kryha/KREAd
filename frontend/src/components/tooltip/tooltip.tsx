@@ -1,9 +1,10 @@
 import React, { FC, useState } from "react";
+import { InfoPosition } from "../../interfaces/layout.types";
 import { TooltipContent, TooltipWrap } from "./styles";
 
 interface TooltipProps {
   title: string;
-  position?: ["top", "bottom", "left", "right"];
+  position?: InfoPosition;
   content: string;
   children: React.ReactNode;
 }
