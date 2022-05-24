@@ -13,9 +13,9 @@ export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, m
 
   return (
     <MenuItemWrapper>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <>
-          <Info selected={false}>
+          <Info selected={false} key={index}>
             <InventoryItem src={CharacterItemIcon} />
             <FilledInventoryItem src={CharacterItemFilledIcon} />
             <ImageCard>

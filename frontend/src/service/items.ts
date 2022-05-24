@@ -18,3 +18,11 @@ export const useItem = (id: string): UseQueryResult<Item> => {
     return item;
   });
 };
+
+export const useMyItems = (): UseQueryResult<Item[]> => {
+  return useQuery(["items"], async () => {
+    //  TODO: intergrate me
+
+    return Items;
+  });
+};

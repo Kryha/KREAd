@@ -37,7 +37,7 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
         <Footer>
           <Tag>
             <Badge><Label>{item.category}</Label></Badge>
-            <Label>{text.param.oneOutOf(item.price)}</Label>
+            <Label>{text.param.oneOutOf(item.rarity)}</Label>
           </Tag>
           <PriceInRun price={item.price} />
         </Footer>

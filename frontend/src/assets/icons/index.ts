@@ -27,6 +27,9 @@ import CharacterItemFilledIcon from "./Character-Item-Filled.png";
 import { ReactComponent as LinkExternalIcon } from "./icon-link-external.svg";
 import { ReactComponent as RefreshIcon } from "./refresh.svg";
 import { ReactComponent as TriangleIcon } from "./triangle.svg";
+import { ReactComponent as TickIcon } from "./tick.svg";
+import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.svg";
+import RangeIcon from "./range.png";
 
 export {
   ErrorIcon,
@@ -58,4 +61,7 @@ export {
   LinkExternalIcon,
   RefreshIcon,
   TriangleIcon,
+  TickIcon,
+  CheveronLeftRightIcon,
+  RangeIcon,
 };
