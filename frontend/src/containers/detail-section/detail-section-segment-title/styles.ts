@@ -8,7 +8,7 @@ export const DetailSectionSegmentTitleWrap = styled.header`
 
 export const DetailSectionSegmentHeader = styled.h2`
   font-size: ${fontSize.sectionTitle};
-  font-weight: ${fontWeight.medium};
+  font-weight: ${fontWeight.regular};
   position: relative;
   left: 30px;
   &::first-letter {
@@ -18,6 +18,7 @@ export const DetailSectionSegmentHeader = styled.h2`
 
 export const DetailSectionSegmentIndex = styled.sup`
   font-size: ${fontSize.extraSmall};
+  font-weight: ${fontWeight.regular};
   position: absolute;
   top: 0;
   left: 0;
