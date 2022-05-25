@@ -36,6 +36,9 @@ export const SwitchButtonRight = styled(SecondaryButton) <ButtonProps>`
   :hover {
     color: ${color.black};
   }
+  :focus {
+    padding: 7px 35px;
+  }
     ${({ selected }): string => {
     return selected
       ? `

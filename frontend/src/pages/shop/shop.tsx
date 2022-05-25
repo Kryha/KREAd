@@ -112,7 +112,7 @@ export const Shop: FC = () => {
           </FilterContainer>
           <HorizontalDivider />
         </FilterWrapper>
-        {noFilteredItems ? <></> :
+        {!!noFilteredItems ||
           <ItemWrapper height={height}>
             {viewItems ?
               <>
