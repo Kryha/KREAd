@@ -28,8 +28,6 @@ export const HeaderWrap = styled.header`
   text-transform: capitalize;
   font-size: ${fontSize.subTitle};
   font-weight: ${fontWeight.regular};
-  div {
-  }
 `;
 
 export const RowWrap = styled.div`
@@ -38,10 +36,6 @@ export const RowWrap = styled.div`
   justify-content: flex-start;
   padding: ${margins.small} 0;
   border-bottom: 1px solid ${color.grey};
-  div {
-    flex-grow: 1;
-    width: 50px;
-  }
 `;
 
 export const BodyWrap = styled.div`
