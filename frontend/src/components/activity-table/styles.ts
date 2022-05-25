@@ -9,6 +9,11 @@ export const ActivityTableWrap = styled.section`
   width: 100%;
 `;
 
+export const Cell = styled.div`
+  flex-grow: 1;
+  width: 50px;
+`;
+
 export const HeaderWrap = styled.header`
   display: flex;
   border-bottom: 1px solid ${color.grey};
@@ -19,8 +24,6 @@ export const HeaderWrap = styled.header`
   font-size: ${fontSize.subTitle};
   font-weight: ${fontWeight.regular};
   div {
-    flex-grow: 1;
-    width: 50px;
   }
 `;
 

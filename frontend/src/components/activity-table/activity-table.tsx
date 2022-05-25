@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { ActivityTableWrap, BodyWrap, FooterWrap, HeaderWrap, RowWrap } from "./styles";
+import { ActivityTableWrap, BodyWrap, Cell, FooterWrap, HeaderWrap, RowWrap } from "./styles";
 
 import { ActivityEvent, Item } from "../../interfaces";
 import { RefreshIcon, text } from "../../assets";
@@ -27,11 +27,11 @@ interface HeadertProps {
 const Header: FC<HeadertProps> = ({ text }) => {
   return (
     <>
-      <div>{text.event}</div>
-      <div>{text.price}</div>
-      <div>{text.from}</div>
-      <div>{text.to}</div>
-      <div>{text.date}</div>
+      <Cell>{text.event}</Cell>
+      <Cell>{text.price}</Cell>
+      <Cell>{text.from}</Cell>
+      <Cell>{text.to}</Cell>
+      <Cell>{text.date}</Cell>
     </>
   );
 };
@@ -39,13 +39,13 @@ const Header: FC<HeadertProps> = ({ text }) => {
 const Row: FC<RowProps> = ({ event }) => {
   return (
     <>
-      <div>
+      <Cell>
         <CategoryButton>{event.type}</CategoryButton>
-      </div>
-      <div>{!!event.price && text.param.runPrice(event.price)}</div>
-      <div>{event.from}</div>
-      <div>{event.to}</div>
-      <div>{event.date}</div>
+      </Cell>
+      <Cell>{!!event.price && text.param.runPrice(event.price)}</Cell>
+      <Cell>{event.from}</Cell>
+      <Cell>{event.to}</Cell>
+      <Cell>{event.date}</Cell>
     </>
   );
 };
