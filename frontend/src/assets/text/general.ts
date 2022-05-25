@@ -20,4 +20,5 @@ export const general = {
   sell: "sell",
   category: "category",
   loadMore: "load more",
+  info: "i",
 };
