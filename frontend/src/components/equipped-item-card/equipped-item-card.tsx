@@ -18,21 +18,48 @@ interface EquippedItemCardProps {
   marginBottom?: string | undefined;
 }
 
-export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
   const navigate = useNavigate();
+  const handleClick = () => {
+    if (!item) return;
+    navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } });
+  };
   return (
-    <EquippedContainer onClick={() => item ? navigate(routes.items, { state: { category: item?.category } }) : <></>}>
+    <EquippedContainer
+      onClick={() => handleClick()}>
       <VerticalInfo code={code} id={item?.id} />
-      <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
+      <ItemCard
+        image={item?.image}
+        width={width}
+        height={height}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        marginLeft={marginLeft}
+        marginRight={marginRight}
+      />
     </EquippedContainer>
   );
 };
 
-export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+export const RightEquippedItemCard: FC<EquippedItemCardProps> =
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
   const navigate = useNavigate();
+  const handleClick = () => {
+    if (!item) return;
+    navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } });
+  };
   return (
-    <EquippedContainer onClick={() => item ? navigate(routes.items, { state: { category: item?.category } }) : <></>}>
-      <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
+    <EquippedContainer
+      onClick={() => handleClick()}>
+      <ItemCard
+        image={item?.image}
+        width={width}
+        height={height}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        marginLeft={marginLeft}
+        marginRight={marginRight} />
       <VerticalInfo code={code} id={item?.id} isRight />
     </EquippedContainer>
   );

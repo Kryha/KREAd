@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { margins } from "../../design";
-import { Label, MenuItemName } from "../atoms";
+import { Img, Label, MenuItemName } from "../atoms";
 
 export const EquippedLabel = styled(Label)``;
 
@@ -102,4 +102,34 @@ export const ImageCard = styled.div`
   border-radius: ${margins.medium};
   width: 80px;
   height: 80px;
+`;
+
+interface ImageProps {
+  category?: string;
+}
+
+/* eslint-disable indent */
+export const ItemImage = styled(Img) <ImageProps>`
+${({ category }): string => {
+    switch (category) {
+      case "hair":
+        return "width: 80px; height: 110px; margin-left: 10px;";
+      case "head piece":
+        return "width: 130px; height: 130px; margin-left: -20px; margin-top: -30px;";
+      case "clothing":
+        return "width: 80px; height: 140px; margin-left: 10px; margin-top: -80px;";
+      case "mask":
+        return "width: 190px; height: 190px; margin-left: -40px; margin-top: -100px;";
+      case "noseline":
+        return "width: 350px; height: 250px; margin-left: -120px; margin-top: -150px;";
+      case "air resevoir":
+        return "width: 130px; height: 130px; margin-left: -10px; margin-top: -60px;";
+      case "liquid":
+        return "width: 250px; height: 250px; margin-left: -70px; margin-top: -155px;";
+      case "front mask":
+        return "width: 270px; height: 270px; margin-left: -80px; margin-top: -175px;";
+      default:
+        return "width: 80px; height: 80px;";
+    }
+  }};
 `;

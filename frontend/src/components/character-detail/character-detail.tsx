@@ -61,7 +61,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
                 </SubTitleContainer>
               </TitleContainer>
               <InfoContainer>
-                <PrimaryButton><ButtonText>{text.general.choose}</ButtonText></PrimaryButton>
+                <PrimaryButton><ButtonText customColor={color.white}>{text.general.choose}</ButtonText></PrimaryButton>
                 <SecondaryButton><ButtonText>{text.general.sell}</ButtonText></SecondaryButton>
                 <Divider />
                 <ArrowContainer>
@@ -87,7 +87,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
         </Content>
         <CardActionsContainer>
           {/* TODO: link to store */}
-          <PrimaryButton onClick={() => navigate(routes.root)}><ButtonText>{text.character.deleteCharacter}</ButtonText></PrimaryButton>
+          <PrimaryButton onClick={() => navigate(routes.shop)}><ButtonText customColor={color.white}>{text.character.deleteCharacter}</ButtonText></PrimaryButton>
         </CardActionsContainer>
       </Detail>
     </DetailWrapper>
