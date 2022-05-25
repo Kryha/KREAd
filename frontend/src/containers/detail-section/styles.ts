@@ -7,6 +7,7 @@ export const DetailSectionWrap = styled.section`
   border-radius: 24px;
   max-width: 55%;
   padding: ${margins.big};
+  padding-bottom: 100px;
   display: flex;
   flex-flow: column nowrap;
   overflow-y: scroll;
