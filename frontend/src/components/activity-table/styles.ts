@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { CategoryButton } from "../../containers/detail-section/detail-section-header/styles";
 import { color, fontSize, fontWeight, margins } from "../../design";
 
 export const ActivityTableWrap = styled.section`
@@ -12,6 +13,10 @@ export const ActivityTableWrap = styled.section`
 export const Cell = styled.div`
   flex-grow: 1;
   width: 50px;
+  ${CategoryButton} {
+    color: ${color.darkGrey};
+    border: 1p solid ${color.darkGrey};
+  }
 `;
 
 export const HeaderWrap = styled.header`
