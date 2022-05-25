@@ -5,6 +5,7 @@ import { ButtonContainer, Divider, EquippedLabel, FilledInventoryItem, ImageCard
 import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { CharacterItemFilledIcon, CharacterItemIcon } from "../../assets";
+import { color } from "../../design";
 interface MenuItemProps extends ImageProps {
   items: Item[];
 }
@@ -36,7 +37,7 @@ export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, m
             <EquippedLabel>{text.general.equipped}</EquippedLabel>
             <ButtonContainer>
               <Divider />
-              <PrimaryButton><ButtonText>{text.character.unequip}</ButtonText></PrimaryButton>
+              <PrimaryButton><ButtonText customColor={color.white}>{text.character.unequip}</ButtonText></PrimaryButton>
             </ButtonContainer>
           </InfoWrapper>
         </Info>
