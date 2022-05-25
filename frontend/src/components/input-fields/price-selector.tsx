@@ -2,7 +2,21 @@ import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react
 
 import { text } from "../../assets/text";
 import { BoldLabel, ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
-import { ButtonContainer, ColorBox, InputContainer, InputWrapper, MaxInput, MinInput, RangeContainer, SliderContainer, SliderRange, SliderTrack, TextLabel, ThumbLeft, ThumbRight } from "./styles";
+import {
+  ButtonContainer,
+  ColorBox,
+  InputContainer,
+  InputWrapper,
+  MaxInput,
+  MinInput,
+  RangeContainer,
+  SliderContainer,
+  SliderRange,
+  SliderTrack,
+  TextLabel,
+  ThumbLeft,
+  ThumbRight
+} from "./styles";
 
 interface PriceSelectorProps {
   handleChange: (min: number, max: number) => void;
@@ -98,8 +112,21 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
         </SliderContainer>
       </RangeContainer>
       <ButtonContainer>
-        <SecondaryButton onClick={() => { setMinVal(min); minValRef.current = min; setMaxVal(max); maxValRef.current = max; handleChange(min, max); }}><ButtonText>{text.filters.clearFilter}</ButtonText></SecondaryButton>
-        <PrimaryButton onClick={() => { handleChange(minVal, maxVal); }}><ButtonText>{text.filters.apply}</ButtonText></PrimaryButton>
+        <SecondaryButton
+          onClick={() => {
+            setMinVal(min);
+            minValRef.current = min;
+            setMaxVal(max);
+            maxValRef.current = max;
+            handleChange(min, max);
+          }}
+        >
+          <ButtonText>{text.filters.clearFilter}</ButtonText>
+        </SecondaryButton>
+        <PrimaryButton
+          onClick={() => { handleChange(minVal, maxVal); }}>
+          <ButtonText>{text.filters.apply}</ButtonText>
+        </PrimaryButton>
       </ButtonContainer>
     </ColorBox>
   );

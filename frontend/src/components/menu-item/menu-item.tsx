@@ -19,7 +19,14 @@ export const MenuItem: FC<MenuItemProps> = ({ items, width, height, marginTop, m
           <FilledInventoryItem src={CharacterItemFilledIcon} />
           {/* TODO: use slots */}
           <ImageCard>
-            <ItemImage src={item.image} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} category={item.category} />
+            <ItemImage
+              src={item.image}
+              width={width}
+              height={height}
+              marginTop={marginTop}
+              marginLeft={marginLeft}
+              category={item.category}
+            />
           </ImageCard>
           <InfoWrapper>
             <InfoContainer>

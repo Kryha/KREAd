@@ -1,6 +1,22 @@
 import { FC, useState } from "react";
 import { text } from "../../assets";
-import { BaseRoute, ButtonText, CharacterShopCard, ColorSelector, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, PriceSelector, SecondaryButton, Select, ShopCard, SwitchSelector, Title } from "../../components";
+import {
+  BaseRoute,
+  ButtonText,
+  CharacterShopCard,
+  ColorSelector,
+  ErrorView,
+  Filters,
+  HorizontalDivider,
+  Label,
+  LoadingPage,
+  PriceSelector,
+  SecondaryButton,
+  Select,
+  ShopCard,
+  SwitchSelector,
+  Title
+} from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
@@ -29,7 +45,9 @@ export const Shop: FC = () => {
   const { data: items, isLoading: isLoadingItems } = useFilteredItems(selectedCategory, selectedSorting, selectedPrice, selectedColor);
   const { data: characters, isLoading: isLoadingCharacters } = useCharacters();
   const { height } = useViewport();
-  const noFilteredItems = (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice) && (!items || !items.length);
+  const noFilteredItems =
+  (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice) && (!items || !items.length);
+
   if (isLoadingItems || isLoadingCharacters) return <LoadingPage />;
 
   if (!characters || !characters.length) return <ErrorView />;
@@ -64,17 +82,32 @@ export const Shop: FC = () => {
         <FilterWrapper>
           <FilterContainer>
             <SelectorContainer>
-              <SwitchSelector buttonOneText={text.character.items} buttonTwoText={text.character.characters} handleView={handleView} />
+              <SwitchSelector
+                buttonOneText={text.character.items}
+                buttonTwoText={text.character.characters}
+                handleView={handleView}
+              />
               {Boolean(viewItems) && (
-                <Filters label={text.filters.category}><Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} /></Filters>
+                <Filters label={text.filters.category}>
+                  <Select
+                    label={text.filters.allCategories}
+                    handleChange={handleCategoryChange}
+                    options={categories} />
+                </Filters>
               )}
               {/* TODO: get actual min and max values */}
-              <Filters label={text.filters.price}><PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} /></Filters>
-              <Filters label={text.filters.color}><ColorSelector handleChange={handleColorChange} colors={colors} /></Filters>
+              <Filters label={text.filters.price}>
+                <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
+              </Filters>
+              <Filters label={text.filters.color}>
+                <ColorSelector handleChange={handleColorChange} colors={colors} />
+              </Filters>
             </SelectorContainer>
             <SortByContainer>
               <Label customColor={color.black}>{text.filters.sortBy}</Label>
-              <Filters label={text.filters.latest}><Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} /></Filters>
+              <Filters label={text.filters.latest}>
+                <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
+              </Filters>
             </SortByContainer>
           </FilterContainer>
           <HorizontalDivider />
@@ -90,7 +123,10 @@ export const Shop: FC = () => {
                 </ItemContainer>
                 {/* TODO: do something with load more */}
                 <LoadMore>
-                  <SecondaryButton><ButtonText>{text.general.loadMore}</ButtonText><Refresh /></SecondaryButton>
+                  <SecondaryButton>
+                    <ButtonText>{text.general.loadMore}</ButtonText>
+                    <Refresh />
+                  </SecondaryButton>
                 </LoadMore>
               </>
               : <>
@@ -101,7 +137,10 @@ export const Shop: FC = () => {
                 </ItemContainer>
                 {/* TODO: do something with load more */}
                 <LoadMore>
-                  <SecondaryButton><ButtonText>{text.general.loadMore}</ButtonText><Refresh /></SecondaryButton>
+                  <SecondaryButton>
+                    <ButtonText>{text.general.loadMore}</ButtonText>
+                    <Refresh />
+                  </SecondaryButton>
                 </LoadMore>
               </>}
           </ItemWrapper>
