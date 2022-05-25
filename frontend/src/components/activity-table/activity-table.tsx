@@ -14,7 +14,7 @@ interface RowProps {
   event: ActivityEvent;
 }
 
-interface HeadertProps {
+interface HeaderProps {
   text: {
     event: string;
     price: string;
@@ -24,7 +24,7 @@ interface HeadertProps {
   };
 }
 
-const Header: FC<HeadertProps> = ({ text }) => {
+const Header: FC<HeaderProps> = ({ text }) => {
   return (
     <>
       <Cell>{text.event}</Cell>
