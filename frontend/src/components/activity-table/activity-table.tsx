@@ -42,7 +42,9 @@ const Row: FC<RowProps> = ({ event }) => {
       <Cell>
         <CategoryButton>{event.type}</CategoryButton>
       </Cell>
-      <Cell>{!!event.price && text.param.runPrice(event.price)}</Cell>
+      <Cell>
+        <b>{!!event.price && text.param.runPrice(event.price)}</b>
+      </Cell>
       <Cell>{event.from}</Cell>
       <Cell>{event.to}</Cell>
       <Cell>{event.date}</Cell>
