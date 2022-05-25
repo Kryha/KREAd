@@ -50,7 +50,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
             )}
             <ButtonContainer>
               <Divider />
-              {isCharacterEquipped ? <PrimaryButton><ButtonText>{text.character.unequip}</ButtonText></PrimaryButton> : <SecondaryButton><ButtonText>{text.character.equip}</ButtonText></SecondaryButton>}
+              {isCharacterEquipped ? <PrimaryButton><ButtonText customColor={color.white}>{text.character.unequip}</ButtonText></PrimaryButton> : <SecondaryButton><ButtonText>{text.character.equip}</ButtonText></SecondaryButton>}
             </ButtonContainer>
           </InfoWrapper>
         </Info>

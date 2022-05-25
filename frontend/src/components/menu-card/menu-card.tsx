@@ -52,8 +52,10 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
         </MenuContent>
       </Content>
       <CardActionsContainer>
-        {/* TODO: link to store */}
-        <OutlinedButton type="submit" onClick={() => navigate(routes.root)}><ButtonText>{text.store.buyAtStore}</ButtonText><ArrowUpRightIcon /></OutlinedButton>
+        <OutlinedButton type="submit" onClick={() => navigate(routes.shop)}>
+          <ButtonText>{text.store.buyAtStore}</ButtonText>
+          <ArrowUpRightIcon />
+        </OutlinedButton>
       </CardActionsContainer>
     </Menu>
   );
