@@ -77,7 +77,7 @@ export const Shop: FC = () => {
   };
 
   return (
-    <BaseRoute sideNavigation={<Title items={items.length} title={text.navigation.shop} />}>
+    <BaseRoute sideNavigation={<Title items={viewItems ? items.length: characters.length} title={text.navigation.shop} />}>
       <ShopWrapper>
         <FilterWrapper>
           <FilterContainer>
@@ -112,7 +112,7 @@ export const Shop: FC = () => {
           </FilterContainer>
           <HorizontalDivider />
         </FilterWrapper>
-        {noFilteredItems ? <></> :
+        {!!noFilteredItems ||
           <ItemWrapper height={height}>
             {viewItems ?
               <>

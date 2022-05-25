@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { text } from "../../assets/text";
+import { color } from "../../design";
 import { BoldLabel, ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
 import {
   ButtonContainer,
@@ -125,7 +126,7 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
         </SecondaryButton>
         <PrimaryButton
           onClick={() => { handleChange(minVal, maxVal); }}>
-          <ButtonText>{text.filters.apply}</ButtonText>
+          <ButtonText customColor={color.white}>{text.filters.apply}</ButtonText>
         </PrimaryButton>
       </ButtonContainer>
     </ColorBox>

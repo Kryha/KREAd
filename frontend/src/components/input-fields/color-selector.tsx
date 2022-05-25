@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { text } from "../../assets/text";
 import { DetailSectionColorPalette } from "../../containers/detail-section/detail-section-color-palette";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
+import {color as designColors } from "../../design";
 
 import { ButtonContainer, ColorBox, ColorContainer, ColorWrapper } from "./styles";
 // TODO: get actual colors for app
@@ -25,7 +26,7 @@ export const ColorSelector: FC<ColorSelectorProps> = ({ handleChange, colors }) 
       </ColorContainer>
       <ButtonContainer>
         <SecondaryButton onClick={() => { handleChange(""); setSelected(-1); }}><ButtonText>{text.filters.clearFilter}</ButtonText></SecondaryButton>
-        <PrimaryButton onClick={() => { handleChange(color); }}><ButtonText>{text.filters.apply}</ButtonText></PrimaryButton>
+        <PrimaryButton onClick={() => { handleChange(color); }}><ButtonText customColor={designColors.white}>{text.filters.apply}</ButtonText></PrimaryButton>
       </ButtonContainer>
     </ColorBox>
   );

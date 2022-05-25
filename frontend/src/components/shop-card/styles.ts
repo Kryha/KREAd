@@ -79,7 +79,7 @@ ${({ category }): string => {
       case "liquid":
         return "width: 1200px; height: 1200px; margin-left: -250px; margin-top: -400px;";
       case "front mask":
-        return "width: 1400px; height: 1400px; margin-left: -350px; margin-top: -600px;";
+        return "width: 1400px; height: 1400px; margin-left: -320px; margin-top: -600px;";
       default:
         return "width: 354px; height: 320px;";
     }
