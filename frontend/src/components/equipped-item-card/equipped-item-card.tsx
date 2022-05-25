@@ -18,21 +18,38 @@ interface EquippedItemCardProps {
   marginBottom?: string | undefined;
 }
 
-export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
   const navigate = useNavigate();
   return (
     <EquippedContainer onClick={() => item ? navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } }) : <></>}>
       <VerticalInfo code={code} id={item?.id} />
-      <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
+      <ItemCard
+        image={item?.image}
+        width={width}
+        height={height}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        marginLeft={marginLeft}
+        marginRight={marginRight}
+      />
     </EquippedContainer>
   );
 };
 
-export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+export const RightEquippedItemCard: FC<EquippedItemCardProps> =
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
   const navigate = useNavigate();
   return (
     <EquippedContainer onClick={() => item ? navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } }) : <></>}>
-      <ItemCard image={item?.image} width={width} height={height} marginTop={marginTop} marginBottom={marginBottom} marginLeft={marginLeft} marginRight={marginRight} />
+      <ItemCard
+        image={item?.image}
+        width={width}
+        height={height}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        marginLeft={marginLeft}
+        marginRight={marginRight} />
       <VerticalInfo code={code} id={item?.id} isRight />
     </EquippedContainer>
   );

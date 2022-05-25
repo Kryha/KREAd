@@ -37,74 +37,65 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
     setWidthRange(maxPercent - minPercent);
 
   }, [maxVal, getPercent]);
+
+  const setMaxValue = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(Number(event.target.value), minVal + 1);
+    setMaxVal(value);
+    maxValRef.current = value;
+
+  };
+  const setMinValue =(event: ChangeEvent<HTMLInputElement>) => {
+    const value = Math.min(Number(event.target.value), maxVal - 1);
+    setMinVal(value);
+    minValRef.current = value;
+  };
+
   return (
     <ColorBox>
       <RangeContainer>
-        <>
-          <InputWrapper>
-            <InputContainer>
-              <BoldLabel>{text.store.min}</BoldLabel>
-              <TextLabel>
-                <MinInput
-                  type="number"
-                  placeholder={`${minVal}`}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    const value = Math.min(Number(event.target.value), maxVal - 1);
-                    if (value >= min) {
-                      setMinVal(value);
-                      minValRef.current = value;
-                    }
-                  }}
-                />
-              </TextLabel>
-            </InputContainer>
-            <InputContainer>
-              <BoldLabel>{text.store.max}</BoldLabel>
-              <TextLabel>
-                <MaxInput
-                  type="number"
-                  placeholder={`${maxVal}`}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    const value = Math.max(Number(event.target.value), minVal + 1);
-                    if (value <= max) {
-                      setMaxVal(value);
-                      maxValRef.current = value;
-                    }
-                  }}
-                />
-              </TextLabel>
-            </InputContainer>
-          </InputWrapper>
-          <ThumbLeft
-            type="range"
-            min={min}
-            max={max}
-            value={minVal}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              const value = Math.min(Number(event.target.value), maxVal - 1);
-              setMinVal(value);
-              minValRef.current = value;
-            }}
+        <InputWrapper>
+          <InputContainer>
+            <BoldLabel>{text.store.min}</BoldLabel>
+            <TextLabel>
+              <MinInput
+                type="number"
+                placeholder={`${minVal}`}
+                onChange={setMinValue}
+              />
+            </TextLabel>
+          </InputContainer>
+          <InputContainer>
+            <BoldLabel>{text.store.max}</BoldLabel>
+            <TextLabel>
+              <MaxInput
+                type="number"
+                placeholder={`${maxVal}`}
+                onChange={setMaxValue}
+              />
+            </TextLabel>
+          </InputContainer>
+        </InputWrapper>
+        <ThumbLeft
+          type="range"
+          min={min}
+          max={max}
+          value={minVal}
+          onChange={setMinValue}
+        />
+        <ThumbRight
+          type="range"
+          min={min}
+          max={max}
+          value={maxVal}
+          onChange={setMaxValue}
+        />
+        <SliderContainer>
+          <SliderTrack />
+          <SliderRange
+            width={widthRange}
+            left={leftRange}
           />
-          <ThumbRight
-            type="range"
-            min={min}
-            max={max}
-            value={maxVal}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              const value = Math.max(Number(event.target.value), minVal + 1);
-              setMaxVal(value);
-              maxValRef.current = value;
-            }}
-          />
-          <SliderContainer>
-            <SliderTrack />
-            <SliderRange
-              width={widthRange}
-              left={leftRange}
-            />
-          </SliderContainer>
-        </>
+        </SliderContainer>
       </RangeContainer>
       <ButtonContainer>
         <SecondaryButton onClick={() => { setMinVal(min); minValRef.current = min; setMaxVal(max); maxValRef.current = max; handleChange(min, max); }}><ButtonText>{text.filters.clearFilter}</ButtonText></SecondaryButton>
