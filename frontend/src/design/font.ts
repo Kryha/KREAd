@@ -5,6 +5,7 @@ export const fontSize = {
   title: "18px",
   small: "20px",
   medium: "24px",
+  sectionTitle: "32px",
   large: "72px",
   extraLarge: "160px",
 };

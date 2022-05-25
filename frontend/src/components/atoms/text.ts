@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 import { color, fontSize, fontWeight } from "../../design";
 
@@ -41,26 +40,25 @@ export const Label = styled.p<TextProps>`
   font-size: 12px;
   line-height: 15px;
   letter-spacing: 0.04em;
-    :first-letter {
+  :first-letter {
     text-transform: capitalize;
   }
-   ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};
+  ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};
 `;
 
 export const BoldLabel = styled(Label)`
   font-family: Aktiv Grotesk Medium;
 `;
 
-
 export const MenuItemName = styled.h3<TextProps>`
   font-family: Aktiv Grotesk Medium;
   font-weight: ${fontWeight.light};
   font-size: ${fontSize.title};
   line-height: 22px;
-    :first-letter {
+  :first-letter {
     text-transform: capitalize;
   }
-   ${({ customColor }): string => `color: ${customColor || color.black};`};
+  ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
 export const NavigationTitle = styled.h3<TextProps>`
@@ -68,10 +66,10 @@ export const NavigationTitle = styled.h3<TextProps>`
   font-weight: ${fontWeight.light};
   font-size: ${fontSize.subTitle};
   line-height: 18px;
-  ::first-letter {
+  :first-letter {
     text-transform: capitalize;
-  };
-   ${({ customColor }): string => `color: ${customColor || color.black};`};
+  }
+  ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
 export const TitleText = styled.h3<TextProps>`
@@ -82,7 +80,7 @@ export const TitleText = styled.h3<TextProps>`
   :first-letter {
     text-transform: capitalize;
   }
-   ${({ customColor }): string => `color: ${customColor || color.black};`};
+  ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
 export const BodyText = styled.p<TextProps>`
@@ -90,10 +88,10 @@ export const BodyText = styled.p<TextProps>`
   font-weight: 400;
   font-size: 24px;
   line-height: 31px;
-    :first-letter {
+  :first-letter {
     text-transform: capitalize;
   }
-   ${({ customColor }): string => `color: ${customColor || color.black};`};
+  ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
 export const PageTitle = styled.h1<TextProps>`
@@ -114,6 +112,12 @@ export const ButtonText = styled.h3<TextProps>`
   line-height: 15px;
   :first-letter {
     text-transform: capitalize;
-  };
+  }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
+`;
+
+export const SectionHeader = styled.h1`
+  font-size: 32px;
+  font-weight: ${fontWeight.medium};
+  line-hight: 40px;
 `;

@@ -24,6 +24,7 @@ import SmallEl from "./small-el.png";
 import { ReactComponent as InventoryItemIcon } from "./Inventoy-Item.svg";
 import CharacterItemIcon from "./Character-Item.png";
 import CharacterItemFilledIcon from "./Character-Item-Filled.png";
+import { ReactComponent as LinkExternalIcon } from "./icon-link-external.svg";
 import { ReactComponent as RefreshIcon } from "./refresh.svg";
 import { ReactComponent as TriangleIcon } from "./triangle.svg";
 import { ReactComponent as TickIcon } from "./tick.svg";
@@ -57,6 +58,7 @@ export {
   InventoryItemIcon,
   CharacterItemIcon,
   CharacterItemFilledIcon,
+  LinkExternalIcon,
   RefreshIcon,
   TriangleIcon,
   TickIcon,

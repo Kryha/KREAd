@@ -25,3 +25,15 @@ export const Badge = styled.span`
     margin: 0px 10px;
   }
 `;
+
+export const FlexRow = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+`;
+
+export const FlexColumn = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+`;

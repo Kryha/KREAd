@@ -1,16 +1,24 @@
-import { Item } from "../interfaces";
+import { useMemo } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 
+import { Item } from "../interfaces";
 import { Items } from "./fake-item-data";
-import { useMemo } from "react";
 import { sortItems } from "../util";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
 
 export const useItems = (): UseQueryResult<Item[]> => {
-  return useQuery(["items"], async () => {
+  return useQuery(["items", "all"], async () => {
     //  TODO: intergrate me
 
     return Items;
+  });
+};
+
+export const useItem = (id: string): UseQueryResult<Item> => {
+  return useQuery(["item", id], async () => {
+    //  TODO: intergrate me
+    const item = Items.find((item) => item.id === id);
+    return item;
   });
 };
 

@@ -1,28 +1,29 @@
 import { Item } from "./item.interfaces";
 
+// TODO: Define proper type for Slots items;
 export interface Slots {
-  // TODO: Figure out this type
+  items: Item[];
 }
 
 export interface CharacterItems {
-  noseline: Item | undefined;
-  midBackground: Item | undefined;
-  mask: Item | undefined;
-  headPiece: Item | undefined;
-  hair: Item | undefined;
-  frontMask: Item | undefined;
-  liquid: Item | undefined;
-  background: Item | undefined;
-  airResevoir: Item | undefined;
-  clothing: Item | undefined;
+  noseline?: Item;
+  midBackground?: Item;
+  mask?: Item;
+  headPiece?: Item;
+  hair?: Item;
+  frontMask?: Item;
+  liquid?: Item;
+  background?: Item;
+  airResevoir?: Item;
+  clothing?: Item;
 }
 
 export interface Detail {
-  boardAddress: string;
+  boardId: string;
   contractAddresss: string;
   standard: string;
   artist: string;
-  metadata: any;
+  metadata: string;
 }
 
 export interface Activity {
