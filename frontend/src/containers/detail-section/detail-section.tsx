@@ -28,9 +28,6 @@ export const DetailSection: FC = () => {
   return (
     <DetailSectionWrap>
       <DetailSectionHeader item={item} />
-      <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5}>
-        <DetailSectionSegmentActivity item={item} />
-      </DetailSectionSegment>
       <DetailSectionSegment title={text.item.story} sectionIndex={1}>
         <DetailSectionSegmentStory item={item} />
       </DetailSectionSegment>
@@ -42,6 +39,9 @@ export const DetailSection: FC = () => {
       </DetailSectionSegment>
       <DetailSectionSegment title={text.item.details} sectionIndex={4}>
         <DetailSectionSegmentDetails item={item} />
+      </DetailSectionSegment>
+      <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5}>
+        <DetailSectionSegmentActivity item={item} />
       </DetailSectionSegment>
     </DetailSectionWrap>
   );
