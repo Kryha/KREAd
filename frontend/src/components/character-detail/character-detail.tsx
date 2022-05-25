@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { CardHeader } from "@mui/material";
 
 import { text, UnnamedCreator } from "../../assets";
 import { color, imageSize } from "../../design";
@@ -21,6 +20,7 @@ import { SectionTitle } from "../section-titile";
 import {
   ArrowContainer,
   CardActionsContainer,
+  CardHeader,
   Close,
   Content,
   Detail,
@@ -50,7 +50,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
   return (
     <DetailWrapper>
       <Detail>
-        <CardHeader component={() => (
+        <CardHeader>
           <DetailHeader>
             <DetailContainer>
               <TitleContainer>
@@ -70,8 +70,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
               </InfoContainer>
             </DetailContainer>
           </DetailHeader>
-        )}
-        />
+        </CardHeader>
         <Content>
           <DetailContent>
             <HorizontalDivider />

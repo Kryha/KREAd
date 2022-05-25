@@ -1,33 +1,36 @@
 import { FC } from "react";
-import { useLocation } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
+import { useMatch, useResolvedPath } from "react-router-dom";
+import { NavTabs, NavTitle, Tab, NavTab, ActiveLine } from "./styles";
 
-import { text } from "../../assets";
-import { routes } from "../../navigation";
-import { NavTabs, NavTab, NavTitle } from "./styles";
-import { color } from "../../design";
+interface NavigationTabProps {
+  route: string;
+  title: string;
+}
 
-
-export const NavigationTab: FC = () => {
-  const location = useLocation();
-  const currentTab = location.pathname;
-
+export const NavigationTab: FC<NavigationTabProps> = ({route, title}) => {
+  const resolved = useResolvedPath(route);
+  const match = useMatch({ path: resolved.pathname, end: true });
   return (
-    <Box>
-      <NavTabs
-        value={currentTab}
-        TabIndicatorProps={{
-          style: {
-            backgroundColor: color.black,
-            border: `1.2px solid ${color.black}`,
-          }
-        }}
-      >
-        <Tab sx={{ textTransform: "none" }} label={<NavTitle>{text.navigation.character}</NavTitle>} value={routes.root} to={routes.root} component={NavTab} />
-        <Tab sx={{ textTransform: "none" }} label={<NavTitle>{text.navigation.shop}</NavTitle>} value={routes.shop} to={routes.shop} component={NavTab} />
-        <Tab sx={{ textTransform: "none" }} label={<NavTitle>{text.navigation.inventory}</NavTitle>} value={routes.inventory} to={routes.inventory} component={NavTab} />
-      </NavTabs>
-    </Box>
+    <NavTabs>
+      <Tab>
+        <NavTitle>{title}</NavTitle>
+        <ActiveLine active={!!match}/>
+      </Tab>
+    </NavTabs>
+  );
+};
+
+
+
+interface NavigationSectionProps {
+  route: string;
+  children: React.ReactNode;
+}
+
+export const NavigationSection: FC<NavigationSectionProps> = ({ route, children }) => {
+  return (
+    <NavTab end to={route}>
+      {children}
+    </NavTab>
   );
 };

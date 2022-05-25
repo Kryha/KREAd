@@ -1,12 +1,11 @@
 import { FC, useCallback, useState } from "react";
-import CardContent from "@mui/material/CardContent";
-
 
 import { ArrowUpRightIcon, text } from "../../assets";
 import {
   CardActionsContainer,
   CharacterWrapper,
   CharacterContent,
+  CardContent,
 } from "./styles";
 import { ButtonText, OutlinedButton } from "../atoms";
 import { CharacterItem } from "../character-item";
