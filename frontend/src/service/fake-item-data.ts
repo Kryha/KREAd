@@ -42,7 +42,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -56,7 +56,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -106,7 +106,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -120,7 +120,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -170,7 +170,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -184,7 +184,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -234,7 +234,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -248,7 +248,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -298,7 +298,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -312,7 +312,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -362,7 +362,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -376,7 +376,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -426,7 +426,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -440,7 +440,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -490,7 +490,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -504,7 +504,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -554,7 +554,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -568,7 +568,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -618,7 +618,7 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -632,7 +632,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -685,7 +685,7 @@ export const Items: Item[] = [
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -699,7 +699,7 @@ export const Items: Item[] = [
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -749,7 +749,7 @@ export const Items: Item[] = [
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -763,7 +763,7 @@ export const Items: Item[] = [
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -813,7 +813,7 @@ export const Items: Item[] = [
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -827,7 +827,7 @@ export const Items: Item[] = [
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,
@@ -877,7 +877,7 @@ export const Items: Item[] = [
     activity: [
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653468177,
@@ -891,7 +891,7 @@ export const Items: Item[] = [
       },
       {
         type: "transfer",
-        price: 10,
+        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653268177,

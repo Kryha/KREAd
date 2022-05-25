@@ -1,32 +1,47 @@
 import styled from "styled-components";
-import { color, margins } from "../../design";
+import { color, fontSize, fontWeight, margins } from "../../design";
 
-export const ActivityTableWrap = styled.table`
+export const ActivityTableWrap = styled.section`
+  display: flex;
+  flex-flow: column nowrap;
+  border: 1px solid ${color.grey};
+  border-radius: ${margins.medium};
   width: 100%;
-  padding: ${margins.large};
-  border-collapse: collapse;
+`;
+
+export const HeaderWrap = styled.header`
+  display: flex;
+  border-bottom: 1px solid ${color.grey};
   padding: ${margins.medium} ${margins.medium} ${margins.small};
-  th,
-  td {
-    text-align: left;
+  margin-bottom: ${margins.small};
+  justify-content: space-between;
+  text-transform: capitalize;
+  font-size: ${fontSize.subTitle};
+  font-weight: ${fontWeight.regular};
+  div {
+    flex-grow: 1;
+    width: 50px;
   }
-  thead {
-    th {
-      border-bottom: 1px solid ${color.darkGrey};
-      text-transform: capitalize;
-    }
+`;
+
+export const RowWrap = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  padding: ${margins.small} 0;
+  border-bottom: 1px solid ${color.grey};
+  div {
+    flex-grow: 1;
+    width: 50px;
   }
-  tbody {
-    tr {
-      border-bottom: 1px solid ${color.darkGrey};
-    }
-  }
-  tfoot {
-    tr {
-      border: none;
-      padding: ${margins.medium};
-      td {
-      }
-    }
-  }
+`;
+
+export const BodyWrap = styled.div`
+  padding: ${margins.medium};
+`;
+
+export const FooterWrap = styled.footer`
+  display: flex;
+  justify-content: center;
+  padding: ${margins.medium} 0;
 `;
