@@ -6,6 +6,8 @@ import { RefreshIcon, text } from "../../assets";
 import { SecondaryButton } from "../atoms";
 import { CategoryButton } from "../../containers/detail-section/detail-section-header/styles";
 
+import { getDatefromEpoch } from "../../util";
+
 interface ActivityTableProps {
   item: Item;
 }
@@ -47,7 +49,7 @@ const Row: FC<RowProps> = ({ event }) => {
       </Cell>
       <Cell>{event.from}</Cell>
       <Cell>{event.to}</Cell>
-      <Cell>{event.date}</Cell>
+      <Cell>{getDatefromEpoch(event.date)}</Cell>
     </>
   );
 };
