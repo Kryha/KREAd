@@ -1,5 +1,5 @@
-import { Card } from "@mui/material";
 import styled from "styled-components";
+
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 
@@ -14,19 +14,17 @@ export const ArrowContainer = styled.div`
 `;
 
 
-export const CharacterWrapper = styled(Card)`
-  && {
-    width: 526px;
-    background: ${color.white};
-    border: 1px solid ${color.grey};
-    box-sizing: border-box;
-    border-radius: ${margins.medium};
-    box-shadow: none;
-    right: ${margins.big};
-    top: 101px;
-    position: absolute;
-    z-index: 10000;
-  }
+export const CharacterWrapper = styled.div`
+  width: 526px;
+  background: ${color.white};
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  box-shadow: none;
+  right: ${margins.big};
+  top: 101px;
+  position: absolute;
+  z-index: 10000;
 `;
 
 export const CharacterHeader = styled.div`
