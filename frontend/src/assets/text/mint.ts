@@ -20,6 +20,6 @@ export const mint = {
   yourNewCharacterIsReadyToBeCreated: "your new character is ready to be created. Click on the blocks to start adding NFT items from your inventory to the new character.",
   addMask: "add mask",
   offerPending: "offer pending",
-  yourNewCharacterHasNot: "Your new character has not yet been minted",
+  yourNewCharacterHasNot: "your new character has not yet been minted",
   butYouCanAlwaysAccept: "but you can always accept the offer in your wallet. When accepted, you'll see the new minted character appearing in the 'My characters' menu.",
 };
