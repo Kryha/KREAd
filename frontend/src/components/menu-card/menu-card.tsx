@@ -13,7 +13,6 @@ import {
   MenuContent,
   MenuHeader,
   Content,
-  CardHeader,
 } from "./styles";
 import { ButtonText, ImageProps, Label, MenuText, OutlinedButton } from "../atoms";
 import { MenuItem } from "../menu-item";
@@ -31,7 +30,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
   const navigate = useNavigate();
   return (
     <Menu>
-      <CardHeader>
+      <>
         <MenuHeader>
           <MenuContainer>
             <MenuText>{title}</MenuText>
@@ -44,7 +43,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
             </InfoContainer>
           </MenuContainer>
         </MenuHeader>
-      </CardHeader>
+      </>
       <Content>
         <MenuContent>
           <MenuItem items={items} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} />

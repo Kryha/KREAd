@@ -20,7 +20,6 @@ import { SectionTitle } from "../section-titile";
 import {
   ArrowContainer,
   CardActionsContainer,
-  CardHeader,
   Close,
   Content,
   Detail,
@@ -50,7 +49,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
   return (
     <DetailWrapper>
       <Detail>
-        <CardHeader>
+        <>
           <DetailHeader>
             <DetailContainer>
               <TitleContainer>
@@ -70,7 +69,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
               </InfoContainer>
             </DetailContainer>
           </DetailHeader>
-        </CardHeader>
+        </>
         <Content>
           <DetailContent>
             <HorizontalDivider />

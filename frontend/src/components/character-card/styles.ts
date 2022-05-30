@@ -72,5 +72,3 @@ export const CardActionsContainer = styled.div`
   margin-bottom: 30px;
   box-shadow: none;
 `;
-
-export const CardContent = styled.div``;

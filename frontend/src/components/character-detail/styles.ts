@@ -157,5 +157,3 @@ export const SignContainer = styled.div`
     justify-content: center;
   }
 `;
-
-export const CardHeader = styled.div``;

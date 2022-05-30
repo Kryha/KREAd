@@ -78,5 +78,3 @@ export const CardActionsContainer = styled.div`
   margin-right: ${margins.large};
   box-shadow: none;
 `;
-
-export const CardHeader = styled.div``;
