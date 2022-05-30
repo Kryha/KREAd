@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { ActivityTable } from "../../../components/activity-table/activity-table";
 import { Item } from "../../../interfaces";
 
 import { DetailSectionSegmentActivityWrap } from "./styles";
@@ -8,5 +9,9 @@ interface DetailSectionSegmentActivityProps {
 }
 
 export const DetailSectionSegmentActivity: FC<DetailSectionSegmentActivityProps> = ({ item }) => {
-  return <DetailSectionSegmentActivityWrap>{item.name}</DetailSectionSegmentActivityWrap>;
+  return (
+    <DetailSectionSegmentActivityWrap>
+      <ActivityTable item={item} />
+    </DetailSectionSegmentActivityWrap>
+  );
 };

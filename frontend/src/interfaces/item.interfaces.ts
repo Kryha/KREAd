@@ -17,4 +17,13 @@ export interface Item {
   details: Detail;
   date: string;
   slots: Slots[];
+  activity: ActivityEvent[];
+}
+
+export interface ActivityEvent {
+  type: string;
+  price?: number;
+  from?: string;
+  to: string;
+  date: EpochTimeStamp;
 }
