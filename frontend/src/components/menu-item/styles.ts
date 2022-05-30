@@ -21,7 +21,6 @@ export const InfoWrapper = styled.div`
   width: 551px;
 `;
 
-
 export const InventoryItem = styled.img`
   position: absolute;
 `;
@@ -33,7 +32,7 @@ export const MenuItemWrapper = styled.div``;
 
 export const Divider = styled.div`
   width: 48px;
-  border: 1px solid #D0D0D0;
+  border: 1px solid #d0d0d0;
   transform: rotate(90deg);
 `;
 
@@ -42,7 +41,7 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-   margin-right: ${margins.medium};
+  margin-right: ${margins.medium};
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
@@ -108,9 +107,10 @@ interface ImageProps {
   category?: string;
 }
 
+// TODO: use square images for slot thumbnails
 /* eslint-disable indent */
-export const ItemImage = styled(Img) <ImageProps>`
-${({ category }): string => {
+export const ItemImage = styled(Img)<ImageProps>`
+  ${({ category }): string => {
     switch (category) {
       case "hair":
         return "width: 80px; height: 110px; margin-left: 10px;";
