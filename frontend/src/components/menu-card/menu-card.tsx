@@ -1,7 +1,6 @@
 
 import { FC } from "react";
 import { Item } from "../../interfaces";
-import { CardHeader } from "@mui/material";
 import { ArrowUpRightIcon, text } from "../../assets";
 import {
   ArrowContainer,
@@ -31,7 +30,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
   const navigate = useNavigate();
   return (
     <Menu>
-      <CardHeader component={() => (
+      <>
         <MenuHeader>
           <MenuContainer>
             <MenuText>{title}</MenuText>
@@ -44,8 +43,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
             </InfoContainer>
           </MenuContainer>
         </MenuHeader>
-      )}
-      />
+      </>
       <Content>
         <MenuContent>
           <MenuItem items={items} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} />

@@ -1,6 +1,4 @@
 import { FC, useCallback, useState } from "react";
-import CardContent from "@mui/material/CardContent";
-
 
 import { ArrowUpRightIcon, text } from "../../assets";
 import {
@@ -46,7 +44,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
   return (
     <>
       <CharacterWrapper>
-        <CardContent>
+        <>
           <CharacterContent>
             {sortedCharacters.map((character, index) => (
               <CharacterItem character={character} key={index} onClick={showInfo} id={id} />
@@ -56,7 +54,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
             {/* TODO: link to create new */}
             <OutlinedButton type="submit" onClick={() => navigate(routes.root)}><ButtonText>{text.general.createNew}</ButtonText><ArrowUpRightIcon /></OutlinedButton>
           </CardActionsContainer>
-        </CardContent>
+        </>
       </CharacterWrapper>
       {Boolean(showDetail) && (
         <CharacterDetail character={character} onClick={showCharacterDetail} />
