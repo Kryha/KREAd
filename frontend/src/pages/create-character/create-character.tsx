@@ -7,6 +7,7 @@ import { PAYMENT_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
 import { CharacterCreation } from "../../interfaces";
 import { useCreateCharacter } from "../../service";
+import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
@@ -34,7 +35,7 @@ export const CreateCharacter: FC = () => {
     case 1:
       return <Payment changeStep={changeStep} />;
     case 2:
-      return <></>;
+      return <Confirmation />;
     default:
       return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
     }

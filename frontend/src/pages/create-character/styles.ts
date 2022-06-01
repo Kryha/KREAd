@@ -172,3 +172,14 @@ export const PreviousButtonContainer = styled.div`
     }
   }
 `;
+
+export const TickContainer = styled.div<NumberProps>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: ${margins.nano};
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+`;
