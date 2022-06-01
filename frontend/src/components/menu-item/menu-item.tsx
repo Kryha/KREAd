@@ -1,31 +1,29 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Item } from "../../interfaces";
 
-import {
-  ButtonContainer,
-  Divider,
-  EquippedLabel,
-  FilledInventoryItem,
-  ImageCard,
-  Info,
-  InfoContainer,
-  InfoWrapper,
-  InventoryItem,
-  ItemImage,
-} from "./styles";
+import { ButtonContainer, Divider, EquippedLabel, ImageCard, Info, InfoContainer, InfoWrapper, ItemImage } from "./styles";
 import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
-import { CharacterItemFilledIcon, CharacterItemIcon } from "../../assets";
 import { color } from "../../design";
 interface MenuItemProps extends ImageProps {
   item: Item;
+  onClick?: () => void;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({ item, width, height, marginTop, marginLeft }) => {
+// TODO: What does InventnryItem does here?
+export const MenuItem: FC<MenuItemProps> = ({ item, width, height, marginTop, marginLeft, onClick }) => {
+  const [selected, setSelected] = useState(false);
   return (
-    <Info selected={false}>
-      <InventoryItem src={CharacterItemIcon} />
-      <FilledInventoryItem src={CharacterItemFilledIcon} />
+    <Info
+      tabIndex={0}
+      selected={selected}
+      onClick={() => {
+        onClick && onClick();
+        setSelected(true);
+      }}
+      onBlur={() => setSelected(false)}
+    >
+      {/* <InventoryItem src={CharacterItemIcon} /> */}
       {/* TODO: use slots */}
       <ImageCard>
         <ItemImage src={item.image} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} category={item.category} />

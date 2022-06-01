@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { margins } from "../../design";
+import { margins, color } from "../../design";
 import { Img, Label, MenuItemName } from "../atoms";
 
 export const EquippedLabel = styled(Label)``;
@@ -21,13 +21,13 @@ export const InfoWrapper = styled.div`
   width: 551px;
 `;
 
-export const InventoryItem = styled.img`
-  position: absolute;
-`;
+// export const InventoryItem = styled.img`
+//   position: absolute;
+// `;
 
-export const FilledInventoryItem = styled.img`
-  position: absolute;
-`;
+// export const FilledInventoryItem = styled.img`
+//   position: absolute;
+// `;
 export const MenuItemWrapper = styled.div``;
 
 export const Divider = styled.div`
@@ -51,31 +51,22 @@ interface InfoProps {
 }
 
 export const Info = styled.div<InfoProps>`
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
-  margin: 24px 0px;
+  padding: 5px 15px;
   cursor: pointer;
-  ${({ selected }): string => {
-    return selected
-      ? `
-        ${FilledInventoryItem} {
-
-        }
-        `
-      : `
-       ${FilledInventoryItem} {
-        display: none;
-        }
-      `;
-  }};
-  :not(:hover) {
-    ${InventoryItem} {
-      display: none;
-    }
-  }
+  border-radius: ${margins.medium};
+  ${({ selected }) =>
+    selected &&
+    `
+    background-color: ${color.lightGrey};
+    border: 1px solid ${color.darkGrey};
+    `};
   :hover {
+    border: 1px solid ${color.darkGrey};
     ${EquippedLabel} {
       display: none;
     }
@@ -84,9 +75,6 @@ export const Info = styled.div<InfoProps>`
     }
     ${ButtonContainer} {
       margin-left: -30px;
-    }
-    ${InfoWrapper} {
-      width: 320px;
     }
   }
   :not(:hover) {
