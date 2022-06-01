@@ -46,3 +46,8 @@ export interface Character {
   price: number;
   slots: Slots[];
 }
+
+export interface CharacterCreation {
+  title: string;
+  name: string;
+}

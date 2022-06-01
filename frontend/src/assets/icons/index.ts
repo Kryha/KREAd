@@ -28,6 +28,7 @@ import { ReactComponent as LinkExternalIcon } from "./icon-link-external.svg";
 import { ReactComponent as RefreshIcon } from "./refresh.svg";
 import { ReactComponent as TriangleIcon } from "./triangle.svg";
 import { ReactComponent as TickIcon } from "./tick.svg";
+import { ReactComponent as ExclamationIcon } from "./exclamation.svg";
 import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.svg";
 import RangeIcon from "./range.png";
 import DefaultIcon from "./default-character.png";
@@ -66,4 +67,5 @@ export {
   CheveronLeftRightIcon,
   RangeIcon,
   DefaultIcon,
+  ExclamationIcon,
 };

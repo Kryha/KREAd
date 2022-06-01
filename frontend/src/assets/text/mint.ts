@@ -22,4 +22,7 @@ export const mint = {
   offerPending: "offer pending",
   yourNewCharacterHasNot: "your new character has not yet been minted",
   butYouCanAlwaysAccept: "but you can always accept the offer in your wallet. When accepted, you'll see the new minted character appearing in the 'My characters' menu.",
+  stepOne: "1",
+  stepTwo: "2",
+  previous: "previous",
 };

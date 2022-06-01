@@ -5,33 +5,34 @@ import { CONFIRMATION_STEP, INFORMATION_STEP, PAYMENT_STEP } from "../../constan
 import { routes } from "../../navigation";
 import { MenuText } from "../atoms";
 import { FormTab } from "../form-tab";
-import {  ArrowContainer, Close, Divider, FormNavigation, HeaderContainer, NavigationTab } from "./styles";
+import {  ArrowContainer, Close, Divider, FormNavigation, HeaderContainer, NavigationTab, ReturnContainer } from "./styles";
 
 interface NavigationTabProps {
-  changeStep: (step: number) => void;
   currentStep: number;
 }
 
-export const FormHeader: FC<NavigationTabProps> = ({ currentStep, changeStep }) => {
+export const FormHeader: FC<NavigationTabProps> = ({ currentStep }) => {
   const navigate = useNavigate();
 
   return (
     <>
       <HeaderContainer>
         <MenuText>{text.mint.mintNewCharacter}</MenuText>
-        <Divider />
-        <ArrowContainer>
-          <Close onClick={() => navigate(routes.root)} />
-        </ArrowContainer>
+        <ReturnContainer>
+          <Divider />
+          <ArrowContainer>
+            <Close onClick={() => navigate(routes.root)} />
+          </ArrowContainer>
+        </ReturnContainer>
       </HeaderContainer>
       <FormNavigation>
-        <NavigationTab onClick={() => changeStep(INFORMATION_STEP)}>
+        <NavigationTab>
           <FormTab active={currentStep === INFORMATION_STEP} title={text.mint.information} />
         </NavigationTab>
-        <NavigationTab onClick={() => changeStep(PAYMENT_STEP)}>
+        <NavigationTab>
           <FormTab active={currentStep === PAYMENT_STEP} title={text.mint.payment} />
         </NavigationTab>
-        <NavigationTab onClick={() => changeStep(CONFIRMATION_STEP)}>
+        <NavigationTab>
           <FormTab active={currentStep === CONFIRMATION_STEP} title={text.mint.confirmation} />
         </NavigationTab>
       </FormNavigation>

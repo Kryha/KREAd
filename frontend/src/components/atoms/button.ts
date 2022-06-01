@@ -87,15 +87,18 @@ export const PrimaryButton = styled.button<ButtonProps>`
         color: ${color.white};
       }
       background: ${color.grey};
-      opacity: 0.4;
       border: 2px solid ${color.grey};
       &:hover {
         ${ButtonText} {
           color: ${color.white};
         }
         background: ${color.grey};
-        opacity: 0.4;
         border: 2px solid ${color.grey};
+        > svg {
+          path {
+            stroke: ${color.white} !important;
+          }
+        }
       }
       &:focus {
         border: 2px solid ${color.grey};
