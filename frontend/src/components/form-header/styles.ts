@@ -26,6 +26,7 @@ export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  justify-content: space-between;
   padding: 0px;
   ${MenuText} {
     margin-right: 60px;
@@ -41,3 +42,11 @@ export const FormNavigation = styled.div`
 `;
 
 export const NavigationTab = styled.div``;
+
+export const ReturnContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0px;
+`;

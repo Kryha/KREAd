@@ -5,3 +5,4 @@ export const MAX_PRICE = 10000;
 export const INFORMATION_STEP = 0;
 export const PAYMENT_STEP = 1;
 export const CONFIRMATION_STEP = 2;
+export const MINTING_COST = 2;

@@ -36,6 +36,4 @@ ${({ active }) => {
   }}
 `;
 
-export const Tab = styled.div`
-  cursor: pointer;
-`;
+export const Tab = styled.div``;

@@ -28,7 +28,7 @@ export const Input = styled.input`
   outline: 0;
   border-width: 0 0 1px;
   border-color: ${color.grey};
-  padding: 20.5px 0px;
+  padding: 2px 0px 20.5px 0px;
   :hover {
     border-color: ${color.black};
   }
