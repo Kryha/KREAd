@@ -51,8 +51,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
             ))}
           </CharacterContent>
           <CardActionsContainer>
-            {/* TODO: link to create new */}
-            <OutlinedButton type="submit" onClick={() => navigate(routes.root)}><ButtonText>{text.general.createNew}</ButtonText><ArrowUpRightIcon /></OutlinedButton>
+            <OutlinedButton type="submit" onClick={() => navigate(routes.createCharacter)}><ButtonText>{text.general.createNew}</ButtonText><ArrowUpRightIcon /></OutlinedButton>
           </CardActionsContainer>
         </>
       </CharacterWrapper>

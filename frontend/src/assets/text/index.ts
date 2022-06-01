@@ -7,6 +7,7 @@ import { products } from "./products";
 import { character } from "./character";
 import { item } from "./item";
 import { filters } from "./filters";
+import { mint } from "./mint";
 
 export const text = {
   error,
@@ -18,4 +19,5 @@ export const text = {
   character,
   item,
   filters,
+  mint,
 };

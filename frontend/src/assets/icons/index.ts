@@ -30,6 +30,7 @@ import { ReactComponent as TriangleIcon } from "./triangle.svg";
 import { ReactComponent as TickIcon } from "./tick.svg";
 import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.svg";
 import RangeIcon from "./range.png";
+import DefaultIcon from "./default-character.png";
 
 export {
   ErrorIcon,
@@ -64,4 +65,5 @@ export {
   TickIcon,
   CheveronLeftRightIcon,
   RangeIcon,
+  DefaultIcon,
 };

@@ -3,5 +3,6 @@ export const routes = {
   character: "/character",
   shop: "/shop",
   inventory: "/inventory",
-  items: "/items"
+  items: "/items",
+  createCharacter: "/create-character",
 };
