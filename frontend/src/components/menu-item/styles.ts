@@ -70,12 +70,12 @@ export const Info = styled.div<InfoProps>`
     ${EquippedLabel} {
       display: none;
     }
-    ${InfoContainer} {
-      margin-right: 0px;
-    }
-    ${ButtonContainer} {
-      margin-left: -30px;
-    }
+    // ${InfoContainer} {
+    //   margin-right: 0px;
+    // }
+    // ${ButtonContainer} {
+    //   margin-left: -30px;
+    // }
   }
   :not(:hover) {
     ${ButtonContainer} {
@@ -85,10 +85,15 @@ export const Info = styled.div<InfoProps>`
 `;
 
 export const ImageCard = styled.div`
+  position: relative;
   box-sizing: border-box;
   border-radius: ${margins.medium};
   width: 80px;
   height: 80px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 interface ImageProps {
@@ -98,26 +103,33 @@ interface ImageProps {
 // TODO: use square images for slot thumbnails
 /* eslint-disable indent */
 export const ItemImage = styled(Img)<ImageProps>`
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // height: auto;
   ${({ category }): string => {
     switch (category) {
       case "hair":
-        return "width: 80px; height: 110px; margin-left: 10px;";
+        return "width: 50px;";
       case "head piece":
-        return "width: 130px; height: 130px; margin-left: -20px; margin-top: -30px;";
+        return "width: 170px; margin-top: -20px;";
       case "clothing":
-        return "width: 80px; height: 140px; margin-left: 10px; margin-top: -80px;";
+        return "width: 95px; margin-top: -100px;";
       case "mask":
-        return "width: 190px; height: 190px; margin-left: -40px; margin-top: -100px;";
+        return "width: 224px; margin-top: -118px;";
       case "noseline":
-        return "width: 350px; height: 250px; margin-left: -120px; margin-top: -150px;";
+        return "margin-top: -124px; width: 320px;";
       case "air resevoir":
-        return "width: 130px; height: 130px; margin-left: -10px; margin-top: -60px;";
+        return "width: 132px; margin-top: -68px;";
       case "liquid":
-        return "width: 250px; height: 250px; margin-left: -70px; margin-top: -155px;";
+        return "width: 240px; margin-top: -132px;";
       case "front mask":
-        return "width: 270px; height: 270px; margin-left: -80px; margin-top: -175px;";
+        return "width: 270px; margin-top: -158px;";
       default:
-        return "width: 80px; height: 80px;";
+        return "width: 80px; ";
     }
   }};
 `;

@@ -10,7 +10,7 @@ interface MenuItemProps extends ImageProps {
   onClick?: () => void;
 }
 
-// TODO: What does InventnryItem does here?
+// TODO: What does InventnryItem do here?
 export const MenuItem: FC<MenuItemProps> = ({ item, width, height, marginTop, marginLeft, onClick }) => {
   const [selected, setSelected] = useState(false);
   return (

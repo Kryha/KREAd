@@ -7,4 +7,5 @@ export const SortableListWrap = styled.section`
   gap: ${margins.medium};
   box-sizing: border-box;
   overflow-y: scroll;
+  margin-bottom: 160px;
 `;
