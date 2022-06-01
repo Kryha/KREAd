@@ -13,7 +13,7 @@ export const Filters: FC<FiltersProps> = ({ children, label, value }) => {
   const [open, setOpened] = useState(false);
 
   return (
-    <FiltersWrapper>
+    <FiltersWrapper tabIndex={0} onBlur={() => setOpened(false)}>
       <FiltersContainer isOpen={open} onClick={() => setOpened(!open)}>
         <ButtonText>{value ? value : label}</ButtonText>
         <Triangle />

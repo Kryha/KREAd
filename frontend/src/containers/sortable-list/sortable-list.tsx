@@ -1,11 +1,14 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import { MenuItem } from "../../components";
+import { Dispatch, FC, SetStateAction, useState } from "react";
+
+import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ListHeader, SortableListWrap, SortContainer } from "./styles";
+
+import { useFilteredItems } from "../../service";
+
 import { Item } from "../../interfaces";
-import { SortableListWrap } from "./styles";
+import { text } from "../../assets";
+import { categories, sorting } from "../../assets/text/filter-options";
 
-// import { useFilteredItems, useItems } from "../../service";
-
-// TODO set proper type for SetSelectedElementId
 interface SortableListProps {
   list: Item[];
   setElementId: Dispatch<SetStateAction<string>>;
@@ -13,32 +16,39 @@ interface SortableListProps {
 
 // TODO: Add filter & sortyng Hooks and components
 
-export const SortableList: FC<SortableListProps> = ({ list, setElementId }) => {
-  // const [selectedCategory, setSelectedCategory] = useState<string>("");
-  // const [selectedSorting, setSelectedSorting] = useState<string>("");
+export const SortableList: FC<SortableListProps> = ({ setElementId }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedSorting, setSelectedSorting] = useState<string>("");
 
-  // TODO: Use Filtered Items Hook
-  // const { data: items, isLoading } = useFilteredItems(selectedCategory, selectedSorting, { min: 0, max: 10000 }, "");
+  const { data: items, isLoading } = useFilteredItems(selectedCategory, selectedSorting, { min: 0, max: 10000 }, "");
 
-  // const { data: items, isLoading } = useItems();
-
-  // if (isLoading) return <LoadingPage />;
+  if (isLoading) return <LoadingPage />;
 
   // TODO: get an empty section view
   // if (!items) return <></>;
 
-  // const handleCategoryChange = (selected: string) => {
-  //   setSelectedCategory(selected);
-  // };
+  const handleCategoryChange = (selected: string) => {
+    setSelectedCategory(selected);
+  };
 
-  // const handleSortingChange = (selected: string) => {
-  //   setSelectedSorting(selected);
-  // };
+  const handleSortingChange = (selected: string) => {
+    setSelectedSorting(selected);
+  };
 
   return (
     <SortableListWrap>
-      {/* TODO: add filters nav header */}
-      {list.map((item) => (
+      <ListHeader>
+        <Filters label={text.filters.category}>
+          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
+        </Filters>
+        <SortContainer>
+          <Label>{text.filters.sortBy}</Label>
+          <Filters label={text.filters.latest}>
+            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
+          </Filters>
+        </SortContainer>
+      </ListHeader>
+      {items.map((item) => (
         <MenuItem item={item} key={item.id} onClick={() => setElementId(item.id)} />
       ))}
     </SortableListWrap>

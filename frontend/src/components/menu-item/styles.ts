@@ -106,10 +106,6 @@ export const ItemImage = styled(Img)<ImageProps>`
   object-fit: cover;
   width: 100%;
   height: auto;
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // height: auto;
   ${({ category }): string => {
     switch (category) {
       case "hair":

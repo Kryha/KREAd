@@ -15,14 +15,14 @@ import {
   Select,
   ShopCard,
   SwitchSelector,
-  Title
+  Title,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useCharacters, useFilteredItems } from "../../service";
 import { colors } from "../../service/fake-item-data";
-import { categories, sorting } from "./filter-options";
+import { categories, sorting } from "../../assets/text/filter-options";
 import {
   FilterContainer,
   FilterWrapper,
@@ -32,9 +32,8 @@ import {
   Refresh,
   SelectorContainer,
   ShopWrapper,
-  SortByContainer
+  SortByContainer,
 } from "./styles";
-
 
 export const Shop: FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -46,7 +45,7 @@ export const Shop: FC = () => {
   const { data: characters, isLoading: isLoadingCharacters } = useCharacters();
   const { height } = useViewport();
   const noFilteredItems =
-  (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice) && (!items || !items.length);
+    (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice) && (!items || !items.length);
 
   if (isLoadingItems || isLoadingCharacters) return <LoadingPage />;
 
@@ -77,22 +76,15 @@ export const Shop: FC = () => {
   };
 
   return (
-    <BaseRoute sideNavigation={<Title items={viewItems ? items.length: characters.length} title={text.navigation.shop} />}>
+    <BaseRoute sideNavigation={<Title items={viewItems ? items.length : characters.length} title={text.navigation.shop} />}>
       <ShopWrapper>
         <FilterWrapper>
           <FilterContainer>
             <SelectorContainer>
-              <SwitchSelector
-                buttonOneText={text.character.items}
-                buttonTwoText={text.character.characters}
-                handleView={handleView}
-              />
+              <SwitchSelector buttonOneText={text.character.items} buttonTwoText={text.character.characters} handleView={handleView} />
               {Boolean(viewItems) && (
                 <Filters label={text.filters.category}>
-                  <Select
-                    label={text.filters.allCategories}
-                    handleChange={handleCategoryChange}
-                    options={categories} />
+                  <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
                 </Filters>
               )}
               {/* TODO: get actual min and max values */}
@@ -112,9 +104,9 @@ export const Shop: FC = () => {
           </FilterContainer>
           <HorizontalDivider />
         </FilterWrapper>
-        {!!noFilteredItems ||
+        {!!noFilteredItems || (
           <ItemWrapper height={height}>
-            {viewItems ?
+            {viewItems ? (
               <>
                 <ItemContainer>
                   {items.map((item, index) => (
@@ -129,7 +121,8 @@ export const Shop: FC = () => {
                   </SecondaryButton>
                 </LoadMore>
               </>
-              : <>
+            ) : (
+              <>
                 <ItemContainer>
                   {characters.map((character, index) => (
                     <CharacterShopCard character={character} key={index} />
@@ -142,9 +135,10 @@ export const Shop: FC = () => {
                     <Refresh />
                   </SecondaryButton>
                 </LoadMore>
-              </>}
+              </>
+            )}
           </ItemWrapper>
-        }
+        )}
       </ShopWrapper>
     </BaseRoute>
   );
