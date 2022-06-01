@@ -5,15 +5,12 @@ import { color, margins } from "../../design";
 export const SortableListWrap = styled.section`
   display: flex;
   flex-flow: column nowrap;
-  gap: ${margins.medium};
   box-sizing: border-box;
-  overflow-y: scroll;
-  margin-bottom: 160px;
+  padding-bottom: 160px;
 `;
 
 export const ListHeader = styled.header`
   z-index: 1;
-  position: sticky;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -30,4 +27,8 @@ export const SortContainer = styled.div`
     color: ${color.black};
     margin-right: 10px;
   }
+`;
+
+export const ListContainer = styled.div`
+  overflow-y: scroll;
 `;

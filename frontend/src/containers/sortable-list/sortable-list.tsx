@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
 
 import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
-import { ListHeader, SortableListWrap, SortContainer } from "./styles";
+import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useFilteredItems } from "../../service";
 
@@ -48,9 +48,11 @@ export const SortableList: FC<SortableListProps> = ({ setElementId }) => {
           </Filters>
         </SortContainer>
       </ListHeader>
-      {items.map((item) => (
-        <MenuItem item={item} key={item.id} onClick={() => setElementId(item.id)} />
-      ))}
+      <ListContainer>
+        {items.map((item) => (
+          <MenuItem item={item} key={item.id} onClick={() => setElementId(item.id)} />
+        ))}
+      </ListContainer>
     </SortableListWrap>
   );
 };
