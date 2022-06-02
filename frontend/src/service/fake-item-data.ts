@@ -346,7 +346,7 @@ export const FakeCharacterItems: CharacterItems = {
     layerComplexity: 78,
     forged: "Tempet Section 1",
     baseMaterial: "Mars & Earth",
-    colors: ["#B1A2A2", "#7B5B7B", "#968996", "#968996", "#FFFFFF"],
+    colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
     price: 14,
@@ -797,7 +797,7 @@ export const Items: Item[] = [
     layerComplexity: 78,
     forged: "Tempet Section 1",
     baseMaterial: "Mars & Earth",
-    colors: ["#B1A2A2", "#7B5B7B", "#968996", "#968996", "#FFFFFF"],
+    colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
     price: 134,
@@ -1362,4 +1362,4 @@ export const Items: Item[] = [
   },
 ];
 
-export const colors = ["#B1A2A2", "#7B5B7B", "#968996", "#968996", "#FFFFFF", "#0000006", "#3063A5"];
+export const colors = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"];
