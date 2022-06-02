@@ -10,7 +10,8 @@ interface MenuItemProps extends ImageProps {
   onClick?: () => void;
 }
 
-// TODO: What does InventnryItem do here?
+// TODO: What does InventoryItem do here?
+// TODO: Add onCLick logic for Equip/Unequip buttons
 export const MenuItem: FC<MenuItemProps> = ({ item, width, height, marginTop, marginLeft, onClick }) => {
   const [selected, setSelected] = useState(false);
   return (
