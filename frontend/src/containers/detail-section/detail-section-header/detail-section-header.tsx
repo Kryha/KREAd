@@ -15,15 +15,16 @@ import { SectionHeader } from "../../../components";
 
 interface DetailSectionHeaderProps {
   item: Item;
+  handleClose: () => void;
 }
 
 // TODO: Pass item actions as props (equip, sell)?
-export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item }) => {
+export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item, handleClose }) => {
   return (
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>
         <SectionHeader>{item.name}</SectionHeader>
-        <DetailSectionHeaderNavigation />
+        <DetailSectionHeaderNavigation handleClose={handleClose} />
       </DetailSectionHeaderTop>
 
       <DetailSectionHeaderDetails>

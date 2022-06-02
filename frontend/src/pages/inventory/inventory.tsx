@@ -29,7 +29,7 @@ export const Inventory: FC = () => {
   return (
     <BaseRoute sideNavigation={<Title title={text.navigation.inventory} items={items.length} />}>
       <PageContainer
-        mainContent={<DetailSection item={selectedItem} />}
+        mainContent={<DetailSection item={selectedItem} setSelectedItem={setSelectedItem} />}
         sidebarContent={<SortableList list={items} setElementId={setSelectedItemtId} />}
       />
     </BaseRoute>
