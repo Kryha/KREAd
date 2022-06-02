@@ -121,3 +121,8 @@ export const SectionHeader = styled.h1`
   font-weight: ${fontWeight.regular};
   line-hight: 40px;
 `;
+
+export const FormText = styled(BodyText)`
+  font-size: 14px;
+  line-height: 18px;
+`;

@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { CloseIcon } from "../../assets";
+import { ArrowUpRightIcon, CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
+import { Label } from "../atoms";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 
 export const Content = styled.div`
@@ -17,19 +18,24 @@ export const ArrowContainer = styled.div`
 `;
 
 export const Close = styled(CloseIcon)`
-  width: ${margins.big};
-  height: ${margins.big};
+  width: 12px;
+  height: 12px;
   cursor: pointer;
+  margin-top: 14px;
 `;
 
-export const Menu = styled.div`
-  width: 526px;
+interface MenuProps {
+  width: number;
+  height: number;
+}
+
+export const Menu = styled.div<MenuProps>`
+  ${({ width, height }): string => `min-width: ${width * 0.375}px; max-width: ${width * 0.375}px; width: ${width * 0.375}px; max-height: ${height - 80}px;`};
   background: ${color.white};
   border: 1px solid ${color.grey};
   box-sizing: border-box;
   border-radius: ${margins.medium};
   box-shadow: none;
-  max-height: 688px;
   overflow-y: scroll;
 `;
 
@@ -51,11 +57,16 @@ export const InfoContainer = styled.div`
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
+  ${Label} {
+    margin-top: 2px;
+  }
 `;
 
 export const Divider = styled(HeaderHorizontalDivider)`
   transform: rotate(90deg);
   width: ${margins.big};
+  margin-right: 26px;
+  margin-left: 12px;
 `;
 
 export const MenuContent = styled.div`
@@ -67,6 +78,10 @@ export const MenuItemContainer = styled.div`
   flex-direction: row;
   align-items: center;
   padding: ${margins.big} ${margins.medium} ${margins.big} ${margins.mini};
+`;
+
+export const ArrowUpRight = styled(ArrowUpRightIcon)`
+  margin: 0px 0px 0px 13px !important;
 `;
 
 export const CardActionsContainer = styled.div`

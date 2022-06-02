@@ -27,4 +27,5 @@ export const character = {
   itemActivity: "item activity",
   deleteCharacter: "delete character",
   characters: "characters",
+  defaultCharacter: "default character",
 };

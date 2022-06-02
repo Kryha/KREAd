@@ -34,6 +34,7 @@ export interface Activity {
   date: string;
 }
 export interface Character {
+  title: string;
   name: string;
   type: string;
   characterId: string;
@@ -45,4 +46,9 @@ export interface Character {
   itemActivity: Activity;
   price: number;
   slots: Slots[];
+}
+
+export interface CharacterCreation {
+  title: string;
+  name: string;
 }

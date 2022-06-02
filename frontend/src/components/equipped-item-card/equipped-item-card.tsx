@@ -8,22 +8,22 @@ import { VerticalInfo } from "../vertical-info";
 import { EquippedContainer } from "./styles";
 
 interface EquippedItemCardProps {
-  item: Item | undefined;
+  item?: Item;
   code: string;
   width?: string;
   height?: string;
-  marginTop?: string | undefined;
-  marginLeft?: string | undefined;
-  marginRight?: string | undefined;
-  marginBottom?: string | undefined;
+  marginTop?: string;
+  marginLeft?: string;
+  marginRight?: string;
+  marginBottom?: string;
+  category: string;
 }
 
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    if (!item) return;
-    navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } });
+    navigate(`${routes.items}/${category}`, { state: { category: category} });
   };
   return (
     <EquippedContainer
@@ -43,11 +43,10 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
 };
 
 export const RightEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    if (!item) return;
-    navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } });
+    navigate(`${routes.items}/${category}`, { state: { category: category } });
   };
   return (
     <EquippedContainer

@@ -14,7 +14,7 @@ import Mask1 from "./mask_01.png";
 import MidBackground1 from "./mid_background_01.png";
 import Noseline1 from "./noseline_01.png";
 import Liquid1 from "./liquid_01.png";
-import CharacterBase from "./character-base.png";
+import CharacterBase from "./default-character.png";
 import Empty from "./empty.png";
 import { ReactComponent as CardElementIcon } from "./element.svg";
 import { ReactComponent as SmallElementIcon } from "./element-small.svg";
@@ -28,8 +28,10 @@ import { ReactComponent as LinkExternalIcon } from "./icon-link-external.svg";
 import { ReactComponent as RefreshIcon } from "./refresh.svg";
 import { ReactComponent as TriangleIcon } from "./triangle.svg";
 import { ReactComponent as TickIcon } from "./tick.svg";
+import { ReactComponent as ExclamationIcon } from "./exclamation.svg";
 import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.svg";
 import RangeIcon from "./range.png";
+import DefaultIcon from "./default-character.png";
 
 export {
   ErrorIcon,
@@ -64,4 +66,6 @@ export {
   TickIcon,
   CheveronLeftRightIcon,
   RangeIcon,
+  DefaultIcon,
+  ExclamationIcon,
 };

@@ -15,9 +15,12 @@ interface ImageProps {
 export const ExpandButton = styled(SecondaryButton)`;
   position: absolute;
   z-index: 300;
-  left: 38%;
+  left: 40%;
   bottom: ${margins.big};
-  padding: 2px 16px;
+  padding: 8px 16px;
+  > svg {
+    margin-left: 0px;
+  }
 `;
 
 export const CharacterIcon = styled.img<ImageProps>`

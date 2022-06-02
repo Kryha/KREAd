@@ -1,8 +1,9 @@
 import { FC } from "react";
 import { DetailSectionHeaderNavigationWrap } from "./styles";
-import { PrimaryButton, SecondaryButton } from "../../../components";
+import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
 import { text } from "../../../assets/text";
 import { ButtonClose } from "../../../components/button-close";
+import { color } from "../../../design";
 
 interface HeaderNavigationProps {
   handleClose: () => void;
@@ -12,8 +13,12 @@ interface HeaderNavigationProps {
 export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ handleClose }) => {
   return (
     <DetailSectionHeaderNavigationWrap>
-      <PrimaryButton>{text.character.equip}</PrimaryButton>
-      <SecondaryButton>{text.character.sell}</SecondaryButton>
+      <PrimaryButton>
+        <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
+      </PrimaryButton>
+      <SecondaryButton>
+        <ButtonText>{text.character.sell}</ButtonText>
+      </SecondaryButton>
       <ButtonClose onClick={handleClose} />
     </DetailSectionHeaderNavigationWrap>
   );

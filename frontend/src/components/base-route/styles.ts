@@ -8,3 +8,9 @@ export const TopbarContainer = styled.header`
   align-items: flex-start;
   padding: ${margins.big};
 `;
+
+export const Box = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 0px;
+`;

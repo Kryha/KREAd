@@ -45,7 +45,6 @@ export const ButtonBase = styled.button<ButtonProps>`
 `;
 
 export const PrimaryButton = styled.button<ButtonProps>`
-  text-transform: capitalize;
   transition: all 0.4s ease 0s;
   display: flex;
   flex-direction: row;
@@ -70,6 +69,11 @@ export const PrimaryButton = styled.button<ButtonProps>`
     ${ButtonText} {
       color: ${(props): string => props.fontColor || color.black};
     }
+    > svg {
+      path {
+        stroke: ${color.black} !important;
+      }
+    }
   }
   &:active {
     background: ${(props): string => props.backgroundColor || color.white};
@@ -88,15 +92,18 @@ export const PrimaryButton = styled.button<ButtonProps>`
         color: ${color.white};
       }
       background: ${color.grey};
-      opacity: 0.4;
       border: 2px solid ${color.grey};
       &:hover {
         ${ButtonText} {
           color: ${color.white};
         }
         background: ${color.grey};
-        opacity: 0.4;
         border: 2px solid ${color.grey};
+        > svg {
+          path {
+            stroke: ${color.white} !important;
+          }
+        }
       }
       &:focus {
         border: 2px solid ${color.grey};
@@ -112,7 +119,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   }};
 `;
 
-export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
+export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   color: ${(props): string => props.fontColor || color.black};
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
@@ -180,7 +187,7 @@ export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   }};
 `;
 
-export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
+export const TertiaryButton = styled(PrimaryButton) <ButtonProps>`
   background-color: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
   border: none;
@@ -226,7 +233,7 @@ export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
   }};
 `;
 
-export const OutlinedButton = styled(ButtonBase)<ButtonProps>`
+export const OutlinedButton = styled(ButtonBase) <ButtonProps>`
   border: ${(props): string => `1px solid ${props.borderColor || color.grey}}`};
   background: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};

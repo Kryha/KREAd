@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color, margins } from "../../design";
+import { color } from "../../design";
 import { CardElementIcon } from "../../assets";
 
 export const Card = styled(CardElementIcon)`
@@ -34,6 +34,10 @@ export const ElementContainer = styled.div`
   box-sizing: border-box;
   background: ${color.white};
   z-index: 100;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${color.grey};
+  border-radius: 60% 40% 40% 20%;
 `;
 
 export const NoImage = styled.div`
@@ -46,12 +50,12 @@ export const NoImage = styled.div`
 `;
 
 export const Diagonal = styled.div`
-  border: 1px solid ${color.grey};
+  border: 0.5px solid ${color.grey};
   transform: rotate(135deg);
-  width: 120px;
-  top: ${margins.big};
+  width: 126px;
+  top: 38px;
   position: absolute;
-  left: -17px;
+  left: -20px;
 `;
 
 export const ItemWrapper = styled.div`

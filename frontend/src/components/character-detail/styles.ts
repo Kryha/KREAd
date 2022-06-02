@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import { Card, CardActions } from "@mui/material";
+
 import { CardElementIcon, CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
-import CardContent from "@mui/material/CardContent";
 import { Badge, Label, PrimaryButton } from "../atoms";
 import { Card as CardIcon, ElementWrapper, ElementContainer as Element } from "../item-card/styles";
 
@@ -23,10 +22,8 @@ export const ElementContainer = styled(CardElementIcon)`
   overflow: hidden;
 `;
 
-export const Content = styled(CardContent)`
-  && {
-    padding: 0px ${margins.small};;
-  }
+export const Content = styled.div`
+  padding: 0px ${margins.small};
 `;
 
 export const TitleContainer = styled.div`
@@ -65,17 +62,15 @@ export const Close = styled(CloseIcon)`
   cursor: pointer;
 `;
 
-export const Detail = styled(Card)`
-  && {
-    width: 720px;
-    background: ${color.lightGrey};
-    border: 1px solid ${color.grey};
-    box-sizing: border-box;
-    border-radius: ${margins.medium};
-    box-shadow: none;
-    max-height: 604px;
-    overflow-y: scroll;
-  }
+export const Detail = styled.div`
+  width: 720px;
+  background: ${color.lightGrey};
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  box-shadow: none;
+  max-height: 604px;
+  overflow-y: scroll;
 `;
 
 export const DetailHeader = styled.div`
@@ -120,16 +115,14 @@ export const DetailItemContainer = styled.div`
   padding: ${margins.big} ${margins.medium} ${margins.big} ${margins.mini};
 `;
 
-export const CardActionsContainer = styled(CardActions)`
-  && {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: center;
-    margin-bottom: ${margins.large};
-    margin-right: ${margins.large};
-    box-shadow: none;
-  }
+export const CardActionsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: ${margins.large};
+  margin-right: ${margins.large};
+  box-shadow: none;
 `;
 
 export const StoryContainer = styled.div`
