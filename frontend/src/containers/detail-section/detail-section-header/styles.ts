@@ -31,9 +31,11 @@ export const DetailSectionHeaderId = styled.p`
   color: ${color.black};
   font-size ${fontSize.extraSmall};
   font-weight: ${fontWeight.medium};
+
 `;
 
 export const CategoryButton = styled(OutlinedButton)`
-  color: ${color.grey};
+  color: ${color.darkGrey};
   padding: 3px 8px;
+  cursor: default;
 `;
