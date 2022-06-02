@@ -34,10 +34,6 @@ export const ElementContainer = styled.div`
   box-sizing: border-box;
   background: ${color.white};
   z-index: 100;
-  border-width: 1px;
-  border-style: solid;
-  border-color: ${color.grey};
-  border-radius: 60% 40% 40% 20%;
 `;
 
 export const NoImage = styled.div`
