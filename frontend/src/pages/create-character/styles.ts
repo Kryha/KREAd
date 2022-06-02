@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
-import { Badge, ButtonText, Input, PrimaryButton } from "../../components";
+import { Badge, ButtonText, Input, MenuItemName, PrimaryButton } from "../../components";
 
 import { color, margins } from "../../design";
 
@@ -173,7 +173,7 @@ export const PreviousButtonContainer = styled.div`
   }
 `;
 
-export const TickContainer = styled.div<NumberProps>`
+export const TickContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -182,4 +182,17 @@ export const TickContainer = styled.div<NumberProps>`
   border-radius: 50%;
   width: 30px;
   height: 30px;
+  border: 1px solid ${color.black};
+  ${Tick} {
+    margin: 0px;
+  }
+  margin-bottom: ${margins.small};
+`;
+
+export const InfoContainer = styled.div`
+  margin-top: ${margins.big};
+  ${MenuItemName} {
+    margin-top: ${margins.mini};
+    margin-bottom: ${margins.medium};
+  }
 `;

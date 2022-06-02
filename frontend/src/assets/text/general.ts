@@ -24,4 +24,5 @@ export const general = {
   toolTipTitle: "tool tip title",
   toolTipInfo: "maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.",
   thisFieldIsRequired: "this field is required",
+  mintNew: "mint new",
 };

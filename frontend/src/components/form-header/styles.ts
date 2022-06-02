@@ -14,11 +14,13 @@ export const ArrowContainer = styled.div`
   align-items: flex-start;
   box-sizing: border-box;
   border-radius: ${margins.medium};
+  margin-left: 46px;
+  margin-right: 14px;
 `;
 
 export const Close = styled(CloseIcon)`
-  width: ${margins.big};
-  height: ${margins.big};
+  width: ${margins.small};
+  height: ${margins.small};
   cursor: pointer;
 `;
 
@@ -46,7 +48,7 @@ export const NavigationTab = styled.div``;
 export const ReturnContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   padding: 0px;
 `;

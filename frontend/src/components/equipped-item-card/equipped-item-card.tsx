@@ -16,14 +16,14 @@ interface EquippedItemCardProps {
   marginLeft?: string | undefined;
   marginRight?: string | undefined;
   marginBottom?: string | undefined;
+  category: string;
 }
 
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    if (!item) return;
-    navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } });
+    navigate(`${routes.items}/${category}`, { state: { category: category} });
   };
   return (
     <EquippedContainer
@@ -43,11 +43,10 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
 };
 
 export const RightEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    if (!item) return;
-    navigate(`${routes.items}/${item.category}`, { state: { category: item?.category } });
+    navigate(`${routes.items}/${category}`, { state: { category: category } });
   };
   return (
     <EquippedContainer
