@@ -1,17 +1,14 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 
 import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
-import { DetailSectionWrap } from "./styles";
-
-import { LoadingPage } from "../../components";
-
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
 import { DetailSectionSegmentStats } from "./detail-section-segment-stats";
 import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
-import { text } from "../../assets";
+import { DetailSectionWrap, EmptyView } from "./styles";
 
+import { text } from "../../assets";
 import { Item } from "../../interfaces";
 
 interface DetailSectionProps {
@@ -22,20 +19,20 @@ interface DetailSectionProps {
 // TODO: Make index dynamic
 // TODO: Handle Loading and Errors in a more global/standdard way
 export const DetailSection: FC<DetailSectionProps> = ({ item }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  // TODO: Re-introduce loading view when fetching from real data
+  // const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (item) {
-      setIsLoading(false);
-    }
-  }, [item]);
+  // useEffect(() => {
+  //   if (item) {
+  //     setIsLoading(false);
+  //   }
+  // }, [item]);
 
-  if (isLoading) return <LoadingPage />;
+  // if (isLoading) return <LoadingPage />;
 
-  // TODO: get an empty section view
-  if (!item) return <></>;
+  // TODO: Add placeholder image?
+  if (!item) return <EmptyView></EmptyView>;
 
-  // TODO: Add Item Activity Table component
   return (
     <DetailSectionWrap>
       <DetailSectionHeader item={item} />

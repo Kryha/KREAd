@@ -12,3 +12,10 @@ export const DetailSectionWrap = styled.section`
   flex-flow: column nowrap;
   overflow-y: scroll;
 `;
+
+export const EmptyView = styled.section`
+  width: 100%;
+  background-color: ${color.lightGrey};
+  border: 1px solid ${color.grey};
+  border-radius: 24px;
+`;
