@@ -7,7 +7,6 @@ export const SortableListWrap = styled.section`
   display: flex;
   flex-flow: column nowrap;
   box-sizing: border-box;
-  padding-bottom: 160px;
 `;
 
 export const ListHeader = styled.header`
@@ -36,4 +35,5 @@ export const ListContainer = styled.div`
   overflow-y: scroll;
   padding-top: ${margins.medium};
   gap: ${margins.small};
+  padding-bottom: 160px;
 `;
