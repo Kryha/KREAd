@@ -21,13 +21,6 @@ export const InfoWrapper = styled.div`
   width: 551px;
 `;
 
-// export const InventoryItem = styled.img`
-//   position: absolute;
-// `;
-
-// export const FilledInventoryItem = styled.img`
-//   position: absolute;
-// `;
 export const MenuItemWrapper = styled.div``;
 
 export const Divider = styled.div`
