@@ -34,6 +34,7 @@ export interface Activity {
   date: string;
 }
 export interface Character {
+  title: string;
   name: string;
   type: string;
   characterId: string;

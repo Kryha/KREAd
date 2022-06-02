@@ -17,7 +17,7 @@ export const FormHeader: FC<NavigationTabProps> = ({ currentStep }) => {
   return (
     <>
       <HeaderContainer>
-        <MenuText>{text.mint.mintNewCharacter}</MenuText>
+        <MenuText>{text.mint.mintNew}</MenuText>
         <ReturnContainer>
           <Divider />
           <ArrowContainer>

@@ -1,5 +1,5 @@
 export const mint = {
-  mintNewCharacter: "mint new character",
+  mintNew: "mint new",
   information: "information",
   payment: "payment",
   confirmation: "confirmation",

@@ -14,7 +14,7 @@ import Mask1 from "./mask_01.png";
 import MidBackground1 from "./mid_background_01.png";
 import Noseline1 from "./noseline_01.png";
 import Liquid1 from "./liquid_01.png";
-import CharacterBase from "./character-base.png";
+import CharacterBase from "./default-character.png";
 import Empty from "./empty.png";
 import { ReactComponent as CardElementIcon } from "./element.svg";
 import { ReactComponent as SmallElementIcon } from "./element-small.svg";

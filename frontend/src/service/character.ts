@@ -38,3 +38,11 @@ export const useCreateCharacter = () => {
     return res.data.character;
   });
 };
+
+export const useEquipCharacter = () => {
+
+  return useMutation(async (body: { id: string }) => {
+    if (!body.id) throw new Error("Id not specified");
+    // TODO: intergrate
+  });
+};
