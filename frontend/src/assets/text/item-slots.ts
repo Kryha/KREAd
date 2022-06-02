@@ -1,4 +1,4 @@
-export const products = {
+export const itemSlots = {
   noselineCode: "nl",
   midBackgroundCode: "bg I",
   maskCode: "m",

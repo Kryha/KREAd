@@ -34,20 +34,18 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
 
   return (
     <Menu width={viewWidth} height={viewHeight}>
-      <>
-        <MenuHeader>
-          <MenuContainer>
-            <MenuText>{title}</MenuText>
-            <InfoContainer>
-              <Label>{text.param.amountOfItems(amount)}</Label>
-              <Divider />
-              <ArrowContainer>
-                <Close onClick={() => navigate(GO_BACK)} />
-              </ArrowContainer>
-            </InfoContainer>
-          </MenuContainer>
-        </MenuHeader>
-      </>
+      <MenuHeader>
+        <MenuContainer>
+          <MenuText>{title}</MenuText>
+          <InfoContainer>
+            <Label>{text.param.amountOfItems(amount)}</Label>
+            <Divider />
+            <ArrowContainer>
+              <Close onClick={() => navigate(GO_BACK)} />
+            </ArrowContainer>
+          </InfoContainer>
+        </MenuContainer>
+      </MenuHeader>
       <Content>
         <MenuContent>
           <MenuItem items={items} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} />

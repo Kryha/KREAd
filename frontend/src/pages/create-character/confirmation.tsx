@@ -10,7 +10,7 @@ import { useEquipCharacter } from "../../service";
 import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer, } from "./styles";
 
 interface ConfirmationProps {
-  character: Character | undefined;
+  character?: Character;
 }
 
 export const Confirmation: FC<ConfirmationProps> = ({ character }) => {

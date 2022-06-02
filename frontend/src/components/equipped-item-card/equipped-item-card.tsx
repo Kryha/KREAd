@@ -8,14 +8,14 @@ import { VerticalInfo } from "../vertical-info";
 import { EquippedContainer } from "./styles";
 
 interface EquippedItemCardProps {
-  item: Item | undefined;
+  item?: Item;
   code: string;
   width?: string;
   height?: string;
-  marginTop?: string | undefined;
-  marginLeft?: string | undefined;
-  marginRight?: string | undefined;
-  marginBottom?: string | undefined;
+  marginTop?: string;
+  marginLeft?: string;
+  marginRight?: string;
+  marginBottom?: string;
   category: string;
 }
 

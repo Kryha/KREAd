@@ -19,39 +19,39 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
       <LeftItemContainer>
         <LeftEquippedItemCard
           item={items.hair}
-          code={text.products.hairCode}
+          code={text.itemSlots.hairCode}
           marginTop={margins.big}
           height={imageSize.mediumLarge}
-          category={text.products.hair}
+          category={text.itemSlots.hair}
         />
         <Row>
           <LeftEquippedItemCard
             item={items.headPiece}
-            code={text.products.headPieceCode}
+            code={text.itemSlots.headPieceCode}
             width={imageSize.large}
             height={imageSize.large}
             marginLeft={`-${margins.extraLarge}`}
-            category={text.products.headPiece}
+            category={text.itemSlots.headPiece}
           />
           <LeftEquippedItemCard
             item={items.clothing}
-            code={text.products.clothingCode}
+            code={text.itemSlots.clothingCode}
             width={imageSize.medium}
             height={imageSize.mediumLarge}
             marginTop={`-${margins.big}`}
-            category={text.products.clothing}
+            category={text.itemSlots.clothing}
           />
         </Row>
         <Row>
           <LeftEquippedItemCard
             item={items.midBackground}
-            code={text.products.midBackgroundCode}
-            category={text.products.midBackground}
+            code={text.itemSlots.midBackgroundCode}
+            category={text.itemSlots.midBackground}
           />
           <LeftEquippedItemCard
             item={items.background}
-            code={text.products.backgroundCode}
-            category={text.products.background}
+            code={text.itemSlots.backgroundCode}
+            category={text.itemSlots.background}
           />
         </Row>
       </LeftItemContainer>
@@ -59,52 +59,52 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
         <RightItems>
           <RightEquippedItemCard
             item={items.mask}
-            code={text.products.maskCode}
+            code={text.itemSlots.maskCode}
             width={imageSize.extralarge}
             height={imageSize.large}
             marginTop={`-${imageSize.mediumLarge}`}
             marginLeft={`-${imageSize.medium}`}
-            category={text.products.mask}
+            category={text.itemSlots.mask}
           />
         </RightItems>
         <Row>
           <RightEquippedItemCard
             item={items.noseline}
-            code={text.products.noselineCode}
+            code={text.itemSlots.noselineCode}
             width={imageSize.large}
             height={imageSize.gigantic}
             marginTop={`-${imageSize.mediumLarge}`}
             marginLeft={`-${margins.extraLarge}`}
-            category={text.products.noseline}
+            category={text.itemSlots.noseline}
           />
           <RightEquippedItemCard
             item={items.airResevoir}
-            code={text.products.airResevoirCode}
+            code={text.itemSlots.airResevoirCode}
             width={imageSize.mediumLarge}
             height={imageSize.big}
             marginTop={`-${margins.extraLarge}`}
             marginLeft={`-${margins.small}`}
-            category={text.products.airResevoir}
+            category={text.itemSlots.airResevoir}
           />
         </Row>
         <Row>
           <RightEquippedItemCard
             item={items.liquid}
-            code={text.products.liquidCode}
+            code={text.itemSlots.liquidCode}
             width={imageSize.extraExtraLarge}
             height={imageSize.extraExtraLarge}
             marginTop={`-${imageSize.big}`}
             marginLeft={`-${margins.gigantic}`}
-            category={text.products.liquid}
+            category={text.itemSlots.liquid}
           />
           <RightEquippedItemCard
             item={items.frontMask}
-            code={text.products.frontMaskCode}
+            code={text.itemSlots.frontMaskCode}
             width={imageSize.extraExtraLarge}
             height={imageSize.extraExtraLarge}
             marginTop={`-${imageSize.big}`}
             marginLeft={`-${margins.gigantic}`}
-            category={text.products.frontMask}
+            category={text.itemSlots.frontMask}
           />
         </Row>
       </RightItemContainer>
