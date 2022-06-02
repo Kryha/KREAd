@@ -6,7 +6,6 @@ export const PageWrap = styled.section`
   flex-flow: row nowrap;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
   height: 100vh;
   gap: ${margins.big};
   box-sizing: border-box;
