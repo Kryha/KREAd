@@ -12,7 +12,7 @@ import { Item } from "../../interfaces";
 
 export const Inventory: FC = () => {
   const { data: items, isLoading } = useItems();
-  const [selectedItemId, setSelectedItemtId] = useState("");
+  const [selectedItemId, setSelectedItemtId] = useState<string>("");
   const [selectedItem, setSelectedItem] = useState<Item>();
 
   useEffect(() => {
