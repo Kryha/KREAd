@@ -24,8 +24,6 @@ export const Inventory: FC = () => {
 
   if (!items || !items.length) return <ErrorView />;
 
-  // TODO: pass an item prop to DetailSection based on the selectedElement state
-  // TODO: pass callback of actions Sortable
   return (
     <BaseRoute sideNavigation={<Title title={text.navigation.inventory} items={items.length} />}>
       <PageContainer

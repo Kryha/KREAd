@@ -18,19 +18,7 @@ interface DetailSectionProps {
 
 // TODO: make Detail Section polymorphic and render Item or Character data conditionally based on type
 // TODO: Make index dynamic
-// TODO: Handle Loading and Errors in a more global/standdard way
 export const DetailSection: FC<DetailSectionProps> = ({ item, setSelectedItem }) => {
-  // TODO: Re-introduce loading view when fetching from real data
-  // const [isLoading, setIsLoading] = useState(true);
-
-  // useEffect(() => {
-  //   if (item) {
-  //     setIsLoading(false);
-  //   }
-  // }, [item]);
-
-  // if (isLoading) return <LoadingPage />;
-
   const handleClose = () => setSelectedItem(undefined);
 
   // TODO: Add placeholder image to empty view?
