@@ -59,6 +59,7 @@ export const Info = styled.div<InfoProps>`
   padding: 5px 15px;
   cursor: pointer;
   border-radius: ${margins.medium};
+  border: 1px solid transparent;
   ${({ selected }) =>
     selected &&
     `
