@@ -16,7 +16,10 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const EquippedLabel = styled(Label)``;
+export const EquippedLabel = styled(Label)`
+  display: flex;
+  justify-content: space-between;
+`;
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -42,23 +45,19 @@ export const Info = styled.div<InfoProps>`
   flex-direction: row;
   align-items: center;
   padding: 0px;
+  border-radius: ${margins.medium};
   ${({ selected }): string => {
     return selected
       ? `
-        ${FilledInventoryItem} {
-
-        }
+        background: #F0F0F0;
+        border: 1px solid ${color.darkGrey};
         `
       : `
-       ${FilledInventoryItem} {
-        display: none;
-        }
+
       `;
   }};
   :not(:hover) {
-    ${InventoryItem} {
-      display: none;
-    }
+
   }
   :hover {
     ${EquippedLabel} {
@@ -70,6 +69,7 @@ export const Info = styled.div<InfoProps>`
     ${ButtonContainer} {
       margin-left: -20px;
     }
+    border: 1px solid ${color.black};
   }
   :not(:hover) {
     ${ButtonContainer} {
@@ -104,7 +104,7 @@ export const InfoWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0px;
-  margin: 0px 104px;
+  margin: 0px 0px 0px 104px;
   z-index: 500;
 `;
 

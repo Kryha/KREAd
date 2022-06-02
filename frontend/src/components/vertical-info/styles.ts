@@ -11,7 +11,6 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px 0px ${margins.mini};
   margin: 0px;
 `;
 
@@ -69,7 +68,7 @@ export const DiagonalContainer = styled.div`
 `;
 
 export const Diagonal = styled.div`
-  border: 1px solid ${color.grey};
+  border: 0.5px solid ${color.grey};
   transform: rotate(135deg);
   left: -2px;
   position: absolute;

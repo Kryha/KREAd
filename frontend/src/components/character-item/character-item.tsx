@@ -6,9 +6,6 @@ import {
   InfoContainer,
   InfoWrapper,
   CharacterItemWrapper,
-  ElemantImage,
-  InventoryItem,
-  FilledInventoryItem,
   ButtonContainer,
   Divider,
   EquippedLabel
@@ -16,7 +13,6 @@ import {
 import { ButtonText, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
-import { CharacterItemFilledIcon, CharacterItemIcon, SmallEl } from "../../assets";
 import { color } from "../../design";
 import { Character } from "../../interfaces";
 
@@ -34,19 +30,16 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
     <CharacterItemWrapper onClick={() => { onClick(character); setSelected(!select); }}>
       <>
         <Info selected={select}>
-          <InventoryItem src={CharacterItemIcon} />
-          <FilledInventoryItem src={CharacterItemFilledIcon} />
           <ImageCard>
-            <ElemantImage src={SmallEl} />
             <BaseCharacter character={character} isZoomed={false} size="mini" />
           </ImageCard>
           <InfoWrapper>
             <InfoContainer>
               <MenuItemName>{character.name}</MenuItemName>
-              <Label customColor={color.black}>{text.param.itemId(character.characterId)}</Label>
+              <Label customColor={color.black}>{character.level}</Label>
             </InfoContainer>
             {Boolean(isCharacterEquipped) && (
-              <EquippedLabel>{text.general.equipped}</EquippedLabel>
+              <EquippedLabel customColor={color.black}>{text.param.itemId(character.characterId)}</EquippedLabel>
             )}
             <ButtonContainer>
               <Divider />
