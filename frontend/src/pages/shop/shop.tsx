@@ -106,37 +106,20 @@ export const Shop: FC = () => {
         </FilterWrapper>
         {!!noFilteredItems || (
           <ItemWrapper height={height}>
-            {viewItems ? (
-              <>
-                <ItemContainer>
-                  {items.map((item, index) => (
-                    <ShopCard item={item} key={index} />
-                  ))}
-                </ItemContainer>
-                {/* TODO: do something with load more */}
-                <LoadMore>
-                  <SecondaryButton>
-                    <ButtonText>{text.general.loadMore}</ButtonText>
-                    <Refresh />
-                  </SecondaryButton>
-                </LoadMore>
-              </>
-            ) : (
-              <>
-                <ItemContainer>
-                  {characters.map((character, index) => (
-                    <CharacterShopCard character={character} key={index} />
-                  ))}
-                </ItemContainer>
-                {/* TODO: do something with load more */}
-                <LoadMore>
-                  <SecondaryButton>
-                    <ButtonText>{text.general.loadMore}</ButtonText>
-                    <Refresh />
-                  </SecondaryButton>
-                </LoadMore>
-              </>
-            )}
+            <>
+              <ItemContainer>
+                {viewItems
+                  ? items.map((item, index) => <ShopCard item={item} key={index} />)
+                  : characters.map((character, index) => <CharacterShopCard character={character} key={index} />)}
+              </ItemContainer>
+              {/* TODO: do something with load more */}
+              <LoadMore>
+                <SecondaryButton>
+                  <ButtonText>{text.general.loadMore}</ButtonText>
+                  <Refresh />
+                </SecondaryButton>
+              </LoadMore>
+            </>
           </ItemWrapper>
         )}
       </ShopWrapper>
