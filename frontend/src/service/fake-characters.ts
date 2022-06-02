@@ -30,7 +30,7 @@ export const FakeCharcters: Character[] = [
     slots: [],
   },
   {
-    title: "character 1",
+    title: "character 2",
     name: "character 2",
     type: "Tempet Scavenger",
     characterId: "78992",
@@ -57,7 +57,7 @@ export const FakeCharcters: Character[] = [
     slots: [],
   },
   {
-    title: "character 1",
+    title: "character 3",
     name: "character 3",
     type: "Tempet Scavenger",
     characterId: "78991",
@@ -84,7 +84,7 @@ export const FakeCharcters: Character[] = [
     slots: [],
   },
   {
-    title: "character 1",
+    title: "character 4",
     name: "character 4",
     type: "Tempet Scavenger",
     characterId: "78991",

@@ -39,7 +39,7 @@ export const CreateCharacter: FC = () => {
     case 1:
       return <Payment changeStep={changeStep} />;
     case 2:
-      return <Confirmation  character={character} />;
+      return <Confirmation character={character} />;
     default:
       return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
     }
