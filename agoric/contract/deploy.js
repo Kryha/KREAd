@@ -3,7 +3,7 @@
 import fs from 'fs';
 import '@agoric/zoe/exported.js';
 import { E } from '@endo/eventual-send';
-// import { resolve as importMetaResolve } from 'import-meta-resolve';
+import { resolve as importMetaResolve } from 'import-meta-resolve';
 
 // This script takes our contract code, installs it on Zoe, and makes
 // the installation publicly available. Our backend API script will
@@ -61,14 +61,14 @@ export default async function deployContract(
   const bundle = await bundleSource(pathResolve(`./src/contract.js`));
   const installation = await E(zoe).install(bundle);
 
-  // // We also need to bundle and install the auctionItems contract
-  // const bundleUrl = await importMetaResolve(
-  //   './src/auctionItems.js',
-  //   import.meta.url,
-  // );
-  // const bundlePath = new URL(bundleUrl).pathname;
-  // const auctionItemsBundle = await bundleSource(bundlePath);
-  // const auctionItemsInstallation = await E(zoe).install(auctionItemsBundle);
+  // We also need to bundle and install the auctionItems contract
+  const bundleUrl = await importMetaResolve(
+    './src/auction-nfts.js',
+    import.meta.url,
+  );
+  const bundlePath = new URL(bundleUrl).pathname;
+  const auctionItemsBundle = await bundleSource(bundlePath);
+  const auctionItemsInstallation = await E(zoe).install(auctionItemsBundle);
 
   // // Auction logic, hope that we can add this to Zoe later
   // const auctionBundleUrl = await importMetaResolve(
@@ -79,6 +79,14 @@ export default async function deployContract(
   // const auctionBundle = await bundleSource(auctionBundlePath);
   // const auctionInstallation = await E(zoe).install(auctionBundle);
 
+  // Auction logic, hope that we can add this to Zoe later
+  const auctionBundleUrl = await importMetaResolve(
+    '@agoric/zoe/src/contracts/sellItems.js',
+    import.meta.url,
+  );
+  const auctionBundlePath = new URL(auctionBundleUrl).pathname;
+  const auctionBundle = await bundleSource(auctionBundlePath);
+  const auctionInstallation = await E(zoe).install(auctionBundle);
   // Let's share this installation with other people, so that
   // they can run our contract code by making a contract
   // instance (see the api deploy script in this repo to see an
@@ -88,32 +96,35 @@ export default async function deployContract(
   // To share the installation, we're going to put it in the
   // board. The board is a shared, on-chain object that maps
   // strings to objects.
-  const CONTRACT_NAME = 'CharacterBuilder';
+  const CONTRACT_NAME = 'CHARACTER-BUILDER';
   const INSTALLATION_BOARD_ID = await E(board).getId(installation);
-  // const AUCTION_ITEMS_INSTALLATION_BOARD_ID = await E(board).getId(
-  //   auctionItemsInstallation,
-  // );
-  // const AUCTION_INSTALLATION_BOARD_ID = await E(board).getId(
-  //   auctionInstallation,
-  // );
+  const AUCTION_ITEMS_INSTALLATION_BOARD_ID = await E(board).getId(
+    auctionItemsInstallation,
+  );
+  const AUCTION_INSTALLATION_BOARD_ID = await E(board).getId(
+    auctionInstallation,
+  );
   console.log('- SUCCESS! contract code installed on Zoe');
   console.log(`-- Contract Name: ${CONTRACT_NAME}`);
   console.log(`-- Installation Board Id: ${INSTALLATION_BOARD_ID}`);
-  // console.log(
-  //   `-- Auction Installation Board Id: ${AUCTION_INSTALLATION_BOARD_ID}`,
-  // );
-  // console.log(
-  //   `-- Auction Items Installation Board Id: ${AUCTION_ITEMS_INSTALLATION_BOARD_ID}`,
-  // );
+  console.log(
+    `-- Auction Installation Board Id: ${AUCTION_INSTALLATION_BOARD_ID}`,
+  );
+  console.log(
+    `-- Auction Items Installation Board Id: ${AUCTION_ITEMS_INSTALLATION_BOARD_ID}`,
+  );
 
   // Save the constants somewhere where the UI and api can find it.
   const dappConstants = {
     CONTRACT_NAME,
     INSTALLATION_BOARD_ID,
+    AUCTION_INSTALLATION_BOARD_ID,
+    AUCTION_ITEMS_INSTALLATION_BOARD_ID,
   };
+
   const defaultsFolder = pathResolve(`../../ui/src/service/conf`);
   const defaultsFile = pathResolve(
-    `../../ui/src/service/conf/installationConstants.js`,
+    `../../ui/src/service/conf/installation-constants.js`,
   );
   console.log('writing', defaultsFile);
   const defaultsContents = `\

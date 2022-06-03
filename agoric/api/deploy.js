@@ -8,9 +8,9 @@ import { E } from '@endo/eventual-send';
 import '@agoric/zoe/exported.js';
 // import { AmountMath } from '@agoric/ertp';
 
-import installationConstants from '../../ui/src/service/conf/installationConstants.js';
+import installationConstants from '../../ui/src/service/conf/installation-constants.js';
 
-// import { cards } from './cards.js';
+import { characters } from './characters.js';
 
 // const PRICE_PER_CARD_IN_MONEY_UNITS = 1n;
 
@@ -46,7 +46,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   // Unpack the references.
   const {
     // *** ON-CHAIN REFERENCES ***
-    // chainTimerService: chainTimerServiceP,
+    chainTimerService: chainTimerServiceP,
 
     // Zoe lives on-chain and is shared by everyone who has access to
     // the chain. In this demo, that's just you, but on our testnet,
@@ -65,7 +65,12 @@ export default async function deployApi(homePromise, { pathResolve }) {
   // To get the backend of our dapp up and running, first we need to
   // grab the installation that our contract deploy script put
   // in the public board.
-  const { INSTALLATION_BOARD_ID, CONTRACT_NAME } = installationConstants;
+  const {
+    INSTALLATION_BOARD_ID,
+    CONTRACT_NAME,
+    AUCTION_INSTALLATION_BOARD_ID,
+    AUCTION_ITEMS_INSTALLATION_BOARD_ID,
+  } = installationConstants;
   const installation = await E(board).getValue(INSTALLATION_BOARD_ID);
 
   // Second, we can use the installation to create a new instance of
@@ -74,7 +79,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   // give us a `creatorFacet` that will let us make invitations we can
   // send to users.
 
-  const { creatorFacet: characterBuilderCreatorFacet, instance } = await E(
+  const { creatorFacet: characterBuilderCreatorFacet } = await E(
     zoe,
   ).startInstance(installation);
 
@@ -90,25 +95,57 @@ export default async function deployApi(homePromise, { pathResolve }) {
     E(moneyBrandP).getDisplayInfo(),
   ]);
 
-  // const allCardNames = harden(cards);
+  const allCharacters = harden(characters);
+  console.log(`CHARACTERS: ${characters}`);
+  console.log(allCharacters);
   // const moneyValue =
   //   PRICE_PER_CARD_IN_MONEY_UNITS * 10n ** BigInt(decimalPlaces);
   // const minBidPerCard = AmountMath.make(moneyBrand, moneyValue);
 
-  // const chainTimerService = await chainTimerServiceP;
+  const auctionItemsInstallation = await E(board).getValue(
+    AUCTION_ITEMS_INSTALLATION_BOARD_ID,
+  );
+  const auctionInstallation = await E(board).getValue(
+    AUCTION_INSTALLATION_BOARD_ID,
+  );
+
+  const chainTimerService = await chainTimerServiceP;
+
+  console.log('CONTRACT PARAMS');
+  console.log({
+    allCharacters,
+    moneyIssuer,
+    auctionInstallation,
+    auctionItemsInstallation,
+    chainTimerService,
+  });
   // const {
   //   // TODO: implement exiting the creatorSeat and taking the earnings
-  //   auctionItemsPublicFacet: publicFacet,
-  //   auctionItemsInstance: instance,
-  // } = await E(characterBuilderCreatorFacet).auctionCards(
-  //   allCardNames,
+  //   auctionItemsPublicFacet: sellCharactersPublicFacet,
+  //   auctionItemsInstance: sellCharactersInstance,
+  // } = await E(characterBuilderCreatorFacet).mintCharacters(
+  //   allCharacters,
   //   moneyIssuer,
   //   auctionInstallation,
   //   auctionItemsInstallation,
-  //   minBidPerCard,
   //   chainTimerService,
   // );
 
+  const {
+    // TODO: implement exiting the creatorSeat and taking the earnings
+    sellItemsCreatorSeat: sellCharactersCreatorSeat,
+    sellItemsCreatorFacet: sellCharactersCreatorFacet,
+    sellItemsInstance: sellCharactersInstance,
+    sellItemsPublicFacet: sellCharactersPublicFacet,
+  } = await E(characterBuilderCreatorFacet).mintCharacters(
+    allCharacters,
+    moneyIssuer,
+    auctionInstallation,
+    // auctionItemsInstallation,
+    // chainTimerService,
+  );
+
+  console.log('@@@@', sellCharactersCreatorFacet, sellCharactersCreatorSeat);
   console.log('- SUCCESS! contract instance is running on Zoe');
 
   console.log('Retrieving Board IDs for issuers and brands');
@@ -116,7 +153,8 @@ export default async function deployApi(homePromise, { pathResolve }) {
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
   const ItemIssuerP = E(characterBuilderCreatorFacet).getItemIssuer();
-  const characterIssuerP = E(characterBuilderCreatorFacet).getCharacterIssuer();
+  // const characterIssuerP = E(characterBuilderCreatorFacet).getCharacterIssuer();
+  const characterIssuerP = E(sellCharactersPublicFacet).getItemsIssuer();
 
   const [
     characterIssuer,
@@ -142,7 +180,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
     MONEY_ISSUER_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
   ] = await Promise.all([
-    E(board).getId(instance),
+    E(board).getId(sellCharactersInstance),
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
     E(board).getId(itemBrand),
@@ -158,6 +196,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   console.log(`-- CHARACTER_BRAND_BOARD_ID: ${CHARACTER_BRAND_BOARD_ID}`);
   console.log(`-- ITEM_ISSUER_BOARD_ID: ${ITEM_ISSUER_BOARD_ID}`);
   console.log(`-- ITEM_BRAND_BOARD_ID: ${ITEM_BRAND_BOARD_ID}`);
+  console.log(`-- INVITE_BRAND_BOARD_ID: ${INVITE_BRAND_BOARD_ID}`);
 
   const API_URL = process.env.API_URL || `http://127.0.0.1:${API_PORT || 8000}`;
 
@@ -165,6 +204,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   const dappConstants = {
     INSTANCE_BOARD_ID,
     INSTALLATION_BOARD_ID,
+    AUCTION_ITEMS_INSTALLATION_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
     BRIDGE_URL: 'agoric-lookup:https://local.agoric.com?append=/bridge',
     brandBoardIds: {

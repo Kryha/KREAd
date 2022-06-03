@@ -14,16 +14,20 @@ import {
 
 const {
   INSTANCE_BOARD_ID,
+  INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
   brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID },
 } = dappConstants;
 
-type Agoric = {
+export type AgoricService = {
   zoe: any;
   board: any;
   instance: any;
   publicFacet: any;
+  zoeInvitationDepositFacetId: any;
+  invitationIssuer: any;
+  walletP: any;
 };
 
 export type ServiceState = {
@@ -31,10 +35,14 @@ export type ServiceState = {
   dappApproved: boolean;
   showApproveDappModal: boolean;
   tokenPurses: any[];
-  characterPurse: any[];
-  agoric: Agoric;
+  characterPurse: {
+    [key: string]: any,
+  };
+  agoric: AgoricService;
   isLoading: boolean;
 };
+
+export type PursePetname = [string, string];
 
 const initialState: ServiceState = {
   walletConnected: false,
@@ -46,7 +54,10 @@ const initialState: ServiceState = {
     zoe: undefined,
     board: undefined,
     instance: undefined,
-    publicFacet: undefined
+    publicFacet: undefined,
+    zoeInvitationDepositFacetId: undefined,
+    invitationIssuer: undefined,
+    walletP: undefined,
   },
   isLoading: false,
 }
@@ -78,7 +89,7 @@ export interface SetCharacterPurses {
 
 export interface SetAgoric {
   type: "SET_AGORIC";
-  payload: Agoric;
+  payload: AgoricService;
 }
 
 export interface SetLoading {
@@ -167,7 +178,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         dispatch: ctpDispatch,
         getBootstrap,
       } = makeCapTP(
-        'Card Store',
+        'CB',
         (obj: any) => socket.send(JSON.stringify(obj)),
         otherSide,
       );
@@ -197,24 +208,32 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           // dispatch(setPurses(purses));
+          console.log("CHECKING PURSE: ", purses);
           processPurses(purses);
         }
       }
-      watchPurses().catch((err) => console.error('got watchPurses err', err));
+      watchPurses().catch((err) => {
+        console.error('got watchPurses err', err);
+        console.log(err)
+      });
 
       await Promise.all([
         E(walletP).suggestInstallation('Installation', INSTALLATION_BOARD_ID),
         E(walletP).suggestInstance('Instance', INSTANCE_BOARD_ID),
-        E(walletP).suggestIssuer('Character', CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer('CB', CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer('CBI', ITEM_ISSUER_BOARD_ID),
       ]);
 
+      const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
       const zoe = E(walletP).getZoe();
       const board = E(walletP).getBoard();
       const instance = await E(board).getValue(INSTANCE_BOARD_ID);
-      const publicFacet = E(zoe).getPublicFacet(instance);
+      const publicFacet = await E(zoe).getPublicFacet(instance);
+      const invitationIssuer = E(zoe).getInvitationIssuer(publicFacet);
+
       publicFacetRef.current = publicFacet;
 
-      dispatch({ type: "SET_AGORIC", payload: { zoe, board, instance, publicFacet } });
+      dispatch({ type: "SET_AGORIC", payload: { zoe, board, instance, publicFacet, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       
       // TODO: fetch available characters
 

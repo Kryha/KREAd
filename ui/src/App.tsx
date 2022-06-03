@@ -1,13 +1,14 @@
 import { BrowserRouter } from "react-router-dom";
 import { ServiceStateProvider } from "./context/service";
 import { AppRoutes } from './navigation';
+import { TestServiceUI } from "./service/test-service-ui";
 
 function App() {
   return (
     <ServiceStateProvider>
       <BrowserRouter>
-        <AppRoutes />
-        <h1>CB</h1>
+        {/* <AppRoutes /> */}
+        <TestServiceUI />
       </BrowserRouter>
     </ServiceStateProvider>
     
