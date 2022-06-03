@@ -16,14 +16,18 @@ import {
   OwnedByContainer,
   ItemImage,
 } from "./styles";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../navigation";
+import { DetailSection } from "../../containers/detail-section";
 
 interface ShopCardProps {
   item: Item;
 }
 
 export const ShopCard: FC<ShopCardProps> = ({ item }) => {
+  const navigate = useNavigate();
   return (
-    <Product>
+    <Product onClick={() => <DetailSection />}>
       <Content>
         <ImageContainer>
           {/* TODO: use slots */}

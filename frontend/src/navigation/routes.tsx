@@ -19,6 +19,7 @@ export const AppRoutes: FC = () => {
           <Route path={routes.shop} element={<Shop />} />
           <Route path={routes.inventory} element={<Inventory />} />
           <Route path={routes.createCharacter} element={<CreateCharacter />} />
+          <Route path={`${routes.buy}/:id`} element={<Item />} />
         </Routes>
       </MainContainer>
     </ErrorBoundary>
