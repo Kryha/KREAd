@@ -1,0 +1,34 @@
+{
+  "name": "agoric",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Agoric Project First Prototype",
+  "scripts": {
+    "build": "yarn workspaces foreach --parallel run build",
+    "test": "yarn workspaces foreach --parallel run test",
+    "coverage": "yarn workspaces foreach --parallel run coverage",
+    "format": "prettier --write --loglevel warn '**/*.*'",
+    "lint": "yarn workspaces foreach --parallel run lint",
+    "refreshVSToken": "vsts-npm-auth -config .npmrc"
+  },
+  "workspaces": [
+    "frontend/"
+  ],
+  "browserslist": [
+    "last 2 chrome version",
+    "last 2 firefox version",
+    "last 2 safari version",
+    "last 2 edge version"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://dev.azure.com/Kryha-io/Agoric"
+  },
+  "keywords": [
+    "Agoric",
+    "React"
+  ],
+  "author": "kryha",
+  "license": "ISC",
+  "packageManager": "yarn@1.22.18"
+}
