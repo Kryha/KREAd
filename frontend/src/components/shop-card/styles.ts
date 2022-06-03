@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
@@ -14,6 +15,12 @@ export const Product = styled.div`
   align-items: center;
   min-height: 485px;
   cursor: pointer;
+  ${DetailSectionWrap} {
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    z-index: 30000000;
+  }
 `;
 
 export const ImageContainer = styled.div`

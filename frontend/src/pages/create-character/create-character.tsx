@@ -6,6 +6,7 @@ import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
 import { Character, CharacterCreation } from "../../interfaces";
+import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
@@ -56,7 +57,7 @@ export const CreateCharacter: FC = () => {
         />}
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} />
+          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.root} />
           <>{perStepDisplay()}</>
         </FormCard>
       }

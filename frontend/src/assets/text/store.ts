@@ -3,4 +3,5 @@ export const store = {
   min: "min",
   max: "max",
   buyMoreAtStore: "buy more at store",
+  buyItem: "buy item",
 };

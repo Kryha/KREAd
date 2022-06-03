@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Item } from "../../interfaces";
 
 import { text } from "../../assets";
@@ -16,8 +16,7 @@ import {
   OwnedByContainer,
   ItemImage,
 } from "./styles";
-import { useNavigate } from "react-router-dom";
-import { routes } from "../../navigation";
+
 import { DetailSection } from "../../containers/detail-section";
 
 interface ShopCardProps {
@@ -25,9 +24,14 @@ interface ShopCardProps {
 }
 
 export const ShopCard: FC<ShopCardProps> = ({ item }) => {
-  const navigate = useNavigate();
+  const [selectedItem, setSelectedItem] = useState<Item>();
+  const [showDetail, setShowDetail] = useState(false);
+  useEffect(() => {
+    !!item && setSelectedItem(item);
+  }, [item]);
+
   return (
-    <Product onClick={() => <DetailSection />}>
+    <Product onClick={() => setShowDetail(!showDetail)}>
       <Content>
         <ImageContainer>
           {/* TODO: use slots */}
@@ -47,6 +51,9 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
           <PriceInRun price={item.price} />
         </Footer>
       </Content>
+      {Boolean(showDetail) && (
+        <DetailSection item={selectedItem} setSelectedItem={setSelectedItem} />
+      )}
     </Product>
   );
 };

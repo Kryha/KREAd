@@ -9,26 +9,31 @@ import {  ArrowContainer, Close, Divider, FormNavigation, HeaderContainer, Navig
 
 interface NavigationTabProps {
   currentStep: number;
+  title: string;
+  isBuyFlow?: boolean;
+  link: string;
 }
 
-export const FormHeader: FC<NavigationTabProps> = ({ currentStep }) => {
+export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFlow = false, link }) => {
   const navigate = useNavigate();
 
   return (
     <>
       <HeaderContainer>
-        <MenuText>{text.mint.mintNew}</MenuText>
+        <MenuText>{title}</MenuText>
         <ReturnContainer>
           <Divider />
           <ArrowContainer>
-            <Close onClick={() => navigate(routes.root)} />
+            <Close onClick={() => navigate(link)} />
           </ArrowContainer>
         </ReturnContainer>
       </HeaderContainer>
       <FormNavigation>
-        <NavigationTab>
-          <FormTab active={currentStep === INFORMATION_STEP} title={text.mint.information} />
-        </NavigationTab>
+        {Boolean(!isBuyFlow) && (
+          <NavigationTab>
+            <FormTab active={currentStep === INFORMATION_STEP} title={text.mint.information} />
+          </NavigationTab>
+        )}
         <NavigationTab>
           <FormTab active={currentStep === PAYMENT_STEP} title={text.mint.payment} />
         </NavigationTab>

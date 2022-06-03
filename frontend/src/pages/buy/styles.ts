@@ -1,10 +1,19 @@
 import styled from "styled-components";
 import { ArrowUpRightIcon, TickIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge } from "../../components";
+import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
 
 export const ContentWrapper = styled.div`
   margin-top: ${margins.big};
+  ${DetailSectionWrap} {
+    margin-top: 80px;
+  }
+  ${DetailSectionHeaderNavigationWrap} {
+    display: none;
+  }
+
 `;
 
 export const Tick = styled(TickIcon)`

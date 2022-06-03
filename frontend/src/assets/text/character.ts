@@ -28,4 +28,5 @@ export const character = {
   deleteCharacter: "delete character",
   characters: "characters",
   defaultCharacter: "default character",
+  buy: "buy",
 };
