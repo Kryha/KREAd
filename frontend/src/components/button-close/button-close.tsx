@@ -4,10 +4,14 @@ import { CloseIcon } from "../../assets";
 import { TertiaryButton } from "../atoms";
 import { ButtonCloseWrap } from "./styles";
 
-export const ButtonClose: FC = () => {
+interface ButtonCloseProps {
+  onClick: () => void;
+}
+
+export const ButtonClose: FC<ButtonCloseProps> = ({ onClick }) => {
   return (
     <ButtonCloseWrap>
-      <TertiaryButton>
+      <TertiaryButton onClick={() => onClick()}>
         <CloseIcon />
       </TertiaryButton>
     </ButtonCloseWrap>

@@ -38,6 +38,7 @@ export const DetailSectionSegmentStoryDescription = styled.p`
 export const DetailSectionSegmentStoryImg = styled.img`
   width: 100%;
   height: auto;
+  box-sizing: border-box;
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   background-color: ${color.white};

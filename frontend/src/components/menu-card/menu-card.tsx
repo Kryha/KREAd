@@ -1,4 +1,3 @@
-
 import { FC } from "react";
 import { Item } from "../../interfaces";
 import { text } from "../../assets";
@@ -48,7 +47,9 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
       </MenuHeader>
       <Content>
         <MenuContent>
-          <MenuItem items={items} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} />
+          {items.map((item) => (
+            <MenuItem item={item} key={item.id} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} />
+          ))}
         </MenuContent>
       </Content>
       <CardActionsContainer>
