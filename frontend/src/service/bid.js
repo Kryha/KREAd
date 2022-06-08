@@ -1,5 +1,5 @@
-import { E } from '@endo/eventual-send';
-import { assert, details as X } from '@agoric/assert';
+import { E } from "@endo/eventual-send";
+import { assert, details as X } from "@agoric/assert";
 
 const getCardAuctionDetail = async (publicFacet, card) => {
   return E(publicFacet).getSessionDetailsForKey(card);
@@ -16,8 +16,8 @@ const makeBidOfferForCard = async (
   // assert(card, X`At least one card must be chosen to purchase`);
   console.log("1 MK INV");
   const card1 = {
-    name: 'Cmoney!',
-    url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
+    name: "Cmoney!",
+    url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
   };
   const invitation = await E(publicFacet).makeBidInvitationForKey(card1);
   console.log("2 OFFER");

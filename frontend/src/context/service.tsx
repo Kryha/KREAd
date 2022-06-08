@@ -1,16 +1,16 @@
 // import { assert } from '@agoric/assert';
 // import '@endo/init';
 import React, { createContext, useReducer, useContext, useEffect, useRef } from "react";
-import { Far } from '@endo/marshal';
-import { makeCapTP, E } from '@endo/captp';
-import { makeAsyncIterableFromNotifier as iterateNotifier } from '@agoric/notifier';
+import { Far } from "@endo/marshal";
+import { makeCapTP, E } from "@endo/captp";
+import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import dappConstants from "../service/conf/defaults";
 
 import {
   activateWebSocket,
   deactivateWebSocket,
   getActiveSocket,
-} from '../service/utils/fetch-websocket';
+} from "../service/utils/fetch-websocket";
 
 const {
   INSTANCE_BOARD_ID,
@@ -60,22 +60,22 @@ const initialState: ServiceState = {
     walletP: undefined,
   },
   isLoading: false,
-}
+};
 
 export interface SetDappApproved {
   type: "SET_DAPP_APPROVED";
   payload: boolean;
-};
+}
 
 export interface SetWalletConnected {
   type: "SET_WALLET_CONNECTED";
   payload: boolean;
-};
+}
 
 export interface SetShowApproveDappModal {
   type: "SET_SHOW_APPROVE_DAPP_MODAL";
   payload: boolean;
-};
+}
 
 export interface SetTokenPurses {
   type: "SET_TOKEN_PURSES";
@@ -119,32 +119,32 @@ const DispatchContext = createContext<Dispatch | undefined>(undefined);
 
 const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState => {
   switch (action.type) {
-    case "SET_DAPP_APPROVED":
-      return { ...state, dappApproved: action.payload };
+  case "SET_DAPP_APPROVED":
+    return { ...state, dappApproved: action.payload };
 
-    case "SET_SHOW_APPROVE_DAPP_MODAL":
-      return { ...state, showApproveDappModal: action.payload };
+  case "SET_SHOW_APPROVE_DAPP_MODAL":
+    return { ...state, showApproveDappModal: action.payload };
 
-    case "SET_WALLET_CONNECTED":
-      return { ...state, walletConnected: action.payload };
+  case "SET_WALLET_CONNECTED":
+    return { ...state, walletConnected: action.payload };
 
-    case "SET_TOKEN_PURSES":
-      return { ...state, tokenPurses: action.payload };
+  case "SET_TOKEN_PURSES":
+    return { ...state, tokenPurses: action.payload };
     
-    case "SET_CHARACTER_PURSES":
-      return { ...state, characterPurse: action.payload };
+  case "SET_CHARACTER_PURSES":
+    return { ...state, characterPurse: action.payload };
     
-    case "SET_AGORIC":
-      return { ...state, agoric: action.payload };
+  case "SET_AGORIC":
+    return { ...state, agoric: action.payload };
       
-    case "SET_LOADING":
-      return { ...state, isLoading: action.payload };
+  case "SET_LOADING":
+    return { ...state, isLoading: action.payload };
     
-    case "RESET":
-      return initialState;
+  case "RESET":
+    return initialState;
 
-    default:
-      throw new Error(`Only defined action types can be handled;`);
+  default:
+    throw new Error("Only defined action types can be handled;");
   }
 };
 
@@ -155,7 +155,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
   
   useEffect(() => {
     // Receive callbacks from the wallet connection.
-    const otherSide = Far('otherSide', {
+    const otherSide = Far("otherSide", {
       needDappApproval(_dappOrigin: any, _suggestedDappPetname: any) {
         dispatch({ type: "SET_DAPP_APPROVED", payload: false });
         dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: true });
@@ -178,7 +178,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         dispatch: ctpDispatch,
         getBootstrap,
       } = makeCapTP(
-        'CB',
+        "CB",
         (obj: any) => socket.send(JSON.stringify(obj)),
         otherSide,
       );
@@ -213,15 +213,15 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         }
       }
       watchPurses().catch((err) => {
-        console.error('got watchPurses err', err);
-        console.log(err)
+        console.error("got watchPurses err", err);
+        console.log(err);
       });
 
       await Promise.all([
-        E(walletP).suggestInstallation('Installation', INSTALLATION_BOARD_ID),
-        E(walletP).suggestInstance('Instance', INSTANCE_BOARD_ID),
-        E(walletP).suggestIssuer('CB', CHARACTER_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer('CBI', ITEM_ISSUER_BOARD_ID),
+        E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
+        E(walletP).suggestInstance("Instance", INSTANCE_BOARD_ID),
+        E(walletP).suggestIssuer("CB", CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("CBI", ITEM_ISSUER_BOARD_ID),
       ]);
 
       const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);

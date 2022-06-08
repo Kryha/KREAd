@@ -1,8 +1,8 @@
 // @ts-check
 /* globals window, WebSocket */
-import { registerSocket, closeSocket, getActiveSocket } from './socket.js';
+import { registerSocket, closeSocket, getActiveSocket } from "./socket.js";
 
-import dappConstants from '../constants.js';
+import dappConstants from "../constants.js";
 
 const { API_URL } = dappConstants;
 
@@ -11,7 +11,7 @@ const { API_URL } = dappConstants;
 function getWebSocketEndpoint(endpoint) {
   // TODO proxy socket.
   const url = new URL(endpoint, API_URL || window.origin);
-  url.protocol = url.protocol.replace(/^http/, 'ws');
+  url.protocol = url.protocol.replace(/^http/, "ws");
   return url.href;
 }
 
@@ -42,22 +42,22 @@ function createSocket({ onConnect, onDisconnect, onMessage }, endpoint) {
     addHandler(handler) {
       const listener = ({ data }) => handler(JSON.parse(data));
       handlerToListener.set(handler, listener);
-      socket.addEventListener('message', listener);
+      socket.addEventListener("message", listener);
     },
     removeHandler(handler) {
       const listener = handlerToListener.get(handler);
-      socket.removeEventListener('message', listener);
+      socket.removeEventListener("message", listener);
       handlerToListener.delete(handler);
     },
   });
   if (onConnect) {
-    socket.addEventListener('open', () => onConnect());
+    socket.addEventListener("open", () => onConnect());
   }
   if (onDisconnect) {
-    socket.addEventListener('close', () => onDisconnect());
+    socket.addEventListener("close", () => onDisconnect());
   }
   if (onMessage) {
-    socket.addEventListener('message', ({ data }) =>
+    socket.addEventListener("message", ({ data }) =>
       onMessage(JSON.parse(data)),
     );
   }
@@ -69,17 +69,17 @@ function createSocket({ onConnect, onDisconnect, onMessage }, endpoint) {
  * @param {SocketHandler} socketListeners
  * @param {*} endpoint
  */
-export function activateSocket(socketListeners = {}, endpoint = '/api') {
+export function activateSocket(socketListeners = {}, endpoint = "/api") {
   if (getActiveSocket(endpoint)) return;
   createSocket(socketListeners, endpoint);
 }
 
-export function deactivateSocket(endpoint = '/api') {
+export function deactivateSocket(endpoint = "/api") {
   if (!getActiveSocket(endpoint)) return;
   closeSocket(endpoint);
 }
 
-export async function rpc(req, endpoint = '/api') {
+export async function rpc(req, endpoint = "/api") {
   // Use the socket directly.
   const socket = getActiveSocket(endpoint);
   if (!socket) {

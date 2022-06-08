@@ -1,6 +1,6 @@
-import { E } from '@endo/eventual-send';
-import { AgoricService, PursePetname } from '../context/service';
-import { assert, details as X } from '@agoric/assert';
+import { E } from "@endo/eventual-send";
+import { AgoricService, PursePetname } from "../context/service";
+import { assert, details as X } from "@agoric/assert";
 
 const getCardAuctionDetail = async ({ publicFacet, card }: any) => {
   return E(publicFacet).getSessionDetailsForKey(card);
@@ -44,7 +44,7 @@ export const mintCharacter = async (characterPursePetname: PursePetname, agoric:
   console.log(updatedOffer);
   await E(depositFacet).receive(invitation);
   await E(agoric.walletP).addOffer(updatedOffer);
-}
+};
 
 // export const makeBidOfferForCard = async ({
 //   walletP,

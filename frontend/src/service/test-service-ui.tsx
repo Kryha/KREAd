@@ -13,15 +13,15 @@ export const TestServiceUI = () => {
   }, [service]);
 
   const nfts = [{
-    name: 'Tsun Tsun!',
-    url: 'https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512',
+    name: "Tsun Tsun!",
+    url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
   },{
-    name: 'Cmoney!',
-    url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
+    name: "Cmoney!",
+    url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
   }];
 
   const handleMint = async () => {
-    console.log("MINTINGGGG")
+    console.log("MINTINGGGG");
     await makeBidOfferForCard(
       service.agoric.walletP,
       nfts[0],
@@ -33,7 +33,7 @@ export const TestServiceUI = () => {
   };
 
   const getCharacter = async () => {
-    console.log("GETTTTT")
+    console.log("GETTTTT");
     await getCardAuctionDetail(service.agoric.publicFacet, nfts[0]);
   };
 
@@ -42,10 +42,10 @@ export const TestServiceUI = () => {
     <div style={{width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row"}}>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-      onClick={handleMint}>BID</button>
+        onClick={handleMint}>BID</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-      onClick={handleMint}>GET INFO</button>
+        onClick={handleMint}>GET INFO</button>
     </div>
-  </>
-}
+  </>;
+};
