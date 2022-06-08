@@ -13,8 +13,6 @@ stages:
       - job: build_and_deploy
         displayName: Build Docker images and deploy through Kubernetes
         steps:
-          - script: cd frontend && export $(grep -v '^#' .env.staging | xargs) && cd ..
-            displayName: "Configure Environment Variables"
           - script: curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && sudo install skaffold /usr/local/bin/
             displayName: Install Skaffold
           - task: DownloadSecureFile@1
@@ -32,8 +30,9 @@ stages:
               namespace: "character-builder-staging"
               command: "login"
           - script: |
-              envsubst < deployment/staging/workloads/config/ui-config.template.yaml > deployment/staging/workloads/config/ui-config.yaml
-              envsubst < frontend/skaffold.staging.template.yaml > frontend/skaffold.staging.yaml
               cd frontend
+              export $(grep -v '^#' .env.staging | xargs)
+              envsubst < ../deployment/staging/workloads/config/ui-config.template.yaml > ../deployment/staging/workloads/config/ui-config.yaml
+              envsubst < skaffold.staging.template.yaml > skaffold.staging.yaml
               skaffold run --filename skaffold.staging.yaml
             displayName: Build and push docker images
