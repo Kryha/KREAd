@@ -1,6 +1,11 @@
 * {
   margin: 0;
 }
+
+div {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family:  'aktiv-grotesk',-apple-system, BlinkMacSystemFont, sans-serif;
