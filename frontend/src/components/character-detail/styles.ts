@@ -60,7 +60,7 @@ export const Close = styled(CloseIcon)`
   width: 12px;
   height: 12px;
   align-items: center;
-  margin-top: 16px;
+  margin-top: ${margins.small}px;
   cursor: pointer;
 `;
 

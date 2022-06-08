@@ -32,7 +32,13 @@ export const CharacterWrapper = styled.div<CharacterProps>`
   top: 101px;
   position: absolute;
   z-index: 10000;
-  ${({ width, height }): string => `min-width: ${width * 0.375}px; max-width: ${width * 0.375}px; width: ${width * 0.375}px; max-height: ${height - 80}px;`};
+  ${({ width, height }): string =>
+    `
+      min-width: ${width * 0.375}px;
+      max-width: ${width * 0.375}px;
+      width: ${width * 0.375}px;
+      max-height: ${height - 80}px;
+   `};
 `;
 
 export const CharacterHeader = styled.div`
@@ -61,7 +67,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const CharacterContent = styled.div`
-  padding: 24px ${margins.big} 0px ${margins.medium};
+  padding: ${margins.medium} ${margins.big} 0px ${margins.medium};
 `;
 
 export const CharacterItemContainer = styled.div`
