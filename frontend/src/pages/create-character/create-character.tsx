@@ -34,26 +34,20 @@ export const CreateCharacter: FC = () => {
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
-    case 0:
-      return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
-    case 1:
-      return <Payment changeStep={changeStep} />;
-    case 2:
-      return <Confirmation character={character} />;
-    default:
-      return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
+      case 0:
+        return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
+      case 1:
+        return <Payment changeStep={changeStep} />;
+      case 2:
+        return <Confirmation character={character} />;
+      default:
+        return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
     }
   };
 
   return (
     <PageContainer
-      mainContent={
-        <DefaultImage
-          src={DefaultIcon}
-          alt={text.character.defaultCharacter}
-          height={height}
-          width={width}
-        />}
+      mainContent={<DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />}
       sidebarContent={
         <FormCard height={height} width={width}>
           <FormHeader currentStep={currentStep} />
