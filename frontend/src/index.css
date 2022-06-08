@@ -3,7 +3,7 @@
 }
 body {
   margin: 0;
-  font-family:  'Aktiv Grotesk Regular',-apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:  'aktiv-grotesk',-apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -12,5 +12,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-@import url("https://use.typekit.net/pqd0hba.css");

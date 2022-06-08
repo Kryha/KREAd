@@ -4,7 +4,7 @@ import { color } from "../../design";
 
 export const Input = styled.input`
   color: ${color.black};
-  font-family: Aktiv Grotesk Medium;
+  font-family: aktiv-grotesk;
   font-weight: 500;
   font-size: 14px;
   line-height: 18px;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color, margins } from "../../design";
+import { color, fontWeight, margins } from "../../design";
 
 import { Label } from "../atoms";
 
@@ -18,7 +18,8 @@ export const CategoryCode = styled(Label) <DirectionProps>`
 
   margin: ${margins.mini} 0px;
   text-transform: uppercase;
-  font-family: Aktiv Grotesk Medium;
+  font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.light};
   flex: none;
   order: 3;
   flex-grow: 0;

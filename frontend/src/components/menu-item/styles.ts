@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { margins } from "../../design";
+import { margins, color } from "../../design";
 import { Img, Label, MenuItemName } from "../atoms";
 
 export const EquippedLabel = styled(Label)``;
@@ -21,19 +21,11 @@ export const InfoWrapper = styled.div`
   width: 551px;
 `;
 
-
-export const InventoryItem = styled.img`
-  position: absolute;
-`;
-
-export const FilledInventoryItem = styled.img`
-  position: absolute;
-`;
 export const MenuItemWrapper = styled.div``;
 
 export const Divider = styled.div`
   width: 48px;
-  border: 1px solid #D0D0D0;
+  border: 1px solid #d0d0d0;
   transform: rotate(90deg);
 `;
 
@@ -42,7 +34,7 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-   margin-right: ${margins.medium};
+  margin-right: ${margins.medium};
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
@@ -52,43 +44,32 @@ interface InfoProps {
 }
 
 export const Info = styled.div<InfoProps>`
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
-  margin: 24px 0px;
+  padding: 5px 15px;
   cursor: pointer;
-  ${({ selected }): string => {
-    return selected
-      ? `
-        ${FilledInventoryItem} {
-
-        }
-        `
-      : `
-       ${FilledInventoryItem} {
-        display: none;
-        }
-      `;
-  }};
-  :not(:hover) {
-    ${InventoryItem} {
-      display: none;
-    }
-  }
+  border-radius: ${margins.medium};
+  border: 1px solid transparent;
+  ${({ selected }) =>
+    selected &&
+    `
+    background-color: ${color.lightGrey};
+    border: 1px solid ${color.darkGrey};
+    `};
   :hover {
+    border: 1px solid ${color.darkGrey};
     ${EquippedLabel} {
       display: none;
     }
-    ${InfoContainer} {
-      margin-right: 0px;
-    }
-    ${ButtonContainer} {
-      margin-left: -30px;
-    }
-    ${InfoWrapper} {
-      width: 320px;
-    }
+    // ${InfoContainer} {
+    //   margin-right: 0px;
+    // }
+    // ${ButtonContainer} {
+    //   margin-left: -30px;
+    // }
   }
   :not(:hover) {
     ${ButtonContainer} {
@@ -98,38 +79,47 @@ export const Info = styled.div<InfoProps>`
 `;
 
 export const ImageCard = styled.div`
+  position: relative;
   box-sizing: border-box;
   border-radius: ${margins.medium};
   width: 80px;
   height: 80px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 interface ImageProps {
   category?: string;
 }
 
+// TODO: use square images for slot thumbnails
 /* eslint-disable indent */
 export const ItemImage = styled(Img) <ImageProps>`
-${({ category }): string => {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  ${({ category }): string => {
     switch (category) {
       case "hair":
-        return "width: 80px; height: 110px; margin-left: 10px;";
+        return "width: 50px;";
       case "head piece":
-        return "width: 130px; height: 130px; margin-left: -20px; margin-top: -30px;";
+        return "width: 170px; margin-top: -20px;";
       case "clothing":
-        return "width: 80px; height: 140px; margin-left: 10px; margin-top: -80px;";
+        return "width: 95px; margin-top: -100px;";
       case "mask":
-        return "width: 190px; height: 190px; margin-left: -40px; margin-top: -100px;";
+        return "width: 224px; margin-top: -118px;";
       case "noseline":
-        return "width: 350px; height: 250px; margin-left: -120px; margin-top: -150px;";
+        return "margin-top: -124px; width: 320px;";
       case "air resevoir":
-        return "width: 130px; height: 130px; margin-left: -10px; margin-top: -60px;";
+        return "width: 132px; margin-top: -68px;";
       case "liquid":
-        return "width: 250px; height: 250px; margin-left: -70px; margin-top: -155px;";
+        return "width: 240px; margin-top: -132px;";
       case "front mask":
-        return "width: 270px; height: 270px; margin-left: -80px; margin-top: -175px;";
+        return "width: 270px; margin-top: -158px;";
       default:
-        return "width: 80px; height: 80px;";
+        return "width: 80px; ";
     }
   }};
 `;

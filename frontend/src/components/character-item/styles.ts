@@ -81,6 +81,11 @@ export const Info = styled.div<InfoProps>`
 
 export const CharacterItemWrapper = styled.div`
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px;
 `;
 
 

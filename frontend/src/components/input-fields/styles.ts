@@ -147,7 +147,8 @@ export const MaxInput = styled(Input)`
   width: 119px;
   padding: 3px 0px 16px 33px;
   position: relative;
-  font-family: Aktiv Grotesk Regular;
+  font-family: aktiv-grotesk;
+  font-weight: 400;
 `;
 
 export const MinInput = styled(MaxInput)`
@@ -167,7 +168,7 @@ export const TextLabel = styled(BodyText)`
   ::before {
     position: absolute;
     content: "RUN";
-    font-family: Aktiv Grotesk Regular;
+    font-family: aktiv-grotesk;
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;
