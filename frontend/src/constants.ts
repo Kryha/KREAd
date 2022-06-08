@@ -6,3 +6,5 @@ export const INFORMATION_STEP = 0;
 export const PAYMENT_STEP = 1;
 export const CONFIRMATION_STEP = 2;
 export const MINTING_COST = 2;
+export const BUY_FLOW_STEPS = 3;
+export const SELL_FLOW_STEPS = 2;

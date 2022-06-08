@@ -19,7 +19,6 @@ export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ handl
   const navigate = useNavigate();
   return (
     <DetailSectionHeaderNavigationWrap>
-      {/* TODO: add links */}
       {location.pathname === routes.shop ? (
         <>
           <PriceInRun price={item.price} />
@@ -29,10 +28,11 @@ export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ handl
         </>
       ) : (
         <>
+          {/* TODO: add links */}
           <PrimaryButton>
             <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
           </PrimaryButton>
-          <SecondaryButton>
+          <SecondaryButton onClick={() => navigate(`${routes.sell}/${item.id}`)}>
             <ButtonText>{text.character.sell}</ButtonText>
           </SecondaryButton>
         </>

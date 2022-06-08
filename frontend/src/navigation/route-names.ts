@@ -6,4 +6,5 @@ export const routes = {
   items: "/items",
   createCharacter: "/create-character",
   buy: "/buy",
+  sell: "/sell",
 };

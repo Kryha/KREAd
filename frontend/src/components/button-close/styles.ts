@@ -7,6 +7,7 @@ export const Close = styled(CloseIcon)`
   height: 12px;
   margin-left: 46px;
   margin-top: 10px;
+  cursor: pointer;
 `;
 
 export const ButtonCloseWrap = styled.div`

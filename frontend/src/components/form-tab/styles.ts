@@ -8,10 +8,6 @@ export const NavTab = styled(NavLink)`
   text-decoration: none;
 `;
 
-export const NavTitle = styled(NavigationTitle)`
-  padding: 0px 36px ${margins.medium} 36px;
-`;
-
 export const NavTabs = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,6 +18,17 @@ export const NavTabs = styled.div`
 interface NavTabProps {
   active?: boolean;
 }
+
+interface WidthProps {
+  width: number;
+  amount: number;
+}
+
+export const NavTitle = styled(NavigationTitle) <WidthProps>`
+  text-align: center;
+  padding: 0px 0px ${margins.medium} 0px;
+`;
+
 export const ActiveLine = styled.div<NavTabProps>`
 ${({ active }) => {
     return active
@@ -36,4 +43,6 @@ ${({ active }) => {
   }}
 `;
 
-export const Tab = styled.div``;
+export const Tab = styled.div<WidthProps>`
+${({ width, amount }): string => `width: ${(width * 0.4 - (amount === 3 ? 80 : 140)) / amount}px;`};
+`;

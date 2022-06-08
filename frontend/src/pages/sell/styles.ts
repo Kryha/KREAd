@@ -1,10 +1,14 @@
 import styled from "styled-components";
-import { ArrowUpRightIcon, TickIcon } from "../../assets";
-import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText } from "../../components";
+import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
+import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
 
+export const Exclamation = styled(ExclamationIcon)`
+  margin-right: 20px;
+  margin-bottom: 10px;
+`;
 
 export const Tick = styled(TickIcon)`
   margin-right: 20px;
@@ -104,7 +108,7 @@ export const Step = styled.div`
 `;
 
 export const Line = styled.div`
-  width: 16px;
+  width: ${margins.small};
   border: 0.5px solid ${color.darkGrey};
   transform: rotate(90deg);
   margin: ${margins.small} 20px ${margins.small} 39px;
@@ -163,5 +167,49 @@ export const InfoContainer = styled.div`
   ${MenuItemName} {
     margin-top: ${margins.mini};
     margin-bottom: ${margins.medium};
+  }
+`;
+
+export const FormFields = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  margin-bottom: ${margins.big};
+  position: relative;
+
+  margin-top: ${margins.big};
+  ${Input} {
+    padding-right: 75px;
+    padding-left: 33px;
+  }
+  ${ButtonText} {
+    margin-top: ${margins.mini};
+  }
+`;
+
+export const TextLabel = styled(BodyText)`
+  display: flex;
+  width: 100%;
+  ::before {
+    position: absolute;
+    content: "RUN";
+    font-family: Aktiv Grotesk Regular;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    padding-top: 3px;
+    color: ${color.black};
+  }
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  width: 100%;
+  ${Input} {
+    width: 100%;
   }
 `;

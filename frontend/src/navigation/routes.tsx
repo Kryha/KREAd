@@ -3,7 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
-import { Landing, Shop, Inventory, CreateCharacter, Buy } from "../pages";
+import { Landing, Shop, Inventory, CreateCharacter, Buy, Sell } from "../pages";
 import { MainContainer, ErrorFallback } from "../components";
 import { Item } from "../pages/item";
 
@@ -20,6 +20,7 @@ export const AppRoutes: FC = () => {
           <Route path={routes.inventory} element={<Inventory />} />
           <Route path={routes.createCharacter} element={<CreateCharacter />} />
           <Route path={`${routes.buy}/:id`} element={<Buy />} />
+          <Route path={`${routes.sell}/:id`} element={<Sell />} />
         </Routes>
       </MainContainer>
     </ErrorBoundary>
