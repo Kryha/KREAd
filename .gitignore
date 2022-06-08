@@ -214,22 +214,11 @@ build
 backend/.env
 frontend/.env
 
-# https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
-
-## yarn zero-installs
-.yarn/*
-!.yarn/cache
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-
 ## npm deprecated in favour of yarn
 package-lock.json
 
 ## script output
 .postgres
-
 
 ## ignore visual studio code history
 .history
@@ -247,3 +236,5 @@ bin/*
 
 # ignore declarations
 src/declarations
+
+install-state.gz
