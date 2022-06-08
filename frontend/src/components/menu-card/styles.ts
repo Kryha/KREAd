@@ -91,5 +91,6 @@ export const CardActionsContainer = styled.div`
   justify-content: flex-end;
   margin-bottom: ${margins.large};
   margin-right: ${margins.large};
+  margin-top: ${margins.medium};
   box-shadow: none;
 `;

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-import { color } from "../../design";
+import { color, fontWeight } from "../../design";
 
 export const Input = styled.input`
   color: ${color.black};
   font-family: aktiv-grotesk;
-  font-weight: 500;
+  font-weight: ${fontWeight.medium};
   font-size: 14px;
   line-height: 18px;
   background-color: transparent;

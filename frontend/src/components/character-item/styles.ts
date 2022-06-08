@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import { color, margins } from "../../design";
-import { Label, MenuItemName } from "../atoms";
+import { BoldLabel, MenuItemName } from "../atoms";
 import { CharacterWrapper } from "../base-character/styles";
 
 export const InfoContainer = styled.div`
@@ -9,14 +9,13 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  width: 200px;
-   margin-right: 60px;
+  margin-right: ${margins.medium};
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
 `;
 
-export const EquippedLabel = styled(Label)`
+export const EquippedLabel = styled(BoldLabel)`
   display: flex;
   justify-content: space-between;
 `;
@@ -28,48 +27,32 @@ export const ButtonContainer = styled.div`
   padding: 16px 0px;
 `;
 
-export const InventoryItem = styled.img`
-  position: absolute;
-`;
-
-export const FilledInventoryItem = styled.img`
-  position: absolute;
-`;
-
 interface InfoProps {
   selected: boolean;
 }
 
 export const Info = styled.div<InfoProps>`
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
+  padding: 8px 8px;
+  cursor: pointer;
   border-radius: ${margins.medium};
-  ${({ selected }): string => {
-    return selected
-      ? `
-        background: #F0F0F0;
-        border: 1px solid ${color.darkGrey};
-        `
-      : `
-
-      `;
-  }};
-  :not(:hover) {
-
-  }
+  border: 1px solid transparent;
+  margin-bottom: ${margins.small};
+  ${({ selected }) =>
+    selected &&
+    `
+    background-color: ${color.lightGrey};
+    border: 1px solid ${color.darkGrey};
+    `};
   :hover {
+    border: 1px solid ${color.darkGrey};
     ${EquippedLabel} {
       display: none;
     }
-    ${InfoContainer} {
-      margin-right: 0px;
-    }
-    ${ButtonContainer} {
-      margin-left: -20px;
-    }
-    border: 1px solid ${color.black};
   }
   :not(:hover) {
     ${ButtonContainer} {
@@ -78,26 +61,20 @@ export const Info = styled.div<InfoProps>`
   }
 `;
 
-
-export const CharacterItemWrapper = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px;
-`;
-
-
 export const ImageCard = styled.div`
-  background: ${color.gradientLight};
+  position: relative;
   box-sizing: border-box;
   border-radius: ${margins.medium};
-  position: relative;
-  height: 96px;
-  margin-left: 8px;
-  margin-top: 16px;
-  ${CharacterWrapper}{
+  border: 1px solid ${color.grey};
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: ${margins.small};
+  ${CharacterWrapper} {
     left: 15px;
   }
 `;
@@ -108,17 +85,29 @@ export const InfoWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   padding: 0px;
-  margin: 0px 0px 0px 104px;
   z-index: 500;
-`;
-
-export const ElemantImage = styled.img`
-  position: absolute;
 `;
 
 export const Divider = styled.div`
   width: 48px;
   border: 1px solid #D0D0D0;
   transform: rotate(90deg);
+`;
+
+export const Line = styled.div`
+  width: ${margins.small};
+  border: 0.5px solid ${color.darkGrey};
+  height: 1px;
+`;
+
+export const SelectedContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  ${Line} {
+    margin-right: ${margins.mini};
+    margin-left: ${margins.mini};
+  }
 `;

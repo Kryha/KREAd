@@ -57,8 +57,10 @@ export const ArrowContainer = styled.div`
 `;
 
 export const Close = styled(CloseIcon)`
-  width: ${margins.big};
-  height: ${margins.big};
+  width: 12px;
+  height: 12px;
+  align-items: center;
+  margin-top: 16px;
   cursor: pointer;
 `;
 

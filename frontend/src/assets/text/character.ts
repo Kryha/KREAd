@@ -28,4 +28,6 @@ export const character = {
   deleteCharacter: "delete character",
   characters: "characters",
   defaultCharacter: "default character",
+  select: "select",
+  selected: "selected",
 };

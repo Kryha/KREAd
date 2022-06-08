@@ -5,12 +5,13 @@ import {
   Info,
   InfoContainer,
   InfoWrapper,
-  CharacterItemWrapper,
   ButtonContainer,
   Divider,
-  EquippedLabel
+  EquippedLabel,
+  Line,
+  SelectedContainer
 } from "./styles";
-import { ButtonText, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
+import { BoldLabel, ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
@@ -23,31 +24,48 @@ interface CharacterItemProps {
 }
 
 export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }) => {
-  const [select, setSelected] = useState(false);
+  const [selected, setSelected] = useState(false);
   const isCharacterEquipped = character.characterId === id;
 
   return (
-    <CharacterItemWrapper onClick={() => { onClick(character); setSelected(!select); }}>
-      <>
-        <Info selected={select}>
-          <ImageCard>
-            <BaseCharacter character={character} isZoomed={false} size="mini" />
-          </ImageCard>
-          <InfoWrapper>
-            <InfoContainer>
-              <MenuItemName>{character.name}</MenuItemName>
-              <Label customColor={color.black}>{character.level}</Label>
-            </InfoContainer>
+    <Info
+      selected={selected}
+      onClick={() => {
+        onClick(character);
+        setSelected(!selected);
+      }}
+    >
+      <ImageCard>
+        <BaseCharacter character={character} isZoomed={false} size="mini" />
+      </ImageCard>
+      <InfoWrapper>
+        <InfoContainer>
+          <MenuItemName>{character.name}</MenuItemName>
+          <SelectedContainer>
+            <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
             {Boolean(isCharacterEquipped) && (
-              <EquippedLabel customColor={color.black}>{text.param.itemId(character.characterId)}</EquippedLabel>
+              <>
+                <Line />
+                <BoldLabel>{text.character.selected}</BoldLabel>
+              </>
             )}
-            <ButtonContainer>
-              <Divider />
-              {isCharacterEquipped ? <PrimaryButton><ButtonText customColor={color.white}>{text.character.unequip}</ButtonText></PrimaryButton> : <SecondaryButton><ButtonText>{text.character.equip}</ButtonText></SecondaryButton>}
-            </ButtonContainer>
-          </InfoWrapper>
-        </Info>
-      </>
-    </CharacterItemWrapper>
+          </SelectedContainer>
+        </InfoContainer>
+        <EquippedLabel customColor={color.black}>{text.param.itemId(character.characterId)}</EquippedLabel>
+        <ButtonContainer>
+          <Divider />
+          {isCharacterEquipped ?
+            (<PrimaryButton>
+              <ButtonText customColor={color.white}>{text.character.select}</ButtonText>
+            </PrimaryButton> )
+            :
+            (
+              <SecondaryButton>
+                <ButtonText>{text.character.selected}</ButtonText>
+              </SecondaryButton>
+            )}
+        </ButtonContainer>
+      </InfoWrapper>
+    </Info>
   );
 };

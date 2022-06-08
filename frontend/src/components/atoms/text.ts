@@ -27,7 +27,6 @@ export const MenuText = styled.h1<TextProps>`
   white-space: normal;
   word-break: keep-all;
   white-space: pre-wrap;
-  font-weight: ${fontWeight.light};
   :first-letter {
     text-transform: capitalize;
   }
@@ -48,11 +47,12 @@ export const Label = styled.p<TextProps>`
 
 export const BoldLabel = styled(Label)`
   font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.medium};
 `;
 
 export const MenuItemName = styled.h3<TextProps>`
   font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.light};
+  font-weight: ${fontWeight.medium};
   font-size: ${fontSize.title};
   line-height: 22px;
   :first-letter {
@@ -85,7 +85,7 @@ export const TitleText = styled.h3<TextProps>`
 
 export const BodyText = styled.p<TextProps>`
   font-family: aktiv-grotesk;
-  font-weight: 400;
+  font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
   :first-letter {

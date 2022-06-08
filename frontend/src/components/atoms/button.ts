@@ -26,7 +26,6 @@ export const ButtonBase = styled.button<ButtonProps>`
   align-items: center;
   padding: 3px 8px 3px 16px;
   background: ${(props): string => props.backgroundColor || color.black};
-  font-weight: ${fontWeight.light};
   color: ${(props): string => props.fontColor || color.white};
   border: none;
   ${({ disabled }): string => {
