@@ -5,12 +5,12 @@ pool:
   vmImage: "ubuntu-latest"
 
 stages:
-  - stage: build-and-deploy
+  - stage: build_and_deploy
     displayName: Build and Deploy
     dependsOn: []
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     jobs:
-      - job: build-and-deploy
+      - job: build_and_deploy
         displayName: Build Docker images and deploy through Kubernetes
         steps:
           - script: cd frontend && export $(grep -v '^#' .env.staging | xargs)
