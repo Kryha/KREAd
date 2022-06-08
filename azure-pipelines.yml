@@ -13,7 +13,7 @@ stages:
       - job: build_and_deploy
         displayName: Build Docker images and deploy through Kubernetes
         steps:
-          - script: cd frontend && export $(grep -v '^#' .env.staging | xargs)
+          - script: cd frontend && export $(grep -v '^#' .env.staging | xargs) && cd ..
             displayName: "Configure Environment Variables"
           - script: curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && sudo install skaffold /usr/local/bin/
             displayName: Install Skaffold
