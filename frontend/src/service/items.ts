@@ -54,7 +54,7 @@ export const useFilteredItems =
 
 
 export const useSellItem = () => {
-
+  // TODO: invalidate queries
   return useMutation(async (body: { price: number }) => {
     if (!body.price) throw new Error("Id not specified");
     // TODO: intergrate

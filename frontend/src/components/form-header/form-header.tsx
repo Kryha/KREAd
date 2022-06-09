@@ -19,7 +19,7 @@ export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFl
     <>
       <FormHeaderClose title={title} link={link} />
       <FormNavigation>
-        {Boolean(!isBuyFlow) && (
+        {!isBuyFlow && (
           <NavigationTab>
             <FormTab
               active={currentStep === INFORMATION_STEP}
@@ -31,14 +31,14 @@ export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFl
           <FormTab
             active={currentStep === PAYMENT_STEP}
             title={text.mint.payment}
-            amount={isBuyFlow? SELL_FLOW_STEPS: BUY_FLOW_STEPS}
+            amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS}
           />
         </NavigationTab>
         <NavigationTab>
           <FormTab
             active={currentStep === CONFIRMATION_STEP}
             title={text.mint.confirmation}
-            amount={isBuyFlow? SELL_FLOW_STEPS: BUY_FLOW_STEPS}
+            amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS}
           />
         </NavigationTab>
       </FormNavigation>

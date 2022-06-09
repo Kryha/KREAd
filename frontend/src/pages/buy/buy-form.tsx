@@ -32,14 +32,15 @@ export const BuyForm: FC<BuyFormProps> = ({ item, changeStep }) => {
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
         <Step>
-          <NumberContainer active={true}>
+          <NumberContainer active >
             {sendOffer ?
-              <Tick />:
+              <Tick />
+              :
               <ButtonText>{text.mint.stepOne}</ButtonText>
             }
           </NumberContainer>
           <StepText>{text.mint.sendOfferToWallet}</StepText>
-          {Boolean(!sendOffer) && (
+          {!sendOffer && (
             <>
               <PriceInRun price={item.price} />
               <PrimaryButton onClick={() => sendOfferToWallet()}>
@@ -54,7 +55,7 @@ export const BuyForm: FC<BuyFormProps> = ({ item, changeStep }) => {
             {acceptOffer ? <Tick /> :<ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
-          {Boolean(!acceptOffer && !!sendOffer) && (
+          {!acceptOffer && !!sendOffer && (
             // TODO: remove this onclick
             <Badge onClick={() => acceptOfferInWallet()}>
               <ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText>

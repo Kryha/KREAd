@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import { NavigationTitle } from "../atoms";
 import { color, margins } from "../../design";
+import { tabWidth } from "../../util";
 
 export const NavTab = styled(NavLink)`
   text-decoration: none;
@@ -44,5 +45,5 @@ ${({ active }) => {
 `;
 
 export const Tab = styled.div<WidthProps>`
-${({ width, amount }): string => `width: ${(width * 0.4 - (amount === 3 ? 80 : 140)) / amount}px;`};
+${({ width, amount }): string => `width: ${(tabWidth(width, amount)) / amount}px;`};
 `;

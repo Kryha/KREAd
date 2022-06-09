@@ -2,20 +2,18 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { text } from "../../assets";
 
-import { ButtonText, ErrorView, FormText, PrimaryButton, TitleText } from "../../components";
+import { ButtonText, FormText, PrimaryButton, TitleText } from "../../components";
 import { color } from "../../design";
 import { Item } from "../../interfaces";
 import { routes } from "../../navigation";
 import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer, } from "./styles";
 
 interface ConfirmationProps {
-  item?: Item;
+  item: Item;
 }
 
-export const Confirmation: FC<ConfirmationProps> = ({ item }) => {
+export const Confirmation: FC<ConfirmationProps> = () => {
   const navigate = useNavigate();
-
-  if (!item) return <ErrorView />;
 
   return (
     <ContentWrapper>
