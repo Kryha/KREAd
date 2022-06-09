@@ -15,6 +15,9 @@ export const Product = styled.div`
   align-items: center;
   min-height: 485px;
   cursor: pointer;
+  :hover {
+    border: 1px solid ${color.black};
+  }
   ${DetailSectionWrap} {
     position: absolute;
     top: -5px;
@@ -32,6 +35,7 @@ export const ImageContainer = styled.div`
   box-sizing: border-box;
   border-radius: ${margins.medium};
   margin-bottom: ${margins.medium};
+  overflow: hidden;
 `;
 
 export const Content = styled.div`
