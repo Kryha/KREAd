@@ -26,7 +26,7 @@ export const Landing: FC = () => {
           <ButtonText>{text.navigation.myCharacters}</ButtonText>
           {openTab ? <CloseIcon /> : <MenuIcon />}
         </SecondaryButton>
-        <NotificationButton onClick={() => setOpenNotifications(!openTab)} backgroundColor={openNotification ? color.lightGrey : color.white}>
+        <NotificationButton onClick={() => setOpenNotifications(!openNotification)} backgroundColor={openNotification ? color.lightGrey : color.white}>
           {openNotification ? <Close /> : <Notification />}
         </NotificationButton>
       </NotificationWrapper>
