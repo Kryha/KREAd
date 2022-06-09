@@ -96,7 +96,7 @@ interface ImageProps {
 
 // TODO: use square images for slot thumbnails
 /* eslint-disable indent */
-export const ItemImage = styled(Img) <ImageProps>`
+export const ItemImage = styled(Img)<ImageProps>`
   object-fit: cover;
   width: 100%;
   height: auto;

@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import {
@@ -29,7 +29,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
   const [character, setCharacter] = useState<Character>();
   const { width, height } = useViewport();
 
-  const moveArrayItem = useCallback(
+  const sortedCharacters = useMemo(
     () => {
       const allItems = [...characters];
       const fromIndex = characters.findIndex((character) => character.characterId === id);
@@ -46,7 +46,6 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
     setShowDetail(!showDetail);
   };
 
-  const sortedCharacters = moveArrayItem();
 
   return (
     <>
@@ -67,7 +66,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
           </CardActionsContainer>
         </>
       </CharacterWrapper>
-      {Boolean(showDetail) && (
+      {!!showDetail && (
         <CharacterDetail character={character} onClick={showCharacterDetail} />
       )}
     </>

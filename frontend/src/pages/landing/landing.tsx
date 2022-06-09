@@ -26,10 +26,10 @@ export const Landing: FC = () => {
       <LandingContainer isZoomed={openTab}>
         <BaseCharacter character={character} isZoomed={openTab} size={openTab ? "large" : "normal"} />
       </LandingContainer>
-      {Boolean(!openTab) && (
+      {!openTab && (
         <CharacterItems items={character.items} />
       )}
-      {Boolean(openTab) && (
+      {openTab && (
         <CharacterCard id={character.characterId} characters={characters} />
       )}
     </BaseRoute >

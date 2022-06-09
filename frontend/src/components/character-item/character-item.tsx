@@ -57,9 +57,8 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
           {isCharacterEquipped ?
             (<PrimaryButton>
               <ButtonText customColor={color.white}>{text.character.selected}</ButtonText>
-            </PrimaryButton> )
-            :
-            (
+            </PrimaryButton>
+            ) : (
               <SecondaryButton>
                 <ButtonText>{text.character.select}</ButtonText>
               </SecondaryButton>

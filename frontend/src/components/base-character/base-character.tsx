@@ -85,14 +85,12 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ character, isZoomed, siz
       {/* TODO: do something with expanding */}
       {size === "mini" || size === "large" ? (
         <></>
-      )
-        :
-        (
-          <ExpandButton backgroundColor={color.white}>
-            <ExpandIcon />
-            <ButtonText>{text.general.showFull}</ButtonText>
-          </ExpandButton>
-        )}
+      ) : (
+        <ExpandButton backgroundColor={color.white}>
+          <ExpandIcon />
+          <ButtonText>{text.general.showFull}</ButtonText>
+        </ExpandButton>
+      )}
     </CharacterWrapper>
   );
 };
