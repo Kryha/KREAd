@@ -2,7 +2,6 @@ import { FC } from "react";
 
 import { text } from "../../../assets";
 import { FlexRow } from "../../../components";
-import { Item } from "../../../interfaces";
 import { DetailSectionElement } from "../detail-section-element";
 import { DetailSectionBody } from "../detail-section-segment/styles";
 import { DetailSectionSegmentDetailsWrap, DetailSectionSegmentDetailsLink } from "./styles";
@@ -10,30 +9,39 @@ import { DetailSectionSegmentDetailsWrap, DetailSectionSegmentDetailsLink } from
 import { LinkExternalIcon } from "../../../assets/icons";
 import { truncateAddress } from "../../../util";
 
+interface Data {
+  brand: string;
+  boardId?: string;
+  artist: string;
+  metadata: string;
+}
+
 interface DetailSectionSegmentDetailsProps {
-  item: Item;
+  data: Data;
 }
 
 // TODO: Adjust flex view for smaller viewports
-export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> = ({ item }) => {
+export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> = ({ data }) => {
   return (
     <DetailSectionSegmentDetailsWrap>
       <FlexRow>
         <DetailSectionElement title={text.item.contractAddress}>
-          <DetailSectionBody>{truncateAddress(item.details.contractAddresss)}</DetailSectionBody>
+          <DetailSectionBody>{truncateAddress(data.brand)}</DetailSectionBody>
         </DetailSectionElement>
-        <DetailSectionElement title={text.item.boardId}>
-          <DetailSectionBody>
-            {text.item.boardIdHash}
-            {item.details.boardId}
-          </DetailSectionBody>
-        </DetailSectionElement>
+        {!!data.boardId && (
+          <DetailSectionElement title={text.item.boardId}>
+            <DetailSectionBody>
+              {text.item.boardIdHash}
+              {data.boardId}
+            </DetailSectionBody>
+          </DetailSectionElement>
+        )}
         <DetailSectionElement title={text.item.artist}>
-          <DetailSectionBody>{item.details.artist}</DetailSectionBody>
+          <DetailSectionBody>{data.artist}</DetailSectionBody>
         </DetailSectionElement>
         <DetailSectionElement title={text.item.metadata}>
           <DetailSectionBody>
-            <DetailSectionSegmentDetailsLink href={item.details.metadata} target="_blank" rel="noreferrer">
+            <DetailSectionSegmentDetailsLink href={data.metadata} target="_blank" rel="noreferrer">
               {text.item.view} <LinkExternalIcon />
             </DetailSectionSegmentDetailsLink>
           </DetailSectionBody>

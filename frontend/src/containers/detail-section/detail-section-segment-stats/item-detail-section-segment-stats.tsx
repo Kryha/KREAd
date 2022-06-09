@@ -10,12 +10,11 @@ import { DetailSectionProgressBar } from "../detail-section-progress-bar";
 import { DetailSectionBody, DetailSectionBodyBigBold } from "../detail-section-segment/styles";
 import { DetailSectionSegmentStatsWrap } from "./styles";
 
-interface DetailSectionSegmentStatsProps {
+interface ItemDetailSectionSegmentStatsProps {
   item: Item;
 }
 
-// TODO: Use props intead of hardcoded placeholder for image src
-export const DetailSectionSegmentStats: FC<DetailSectionSegmentStatsProps> = ({ item }) => {
+export const ItemDetailSectionSegmentStats: FC<ItemDetailSectionSegmentStatsProps> = ({ item }) => {
   return (
     <DetailSectionSegmentStatsWrap>
       <FlexRow>

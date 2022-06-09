@@ -1,25 +1,36 @@
 import { FC } from "react";
+
 import { DetailSectionHeaderNavigationWrap } from "./styles";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
-import { text } from "../../../assets/text";
 import { ButtonClose } from "../../../components/button-close";
 import { color } from "../../../design";
 
-interface HeaderNavigationProps {
-  handleClose: () => void;
+interface Actions {
+  onClose: () => void;
+  onLeftButtonClick: () => void;
+  onRightButtonClick: () => void;
 }
 
-// TODO: Pass ButtonClose callback as onClick prop
-export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ handleClose }) => {
+interface Text {
+  leftButton: string;
+  rightButton: string;
+}
+
+interface HeaderNavigationProps {
+  actions: Actions;
+  text: Text;
+}
+
+export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ actions, text }) => {
   return (
     <DetailSectionHeaderNavigationWrap>
-      <PrimaryButton>
-        <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
+      <PrimaryButton onClick={() => actions.onLeftButtonClick()}>
+        <ButtonText customColor={color.white}>{text.leftButton}</ButtonText>
       </PrimaryButton>
-      <SecondaryButton>
-        <ButtonText>{text.character.sell}</ButtonText>
+      <SecondaryButton onClick={() => actions.onRightButtonClick()}>
+        <ButtonText>{text.rightButton}</ButtonText>
       </SecondaryButton>
-      <ButtonClose onClick={handleClose} />
+      <ButtonClose onClick={() => actions.onClose()} />
     </DetailSectionHeaderNavigationWrap>
   );
 };

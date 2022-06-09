@@ -25,5 +25,7 @@ export const item = {
   project: "project",
   details: "details",
   itemActivity: "item activity",
+  equip: "equip",
+  sell: "sell",
   zero: 0,
 };

@@ -9,27 +9,43 @@ import {
   DetailSectionHeaderWrap,
 } from "./styles";
 
-import { Item } from "../../../interfaces";
 import { text } from "../../../assets";
 import { SectionHeader } from "../../../components";
 
-interface DetailSectionHeaderProps {
-  item: Item;
-  handleClose: () => void;
+interface Data {
+  name: string;
+  category: string;
+  id: string;
 }
 
-// TODO: Pass item actions as props (equip, sell)?
-export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item, handleClose }) => {
+interface Actions {
+  onClose: () => void;
+  onLeftButtonClick: () => void;
+  onRightButtonClick: () => void;
+}
+
+interface Text {
+  leftButton: string;
+  rightButton: string;
+}
+
+interface DetailSectionHeaderProps {
+  data: Data;
+  actions: Actions;
+  text: Text;
+}
+
+export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, actions, text: pText }) => {
   return (
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>
-        <SectionHeader>{item.name}</SectionHeader>
-        <DetailSectionHeaderNavigation handleClose={handleClose} />
+        <SectionHeader>{data.name}</SectionHeader>
+        <DetailSectionHeaderNavigation actions={actions} text={pText} />
       </DetailSectionHeaderTop>
 
       <DetailSectionHeaderDetails>
-        <CategoryButton>{item.category}</CategoryButton>
-        <DetailSectionHeaderId>{text.param.itemId(item.id)}</DetailSectionHeaderId>
+        <CategoryButton>{data.category}</CategoryButton>
+        <DetailSectionHeaderId>{text.param.itemId(data.id)}</DetailSectionHeaderId>
       </DetailSectionHeaderDetails>
     </DetailSectionHeaderWrap>
   );

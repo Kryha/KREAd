@@ -1,4 +1,6 @@
+import { ActivityEvent } from "./activity.interfaces";
 import { Detail, Slots } from "./character.interfaces";
+
 export interface Item {
   name: string;
   category: string;
@@ -18,12 +20,4 @@ export interface Item {
   date: string;
   slots: Slots[];
   activity: ActivityEvent[];
-}
-
-export interface ActivityEvent {
-  type: string;
-  price?: number;
-  from?: string;
-  to: string;
-  date: EpochTimeStamp;
 }
