@@ -157,3 +157,5 @@ export const Content = styled.div`
     min-width: 95px;
   }
 `;
+
+export const MessageContainer = styled.div``;

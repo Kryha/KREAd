@@ -15,6 +15,7 @@ import {
   NotificationHeader,
   NotificationItemContainer,
   BodyMessage,
+  MessageContainer,
 } from "./styles";
 import {  ButtonText, HorizontalDivider, MenuText,  SecondaryButton } from "../atoms";
 import { useViewport } from "../../hooks";
@@ -25,6 +26,8 @@ import { NotificationDetail } from "../notification-detail";
 export const NotificationCard: FC = () => {
   const { data: notifications, isLoading: isLoadingNotifications } = useNotifications();
   const [showDetail, setShowDetail] = useState(false);
+  const [info, setInfo] = useState("");
+  const [title, setTitle] = useState("");
   const { width, height } = useViewport();
 
   // TODO: add empty view
@@ -33,7 +36,6 @@ export const NotificationCard: FC = () => {
   if(isLoadingNotifications) return <LoadingPage />;
 
   const closeToast = () => {
-    console.log("d");
     setShowDetail(!showDetail);
   };
 
@@ -56,13 +58,18 @@ export const NotificationCard: FC = () => {
                       <>
                         <NotificationItemContainer>
                           <NotificationHeader>
-                            <div>
+                            <MessageContainer>
                               <BodyMessage>{text.notifications.your}</BodyMessage>
                               <BodyText>{text.notifications.item}</BodyText>
                               <BoldText>{text.param.itemQuoted(notification.itemName)}</BoldText>
                               <BodyText>{text.param.notificationSold(notification.price || 0)}</BodyText>
-                            </div>
-                            <SecondaryButton onClick={() => setShowDetail(!showDetail)}>
+                            </MessageContainer>
+                            <SecondaryButton
+                              onClick={() => {
+                                setShowDetail(!showDetail);
+                                setInfo(text.param.yourItemHasBeenSold(notification.itemName, notification.price || 0));
+                                setTitle(text.notifications.yourItemHasBeenPurchased);
+                              }}>
                               <ButtonText>{text.notifications.viewItem}</ButtonText>
                             </SecondaryButton>
                           </NotificationHeader>
@@ -73,12 +80,18 @@ export const NotificationCard: FC = () => {
                       <>
                         <NotificationItemContainer>
                           <NotificationHeader>
-                            <div>
+                            <MessageContainer>
                               <BodyMessage>{text.notifications.the}</BodyMessage>
                               <BoldText>{text.param.itemQuoted(notification.itemName)}</BoldText>
                               <BodyText>{text.notifications.itemIsSuccesfully}</BodyText>
-                            </div>
-                            <SecondaryButton onClick={() => setShowDetail(!showDetail)}>
+                            </MessageContainer>
+                            <SecondaryButton
+                              onClick={() => {
+                                setShowDetail(!showDetail);
+                                setInfo(text.param.theItemIsSussfullyPurchased(notification.itemName));
+                                setTitle(text.notifications.yourItemHasBeenPurchased);
+                              }}
+                            >
                               <ButtonText>{text.notifications.viewItem}</ButtonText>
                             </SecondaryButton>
                           </NotificationHeader>
@@ -94,7 +107,7 @@ export const NotificationCard: FC = () => {
         </NotificationContainer>
       </NotificationWrapper>
       {Boolean(showDetail) && (
-        <NotificationDetail title={"djshdjssd"} info={"sdjdsjsd"} closeToast={closeToast} />
+        <NotificationDetail title={title} info={info} closeToast={closeToast} />
       )}
     </>
   );

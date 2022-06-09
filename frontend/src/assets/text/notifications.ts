@@ -10,4 +10,5 @@ export const notifications = {
   yourItemIsSuccessfullyPlacedInShop: "your item is successfully placed in the shop",
   youDidNotPurchaseTheItem: "you did not purchase the item yet",
   butYouCanAccept: "but you can accept the offer in your wallet. When accepted, you'll see the new bought item appearing in your inventory.",
+  yourItemHasBeenPurchased: "your item has been purchased from the shop",
 };

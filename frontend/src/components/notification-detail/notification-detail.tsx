@@ -1,12 +1,16 @@
 import { FC } from "react";
-import { ButtonText } from "../atoms";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../navigation";
+import { ButtonText, SecondaryButton } from "../atoms";
 
 import {
   ArrowContainer,
   Close,
   Divider,
+  DividerContainer,
   Exclamation,
   IconContainer,
+  InfoContainer,
   ReturnContainer,
   Tick,
   ToastContainer,
@@ -18,22 +22,32 @@ interface NotificationDetailProps {
   title: string;
   info: string;
   closeToast: () => void;
+  buttonTitle?: string;
 }
 
-export const NotificationDetail: FC<NotificationDetailProps> = ({ error, title, info, closeToast }) => {
+export const NotificationDetail: FC<NotificationDetailProps> = ({ error, title, info, closeToast, buttonTitle }) => {
+  const navigate = useNavigate();
+
   return(
     <ToastContainer>
       <IconContainer>
         {error ? <Exclamation /> : <Tick />}
       </IconContainer>
-      <ToastTitle>{title}</ToastTitle>
-      <ButtonText>{info}</ButtonText>
-      <ReturnContainer>
-        <Divider />
-        <ArrowContainer>
-          <Close onClick={() => closeToast()} />
-        </ArrowContainer>
-      </ReturnContainer>
+      <InfoContainer>
+        <ToastTitle>{title}</ToastTitle>
+        <ButtonText>{info}</ButtonText>
+      </InfoContainer>
+      {buttonTitle && (
+        <SecondaryButton onClick={() => navigate(routes.shop)}>{buttonTitle}</SecondaryButton>
+      )}
+      <DividerContainer>
+        <ReturnContainer>
+          <Divider />
+          <ArrowContainer>
+            <Close onClick={() => closeToast()} />
+          </ArrowContainer>
+        </ReturnContainer>
+      </DividerContainer>
     </ToastContainer>
   );
 };

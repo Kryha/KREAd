@@ -14,7 +14,7 @@ export const ToastContainer = styled.div`
   border: 1px solid ${color.grey};
   border-radius: ${margins.small};
   bottom: ${margins.big};
-  z-index: 700;
+  z-index: 10000;
   width: 720px;
   position: absolute;
   left: 30%;
@@ -42,7 +42,6 @@ export const IconContainer = styled.div`
   width: 18px;
   height: 18px;
   border: 1px solid ${color.black};
-  margin-bottom: ${margins.small};
 `;
 
 export const ToastTitle = styled(NavigationTitle)``;
@@ -73,4 +72,19 @@ export const ReturnContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0px;
+`;
+
+export const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 4px;
+`;
+
+export const DividerContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
 `;
