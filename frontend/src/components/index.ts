@@ -24,3 +24,5 @@ export * from "./title";
 export * from "./character-shop-card";
 export * from "./form-tab";
 export * from "./form-header";
+export * from "./notification-card";
+export * from "./notification-detail";

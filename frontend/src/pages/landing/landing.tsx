@@ -2,35 +2,47 @@ import { FC, useState } from "react";
 
 import { CloseIcon, MenuIcon, text } from "../../assets";
 import { color } from "../../design";
-import { BaseCharacter, BaseRoute, ButtonText, CharacterCard, CharacterItems, LoadingPage, SecondaryButton } from "../../components";
-import { LandingContainer } from "./styles";
+import { BaseCharacter, BaseRoute, ButtonText, CharacterCard, CharacterItems, LoadingPage, NotificationCard, SecondaryButton } from "../../components";
+import { LandingContainer, NotificationWrapper, Notification, NotificationButton, Close } from "./styles";
 import { useMyCharacter, useMyCharacters } from "../../service";
 
 export const Landing: FC = () => {
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
   const [openTab, setOpenTab] = useState(false);
+  const [openNotification, setOpenNotifications] = useState(false);
 
   if (isLoadingCharacter || isLoadingCharacters) return <LoadingPage />;
 
   // TODO: get an empty page
   if (!character || !characters || !characters.length) return <></>;
 
+  const isZoomed = openTab || openNotification;
+
   return (
     <BaseRoute sideNavigation={
-      <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
-        <ButtonText>{text.navigation.myCharacters}</ButtonText>
-        {openTab ? <CloseIcon /> : <MenuIcon />}
-      </SecondaryButton>}
+      <NotificationWrapper>
+        <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
+          <ButtonText>{text.navigation.myCharacters}</ButtonText>
+          {openTab ? <CloseIcon /> : <MenuIcon />}
+        </SecondaryButton>
+        <NotificationButton onClick={() => setOpenNotifications(!openTab)} backgroundColor={openNotification ? color.lightGrey : color.white}>
+          {openNotification ? <Close /> : <Notification />}
+        </NotificationButton>
+      </NotificationWrapper>
+    }
     >
-      <LandingContainer isZoomed={openTab}>
-        <BaseCharacter character={character} isZoomed={openTab} size={openTab ? "large" : "normal"} />
+      <LandingContainer isZoomed={isZoomed}>
+        <BaseCharacter character={character} isZoomed={isZoomed} size={isZoomed ? "large" : "normal"} />
       </LandingContainer>
       {Boolean(!openTab) && (
         <CharacterItems items={character.items} />
       )}
       {Boolean(openTab) && (
         <CharacterCard id={character.characterId} characters={characters} />
+      )}
+      {Boolean(openNotification) && (
+        <NotificationCard />
       )}
     </BaseRoute >
   );
