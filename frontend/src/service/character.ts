@@ -5,13 +5,14 @@ import { FakeCharcters } from "./fake-characters";
 import { api } from "./config";
 
 export const useCharacters = (): UseQueryResult<Character[]> => {
-  return useQuery(["characters"], async () => {
+  return useQuery(["characters", "all"], async () => {
     //  TODO: intergrate me
 
     return FakeCharcters;
   });
 };
 
+// TODO: provide id as param and as query key
 export const useMyCharacter = (): UseQueryResult<Character> => {
   return useQuery(["character"], async () => {
     //  TODO: intergrate me
@@ -21,16 +22,20 @@ export const useMyCharacter = (): UseQueryResult<Character> => {
 };
 
 export const useMyCharacters = (): UseQueryResult<Character[]> => {
-  return useQuery(["characters"], async () => {
+  return useQuery(["characters", "my"], async () => {
     //  TODO: intergrate me
 
     return FakeCharcters;
   });
 };
 
+// TODO: actually implement filtering
+export const useMyFilteredCharacters = () => {
+  return useMyCharacters();
+};
+
 // TODO: invalidate queries + intergrate me
 export const useCreateCharacter = () => {
-
   return useMutation(async (body: CharacterCreation) => {
     if (!body.title) throw new Error("Title not specified");
     if (!body.name) throw new Error("Name not specified");
@@ -40,7 +45,6 @@ export const useCreateCharacter = () => {
 };
 
 export const useEquipCharacter = () => {
-
   return useMutation(async (body: { id: string }) => {
     if (!body.id) throw new Error("Id not specified");
     // TODO: intergrate

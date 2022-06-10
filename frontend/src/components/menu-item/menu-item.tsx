@@ -1,39 +1,60 @@
 import { FC, useState } from "react";
-import { Item } from "../../interfaces";
 
-import { ButtonContainer, Divider, EquippedLabel, ImageCard, Info, InfoContainer, InfoWrapper, ItemImage } from "./styles";
+import { CharacterItems } from "../../interfaces";
+import { ButtonContainer, Divider, EquippedLabel, ImageCard, ImageContainer, Info, InfoContainer, InfoWrapper, ItemImage } from "./styles";
 import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
-interface MenuItemProps extends ImageProps {
-  item: Item;
-  onClick?: () => void;
+import { BaseCharacter } from "../base-character";
+
+interface Data {
+  image: string | CharacterItems;
+  name: string;
+  level: number;
+  category: string;
+  id: string;
 }
 
-// TODO: What does InventoryItem do here?
-// TODO: Add onCLick logic for Equip/Unequip buttons
-export const MenuItem: FC<MenuItemProps> = ({ item, width, height, marginTop, marginLeft, onClick }) => {
+interface MenuItemProps extends ImageProps {
+  data: Data;
+  onClick?: (id: string) => void;
+}
+
+export const MenuItem: FC<MenuItemProps> = ({ data, width, height, marginTop, marginLeft, onClick }) => {
   const [selected, setSelected] = useState(false);
+
   return (
     <Info
       tabIndex={0}
       selected={selected}
       onClick={() => {
-        onClick && onClick();
+        onClick && onClick(data.id);
         setSelected(true);
       }}
       onBlur={() => setSelected(false)}
     >
-      {/* <InventoryItem src={CharacterItemIcon} /> */}
-      {/* TODO: use slots */}
-      <ImageCard>
-        <ItemImage src={item.image} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} category={item.category} />
-      </ImageCard>
+      {typeof data.image === "string" ? (
+        <ImageCard>
+          <ItemImage
+            src={data.image}
+            width={width}
+            height={height}
+            marginTop={marginTop}
+            marginLeft={marginLeft}
+            category={data.category}
+          />
+        </ImageCard>
+      ) : (
+        <ImageContainer>
+          <BaseCharacter items={data.image} size="mini" />
+        </ImageContainer>
+      )}
       <InfoWrapper>
         <InfoContainer>
-          <MenuItemName>{item.name}</MenuItemName>
-          <Label>{text.param.itemId(item.id)}</Label>
+          <MenuItemName>{data.name}</MenuItemName>
+          <Label>{text.param.itemId(data.id)}</Label>
         </InfoContainer>
+        {/* TODO: actually track if equipped or not */}
         <EquippedLabel>{text.general.equipped}</EquippedLabel>
         <ButtonContainer>
           <Divider />

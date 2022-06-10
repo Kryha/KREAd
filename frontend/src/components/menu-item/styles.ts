@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { margins, color } from "../../design";
 import { Img, Label, MenuItemName } from "../atoms";
+import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 
 export const EquippedLabel = styled(Label)``;
 
@@ -88,6 +89,25 @@ export const ImageCard = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  margin-bottom: ${margins.medium};
+  position: relative;
+  ${CharacterWrapper} {
+    left: 20%;
+    right: 0;
+  }
+  ${ExpandButton} {
+    display: none;
+  }
 `;
 
 interface ImageProps {

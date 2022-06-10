@@ -1,22 +1,20 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { FC, useState } from "react";
 
 import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useFilteredItems } from "../../service";
 
-import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import { categories, sorting } from "../../assets/text/filter-options";
 
-interface SortableListProps {
-  list: Item[];
-  setElementId: Dispatch<SetStateAction<string>>;
+interface Props {
+  onItemClick: (id: string) => void;
 }
 
 // TODO: Add filter & sortyng Hooks and components
 
-export const SortableList: FC<SortableListProps> = ({ setElementId }) => {
+export const ItemsList: FC<Props> = ({ onItemClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
 
@@ -25,7 +23,7 @@ export const SortableList: FC<SortableListProps> = ({ setElementId }) => {
   if (isLoading) return <LoadingPage />;
 
   // TODO: get an empty section view
-  // if (!items) return <></>;
+  if (!items || !items.length) return <></>;
 
   const handleCategoryChange = (selected: string) => {
     setSelectedCategory(selected);
@@ -50,7 +48,7 @@ export const SortableList: FC<SortableListProps> = ({ setElementId }) => {
       </ListHeader>
       <ListContainer>
         {items.map((item) => (
-          <MenuItem item={item} key={item.id} onClick={() => setElementId(item.id)} />
+          <MenuItem data={item} key={item.id} onClick={() => onItemClick(item.id)} />
         ))}
       </ListContainer>
     </SortableListWrap>

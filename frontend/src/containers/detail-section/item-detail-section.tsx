@@ -6,37 +6,34 @@ import { DetailSectionSegmentStory } from "./detail-section-segment-story";
 import { ItemDetailSectionSegmentStats } from "./detail-section-segment-stats";
 import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
-import { DetailSectionWrap, EmptyView } from "./styles";
+import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
 import { Item } from "../../interfaces";
 
 interface ItemDetailSectionProps {
-  item?: Item;
+  item: Item;
   onClose: () => void;
 }
 
 // TODO: Make index dynamic
 export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, onClose }) => {
-  const handleEquip = () => {
+  const equip = () => {
     console.log("TODO: implement equip");
     // TODO: implement
   };
 
-  const handleSell = () => {
+  const sell = () => {
     console.log("TODO: implement sell");
     // TODO: implement
   };
-
-  // TODO: Add placeholder image to empty view?
-  if (!item) return <EmptyView />;
 
   return (
     <DetailSectionWrap>
       {/* header */}
       <DetailSectionHeader
         data={item}
-        actions={{ onClose, onLeftButtonClick: handleEquip, onRightButtonClick: handleSell }}
+        actions={{ onClose, onLeftButtonClick: equip, onRightButtonClick: sell }}
         text={{ leftButton: text.item.equip, rightButton: text.item.sell }}
       />
 

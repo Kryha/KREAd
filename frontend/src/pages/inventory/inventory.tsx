@@ -3,28 +3,56 @@ import { FC, useMemo, useState } from "react";
 import { BaseRoute, ErrorView, LoadingPage } from "../../components";
 import { text } from "../../assets/text";
 import { PageContainer } from "../../components/page-container";
-import { ItemDetailSection } from "../../containers/detail-section";
+import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
 import { Title } from "../../components/title";
-import { SortableList } from "../../containers/sortable-list";
-import { useItems } from "../../service";
+import { ItemsList } from "../../containers/items-list";
+import { useCharacters, useItems } from "../../service";
+import { CharactersList } from "../../containers/characters-list";
 
-export const Inventory: FC = () => {
-  const { data: items, isLoading } = useItems();
-  const [selectedItemId, setSelectedItemtId] = useState<string>("");
+const ItemsInventory: FC = () => {
+  const { data: items, isLoading, isError } = useItems();
+  const [selectedId, setSelectedId] = useState<string>("");
 
-  const item = useMemo(() => items?.find((item) => item.id === selectedItemId), [items, selectedItemId]);
+  const item = useMemo(() => items?.find((item) => item.id === selectedId), [items, selectedId]);
 
-  const closeDetail = () => setSelectedItemtId("");
+  const closeDetail = () => setSelectedId("");
 
   if (isLoading) return <LoadingPage />;
 
-  if (!items || !items.length) return <ErrorView />;
+  if (isError || !items || !items.length) return <ErrorView />;
 
   return (
-    <BaseRoute sideNavigation={<Title title={text.navigation.inventory} items={items.length} />}>
-      <PageContainer sidebarContent={<SortableList list={items} setElementId={setSelectedItemtId} />}>
-        <ItemDetailSection item={item} onClose={closeDetail} />
-      </PageContainer>
+    <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
+      <ItemDetailSection item={item || items[0]} onClose={closeDetail} />
+    </PageContainer>
+  );
+};
+
+// TODO: uncomment when designs will be done
+const CharactersInventory: FC = () => {
+  const { data: characters, isLoading, isError } = useCharacters();
+  const [selectedId, setSelectedId] = useState<string>("");
+
+  const character = useMemo(() => characters?.find((character) => character.characterId === selectedId), [characters, selectedId]);
+
+  const closeDetail = () => setSelectedId("");
+
+  if (isLoading) return <LoadingPage />;
+
+  if (isError || !characters || !characters.length) return <ErrorView />;
+
+  return (
+    <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
+      <CharacterDetailSection character={character || characters[0]} onClose={closeDetail} />
+    </PageContainer>
+  );
+};
+
+export const Inventory: FC = () => {
+  // TODO: switch between items and characters
+  return (
+    <BaseRoute sideNavigation={<Title title={text.navigation.inventory} />}>
+      <CharactersInventory />;
     </BaseRoute>
   );
 };

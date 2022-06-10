@@ -1,73 +1,69 @@
-import { Dispatch, FC } from "react";
+import { FC } from "react";
 
 import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
-import { ItemDetailSectionSegmentStats } from "./detail-section-segment-stats";
+import { CharacterDetailSectionSegmentStats } from "./detail-section-segment-stats";
 import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
-import { DetailSectionWrap, EmptyView } from "./styles";
+import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
-import { Character, Item } from "../../interfaces";
+import { Character } from "../../interfaces";
 
-// TODO: maybe make data mandatory
 interface ItemDetailSectionProps {
-  character?: Character;
-  setSelectedItem: Dispatch<React.SetStateAction<Item | undefined>>;
+  character: Character;
+  onClose: () => void;
 }
 
 // TODO: Make index dynamic
-export const CharacterDetailSection: FC<ItemDetailSectionProps> = ({ character, setSelectedItem }) => {
-  const handleClose = () => setSelectedItem(undefined);
-
-  const handleEquip = () => {
+export const CharacterDetailSection: FC<ItemDetailSectionProps> = ({ character, onClose }) => {
+  const choose = () => {
+    console.log("TODO: implement choose");
     // TODO: implement
   };
 
-  const handleSell = () => {
+  const sell = () => {
+    console.log("TODO: implement sell");
     // TODO: implement
   };
 
-  // // TODO: Add placeholder image to empty view?
-  if (!character) return <EmptyView />;
+  return (
+    <DetailSectionWrap>
+      {/* header */}
+      <DetailSectionHeader
+        data={{ ...character, id: character.characterId, category: character.type }}
+        actions={{ onClose, onLeftButtonClick: choose, onRightButtonClick: sell }}
+        text={{ leftButton: text.character.choose, rightButton: text.character.equip }}
+      />
 
-  return <></>;
+      {/* story */}
+      <DetailSectionSegment title={text.item.story} sectionIndex={1}>
+        {/* TODO: fetch actual creator image */}
+        <DetailSectionSegmentStory data={{ ...character, creatorImage: UnnamedCreator, image: character.items }} />
+      </DetailSectionSegment>
 
-  //   return (
-  //     <DetailSectionWrap>
-  //       {/* header */}
-  //       <DetailSectionHeader
-  //         data={item}
-  //         actions={{ onClose: handleClose, onLeftButtonClick: handleEquip, onRightButtonClick: handleSell }}
-  //         text={{ leftButton: text.character.choose, rightButton: text.character.equip }}
-  //       />
+      {/* stats */}
+      <DetailSectionSegment title={text.item.stats} sectionIndex={2}>
+        <CharacterDetailSectionSegmentStats character={character} />
+      </DetailSectionSegment>
 
-  //       {/* story */}
-  //       <DetailSectionSegment title={text.item.story} sectionIndex={1}>
-  //         {/* TODO: fetch actual creator image */}
-  //         <DetailSectionSegmentStory data={{ ...item, creatorImage: UnnamedCreator }} />
-  //       </DetailSectionSegment>
+      {/* equipped items */}
 
-  //       {/* stats */}
-  //       <DetailSectionSegment title={text.item.stats} sectionIndex={2}>
-  //         <ItemDetailSectionSegmentStats item={item} />
-  //       </DetailSectionSegment>
+      {/* details */}
+      <DetailSectionSegment title={text.item.details} sectionIndex={3}>
+        <DetailSectionSegmentDetails data={{ ...character.detail, brand: character.detail.contractAddresss }} />
+      </DetailSectionSegment>
 
-  //       {/* details */}
-  //       <DetailSectionSegment title={text.item.details} sectionIndex={3}>
-  //         <DetailSectionSegmentDetails data={{ ...item.details, brand: item.details.contractAddresss }} />
-  //       </DetailSectionSegment>
+      {/* project */}
+      <DetailSectionSegment title={text.item.project} sectionIndex={4}>
+        {character.description}
+      </DetailSectionSegment>
 
-  //       {/* project */}
-  //       <DetailSectionSegment title={text.item.project} sectionIndex={4}>
-  //         {item.description}
-  //       </DetailSectionSegment>
-
-  //       {/* activity */}
-  //       <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5}>
-  //         <DetailSectionSegmentActivity events={item.activity} />
-  //       </DetailSectionSegment>
-  //     </DetailSectionWrap>
-  //   );
+      {/* activity */}
+      <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5}>
+        <DetailSectionSegmentActivity events={character.itemActivity} />
+      </DetailSectionSegment>
+    </DetailSectionWrap>
+  );
 };

@@ -1,7 +1,8 @@
 import { FC } from "react";
 
 import { text } from "../../../assets";
-import { Label } from "../../../components";
+import { BaseCharacter, Label } from "../../../components";
+import { CharacterItems } from "../../../interfaces";
 
 import {
   DetailSectionSegmentStoryCreators,
@@ -10,12 +11,13 @@ import {
   DetailSectionSegmentStoryDescription,
   DetailSectionSegmentStoryImg,
   DetailSectionSegmentStoryWrap,
+  ImageContainer,
 } from "./styles";
 
 interface Data {
   name: string;
   description: string;
-  image: string;
+  image: string | CharacterItems;
   creatorImage: string;
 }
 
@@ -35,7 +37,15 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
         </DetailSectionSegmentStoryCreators>
         <DetailSectionSegmentStoryDescription>{data.description}</DetailSectionSegmentStoryDescription>
       </DetailSectionSegmentStoryWrap>
-      <DetailSectionSegmentStoryImg src={data.image} />
+      {/* TODO: handle if image is slots */}
+      {typeof data.image === "string" ? (
+        <DetailSectionSegmentStoryImg src={data.image} />
+      ) : (
+        // TODO: fix image z-index issue
+        <ImageContainer>
+          <BaseCharacter items={data.image} size="half" />
+        </ImageContainer>
+      )}
     </>
   );
 };

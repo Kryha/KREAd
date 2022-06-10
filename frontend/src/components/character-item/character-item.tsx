@@ -11,7 +11,7 @@ import {
   FilledInventoryItem,
   ButtonContainer,
   Divider,
-  EquippedLabel
+  EquippedLabel,
 } from "./styles";
 import { ButtonText, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
@@ -31,30 +31,39 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
   const isCharacterEquipped = character.characterId === id;
 
   return (
-    <CharacterItemWrapper onClick={() => { onClick(character); setSelected(!select); }}>
-      <>
-        <Info selected={select}>
-          <InventoryItem src={CharacterItemIcon} />
-          <FilledInventoryItem src={CharacterItemFilledIcon} />
-          <ImageCard>
-            <ElemantImage src={SmallEl} />
-            <BaseCharacter character={character} isZoomed={false} size="mini" />
-          </ImageCard>
-          <InfoWrapper>
-            <InfoContainer>
-              <MenuItemName>{character.name}</MenuItemName>
-              <Label customColor={color.black}>{text.param.itemId(character.characterId)}</Label>
-            </InfoContainer>
-            {Boolean(isCharacterEquipped) && (
-              <EquippedLabel>{text.general.equipped}</EquippedLabel>
+    <CharacterItemWrapper
+      onClick={() => {
+        onClick(character);
+        setSelected(!select);
+      }}
+    >
+      <Info selected={select}>
+        <InventoryItem src={CharacterItemIcon} />
+        <FilledInventoryItem src={CharacterItemFilledIcon} />
+        <ImageCard>
+          <ElemantImage src={SmallEl} />
+          <BaseCharacter items={character.items} isZoomed={false} size="mini" />
+        </ImageCard>
+        <InfoWrapper>
+          <InfoContainer>
+            <MenuItemName>{character.name}</MenuItemName>
+            <Label customColor={color.black}>{text.param.itemId(character.characterId)}</Label>
+          </InfoContainer>
+          {Boolean(isCharacterEquipped) && <EquippedLabel>{text.general.equipped}</EquippedLabel>}
+          <ButtonContainer>
+            <Divider />
+            {isCharacterEquipped ? (
+              <PrimaryButton>
+                <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
+              </PrimaryButton>
+            ) : (
+              <SecondaryButton>
+                <ButtonText>{text.character.equip}</ButtonText>
+              </SecondaryButton>
             )}
-            <ButtonContainer>
-              <Divider />
-              {isCharacterEquipped ? <PrimaryButton><ButtonText customColor={color.white}>{text.character.unequip}</ButtonText></PrimaryButton> : <SecondaryButton><ButtonText>{text.character.equip}</ButtonText></SecondaryButton>}
-            </ButtonContainer>
-          </InfoWrapper>
-        </Info>
-      </>
+          </ButtonContainer>
+        </InfoWrapper>
+      </Info>
     </CharacterItemWrapper>
   );
 };
