@@ -1,8 +1,6 @@
 import { FC } from "react";
 
-import { CloseIcon } from "../../assets";
-import { TertiaryButton } from "../atoms";
-import { ButtonCloseWrap } from "./styles";
+import { ButtonCloseWrap, Close } from "./styles";
 
 interface ButtonCloseProps {
   onClick: () => void;
@@ -11,9 +9,7 @@ interface ButtonCloseProps {
 export const ButtonClose: FC<ButtonCloseProps> = ({ onClick }) => {
   return (
     <ButtonCloseWrap>
-      <TertiaryButton onClick={() => onClick()}>
-        <CloseIcon />
-      </TertiaryButton>
+      <Close onClick={() => onClick()}/>
     </ButtonCloseWrap>
   );
 };

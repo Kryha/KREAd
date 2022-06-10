@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
@@ -14,6 +15,15 @@ export const Product = styled.div`
   align-items: center;
   min-height: 485px;
   cursor: pointer;
+  :hover {
+    border: 1px solid ${color.black};
+  }
+  ${DetailSectionWrap} {
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    z-index: 30000000;
+  }
 `;
 
 export const ImageContainer = styled.div`
@@ -25,6 +35,7 @@ export const ImageContainer = styled.div`
   box-sizing: border-box;
   border-radius: ${margins.medium};
   margin-bottom: ${margins.medium};
+  overflow: hidden;
 `;
 
 export const Content = styled.div`
