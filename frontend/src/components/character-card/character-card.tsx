@@ -55,7 +55,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
           </CardActionsContainer>
         </>
       </CharacterWrapper>
-      {Boolean(showDetail) && (
+      {showDetail && (
         <CharacterDetail character={character} onClick={showCharacterDetail} />
       )}
     </>
