@@ -10,5 +10,6 @@ export const param = {
   itemQuoted: (itemName: string) => `${itemName}`,
   theItemIsUpForSale: (itemName: string) => `The '${itemName}' is up for sale in the shop now. As soon as it's sold, you'll receive a message.`,
   yourItemHasBeenSold: (itemName: string, price: number) => `your item '${itemName}' has been sold. RUN ${price} is transfered to your wallet.`,
-  theItemIsSussfullyPurchased: (itemName: string) => `The '${itemName}' has been successfully purchased from the shop.`
+  theItemIsSussfullyPurchased: (itemName: string) => `The '${itemName}' has been successfully purchased from the shop.`,
+  level: (level: number) => `lvl. ${level}`,
 };

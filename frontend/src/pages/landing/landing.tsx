@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 
-import { CloseIcon, MenuIcon, text } from "../../assets";
+import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter, BaseRoute, ButtonText, CharacterCard, CharacterItems, LoadingPage, NotificationCard, SecondaryButton } from "../../components";
-import { LandingContainer, NotificationWrapper, Notification, NotificationButton, Close } from "./styles";
+import { LandingContainer, NotificationWrapper, Notification, NotificationButton, Close, Menu } from "./styles";
 import { useMyCharacter, useMyCharacters } from "../../service";
 
 export const Landing: FC = () => {
@@ -24,7 +24,7 @@ export const Landing: FC = () => {
       <NotificationWrapper>
         <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
           <ButtonText>{text.navigation.myCharacters}</ButtonText>
-          {openTab ? <CloseIcon /> : <MenuIcon />}
+          {openTab ? <Close /> : <Menu />}
         </SecondaryButton>
         <NotificationButton onClick={() => setOpenNotifications(!openNotification)} backgroundColor={openNotification ? color.lightGrey : color.white}>
           {openNotification ? <Close /> : <Notification />}
@@ -35,10 +35,10 @@ export const Landing: FC = () => {
       <LandingContainer isZoomed={isZoomed}>
         <BaseCharacter character={character} isZoomed={isZoomed} size={isZoomed ? "large" : "normal"} />
       </LandingContainer>
-      {Boolean(!openTab) && (
+      {!openTab && (
         <CharacterItems items={character.items} />
       )}
-      {Boolean(openTab) && (
+      {openTab && (
         <CharacterCard id={character.characterId} characters={characters} />
       )}
       {Boolean(openNotification) && (

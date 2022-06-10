@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Item } from "../../interfaces";
 
 import { text } from "../../assets";
@@ -17,13 +17,21 @@ import {
   ItemImage,
 } from "./styles";
 
+import { DetailSection } from "../../containers/detail-section";
+
 interface ShopCardProps {
   item: Item;
 }
 
 export const ShopCard: FC<ShopCardProps> = ({ item }) => {
+  const [selectedItem, setSelectedItem] = useState<Item>();
+  const [showDetail, setShowDetail] = useState(false);
+  useEffect(() => {
+    !!item && setSelectedItem(item);
+  }, [item]);
+
   return (
-    <Product>
+    <Product onClick={() => setShowDetail(!showDetail)}>
       <Content>
         <ImageContainer>
           {/* TODO: use slots */}
@@ -43,6 +51,9 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
           <PriceInRun price={item.price} />
         </Footer>
       </Content>
+      {Boolean(showDetail) && (
+        <DetailSection item={selectedItem} setSelectedItem={setSelectedItem} />
+      )}
     </Product>
   );
 };

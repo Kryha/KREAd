@@ -18,7 +18,7 @@ export const InfoWrapper = styled.div`
   justify-content: space-between;
   padding: 0px;
   margin: 0px 0px 0px ${margins.medium};
-  width: 551px;
+  width: 100%;
 `;
 
 export const MenuItemWrapper = styled.div``;

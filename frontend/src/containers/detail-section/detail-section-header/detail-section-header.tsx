@@ -24,7 +24,7 @@ export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item, handle
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>
         <SectionHeader>{item.name}</SectionHeader>
-        <DetailSectionHeaderNavigation handleClose={handleClose} />
+        <DetailSectionHeaderNavigation handleClose={handleClose} item={item} />
       </DetailSectionHeaderTop>
 
       <DetailSectionHeaderDetails>

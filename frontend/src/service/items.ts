@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useQuery, UseQueryResult } from "react-query";
+import { useMutation, useQuery, UseQueryResult } from "react-query";
 
 import { Item } from "../interfaces";
 import { Items } from "./fake-item-data";
@@ -51,3 +51,12 @@ export const useFilteredItems =
       return { data: items, isLoading };
     }, [category, changedRange, color, data, isLoading, price.max, price.min, sorting]);
   };
+
+
+export const useSellItem = () => {
+  // TODO: invalidate queries
+  return useMutation(async (body: { price: number }) => {
+    if (!body.price) throw new Error("Id not specified");
+    // TODO: intergrate
+  });
+};

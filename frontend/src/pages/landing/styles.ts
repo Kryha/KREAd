@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BellIcon, CloseIcon } from "../../assets";
+import { BellIcon, CloseIcon, MenuIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
 
 import { CharacterWrapper, ExpandButton } from "../../components/base-character/styles";
@@ -48,3 +48,7 @@ export const NotificationWrapper = styled.div`
 `;
 
 export const Notification = styled(BellIcon)``;
+
+export const Menu = styled(MenuIcon)`
+  margin: 0px 0px 0px 11px !important;
+`;
