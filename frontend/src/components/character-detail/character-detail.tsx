@@ -77,7 +77,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
             <StoryContainer>
               <SignContainer>
                 <Label>{text.character.creators}</Label>
-                <ItemCard image={UnnamedCreator} width={imageSize.minute} height={imageSize.tiny} />
+                {/* <ItemCard image={UnnamedCreator} width={imageSize.minute} height={imageSize.tiny} /> */}
               </SignContainer>
               <BodyText>{character.description}</BodyText>
             </StoryContainer>

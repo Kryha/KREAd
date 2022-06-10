@@ -1,6 +1,8 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { imageSize } from "../../design";
+import { Item } from "../../interfaces";
 import { ImageProps, Img } from "../atoms";
+import { ItemStats } from "../item-stats";
 import {
   Diagonal,
   ElementWrapper,
@@ -11,30 +13,38 @@ import {
 } from "./styles";
 interface ItemCardProps extends ImageProps {
   image: string | undefined;
+  item: Item | undefined;
 }
 
-export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight }) => {
+export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight, item }) => {
+  const [showStats, setShowStats] = useState(false);
   return (
-    <ElementWrapper>
-      <Card />
-      <ElementContainer>
-        <ItemWrapper>
-          {image ?
-            <Img
-              src={image}
-              width={width || imageSize.medium}
-              height={height || imageSize.small}
-              marginTop={marginTop}
-              marginBottom={marginBottom}
-              marginLeft={marginLeft}
-              marginRight={marginRight} />
-            :
-            <NoImage>
-              <Diagonal />
-            </NoImage>
-          }
-        </ItemWrapper>
-      </ElementContainer>
-    </ElementWrapper>
+    <>
+      {showStats && <ItemStats item={item} />}
+      <ElementWrapper
+        onMouseEnter={() => setShowStats(!showStats)}
+        onMouseLeave={() => setShowStats(!showStats)}
+      >
+        <Card />
+        <ElementContainer>
+          <ItemWrapper>
+            {image ?
+              <Img
+                src={image}
+                width={width || imageSize.medium}
+                height={height || imageSize.small}
+                marginTop={marginTop}
+                marginBottom={marginBottom}
+                marginLeft={marginLeft}
+                marginRight={marginRight} />
+              :
+              <NoImage>
+                <Diagonal />
+              </NoImage>
+            }
+          </ItemWrapper>
+        </ElementContainer>
+      </ElementWrapper>
+    </>
   );
 };
