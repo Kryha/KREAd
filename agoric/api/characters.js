@@ -13,7 +13,7 @@ export const characters = [
     url: 'https://ca.slack-edge.com/T4P05TL1F-U4S6STG1E-1651065781f0-512',
   },
   {
-    name: 'Popo!',
+    name: 'Poppo!',
     url: '',
   },
   {
