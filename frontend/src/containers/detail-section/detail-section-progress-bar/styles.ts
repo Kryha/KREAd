@@ -15,7 +15,7 @@ export const DetailSectionProgress = styled.progress`
   &[value] {
     color: ${color.black};
     border: 1px solid ${color.grey};
-    border-radius: 2px;
+    border-radius: 10px;
     padding: 2px;
     width: 100%;
   }
@@ -24,6 +24,7 @@ export const DetailSectionProgress = styled.progress`
   }
   &::-webkit-progress-value {
     background-color: ${color.black};
+    border-radius: 10px;
   }
   &::-moz-progress-bar {
     background-color: transparent;
