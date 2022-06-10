@@ -29,4 +29,6 @@ export const character = {
   characters: "characters",
   defaultCharacter: "default character",
   buy: "buy",
+  select: "select",
+  selected: "selected",
 };
