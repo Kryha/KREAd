@@ -1,11 +1,13 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { ImageProps, MenuItemName } from "../../../components";
+import { ButtonText, ItemCard, Label, MenuItemName, PrimaryButton } from "../../../components";
+import { color } from "../../../design";
 import { Item } from "../../../interfaces";
 import {
   CategoryButton,
   Divider,
+  EmptyInfo,
   IdLabel,
   ImageCard,
   Info,
@@ -20,10 +22,9 @@ import {
 
 interface ListItemProps {
   item: Item;
-  imageProps?: ImageProps;
 }
 
-const ListItem: FC<ListItemProps> = ({ item, imageProps }) => {
+const ListItem: FC<ListItemProps> = ({ item }) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -36,14 +37,7 @@ const ListItem: FC<ListItemProps> = ({ item, imageProps }) => {
       onBlur={() => setSelected(false)}
     >
       <ImageCard>
-        <ItemImage
-          src={item.image}
-          category={item.category}
-          width={imageProps?.width}
-          height={imageProps?.height}
-          marginTop={imageProps?.marginTop}
-          marginLeft={imageProps?.marginLeft}
-        />
+        <ItemImage src={item.image} category={item.category} />
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>
@@ -61,12 +55,39 @@ const ListItem: FC<ListItemProps> = ({ item, imageProps }) => {
   );
 };
 
+const EmptyItem: FC = () => {
+  return (
+    <EmptyInfo>
+      <ItemCard />
+      <InfoWrapper>
+        <InfoContainer>
+          <MenuItemName>{text.character.noItemEquipped}</MenuItemName>
+          <Label>{text.character.noItemEquippedCharacter}</Label>
+        </InfoContainer>
+        <PrimaryButton
+          onClick={() => {
+            // TODO: redirect to character builder page
+          }}
+        >
+          <ButtonText customColor={color.white}>{text.character.startEquipping}</ButtonText>
+        </PrimaryButton>
+      </InfoWrapper>
+    </EmptyInfo>
+  );
+};
+
 interface SectionProps {
   items: Item[];
 }
 
 export const DetailSectionItems: FC<SectionProps> = ({ items }) => {
-  // TODO: handle empty items list
+  if (!items.length)
+    return (
+      <ListContainer>
+        <EmptyItem />
+      </ListContainer>
+    );
+
   return (
     <ListContainer>
       {items.map((item, i) => (

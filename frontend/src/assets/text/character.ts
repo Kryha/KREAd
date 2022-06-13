@@ -30,4 +30,7 @@ export const character = {
   deleteCharacter: "delete character",
   characters: "characters",
   defaultCharacter: "default character",
+  noItemEquipped: "no item equipped",
+  noItemEquippedCharacter: "you have no items equipped to this character",
+  startEquipping: "start equipping",
 };

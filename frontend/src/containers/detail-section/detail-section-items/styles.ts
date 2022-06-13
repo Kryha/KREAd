@@ -42,21 +42,24 @@ export const InfoContainer = styled.div`
   }
 `;
 
-interface InfoProps {
-  selected: boolean;
-}
-
-export const Info = styled.div<InfoProps>`
+export const EmptyInfo = styled.div`
   width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 5px 15px;
-  cursor: pointer;
   border-radius: ${margins.medium};
   border: 1px solid transparent;
   background-color: ${color.lightGrey};
+`;
+
+interface InfoProps {
+  selected?: boolean;
+}
+
+export const Info = styled(EmptyInfo)<InfoProps>`
+  cursor: pointer;
   ${({ selected }) =>
     selected &&
     `
