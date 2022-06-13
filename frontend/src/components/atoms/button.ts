@@ -13,7 +13,8 @@ interface ButtonProps {
 
 export const ButtonBase = styled.button<ButtonProps>`
   text-transform: capitalize;
-  font-family: Aktiv Grotesk Medium;
+  font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.medium};
   display: inline-block;
   transition: all 0.4s ease 0s;
   font-size: 12px;
@@ -25,7 +26,6 @@ export const ButtonBase = styled.button<ButtonProps>`
   align-items: center;
   padding: 3px 8px 3px 16px;
   background: ${(props): string => props.backgroundColor || color.black};
-  font-weight: ${fontWeight.light};
   color: ${(props): string => props.fontColor || color.white};
   border: none;
   ${({ disabled }): string => {
@@ -51,8 +51,8 @@ export const PrimaryButton = styled.button<ButtonProps>`
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
-  font-family: Aktiv Grotesk Medium;
-  font-weight: ${fontWeight.light};
+  font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.medium};
   font-size: 14px;
   line-height: 18px;
   border: 2px solid ${color.black};
