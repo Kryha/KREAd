@@ -6,31 +6,39 @@ import { ButtonClose } from "../../../components/button-close";
 import { color } from "../../../design";
 
 interface Actions {
-  onClose: () => void;
-  onLeftButtonClick: () => void;
-  onRightButtonClick: () => void;
-}
-
-interface Text {
-  leftButton: string;
-  rightButton: string;
+  onClose?: () => void;
+  primary?: {
+    text: string;
+    onClick: () => void;
+  };
+  secondary?: {
+    text: string;
+    onClick: () => void;
+  };
 }
 
 interface HeaderNavigationProps {
   actions: Actions;
-  text: Text;
 }
 
-export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ actions, text }) => {
+export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ actions }) => {
+  const { primary, secondary, onClose } = actions;
+
   return (
     <DetailSectionHeaderNavigationWrap>
-      <PrimaryButton onClick={() => actions.onLeftButtonClick()}>
-        <ButtonText customColor={color.white}>{text.leftButton}</ButtonText>
-      </PrimaryButton>
-      <SecondaryButton onClick={() => actions.onRightButtonClick()}>
-        <ButtonText>{text.rightButton}</ButtonText>
-      </SecondaryButton>
-      <ButtonClose onClick={() => actions.onClose()} />
+      {!!primary && (
+        <PrimaryButton onClick={() => primary.onClick()}>
+          <ButtonText customColor={color.white}>{primary.text}</ButtonText>
+        </PrimaryButton>
+      )}
+
+      {!!secondary && (
+        <SecondaryButton onClick={() => secondary.onClick()}>
+          <ButtonText>{secondary.text}</ButtonText>
+        </SecondaryButton>
+      )}
+
+      {!!onClose && <ButtonClose onClick={() => onClose()} />}
     </DetailSectionHeaderNavigationWrap>
   );
 };

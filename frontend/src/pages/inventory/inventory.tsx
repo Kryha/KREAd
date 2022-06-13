@@ -15,15 +15,13 @@ const ItemsInventory: FC = () => {
 
   const item = useMemo(() => items?.find((item) => item.id === selectedId), [items, selectedId]);
 
-  const closeDetail = () => setSelectedId("");
-
   if (isLoading) return <LoadingPage />;
 
   if (isError || !items || !items.length) return <ErrorView />;
 
   return (
     <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
-      <ItemDetailSection item={item || items[0]} onClose={closeDetail} />
+      <ItemDetailSection item={item || items[0]} />
     </PageContainer>
   );
 };
@@ -35,15 +33,13 @@ const CharactersInventory: FC = () => {
 
   const character = useMemo(() => characters?.find((character) => character.characterId === selectedId), [characters, selectedId]);
 
-  const closeDetail = () => setSelectedId("");
-
   if (isLoading) return <LoadingPage />;
 
   if (isError || !characters || !characters.length) return <ErrorView />;
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
-      <CharacterDetailSection character={character || characters[0]} onClose={closeDetail} />
+      <CharacterDetailSection character={character || characters[0]} />
     </PageContainer>
   );
 };

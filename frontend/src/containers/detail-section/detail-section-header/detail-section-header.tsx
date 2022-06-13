@@ -19,28 +19,28 @@ interface Data {
 }
 
 interface Actions {
-  onClose: () => void;
-  onLeftButtonClick: () => void;
-  onRightButtonClick: () => void;
-}
-
-interface Text {
-  leftButton: string;
-  rightButton: string;
+  onClose?: () => void;
+  primary?: {
+    text: string;
+    onClick: () => void;
+  };
+  secondary?: {
+    text: string;
+    onClick: () => void;
+  };
 }
 
 interface DetailSectionHeaderProps {
   data: Data;
   actions: Actions;
-  text: Text;
 }
 
-export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, actions, text: pText }) => {
+export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, actions }) => {
   return (
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>
         <SectionHeader>{data.name}</SectionHeader>
-        <DetailSectionHeaderNavigation actions={actions} text={pText} />
+        <DetailSectionHeaderNavigation actions={actions} />
       </DetailSectionHeaderTop>
 
       <DetailSectionHeaderDetails>

@@ -14,7 +14,7 @@ import { DetailSectionItems } from "./detail-section-items";
 
 interface ItemDetailSectionProps {
   character: Character;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 // TODO: Make index dynamic
@@ -34,8 +34,11 @@ export const CharacterDetailSection: FC<ItemDetailSectionProps> = ({ character, 
       {/* header */}
       <DetailSectionHeader
         data={{ ...character, id: character.characterId, category: character.type }}
-        actions={{ onClose, onLeftButtonClick: choose, onRightButtonClick: sell }}
-        text={{ leftButton: text.character.choose, rightButton: text.character.equip }}
+        actions={{
+          onClose,
+          primary: { onClick: choose, text: text.character.choose },
+          secondary: { onClick: sell, text: text.character.equip },
+        }}
       />
 
       {/* story */}

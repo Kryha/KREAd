@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+
 import { ButtonInfo } from "../../../components/button-info";
 import { InfoPosition } from "../../../interfaces/layout.types";
 import { DetailSectionElemenTitle, DetailSectionElementWrap, TitleFlexRow } from "./styles";

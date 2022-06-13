@@ -10,8 +10,8 @@ interface PageContainerProps {
 export const PageContainer: FC<PageContainerProps> = ({ children, sidebarContent }) => {
   return (
     <PageWrap>
-      {children}
       {sidebarContent}
+      {children}
     </PageWrap>
   );
 };
