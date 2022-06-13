@@ -657,7 +657,7 @@ export const FakeCharacterItems: CharacterItems = {
 
 export const Items: Item[] = [
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "NoseLine: Fairy Dust Elite",
     category: "noseline",
     id: "12344",
     description:
@@ -721,7 +721,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Mid Background: Fairy Dust Elite",
     category: "mid background",
     id: "12345",
     description:
@@ -785,7 +785,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "birTox: Fairy Dust Elite",
+    name: "Mask: Fairy Dust Elite",
     category: "mask",
     id: "12346",
     description:
@@ -849,7 +849,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Head Piece: Fairy Dust Elite",
     category: "head piece",
     id: "12347",
     description:
@@ -913,7 +913,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Hair: Fairy Dust Elite",
     category: "hair",
     id: "11333",
     description:
@@ -977,7 +977,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Front Mask: Fairy Dust Elite",
     category: "front mask",
     id: "11334",
     description:
@@ -1041,7 +1041,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Liquid: Fairy Dust Elite",
     category: "liquid",
     id: "11335",
     description:
@@ -1105,7 +1105,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Background: Fairy Dust Elite",
     category: "background",
     id: "12333",
     description:
@@ -1169,7 +1169,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Air Reservoir: Fairy Dust Elite",
     category: "air resevoir",
     id: "12337",
     description:
@@ -1233,7 +1233,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Clothing: Fairy Dust Elite",
     category: "clothing",
     id: "12310",
     description:
@@ -1297,7 +1297,7 @@ export const Items: Item[] = [
     ],
   },
   {
-    name: "AirTox: Fairy Dust Elite",
+    name: "Air reservoir 2: Fairy Dust Elite",
     category: "air resevoir",
     id: "12339",
     description:
@@ -1312,7 +1312,7 @@ export const Items: Item[] = [
     colors: ["#0000006", "#3063A5", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1000,
+    price: 900,
     details: {
       boardId: "0x0177812bsjs7998",
       contractAddresss: "0x0177812bsjs7998",
