@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { margins, color } from "../../design";
 import { Img, Label, MenuItemName } from "../atoms";
 

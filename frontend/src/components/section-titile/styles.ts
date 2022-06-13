@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { BoldLabel } from "../atoms";
 
 export const SectionTitleWrapper = styled.div`
@@ -6,7 +6,7 @@ export const SectionTitleWrapper = styled.div`
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
-  margin 40px 0px;
+  margin: 40px 0px;
   ${BoldLabel} {
     transform: rotate(-90deg);
     margin-right: 16px;

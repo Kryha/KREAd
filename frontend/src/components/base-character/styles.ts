@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { margins } from "../../design";
 import { SecondaryButton } from "../atoms";
@@ -12,7 +12,7 @@ interface ImageProps {
   size?: "mini" | "medium" | "normal" | "large" | "extraLarge";
 }
 
-export const ExpandButton = styled(SecondaryButton)`;
+export const ExpandButton = styled(SecondaryButton)`
   position: absolute;
   z-index: 300;
   left: 40%;
@@ -27,9 +27,9 @@ export const CharacterIcon = styled.img<ImageProps>`
   position: relative;
   top: 0px;
   ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.forground};`};
-  ${({ width, height }): string => `min-width: ${width * 0.4}px; max-width: ${width * 0.4}px; width: ${width * 0.4}px; height: ${height}px;`};
+  ${({ width, height }): string =>
+    `min-width: ${width * 0.4}px; max-width: ${width * 0.4}px; width: ${width * 0.4}px; height: ${height}px;`};
 `;
-
 
 export const CharacterWrapper = styled.div`
   position: absolute;

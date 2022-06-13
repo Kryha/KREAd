@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
@@ -45,7 +45,6 @@ export const ContentWrapper = styled.div`
     margin-top: ${margins.big};
   }
 `;
-
 
 export const ArrowUp = styled(ArrowUpRightIcon)`
   padding-left: 13px;

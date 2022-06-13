@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins } from "../../design";
@@ -72,8 +72,8 @@ interface ImageProps {
 }
 
 /* eslint-disable indent */
-export const ItemImage = styled(Img) <ImageProps>`
-${({ category }): string => {
+export const ItemImage = styled(Img)<ImageProps>`
+  ${({ category }): string => {
     switch (category) {
       case "hair":
         return "width: 1000px; height: 400px; margin-top: 110px;";

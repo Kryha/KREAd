@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { FlexRow } from "../../../components";
 import { color, fontSize, fontWeight, margins } from "../../../design";
 import { DetailSectionBody } from "../detail-section-segment/styles";

@@ -30,21 +30,20 @@ export const Buy: FC = () => {
     setCurrentStep(step);
   };
 
-  if(isLoadingItem) return <LoadingPage />;
+  if (isLoadingItem) return <LoadingPage />;
 
-  if(!item || isErrorItem) return <ErrorView />;
+  if (!item || isErrorItem) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
-    case 1:
-      return <BuyForm item={item} changeStep={changeStep} />;
-    case 2:
-      return <Confirmation item={item} />;
-    default:
-      return <BuyForm item={item} changeStep={changeStep} />;
+      case 1:
+        return <BuyForm item={item} changeStep={changeStep} />;
+      case 2:
+        return <Confirmation item={item} />;
+      default:
+        return <BuyForm item={item} changeStep={changeStep} />;
     }
   };
-
 
   return (
     <ContentWrapper>
@@ -52,7 +51,7 @@ export const Buy: FC = () => {
         mainContent={<DetailSection setSelectedItem={setSelectedItem} item={selectedItem} />}
         sidebarContent={
           <FormCard height={height} width={width}>
-            <FormHeader currentStep={currentStep} title={text.store.buyItem} link={routes.shop} isBuyFlow/>
+            <FormHeader currentStep={currentStep} title={text.store.buyItem} link={routes.shop} isBuyFlow />
             <>{perStepDisplay()}</>
           </FormCard>
         }

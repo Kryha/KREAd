@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { ArrowUpRightIcon, CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { Label } from "../atoms";
@@ -30,7 +30,8 @@ interface MenuProps {
 }
 
 export const Menu = styled.div<MenuProps>`
-  ${({ width, height }): string => `min-width: ${width * 0.375}px; max-width: ${width * 0.375}px; width: ${width * 0.375}px; max-height: ${height - 80}px;`};
+  ${({ width, height }): string =>
+    `min-width: ${width * 0.375}px; max-width: ${width * 0.375}px; width: ${width * 0.375}px; max-height: ${height - 80}px;`};
   background: ${color.white};
   border: 1px solid ${color.grey};
   box-sizing: border-box;

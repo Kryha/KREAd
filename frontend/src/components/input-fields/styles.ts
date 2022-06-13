@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { TickIcon, RangeIcon } from "../../assets";
 import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
@@ -94,8 +94,8 @@ export const SliderTrack = styled.div`
 export const SliderRange = styled.div<RangeProps>`
   border-radius: 0px;
   height: 4px;
-  width: ${(props): string => `${props.width}%;`}
-  left: ${(props): string => `${props.left}%;`}
+  width: ${(props): string => `${props.width}%;`};
+  left: ${(props): string => `${props.left}%;`};
   position: absolute;
   background-color: ${color.black};
   z-index: 2;
@@ -125,7 +125,7 @@ export const ThumbLeft = styled.input`
     pointer-events: all;
     position: relative;
   }
-   ::-moz-range-thumb {
+  ::-moz-range-thumb {
     cursor: pointer;
     height: 32px;
     width: 40px;
@@ -186,7 +186,7 @@ export const InputContainer = styled.div`
 
 export const ColorWrapper = styled.div<SelectProps>`
   cursor: pointer;
-    ${({ selected }): string => {
+  ${({ selected }): string => {
     return selected
       ? `
       ${DetailSectionColorPaletteWrap} {

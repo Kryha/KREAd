@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { color, fontWeight } from "../../design";
 import { ButtonText } from "./text";
@@ -119,7 +119,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   }};
 `;
 
-export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
+export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   color: ${(props): string => props.fontColor || color.black};
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
@@ -187,7 +187,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   }};
 `;
 
-export const TertiaryButton = styled(PrimaryButton) <ButtonProps>`
+export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
   background-color: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
   border: none;
@@ -233,7 +233,7 @@ export const TertiaryButton = styled(PrimaryButton) <ButtonProps>`
   }};
 `;
 
-export const OutlinedButton = styled(ButtonBase) <ButtonProps>`
+export const OutlinedButton = styled(ButtonBase)<ButtonProps>`
   border: ${(props): string => `1px solid ${props.borderColor || color.grey}}`};
   background: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
