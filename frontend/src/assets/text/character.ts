@@ -14,6 +14,7 @@ export const character = {
   choose: "choose",
   unequip: "unequip",
   story: "story",
+  equippedItems: "equipped items",
   zeroOne: "01",
   zeroTwo: "02",
   zeroThree: "03",

@@ -1,5 +1,3 @@
-// TODO: finish this component
-
 import { FC, useState } from "react";
 
 import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";

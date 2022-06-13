@@ -1,11 +1,12 @@
 import { FC } from "react";
-import {useNavigate,  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import { text } from "../../assets";
 import { CONFIRMATION_STEP, INFORMATION_STEP, PAYMENT_STEP } from "../../constants";
 import { routes } from "../../navigation";
 import { MenuText } from "../atoms";
 import { FormTab } from "../form-tab";
-import {  ArrowContainer, Close, Divider, FormNavigation, HeaderContainer, NavigationTab, ReturnContainer } from "./styles";
+import { ArrowContainer, Close, Divider, FormNavigation, HeaderContainer, NavigationTab, ReturnContainer } from "./styles";
 
 interface NavigationTabProps {
   currentStep: number;

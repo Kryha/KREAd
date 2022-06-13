@@ -15,12 +15,13 @@ interface Data {
   id: string;
 }
 
-interface MenuItemProps extends ImageProps {
+interface MenuItemProps {
   data: Data;
   onClick?: (id: string) => void;
+  imageProps?: ImageProps;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({ data, width, height, marginTop, marginLeft, onClick }) => {
+export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
   const [selected, setSelected] = useState(false);
 
   return (
@@ -37,11 +38,11 @@ export const MenuItem: FC<MenuItemProps> = ({ data, width, height, marginTop, ma
         <ImageCard>
           <ItemImage
             src={data.image}
-            width={width}
-            height={height}
-            marginTop={marginTop}
-            marginLeft={marginLeft}
             category={data.category}
+            width={imageProps?.width}
+            height={imageProps?.height}
+            marginTop={imageProps?.marginTop}
+            marginLeft={imageProps?.marginLeft}
           />
         </ImageCard>
       ) : (

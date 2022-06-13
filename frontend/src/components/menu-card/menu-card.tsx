@@ -49,7 +49,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
       <Content>
         <MenuContent>
           {items.map((item) => (
-            <MenuItem data={item} key={item.id} width={width} height={height} marginTop={marginTop} marginLeft={marginLeft} />
+            <MenuItem data={item} key={item.id} imageProps={{ width, height, marginTop, marginLeft }} />
           ))}
         </MenuContent>
       </Content>

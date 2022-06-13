@@ -37,7 +37,7 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
         </DetailSectionSegmentStoryCreators>
         <DetailSectionSegmentStoryDescription>{data.description}</DetailSectionSegmentStoryDescription>
       </DetailSectionSegmentStoryWrap>
-      {/* TODO: handle if image is slots */}
+
       {typeof data.image === "string" ? (
         <DetailSectionSegmentStoryImg src={data.image} />
       ) : (
