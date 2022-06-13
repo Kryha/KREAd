@@ -17,4 +17,5 @@ export const zIndex = {
   mid: 20,
   inFront: 30,
   onTop: 40,
+  overCharacter: 41,
 };
