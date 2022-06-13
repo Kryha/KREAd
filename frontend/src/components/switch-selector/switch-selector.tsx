@@ -1,34 +1,21 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 
 import { SwitchButtonLeft, SwitchButtonRight, Group } from "./styles";
 
 interface SwitchSelectorProps {
+  selectedIndex: number;
+  setSelectedIndex: (index: number) => void;
   buttonOneText: string;
   buttonTwoText: string;
-  handleView: (changeView: boolean) => void;
 }
 
-export const SwitchSelector: FC<SwitchSelectorProps> = ({ buttonOneText, buttonTwoText, handleView }) => {
-  const [switchView, setSwitchView] = useState(false);
-
+export const SwitchSelector: FC<SwitchSelectorProps> = ({ buttonOneText, buttonTwoText, selectedIndex, setSelectedIndex }) => {
   return (
     <Group>
-      <SwitchButtonLeft
-        onClick={() => {
-          setSwitchView(false);
-          handleView(false);
-        }}
-        selected={switchView}
-      >
+      <SwitchButtonLeft onClick={() => setSelectedIndex(0)} selected={selectedIndex === 0}>
         {buttonOneText}
       </SwitchButtonLeft>
-      <SwitchButtonRight
-        onClick={() => {
-          setSwitchView(true);
-          handleView(true);
-        }}
-        selected={switchView}
-      >
+      <SwitchButtonRight onClick={() => setSelectedIndex(1)} selected={selectedIndex === 1}>
         {buttonTwoText}
       </SwitchButtonRight>
     </Group>

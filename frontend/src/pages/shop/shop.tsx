@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, ReactNode, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import {
@@ -41,10 +41,10 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 
 interface SubviewProps {
-  setViewItems: (viewItems: boolean) => void;
+  pageSelector: ReactNode;
 }
 
-const CharactersShop: FC<SubviewProps> = ({ setViewItems }) => {
+const CharactersShop: FC<SubviewProps> = ({ pageSelector }) => {
   const { height } = useViewport();
 
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
@@ -77,7 +77,7 @@ const CharactersShop: FC<SubviewProps> = ({ setViewItems }) => {
       <FilterWrapper>
         <FilterContainer>
           <SelectorContainer>
-            <SwitchSelector buttonOneText={text.character.items} buttonTwoText={text.character.characters} handleView={setViewItems} />
+            {pageSelector}
             <Filters label={text.filters.category}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={categories} />
             </Filters>
@@ -122,7 +122,7 @@ const CharactersShop: FC<SubviewProps> = ({ setViewItems }) => {
   );
 };
 
-const ItemsShop: FC<SubviewProps> = ({ setViewItems }) => {
+const ItemsShop: FC<SubviewProps> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
 
@@ -156,7 +156,7 @@ const ItemsShop: FC<SubviewProps> = ({ setViewItems }) => {
       <FilterWrapper>
         <FilterContainer>
           <SelectorContainer>
-            <SwitchSelector buttonOneText={text.character.items} buttonTwoText={text.character.characters} handleView={setViewItems} />
+            {pageSelector}
             <Filters label={text.filters.category}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={categories} />
             </Filters>
@@ -207,13 +207,31 @@ const ItemsShop: FC<SubviewProps> = ({ setViewItems }) => {
   );
 };
 
+enum Page {
+  Items = 0,
+  Characters = 1,
+}
+
 export const Shop: FC = () => {
-  // TODO: use union type instead of boolean
-  const [viewItems, setViewItems] = useState(true);
+  const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
+
+  const pageSelector = useMemo(
+    () => (
+      <SwitchSelector
+        buttonOneText={text.character.items}
+        buttonTwoText={text.character.characters}
+        setSelectedIndex={setSelectedPage}
+        selectedIndex={selectedPage}
+      />
+    ),
+    [selectedPage]
+  );
 
   return (
     <BaseRoute sideNavigation={<Title title={text.navigation.shop} />}>
-      <ShopWrapper>{viewItems ? <ItemsShop setViewItems={setViewItems} /> : <CharactersShop setViewItems={setViewItems} />}</ShopWrapper>
+      <ShopWrapper>
+        {selectedPage === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
+      </ShopWrapper>
     </BaseRoute>
   );
 };
