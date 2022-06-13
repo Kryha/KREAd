@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { TickIcon, RangeIcon } from "../../assets";
 import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
-import { color, margins } from "../../design";
+import { color, fontWeight, margins } from "../../design";
 import { ButtonText, SecondaryButton, BodyText, Input } from "../atoms";
 
 interface SelectProps {
@@ -147,7 +147,8 @@ export const MaxInput = styled(Input)`
   width: 119px;
   padding: 3px 0px 16px 33px;
   position: relative;
-  font-family: Aktiv Grotesk Regular;
+  font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.light};
 `;
 
 export const MinInput = styled(MaxInput)`
@@ -167,8 +168,8 @@ export const TextLabel = styled(BodyText)`
   ::before {
     position: absolute;
     content: "RUN";
-    font-family: Aktiv Grotesk Regular;
-    font-weight: 400;
+    font-family: aktiv-grotesk;
+    font-weight: ${fontWeight.light};
     font-size: 14px;
     line-height: 18px;
     padding-top: 3px;

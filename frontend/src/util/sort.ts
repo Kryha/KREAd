@@ -1,19 +1,19 @@
 import { Item } from "../interfaces";
 
 /* eslint-disable indent */
-export const sortItems = (sorting: string, data: Item[]): Item[] => {
+export const sortItems = (sorting: string, items: Item[]): Item[] => {
   switch (sorting) {
     case "atoz":
-      return data.sort((a, b) => a.name.localeCompare(b.name));
+      return items.sort((a, b) => a.name.localeCompare(b.name));
     case "lowestPrice":
-      return data.sort((a, b) => a.price - b.price);
+      return items.sort((a, b) => a.price - b.price);
     case "highestPrice":
-      return data.sort((a, b) => b.price - a.price);
+      return items.sort((a, b) => b.price - a.price);
     case "rarity":
-      return data.sort((a, b) => b.rarity - a.rarity);
+      return items.sort((a, b) => b.rarity - a.rarity);
     case "latest":
-      return data;
+      return items;
     default:
-      return [];
+      return items;
   }
 };

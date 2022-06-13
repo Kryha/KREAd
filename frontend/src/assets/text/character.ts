@@ -35,4 +35,7 @@ export const character = {
   startEquipping: "start equipping",
   level: "level",
   levelInfo: "this is the level of your character...",
+  buy: "buy",
+  select: "select",
+  selected: "selected",
 };

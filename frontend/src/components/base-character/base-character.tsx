@@ -70,7 +70,7 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false,
         />
       </CharacterContainer>
       {/* TODO: do something with expanding */}
-      {size === "mini" ? (
+      {size === "mini" || size === "large" ? (
         <></>
       ) : (
         <ExpandButton backgroundColor={color.white}>
