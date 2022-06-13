@@ -32,9 +32,8 @@ export const DetailSectionHeaderDetails = styled.div`
 export const DetailSectionHeaderId = styled.p`
   display: inline-block;
   color: ${color.black};
-  font-size ${fontSize.extraSmall};
+  font-size: ${fontSize.extraSmall};
   font-weight: ${fontWeight.medium};
-
 `;
 
 export const CategoryButton = styled(OutlinedButton)`

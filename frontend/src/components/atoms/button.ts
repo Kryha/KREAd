@@ -13,7 +13,7 @@ interface ButtonProps {
 
 export const ButtonBase = styled.button<ButtonProps>`
   text-transform: capitalize;
-  font-family: aktiv-grotesk;
+  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   display: inline-block;
   transition: all 0.4s ease 0s;
@@ -33,9 +33,7 @@ export const ButtonBase = styled.button<ButtonProps>`
       ? `
         color: ${color.grey};
         background-color: ${color.white};
-        && {
-          cursor: default;
-        }
+        cursor: default;
       `
       : "";
   }};
@@ -51,7 +49,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
-  font-family: aktiv-grotesk;
+  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 14px;
   line-height: 18px;
