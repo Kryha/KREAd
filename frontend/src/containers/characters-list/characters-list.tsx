@@ -13,7 +13,6 @@ interface Props {
 }
 
 // TODO: Add filter & sortyng Hooks and components
-
 export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");

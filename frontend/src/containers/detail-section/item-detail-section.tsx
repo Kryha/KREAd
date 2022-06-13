@@ -10,35 +10,19 @@ import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
 import { Item } from "../../interfaces";
+import { DetailSectionActions } from "./types";
 
 interface ItemDetailSectionProps {
   item: Item;
-  onClose?: () => void;
+  actions?: DetailSectionActions;
 }
 
 // TODO: Make index dynamic
-export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, onClose }) => {
-  const equip = () => {
-    console.log("TODO: implement equip");
-    // TODO: implement
-  };
-
-  const sell = () => {
-    console.log("TODO: implement sell");
-    // TODO: implement
-  };
-
+export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions }) => {
   return (
     <DetailSectionWrap>
       {/* header */}
-      <DetailSectionHeader
-        data={item}
-        actions={{
-          onClose,
-          primary: { onClick: equip, text: text.item.equip },
-          secondary: { onClick: sell, text: text.item.sell },
-        }}
-      />
+      <DetailSectionHeader data={item} actions={actions} />
 
       {/* story */}
       <DetailSectionSegment title={text.item.story} sectionIndex={1}>

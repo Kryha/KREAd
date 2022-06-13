@@ -1,6 +1,8 @@
 import styled from "styled-components";
+
 import { RefreshIcon } from "../../assets";
 import { Label } from "../../components";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins } from "../../design";
 
 interface ShopProps {
@@ -10,6 +12,13 @@ interface ShopProps {
 export const ShopWrapper = styled.div`
   margin: ${margins.big} ${margins.big} 120px ${margins.big};
   position: relative;
+
+  ${DetailSectionWrap} {
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    z-index: 30000000;
+  }
 `;
 
 export const FilterWrapper = styled.div`

@@ -1,4 +1,3 @@
-
 import { FC, useState } from "react";
 
 import { SwitchButtonLeft, SwitchButtonRight, Group } from "./styles";
@@ -14,8 +13,24 @@ export const SwitchSelector: FC<SwitchSelectorProps> = ({ buttonOneText, buttonT
 
   return (
     <Group>
-      <SwitchButtonLeft onClick={() => { setSwitchView(false); handleView(false); }} selected={switchView}>{buttonOneText}</SwitchButtonLeft>
-      <SwitchButtonRight onClick={() => { setSwitchView(true); handleView(true); }} selected={switchView}>{buttonTwoText}</SwitchButtonRight>
+      <SwitchButtonLeft
+        onClick={() => {
+          setSwitchView(false);
+          handleView(false);
+        }}
+        selected={switchView}
+      >
+        {buttonOneText}
+      </SwitchButtonLeft>
+      <SwitchButtonRight
+        onClick={() => {
+          setSwitchView(true);
+          handleView(true);
+        }}
+        selected={switchView}
+      >
+        {buttonTwoText}
+      </SwitchButtonRight>
     </Group>
   );
 };

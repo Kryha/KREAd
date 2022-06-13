@@ -11,6 +11,7 @@ import {
 
 import { text } from "../../../assets";
 import { SectionHeader } from "../../../components";
+import { DetailSectionActions } from "../types";
 
 interface Data {
   name: string;
@@ -18,21 +19,9 @@ interface Data {
   id: string;
 }
 
-interface Actions {
-  onClose?: () => void;
-  primary?: {
-    text: string;
-    onClick: () => void;
-  };
-  secondary?: {
-    text: string;
-    onClick: () => void;
-  };
-}
-
 interface DetailSectionHeaderProps {
   data: Data;
-  actions: Actions;
+  actions?: DetailSectionActions;
 }
 
 export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, actions }) => {

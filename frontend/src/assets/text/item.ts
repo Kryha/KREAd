@@ -1,4 +1,5 @@
 export const item = {
+  buy: "buy",
   creators: "creators",
   level: "level",
   levelInfo: "this is the level of your item...",
