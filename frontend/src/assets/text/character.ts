@@ -33,4 +33,6 @@ export const character = {
   noItemEquipped: "no item equipped",
   noItemEquippedCharacter: "you have no items equipped to this character",
   startEquipping: "start equipping",
+  level: "level",
+  levelInfo: "this is the level of your character...",
 };

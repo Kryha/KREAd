@@ -15,7 +15,7 @@ export const CharacterDetailSectionSegmentStats: FC<Props> = ({ character }) => 
   return (
     <DetailSectionSegmentStatsWrap>
       <FlexRow>
-        <DetailSectionElement title={text.item.level} info={text.item.levelInfo} infoPosition="right">
+        <DetailSectionElement title={text.character.level} info={text.character.levelInfo} infoPosition="right">
           <DetailSectionBodyBigBold>{character.level}</DetailSectionBodyBigBold>
         </DetailSectionElement>
       </FlexRow>
