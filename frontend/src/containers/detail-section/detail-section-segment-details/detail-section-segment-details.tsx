@@ -11,7 +11,7 @@ import { truncateAddress } from "../../../util";
 
 interface Data {
   brand: string;
-  boardId?: string;
+  boardId: string;
   artist: string;
   metadata: string;
 }
@@ -25,22 +25,21 @@ export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> =
   return (
     <DetailSectionSegmentDetailsWrap>
       <FlexRow>
-        <DetailSectionElement title={text.item.contractAddress}>
+        <DetailSectionElement title={text.item.brand}>
           <DetailSectionBody>{truncateAddress(data.brand)}</DetailSectionBody>
         </DetailSectionElement>
-        {!!data.boardId && (
-          <DetailSectionElement title={text.item.boardId}>
-            <DetailSectionBody>
-              {text.item.boardIdHash}
-              {data.boardId}
-            </DetailSectionBody>
-          </DetailSectionElement>
-        )}
+        <DetailSectionElement title={text.item.boardId}>
+          <DetailSectionBody>
+            {text.item.boardIdHash}
+            {data.boardId}
+          </DetailSectionBody>
+        </DetailSectionElement>
         <DetailSectionElement title={text.item.artist}>
           <DetailSectionBody>{data.artist}</DetailSectionBody>
         </DetailSectionElement>
         <DetailSectionElement title={text.item.metadata}>
           <DetailSectionBody>
+            {/* TODO: redirect to a real place */}
             <DetailSectionSegmentDetailsLink href={data.metadata} target="_blank" rel="noreferrer">
               {text.item.view} <LinkExternalIcon />
             </DetailSectionSegmentDetailsLink>

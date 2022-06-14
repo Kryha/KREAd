@@ -12,6 +12,7 @@ export const item = {
   colors: "colors",
   contractAddress: "contract address",
   boardId: "board id",
+  brand: "brand",
   boardIdHash: "#",
   artist: "artist",
   metadata: "metadata",
