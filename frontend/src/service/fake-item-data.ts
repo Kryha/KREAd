@@ -32,8 +32,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06149",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://yourmetadata.com",
     },
@@ -96,8 +95,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06119",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -160,8 +158,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06139",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -224,8 +221,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06118",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -288,8 +284,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06117",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -352,8 +347,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 14,
     details: {
       boardId: "06116",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -416,8 +410,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06115",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -480,8 +473,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06114",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -544,8 +536,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06113",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -608,8 +599,7 @@ export const FakeCharacterItems: CharacterItems = {
     price: 1234,
     details: {
       boardId: "06112",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -675,8 +665,7 @@ export const Items: Item[] = [
     price: 1234,
     details: {
       boardId: "06111",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -739,8 +728,7 @@ export const Items: Item[] = [
     price: 1234,
     details: {
       boardId: "06110",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -803,8 +791,7 @@ export const Items: Item[] = [
     price: 134,
     details: {
       boardId: "06129",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -867,8 +854,7 @@ export const Items: Item[] = [
     price: 1234,
     details: {
       boardId: "0x0177812bsjs7998",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "",
     },
@@ -931,8 +917,7 @@ export const Items: Item[] = [
     price: 1234,
     details: {
       boardId: "06128",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
@@ -995,8 +980,7 @@ export const Items: Item[] = [
     price: 12340,
     details: {
       boardId: "0x0177812bsjs7998",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "",
     },
@@ -1059,8 +1043,7 @@ export const Items: Item[] = [
     price: 24,
     details: {
       boardId: "0x0177812bsjs7998",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "",
     },
@@ -1123,8 +1106,7 @@ export const Items: Item[] = [
     price: 9000,
     details: {
       boardId: "0x0177812bsjs7998",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "",
     },
@@ -1187,8 +1169,7 @@ export const Items: Item[] = [
     price: 1000,
     details: {
       boardId: "0x0177812bsjs7998",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "",
     },
@@ -1251,8 +1232,7 @@ export const Items: Item[] = [
     price: 1200,
     details: {
       boardId: "0x0177812bsjs7998",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "",
     },
@@ -1315,8 +1295,7 @@ export const Items: Item[] = [
     price: 900,
     details: {
       boardId: "0x0177812bsjs7998",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "",
     },

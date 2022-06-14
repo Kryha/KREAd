@@ -21,8 +21,7 @@ export interface CharacterItems {
 
 export interface Detail {
   boardId: string;
-  contractAddresss: string;
-  standard: string;
+  brand: string;
   artist: string;
   metadata: string;
 }

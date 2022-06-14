@@ -43,7 +43,7 @@ export const CharacterDetailSection: FC<ItemDetailSectionProps> = ({ character, 
 
       {/* details */}
       <DetailSectionSegment title={text.character.details} sectionIndex={4}>
-        <DetailSectionSegmentDetails data={{ ...character.detail, brand: character.detail.contractAddresss }} />
+        <DetailSectionSegmentDetails data={{ ...character.detail, brand: character.detail.brand }} />
       </DetailSectionSegment>
 
       {/* project */}

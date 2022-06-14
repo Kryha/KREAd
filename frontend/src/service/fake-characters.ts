@@ -13,8 +13,7 @@ export const FakeCharcters: Character[] = [
     items: FakeCharacterItems,
     detail: {
       boardId: "06553",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://yourmetadata.info",
     },
@@ -42,8 +41,7 @@ export const FakeCharcters: Character[] = [
     items: FakeCharacterItems,
     detail: {
       boardId: "06553",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://yourmetadata.info",
     },
@@ -71,8 +69,7 @@ export const FakeCharcters: Character[] = [
     items: FakeCharacterItems,
     detail: {
       boardId: "06553",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://yourmetadata.info",
     },
@@ -100,8 +97,7 @@ export const FakeCharcters: Character[] = [
     items: {},
     detail: {
       boardId: "06553",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
+      brand: "0x0177812bsjs7998",
       artist: "emily",
       metadata: "https://yourmetadata.info",
     },
