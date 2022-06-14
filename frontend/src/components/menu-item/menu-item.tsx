@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import { CharacterItems } from "../../interfaces";
+import { CharacterItems, isString } from "../../interfaces";
 import { ButtonContainer, Divider, EquippedLabel, ImageCard, ImageContainer, Info, InfoContainer, InfoWrapper, ItemImage } from "./styles";
 import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
@@ -34,7 +34,7 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
       }}
       onBlur={() => setSelected(false)}
     >
-      {typeof data.image === "string" ? (
+      {isString(data.image) ? (
         <ImageCard>
           <ItemImage
             src={data.image}
