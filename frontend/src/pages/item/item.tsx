@@ -2,11 +2,10 @@ import { FC } from "react";
 
 import { useViewport } from "../../hooks";
 
-import { BaseCharacter, ErrorView, LoadingPage, MenuCard, } from "../../components";
+import { BaseCharacter, ErrorView, LoadingPage, MenuCard } from "../../components";
 import { ItemWrapper } from "./styles";
 import { useMyItems, useMyCharacter } from "../../service";
 import { useParams } from "react-router-dom";
-
 
 export const Item: FC = () => {
   const { category } = useParams<"category">();
@@ -22,7 +21,7 @@ export const Item: FC = () => {
 
   return (
     <ItemWrapper height={height} position={category}>
-      <BaseCharacter character={character} size="extraLarge" isZoomed />
+      <BaseCharacter items={character.items} size="extraLarge" isZoomed />
       <MenuCard title={category} items={categoryItems} amount={categoryItems.length} />
     </ItemWrapper>
   );

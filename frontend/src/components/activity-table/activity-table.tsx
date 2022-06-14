@@ -1,40 +1,29 @@
 import { FC } from "react";
+
 import { ActivityTableWrap, BodyWrap, Cell, HeaderWrap, RowWrap } from "./styles";
-
-import { ActivityEvent, Item } from "../../interfaces";
+import { ActivityEvent } from "../../interfaces";
 import { text } from "../../assets";
-import { BoldLabel } from "../atoms";
 import { CategoryButton } from "../../containers/detail-section/detail-section-header/styles";
-
 import { getDatefromEpoch } from "../../util";
 import { color } from "../../design";
+import { BoldLabel } from "../atoms";
 
 interface ActivityTableProps {
-  item: Item;
+  events: ActivityEvent[];
 }
 
 interface RowProps {
   event: ActivityEvent;
 }
 
-interface HeaderProps {
-  text: {
-    event: string;
-    price: string;
-    from: string;
-    to: string;
-    date: string;
-  };
-}
-
-const Header: FC<HeaderProps> = ({ text }) => {
+const Header: FC = () => {
   return (
     <>
-      <Cell>{text.event}</Cell>
-      <Cell>{text.price}</Cell>
-      <Cell>{text.from}</Cell>
-      <Cell>{text.to}</Cell>
-      <Cell>{text.date}</Cell>
+      <Cell>{text.item.event}</Cell>
+      <Cell>{text.item.price}</Cell>
+      <Cell>{text.item.from}</Cell>
+      <Cell>{text.item.to}</Cell>
+      <Cell>{text.item.date}</Cell>
     </>
   );
 };
@@ -43,7 +32,7 @@ const Row: FC<RowProps> = ({ event }) => {
   return (
     <>
       <Cell>
-        <CategoryButton>{event.type}</CategoryButton>
+        <CategoryButton>{event.name}</CategoryButton>
       </Cell>
       <Cell>
         <BoldLabel customColor={color.black}>{!!event.price && text.param.runPrice(event.price)}</BoldLabel>
@@ -55,14 +44,14 @@ const Row: FC<RowProps> = ({ event }) => {
   );
 };
 
-export const ActivityTable: FC<ActivityTableProps> = ({ item }) => {
+export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
   return (
     <ActivityTableWrap>
       <HeaderWrap>
-        <Header text={text.item} />
+        <Header />
       </HeaderWrap>
       <BodyWrap>
-        {item.activity.map((event) => (
+        {events.map((event) => (
           <RowWrap key={event.date}>
             <Row event={event} />
           </RowWrap>

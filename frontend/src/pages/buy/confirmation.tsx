@@ -1,18 +1,17 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { text } from "../../assets";
 
 import { ButtonText, FormText, PrimaryButton, TitleText } from "../../components";
 import { color } from "../../design";
-import { Item } from "../../interfaces";
 import { routes } from "../../navigation";
-import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer, } from "./styles";
+import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer } from "./styles";
+import { BuyText } from "./types";
 
-interface ConfirmationProps {
-  item: Item;
+interface Props {
+  text: BuyText;
 }
 
-export const Confirmation: FC<ConfirmationProps> = () => {
+export const Confirmation: FC<Props> = ({ text }) => {
   const navigate = useNavigate();
 
   return (
@@ -20,13 +19,13 @@ export const Confirmation: FC<ConfirmationProps> = () => {
       <TickContainer>
         <Tick />
       </TickContainer>
-      <TitleText>{text.store.itemSuccessfullyBought}</TitleText>
+      <TitleText>{text.success}</TitleText>
       <InfoContainer>
-        <FormText>{text.store.yourNewItemIs}</FormText>
+        <FormText>{text.successLong}</FormText>
       </InfoContainer>
       <ButtonContainer>
         <PrimaryButton onClick={() => navigate(routes.inventory)}>
-          <ButtonText customColor={color.white}>{text.store.checkItem}</ButtonText>
+          <ButtonText customColor={color.white}>{text.check}</ButtonText>
           <ArrowUp />
         </PrimaryButton>
       </ButtonContainer>

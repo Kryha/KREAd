@@ -9,7 +9,7 @@ interface ImageProps {
   height: number;
   zIndex?: number;
   isZoomed?: boolean;
-  size?: "mini" | "medium" | "normal" | "large" | "extraLarge";
+  size?: "mini" | "medium" | "half" | "normal" | "large" | "extraLarge";
 }
 
 export const ExpandButton = styled(SecondaryButton)`
@@ -45,6 +45,8 @@ export const CharacterContainer = styled.div<ImageProps>`
         return "zoom:0.075; ";
       case "medium":
         return "zoom: 0.3079;";
+      case "half":
+        return "zoom: 0.5;";
       case "normal":
         return `width: ${width * 0.4}px; height: ${height}px;`;
       case "large":

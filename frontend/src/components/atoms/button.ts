@@ -11,37 +11,6 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export const ButtonBase = styled.button<ButtonProps>`
-  text-transform: capitalize;
-  font-family: "aktiv-grotesk";
-  font-weight: ${fontWeight.medium};
-  display: inline-block;
-  transition: all 0.4s ease 0s;
-  font-size: 12px;
-  line-height: 15px;
-  cursor: pointer;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 3px 8px 3px 16px;
-  background: ${(props): string => props.backgroundColor || color.black};
-  color: ${(props): string => props.fontColor || color.white};
-  border: none;
-  ${({ disabled }): string => {
-    return disabled
-      ? `
-        color: ${color.grey};
-        background-color: ${color.white};
-        cursor: default;
-      `
-      : "";
-  }};
-  ${({ visible }): string => {
-    return visible ? "display: none;" : "";
-  }};
-`;
-
 export const PrimaryButton = styled.button<ButtonProps>`
   transition: all 0.4s ease 0s;
   display: flex;
@@ -229,11 +198,4 @@ export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
         `
       : "";
   }};
-`;
-
-export const OutlinedButton = styled(ButtonBase)<ButtonProps>`
-  border: ${(props): string => `1px solid ${props.borderColor || color.grey}}`};
-  background: ${(props): string => props.backgroundColor || "transparent"};
-  color: ${(props): string => props.fontColor || color.black};
-  border-radius: 24px;
 `;

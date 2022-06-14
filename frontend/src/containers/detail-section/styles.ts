@@ -11,6 +11,13 @@ export const DetailSectionWrap = styled.section`
   display: flex;
   flex-flow: column nowrap;
   overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const EmptyView = styled.section`

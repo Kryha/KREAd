@@ -48,7 +48,6 @@ export const CreateCharacter: FC = () => {
 
   return (
     <PageContainer
-      mainContent={<DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />}
       sidebarContent={
         <FormCard height={height} width={width}>
           <FormHeader
@@ -59,6 +58,8 @@ export const CreateCharacter: FC = () => {
           <>{perStepDisplay()}</>
         </FormCard>
       }
-    />
+    >
+      <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />
+    </PageContainer>
   );
 };
