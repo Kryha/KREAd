@@ -3,15 +3,15 @@ import { FC } from "react";
 import { PageWrap } from "./styles";
 
 interface PageContainerProps {
-  mainContent: React.ReactNode;
+  children: React.ReactNode;
   sidebarContent: React.ReactNode;
 }
 
-export const PageContainer: FC<PageContainerProps> = ({ mainContent, sidebarContent }) => {
+export const PageContainer: FC<PageContainerProps> = ({ children, sidebarContent }) => {
   return (
     <PageWrap>
-      {mainContent}
       {sidebarContent}
+      {children}
     </PageWrap>
   );
 };

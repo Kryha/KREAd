@@ -25,3 +25,4 @@ export * from "./character-shop-card";
 export * from "./form-tab";
 export * from "./form-header";
 export * from "./form-header-close";
+export * from "./item-thumbnail";

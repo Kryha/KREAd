@@ -1,43 +1,37 @@
 import { FC } from "react";
+
 import { DetailSectionHeaderNavigationWrap } from "./styles";
 import { ButtonText, PriceInRun, PrimaryButton, SecondaryButton } from "../../../components";
-import { text } from "../../../assets/text";
 import { ButtonClose } from "../../../components/button-close";
 import { color } from "../../../design";
-import { useLocation, useNavigate } from "react-router-dom";
-import { routes } from "../../../navigation";
-import { Item } from "../../../interfaces";
+import { DetailSectionActions } from "../types";
 
 interface HeaderNavigationProps {
-  handleClose: () => void;
-  item: Item;
+  actions?: DetailSectionActions;
 }
 
-// TODO: Pass ButtonClose callback as onClick prop
-export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ handleClose, item }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ actions }) => {
+  if (!actions) return <DetailSectionHeaderNavigationWrap />;
+
+  const { primary, secondary, onClose, price } = actions;
+
   return (
     <DetailSectionHeaderNavigationWrap>
-      {location.pathname === routes.shop ? (
-        <>
-          <PriceInRun price={item.price} />
-          <PrimaryButton onClick={() => navigate(`${routes.buy}/${item.id}`)}>
-            <ButtonText customColor={color.white}>{text.character.buy}</ButtonText>
-          </PrimaryButton>
-        </>
-      ) : (
-        <>
-          {/* TODO: add links */}
-          <PrimaryButton>
-            <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
-          </PrimaryButton>
-          <SecondaryButton onClick={() => navigate(`${routes.sell}/${item.id}`)}>
-            <ButtonText>{text.character.sell}</ButtonText>
-          </SecondaryButton>
-        </>
+      {!!price && <PriceInRun price={price} />}
+
+      {!!primary && (
+        <PrimaryButton onClick={() => primary.onClick()}>
+          <ButtonText customColor={color.white}>{primary.text}</ButtonText>
+        </PrimaryButton>
       )}
-      <ButtonClose onClick={handleClose} />
+
+      {!!secondary && (
+        <SecondaryButton onClick={() => secondary.onClick()}>
+          <ButtonText>{secondary.text}</ButtonText>
+        </SecondaryButton>
+      )}
+
+      {!!onClose && <ButtonClose onClick={() => onClose()} />}
     </DetailSectionHeaderNavigationWrap>
   );
 };

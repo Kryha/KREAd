@@ -9,27 +9,32 @@ import {
   DetailSectionHeaderWrap,
 } from "./styles";
 
-import { Item } from "../../../interfaces";
 import { text } from "../../../assets";
 import { SectionHeader } from "../../../components";
+import { DetailSectionActions } from "../types";
 
-interface DetailSectionHeaderProps {
-  item: Item;
-  handleClose: () => void;
+interface Data {
+  name: string;
+  category: string;
+  id: string;
 }
 
-// TODO: Pass item actions as props (equip, sell)?
-export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ item, handleClose }) => {
+interface DetailSectionHeaderProps {
+  data: Data;
+  actions?: DetailSectionActions;
+}
+
+export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, actions }) => {
   return (
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>
-        <SectionHeader>{item.name}</SectionHeader>
-        <DetailSectionHeaderNavigation handleClose={handleClose} item={item} />
+        <SectionHeader>{data.name}</SectionHeader>
+        <DetailSectionHeaderNavigation actions={actions} />
       </DetailSectionHeaderTop>
 
       <DetailSectionHeaderDetails>
-        <CategoryButton>{item.category}</CategoryButton>
-        <DetailSectionHeaderId>{text.param.itemId(item.id)}</DetailSectionHeaderId>
+        <CategoryButton>{data.category}</CategoryButton>
+        <DetailSectionHeaderId>{text.param.itemId(data.id)}</DetailSectionHeaderId>
       </DetailSectionHeaderDetails>
     </DetailSectionHeaderWrap>
   );

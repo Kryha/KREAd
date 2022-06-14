@@ -1,31 +1,28 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { FC, useState } from "react";
 
 import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useFilteredItems } from "../../service";
+import { useMyFilteredCharacters } from "../../service";
 
-import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import { categories, sorting } from "../../assets/text/filter-options";
 
-interface SortableListProps {
-  list: Item[];
-  setElementId: Dispatch<SetStateAction<string>>;
+interface Props {
+  onCharacterClick: (id: string) => void;
 }
 
 // TODO: Add filter & sortyng Hooks and components
-
-export const SortableList: FC<SortableListProps> = ({ setElementId }) => {
+export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
 
-  const { data: items, isLoading } = useFilteredItems(selectedCategory, selectedSorting, { min: 0, max: 10000 }, "");
+  const { data: characters, isLoading } = useMyFilteredCharacters();
 
   if (isLoading) return <LoadingPage />;
 
   // TODO: get an empty section view
-  // if (!items) return <></>;
+  if (!characters || !characters.length) return <></>;
 
   const handleCategoryChange = (selected: string) => {
     setSelectedCategory(selected);
@@ -49,8 +46,12 @@ export const SortableList: FC<SortableListProps> = ({ setElementId }) => {
         </SortContainer>
       </ListHeader>
       <ListContainer>
-        {items.map((item) => (
-          <MenuItem item={item} key={item.id} onClick={() => setElementId(item.id)} />
+        {characters.map((character) => (
+          <MenuItem
+            data={{ ...character, image: character.items, category: character.type, id: character.characterId }}
+            key={character.characterId}
+            onClick={onCharacterClick}
+          />
         ))}
       </ListContainer>
     </SortableListWrap>

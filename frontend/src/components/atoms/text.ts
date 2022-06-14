@@ -119,7 +119,7 @@ export const ButtonText = styled.h3<TextProps>`
 export const SectionHeader = styled.h1`
   font-size: 32px;
   font-weight: ${fontWeight.regular};
-  line-hight: 40px;
+  line-height: 40px;
 `;
 
 export const FormText = styled(BodyText)`

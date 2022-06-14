@@ -17,21 +17,19 @@ export const Landing: FC = () => {
   if (!character || !characters || !characters.length) return <></>;
 
   return (
-    <BaseRoute sideNavigation={
-      <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
-        <ButtonText>{text.navigation.myCharacters}</ButtonText>
-        {openTab ? <Close /> : <Menu />}
-      </SecondaryButton>}
+    <BaseRoute
+      sideNavigation={
+        <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
+          <ButtonText>{text.navigation.myCharacters}</ButtonText>
+          {openTab ? <Close /> : <Menu />}
+        </SecondaryButton>
+      }
     >
       <LandingContainer isZoomed={openTab}>
-        <BaseCharacter character={character} isZoomed={openTab} size={openTab ? "large" : "normal"} />
+        <BaseCharacter items={character.items} isZoomed={openTab} size={openTab ? "large" : "normal"} />
       </LandingContainer>
-      {!openTab && (
-        <CharacterItems items={character.items} />
-      )}
-      {openTab && (
-        <CharacterCard id={character.characterId} characters={characters} />
-      )}
-    </BaseRoute >
+      {!openTab && <CharacterItems items={character.items} />}
+      {openTab && <CharacterCard id={character.characterId} characters={characters} />}
+    </BaseRoute>
   );
 };

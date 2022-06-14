@@ -1,48 +1,43 @@
 import styled from "styled-components";
 
 import { color, margins } from "../../design";
-import { SecondaryButton, PrimaryButton } from "../atoms";
+import { SecondaryButton } from "../atoms";
 
 interface ButtonProps {
   selected: boolean;
 }
 
-export const SwitchButtonLeft = styled(PrimaryButton) <ButtonProps>`
+export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
   border-radius: ${margins.medium} 0px 0px ${margins.medium};
   text-transform: capitalize;
-  padding: 7px 35px;
-  color: ${color.white};
+  padding: 8px 35px;
   :hover {
     color: ${color.black};
-    padding: 7px 35px;
   }
   ${({ selected }): string => {
     return selected
       ? `
-       color: ${color.black};
-       background-color: ${color.white};
-       border: 1px solid ${color.grey};
-       padding: 8px 35px;
+      background-color: ${color.black};
+      color: ${color.white};
+      padding: 8px 35px;
+      border: 1px solid ${color.black};
         `
       : `
       `;
   }};
 `;
 
-export const SwitchButtonRight = styled(SecondaryButton) <ButtonProps>`
+export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
   border-radius: 0px ${margins.medium} ${margins.medium} 0px;
   padding: 8px 35px;
   text-transform: capitalize;
   :hover {
     color: ${color.black};
   }
-  :focus {
-    padding: 7px 35px;
-  }
-    ${({ selected }): string => {
+  ${({ selected }): string => {
     return selected
       ? `
-        background: ${color.black};
+        background-color: ${color.black};
         color: ${color.white};
         padding: 8px 35px;
         border: 1px solid ${color.black};
