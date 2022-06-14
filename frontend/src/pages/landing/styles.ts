@@ -29,7 +29,6 @@ export const Close = styled(CloseIcon)`
   margin: 0px 0px 0px 11px !important;
   width: 12px;
   height: 12px;
-  padding: 0px 6px;
 `;
 
 export const NotificationButton = styled(SecondaryButton)`

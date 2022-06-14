@@ -120,20 +120,17 @@ export const TickContainer = styled.div`
 `;
 
 export const BodyMessage = styled(NavigationTitle)`
-  // TODO: remove
-  font-family: Aktiv Grotesk Regular;
+  font-family: aktiv-grotesk;
   font-weight: ${fontWeight.light};
   text-transform: capitalize;
 `;
 
 export const BoldText = styled(NavigationTitle)`
-  // TODO: remove
-  font-family: Aktiv Grotesk Medium;
+  font-family: aktiv-grotesk;
   font-weight: ${fontWeight.medium};
 `;
 export const BodyText = styled(NavigationTitle)`
-  // TODO: remove
-  font-family: Aktiv Grotesk Regular;
+  font-family: aktiv-grotesk;
   font-weight: ${fontWeight.light};
 `;
 

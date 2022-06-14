@@ -12,7 +12,7 @@ interface ViewProps {
 export const DefaultImage = styled.img<ViewProps>`
   margin-left: 140px;
   top: 0;
-  ${({ width, height }): string => `min-width: 542px; max-width: 542px; width: 542px; height: ${height}px;`};
+  ${({ width, height }): string => `min-width: ${width * 0.4}px; max-width: ${width * 0.4}px; width: ${width * 0.4}px; height: ${height}px;`};
 `;
 
 export const Exclamation = styled(ExclamationIcon)`
@@ -35,7 +35,7 @@ export const FormCard = styled.div<ViewProps>`
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   margin-top: ${margins.big};
-  ${({ height, width }): string => `height: ${height - 80}px; width: 542px;`};
+  ${({ height, width }): string => `height: ${height - 80}px; width: ${width * 0.4}px; min-width: 526px;`};
 `;
 
 export const FormFields = styled.div`

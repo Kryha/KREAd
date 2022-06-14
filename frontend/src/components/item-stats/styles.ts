@@ -30,8 +30,7 @@ export const Header = styled.div`
 `;
 
 export const Title = styled.div`
-  // TODO: remove
-  font-family: 'Aktiv Grotesk Medium';
+  font-family: aktiv-grotesk;
   font-style: normal;
   font-weight: ${fontWeight.medium};
   font-size: 16px;
