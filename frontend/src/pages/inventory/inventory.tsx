@@ -26,7 +26,7 @@ const ItemsInventory: FC = () => {
 
   const sell = () => {
     if (!selectedId) return;
-    navigate(`${routes.sell}/${selectedId}`);
+    navigate(`${routes.sellItem}/${selectedId}`);
   };
 
   if (isLoading) return <LoadingPage />;
@@ -45,6 +45,7 @@ const ItemsInventory: FC = () => {
 
 // TODO: uncomment when designs will be done
 const CharactersInventory: FC = () => {
+  const navigate = useNavigate();
   const { data: characters, isLoading, isError } = useCharacters();
   const [selectedId, setSelectedId] = useState<string>("");
 
@@ -56,8 +57,8 @@ const CharactersInventory: FC = () => {
   };
 
   const sell = () => {
-    // TODO: implement character sell
-    console.log("TODO: implement character sell");
+    if (!selectedId) return;
+    navigate(`${routes.sellCharacter}/${selectedId}`);
   };
 
   if (isLoading) return <LoadingPage />;

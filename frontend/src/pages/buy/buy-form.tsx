@@ -1,18 +1,18 @@
 import { FC, useState } from "react";
-import { text } from "../../assets";
 
+import { text } from "../../assets";
 import { Badge, ButtonText, FormText, PriceInRun, PrimaryButton } from "../../components";
 import { CONFIRMATION_STEP } from "../../constants";
 import { color } from "../../design";
-import { Item } from "../../interfaces";
 import { ArrowUp, ButtonContainer, ContentWrapper, Line, NumberContainer, Step, StepContainer, StepText, Tick } from "./styles";
+import { BuyData } from "./types";
 
 interface BuyFormProps {
-  item: Item;
+  data: BuyData;
   changeStep: (step: number) => void;
 }
 
-export const BuyForm: FC<BuyFormProps> = ({ item, changeStep }) => {
+export const BuyForm: FC<BuyFormProps> = ({ data, changeStep }) => {
   const [sendOffer, setSendOffer] = useState(false);
   const [acceptOffer, setAcceptOffer] = useState(false);
 
@@ -35,7 +35,7 @@ export const BuyForm: FC<BuyFormProps> = ({ item, changeStep }) => {
           <StepText>{text.mint.sendOfferToWallet}</StepText>
           {!sendOffer && (
             <>
-              <PriceInRun price={item.price} />
+              <PriceInRun price={data.price} />
               <PrimaryButton onClick={() => sendOfferToWallet()}>
                 <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
               </PrimaryButton>

@@ -30,6 +30,8 @@ import {
 } from "./styles";
 import { Character } from "../../interfaces";
 import { CharacterDetailSection } from "../../containers/detail-section";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../navigation";
 
 interface Props {
   pageSelector: ReactNode;
@@ -37,6 +39,7 @@ interface Props {
 
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
+  const navigate = useNavigate();
 
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
 
@@ -55,8 +58,8 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   };
 
   const buy = () => {
-    // TODO: implement character buy
-    console.log("TODO: implement character buy");
+    if (!selectedCharacter) return;
+    navigate(`${routes.buyCharacter}/${selectedCharacter.characterId}`);
   };
 
   if (isLoading) return <LoadingPage />;

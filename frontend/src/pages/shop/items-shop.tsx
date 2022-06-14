@@ -61,7 +61,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
 
   const buy = () => {
     if (!selectedItem) return;
-    navigate(`${routes.buy}/${selectedItem.id}`);
+    navigate(`${routes.buyItem}/${selectedItem.id}`);
   };
 
   if (isLoading) return <LoadingPage />;

@@ -12,6 +12,14 @@ export const useCharacters = (): UseQueryResult<Character[]> => {
   });
 };
 
+export const useCharacter = (id: string): UseQueryResult<Character> => {
+  return useQuery(["characters", id], async () => {
+    //  TODO: intergrate me
+
+    return FakeCharcters.find((c) => c.characterId === id);
+  });
+};
+
 // TODO: provide id as param and as query key
 export const useMyCharacter = (): UseQueryResult<Character> => {
   return useQuery(["character"], async () => {
