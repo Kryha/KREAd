@@ -9,7 +9,7 @@ export const DetailSectionSegmentWrap = styled.div`
 
 export const DetailSectionBody = styled.p`
   color: ${color.black};
-  font-size: ${fontSize.medium};
+  font-size: ${fontSize.title};
   font-weight: ${fontWeight.regular};
 `;
 

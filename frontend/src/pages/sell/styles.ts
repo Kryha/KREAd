@@ -193,7 +193,7 @@ export const TextLabel = styled(BodyText)`
   ::before {
     position: absolute;
     content: "RUN";
-    font-family: Aktiv Grotesk Regular;
+    font-family: "aktiv-grotesk";
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;

@@ -15,6 +15,6 @@ export const DetailSectionSegmentDetailsWrap = styled.div`
 export const DetailSectionSegmentDetailsLink = styled.a`
   text-decoration: none;
   color: ${color.black};
-  font-size: ${fontSize.small};
+  font-size: ${fontSize.extraSmall};
   font-weight: ${fontWeight.light};
 `;

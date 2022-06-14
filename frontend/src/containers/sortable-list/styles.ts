@@ -4,6 +4,7 @@ import { color, margins } from "../../design";
 
 export const SortableListWrap = styled.section`
   width: 40%;
+  min-width: 40%;
   display: flex;
   flex-flow: column nowrap;
   box-sizing: border-box;

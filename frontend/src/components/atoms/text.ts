@@ -96,7 +96,7 @@ export const BodyText = styled.p<TextProps>`
 
 export const PageTitle = styled.h1<TextProps>`
   color: ${color.black};
-  font-family: "" aktiv-grotesk "";
+  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 32px;
   line-height: 52px;

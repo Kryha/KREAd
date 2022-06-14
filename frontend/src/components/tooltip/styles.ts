@@ -29,7 +29,7 @@ export const TooltipContent = styled.div`
   background: ${color.lightGrey};
   font-size: ${fontSize.medium};
   z-index: 100;
-  white-space: nowrap;
+  min-width: 200px;
   box-sizing: border-box;
   animation: ${TooltipAnimation} 0.5s;
   h3 {
