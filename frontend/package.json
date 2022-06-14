@@ -5,11 +5,14 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
-    "@endo/init": "^0.5.41",
+    "@endo/captp": "^2.0.8",
+    "@endo/eventual-send": "^0.15.4",
+    "@endo/nat": "^4.1.13",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.27.2",
+    "json5": "^2.2.1",
     "react": "18",
     "react-dom": "18",
     "react-error-boundary": "^3.1.4",
@@ -17,13 +20,15 @@
     "react-query": "^3.39.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "4.0.3",
-    "ses": "^0.15.15",
+    "ses": "^0.15.16",
     "typescript": "^4.5.5",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "yarn build:ses && react-app-rewired start",
+    "build:ses": "cp ./node_modules/ses/dist/lockdown.umd.js public/",
+    "build": "yarn build:ses && yarn build:react",
+    "build:react": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint:fix": "npx eslint . --ext .ts,.tsx --fix"
@@ -42,6 +47,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.9.2",
+    "@endo/eslint-plugin": "^0.4.0",
     "@types/customize-cra": "^1.0.2",
     "@types/jest": "^26.0.24",
     "@types/node": "^12.20.42",

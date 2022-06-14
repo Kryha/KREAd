@@ -1535,7 +1535,10 @@ __metadata:
     "@emotion/babel-plugin": ^11.9.2
     "@emotion/react": ^11.9.3
     "@emotion/styled": ^11.9.3
-    "@endo/init": ^0.5.41
+    "@endo/captp": ^2.0.8
+    "@endo/eslint-plugin": ^0.4.0
+    "@endo/eventual-send": ^0.15.4
+    "@endo/nat": ^4.1.13
     "@testing-library/jest-dom": ^5.16.1
     "@testing-library/react": ^11.2.7
     "@testing-library/user-event": ^12.8.3
@@ -1551,6 +1554,7 @@ __metadata:
     eslint-config-react-app: ^7.0.0
     eslint-plugin-react: ^7.29.4
     eslint-plugin-react-hooks: ^4.5.0
+    json5: ^2.2.1
     react: 18
     react-app-rewired: ^2.2.1
     react-dom: 18
@@ -1559,7 +1563,7 @@ __metadata:
     react-query: ^3.39.0
     react-router-dom: ^6.2.1
     react-scripts: 4.0.3
-    ses: ^0.15.15
+    ses: ^0.15.16
     typescript: ^4.5.5
     web-vitals: ^0.2.4
   languageName: unknown
@@ -1735,29 +1739,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/eventual-send@npm:^0.15.3":
-  version: 0.15.3
-  resolution: "@endo/eventual-send@npm:0.15.3"
-  checksum: 3eaa3015382f40e2944cfd3b5665ffaa184d79fd6decaaa77e5ee7e96e8bd0363c0026b8dfcaffa6d3b676d100e55adf1f1740d1495112ddad28cc18863e562d
+"@endo/captp@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@endo/captp@npm:2.0.8"
+  dependencies:
+    "@endo/eventual-send": ^0.15.4
+    "@endo/marshal": ^0.6.8
+    "@endo/nat": ^4.1.13
+    "@endo/promise-kit": ^0.2.42
+  checksum: b8e4cb2c997d26b846aecb008a3d67f554a8686ccc13a5b7e5e8f975ff2c4b3c2b31d48a8be4887460ee190c86f0dad18106908fa90ff15ca57dfed2197346f8
   languageName: node
   linkType: hard
 
-"@endo/init@npm:^0.5.41":
-  version: 0.5.41
-  resolution: "@endo/init@npm:0.5.41"
+"@endo/eslint-plugin@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@endo/eslint-plugin@npm:0.4.0"
   dependencies:
-    "@endo/eventual-send": ^0.15.3
-    "@endo/lockdown": ^0.1.13
-  checksum: ff8b77fcf2fc37cf94e765d5dd44a38bfce088a756f969d2343534638f2e3b8f13b007a2843b0765150030926618d732f0ed1831a74b1c951dd139f5dc98bb9b
+    requireindex: ~1.1.0
+  checksum: c1005a057dd63fcea3a178ab2a94cecf76ba2f4690716da7231b25c1eeabe2fbdd2d8e378767fc0f9ccf5b16877d9f2d14cdef7b434ec741b6280537f1b91e82
   languageName: node
   linkType: hard
 
-"@endo/lockdown@npm:^0.1.13":
-  version: 0.1.13
-  resolution: "@endo/lockdown@npm:0.1.13"
+"@endo/eventual-send@npm:^0.15.4":
+  version: 0.15.4
+  resolution: "@endo/eventual-send@npm:0.15.4"
+  checksum: 53d31784202e9ce919bbe4b794832beb9d7682127406881bbeefc2f2474bf2f6931cd49f610bd265bb396d755694d8185d27a155462b20ebba1f59ff58400a1b
+  languageName: node
+  linkType: hard
+
+"@endo/marshal@npm:^0.6.8":
+  version: 0.6.8
+  resolution: "@endo/marshal@npm:0.6.8"
   dependencies:
-    ses: ^0.15.15
-  checksum: 83a1b1b04fe8aad69e8d1984a5bc96fb47930409815ebea522037331cf1eb7d227873eec2d08fc7d336688b67731247c31fa08db6a77b0763f30cf0fee8448c5
+    "@endo/eventual-send": ^0.15.4
+    "@endo/nat": ^4.1.13
+    "@endo/promise-kit": ^0.2.42
+  checksum: add612daaaedbb0f93dfe4300ade78bcf33ba45fb7ca2a6b3e0e2e1c52d7f5d17fc70435bf9bb2b54eb24c9dc49f8fe40e984e506b282c0ec7c4b1bcf5503c83
+  languageName: node
+  linkType: hard
+
+"@endo/nat@npm:^4.1.13":
+  version: 4.1.13
+  resolution: "@endo/nat@npm:4.1.13"
+  checksum: 855114faee83320bbf566146827e609508317378ec818ad01a64714242203ab35c1b45a8c45e162d1af827df6e54b3a50d9750cea6e382e4066ffe5c6ec8f5dd
+  languageName: node
+  linkType: hard
+
+"@endo/promise-kit@npm:^0.2.42":
+  version: 0.2.42
+  resolution: "@endo/promise-kit@npm:0.2.42"
+  dependencies:
+    ses: ^0.15.16
+  checksum: 3f71d0a9fc55e0244648f76bed9d23df7d0a3410ef3f9107df5a646448e472522ba2d0938d823b4625892aa288bb77252e319f40beec14dc1c256386e959c549
   languageName: node
   linkType: hard
 
@@ -13536,6 +13569,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"requireindex@npm:~1.1.0":
+  version: 1.1.0
+  resolution: "requireindex@npm:1.1.0"
+  checksum: 397057d97d7f753a3851abf0d6db94c295bd8254536f71f622b896ba08ea8c0d3e3771c8b009a557e6ce602f4245c0588836cdf59c4ce588fff721a7b855d323
+  languageName: node
+  linkType: hard
+
 "requires-port@npm:^1.0.0":
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
@@ -14109,10 +14149,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ses@npm:^0.15.15":
-  version: 0.15.15
-  resolution: "ses@npm:0.15.15"
-  checksum: 4deb57e6589d3d13d15e77e6f6a7095c1b0179e4b3127b0d61139c3809ebef1fece2d4979a2ea0cac1eb821c69f31fb90a1b653646ed2125e74e3719f3472d0e
+"ses@npm:^0.15.16":
+  version: 0.15.16
+  resolution: "ses@npm:0.15.16"
+  checksum: 4c65ef1947bda4fa66cd9c1d499d2e9c3a9c4ea03de154fe171e4af09a72882f375ea9b5a0414c08c23f08338fc00f6eecc82e04b33482f324c3c4dde386ad0c
   languageName: node
   linkType: hard
 

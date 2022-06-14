@@ -1,4 +1,5 @@
-import "@endo/init";
+import "@endo/eventual-send/shim";
+import "json5";
 import React from "react";
 import { createRoot } from "react-dom/client";
 

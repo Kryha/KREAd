@@ -238,3 +238,4 @@ bin/*
 src/declarations
 
 install-state.gz
+lockdown.umd.js
