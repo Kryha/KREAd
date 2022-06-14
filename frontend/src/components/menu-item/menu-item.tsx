@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isString } from "../../interfaces";
-import { ButtonContainer, Divider, EquippedLabel, ImageCard, ImageContainer, Info, InfoContainer, InfoWrapper, ItemImage } from "./styles";
+import { ButtonContainer, Divider, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper } from "./styles";
 import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
+import { ItemThumbnail } from "../item-thumbnail";
 
 interface Data {
   image: string | CharacterItems;
@@ -35,16 +36,7 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
       onBlur={() => setSelected(false)}
     >
       {isString(data.image) ? (
-        <ImageCard>
-          <ItemImage
-            src={data.image}
-            category={data.category}
-            width={imageProps?.width}
-            height={imageProps?.height}
-            marginTop={imageProps?.marginTop}
-            marginLeft={imageProps?.marginLeft}
-          />
-        </ImageCard>
+        <ItemThumbnail {...imageProps} category={data.category} src={data.image} />
       ) : (
         <ImageContainer>
           <BaseCharacter items={data.image} size="mini" />

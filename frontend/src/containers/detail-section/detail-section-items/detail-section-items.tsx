@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { ButtonText, ItemCard, Label, MenuItemName, PrimaryButton } from "../../../components";
+import { ButtonText, ItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
 import { color } from "../../../design";
 import { Item } from "../../../interfaces";
 import {
@@ -9,12 +9,10 @@ import {
   Divider,
   EmptyInfo,
   IdLabel,
-  ImageCard,
   Info,
   InfoContainer,
   InfoWrapper,
   InlineDetails,
-  ItemImage,
   LevelLabel,
   ListContainer,
   RedirectArrow,
@@ -36,9 +34,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
       }}
       onBlur={() => setSelected(false)}
     >
-      <ImageCard>
-        <ItemImage src={item.image} category={item.category} />
-      </ImageCard>
+      <ItemThumbnail src={item.image} category={item.category} />
       <InfoWrapper>
         <InfoContainer>
           <MenuItemName>{item.name}</MenuItemName>

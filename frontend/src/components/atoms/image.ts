@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { imageSize } from "../../design/image";
 
 export interface ImageProps {
+  src?: string;
   width?: string;
   height?: string;
   marginTop?: string | undefined;
