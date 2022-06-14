@@ -8,6 +8,7 @@ import { E } from '@endo/eventual-send';
 import '@agoric/zoe/exported.js';
 // import { AmountMath } from '@agoric/ertp';
 
+import { AmountMath } from '@agoric/ertp';
 import installationConstants from '../../frontend/src/service/conf/installation-constants.js';
 
 import { characters } from './characters.js';
@@ -93,9 +94,9 @@ export default async function deployApi(
   // give us a `creatorFacet` that will let us make invitations we can
   // send to users.
 
-  const { creatorFacet: characterBuilderCreatorFacet } = await E(
-    zoe,
-  ).startInstance(installation);
+  // const { creatorFacet: characterBuilderCreatorFacet } = await E(
+  //   zoe,
+  // ).startInstance(installation);
 
   /**
    * @type {ERef<Issuer>}
@@ -112,54 +113,19 @@ export default async function deployApi(
   const allCharacters = harden(characters);
   console.log(`CHARACTERS: ${characters}`);
   console.log(allCharacters);
-  // const moneyValue =
-  //   PRICE_PER_CARD_IN_MONEY_UNITS * 10n ** BigInt(decimalPlaces);
-  // const minBidPerCard = AmountMath.make(moneyBrand, moneyValue);
 
-  const auctionItemsInstallation = await E(board).getValue(
-    AUCTION_ITEMS_INSTALLATION_BOARD_ID,
-  );
-  const auctionInstallation = await E(board).getValue(
-    AUCTION_INSTALLATION_BOARD_ID,
-  );
-
-  // const chainTimerService = await chainTimerServiceP;
-
-  console.log('CONTRACT PARAMS');
-  console.log({
-    allCharacters,
-    moneyIssuer,
-    auctionInstallation,
-    auctionItemsInstallation,
-    // chainTimerService,
+  const pricePerNFT = AmountMath.make(moneyBrand, 1n);
+  const issuers = harden({ Money: moneyIssuer });
+  const terms = harden({
+    pricePerNFT,
+    nftName: 'CB',
   });
-  // const {
-  //   // TODO: implement exiting the creatorSeat and taking the earnings
-  //   auctionItemsPublicFacet: sellCharactersPublicFacet,
-  //   auctionItemsInstance: sellCharactersInstance,
-  // } = await E(characterBuilderCreatorFacet).mintCharacters(
-  //   allCharacters,
-  //   moneyIssuer,
-  //   auctionInstallation,
-  //   auctionItemsInstallation,
-  //   chainTimerService,
-  // );
+  const {
+    creatorFacet: characterBuilderCreatorFacet,
+    publicFacet: characterBuilderPublicFacet,
+  } = await E(zoe).startInstance(installation, issuers, terms);
 
-  // const {
-  //   // TODO: implement exiting the creatorSeat and taking the earnings
-  //   sellItemsCreatorSeat: sellCharactersCreatorSeat,
-  //   sellItemsCreatorFacet: sellCharactersCreatorFacet,
-  //   sellItemsInstance: sellCharactersInstance,
-  //   sellItemsPublicFacet: sellCharactersPublicFacet,
-  // } = await E(characterBuilderCreatorFacet).mintCharacters(
-  //   allCharacters,
-  //   moneyIssuer,
-  //   auctionInstallation,
-  //   // auctionItemsInstallation,
-  //   // chainTimerService,
-  // );
-
-  // console.log('@@@@', sellCharactersCreatorFacet, sellCharactersCreatorSeat);
+  console.log('INSTANCE (public facet): ', characterBuilderPublicFacet);
   console.log('- SUCCESS! contract instance is running on Zoe');
 
   console.log('Retrieving Board IDs for issuers and brands');
@@ -167,7 +133,8 @@ export default async function deployApi(
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
   const ItemIssuerP = E(characterBuilderCreatorFacet).getItemIssuer();
-  const characterIssuerP = E(characterBuilderCreatorFacet).getCharacterIssuer();
+  // const characterIssuerP = E(characterBuilderCreatorFacet).getCharacterIssuer();
+  const characterIssuerP = E(characterBuilderCreatorFacet).getNFTIssuer();
   // const characterIssuerP = E(sellCharactersPublicFacet).getItemsIssuer();
 
   const [
@@ -186,9 +153,6 @@ export default async function deployApi(
     invitationBrandP,
   ]);
 
-  // Set up our token to be used by other dapps
-  E(scratch).set('CBIssuer', characterIssuer);
-
   const [
     INSTANCE_BOARD_ID,
     CHARACTER_BRAND_BOARD_ID,
@@ -199,7 +163,8 @@ export default async function deployApi(
     MONEY_ISSUER_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
   ] = await Promise.all([
-    E(board).getId(characterBuilderCreatorFacet),
+    E(board).getId(characterBuilderPublicFacet),
+    // E(board).getId(sellCharactersInstance),
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
     E(board).getId(itemBrand),
@@ -245,7 +210,6 @@ export default async function deployApi(
   };
 
   await installURLHandler();
-
   const API_URL = process.env.API_URL || `http://127.0.0.1:${API_PORT || 8000}`;
 
   // Re-save the constants somewhere where the UI and api can find it.

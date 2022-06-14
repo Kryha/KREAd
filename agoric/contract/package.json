@@ -29,6 +29,7 @@
     "@agoric/babel-parser": "^7.6.4",
     "@endo/bundle-source": "^2.0.5",
     "@agoric/ertp": "dev",
+    "@agoric/nat": "dev",
     "@endo/eventual-send": "^0.14.4",
     "@endo/init": "^0.5.33",
     "@endo/marshal": "^0.5.4",

@@ -29,6 +29,7 @@
   "dependencies": {
     "@agoric/ertp": "dev",
     "@endo/eventual-send": "^0.14.4",
+    "@endo/marshal": "dev",
     "@agoric/zoe": "dev",
     "json5": "^2.2.0"
   },

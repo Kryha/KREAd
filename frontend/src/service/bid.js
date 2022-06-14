@@ -1,5 +1,6 @@
 import { E } from "@endo/eventual-send";
 import { assert, details as X } from "@agoric/assert";
+import { AmountMath } from "@agoric/ertp";
 
 const getCardAuctionDetail = async (publicFacet, card) => {
   return E(publicFacet).getSessionDetailsForKey(card);
@@ -47,5 +48,21 @@ const makeBidOfferForCard = async (
 
   return E(walletP).addOffer(offerConfig);
 };
+
+// export const mintNFT = async (agoric, moneyBrand) => {
+//   console.log("CALLIN MINT...");
+//   const pricePerNFT = AmountMath.make(moneyBrand, 10n);
+//   /* eslint-disable-next-line */
+//   const proposal = harden({
+//     give: {
+//       Money: aLittleExtra,
+//     },
+//     want: {
+//       NFTs: AmountMath.make(nftBrand, [1n]),
+//     },
+//   });
+//   const invitation = await E(agoric.publicFacet).makeInvitation();
+//   console.log("invitation", invitation);
+// };
 
 export { makeBidOfferForCard, getCardAuctionDetail };

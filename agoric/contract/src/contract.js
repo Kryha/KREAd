@@ -26,8 +26,29 @@ const start = async (zcf) => {
   // that 'Tokens' is both the keyword and the allegedName.
   // const zcfMint = await zcf.makeZCFMint('Tokens');
   // AWAIT
-
   const zoeService = zcf.getZoeService();
+  const { pricePerNFT, nftName } = zcf.getTerms();
+  const mint = await zcf.makeZCFMint(nftName, AssetKind.SET);
+  const { brand: NFTBrand, issuer: NFTIssuer } = mint.getIssuerRecord();
+  const { zcfSeat: sellerSeat } = zcf.makeEmptySeatKit();
+
+  let currentId = 1n;
+
+  /** @type {OfferHandler} */
+  const buyNFTs = (buyerSeat) => {
+    // Mint the NFTs
+    const amount = AmountMath.make(NFTBrand, [harden({ id: currentId })]);
+    mint.mintGains({ NFTs: amount }, buyerSeat);
+    currentId += 1n;
+
+    // Take the money
+    sellerSeat.incrementBy(buyerSeat.decrementBy({ Money: pricePerNFT }));
+
+    zcf.reallocate(buyerSeat, sellerSeat);
+    buyerSeat.exit();
+
+    return 'your offer was successful';
+  };
 
   const characterSet = ['Tsun Tsun, Cmoney, Wietz, Popo'];
   const itemSet = {
@@ -149,10 +170,9 @@ const start = async (zcf) => {
           });
       },
     );
-
   };
 
-    /*
+  /*
     assert(newCharactersAmount, X`Amount`);
     // Mint character & update registry
 
@@ -236,7 +256,10 @@ const start = async (zcf) => {
     //   zcf.makeInvitation(mintCharacter, 'mint a character'),
     // makeInvitationMintItem: () => zcf.makeInvitation(mintItem, 'mint an item'),
     getCharacterIssuer: () => characterIssuer,
+    getNFTIssuer: () => NFTIssuer,
     getItemIssuer: () => itemIssuer,
+    makeInvitation: () => zcf.makeInvitation(buyNFTs, 'buyNFTs'),
+
   });
 
   const publicFacet = Far('publicFacet', {
@@ -244,7 +267,9 @@ const start = async (zcf) => {
     // make new digital assets. The issuer is ok to make public.
     mintCharacters,
     getCharacterIssuer: () => characterIssuer,
+    getNFTIssuer: () => NFTIssuer,
     getItemIssuer: () => itemIssuer,
+    makeInvitation: () => zcf.makeInvitation(buyNFTs, 'buyNFTs'),
     // makeInvitationMintCharacter: () =>
     //   zcf.makeInvitation(mintCharacter, 'mint a character'),
     // makeInvitationMintItem: () => zcf.makeInvitation(mintItem, 'mint an item'),

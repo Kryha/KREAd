@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@agoric/assert": "^0.4.0",
+    "@agoric/ertp": "^0.14.2",
     "@agoric/notifier": "^0.4.0",
     "@endo/captp": "^2.0.7",
     "@endo/init": "^0.5.41",

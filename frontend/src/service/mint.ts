@@ -1,10 +1,12 @@
+/// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { AgoricService, PursePetname } from "../context/service";
 import { assert, details as X } from "@agoric/assert";
+import { AmountMath, makeIssuerKit } from "@agoric/ertp";
 
-const getCardAuctionDetail = async ({ publicFacet, card }: any) => {
-  return E(publicFacet).getSessionDetailsForKey(card);
-};
+// const getCharacters = async () => {
+//   return E(publicFacet).getSessionDetailsForKey(card);
+// };
 
 const formOffer = (characterPursePetname: PursePetname) => ({
   // JSONable ID for this offer.  This is scoped to the origin.
@@ -22,6 +24,39 @@ const formOffer = (characterPursePetname: PursePetname) => ({
   // Tell the wallet that we're handling the offer result.
   dappContext: true,
 });
+
+export const mintNFT = async (agoric: AgoricService, moneyPurse: any, moneyBrand: unknown) => {
+  console.log("CALLIN MINT...");
+  console.log(agoric, moneyBrand, moneyPurse);
+  const pricePerNFT = AmountMath.make(moneyBrand, 1n+1n);
+  /* tslint-disable-next-line */
+  const proposal = harden({
+    give: {
+      Money: pricePerNFT,
+    },
+    want: {
+      NFTs: AmountMath.make(moneyBrand, [1n]),
+    },
+  });
+  const invitation = await E(agoric.publicFacet).makeInvitation();
+  const myNFTPayment = moneyPurse.withdraw(pricePerNFT);
+  const payments = harden({
+    Money: myNFTPayment,
+  });
+
+  // const seat = E(agoric.zoe).offer(invitation, proposal, payments);
+
+  // const offerResult = await E(seat).getOfferResult();
+  // console.log(offerResult);
+
+  // const nftPayment = await E(seat).getPayout("NFTs");
+  // const moneyPayment = await E(seat).getPayout("Money");
+
+  // const moneyPayoutAmount = await E(moneyIssuer).getAmountOf(moneyPayment);
+  // const nftPayoutAmount = await E(nftIssuer).getAmountOf(nftPayment);
+
+  // console.log("invitation", invitation);
+};
 
 export const mintCharacter = async (characterPursePetname: PursePetname, agoric: AgoricService) => {
   // const { depositFacetId, offer } = obj.data;

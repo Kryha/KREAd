@@ -1,3 +1,4 @@
+/// <reference types="ses"/>
 // import { assert } from '@agoric/assert';
 // import '@endo/init';
 import React, { createContext, useReducer, useContext, useEffect, useRef } from "react";
@@ -11,14 +12,17 @@ import {
   deactivateWebSocket,
   getActiveSocket,
 } from "../service/utils/fetch-websocket";
+import { connect } from "../service/lib/connect";
 
 const {
   INSTANCE_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID },
   brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID },
 } = dappConstants;
+
+console.log(dappConstants);
 
 export type AgoricService = {
   zoe: any;
@@ -39,6 +43,7 @@ export type ServiceState = {
     [key: string]: any,
   };
   agoric: AgoricService;
+  apiSend: any;
   isLoading: boolean;
 };
 
@@ -59,6 +64,7 @@ const initialState: ServiceState = {
     invitationIssuer: undefined,
     walletP: undefined,
   },
+  apiSend: undefined,
   isLoading: false,
 };
 
@@ -91,7 +97,10 @@ export interface SetAgoric {
   type: "SET_AGORIC";
   payload: AgoricService;
 }
-
+export interface SetApiSend {
+  type: "SET_APISEND";
+  payload: any;
+}
 export interface SetLoading {
   type: "SET_LOADING";
   payload: boolean;
@@ -109,6 +118,7 @@ export type ServiceStateActions =
   | SetTokenPurses
   | SetCharacterPurses
   | SetAgoric
+  | SetApiSend
   | SetLoading;
 
 type Dispatch = React.Dispatch<ServiceStateActions>;
@@ -135,8 +145,11 @@ const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState
     return { ...state, characterPurse: action.payload };
     
   case "SET_AGORIC":
-    return { ...state, agoric: action.payload };
+    return { ...state, agoric: { ...state.agoric, ...action.payload }};
       
+  case "SET_APISEND":
+    return { ...state, apiSend: action.payload };
+
   case "SET_LOADING":
     return { ...state, isLoading: action.payload };
     
@@ -171,6 +184,37 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
     const onConnect = async () => {
       console.info("Connecting to wallet...");
 
+      const apiRecv = (obj: any) => {
+        switch (obj.type) {
+        case "nft-maker/nftTestResponse": {
+          console.log("GOT CHARACTERS:");
+          console.log(obj.data);
+          return obj.data;
+        }
+        case "nftFaucet/sendInvitationResponse": {
+          // Once the invitation has been sent to the user, we update the
+          // offer to include the invitationBoardId. Then we make a
+          // request to the user's wallet to send the proposed offer for
+          // acceptance/rejection.
+          const { offer } = obj.data;
+          console.log("OFFER INCOMING: ", offer);
+          // eslint-disable-next-line no-use-before-define
+          // addOffer(offer);
+          break;
+        }
+        case "CTP_DISCONNECT": {
+          // TODO: handle this appropriately
+          break;
+        }
+        default: {
+          throw Error(`unexpected apiRecv obj.type ${obj.type}`);
+        }
+        }
+      };
+
+      await connect("/api/nft-maker", apiRecv).then((rawApiSend) => {
+        dispatch({ type: "SET_APISEND", payload: rawApiSend });  
+      });
       dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
       const socket = getActiveSocket();
       const {
@@ -221,19 +265,20 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestInstance("Instance", INSTANCE_BOARD_ID),
         E(walletP).suggestIssuer("CB", CHARACTER_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer("CBI", ITEM_ISSUER_BOARD_ID),
+        // E(walletP).suggestIssuer("CBI", ITEM_ISSUER_BOARD_ID),
       ]);
 
       const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
       const zoe = E(walletP).getZoe();
       const board = E(walletP).getBoard();
       const instance = await E(board).getValue(INSTANCE_BOARD_ID);
-      const publicFacet = await E(zoe).getPublicFacet(instance);
-      const invitationIssuer = E(zoe).getInvitationIssuer(publicFacet);
-
-      publicFacetRef.current = publicFacet;
-
-      dispatch({ type: "SET_AGORIC", payload: { zoe, board, instance, publicFacet, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
+      console.log("😬😬😬😬😬");
+      // const publicFacet = E(zoe).getPublicFacet(instance);
+      console.log("😮‍💨😮‍💨😮‍💨😮‍💨😮‍💨");
+      // const invitationIssuer = E(zoe).getInvitationIssuer(publicFacet);
+      // publicFacetRef.current = "publicFacet";
+      // console.log("😮‍💨😮‍💨😮‍💨😮‍💨😮‍💨",{ zoe, board, instance, publicFacet, zoeInvitationDepositFacetId, invitationIssuer, walletP });
+      dispatch({ type: "SET_AGORIC", payload: { zoe, board, instance, publicFacet: undefined, zoeInvitationDepositFacetId, invitationIssuer: undefined, walletP } });
       
       // TODO: fetch available characters
 

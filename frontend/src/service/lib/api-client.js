@@ -1,4 +1,5 @@
 // @ts-check
+// eslint-disable-next-line no-redeclare
 /* globals window, WebSocket */
 import { registerSocket, closeSocket, getActiveSocket } from "./socket.js";
 
@@ -25,6 +26,19 @@ function getWebSocketEndpoint(endpoint) {
 const handlerToListener = new Map();
 
 /**
+ * JSON.Stringify Alternative
+ *
+ * @param {object} obj
+ */
+function objToString (obj) {
+  let str = "";
+  for (const [p, val] of Object.entries(obj)) {
+    str += `${p}::${val}\n`;
+  }
+  return str;
+}
+
+/**
  * Make a new socket to the API handler.
  *
  * @param {SocketHandler} handler
@@ -37,7 +51,8 @@ function createSocket({ onConnect, onDisconnect, onMessage }, endpoint) {
       socket.close();
     },
     send(obj) {
-      socket.send(JSON.stringify(obj));
+      const objStr = JSON.stringify(obj);
+      socket.send(objStr);
     },
     addHandler(handler) {
       const listener = ({ data }) => handler(JSON.parse(data));

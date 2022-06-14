@@ -120,7 +120,7 @@
   resolved "https://registry.yarnpkg.com/@agoric/import-manager/-/import-manager-0.3.2-dev-b44f27b.0.tgz#5fc73087f86eadc5184654ec366611fbd7027c22"
   integrity sha512-zTPrqRhRnPx3xNNdJytIKCNDo0DWJMH8VPbOq0gF1swY/7Xj2LYlRKk+1VPBj4yfQ4jJkWqiw/NsnKWtrUGkmg==
 
-"@agoric/nat@^4.1.0":
+"@agoric/nat@^4.1.0", "@agoric/nat@dev":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@agoric/nat/-/nat-4.1.0.tgz#102794e033ffc183a20b0f86031a2e76d204b9f6"
   integrity sha512-2oMoh3DMn0Fx8HChPPiH8irBNdT/33ttxAZJohhd3nU3gyBRQ1u+eEoOQWfSkrE6M02iMkQM7GE9MzGmjQ6bHg==
