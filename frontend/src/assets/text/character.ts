@@ -31,7 +31,7 @@ export const character = {
   characters: "characters",
   defaultCharacter: "default character",
   noItemEquipped: "no item equipped",
-  noItemEquippedCharacter: "you have no items equipped to this character",
+  noItemEquippedCharacter: "this character has no items equipped",
   startEquipping: "start equipping",
   level: "level",
   levelInfo: "this is the level of your character...",
