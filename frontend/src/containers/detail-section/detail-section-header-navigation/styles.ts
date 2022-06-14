@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { PriceContainer } from "../../../components/price-in-run/styles";
 import { margins } from "../../../design";
 

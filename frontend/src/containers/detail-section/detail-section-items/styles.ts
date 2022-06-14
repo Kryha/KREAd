@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { ArrowUpRightIcon } from "../../../assets";
-import { MenuItemName, OutlinedButton } from "../../../components";
+import { MenuItemName } from "../../../components";
 import { color, fontWeight, margins } from "../../../design";
 
 export const ListContainer = styled.div`
@@ -58,7 +58,7 @@ interface InfoProps {
   selected?: boolean;
 }
 
-export const Info = styled(EmptyInfo)<InfoProps>`
+export const Info = styled(EmptyInfo) <InfoProps>`
   cursor: pointer;
   ${({ selected }) =>
     selected &&
@@ -95,10 +95,4 @@ export const Divider = styled.div`
 export const LevelLabel = styled.p`
   font-size: 12px;
   font-weight: ${fontWeight.medium};
-`;
-
-export const CategoryButton = styled(OutlinedButton)`
-  color: ${color.darkGrey};
-  padding: 3px 8px;
-  cursor: default;
 `;

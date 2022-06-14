@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { CharacterWrapper, ExpandButton } from "../../../components/base-character/styles";
 import { color, fontSize, imageSize, margins } from "../../../design";
 

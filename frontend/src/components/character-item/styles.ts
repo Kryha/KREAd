@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { BoldLabel, MenuItemName } from "../atoms";
@@ -79,7 +79,6 @@ export const ImageCard = styled.div`
   }
 `;
 
-
 export const InfoWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -92,7 +91,7 @@ export const InfoWrapper = styled.div`
 
 export const Divider = styled.div`
   width: 48px;
-  border: 1px solid #D0D0D0;
+  border: 1px solid #d0d0d0;
   transform: rotate(90deg);
 `;
 

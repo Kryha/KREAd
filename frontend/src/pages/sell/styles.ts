@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
@@ -45,7 +45,6 @@ export const ContentWrapper = styled.div`
     margin-top: ${margins.big};
   }
 `;
-
 
 export const ArrowUp = styled(ArrowUpRightIcon)`
   padding-left: 13px;
@@ -194,7 +193,7 @@ export const TextLabel = styled(BodyText)`
   ::before {
     position: absolute;
     content: "RUN";
-    font-family: Aktiv Grotesk Regular;
+    font-family: "aktiv-grotesk";
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;

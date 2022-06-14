@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { margins } from "../../design";
 import { Img } from "../atoms";
@@ -20,7 +20,7 @@ interface ImageProps {
 }
 
 // TODO: use square images for slot thumbnails
-export const ItemImage = styled(Img)<ImageProps>`
+export const ItemImage = styled(Img) <ImageProps>`
   object-fit: cover;
   width: 100%;
   height: auto;

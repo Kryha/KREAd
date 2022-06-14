@@ -1,11 +1,12 @@
 import { FC } from "react";
 
-import { ActivityTableWrap, BodyWrap, Cell, FooterWrap, HeaderWrap, RowWrap } from "./styles";
+import { ActivityTableWrap, BodyWrap, Cell, HeaderWrap, RowWrap } from "./styles";
 import { ActivityEvent } from "../../interfaces";
-import { RefreshIcon, text } from "../../assets";
-import { SecondaryButton } from "../atoms";
+import { text } from "../../assets";
 import { CategoryButton } from "../../containers/detail-section/detail-section-header/styles";
 import { getDatefromEpoch } from "../../util";
+import { color } from "../../design";
+import { BoldLabel } from "../atoms";
 
 interface ActivityTableProps {
   events: ActivityEvent[];
@@ -34,7 +35,7 @@ const Row: FC<RowProps> = ({ event }) => {
         <CategoryButton>{event.name}</CategoryButton>
       </Cell>
       <Cell>
-        <b>{!!event.price && text.param.runPrice(event.price)}</b>
+        <BoldLabel customColor={color.black}>{!!event.price && text.param.runPrice(event.price)}</BoldLabel>
       </Cell>
       <Cell>{event.from}</Cell>
       <Cell>{event.to}</Cell>
@@ -56,11 +57,6 @@ export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
           </RowWrap>
         ))}
       </BodyWrap>
-      <FooterWrap>
-        <SecondaryButton>
-          {text.general.loadMore} <RefreshIcon />
-        </SecondaryButton>
-      </FooterWrap>
     </ActivityTableWrap>
   );
 };

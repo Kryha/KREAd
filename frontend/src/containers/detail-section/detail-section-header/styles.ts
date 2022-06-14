@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { SecondaryButton } from "../../../components";
 
-import { OutlinedButton } from "../../../components";
 import { color, margins, fontWeight, fontSize, zIndex } from "../../../design";
 
 export const DetailSectionHeaderWrap = styled.header`
@@ -36,8 +36,25 @@ export const DetailSectionHeaderId = styled.p`
   font-weight: ${fontWeight.medium};
 `;
 
-export const CategoryButton = styled(OutlinedButton)`
+export const CategoryButton = styled(SecondaryButton)`
+  border-radius: 24px;
   color: ${color.darkGrey};
   padding: 3px 8px;
   cursor: default;
+  font-size:  12px;
+  line-height: 15px;
+  text-transform: capitalize;
+  border: 1px solid ${color.grey};
+  &:hover {
+    border: 1px solid ${color.grey};
+    color: ${color.darkGrey};
+  }
+  &:active {
+    border: 1px solid ${color.grey};
+    color: ${color.darkGrey};
+  }
+  &:focus {
+    border: 1px solid ${color.grey};
+    color: ${color.darkGrey};
+  }
 `;

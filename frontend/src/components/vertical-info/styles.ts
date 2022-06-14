@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { color, fontWeight, margins } from "../../design";
 
 import { Label } from "../atoms";
@@ -14,8 +14,7 @@ export const InfoContainer = styled.div`
   margin: 0px;
 `;
 
-export const CategoryCode = styled(Label) <DirectionProps>`
-
+export const CategoryCode = styled(Label)<DirectionProps>`
   margin: ${margins.mini} 0px;
   text-transform: uppercase;
   font-family: aktiv-grotesk;
@@ -34,7 +33,7 @@ export const CategoryCode = styled(Label) <DirectionProps>`
   }}
 `;
 
-export const Id = styled(CategoryCode) <DirectionProps>`
+export const Id = styled(CategoryCode)<DirectionProps>`
   margin: ${margins.medium} 0px;
   flex: none;
   order: 0;

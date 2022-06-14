@@ -1,5 +1,4 @@
-import styled from "styled-components";
-
+import styled from "@emotion/styled";
 import { color } from "../../design";
 import { CardElementIcon } from "../../assets";
 

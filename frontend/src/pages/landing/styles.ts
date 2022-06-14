@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { CloseIcon, MenuIcon } from "../../assets";
 
 import { CharacterWrapper, ExpandButton } from "../../components/base-character/styles";
@@ -7,8 +7,8 @@ interface ImageProps {
   isZoomed?: boolean;
 }
 
-export const LandingContainer = styled.div <ImageProps>`
-${({ isZoomed }): string => {
+export const LandingContainer = styled.div<ImageProps>`
+  ${({ isZoomed }): string => {
     return isZoomed
       ? `
      ${CharacterWrapper} {

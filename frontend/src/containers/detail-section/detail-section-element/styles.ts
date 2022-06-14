@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { FlexRow } from "../../../components";
 import { color, fontSize, fontWeight, margins } from "../../../design";
 
@@ -11,7 +11,7 @@ export const DetailSectionElementWrap = styled.div`
 export const DetailSectionElemenTitle = styled.h3`
   display: inline-block;
   color: ${color.darkGrey};
-  font-size: ${fontSize.title};
+  font-size: ${fontSize.extraSmall};
   font-weight: ${fontWeight.medium};
   text-transform: capitalize;
   margin-bottom: ${margins.small};

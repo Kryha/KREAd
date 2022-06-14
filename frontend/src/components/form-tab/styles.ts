@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 
 import { NavigationTitle } from "../atoms";
@@ -25,13 +25,13 @@ interface WidthProps {
   amount: number;
 }
 
-export const NavTitle = styled(NavigationTitle) <WidthProps>`
+export const NavTitle = styled(NavigationTitle)<WidthProps>`
   text-align: center;
   padding: 0px 0px ${margins.medium} 0px;
 `;
 
 export const ActiveLine = styled.div<NavTabProps>`
-${({ active }) => {
+  ${({ active }) => {
     return active
       ? `
     height: 4px;
@@ -45,5 +45,5 @@ ${({ active }) => {
 `;
 
 export const Tab = styled.div<WidthProps>`
-${({ width, amount }): string => `width: ${(tabWidth(width, amount)) / amount}px;`};
+  ${({ width, amount }): string => `width: ${tabWidth(width, amount) / amount}px;`};
 `;

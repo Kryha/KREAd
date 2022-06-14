@@ -4,8 +4,8 @@ import { text } from "../../../assets";
 import { ButtonText, ItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
 import { color } from "../../../design";
 import { Item } from "../../../interfaces";
+import { CategoryButton } from "../detail-section-header/styles";
 import {
-  CategoryButton,
   Divider,
   EmptyInfo,
   IdLabel,

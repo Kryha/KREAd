@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { TriangleIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { ButtonText } from "../atoms";

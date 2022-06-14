@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ErrorIcon } from "./styles";
-import { ButtonBase, Heading, CenteredContainer } from "../atoms";
+import { Heading, CenteredContainer, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { routes } from "../../navigation";
 import { color } from "../../design";
@@ -26,7 +26,7 @@ export const ErrorView: FC<ErrorViewProps> = ({ redirectRoute, headingText, navi
     <CenteredContainer>
       <Heading customColor={color.black}>{headingText || text.error.somethingWentWrong}</Heading>
       <ErrorIcon />
-      <ButtonBase onClick={() => handleButtonClick()}>{navigationText || text.navigation.goHome}</ButtonBase>
+      <PrimaryButton onClick={() => handleButtonClick()}>{navigationText || text.navigation.goHome}</PrimaryButton>
     </CenteredContainer>
   );
 };

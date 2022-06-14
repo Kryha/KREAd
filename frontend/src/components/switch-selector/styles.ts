@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { SecondaryButton } from "../atoms";
@@ -7,7 +7,7 @@ interface ButtonProps {
   selected: boolean;
 }
 
-export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
+export const SwitchButtonLeft = styled(SecondaryButton) <ButtonProps>`
   border-radius: ${margins.medium} 0px 0px ${margins.medium};
   text-transform: capitalize;
   padding: 8px 35px;
@@ -27,7 +27,7 @@ export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
   }};
 `;
 
-export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
+export const SwitchButtonRight = styled(SecondaryButton) <ButtonProps>`
   border-radius: 0px ${margins.medium} ${margins.medium} 0px;
   padding: 8px 35px;
   text-transform: capitalize;

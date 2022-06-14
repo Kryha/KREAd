@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { color, margins } from "../../design";
 import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 
@@ -10,7 +10,7 @@ export const Product = styled.div`
   border-radius: ${margins.medium};
   box-shadow: none;
   padding-top: ${margins.medium};
-  border-radius:${margins.medium};
+  border-radius: ${margins.medium};
   align-items: center;
   min-height: 485px;
   :hover {
@@ -39,7 +39,7 @@ export const ImageContainer = styled.div`
 `;
 
 export const Content = styled.div`
-   padding: 0 ${margins.medium} ${margins.medium} ${margins.medium};
+  padding: 0 ${margins.medium} ${margins.medium} ${margins.medium};
 `;
 
 export const TitleWrapper = styled.div`
@@ -62,8 +62,8 @@ export const Footer = styled.div`
 `;
 
 export const Element = styled.div`
- width: 345px;
- height: 320px;
- border: 1px solid ${color.grey};
- border-radius: ${margins.medium};
+  width: 345px;
+  height: 320px;
+  border: 1px solid ${color.grey};
+  border-radius: ${margins.medium};
 `;

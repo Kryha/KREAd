@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
 import { Badge, ButtonText, Input, MenuItemName, PrimaryButton } from "../../components";
 
@@ -12,7 +12,8 @@ interface ViewProps {
 export const DefaultImage = styled.img<ViewProps>`
   margin-left: 140px;
   top: 0;
-  ${({ width, height }): string => `min-width: ${width * 0.4}px; max-width: ${width * 0.4}px; width: ${width * 0.4}px; height: ${height}px;`};
+  ${({ width, height }): string =>
+    `min-width: ${width * 0.4}px; max-width: ${width * 0.4}px; width: ${width * 0.4}px; height: ${height}px;`};
 `;
 
 export const Exclamation = styled(ExclamationIcon)`
