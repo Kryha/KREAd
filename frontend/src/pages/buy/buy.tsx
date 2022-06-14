@@ -1,6 +1,5 @@
 import { FC, ReactNode, useState } from "react";
 
-import { text } from "../../assets";
 import { FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { useViewport } from "../../hooks";
