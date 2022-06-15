@@ -1,12 +1,64 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
-import { AgoricService, PursePetname } from "../context/service";
+import { AgoricService, PursePetname, ServiceState } from "../context/service";
 import { assert, details as X } from "@agoric/assert";
 import { AmountMath, makeIssuerKit } from "@agoric/ertp";
+import dappConstants from "../service/conf/defaults";
+import installationConstants from "../service/conf/installation-constants-nft-maker.js";
 
-// const getCharacters = async () => {
-//   return E(publicFacet).getSessionDetailsForKey(card);
-// };
+const { AUCTION_INSTALLATION_BOARD_ID } = installationConstants;
+const {
+  INSTANCE_BOARD_ID,
+  INSTANCE_NFT_MAKER_BOARD_ID,
+  AUCTION_ITEMS_INSTALLATION_BOARD_ID,
+  INVITE_BRAND_BOARD_ID,
+  INSTALLATION_BOARD_ID,
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Money: MONEY_ISSUER_BOARD_ID},
+  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID },
+  minBidPerCharacter,
+} = dappConstants;
+
+export const getCharacters = async (agoric: AgoricService) => {
+  console.log("getting characters");
+  console.log("instance nft", agoric.instanceNft);
+  const publicFacet = await E(agoric.zoe).getPublicFacet(agoric.instanceNft);
+  console.log(publicFacet, agoric.publicFacet);
+  const nfts = await E(publicFacet).getCharacters();
+  console.log(nfts);
+  return nfts;
+};
+
+export const mintCharacters = async (service: ServiceState) => {
+  const characters = harden([{
+    name: "NOPE",
+    url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
+  },
+  {
+    name: "WHY",
+    url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
+  }]);
+  console.log("MITNING CHARACTERS");
+  const { agoric } = service;
+  const publicFacet = await E(agoric.zoe).getPublicFacet(agoric.instanceNft);
+  const moneyIssuer = await E(agoric.board).getValue(MONEY_ISSUER_BOARD_ID);
+  const auctionItemsInstallation = await E(agoric.board).getValue(
+    AUCTION_ITEMS_INSTALLATION_BOARD_ID,
+  );
+  const auctionInstallation = await E(agoric.board).getValue(
+    AUCTION_INSTALLATION_BOARD_ID,
+  );
+  const {
+    auctionItemsPublicFacet,
+    auctionItemsInstance,
+  } = await E(publicFacet).auctionCharacters(
+    characters,
+    moneyIssuer,
+    auctionInstallation,
+    auctionItemsInstallation,
+    minBidPerCharacter,
+    // chainTimerService,
+  );
+};
 
 const formOffer = (characterPursePetname: PursePetname) => ({
   // JSONable ID for this offer.  This is scoped to the origin.

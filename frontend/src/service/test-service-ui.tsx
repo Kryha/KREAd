@@ -1,18 +1,19 @@
 /// <reference types="ses"/>
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useServiceContext } from "../context/service";
 // import { getCardAuctionDetail, makeBidOfferForCard } from "./bid";
-import { mintCharacter, mintNFT } from "./mint";
+import { getCharacters, mintCharacter, mintNFT } from "./mint";
 import { AmountMath } from "@agoric/ertp";
+import { useCharacterContext } from "../context/characters";
 
 export const TestServiceUI = () => {
   const [service, serviceDispatch] = useServiceContext();
+  const [characters, charactersDispatch] = useCharacterContext();
 
   useEffect(() => {
     console.log("SERVICE:", service);
-    
-
-  }, [service]);
+    console.log("CHARACTERS: ", characters);
+  }, [service, characters]);
 
   const nfts = [{
     name: "Tsun Tsun!",
@@ -47,15 +48,41 @@ export const TestServiceUI = () => {
     //   1,
     // );
   };
-  const getcharacters = () => {
+
+  const getTimer = () => {
     if (!service.apiSend) {
       console.log("NO API", service);
       return;
     }
     service.apiSend({
-      type: "nft/test",
+      type: "nft/getTimerService",
+    });
+    console.log("SENT GET TIMER");
+  };
+  
+  const mint = () => {
+    if (!service.apiSend) {
+      console.log("NO API", service);
+      return;
+    }
+    service.apiSend({
+      type: "nft/mint",
+      data: {
+        characters: [{
+          name: "NOPE",
+          url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
+        },
+        {
+          name: "WHY",
+          url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
+        }],
+      }
     });
     console.log("SENT GET CHARACTERS");
+  };
+
+  const getCharacters2 = async () => {
+    console.log(await getCharacters(service.agoric));
   };
   
   const callMintApi = () => {
@@ -142,10 +169,13 @@ export const TestServiceUI = () => {
     <div style={{width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row"}}>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={handleMint}>BID</button>
+        onClick={getTimer}>GET TIMER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={getcharacters}>GET CHARACTERS</button>
+        onClick={mint}>GET CHARACTERS</button>
+      <button
+        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+        onClick={async ()=> await getCharacters(service.agoric)}>GET CHARACTERS</button>
     </div>
   </>;
 };

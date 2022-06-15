@@ -6,17 +6,20 @@ import { AppRoutes } from "./navigation";
 import { queryClient } from "./service";
 import { ServiceStateProvider } from "./context/service";
 import { TestServiceUI } from "./service/test-service-ui";
+import { CharacterStateProvider } from "./context/characters";
 
 function App() {
   return (
-    <ServiceStateProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          {/* <AppRoutes /> */}
-          <TestServiceUI />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ServiceStateProvider>
+    <CharacterStateProvider>
+      <ServiceStateProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            {/* <AppRoutes /> */}
+            <TestServiceUI />
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ServiceStateProvider>
+    </CharacterStateProvider>
   );
 }
 

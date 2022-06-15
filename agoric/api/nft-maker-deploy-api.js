@@ -96,10 +96,13 @@ export default async function deployApi(
   // give us a `creatorFacet` that will let us make invitations we can
   // send to users.
 
-  const { creatorFacet: nftMakerSellerFacet } = await E(zoe).startInstance(
-    installation,
-  );
+  const {
+    creatorFacet: nftMakerSellerFacet,
+    publicFacet: nftMakerPublicFacet,
+    instance: instanceNftMaker,
+  } = await E(zoe).startInstance(installation);
 
+  console.log(instanceNftMaker);
   /**
    * @type {ERef<Issuer>}
    */
@@ -138,26 +141,41 @@ export default async function deployApi(
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
   const characterIssuerP = E(publicFacet).getItemsIssuer();
-  const [characterIssuer, characterBrand, invitationBrand, invitationIssuer] =
-    await Promise.all([
-      characterIssuerP,
-      E(characterIssuerP).getBrand(),
-      invitationBrandP,
-      invitationBrandP,
-    ]);
+  // const characterIssuerZCFP = E(nftMakerPublicFacet).getCharacterIssuer();
+  const [
+    characterIssuer,
+    characterBrand,
+    // characterIssuerZCF,
+    // characterBrandZCF,
+    invitationBrand,
+    invitationIssuer,
+  ] = await Promise.all([
+    characterIssuerP,
+    E(characterIssuerP).getBrand(),
+    // characterIssuerZCFP,
+    // E(characterIssuerZCFP).getBrand(),
+    invitationBrandP,
+    invitationBrandP,
+  ]);
 
   const [
     INSTANCE_BOARD_ID,
+    INSTANCE_NFT_MAKER_BOARD_ID,
     CHARACTER_BRAND_BOARD_ID,
     CHARACTER_ISSUER_BOARD_ID,
+    // CHARACTER_BRAND_ZCF_BOARD_ID,
+    // CHARACTER_ISSUER_ZCF_BOARD_ID,
     MONEY_BRAND_BOARD_ID,
     MONEY_ISSUER_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
     INVITE_ISSUER_BOARD_ID,
   ] = await Promise.all([
     E(board).getId(instance),
+    E(board).getId(instanceNftMaker),
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
+    // E(board).getId(characterBrandZCF),
+    // E(board).getId(characterIssuerZCF),
     E(board).getId(moneyBrand),
     E(board).getId(moneyIssuer),
     E(board).getId(invitationBrand),
@@ -166,6 +184,7 @@ export default async function deployApi(
 
   console.log(`-- Contract Name: ${CONTRACT_NAME}`);
   console.log(`-- INSTANCE_BOARD_ID: ${INSTANCE_BOARD_ID}`);
+  console.log(`-- INSTANCE_BOARD_ID: ${INSTANCE_NFT_MAKER_BOARD_ID}`);
   console.log(`-- CHARACTER_ISSUER_BOARD_ID: ${CHARACTER_ISSUER_BOARD_ID}`);
   console.log(`-- CHARACTER_BRAND_BOARD_ID: ${CHARACTER_BRAND_BOARD_ID}`);
   console.log(`-- INVITE_BRAND_BOARD_ID: ${INVITE_ISSUER_BOARD_ID}`);
@@ -189,10 +208,20 @@ export default async function deployApi(
     // Spawn the installed code to create an URL handler.
     const handler = await E(handlerInstall).spawn({
       nftMakerSellerFacet,
+      nftMakerPublicFacet,
       board,
       http,
+      chainTimerService,
       invitationIssuer,
       nfts: characters,
+      mintArgs: {
+        PRICE_PER_CHARACTER_IN_MONEY_UNITS: 1,
+        decimalPlaces,
+        moneyBrand,
+        chainTimerService,
+        auctionInstallation,
+        auctionItemsInstallation,
+      },
     });
 
     // Have our ag-solo wait on ws://localhost:8000/api/fungible-faucet for
@@ -207,6 +236,7 @@ export default async function deployApi(
   // Re-save the constants somewhere where the UI and api can find it.
   const dappConstants = {
     INSTANCE_BOARD_ID,
+    INSTANCE_NFT_MAKER_BOARD_ID,
     INSTALLATION_BOARD_ID,
     AUCTION_ITEMS_INSTALLATION_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
@@ -214,10 +244,12 @@ export default async function deployApi(
     BRIDGE_URL: 'agoric-lookup:https://local.agoric.com?append=/bridge',
     brandBoardIds: {
       Character: CHARACTER_BRAND_BOARD_ID,
+      // CharacterZCF: CHARACTER_BRAND_ZCF_BOARD_ID,
       Money: MONEY_BRAND_BOARD_ID,
     },
     issuerBoardIds: {
       Character: CHARACTER_ISSUER_BOARD_ID,
+      // CharacterZCF: CHARACTER_ISSUER_ZCF_BOARD_ID,
       Money: MONEY_ISSUER_BOARD_ID,
     },
     minBidPerCharacter: Number(moneyValue),

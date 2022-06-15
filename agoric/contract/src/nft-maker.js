@@ -21,9 +21,33 @@ const start = (zcf) => {
     AssetKind.SET,
   );
 
+  // const characterMint = zcf.makeZCFMint('CHARACTER', AssetKind.SET);
+  // const { issuer: characterIssuer, brand: characterBrand } =
+  //   characterMint.getIssuerRecord();
+
   const zoeService = zcf.getZoeService();
 
   const characterList = new Map();
+  const characterArray = [];
+
+  // const mintCharacter = (seat) => {
+  //   const amount = AmountMath.make(
+  //     characterBrand,
+  //     harden([
+  //       {
+  //         name: 'Pablo',
+  //         url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
+  //       },
+  //     ]),
+  //   );
+  //   // Synchronously mint and allocate amount to seat.
+  //   characterMint.mintGains(harden(amount), seat);
+  //   // Exit the seat so that the user gets a payout.
+  //   seat.exit();
+  //   // Since the user is getting the payout through Zoe, we can
+  //   // return anything here. Let's return some helpful instructions.
+  //   return 'Offer completed. You should receive a payment from Zoe';
+  // };
 
   const auctionCharacters = async (
     newCharacters,
@@ -73,6 +97,12 @@ const start = (zcf) => {
     assert(creatorInvitation, shouldBeInvitationMsg);
 
     newCharacters.forEach((newCharacter) => {
+      const character = {
+        name: newCharacter.name,
+        character: newCharacter,
+        auction: instance,
+      };
+      characterArray.push(character);
       characterList.set(newCharacter.name, {
         character: newCharacter,
         auction: instance,
@@ -97,14 +127,30 @@ const start = (zcf) => {
       nfts,
     });
   };
-
+  const getCharacters = () => {
+    return harden({
+      characters: characterArray,
+    });
+  };
   const creatorFacet = Far('Character store creator', {
     auctionCharacters,
+    // mintCharacter: zcf.makeInvitation(mintCharacter, 'mint a character nft'),
     getIssuer: () => issuer,
+    // getCharacterIssuer: () => characterIssuer,
     getNfts,
+    getCharacters,
   });
 
-  return harden({ creatorFacet });
+  const publicFacet = Far('Chracter store public', {
+    getIssuer: () => issuer,
+    // getCharacterIssuer: () => characterIssuer,
+    // mintCharacter: zcf.makeInvitation(mintCharacter, 'mint a character nft'),
+    getNfts,
+    getCharacters,
+    auctionCharacters,
+  });
+
+  return harden({ creatorFacet, publicFacet });
 };
 
 harden(start);

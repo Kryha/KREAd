@@ -1,19 +1,37 @@
 // @ts-check
+import { AmountMath } from '@agoric/ertp';
 import { E } from '@endo/eventual-send';
 import { makeWebSocketHandler } from './lib-http';
 
 const spawnHandler = (
-  { creatorFacet, board, http, invitationIssuer, nfts },
+  {
+    nftMakerCreatorFacet,
+    nftMakerPublicFacet,
+    board,
+    http,
+    chainTimerService,
+    invitationIssuer,
+    nfts,
+    mintArgs,
+  },
   _invitationMaker,
 ) =>
   makeWebSocketHandler(http, (send, _meta) =>
     harden({
       async onMessage(obj) {
         switch (obj.type) {
-          case 'nft/list': {
-            const fetchedNfts = await E(creatorFacet).getNfts();
+          case 'nft/public/list': {
+            const fetchedNfts = await E(nftMakerPublicFacet).getNfts();
             send({
               type: 'nft-maker/nftListResponse',
+              data: fetchedNfts,
+            });
+            return true;
+          }
+          case 'nft/creator/list': {
+            const fetchedNfts = await E(nftMakerCreatorFacet).getNfts();
+            send({
+              type: 'nft-maker/nftListCreatorResponse',
               data: fetchedNfts,
             });
             return true;
@@ -26,16 +44,56 @@ const spawnHandler = (
             });
             return true;
           }
+          case 'nft/getTimerService': {
+            send({
+              type: 'nft-maker/nftTimerServiceResponse',
+              data: chainTimerService,
+            });
+            return true;
+          }
+          case 'nft/mint': {
+            const { characters } = obj.data;
+
+            const allcharacters = harden(characters);
+            const moneyValue = 1 * 1000000;
+            const minBidPercharacter = AmountMath.make(
+              mintArgs.moneyBrand,
+              BigInt(moneyValue),
+            );
+
+            const {
+              // TODO: implement exiting the creatorSeat and taking the earnings
+              auctionItemsPublicFacet: publicFacet,
+              // auctionItemsInstance: instance,
+            } = await E(nftMakerCreatorFacet).auctionCharacters(
+              allcharacters,
+              mintArgs.moneyIssuer,
+              mintArgs.auctionInstallation,
+              mintArgs.auctionItemsInstallation,
+              minBidPercharacter,
+              mintArgs.chainTimerService,
+            );
+
+            send({
+              type: 'nft-maker/nftMintResponse',
+              data: {
+                msg: 'MINT SUCCESSFUL',
+                auction: { publicFacet },
+              },
+            });
+            return true;
+          }
+
           case 'nftFaucet/sendInvitation': {
             const { depositFacetId, offer } = obj.data;
             console.log('CREATOR FACET');
-            console.log(creatorFacet);
+            console.log(nftMakerCreatorFacet);
             console.log('INVITATION ISSUER');
             console.log(invitationIssuer);
             const depositFacet = E(board).getValue(depositFacetId);
             console.log('DEPOSIT FACET');
             console.log(depositFacet);
-            const invitation = await E(creatorFacet).makeInvitation();
+            const invitation = await E(nftMakerCreatorFacet).makeInvitation();
             console.log('INVITATION');
             console.log(invitation);
             const invitationAmount = await E(invitationIssuer).getAmountOf(
