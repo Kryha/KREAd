@@ -4,21 +4,31 @@ import { Character } from "../types/character";
 
 export type CharacterState = {
   characters: Character[];
+  owned: Character[];
   fetched: boolean;
 };
 
 const initialState: CharacterState = {
   characters: [],
+  owned: [],
   fetched: false,
 };
 
 export interface SetCharacters {
   type: "SET_CHARACTERS";
-  payload: Character[];
+  payload: any[];
 }
 export interface AddCharacters {
   type: "ADD_CHARACTERS";
-  payload: Character[];
+  payload: any[];
+}
+export interface SetOwnedCharacters {
+  type: "SET_OWNED_CHARACTERS";
+  payload: any[];
+}
+export interface AddOwnedCharacters {
+  type: "ADD_OWNED_CHARACTERS";
+  payload: any[];
 }
 export interface SetFetched {
   type: "SET_FETCHED";
@@ -32,7 +42,9 @@ export type CharacterStateActions =
   | Reset
   | SetFetched
   | SetCharacters
-  | AddCharacters;
+  | AddCharacters
+  | SetOwnedCharacters
+  | AddOwnedCharacters;
 
 type Dispatch = React.Dispatch<CharacterStateActions>;
 type ProviderProps = Omit<React.ProviderProps<CharacterState>, "value">;
@@ -46,7 +58,13 @@ const Reducer = (state: CharacterState, action: CharacterStateActions): Characte
     return { ...state, characters: action.payload };
     
   case "ADD_CHARACTERS":
-    return { ...state, characters: [...state.characters, ...action.payload]};
+    return { ...state, characters: [...state.characters, ...action.payload] };
+    
+  case "SET_OWNED_CHARACTERS":
+    return { ...state, owned: action.payload };
+    
+  case "ADD_OWNED_CHARACTERS":
+    return { ...state, owned: [...state.characters, ...action.payload]};
 
   case "SET_FETCHED":
     return { ...state, fetched: action.payload };
