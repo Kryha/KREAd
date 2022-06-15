@@ -45,6 +45,8 @@ bin/*
 # ignore declarations
 src/declarations
 
+frontend/build
+
 install-state.gz
 lockdown.umd.js
 
@@ -52,12 +54,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.yarn/*
-!.yarn/cache
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
+install-state.gz
 
 agoric/_agstate/yarn-links/
 .idea/
