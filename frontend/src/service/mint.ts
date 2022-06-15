@@ -28,6 +28,15 @@ export const getCharacters = async (agoric: AgoricService) => {
   return nfts;
 };
 
+export const getCharacterArray = async (agoric: AgoricService) => {
+  console.log("getting characters");
+  console.log("instance nft", agoric.instanceNft);
+  const publicFacet = await E(agoric.zoe).getPublicFacet(agoric.instanceNft);
+  console.log(publicFacet, agoric.publicFacet);
+  const nfts = await E(publicFacet).getCharacters();
+  console.log(nfts);
+  return nfts;
+};
 export const mintCharacters = async (service: ServiceState) => {
   const characters = harden([{
     name: "NOPE",
@@ -132,39 +141,136 @@ export const mintCharacter = async (characterPursePetname: PursePetname, agoric:
   await E(depositFacet).receive(invitation);
   await E(agoric.walletP).addOffer(updatedOffer);
 };
+export const mintCharacterZCF = async (characterPursePetname: PursePetname, agoric: AgoricService) => {
+  // const { depositFacetId, offer } = obj.data;
+  console.log("MINTING VIA PUBLIC FACET");
+  console.log(characterPursePetname);
+  console.log(agoric);
+  const want = harden([{
+    name: "other",
+    url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
+  }]);
+  const offer = {
+    // JSONable ID for this offer.  This is scoped to the origin.
+    id: Date.now(),
+    proposalTemplate: {
+      want: {
+        KCB: {
+          pursePetname: characterPursePetname,
+          value: want,
+        },
+      },
+    },
 
-// export const makeBidOfferForCard = async ({
-//   walletP,
-//   card,
-//   publicFacet,
-//   characterPurse,
-//   tokenPurse,
-//   price,
-// }: any) => {
-//   assert(card, X`At least one card must be chosen to purchase`);
-//   const invitation = await E(publicFacet).makeBidInvitationForKey(card);
+    // Tell the wallet that we're handling the offer result.
+    dappContext: true,
+  };
+  console.log("OFFER: ", offer);
+  // const offer = formOffer(characterPursePetname);
+  const depositFacet = await E(agoric.board).getValue(agoric.zoeInvitationDepositFacetId);
+  console.log(">> calling mintCharacter");
+  const invitation = await E(agoric.nftPublicFacet).mintCharacter();
+  console.log(">> called");
+  console.log("INVITATION: ", invitation);
 
-//   const offerConfig = {
-//     // JSONable ID for this offer.  This is scoped to the origin.
-//     id: Date.now(),
-//     invitation,
-//     proposalTemplate: {
-//       want: {
-//         Asset: {
-//           pursePetname: characterPurse.pursePetname,
-//           value: harden([`Tsun Tsun!`]),
-//         },
-//       },
-//       give: {
-//         Bid: {
-//           pursePetname: tokenPurse.pursePetname,
-//           value: price,
-//         },
-//       },
-//     },
-//   };
+  const invitationAmount = await E(agoric.invitationIssuer).getAmountOf(
+    invitation,
+  );
+  console.log("INVITATION: ", invitationAmount);
 
-//   return E(walletP).addOffer(offerConfig);
-// };
+  const {
+    value: [{ handle }],
+  } = invitationAmount;
+  const invitationHandleBoardId = await E(agoric.board).getId(handle);
+  console.log("invitationHandleBoardId: ", invitationHandleBoardId);
+  const updatedOffer = { ...offer, invitationHandleBoardId };
+  // We need to wait for the invitation to be
+  // received, or we will possibly win the race of
+  // proposing the offer before the invitation is ready.
+  // TODO: We should make this process more robust.
+  console.log("OFERRRRRR");
+  console.log(updatedOffer);
+  await E(depositFacet).receive(invitation);
+  await E(agoric.walletP).addOffer(updatedOffer);
+};
+
+export const mintNextCharacterZCF = async (characterPursePetname: PursePetname, agoric: AgoricService, name: string) => {
+  // const { depositFacetId, offer } = obj.data;
+  console.log("MINTING VIA PUBLIC FACET");
+  console.log(characterPursePetname);
+  console.log(agoric);
+  const want = harden([{
+    name,
+    url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
+  }]);
+  const offer = {
+    // JSONable ID for this offer.  This is scoped to the origin.
+    id: Date.now(),
+    proposalTemplate: {
+      want: {
+        KCB: {
+          pursePetname: characterPursePetname,
+          value: want,
+        },
+      },
+    },
+
+    // Tell the wallet that we're handling the offer result.
+    dappContext: true,
+  };
+  console.log("OFFER: ", offer);
+  // const offer = formOffer(characterPursePetname);
+  const depositFacet = await E(agoric.board).getValue(agoric.zoeInvitationDepositFacetId);
+  console.log(">> calling mintCharacter");
+  const invitation = await E(agoric.nftPublicFacet).mintNextCharacter();
+  console.log(">> called");
+  console.log("INVITATION: ", invitation);
+
+  const invitationAmount = await E(agoric.invitationIssuer).getAmountOf(
+    invitation,
+  );
+  console.log("INVITATION: ", invitationAmount);
+
+  const {
+    value: [{ handle }],
+  } = invitationAmount;
+  const invitationHandleBoardId = await E(agoric.board).getId(handle);
+  console.log("invitationHandleBoardId: ", invitationHandleBoardId);
+  const updatedOffer = { ...offer, invitationHandleBoardId };
+  // We need to wait for the invitation to be
+  // received, or we will possibly win the race of
+  // proposing the offer before the invitation is ready.
+  // TODO: We should make this process more robust.
+  console.log("OFERRRRRR");
+  console.log(updatedOffer);
+  await E(depositFacet).receive(invitation);
+  await E(agoric.walletP).addOffer(updatedOffer);
+};
+export const makeBidOfferForCard = async (service: ServiceState, publicFacet: any, character: any, price: number) => {
+  const invitation = await E(publicFacet).makeBidInvitationForKey(character);
+  const { agoric, characterPurse, tokenPurses } = service;
+  const adjustedPrice = BigInt(price * (10 ** 6));
+  const offerConfig = {
+    // JSONable ID for this offer.  This is scoped to the origin.
+    id: Date.now(),
+    invitation,
+    proposalTemplate: {
+      want: {
+        Asset: {
+          pursePetname: characterPurse[0].pursePetname,
+          value: harden([character]),
+        },
+      },
+      give: {
+        Bid: {
+          pursePetname: tokenPurses[0].pursePetname,
+          value: adjustedPrice,
+        },
+      },
+    },
+  };
+
+  return E(agoric.walletP).addOffer(offerConfig);
+};
 
 // export { makeBidOfferForCard, getCardAuctionDetail };

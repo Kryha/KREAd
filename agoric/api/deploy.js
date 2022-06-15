@@ -10,7 +10,7 @@ import '@agoric/zoe/exported.js';
 
 import installationConstants from '../../frontend/src/service/conf/installation-constants.js';
 
-import { characters } from './characters.js';
+import { characters, KCB } from './characters.js';
 
 // const PRICE_PER_CARD_IN_MONEY_UNITS = 1n;
 
@@ -109,9 +109,9 @@ export default async function deployApi(
     E(moneyBrandP).getDisplayInfo(),
   ]);
 
-  const allCharacters = harden(characters);
-  console.log(`CHARACTERS: ${characters}`);
-  console.log(allCharacters);
+  const allCharacters = harden(KCB);
+  console.log(`CHARACTERS: ${allCharacters}`);
+  // console.log(allCharacters);
   // const moneyValue =
   //   PRICE_PER_CARD_IN_MONEY_UNITS * 10n ** BigInt(decimalPlaces);
   // const minBidPerCard = AmountMath.make(moneyBrand, moneyValue);

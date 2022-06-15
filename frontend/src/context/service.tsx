@@ -20,8 +20,8 @@ const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID },
-  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID },
+  issuerBoardIds: { CharacterZCF: CHARACTER_ZCF_ISSUER_BOARD_ID, Character: CHARACTER_ISSUER_BOARD_ID },
+  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, CharacterZCF: CHARACTER_ZFC_BRAND_BOARD_ID},
 } = dappConstants;
 
 console.log(dappConstants);
@@ -192,6 +192,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       },
       dappApproved(_dappOrigin: any) {
         dispatch({ type: "SET_DAPP_APPROVED", payload: true });
+        dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: false });
       },
     });
 
@@ -225,7 +226,11 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
           console.log("MINT RESPONSE");
           console.log(obj.data);
           return obj.data;
-
+        }
+        case "response/character/mint": {
+          console.log("~MINT RESPONSE");
+          console.log(obj.data);
+          return obj.data;
         }
         case "nftFaucet/sendInvitationResponse": {
           // Once the invitation has been sent to the user, we update the
@@ -248,9 +253,8 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         }
       };
 
-      await connect("/api/nft-maker", apiRecv).then((rawApiSend) => {
-        dispatch({ type: "SET_APISEND", payload: rawApiSend });  
-      });
+      const rawApiSend = await connect("/api/nft-maker", apiRecv);
+      dispatch({ type: "SET_APISEND", payload: rawApiSend });  
       dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
       const socket = getActiveSocket();
       const {
@@ -271,10 +275,12 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         const newTokenPurses = purses.filter(
           ({ brandBoardId }) => brandBoardId === MONEY_BRAND_BOARD_ID,
         );
-        const newCharacterPurses = purses.find(
-          ({ brandBoardId }) => brandBoardId === CHARACTER_BRAND_BOARD_ID,
+        const newCharacterPurses = purses.filter(
+          ({ brandBoardId }) => brandBoardId === CHARACTER_BRAND_BOARD_ID || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
         );
-
+        // const newCharacterZCFPurses = purses.filter(
+        //   ({ brandBoardId }) => brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
+        // );
         dispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
         dispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
 
@@ -302,10 +308,13 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestInstance("Instance", INSTANCE_BOARD_ID),
         E(walletP).suggestIssuer("CB", CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("KCB", CHARACTER_ZCF_ISSUER_BOARD_ID),
+
         // E(walletP).suggestIssuer("CBI", ITEM_ISSUER_BOARD_ID),
       ]);
 
       const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
+      console.log("ZOE INVITE DEPOSIT", zoeInvitationDepositFacetId);
       const zoe = E(walletP).getZoe();
       const board = E(walletP).getBoard();
       const instance = await E(board).getValue(INSTANCE_BOARD_ID);
@@ -314,11 +323,11 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       const nftPublicFacet = await E(zoe).getPublicFacet(instanceNft);
 
       // const publicFacet = E(zoe).getPublicFacet(instance);
+      const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
       console.log("😮‍💨😮‍💨😮‍💨😮‍💨😮‍💨");
-      // const invitationIssuer = E(zoe).getInvitationIssuer(publicFacet);
       // publicFacetRef.current = "publicFacet";
       // console.log("😮‍💨😮‍💨😮‍💨😮‍💨😮‍💨",{ zoe, board, instance, publicFacet, zoeInvitationDepositFacetId, invitationIssuer, walletP });
-      dispatch({ type: "SET_AGORIC", payload: { zoe, board, instance, publicFacet: undefined, zoeInvitationDepositFacetId, nftPublicFacet, instanceNft, invitationIssuer: undefined, walletP } });
+      dispatch({ type: "SET_AGORIC", payload: { zoe, board, instance, publicFacet: undefined, zoeInvitationDepositFacetId, nftPublicFacet, instanceNft, invitationIssuer, walletP } });
       
       // TODO: fetch available characters
 

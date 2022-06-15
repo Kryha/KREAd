@@ -10,7 +10,7 @@ import { AmountMath } from '@agoric/ertp';
 
 import installationConstants from '../../frontend/src/service/conf/installation-constants-nft-maker.js';
 
-import { characters } from './characters.js';
+import { characters, KCB } from './characters.js';
 
 const PRICE_PER_CHARACTER_IN_MONEY_UNITS = 1n;
 
@@ -115,12 +115,20 @@ export default async function deployApi(
     E(moneyBrandP).getDisplayInfo(),
   ]);
 
-  const allcharacterNames = harden(characters);
+  const allcharacterNames = harden(KCB);
   const moneyValue =
     PRICE_PER_CHARACTER_IN_MONEY_UNITS * 10n ** BigInt(decimalPlaces);
   const minBidPercharacter = AmountMath.make(moneyBrand, moneyValue);
 
   const chainTimerService = await chainTimerServiceP;
+  console.log(
+    await E(nftMakerSellerFacet).initConfig(
+      moneyIssuer,
+      auctionInstallation,
+      auctionItemsInstallation,
+      chainTimerService,
+    ),
+  );
   const {
     // TODO: implement exiting the creatorSeat and taking the earnings
     auctionItemsPublicFacet: publicFacet,
@@ -141,19 +149,19 @@ export default async function deployApi(
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
   const characterIssuerP = E(publicFacet).getItemsIssuer();
-  // const characterIssuerZCFP = E(nftMakerPublicFacet).getCharacterIssuer();
+  const characterIssuerZCFP = E(nftMakerPublicFacet).getCharacterIssuer();
   const [
     characterIssuer,
     characterBrand,
-    // characterIssuerZCF,
-    // characterBrandZCF,
+    characterIssuerZCF,
+    characterBrandZCF,
     invitationBrand,
     invitationIssuer,
   ] = await Promise.all([
     characterIssuerP,
     E(characterIssuerP).getBrand(),
-    // characterIssuerZCFP,
-    // E(characterIssuerZCFP).getBrand(),
+    characterIssuerZCFP,
+    E(characterIssuerZCFP).getBrand(),
     invitationBrandP,
     invitationBrandP,
   ]);
@@ -163,8 +171,8 @@ export default async function deployApi(
     INSTANCE_NFT_MAKER_BOARD_ID,
     CHARACTER_BRAND_BOARD_ID,
     CHARACTER_ISSUER_BOARD_ID,
-    // CHARACTER_BRAND_ZCF_BOARD_ID,
-    // CHARACTER_ISSUER_ZCF_BOARD_ID,
+    CHARACTER_BRAND_ZCF_BOARD_ID,
+    CHARACTER_ISSUER_ZCF_BOARD_ID,
     MONEY_BRAND_BOARD_ID,
     MONEY_ISSUER_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
@@ -174,8 +182,8 @@ export default async function deployApi(
     E(board).getId(instanceNftMaker),
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
-    // E(board).getId(characterBrandZCF),
-    // E(board).getId(characterIssuerZCF),
+    E(board).getId(characterBrandZCF),
+    E(board).getId(characterIssuerZCF),
     E(board).getId(moneyBrand),
     E(board).getId(moneyIssuer),
     E(board).getId(invitationBrand),
@@ -244,12 +252,12 @@ export default async function deployApi(
     BRIDGE_URL: 'agoric-lookup:https://local.agoric.com?append=/bridge',
     brandBoardIds: {
       Character: CHARACTER_BRAND_BOARD_ID,
-      // CharacterZCF: CHARACTER_BRAND_ZCF_BOARD_ID,
+      CharacterZCF: CHARACTER_BRAND_ZCF_BOARD_ID,
       Money: MONEY_BRAND_BOARD_ID,
     },
     issuerBoardIds: {
       Character: CHARACTER_ISSUER_BOARD_ID,
-      // CharacterZCF: CHARACTER_ISSUER_ZCF_BOARD_ID,
+      CharacterZCF: CHARACTER_ISSUER_ZCF_BOARD_ID,
       Money: MONEY_ISSUER_BOARD_ID,
     },
     minBidPerCharacter: Number(moneyValue),

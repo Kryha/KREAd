@@ -13,41 +13,133 @@ import { FIRST_PRICE } from '@agoric/zoe/src/contracts/auction';
  *
  * @type {ContractStartFn}
  */
-const start = (zcf) => {
+const start = async (zcf) => {
   // Create the internal character mint
-  // eslint-disable-next-line prettier/prettier
-  const { issuer, mint, brand } = makeIssuerKit(
-    'character',
-    AssetKind.SET,
-  );
+  const { issuer, mint, brand } = makeIssuerKit('Character', AssetKind.SET);
 
-  // const characterMint = zcf.makeZCFMint('CHARACTER', AssetKind.SET);
-  // const { issuer: characterIssuer, brand: characterBrand } =
-  //   characterMint.getIssuerRecord();
+  const characterMint = await zcf.makeZCFMint('KCB', AssetKind.SET);
+  const { issuer: characterIssuer, brand: characterBrand } =
+    characterMint.getIssuerRecord();
 
   const zoeService = zcf.getZoeService();
 
-  const characterList = new Map();
-  const characterArray = [];
+  // const characterList = new Map();
+  let characterArray = [];
+  let config = {
+    completed: false,
+  };
+  let counter = 1;
 
-  // const mintCharacter = (seat) => {
-  //   const amount = AmountMath.make(
-  //     characterBrand,
-  //     harden([
-  //       {
-  //         name: 'Pablo',
-  //         url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
-  //       },
-  //     ]),
-  //   );
-  //   // Synchronously mint and allocate amount to seat.
-  //   characterMint.mintGains(harden(amount), seat);
-  //   // Exit the seat so that the user gets a payout.
-  //   seat.exit();
-  //   // Since the user is getting the payout through Zoe, we can
-  //   // return anything here. Let's return some helpful instructions.
-  //   return 'Offer completed. You should receive a payment from Zoe';
-  // };
+  const mintCharacterZCF = (seat) => {
+    const amount = AmountMath.make(
+      characterBrand,
+      harden([
+        {
+          name: `Pablo${counter}`,
+          url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
+        },
+      ]),
+    );
+
+    // Synchronously mint and allocate amount to seat.
+    characterMint.mintGains(harden(amount), seat);
+    // Exit the seat so that the user gets a payout.
+    seat.exit();
+
+    characterArray = [
+      ...characterArray,
+      {
+        name: `Pablo${counter}`,
+        url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
+      },
+    ];
+    counter += 1;
+    // Since the user is getting the payout through Zoe, we can
+    // return anything here. Let's return some helpful instructions.
+    return 'Offer completed. You should receive a payment from Zoe';
+  };
+
+  const initConfig = (
+    moneyIssuer,
+    auctionInstallation,
+    auctionItemsInstallation,
+    timeAuthority,
+  ) => {
+    config = {
+      moneyIssuer,
+      auctionInstallation,
+      auctionItemsInstallation,
+      timeAuthority,
+      completed: true,
+    };
+    return 'Setup completed';
+  };
+  const auctionCharactersPublic = async (newCharacters, minBidPerCharacter) => {
+    assert(
+      config.completed,
+      'Configuration not found, please use creatorFacet.initConfig(<config>) to enable this method',
+    );
+    const newCharactersForSaleAmount = AmountMath.make(brand, newCharacters);
+    const allCharactersForSalePayment = mint.mintPayment(
+      newCharactersForSaleAmount,
+    );
+    // Note that the proposal `want` is empty because we don't know
+    // how many Characters will be sold, so we don't know how much money we
+    // will make in total.
+    // https://github.com/Agoric/agoric-sdk/issues/855
+    const proposal = harden({
+      give: { Items: newCharactersForSaleAmount },
+    });
+    const paymentKeywordRecord = harden({ Items: allCharactersForSalePayment });
+
+    const issuerKeywordRecord = harden({
+      Items: issuer,
+      Money: config.moneyIssuer,
+    });
+    // Terms used here are set via creatorFacet.initConfig(<config obj>)
+    // Short bidDuration of 1s for [almost] instant sell
+    const auctionItemsTerms = harden({
+      bidDuration: 1n,
+      winnerPriceOption: FIRST_PRICE,
+      ...zcf.getTerms(),
+      auctionInstallation: config.auctionInstallation,
+      minimalBid: minBidPerCharacter,
+      timeAuthority: config.timeAuthority,
+    });
+
+    const { creatorInvitation, instance, publicFacet } = await E(
+      zoeService,
+    ).startInstance(
+      config.auctionItemsInstallation,
+      issuerKeywordRecord,
+      auctionItemsTerms,
+    );
+
+    const shouldBeInvitationMsg = `The auctionItemsContract instance should return a creatorInvitation`;
+    assert(creatorInvitation, shouldBeInvitationMsg);
+
+    newCharacters.forEach((newCharacter) => {
+      const character = {
+        name: newCharacter.name,
+        character: newCharacter,
+        auction: { instance, publicFacet },
+      };
+      characterArray = [...characterArray, character];
+    });
+
+    await E(zoeService).offer(
+      creatorInvitation,
+      proposal,
+      paymentKeywordRecord,
+    );
+
+    counter += 1;
+
+    return harden({
+      msg: 'Character mint successful, use attached public facet to purchase',
+      auctionItemsPublicFacet: publicFacet,
+    });
+  };
 
   const auctionCharacters = async (
     newCharacters,
@@ -75,7 +167,7 @@ const start = (zcf) => {
       Money: moneyIssuer,
     });
 
-    // CODECHANGE2: shortened bidDuration from 300 to 1s for quicker testing
+    // Short bidDuration of 1s for [almost] instant sell
     const auctionItemsTerms = harden({
       bidDuration: 1n,
       winnerPriceOption: FIRST_PRICE,
@@ -100,13 +192,14 @@ const start = (zcf) => {
       const character = {
         name: newCharacter.name,
         character: newCharacter,
-        auction: instance,
+        auction: { instance, publicFacet },
       };
-      characterArray.push(character);
-      characterList.set(newCharacter.name, {
-        character: newCharacter,
-        auction: instance,
-      });
+      characterArray = [...characterArray, character];
+      // characterArray.push(character);
+      // characterList.set(newCharacter.name, {
+      //   character: newCharacter,
+      //   auction: instance,
+      // });
     });
 
     await E(zoeService).offer(
@@ -121,12 +214,7 @@ const start = (zcf) => {
     });
   };
 
-  const getNfts = () => {
-    const nfts = characterList.values();
-    return harden({
-      nfts,
-    });
-  };
+  // Opportunity for more complex queries
   const getCharacters = () => {
     return harden({
       characters: characterArray,
@@ -134,20 +222,32 @@ const start = (zcf) => {
   };
   const creatorFacet = Far('Character store creator', {
     auctionCharacters,
-    // mintCharacter: zcf.makeInvitation(mintCharacter, 'mint a character nft'),
+    auctionCharactersPublic,
+    mintCharacter: () =>
+      zcf.makeInvitation(
+        mintCharacterZCF,
+        'mint a character nft via mintGains',
+      ),
     getIssuer: () => issuer,
-    // getCharacterIssuer: () => characterIssuer,
-    getNfts,
+    getCharacterIssuer: () => characterIssuer,
     getCharacters,
+    getConfig: () => config,
+    initConfig,
   });
 
   const publicFacet = Far('Chracter store public', {
     getIssuer: () => issuer,
-    // getCharacterIssuer: () => characterIssuer,
-    // mintCharacter: zcf.makeInvitation(mintCharacter, 'mint a character nft'),
-    getNfts,
+    getCharacterIssuer: () => characterIssuer,
+    mintCharacter: () =>
+      zcf.makeInvitation(
+        mintCharacterZCF,
+        'mint a character nft via mintGains',
+      ),
     getCharacters,
-    auctionCharacters,
+    getCharacterArray: () => characterArray,
+    auctionCharactersPublic,
+    getCount: () => counter,
+    getConfig: () => config,
   });
 
   return harden({ creatorFacet, publicFacet });
