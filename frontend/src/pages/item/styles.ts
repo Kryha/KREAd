@@ -21,7 +21,7 @@ export const ItemWrapper = styled.div<ViewProps>`
         return "top: 0px;";
       case "clothing":
         if (width <= SMALL_SCREEN_SIZE) {
-          return "top: -550px;";
+          return "top: -650px;";
         }
         if (width >= EXTRA_LARGE_SCREEN_SIZE) {
           return "top: -1100px;";
@@ -31,7 +31,7 @@ export const ItemWrapper = styled.div<ViewProps>`
         }
       default:
         if (width <= SMALL_SCREEN_SIZE) {
-          return "top: -550px;";
+          return "top: -650px;";
         }
         if (width >= EXTRA_LARGE_SCREEN_SIZE) {
           return "top: -800px;";

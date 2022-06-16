@@ -88,7 +88,7 @@ export const CharacterContainer = styled.div<ImageProps>`
         return "zoom:0.075;";
       case "medium":
         if (width <= SMALL_SCREEN_SIZE) {
-          return "zoom: 0.416;";
+          return "zoom: 0.357;";
         }
         if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
           return "zoom: 0.304;";
@@ -121,7 +121,7 @@ export const ItemIcon = styled.img<ImageProps>`
   top: 0;
   left: 0;
   ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.mid};`};
-  ${({ height }): string => `z-index: ${height}px;`};
+  ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
       return "width: 542.82px;";

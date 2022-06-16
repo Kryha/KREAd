@@ -67,6 +67,7 @@ export const ItemContainer = styled.div`
   gap: ${margins.big};
   padding-top: ${margins.big};
   align-items: flex-start;
+  padding-bottom: 140px;
 `;
 
 export const LoadMore = styled.div`

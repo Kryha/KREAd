@@ -33,6 +33,7 @@ import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.sv
 import RangeIcon from "./range.png";
 import DefaultIcon from "./default-character.png";
 import { ReactComponent as DownArrowIcon } from "./down-arrow.svg";
+import { ReactComponent as BellIcon } from "./bell.svg";
 
 export {
   ErrorIcon,
@@ -70,4 +71,5 @@ export {
   DefaultIcon,
   ExclamationIcon,
   DownArrowIcon,
+  BellIcon,
 };

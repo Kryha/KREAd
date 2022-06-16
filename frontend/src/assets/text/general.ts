@@ -14,7 +14,7 @@ export const general = {
   sortBy: "sort by",
   latest: "latest",
   equipped: "equipped",
-  showFull: "show full",
+  showFull: "hide ui",
   createNew: "create new",
   choose: "choose",
   sell: "sell",
@@ -27,4 +27,5 @@ export const general = {
   mintNew: "mint new",
   theMinimiumAmountIs: "the minimum amount is RUN 1",
   moreInfo: "more info",
+  showLess: "show ui",
 };

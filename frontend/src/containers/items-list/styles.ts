@@ -8,6 +8,7 @@ export const SortableListWrap = styled.section`
   display: flex;
   flex-flow: column nowrap;
   box-sizing: border-box;
+  padding-bottom: 120px;
 `;
 
 export const ListHeader = styled.header`
