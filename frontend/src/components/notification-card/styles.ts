@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { TickIcon } from "../../assets";
 
 import { color, fontWeight, margins } from "../../design";

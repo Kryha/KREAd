@@ -1,16 +1,6 @@
 import { FC, useState } from "react";
 
-import {
-  ImageCard,
-  Info,
-  InfoContainer,
-  InfoWrapper,
-  ButtonContainer,
-  Divider,
-  EquippedLabel,
-  Line,
-  SelectedContainer
-} from "./styles";
+import { ImageCard, Info, InfoContainer, InfoWrapper, ButtonContainer, Divider, EquippedLabel, Line, SelectedContainer } from "./styles";
 import { BoldLabel, ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
@@ -36,14 +26,14 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
       }}
     >
       <ImageCard>
-        <BaseCharacter character={character} isZoomed={false} size="mini" />
+        <BaseCharacter items={character.items} isZoomed={false} size="mini" />
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>
           <MenuItemName>{character.name}</MenuItemName>
           <SelectedContainer>
             <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
-            {Boolean(isCharacterEquipped) && (
+            {isCharacterEquipped && (
               <>
                 <Line />
                 <BoldLabel>{text.character.selected}</BoldLabel>
@@ -54,15 +44,15 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
         <EquippedLabel customColor={color.black}>{text.param.itemId(character.characterId)}</EquippedLabel>
         <ButtonContainer>
           <Divider />
-          {isCharacterEquipped ?
-            (<PrimaryButton>
+          {isCharacterEquipped ? (
+            <PrimaryButton>
               <ButtonText customColor={color.white}>{text.character.selected}</ButtonText>
             </PrimaryButton>
-            ) : (
-              <SecondaryButton>
-                <ButtonText>{text.character.select}</ButtonText>
-              </SecondaryButton>
-            )}
+          ) : (
+            <SecondaryButton>
+              <ButtonText>{text.character.select}</ButtonText>
+            </SecondaryButton>
+          )}
         </ButtonContainer>
       </InfoWrapper>
     </Info>

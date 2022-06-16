@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, MenuIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
 
@@ -9,8 +9,8 @@ interface ImageProps {
   isZoomed?: boolean;
 }
 
-export const LandingContainer = styled.div <ImageProps>`
-${({ isZoomed }): string => {
+export const LandingContainer = styled.div<ImageProps>`
+  ${({ isZoomed }): string => {
     return isZoomed
       ? `
      ${CharacterWrapper} {
@@ -27,14 +27,14 @@ ${({ isZoomed }): string => {
 `;
 export const Close = styled(CloseIcon)`
   margin: 0px 0px 0px 11px !important;
-  width: 12px;
-  height: 12px;
+  width: 15px;
+  height: 15px;
 `;
 
 export const NotificationButton = styled(SecondaryButton)`
   padding: ${margins.mini};
   ${Close} {
-    margin: 0px !important;
+    margin: 0px 6px !important;
   }
 `;
 
@@ -46,7 +46,10 @@ export const NotificationWrapper = styled.div`
   gap: ${margins.small};
 `;
 
-export const Notification = styled(BellIcon)``;
+export const Notification = styled(BellIcon)`
+  width: 15px;
+  height: 15px;
+`;
 
 export const Menu = styled(MenuIcon)`
   margin: 0px 0px 0px 11px !important;

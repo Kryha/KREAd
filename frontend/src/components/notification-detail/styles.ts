@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { CloseIcon, ExclamationIcon, TickIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider, NavigationTitle } from "../atoms";

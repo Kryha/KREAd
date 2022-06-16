@@ -1,4 +1,5 @@
-import styled, { keyframes } from "styled-components";
+import styled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import { color, fontSize, margins } from "../../design";
 
 export const TooltipWrap = styled.section`
@@ -17,7 +18,7 @@ const TooltipAnimation = keyframes`
 `;
 
 export const TooltipContent = styled.div`
-  max-with: 300px;
+  max-width: 300px;
   position: absolute;
   border-radius: ${margins.medium};
   border: solid 1px ${color.grey};
@@ -28,7 +29,7 @@ export const TooltipContent = styled.div`
   background: ${color.lightGrey};
   font-size: ${fontSize.medium};
   z-index: 100;
-  white-space: nowrap;
+  min-width: 200px;
   box-sizing: border-box;
   animation: ${TooltipAnimation} 0.5s;
   h3 {

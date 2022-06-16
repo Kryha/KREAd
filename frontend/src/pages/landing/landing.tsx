@@ -33,17 +33,11 @@ export const Landing: FC = () => {
     }
     >
       <LandingContainer isZoomed={isZoomed}>
-        <BaseCharacter character={character} isZoomed={isZoomed} size={isZoomed ? "large" : "normal"} />
+        <BaseCharacter items={character.items} isZoomed={openTab} size={openTab ? "large" : "normal"} />
       </LandingContainer>
-      {!openTab && (
-        <CharacterItems items={character.items} />
-      )}
-      {openTab && (
-        <CharacterCard id={character.characterId} characters={characters} />
-      )}
-      {Boolean(openNotification) && (
-        <NotificationCard />
-      )}
-    </BaseRoute >
+      {!openTab && <CharacterItems items={character.items} />}
+      {openTab && <CharacterCard id={character.characterId} characters={characters} />}
+      {openNotification && <NotificationCard />}
+    </BaseRoute>
   );
 };

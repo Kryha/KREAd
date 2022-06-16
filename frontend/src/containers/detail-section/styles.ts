@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { color, margins } from "../../design";
 
 export const DetailSectionWrap = styled.section`
@@ -11,6 +11,13 @@ export const DetailSectionWrap = styled.section`
   display: flex;
   flex-flow: column nowrap;
   overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const EmptyView = styled.section`

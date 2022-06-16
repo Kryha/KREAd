@@ -1,5 +1,4 @@
-import styled from "styled-components";
-import { DetailSectionWrap } from "../../containers/detail-section/styles";
+import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
@@ -17,12 +16,6 @@ export const Product = styled.div`
   cursor: pointer;
   :hover {
     border: 1px solid ${color.black};
-  }
-  ${DetailSectionWrap} {
-    position: absolute;
-    top: -5px;
-    left: 0px;
-    z-index: 30000000;
   }
 `;
 
@@ -73,7 +66,7 @@ interface ImageProps {
 
 /* eslint-disable indent */
 export const ItemImage = styled(Img) <ImageProps>`
-${({ category }): string => {
+  ${({ category }): string => {
     switch (category) {
       case "hair":
         return "width: 1000px; height: 400px; margin-top: 110px;";

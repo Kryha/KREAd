@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { color, fontWeight, margins } from "../../../design";
 
 export const DetailSectionProgressBarWrap = styled.div`

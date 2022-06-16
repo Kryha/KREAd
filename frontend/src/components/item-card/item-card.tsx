@@ -12,8 +12,8 @@ import {
   Card,
 } from "./styles";
 interface ItemCardProps extends ImageProps {
-  image: string | undefined;
-  item: Item | undefined;
+  image?: string;
+  item?: Item;
 }
 
 export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight, item }) => {

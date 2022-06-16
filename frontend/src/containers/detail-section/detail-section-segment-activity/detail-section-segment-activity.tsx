@@ -1,17 +1,17 @@
 import { FC } from "react";
-import { ActivityTable } from "../../../components/activity-table/activity-table";
-import { Item } from "../../../interfaces";
 
+import { ActivityTable } from "../../../components/activity-table/activity-table";
+import { ActivityEvent } from "../../../interfaces";
 import { DetailSectionSegmentActivityWrap } from "./styles";
 
-interface DetailSectionSegmentActivityProps {
-  item: Item;
+interface Props {
+  events: ActivityEvent[];
 }
 
-export const DetailSectionSegmentActivity: FC<DetailSectionSegmentActivityProps> = ({ item }) => {
+export const DetailSectionSegmentActivity: FC<Props> = ({ events }) => {
   return (
     <DetailSectionSegmentActivityWrap>
-      <ActivityTable item={item} />
+      <ActivityTable events={events} />
     </DetailSectionSegmentActivityWrap>
   );
 };

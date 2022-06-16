@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { color, fontWeight, margins } from "../../design";
 import { DetailSectionProgress } from "../../containers/detail-section/detail-section-progress-bar/styles";
 import { HorizontalDivider } from "../atoms";

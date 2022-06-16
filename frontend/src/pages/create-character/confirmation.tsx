@@ -8,7 +8,7 @@ import { Character } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useEquipCharacter } from "../../service";
 import { getDatefromEpoch } from "../../util";
-import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer, } from "./styles";
+import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer } from "./styles";
 
 interface ConfirmationProps {
   character?: Character;
@@ -40,7 +40,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
         <ButtonText customColor={color.darkGrey}>{text.mint.characterName}</ButtonText>
         <MenuItemName>{character.name}</MenuItemName>
         <ButtonText customColor={color.darkGrey}>{text.mint.creationDate}</ButtonText>
-        <MenuItemName>{getDatefromEpoch(Number(character.itemActivity.date))}</MenuItemName>
+        <MenuItemName>{getDatefromEpoch(character.itemActivity[0].date || Date.now())}</MenuItemName>
       </InfoContainer>
       <ButtonContainer>
         <PrimaryButton onClick={() => equipNewCharacter()}>

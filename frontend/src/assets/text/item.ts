@@ -1,4 +1,5 @@
 export const item = {
+  buy: "buy",
   creators: "creators",
   level: "level",
   levelInfo: "this is the level of your item...",
@@ -11,6 +12,7 @@ export const item = {
   colors: "colors",
   contractAddress: "contract address",
   boardId: "board id",
+  brand: "brand",
   boardIdHash: "#",
   artist: "artist",
   metadata: "metadata",
@@ -25,5 +27,7 @@ export const item = {
   project: "project",
   details: "details",
   itemActivity: "item activity",
+  equip: "equip",
+  sell: "sell",
   zero: 0,
 };

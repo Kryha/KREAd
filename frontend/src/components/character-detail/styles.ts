@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { CardElementIcon, CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
@@ -105,7 +105,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 
 export const DetailContent = styled.div`
   padding: ${margins.medium} ${margins.medium} 0px ${margins.medium};
-  ${HorizontalDivider}{
+  ${HorizontalDivider} {
     margin-bottom: ${margins.medium};
   }
 `;
@@ -153,7 +153,7 @@ export const SignContainer = styled.div`
     background: ${color.lightGrey};
   }
   ${Element} {
-     width: 140px;
+    width: 140px;
     height: 140px;
     background: ${color.lightGrey};
     justify-content: center;

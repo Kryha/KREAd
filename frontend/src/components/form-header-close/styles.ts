@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { CloseIcon } from "../../assets";
 import { margins } from "../../design";
 import { HeaderHorizontalDivider, MenuText } from "../atoms";

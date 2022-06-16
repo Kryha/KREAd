@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { SecondaryButton } from "../atoms";
 
 export const ButtonInfoWrap = styled.div`

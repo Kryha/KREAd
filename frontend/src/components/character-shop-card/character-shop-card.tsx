@@ -1,33 +1,25 @@
 import { FC } from "react";
-import { Character } from "../../interfaces";
 
+import { Character } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { BoldLabel, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
-
-import {
-  Product,
-  Content,
-  ImageContainer,
-  Footer,
-  TitleWrapper,
-  OwnedByContainer,
-  Element,
-} from "./styles";
+import { Product, Content, ImageContainer, Footer, TitleWrapper, OwnedByContainer, Element } from "./styles";
 import { BaseCharacter } from "../base-character";
 
 interface CharacterShopCardProps {
   character: Character;
+  onClick?: (character: Character) => void;
 }
 
-export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character }) => {
+export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onClick }) => {
   return (
-    <Product>
+    <Product onClick={() => onClick && onClick(character)}>
       <Content>
         <ImageContainer>
           <Element />
-          <BaseCharacter character={character} isZoomed={false} size="medium" />
+          <BaseCharacter items={character.items} isZoomed={false} size="medium" />
         </ImageContainer>
         <TitleWrapper>
           <TitleText>{character.name}</TitleText>

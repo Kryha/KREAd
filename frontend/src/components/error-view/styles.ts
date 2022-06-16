@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { ErrorIcon as RawIcon } from "../../assets/icons";
@@ -6,7 +6,7 @@ import { ErrorIcon as RawIcon } from "../../assets/icons";
 export const ErrorIcon = styled(RawIcon)`
   path {
     fill: ${color.black};
-  };
+  }
   width: 250px;
   height: 250px;
   margin-top: ${margins.big};
