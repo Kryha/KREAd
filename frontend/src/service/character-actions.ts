@@ -1,10 +1,67 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
-import { AgoricService, PursePetname, ServiceState } from "../context/service";
-// import { assert, details as X } from "@agoric/assert";
-// import { AmountMath, makeIssuerKit } from "@agoric/ertp";
+import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
+import { Purses, ServiceState } from "../context/service";
+import { AmountMath } from "@agoric/ertp";
+import { CharacterDispatch } from "../context/characters";
 // import dappConstants from "../service/conf/defaults";
 // import installationConstants from "../service/conf/installation-constants-nft-maker.js";
+
+const formBidOfferForCharacter = (invitation: any, character: any, purses: Purses, price: bigint) => ({
+  // JSONable ID for this offer.  This is scoped to the origin.
+  id: Date.now(),
+  invitation,
+  proposalTemplate: {
+    want: {
+      Asset: {
+        pursePetname: purses.character[0].pursePetname,
+        value: harden([character]),
+      },
+    },
+    give: {
+      Bid: {
+        pursePetname: purses.money[0].pursePetname,
+        value: price,
+      },
+    },
+  },
+});
+
+export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
+  const { agoric, purses } = service;
+  const invitation = await E(auctionPublicFacet).makeBidInvitationForKey(character);
+  console.info("Invitation successful, sending to wallet for approval");
+  // Adjust based on Money Brand decimals
+  const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
+  const offerConfig = formBidOfferForCharacter(invitation, character, purses, adjustedPrice);
+
+  return E(agoric.walletP).addOffer(offerConfig);
+};
+
+export const mintCharacters = async (service: ServiceState, characters: any, price: bigint) => {
+  const { contracts: { characterBuilder }, purses } = service;
+  const pricePerNFT = AmountMath.make(purses.money[0].brand, price);
+  const newCharacters = harden(characters);
+  const mintResponse = await E(characterBuilder.publicFacet).auctionCharactersPublic(newCharacters, pricePerNFT);
+  assert(mintResponse.msg === SUCCESSFUL_MINT_REPONSE_MSG, "There was a problem minting the character");
+  console.info(mintResponse.msg);
+  return mintResponse;
+};
+
+export const mintAndBuy = async (service: ServiceState, characters: any) => {
+  assert(characters.length === 1, "mintAndBuy expects an array with a single character");
+  const newCharacter = await mintCharacters(service, characters, 1n);
+  assert(newCharacter.msg === SUCCESSFUL_MINT_REPONSE_MSG, "There was a problem minting the character");
+  console.info(newCharacter.msg);
+  await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
+};
+
+export const getCharacters = async (service: ServiceState, characterDispatch: CharacterDispatch) => {
+  const { contracts: { characterBuilder } } = service;
+  const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
+  console.info(`Fetched Characters: ${nfts.map((nft: any)=>nft.character.name)}`);
+  characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
+};
 
 // const { AUCTION_INSTALLATION_BOARD_ID } = installationConstants;
 // const {
@@ -246,31 +303,4 @@ import { AgoricService, PursePetname, ServiceState } from "../context/service";
 //   await E(depositFacet).receive(invitation);
 //   await E(agoric.walletP).addOffer(updatedOffer);
 // };
-export const makeBidOfferForCard = async (service: ServiceState, publicFacet: any, character: any, price: number) => {
-  const invitation = await E(publicFacet).makeBidInvitationForKey(character);
-  const { agoric, purses: { character: characterPurse, money: tokenPurses } } = service;
-  const adjustedPrice = BigInt(price * (10 ** 6));
-  const offerConfig = {
-    // JSONable ID for this offer.  This is scoped to the origin.
-    id: Date.now(),
-    invitation,
-    proposalTemplate: {
-      want: {
-        Asset: {
-          pursePetname: characterPurse[0].pursePetname,
-          value: harden([character]),
-        },
-      },
-      give: {
-        Bid: {
-          pursePetname: tokenPurses[0].pursePetname,
-          value: adjustedPrice,
-        },
-      },
-    },
-  };
 
-  return E(agoric.walletP).addOffer(offerConfig);
-};
-
-// // export { makeBidOfferForCard, getCardAuctionDetail };

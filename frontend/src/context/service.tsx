@@ -14,6 +14,7 @@ import {
 } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
 import { useCharacterStateDispatch } from "./characters";
+import { getCharacters } from "../service/character-actions";
 
 const {
   INSTANCE_BOARD_ID,
@@ -344,7 +345,9 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       // const publicFacet = E(zoe).getPublicFacet(instance);
       const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
       // publicFacetRef.current = "publicFacet";
-      dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId,  invitationIssuer, walletP } });
+      const nfts = await E(nftPublicFacet).getCharacterArray();
+      characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
+      dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
 
       // TODO: fetch available characters

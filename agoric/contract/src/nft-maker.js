@@ -30,6 +30,11 @@ const start = async (zcf) => {
   };
   let counter = 1;
 
+  // TODO: establish a rarity system set by the creator of the character set
+  // const pickRandomCharacter = () => {
+  //   const number = Math.random() * (characterSet.length - 1);
+  //   return characterSet[number];
+  // };
   const mintCharacterZCF = (seat) => {
     const amount = AmountMath.make(
       characterBrand,
@@ -64,16 +69,94 @@ const start = async (zcf) => {
     auctionInstallation,
     auctionItemsInstallation,
     timeAuthority,
+    baseCharacters,
   ) => {
     config = {
       moneyIssuer,
       auctionInstallation,
       auctionItemsInstallation,
       timeAuthority,
+      baseCharacters,
       completed: true,
     };
     return 'Setup completed';
   };
+
+  // TODO: establish a rarity system set by the creator of the character set
+  const getRandomBaseCharacter = () => {
+    const number = Math.random() * (config.baseCharacters.length - 1);
+    return config.baseCharacters[number];
+  };
+
+  const createNewCharacter = async (name) => {
+    assert(
+      config.completed,
+      'Configuration not found, please use creatorFacet.initConfig(<config>) to enable this method',
+    );
+    const newCharacter = {
+      ...getRandomBaseCharacter(),
+      name,
+    };
+
+    const newCharactersForSaleAmount = AmountMath.make(brand, [newCharacter]);
+    const allCharactersForSalePayment = mint.mintPayment(
+      newCharactersForSaleAmount,
+    );
+    const proposal = harden({
+      give: { Items: newCharactersForSaleAmount },
+    });
+    const paymentKeywordRecord = harden({ Items: allCharactersForSalePayment });
+
+    const issuerKeywordRecord = harden({
+      Items: issuer,
+      Money: config.moneyIssuer,
+    });
+    // Adjust for 6 decimals
+    const moneyValue = 10n ** 6n;
+    const minBidPerCharacter = AmountMath.make(config.moneyBrand, moneyValue);
+    // Terms used here are set via creatorFacet.initConfig(<config obj>)
+    // Short bidDuration of 1s for [almost] instant sell
+    const auctionItemsTerms = harden({
+      bidDuration: 1n,
+      winnerPriceOption: FIRST_PRICE,
+      ...zcf.getTerms(),
+      auctionInstallation: config.auctionInstallation,
+      minimalBid: minBidPerCharacter,
+      timeAuthority: config.timeAuthority,
+    });
+
+    const { creatorInvitation, instance, publicFacet } = await E(
+      zoeService,
+    ).startInstance(
+      config.auctionItemsInstallation,
+      issuerKeywordRecord,
+      auctionItemsTerms,
+    );
+
+    const shouldBeInvitationMsg = `The auctionItemsContract instance should return a creatorInvitation`;
+    assert(creatorInvitation, shouldBeInvitationMsg);
+
+    const character = {
+      name: newCharacter.name,
+      character: newCharacter,
+      auction: { instance, publicFacet },
+    };
+    characterArray = [...characterArray, character];
+
+    await E(zoeService).offer(
+      creatorInvitation,
+      proposal,
+      paymentKeywordRecord,
+    );
+
+    counter += 1;
+
+    return harden({
+      msg: 'Character mint successful, use attached public facet to purchase',
+      auctionItemsPublicFacet: publicFacet,
+    });
+  };
+
   const auctionCharactersPublic = async (newCharacters, minBidPerCharacter) => {
     assert(
       config.completed,
@@ -83,10 +166,6 @@ const start = async (zcf) => {
     const allCharactersForSalePayment = mint.mintPayment(
       newCharactersForSaleAmount,
     );
-    // Note that the proposal `want` is empty because we don't know
-    // how many Characters will be sold, so we don't know how much money we
-    // will make in total.
-    // https://github.com/Agoric/agoric-sdk/issues/855
     const proposal = harden({
       give: { Items: newCharactersForSaleAmount },
     });
@@ -246,6 +325,7 @@ const start = async (zcf) => {
     getCharacters,
     getCharacterArray: () => characterArray,
     auctionCharactersPublic,
+    createNewCharacter,
     getCount: () => counter,
     getConfig: () => config,
   });

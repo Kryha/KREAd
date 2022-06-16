@@ -2,7 +2,7 @@
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { useServiceContext } from "../context/service";
-import { makeBidOfferForCard } from "./mint";
+import { makeBidOfferForCharacter, getCharacters, mintCharacters } from "./character-actions";
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";
 import { useCharacterContext } from "../context/characters";
@@ -12,6 +12,7 @@ import { FakeCharctersNoItems } from "./fake-characters";
 export const TestServiceUI = () => {
   const [service, serviceDispatch] = useServiceContext();
   const [characters, charactersDispatch] = useCharacterContext();
+
   const CBPublicFacet = service.contracts.characterBuilder.publicFacet;
   useEffect(() => {
     console.log("SERVICE:", service);
@@ -25,32 +26,6 @@ export const TestServiceUI = () => {
     name: "Cmoney!",
     url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
   }];
-
-  const handleMint = async () => {
-    try {
-      console.log("MINTINGGGG");
-      console.log(service);
-      const pricePerNFT = AmountMath.make(service.purses.money[0].brand, 1n);
-      console.log(pricePerNFT);
-      const newCharacters = harden([FakeCharctersNoItems[1]]);
-      const mintResponse = await E(CBPublicFacet).auctionCharactersPublic(newCharacters, pricePerNFT);
-      console.log(mintResponse);
-    } catch (e) {
-      console.log("ERROR");
-      console.log(e);
-    }
-    // console.log(AmountMath.make(service.purses.character.brand, [1n]));
-    // callMintApi();
-    // await mintNFT(service.agoric, service.purses.money, service.agoric.walletP);
-    // await makeBidOfferForCard(
-    //   service.agoric.walletP,
-    //   nfts[0],
-    //   service.agoric.publicFacet,
-    //   service.purses.character,
-    //   service.purses.money,
-    //   1,
-    // );
-  };
 
   const getTimer = () => {
     if (!service.agoric.apiSend) {
@@ -219,13 +194,13 @@ export const TestServiceUI = () => {
     const nfts = await E(CBPublicFacet).getCharacterArray();
     const character = nfts[characterIndex];
     console.log(character.auction.publicFacet);
-    await makeBidOfferForCard(service, character.auction.publicFacet, character.character, 10);
+    await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
   };
   const makeOffer = async (character: any) => {
     // const auctionPublicFacet = await E(service.agoric.zoe).getPublicFacet(auctionInstance);
     console.log("🥵>>>>> AUCTION PUBLIC FACET");
     console.log(character.auction.publicFacet);
-    await makeBidOfferForCard(service, character.auction.publicFacet, character.character, 10);
+    await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
   };
   return <>
     <h1>SERVICE TEST UI</h1>
@@ -235,13 +210,13 @@ export const TestServiceUI = () => {
         onClick={getTimer}>GET TIMER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={handleMint}>CREATE CHARACTER</button>
+        onClick={()=>console.log("oops")}>CREATE CHARACTER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={checkOwned}>CHECK MY CHARACTERS</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async ()=> await buyCharacter(1)}>BUY CHARACTER</button>
+        onClick={async ()=> await buyCharacter(5)}>BUY CHARACTER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={async () => await getCharacters()}>GET CHARACTERS</button>
@@ -251,9 +226,6 @@ export const TestServiceUI = () => {
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={test}>TEST</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={setMintNext}>SET MINT NEXT</button>
     </div>
   </>;
 };

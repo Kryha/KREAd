@@ -46,11 +46,11 @@ export type CharacterStateActions =
   | SetOwnedCharacters
   | AddOwnedCharacters;
 
-type Dispatch = React.Dispatch<CharacterStateActions>;
+export type CharacterDispatch = React.Dispatch<CharacterStateActions>;
 type ProviderProps = Omit<React.ProviderProps<CharacterState>, "value">;
 
 const Context = createContext<CharacterState | undefined>(undefined);
-const DispatchContext = createContext<Dispatch | undefined>(undefined);
+const DispatchContext = createContext<CharacterDispatch | undefined>(undefined);
 
 const Reducer = (state: CharacterState, action: CharacterStateActions): CharacterState => {
   switch (action.type) {
@@ -102,4 +102,4 @@ export const useCharacterStateDispatch = (): React.Dispatch<CharacterStateAction
   return dispatch;
 };
 
-export const useCharacterContext = (): [CharacterState, Dispatch] => [useCharacterState(), useCharacterStateDispatch()];
+export const useCharacterContext = (): [CharacterState, CharacterDispatch] => [useCharacterState(), useCharacterStateDispatch()];

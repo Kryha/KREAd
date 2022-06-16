@@ -6,3 +6,6 @@ export const INFORMATION_STEP = 0;
 export const PAYMENT_STEP = 1;
 export const CONFIRMATION_STEP = 2;
 export const MINTING_COST = 2;
+export const MONEY_DECIMALS = 6;
+
+export const SUCCESSFUL_MINT_REPONSE_MSG = "Character mint successful, use attached public facet to purchase";
