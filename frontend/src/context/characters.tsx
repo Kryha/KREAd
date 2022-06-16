@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, useContext } from "react";
+import { Character } from "../interfaces";
 
-import { Character } from "../types/character";
+// import { Character } from "../types/character"
 
 export type CharacterState = {
   characters: Character[];
@@ -28,11 +29,7 @@ export interface Reset {
   type: "RESET";
 }
 
-export type CharacterStateActions =
-  | Reset
-  | SetFetched
-  | SetCharacters
-  | AddCharacters;
+export type CharacterStateActions = Reset | SetFetched | SetCharacters | AddCharacters;
 
 type Dispatch = React.Dispatch<CharacterStateActions>;
 type ProviderProps = Omit<React.ProviderProps<CharacterState>, "value">;
@@ -42,20 +39,20 @@ const DispatchContext = createContext<Dispatch | undefined>(undefined);
 
 const Reducer = (state: CharacterState, action: CharacterStateActions): CharacterState => {
   switch (action.type) {
-  case "SET_CHARACTERS":
-    return { ...state, characters: action.payload };
-    
-  case "ADD_CHARACTERS":
-    return { ...state, characters: [...state.characters, ...action.payload]};
+    case "SET_CHARACTERS":
+      return { ...state, characters: action.payload };
 
-  case "SET_FETCHED":
-    return { ...state, fetched: action.payload };
-    
-  case "RESET":
-    return initialState;
+    case "ADD_CHARACTERS":
+      return { ...state, characters: [...state.characters, ...action.payload] };
 
-  default:
-    throw new Error("Only defined action types can be handled;");
+    case "SET_FETCHED":
+      return { ...state, fetched: action.payload };
+
+    case "RESET":
+      return initialState;
+
+    default:
+      throw new Error("Only defined action types can be handled;");
   }
 };
 

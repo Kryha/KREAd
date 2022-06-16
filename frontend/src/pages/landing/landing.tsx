@@ -5,13 +5,18 @@ import { color } from "../../design";
 import { BaseCharacter, BaseRoute, ButtonText, CharacterCard, CharacterItems, LoadingPage, SecondaryButton } from "../../components";
 import { Close, LandingContainer, Menu } from "./styles";
 import { useMyCharacter, useMyCharacters } from "../../service";
+import { useCharacterContext } from "../../context/characters";
 
 export const Landing: FC = () => {
+  // Use useCharacterContext instead of use My characters
+  // const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
+  const [CharacterState, Dispatch] = useCharacterContext();
+  const { characters, fetched } = CharacterState;
+
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
-  const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
   const [openTab, setOpenTab] = useState(false);
 
-  if (isLoadingCharacter || isLoadingCharacters) return <LoadingPage />;
+  if (isLoadingCharacter) return <LoadingPage />;
 
   // TODO: get an empty page
   if (!character || !characters || !characters.length) return <></>;
