@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { text } from "../../assets";
+import { ONE_HUNDRED_PERCENT } from "../../constants";
 import { DetailSectionProgress } from "../../containers/detail-section/detail-section-progress-bar/styles";
 import { color } from "../../design";
 
@@ -33,13 +34,13 @@ export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
             <MenuText>{item.level}</MenuText>
             <ProgressContainer>
               <ButtonText>{text.item.effectiveness}</ButtonText>
-              <DetailSectionProgress id={text.item.effectiveness} value={item.effectiveness || 0} max="100">
+              <DetailSectionProgress id={text.item.effectiveness} value={item.effectiveness || 0} max={ONE_HUNDRED_PERCENT}>
                 {item.effectiveness}
               </DetailSectionProgress>
             </ProgressContainer>
             <ProgressContainer>
               <ButtonText>{text.item.layerComplexity}</ButtonText>
-              <DetailSectionProgress id={text.item.layerComplexity} value={item.layerComplexity || 0} max="100">
+              <DetailSectionProgress id={text.item.layerComplexity} value={item.layerComplexity || 0} max={ONE_HUNDRED_PERCENT}>
                 {text.item.layerComplexity}
               </DetailSectionProgress>
             </ProgressContainer>

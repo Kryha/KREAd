@@ -15,3 +15,4 @@ export const SMALL_SCREEN_SIZE = 1366;
 export const MEDIUM_SCREEN_SIZE = 1680;
 export const LARGE_SCREEN_SIZE = 1920;
 export const EXTRA_LARGE_SCREEN_SIZE = 2560;
+export const ONE_HUNDRED_PERCENT = 100;

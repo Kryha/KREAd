@@ -23,12 +23,10 @@ interface EquippedItemCardProps {
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
 ({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category, area }) => {
   const navigate = useNavigate();
-
   const handleClick = () => {
     navigate(`${routes.items}/${category}`, { state: { category: category} });
   };
   return (
-
     <EquippedContainer
       onClick={() => handleClick()}>
       <VerticalInfo code={code} id={item?.id} />
@@ -45,7 +43,6 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
         marginRight={marginRight}
       />
     </EquippedContainer>
-
   );
 };
 
