@@ -1,20 +1,25 @@
 {
-  "name": "character-builder-ui",
+  "name": "@builder/frontend",
   "version": "0.1.0",
-  "type": "module",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@agoric/assert": "^0.4.0",
     "@agoric/ertp": "^0.14.2",
     "@agoric/notifier": "^0.4.0",
-    "@endo/captp": "^2.0.7",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@endo/captp": "^2.0.8",
+    "@endo/eventual-send": "^0.15.4",
     "@endo/init": "^0.5.41",
     "@endo/lockdown": "^0.1.13",
     "@endo/marshal": "^0.6.7",
+    "@endo/nat": "^4.1.13",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.27.2",
+    "json5": "^2.2.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-error-boundary": "^3.1.4",
@@ -22,8 +27,7 @@
     "react-query": "^3.39.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
-    "ses": "^0.15.15",
-    "styled-components": "^5.3.5",
+    "ses": "^0.15.16",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.3",
@@ -40,10 +44,11 @@
     "workbox-streams": "^6.5.3"
   },
   "scripts": {
-    "start": "yarn build:ses && react-scripts start",
+    "start": "yarn build:ses && react-app-rewired start",
     "build:ses": "cp ./node_modules/ses/dist/lockdown.umd.js public/",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build:react": "react-app-rewired build",
+    "build": "yarn build:ses && yarn build:react",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint:fix": "npx eslint . --ext .ts,.tsx,.js --fix"
   },
@@ -60,6 +65,9 @@
     ]
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.9.2",
+    "@endo/eslint-plugin": "^0.4.0",
+    "@types/customize-cra": "^1.0.2",
     "@types/jest": "^26.0.24",
     "@types/node": "^12.20.42",
     "@types/react": "18",
@@ -68,8 +76,10 @@
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
     "agoric": "^0.16.0",
+    "customize-cra": "^1.0.0",
     "eslint-config-react-app": "^7.0.0",
     "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.5.0"
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "react-app-rewired": "^2.2.1"
   }
 }

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useQuery, UseQueryResult } from "react-query";
+import { useMutation, useQuery, UseQueryResult } from "react-query";
 
 import { Item } from "../interfaces";
 import { Items } from "./fake-item-data";
@@ -30,24 +30,34 @@ export const useMyItems = (): UseQueryResult<Item[]> => {
   });
 };
 
-export const useFilteredItems =
-  (category: string, sorting: string, price: { min: number, max: number }, color: string): { data: Item[]; isLoading: boolean } => {
-    const { data, isLoading } = useItems();
-    const changedRange = price.min === MIN_PRICE && price.max === MAX_PRICE;
+export const useFilteredItems = (
+  category: string,
+  sorting: string,
+  price: { min: number; max: number },
+  color: string
+): { data: Item[]; isLoading: boolean } => {
+  const { data, isLoading } = useItems();
+  const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
-    return useMemo(() => {
-      if (!data) return { data: [], isLoading };
-      if (!category && !sorting && !color && changedRange) return { data, isLoading };
+  const isInCategory = (item: Item, category: string) => (category ? item.category === category : true);
+  const hasColor = (item: Item, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
-      const categoryItems = data.filter((item) => item.category === category);
-      const colorItems = data.filter((item) => item.colors.some((colorElement) => colorElement === color));
-      const sortingItems = sortItems(sorting, data);
-      const priceItems = changedRange ? [] : data.filter((item) => (item.price > price.min && item.price < price.max));
+  return useMemo(() => {
+    if (!data) return { data: [], isLoading };
+    if (!category && !sorting && !color && !changedRange) return { data, isLoading };
 
-      const combinedItemsOne = categoryItems.concat(colorItems.filter((item) => categoryItems.indexOf(item) < 0));
-      const combinedItemsTwo = sortingItems.concat(priceItems.filter((item) => sortingItems.indexOf(item) < 0));
-      const items = combinedItemsOne.concat(combinedItemsTwo.filter((item) => combinedItemsOne.indexOf(item) < 0));
+    const filteredItems = data.filter((item) => isInCategory(item, category) && hasColor(item, color));
+    const filteredPrice = filteredItems.filter((item) => item.price > price.min && item.price < price.max);
+    const sortedItems = sortItems(sorting, filteredPrice);
 
-      return { data: items, isLoading };
-    }, [category, changedRange, color, data, isLoading, price.max, price.min, sorting]);
-  };
+    return { data: sortedItems, isLoading };
+  }, [category, color, data, isLoading, price, sorting, changedRange]);
+};
+
+export const useSellItem = () => {
+  // TODO: invalidate queries
+  return useMutation(async (body: { price: number }) => {
+    if (!body.price) throw new Error("Id not specified");
+    // TODO: intergrate
+  });
+};

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
@@ -14,6 +14,9 @@ export const Product = styled.div`
   align-items: center;
   min-height: 485px;
   cursor: pointer;
+  :hover {
+    border: 1px solid ${color.black};
+  }
 `;
 
 export const ImageContainer = styled.div`
@@ -25,6 +28,7 @@ export const ImageContainer = styled.div`
   box-sizing: border-box;
   border-radius: ${margins.medium};
   margin-bottom: ${margins.medium};
+  overflow: hidden;
 `;
 
 export const Content = styled.div`
@@ -62,7 +66,7 @@ interface ImageProps {
 
 /* eslint-disable indent */
 export const ItemImage = styled(Img) <ImageProps>`
-${({ category }): string => {
+  ${({ category }): string => {
     switch (category) {
       case "hair":
         return "width: 1000px; height: 400px; margin-top: 110px;";

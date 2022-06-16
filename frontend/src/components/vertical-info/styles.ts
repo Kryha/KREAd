@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { color, margins } from "../../design";
+import styled from "@emotion/styled";
+import { color, fontWeight, margins } from "../../design";
 
 import { Label } from "../atoms";
 
@@ -11,15 +11,14 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px 0px ${margins.mini};
   margin: 0px;
 `;
 
-export const CategoryCode = styled(Label) <DirectionProps>`
-
+export const CategoryCode = styled(Label)<DirectionProps>`
   margin: ${margins.mini} 0px;
   text-transform: uppercase;
-  font-family: Aktiv Grotesk Medium;
+  font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.light};
   flex: none;
   order: 3;
   flex-grow: 0;
@@ -34,7 +33,7 @@ export const CategoryCode = styled(Label) <DirectionProps>`
   }}
 `;
 
-export const Id = styled(CategoryCode) <DirectionProps>`
+export const Id = styled(CategoryCode)<DirectionProps>`
   margin: ${margins.medium} 0px;
   flex: none;
   order: 0;
@@ -69,7 +68,7 @@ export const DiagonalContainer = styled.div`
 `;
 
 export const Diagonal = styled.div`
-  border: 1px solid ${color.grey};
+  border: 0.5px solid ${color.grey};
   transform: rotate(135deg);
   left: -2px;
   position: absolute;

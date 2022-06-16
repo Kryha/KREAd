@@ -1,7 +1,10 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { ArrowUpRightIcon } from "../../assets";
 
 import { color, margins } from "../../design";
 import { HeaderHorizontalDivider } from "../atoms/lines";
+import { ButtonInfoWrap } from "../button-info/styles";
+import { PriceContainer } from "../price-in-run/styles";
 
 export const ArrowContainer = styled.div`
   display: flex;
@@ -13,8 +16,12 @@ export const ArrowContainer = styled.div`
   border-radius: ${margins.medium};
 `;
 
+interface CharacterProps {
+  width: number;
+  height: number;
+}
 
-export const CharacterWrapper = styled.div`
+export const CharacterWrapper = styled.div<CharacterProps>`
   width: 526px;
   background: ${color.white};
   border: 1px solid ${color.grey};
@@ -25,6 +32,13 @@ export const CharacterWrapper = styled.div`
   top: 101px;
   position: absolute;
   z-index: 10000;
+  ${({ width, height }): string =>
+    `
+      min-width: ${width * 0.375}px;
+      max-width: ${width * 0.375}px;
+      width: ${width * 0.375}px;
+      max-height: ${height - 80}px;
+   `};
 `;
 
 export const CharacterHeader = styled.div`
@@ -53,7 +67,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const CharacterContent = styled.div`
-  padding: 24px ${margins.big} 0px ${margins.medium};
+  padding: ${margins.medium} ${margins.big} 0px ${margins.medium};
 `;
 
 export const CharacterItemContainer = styled.div`
@@ -66,9 +80,25 @@ export const CharacterItemContainer = styled.div`
 export const CardActionsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
+  padding: 0px;
   justify-content: flex-end;
   margin-right: 30px;
   margin-bottom: 30px;
   box-shadow: none;
+  ${PriceContainer} {
+    margin-top: ${margins.mini};
+    margin-right: ${margins.mini};
+  }
+  ${ButtonInfoWrap} {
+    margin-top: 30px;
+    margin-right: ${margins.small};
+  }
+`;
+
+export const ArrowUp = styled(ArrowUpRightIcon)`
+  margin-left: ${margins.mini};
+  path {
+    stroke: ${color.white};
+  }
 `;

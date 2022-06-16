@@ -1,3 +1,4 @@
+import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
 
 // TODO: Define proper type for Slots items;
@@ -20,19 +21,11 @@ export interface CharacterItems {
 
 export interface Detail {
   boardId: string;
-  contractAddresss: string;
-  standard: string;
+  brand: string;
   artist: string;
   metadata: string;
 }
 
-export interface Activity {
-  event: string;
-  price: number;
-  to: string;
-  from: string;
-  date: string;
-}
 export interface Character {
   title: string;
   name: string;
@@ -43,7 +36,7 @@ export interface Character {
   items: CharacterItems;
   detail: Detail;
   projectDescription: string;
-  itemActivity: Activity;
+  itemActivity: ActivityEvent[];
   price: number;
   slots: Slots[];
 }

@@ -1,29 +1,26 @@
 import { FC } from "react";
-import { Item } from "../../interfaces";
 
+import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { Badge, BoldLabel, Label, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
-
-import {
-  Product,
-  Content,
-  ImageContainer,
-  Footer,
-  Tag,
-  TitleWrapper,
-  OwnedByContainer,
-  ItemImage,
-} from "./styles";
+import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, OwnedByContainer, ItemImage } from "./styles";
 
 interface ShopCardProps {
   item: Item;
+  onClick?: (item: Item) => void;
 }
 
-export const ShopCard: FC<ShopCardProps> = ({ item }) => {
+// TODO: rename to ItemShopCard
+export const ShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
+  const handleClick = () => {
+    if (!onClick) return;
+    onClick(item);
+  };
+
   return (
-    <Product>
+    <Product onClick={() => handleClick()}>
       <Content>
         <ImageContainer>
           {/* TODO: use slots */}
@@ -37,7 +34,9 @@ export const ShopCard: FC<ShopCardProps> = ({ item }) => {
         </TitleWrapper>
         <Footer>
           <Tag>
-            <Badge><Label>{item.category}</Label></Badge>
+            <Badge>
+              <Label>{item.category}</Label>
+            </Badge>
             <Label>{text.param.oneOutOf(item.rarity)}</Label>
           </Tag>
           <PriceInRun price={item.price} />

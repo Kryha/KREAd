@@ -1,4 +1,3 @@
-
 // const state = {
 //   walletConnected: false,
 //   dappApproved: true,

@@ -1,16 +1,15 @@
-import "@endo/init";
-/// <reference types="ses"/>
-// import "ses";
+import "@endo/eventual-send/shim";
+import "json5";
 import React from "react";
 import { createRoot } from "react-dom/client";
+
 import "./index.css";
 import App from "./App";
+
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 // import reportWebVitals from "./reportWebVitals";
-// lockdown();
-const container = document.getElementById("root");
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(container!); // createRoot(container!) if you use TypeScript
+
+const root = createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
   <React.StrictMode>

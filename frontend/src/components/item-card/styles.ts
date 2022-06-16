@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { color } from "../../design";
 import { CardElementIcon } from "../../assets";
 
@@ -19,6 +19,7 @@ export const ElementWrapper = styled.div`
       > rect {
         stroke: ${color.black};
       }
+    }
   }
 `;
 
@@ -32,7 +33,8 @@ export const ElementContainer = styled.div`
   left: 23px;
   top: 0px;
   box-sizing: border-box;
-  background: ${color.white};
+  border-radius: 24px;
+  background-color: ${color.white};
   z-index: 100;
 `;
 

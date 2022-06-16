@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 import { TickIcon, RangeIcon } from "../../assets";
 import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
-import { color, margins } from "../../design";
+import { color, fontWeight, margins } from "../../design";
 import { ButtonText, SecondaryButton, BodyText, Input } from "../atoms";
 
 interface SelectProps {
@@ -94,8 +94,8 @@ export const SliderTrack = styled.div`
 export const SliderRange = styled.div<RangeProps>`
   border-radius: 0px;
   height: 4px;
-  width: ${(props): string => `${props.width}%;`}
-  left: ${(props): string => `${props.left}%;`}
+  width: ${(props): string => `${props.width}%;`};
+  left: ${(props): string => `${props.left}%;`};
   position: absolute;
   background-color: ${color.black};
   z-index: 2;
@@ -125,7 +125,7 @@ export const ThumbLeft = styled.input`
     pointer-events: all;
     position: relative;
   }
-   ::-moz-range-thumb {
+  ::-moz-range-thumb {
     cursor: pointer;
     height: 32px;
     width: 40px;
@@ -147,7 +147,8 @@ export const MaxInput = styled(Input)`
   width: 119px;
   padding: 3px 0px 16px 33px;
   position: relative;
-  font-family: Aktiv Grotesk Regular;
+  font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.light};
 `;
 
 export const MinInput = styled(MaxInput)`
@@ -167,8 +168,8 @@ export const TextLabel = styled(BodyText)`
   ::before {
     position: absolute;
     content: "RUN";
-    font-family: Aktiv Grotesk Regular;
-    font-weight: 400;
+    font-family: aktiv-grotesk;
+    font-weight: ${fontWeight.light};
     font-size: 14px;
     line-height: 18px;
     padding-top: 3px;
@@ -185,7 +186,7 @@ export const InputContainer = styled.div`
 
 export const ColorWrapper = styled.div<SelectProps>`
   cursor: pointer;
-    ${({ selected }): string => {
+  ${({ selected }): string => {
     return selected
       ? `
       ${DetailSectionColorPaletteWrap} {

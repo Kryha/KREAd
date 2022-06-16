@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { margins } from "../../design";
 
 export const LeftItemContainer = styled.div`
@@ -15,7 +15,6 @@ export const RightItemContainer = styled.div`
   height: 408px;
   right: ${margins.big};
   bottom: ${margins.big};
-
 `;
 
 export const RightItems = styled.div`

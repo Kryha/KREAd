@@ -21,8 +21,15 @@ const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: { CharacterZCF: CHARACTER_ZCF_ISSUER_BOARD_ID, Character: CHARACTER_ISSUER_BOARD_ID },
-  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, CharacterZCF: CHARACTER_ZFC_BRAND_BOARD_ID},
+  issuerBoardIds: {
+    // CharacterZCF: CHARACTER_ZCF_ISSUER_BOARD_ID,
+    Character: CHARACTER_ISSUER_BOARD_ID
+  },
+  brandBoardIds: {
+    Money: MONEY_BRAND_BOARD_ID,
+    Character: CHARACTER_BRAND_BOARD_ID,
+    // CharacterZCF: CHARACTER_ZFC_BRAND_BOARD_ID
+  },
 } = dappConstants;
 
 console.log(dappConstants);
@@ -163,41 +170,41 @@ const DispatchContext = createContext<Dispatch | undefined>(undefined);
 
 const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState => {
   switch (action.type) {
-  case "SET_DAPP_APPROVED":
-    return { ...state, status: { ...state.status, dappApproved: action.payload } };
+    case "SET_DAPP_APPROVED":
+      return { ...state, status: { ...state.status, dappApproved: action.payload } };
 
-  case "SET_SHOW_APPROVE_DAPP_MODAL":
-    return { ...state, status: { ...state.status, showApproveDappModal: action.payload } };
+    case "SET_SHOW_APPROVE_DAPP_MODAL":
+      return { ...state, status: { ...state.status, showApproveDappModal: action.payload } };
 
-  case "SET_WALLET_CONNECTED":
-    return { ...state, status: { ...state.status, walletConnected: action.payload } };
+    case "SET_WALLET_CONNECTED":
+      return { ...state, status: { ...state.status, walletConnected: action.payload } };
 
-  case "SET_TOKEN_PURSES":
-    return { ...state, purses: { ...state.purses, money: action.payload } };
+    case "SET_TOKEN_PURSES":
+      return { ...state, purses: { ...state.purses, money: action.payload } };
     
-  case "SET_CHARACTER_PURSES":
-    return { ...state, purses: { ...state.purses, character: action.payload } };
+    case "SET_CHARACTER_PURSES":
+      return { ...state, purses: { ...state.purses, character: action.payload } };
     
-  case "SET_AGORIC":
-    return { ...state, agoric: { ...state.agoric, ...action.payload }};
+    case "SET_AGORIC":
+      return { ...state, agoric: { ...state.agoric, ...action.payload }};
       
-  case "SET_APISEND":
-    return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
+    case "SET_APISEND":
+      return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
     
-  case "SET_CHARACTER_CONTRACT":
-    return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload }};
+    case "SET_CHARACTER_CONTRACT":
+      return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload }};
       
-  case "ADD_AUCTION_CONTRACT":
-    return { ...state, contracts: { ...state.contracts, auctions: [...state.contracts.auctions, action.payload] } };
+    case "ADD_AUCTION_CONTRACT":
+      return { ...state, contracts: { ...state.contracts, auctions: [...state.contracts.auctions, action.payload] } };
     
-  case "SET_LOADING":
-    return { ...state, isLoading: action.payload };
+    case "SET_LOADING":
+      return { ...state, isLoading: action.payload };
     
-  case "RESET":
-    return initialState;
+    case "RESET":
+      return initialState;
 
-  default:
-    throw new Error("Only defined action types can be handled;");
+    default:
+      throw new Error("Only defined action types can be handled;");
   }
 };
 
@@ -228,46 +235,46 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
 
       const apiRecv = (obj: any) => {
         switch (obj.type) {
-        case "nft-maker/nftTestResponse": {
-          console.log("GOT CHARACTERS:");
-          console.log(obj.data);
-          characterDispatch({ type: "SET_CHARACTERS", payload: obj.data });
-          return obj.data;
-        }
-        case "nft-maker/nftListResponse": {
-          console.log("GOT CHARACTERS:");
-          console.log(obj.data);
-          characterDispatch({ type: "SET_CHARACTERS", payload: obj.data });
-          return obj.data;
-        }
-        case "nft-maker/nftMintResponse": {
-          console.log("MINT RESPONSE");
-          console.log(obj.data);
-          return obj.data;
-        }
-        case "response/character/mint": {
-          console.log("~MINT RESPONSE");
-          console.log(obj.data);
-          return obj.data;
-        }
-        case "nftFaucet/sendInvitationResponse": {
+          case "nft-maker/nftTestResponse": {
+            console.log("GOT CHARACTERS:");
+            console.log(obj.data);
+            characterDispatch({ type: "SET_CHARACTERS", payload: obj.data });
+            return obj.data;
+          }
+          case "nft-maker/nftListResponse": {
+            console.log("GOT CHARACTERS:");
+            console.log(obj.data);
+            characterDispatch({ type: "SET_CHARACTERS", payload: obj.data });
+            return obj.data;
+          }
+          case "nft-maker/nftMintResponse": {
+            console.log("MINT RESPONSE");
+            console.log(obj.data);
+            return obj.data;
+          }
+          case "response/character/mint": {
+            console.log("~MINT RESPONSE");
+            console.log(obj.data);
+            return obj.data;
+          }
+          case "nftFaucet/sendInvitationResponse": {
           // Once the invitation has been sent to the user, we update the
           // offer to include the invitationBoardId. Then we make a
           // request to the user's wallet to send the proposed offer for
           // acceptance/rejection.
-          const { offer } = obj.data;
-          console.log("OFFER INCOMING: ", offer);
-          // eslint-disable-next-line no-use-before-define
-          // addOffer(offer);
-          break;
-        }
-        case "CTP_DISCONNECT": {
+            const { offer } = obj.data;
+            console.log("OFFER INCOMING: ", offer);
+            // eslint-disable-next-line no-use-before-define
+            // addOffer(offer);
+            break;
+          }
+          case "CTP_DISCONNECT": {
           // TODO: handle this appropriately
-          break;
-        }
-        default: {
-          throw Error(`unexpected apiRecv obj.type ${obj.type}`);
-        }
+            break;
+          }
+          default: {
+            throw Error(`unexpected apiRecv obj.type ${obj.type}`);
+          }
         }
       };
 
@@ -294,7 +301,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
           ({ brandBoardId }) => brandBoardId === MONEY_BRAND_BOARD_ID,
         );
         const newCharacterPurses = purses.filter(
-          ({ brandBoardId }) => brandBoardId === CHARACTER_BRAND_BOARD_ID || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
+          ({ brandBoardId }) => brandBoardId === CHARACTER_BRAND_BOARD_ID, // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
         );
         // const newCharacterZCFPurses = purses.filter(
         //   ({ brandBoardId }) => brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
@@ -331,8 +338,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestInstance("Instance", INSTANCE_BOARD_ID),
         E(walletP).suggestIssuer("CB", CHARACTER_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer("KCB", CHARACTER_ZCF_ISSUER_BOARD_ID),
-
+        // E(walletP).suggestIssuer("KCB", CHARACTER_ZCF_ISSUER_BOARD_ID),
         // E(walletP).suggestIssuer("CBI", ITEM_ISSUER_BOARD_ID),
       ]);
 

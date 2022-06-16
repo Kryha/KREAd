@@ -2,7 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+
+    <script src="lockdown.umd.js"></script>
+    <script>
+      // Allow the React dev environment to extend the console for debugging
+      // features.
+      const consoleTaming = "%NODE_ENV%" === "production" ? "safe" : "unsafe";
+
+      const { pow: mathPow } = Math;
+      Math.pow = (base, exp) => (typeof base === "bigint" && typeof exp === "bigint" ? base ** exp : mathPow(base, exp));
+
+      lockdown({
+        __allowUnsafeMonkeyPatching__: "unsafe",
+        errorTaming: "unsafe",
+        overrideTaming: "severe",
+        consoleTaming: consoleTaming,
+      });
+
+      console.log("lockdown done.");
+
+      // Prevent React Dev from throwing up error overlays on unhandled rejections.
+      if ("%NODE_ENV%" !== "production") {
+        window.addEventListener("unhandledrejection", (ev) => ev.stopImmediatePropagation());
+      }
+    </script>
+
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" href="https://use.typekit.net/pqd0hba.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Web site created using create-react-app" />

@@ -1,9 +1,9 @@
 import { FC } from "react";
 
-import { text, UnnamedCreator } from "../../../assets";
-import { Label } from "../../../components";
+import { text } from "../../../assets";
+import { BaseCharacter, Label } from "../../../components";
+import { CharacterItems } from "../../../interfaces";
 
-import { Item } from "../../../interfaces";
 import {
   DetailSectionSegmentStoryCreators,
   DetailSectionSegmentStoryCreatorsImg,
@@ -11,26 +11,41 @@ import {
   DetailSectionSegmentStoryDescription,
   DetailSectionSegmentStoryImg,
   DetailSectionSegmentStoryWrap,
+  ImageContainer,
 } from "./styles";
 
-interface DetailSectionSegmentStoryProps {
-  item: Item;
+interface Data {
+  name: string;
+  description: string;
+  image: string | CharacterItems;
+  creatorImage: string;
 }
 
-// TODO: Use props intead of hardcoded placeholder for image src
-export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ item }) => {
+interface DetailSectionSegmentStoryProps {
+  data: Data;
+}
+
+export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ data }) => {
   return (
     <>
       <DetailSectionSegmentStoryWrap>
         <DetailSectionSegmentStoryCreators>
           <Label>{text.item.creators}</Label>
           <DetailSectionSegmentStoryCreatorsImgContainer>
-            <DetailSectionSegmentStoryCreatorsImg alt={item.name} src={UnnamedCreator} />
+            <DetailSectionSegmentStoryCreatorsImg alt={data.name} src={data.creatorImage} />
           </DetailSectionSegmentStoryCreatorsImgContainer>
         </DetailSectionSegmentStoryCreators>
-        <DetailSectionSegmentStoryDescription>{item.description}</DetailSectionSegmentStoryDescription>
+        <DetailSectionSegmentStoryDescription>{data.description}</DetailSectionSegmentStoryDescription>
       </DetailSectionSegmentStoryWrap>
-      <DetailSectionSegmentStoryImg src={item.image} />
+
+      {typeof data.image === "string" ? (
+        <DetailSectionSegmentStoryImg src={data.image} />
+      ) : (
+        // TODO: fix image z-index issue
+        <ImageContainer>
+          <BaseCharacter items={data.image} size="half" />
+        </ImageContainer>
+      )}
     </>
   );
 };

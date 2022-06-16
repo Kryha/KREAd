@@ -1,5 +1,5 @@
-import styled, { keyframes } from "styled-components";
-
+import styled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import { color, margins } from "../../design";
 
 const spin = keyframes`

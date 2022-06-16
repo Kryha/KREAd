@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { OutlinedButton } from "../../../components";
+import styled from "@emotion/styled";
+import { SecondaryButton } from "../../../components";
 
-import { color, margins, fontWeight, fontSize } from "../../../design";
+import { color, margins, fontWeight, fontSize, zIndex } from "../../../design";
 
 export const DetailSectionHeaderWrap = styled.header`
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: ${zIndex.overCharacter};
   background-color: ${color.lightGrey};
   display: flex;
   flex-flow: column nowrap;
@@ -32,13 +32,29 @@ export const DetailSectionHeaderDetails = styled.div`
 export const DetailSectionHeaderId = styled.p`
   display: inline-block;
   color: ${color.black};
-  font-size ${fontSize.extraSmall};
+  font-size: ${fontSize.extraSmall};
   font-weight: ${fontWeight.medium};
-
 `;
 
-export const CategoryButton = styled(OutlinedButton)`
+export const CategoryButton = styled(SecondaryButton)`
+  border-radius: 24px;
   color: ${color.darkGrey};
   padding: 3px 8px;
   cursor: default;
+  font-size:  12px;
+  line-height: 15px;
+  text-transform: capitalize;
+  border: 1px solid ${color.grey};
+  &:hover {
+    border: 1px solid ${color.grey};
+    color: ${color.darkGrey};
+  }
+  &:active {
+    border: 1px solid ${color.grey};
+    color: ${color.darkGrey};
+  }
+  &:focus {
+    border: 1px solid ${color.grey};
+    color: ${color.darkGrey};
+  }
 `;

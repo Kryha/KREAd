@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
+import { CharacterWrapper, ExpandButton } from "../../../components/base-character/styles";
 import { color, fontSize, imageSize, margins } from "../../../design";
 
 export const DetailSectionSegmentStoryWrap = styled.div`
@@ -42,4 +43,26 @@ export const DetailSectionSegmentStoryImg = styled.img`
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   background-color: ${color.white};
+`;
+
+export const ImageContainer = styled.div`
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  border: 1px solid ${color.grey};
+  border-radius: ${margins.medium};
+  background-color: ${color.white};
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  ${CharacterWrapper} {
+    position: relative;
+    right: 33%;
+    left: 33%;
+  }
+  ${ExpandButton} {
+    display: none;
+  }
 `;

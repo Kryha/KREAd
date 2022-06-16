@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { CharacterWrapper, ExpandButton } from "../../components/base-character/styles";
 import { Menu } from "../../components/menu-card/styles";
 
@@ -9,8 +9,8 @@ interface ViewProps {
 }
 
 /* eslint-disable indent */
-export const ItemWrapper = styled.div <ViewProps>`
-  over-flow: hidden;
+export const ItemWrapper = styled.div<ViewProps>`
+  overflow: hidden;
   ${({ height }): string => `max-height: ${height};`};
   ${({ position }): string => {
     console.log(position);

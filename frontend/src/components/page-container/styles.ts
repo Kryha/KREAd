@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { margins } from "../../design";
 
 export const PageWrap = styled.section`
