@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isString } from "../../interfaces";
-import { ButtonContainer, Divider, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper } from "./styles";
-import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
+import { ButtonContainer, Dash, Divider, ImageContainer, Info, InfoContainer, InfoWrapper, SubTitleContainer, TitleContainer } from "./styles";
+import { Badge, ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
@@ -24,6 +24,8 @@ interface MenuItemProps {
 
 export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
   const [selected, setSelected] = useState(false);
+  // TODO: find equpped items + categories
+  const isEquipped =  false;
 
   return (
     <Info
@@ -44,13 +46,25 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
       )}
       <InfoWrapper>
         <InfoContainer>
-          <MenuItemName>{data.name}</MenuItemName>
-          <Label>{text.param.itemId(data.id)}</Label>
+          <TitleContainer>
+            <MenuItemName>{data.name}</MenuItemName>
+            <Label customColor={color.black}>{text.param.itemId(data.id)}</Label>
+          </TitleContainer>
+          <SubTitleContainer>
+            <Badge>
+              <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
+            </Badge>
+            <Divider />
+            <ButtonText>{text.param.level(data.level)}</ButtonText>
+            {isEquipped && (
+              <>
+                <Dash />
+                <ButtonText customColor={color.darkGrey}>{text.general.equipped}</ButtonText>
+              </>
+            )}
+          </SubTitleContainer>
         </InfoContainer>
-        {/* TODO: actually track if equipped or not */}
-        <EquippedLabel>{text.general.equipped}</EquippedLabel>
         <ButtonContainer>
-          <Divider />
           <PrimaryButton>
             <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
           </PrimaryButton>

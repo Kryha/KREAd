@@ -2,7 +2,6 @@ import { FC, ReactNode, useState } from "react";
 
 import { text } from "../../assets";
 import {
-  ButtonText,
   ColorSelector,
   ErrorView,
   Filters,
@@ -10,9 +9,9 @@ import {
   Label,
   LoadingPage,
   PriceSelector,
-  SecondaryButton,
   Select,
-  ShopCard,
+  ItemShopCard,
+  ButtonText,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -25,8 +24,6 @@ import {
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
-  LoadMore,
-  Refresh,
   SelectorContainer,
   SortByContainer,
 } from "./styles";
@@ -92,22 +89,16 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             </Filters>
           </SortByContainer>
         </FilterContainer>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
       {!!noFilteredItems || (
         <ItemWrapper height={height}>
           <ItemContainer>
             {items.map((item, index) => (
-              <ShopCard item={item} key={index} onClick={setSelectedItem} />
+              <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
             ))}
           </ItemContainer>
-          {/* TODO: do something with load more */}
-          <LoadMore>
-            <SecondaryButton>
-              <ButtonText>{text.general.loadMore}</ButtonText>
-              <Refresh />
-            </SecondaryButton>
-          </LoadMore>
         </ItemWrapper>
       )}
       {!!selectedItem && (

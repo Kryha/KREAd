@@ -32,6 +32,7 @@ import { ReactComponent as ExclamationIcon } from "./exclamation.svg";
 import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.svg";
 import RangeIcon from "./range.png";
 import DefaultIcon from "./default-character.png";
+import { ReactComponent as DownArrowIcon } from "./down-arrow.svg";
 
 export {
   ErrorIcon,
@@ -68,4 +69,5 @@ export {
   RangeIcon,
   DefaultIcon,
   ExclamationIcon,
+  DownArrowIcon,
 };

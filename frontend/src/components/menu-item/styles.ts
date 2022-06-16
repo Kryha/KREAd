@@ -25,8 +25,8 @@ export const InfoWrapper = styled.div`
 export const MenuItemWrapper = styled.div``;
 
 export const Divider = styled.div`
-  width: 48px;
-  border: 1px solid #d0d0d0;
+  width: 23px;
+  border: 0.5px solid #d0d0d0;
   transform: rotate(90deg);
 `;
 
@@ -34,11 +34,13 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: ${margins.mini};
   padding: 0px;
   margin-right: ${margins.medium};
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
+  width: 100%;
 `;
 interface InfoProps {
   selected: boolean;
@@ -62,15 +64,9 @@ export const Info = styled.div<InfoProps>`
     `};
   :hover {
     border: 1px solid ${color.darkGrey};
-    ${EquippedLabel} {
+    ${Label} {
       display: none;
     }
-    // ${InfoContainer} {
-    //   margin-right: 0px;
-    // }
-    // ${ButtonContainer} {
-    //   margin-left: -30px;
-    // }
   }
   :not(:hover) {
     ${ButtonContainer} {
@@ -80,20 +76,46 @@ export const Info = styled.div<InfoProps>`
 `;
 
 export const ImageContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 80px;
-  height: 80px;
+  position: relative;
   box-sizing: border-box;
   border-radius: ${margins.medium};
-  margin-bottom: ${margins.medium};
-  position: relative;
+  border: 1px solid ${color.grey};
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: ${margins.small};
   ${CharacterWrapper} {
-    left: 20%;
-    right: 0;
+    left: 15px;
   }
   ${ExpandButton} {
     display: none;
   }
+`;
+
+export const SubTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: ${margins.small};
+`;
+
+export const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: ${margins.medium};
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const Dash = styled.div`
+  height: 1px;
+  border: 0.5px solid ${color.darkGrey};
+  width: ${margins.small};
 `;

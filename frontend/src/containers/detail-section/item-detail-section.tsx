@@ -48,9 +48,11 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
       </DetailSectionSegment>
 
       {/* activity */}
-      <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5}>
-        <DetailSectionSegmentActivity events={item.activity} />
-      </DetailSectionSegment>
+      {!!item.activity.length && (
+        <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5}>
+          <DetailSectionSegmentActivity events={item.activity} />
+        </DetailSectionSegment>
+      )}
     </DetailSectionWrap>
   );
 };

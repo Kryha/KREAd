@@ -15,8 +15,17 @@ export const ListHeader = styled.header`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  padding-bottom: ${margins.medium};
+  width: 100%;
+`;
+
+export const ListHeaderContainer = styled.div`
   border-bottom: 1px solid ${color.grey};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  gap: ${margins.small};
+  padding-bottom: ${margins.big};
 `;
 
 export const SortContainer = styled.div`

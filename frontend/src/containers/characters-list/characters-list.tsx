@@ -1,12 +1,14 @@
 import { FC, useState } from "react";
 
-import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
-import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
+import { ButtonText, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ListContainer, SortableListWrap, SortContainer } from "./styles";
 
 import { useMyFilteredCharacters } from "../../service";
 
 import { text } from "../../assets";
 import { categories, sorting } from "../../assets/text/filter-options";
+import { ListHeader, ListHeaderContainer } from "../items-list/styles";
+import { color } from "../../design";
 
 interface Props {
   onCharacterClick: (id: string) => void;
@@ -34,17 +36,20 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
 
   return (
     <SortableListWrap>
-      <ListHeader>
-        <Filters label={text.filters.category}>
-          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
-        </Filters>
-        <SortContainer>
-          <Label>{text.filters.sortBy}</Label>
-          <Filters label={text.filters.latest}>
-            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
+      <ListHeaderContainer>
+        <ListHeader>
+          <Filters label={text.filters.category}>
+            <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
           </Filters>
-        </SortContainer>
-      </ListHeader>
+          <SortContainer>
+            <Label>{text.filters.sortBy}</Label>
+            <Filters label={text.filters.latest}>
+              <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
+            </Filters>
+          </SortContainer>
+        </ListHeader>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(characters.length)}</ButtonText>
+      </ListHeaderContainer>
       <ListContainer>
         {characters.map((character) => (
           <MenuItem

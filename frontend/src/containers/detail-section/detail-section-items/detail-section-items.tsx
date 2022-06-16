@@ -6,7 +6,6 @@ import { color } from "../../../design";
 import { Item } from "../../../interfaces";
 import { CategoryButton } from "../detail-section-header/styles";
 import {
-  Divider,
   EmptyInfo,
   IdLabel,
   Info,
@@ -40,7 +39,6 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
           <MenuItemName>{item.name}</MenuItemName>
           <InlineDetails>
             <CategoryButton>{item.category}</CategoryButton>
-            <Divider />
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>

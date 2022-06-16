@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { text } from "../../assets";
-import { BUY_FLOW_STEPS, CONFIRMATION_STEP, INFORMATION_STEP, PAYMENT_STEP, SELL_FLOW_STEPS } from "../../constants";
+import { BUY_FLOW_STEPS, CONFIRMATION_STEP, PAYMENT_STEP, SELL_FLOW_STEPS } from "../../constants";
 import { FormHeaderClose } from "../form-header-close";
 import { FormTab } from "../form-tab";
 import { FormNavigation, NavigationTab } from "./styles";
@@ -20,15 +20,15 @@ export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFl
       <FormNavigation>
         {!isBuyFlow && (
           <NavigationTab>
-            <FormTab active={currentStep === INFORMATION_STEP} title={text.mint.information} amount={BUY_FLOW_STEPS} />
+            <FormTab active={true} title={text.mint.information} amount={BUY_FLOW_STEPS} />
           </NavigationTab>
         )}
         <NavigationTab>
-          <FormTab active={currentStep === PAYMENT_STEP} title={text.mint.payment} amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS} />
+          <FormTab active={currentStep >= PAYMENT_STEP} title={text.mint.payment} amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS} />
         </NavigationTab>
         <NavigationTab>
           <FormTab
-            active={currentStep === CONFIRMATION_STEP}
+            active={currentStep >= CONFIRMATION_STEP}
             title={text.mint.confirmation}
             amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS}
           />

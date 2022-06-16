@@ -20,11 +20,6 @@ const ItemsInventory: FC = () => {
 
   const item = useMemo(() => items?.find((item) => item.id === selectedId), [items, selectedId]);
 
-  const equip = () => {
-    // TODO: implement item equip
-    console.log("TODO: implement item equip");
-  };
-
   const sell = () => {
     if (!selectedId) return;
     navigate(`${routes.sellItem}/${selectedId}`);
@@ -38,7 +33,7 @@ const ItemsInventory: FC = () => {
     <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
       <ItemDetailSection
         item={item || items[0]}
-        actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+        actions={{ secondary: { text: text.item.sell, onClick: sell } }}
       />
     </PageContainer>
   );
@@ -90,7 +85,7 @@ export const Inventory: FC = () => {
     ),
     [selectedPage]
   );
-  // TODO: switch between items and characters
+
   return (
     <BaseRoute sideNavigation={<Title title={text.navigation.inventory} />}>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>

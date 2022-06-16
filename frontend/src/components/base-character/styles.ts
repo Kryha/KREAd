@@ -87,7 +87,21 @@ export const CharacterContainer = styled.div<ImageProps>`
         }
         return "zoom:0.075;";
       case "medium":
-        return "zoom: 0.3079;";
+        if (width <= SMALL_SCREEN_SIZE) {
+          return "zoom: 0.416;";
+        }
+        if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
+          return "zoom: 0.304;";
+        }
+        if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
+          return "zoom: 0.295;";
+        }
+        if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
+          return "zoom: 0.222;";
+        }
+        else {
+          return "zoom: 0.304;";
+        }
       case "half":
         return "zoom: 0.5;";
       case "normal":

@@ -26,4 +26,5 @@ export const general = {
   thisFieldIsRequired: "this field is required",
   mintNew: "mint new",
   theMinimiumAmountIs: "the minimum amount is RUN 1",
+  moreInfo: "more info",
 };

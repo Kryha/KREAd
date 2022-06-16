@@ -1,7 +1,18 @@
 import { FC, useState } from "react";
 
-import { ImageCard, Info, InfoContainer, InfoWrapper, ButtonContainer, Divider, EquippedLabel, Line, SelectedContainer } from "./styles";
-import { BoldLabel, ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
+import {
+  ImageCard,
+  ButtonContainer,
+  EquippedLabel,
+  Line,
+  InfoContainer,
+  SubTitleContainer,
+  TitleContainer,
+  Info,
+  InfoWrapper,
+  Divider
+} from "./styles";
+import { Badge, BoldLabel, ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
@@ -32,20 +43,25 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>
-          <MenuItemName>{character.name}</MenuItemName>
-          <SelectedContainer>
-            <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
+          <TitleContainer>
+            <MenuItemName>{character.name}</MenuItemName>
+            <EquippedLabel customColor={color.black}>{text.param.itemId(character.characterId)}</EquippedLabel>
+          </TitleContainer>
+          <SubTitleContainer>
+            <Badge>
+              <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
+            </Badge>
+            <Divider />
+            <ButtonText>{text.param.level(character.level)}</ButtonText>
             {isCharacterEquipped && (
               <>
                 <Line />
                 <BoldLabel>{text.character.selected}</BoldLabel>
               </>
             )}
-          </SelectedContainer>
+          </SubTitleContainer>
         </InfoContainer>
-        <EquippedLabel customColor={color.black}>{text.param.itemId(character.characterId)}</EquippedLabel>
         <ButtonContainer>
-          <Divider />
           {isCharacterEquipped ? (
             <PrimaryButton>
               <ButtonText customColor={color.white}>{text.character.selected}</ButtonText>
