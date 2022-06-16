@@ -62,10 +62,10 @@ const start = async (zcf) => {
   //   return characterSet[number];
   // };
 
-  const pickRandomItem = () => {
-    const number = Math.random() * (itemSet.length - 1);
-    return itemSet[number];
-  };
+  // const pickRandomItem = () => {
+  //   const number = Math.random() * (itemSet.length - 1);
+  //   return itemSet[number];
+  // };
 
   // Create the internal character nft issuer kit
   const {
@@ -259,7 +259,6 @@ const start = async (zcf) => {
     getNFTIssuer: () => NFTIssuer,
     getItemIssuer: () => itemIssuer,
     makeInvitation: () => zcf.makeInvitation(buyNFTs, 'buyNFTs'),
-
   });
 
   const publicFacet = Far('publicFacet', {
