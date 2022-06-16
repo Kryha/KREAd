@@ -9,13 +9,15 @@ import { Footer, Header, ProgressContainer, StatsContainer, StatsWrapper, Title 
 
 interface ItemStatsProps {
   item?: Item;
+  position: "left" | "right";
+  area: "top" | "middle" | "bottom";
 }
 
-export const ItemStats: FC<ItemStatsProps> = ({ item }) => {
+export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
   return (
     <>
       {item ? (
-        <StatsWrapper>
+        <StatsWrapper position={position} area={area}>
           <Header>
             <Title>{item.name}</Title>
             <Footer>

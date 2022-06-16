@@ -14,13 +14,21 @@ import {
 interface ItemCardProps extends ImageProps {
   image?: string;
   item?: Item;
+  position?: "left" | "right";
+  area?: "top" | "middle" | "bottom";
 }
 
-export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight, item }) => {
+export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight, item, position = "left", area ="middle" }) => {
   const [showStats, setShowStats] = useState(false);
   return (
     <>
-      {showStats && <ItemStats item={item} />}
+      {showStats && item &&
+        <ItemStats
+          item={item}
+          position={position}
+          area={area}
+        />
+      }
       <ElementWrapper
         onMouseEnter={() => setShowStats(!showStats)}
         onMouseLeave={() => setShowStats(!showStats)}

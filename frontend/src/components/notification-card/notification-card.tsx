@@ -66,10 +66,11 @@ export const NotificationCard: FC = () => {
                             </MessageContainer>
                             <SecondaryButton
                               onClick={() => {
-                                setShowDetail(!showDetail);
+                                setShowDetail(true);
                                 setInfo(text.param.yourItemHasBeenSold(notification.itemName, notification.price || 0));
                                 setTitle(text.notifications.yourItemHasBeenPurchased);
-                              }}>
+                              }}
+                            >
                               <ButtonText>{text.notifications.viewItem}</ButtonText>
                             </SecondaryButton>
                           </NotificationHeader>
@@ -87,7 +88,7 @@ export const NotificationCard: FC = () => {
                             </MessageContainer>
                             <SecondaryButton
                               onClick={() => {
-                                setShowDetail(!showDetail);
+                                setShowDetail(true);
                                 setInfo(text.param.theItemIsSussfullyPurchased(notification.itemName));
                                 setTitle(text.notifications.yourItemHasBeenPurchased);
                               }}
