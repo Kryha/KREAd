@@ -4,7 +4,7 @@ import { text } from "../../assets";
 import {  Badge, ButtonText, FormText, PriceInRun, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
-import { ArrowUp, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
+import { ArrowUp, ButtonContainer, ContentWrapper, GeneralInfo, Line, NumberContainer, PreviousButtonContainer, PricingContainer, Step, StepContainer, StepText, Tick, } from "./styles";
 
 interface PaymentProps {
   changeStep: (step: number) => void;
@@ -30,23 +30,25 @@ export const Payment: FC<PaymentProps> = ({ changeStep }) => {
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <Step>
-          <NumberContainer active={true}>
-            {sendOffer ?
-              <Tick />:
-              <ButtonText>{text.mint.stepOne}</ButtonText>
-            }
-          </NumberContainer>
-          <StepText>{text.mint.sendOfferToWallet}</StepText>
-          {Boolean(!sendOffer) && (
-            <>
+        <GeneralInfo>
+          <PricingContainer>
+            <NumberContainer active={true}>
+              {sendOffer ?
+                <Tick />:
+                <ButtonText>{text.mint.stepOne}</ButtonText>
+              }
+            </NumberContainer>
+            <StepText>{text.mint.sendOfferToWallet}</StepText>
+            {Boolean(!sendOffer) && (
               <PriceInRun price={MINTING_COST} />
-              <PrimaryButton onClick={() => sendOfferToWallet()}>
-                <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
-              </PrimaryButton>
-            </>
+            )}
+          </PricingContainer>
+          {Boolean(!sendOffer) && (
+            <PrimaryButton onClick={() => sendOfferToWallet()}>
+              <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
+            </PrimaryButton>
           )}
-        </Step>
+        </GeneralInfo>
         <Line />
         <Step>
           <NumberContainer active={!!sendOffer}>

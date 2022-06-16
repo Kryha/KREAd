@@ -5,7 +5,7 @@ export const LeftItemContainer = styled.div`
   position: absolute;
   width: 310px;
   height: 408px;
-  left: ${margins.big};
+  left: ${margins.small};
   bottom: ${margins.big};
 `;
 

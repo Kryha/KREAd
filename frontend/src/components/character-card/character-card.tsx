@@ -6,18 +6,19 @@ import {
   CharacterWrapper,
   CharacterContent,
   ArrowUp,
+  CharacterCardWrapper,
 } from "./styles";
 import { ButtonText, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
-import { CharacterDetail } from "../character-detail";
 import { Character } from "../../interfaces";
 import { PriceInRun } from "../price-in-run";
 import { MINTING_COST } from "../../constants";
 import { ButtonInfo } from "../button-info";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
+import { CharacterDetailSection } from "../../containers/detail-section/character-detail-section";
 interface CharacterCardProps {
   id: string;
   characters: Character[];
@@ -25,7 +26,6 @@ interface CharacterCardProps {
 
 export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
   const navigate = useNavigate();
-  const [showDetail, setShowDetail] = useState(false);
   const [character, setCharacter] = useState<Character>();
   const { width, height } = useViewport();
 
@@ -38,14 +38,18 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
     }, [characters, id]);
 
   const showInfo = (values: Character) => {
-    setShowDetail(!showDetail);
     setCharacter(values);
   };
 
-  const showCharacterDetail = () => {
-    setShowDetail(!showDetail);
+  const choose = () => {
+    // TODO: implement character choose
+    console.log("TODO: implement character choose");
   };
 
+  const sell = () => {
+    if (!character) return;
+    navigate(`${routes.sellCharacter}/${character.characterId}`);
+  };
 
   return (
     <>
@@ -66,8 +70,14 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
           </CardActionsContainer>
         </>
       </CharacterWrapper>
-      {!!showDetail && (
-        <CharacterDetail character={character} onClick={showCharacterDetail} />
+
+      {character && (
+        <CharacterCardWrapper>
+          <CharacterDetailSection
+            character={character}
+            actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
+          />
+        </CharacterCardWrapper>
       )}
     </>
   );

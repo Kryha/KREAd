@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, ButtonText, ErrorView, LoadingPage, PrimaryButton } from "../../components";
+import { BaseRoute, ErrorView, LoadingPage, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
@@ -10,7 +10,8 @@ import { useCharacters, useItems } from "../../service";
 import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
-import { color } from "../../design";
+import { Page } from "../shop";
+import { InventoryWrapper } from "./styles";
 
 const ItemsInventory: FC = () => {
   const { data: items, isLoading, isError } = useItems();
@@ -76,17 +77,24 @@ const CharactersInventory: FC = () => {
 };
 
 export const Inventory: FC = () => {
-  const [viewItems, setViewItems] = useState(true);
+  const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
 
+  const pageSelector = useMemo(
+    () => (
+      <SwitchSelector
+        buttonOneText={text.character.items}
+        buttonTwoText={text.character.characters}
+        setSelectedIndex={setSelectedPage}
+        selectedIndex={selectedPage}
+      />
+    ),
+    [selectedPage]
+  );
   // TODO: switch between items and characters
   return (
     <BaseRoute sideNavigation={<Title title={text.navigation.inventory} />}>
-      {/* TODO: remove this button and use proper switch */}
-      <PrimaryButton onClick={() => setViewItems(!viewItems)}>
-        <ButtonText customColor={color.white}>Switch views</ButtonText>
-      </PrimaryButton>
-
-      {viewItems ? <ItemsInventory /> : <CharactersInventory />}
+      <InventoryWrapper>{pageSelector}</InventoryWrapper>
+      {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
     </BaseRoute>
   );
 };

@@ -22,7 +22,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   font-weight: ${fontWeight.medium};
   font-size: 14px;
   line-height: 18px;
-  border: 2px solid ${color.black};
+  border: 1px solid ${color.black};
   box-sizing: border-box;
   align-items: center;
   letter-spacing: 0.05em;
@@ -31,7 +31,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   &:hover {
     color: ${(props): string => props.fontColor || color.black};
     background: ${(props): string => props.backgroundColor || color.white};
-    border: 2px solid ${color.black};
+    border: 1px solid ${color.black};
     box-sizing: border-box;
     ${ButtonText} {
       color: ${(props): string => props.fontColor || color.black};
@@ -44,11 +44,11 @@ export const PrimaryButton = styled.button<ButtonProps>`
   }
   &:active {
     background: ${(props): string => props.backgroundColor || color.white};
-    border: 2px solid ${color.black};
+    border: 1px solid ${color.black};
     box-sizing: border-box;
   }
   &:focus {
-    border: 2px solid ${color.black};
+    border: 1px solid ${color.black};
     outline: none;
     box-sizing: border-box;
   }
@@ -59,13 +59,13 @@ export const PrimaryButton = styled.button<ButtonProps>`
         color: ${color.white};
       }
       background: ${color.grey};
-      border: 2px solid ${color.grey};
+      border: 1px solid ${color.grey};
       &:hover {
         ${ButtonText} {
           color: ${color.white};
         }
         background: ${color.grey};
-        border: 2px solid ${color.grey};
+        border: 1px solid ${color.grey};
         > svg {
           path {
             stroke: ${color.white} !important;
@@ -73,10 +73,10 @@ export const PrimaryButton = styled.button<ButtonProps>`
         }
       }
       &:focus {
-        border: 2px solid ${color.grey};
+        border: 1px solid ${color.grey};
       }
       &:active {
-        border: 2px solid ${color.grey};
+        border: 1px solid ${color.grey};
       }
       && {
         cursor: default;
@@ -86,7 +86,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   }};
 `;
 
-export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
+export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   color: ${(props): string => props.fontColor || color.black};
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
@@ -113,7 +113,7 @@ export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
     box-sizing: border-box;
   }
   &:focus {
-    border: 2px solid ${color.darkGrey};
+    border: 1px solid ${color.darkGrey};
     outline: none;
     box-sizing: border-box;
   }
@@ -154,7 +154,7 @@ export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   }};
 `;
 
-export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
+export const TertiaryButton = styled(PrimaryButton) <ButtonProps>`
   background-color: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
   border: none;
@@ -172,7 +172,7 @@ export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
     box-sizing: border-box;
   }
   &:focus {
-    border: 2px solid ${color.black};
+    border: 1px solid ${color.black};
     box-sizing: border-box;
   }
   ${({ disabled }): string => {
@@ -188,7 +188,7 @@ export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
         opacity: 0.4;
       }
       &:focus {
-        border: 2px solid${color.black};
+        border: 1px solid${color.black};
       }
       &:active {
       }
