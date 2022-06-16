@@ -9,7 +9,7 @@ import { Character } from "../../interfaces";
 
 interface CharacterItemProps {
   character: Character;
-  onClick: (values: Character) => void;
+  onClick?: (character: Character) => void;
   id: string;
 }
 
@@ -19,11 +19,13 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
 
   return (
     <Info
+      tabIndex={0}
       selected={selected}
       onClick={() => {
-        onClick(character);
-        setSelected(!selected);
+        onClick && onClick(character);
+        setSelected(true);
       }}
+      onBlur={() => setSelected(false)}
     >
       <ImageCard>
         <BaseCharacter items={character.items} isZoomed={false} size="mini" />

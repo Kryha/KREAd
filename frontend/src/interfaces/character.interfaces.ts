@@ -42,6 +42,5 @@ export interface Character {
 }
 
 export interface CharacterCreation {
-  title: string;
   name: string;
 }

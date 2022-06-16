@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
-import { color, margins } from "../../design";
+import { color, margins, zIndex } from "../../design";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 import { ButtonInfoWrap } from "../button-info/styles";
 import { PriceContainer } from "../price-in-run/styles";
@@ -22,7 +23,6 @@ interface CharacterProps {
 }
 
 export const CharacterWrapper = styled.div<CharacterProps>`
-  width: 526px;
   background: ${color.white};
   border: 1px solid ${color.grey};
   box-sizing: border-box;
@@ -100,5 +100,14 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
   margin-left: ${margins.mini};
   path {
     stroke: ${color.white};
+  }
+`;
+
+export const CharacterCardWrapper = styled.div`
+  ${DetailSectionWrap} {
+    position: relative;
+    z-index: ${zIndex.overCharacter};
+    bottom: ${margins.big};
+    left: ${margins.big};
   }
 `;

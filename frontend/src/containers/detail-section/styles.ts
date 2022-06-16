@@ -1,7 +1,11 @@
 import styled from "@emotion/styled";
 import { color, margins } from "../../design";
 
-export const DetailSectionWrap = styled.section`
+interface ViewProps {
+  width: number;
+}
+
+export const DetailSectionWrap = styled.section<ViewProps>`
   height: 80vh;
   background-color: ${color.lightGrey};
   border: 1px solid ${color.grey};
@@ -18,6 +22,7 @@ export const DetailSectionWrap = styled.section`
   ::-webkit-scrollbar {
     display: none;
   }
+  ${({ width }): string => `width: ${width * 0.49}px;`};
 `;
 
 export const EmptyView = styled.section`

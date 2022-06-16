@@ -120,6 +120,9 @@ export const SectionHeader = styled.h1`
   font-size: 32px;
   font-weight: ${fontWeight.regular};
   line-height: 40px;
+  :first-letter {
+    text-transform: capitalize;
+  }
 `;
 
 export const FormText = styled(BodyText)`
