@@ -1,0 +1,4 @@
+{
+  "*.{ts,tsx,js,jsx}": ["yarn run lint-staged", "yarn run test-staged"],
+  "*.{json,md,yml,yaml,html,css}": ["prettier --write"]
+}

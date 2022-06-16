@@ -14,8 +14,8 @@ function App() {
       <ServiceStateProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
-            {/* <AppRoutes /> */}
-            <TestServiceUI />
+            <AppRoutes />
+            {/* <TestServiceUI /> */}
           </BrowserRouter>
         </QueryClientProvider>
       </ServiceStateProvider>
