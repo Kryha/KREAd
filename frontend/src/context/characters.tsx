@@ -54,16 +54,16 @@ const DispatchContext = createContext<CharacterDispatch | undefined>(undefined);
 const Reducer = (state: CharacterState, action: CharacterStateActions): CharacterState => {
   switch (action.type) {
     case "SET_CHARACTERS":
-      return { ...state, characters: action.payload };
+      return { ...state, fetched: true, characters: action.payload };
     
     case "ADD_CHARACTERS":
-      return { ...state, characters: [...state.characters, ...action.payload] };
+      return { ...state, fetched: true, characters: [...state.characters, ...action.payload] };
     
     case "SET_OWNED_CHARACTERS":
       return { ...state, owned: action.payload };
     
     case "ADD_OWNED_CHARACTERS":
-      return { ...state, owned: [...state.characters, ...action.payload]};
+      return { ...state, fetched: true, owned: [...state.owned, ...action.payload]};
 
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };

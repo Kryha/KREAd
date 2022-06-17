@@ -43,15 +43,16 @@ export const mintCharacters = async (service: ServiceState, characters: any, pri
   const pricePerNFT = AmountMath.make(purses.money[0].brand, price);
   const newCharacters = harden(characters);
   const mintResponse = await E(characterBuilder.publicFacet).auctionCharactersPublic(newCharacters, pricePerNFT);
-  assert(mintResponse.msg === SUCCESSFUL_MINT_REPONSE_MSG, "There was a problem minting the character");
+  if (mintResponse.msg !== SUCCESSFUL_MINT_REPONSE_MSG) throw new Error("There was a problem minting the character");
   console.info(mintResponse.msg);
   return mintResponse;
 };
 
 export const mintAndBuy = async (service: ServiceState, characters: any) => {
+  console.log(characters);
   assert(characters.length === 1, "mintAndBuy expects an array with a single character");
   const newCharacter = await mintCharacters(service, characters, 1n);
-  assert(newCharacter.msg === SUCCESSFUL_MINT_REPONSE_MSG, "There was a problem minting the character");
+  if (newCharacter.msg !== SUCCESSFUL_MINT_REPONSE_MSG) throw new Error("There was a problem minting the character");
   console.info(newCharacter.msg);
   await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
 };

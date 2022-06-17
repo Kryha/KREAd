@@ -1,35 +1,51 @@
 import { FC, useState } from "react";
 
 import { DefaultIcon, text } from "../../assets";
+import { mint } from "../../assets/text/mint";
 import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
+import { useServiceContext } from "../../context/service";
 import { useViewport } from "../../hooks";
 import { Character, CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
+import { makeBidOfferForCharacter, mintAndBuy, mintCharacters } from "../../service/character-actions";
+import { FakeCharctersNoItems } from "../../service/fake-characters";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
 
 export const CreateCharacter: FC = () => {
+  const [service, serviceDispatch] = useServiceContext();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [character, setCharacter] = useState<Character>();
+  const [character, setCharacter] = useState<any>();
   const createCharacter = useCreateCharacter();
 
-  const changeStep = (step: number): void => {
+  const changeStep = async (step: number): Promise<void> => {
     setCurrentStep(step);
   };
 
-  const submitForm = (data: CharacterCreation): void => {
-    createCharacter.mutate(data);
-    if (createCharacter.isSuccess) {
+  const sendOfferHandler = async (): Promise<void> => {
+    await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
+  };
+
+  const submitForm = async (data: CharacterCreation): Promise<void> => {
+    // createCharacter.mutate(data);
+    const baseCharacter = FakeCharctersNoItems[0];
+    const newCharacter = { ...baseCharacter, name: data.name, title: data.title };
+    const bought = await mintCharacters(service, [newCharacter], 1n);
+
+    // setCurrentStep(PAYMENT_STEP);
+    // setCharacter(createCharacter.data);
+    if (bought) {
       setCurrentStep(PAYMENT_STEP);
-      setCharacter(createCharacter.data);
+      setCharacter({ character: newCharacter, auction: { publicFacet: bought.auctionItemsPublicFacet } });
     }
   };
+
 
   if (createCharacter.isError) return <ErrorView />;
 
@@ -38,9 +54,9 @@ export const CreateCharacter: FC = () => {
       case 0:
         return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
       case 1:
-        return <Payment changeStep={changeStep} />;
+        return <Payment sendOfferHandler={()=>sendOfferHandler()} submit={changeStep} />;
       case 2:
-        return <Confirmation character={character} />;
+        return <Confirmation character={character.character} />;
       default:
         return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
     }

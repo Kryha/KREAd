@@ -4,19 +4,22 @@ import { text } from "../../assets";
 import {  Badge, ButtonText, FormText, PriceInRun, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
+import { Character } from "../../interfaces";
 import { ArrowUp, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
 
 interface PaymentProps {
-  changeStep: (step: number) => void;
+  submit: (step: number) => void;
+  sendOfferHandler: ()=> Promise<void>;
 }
 
 
-export const Payment: FC<PaymentProps> = ({ changeStep }) => {
+export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
   const [sendOffer, setSendOffer] = useState(false);
   const [acceptOffer, setAcceptOffer] = useState(false);
 
-  const sendOfferToWallet = () => {
-    // TODO: send offer
+  const sendOfferToWallet = async () => {
+    console.log("SENDING OFFER");
+    await sendOfferHandler();
     setSendOffer(true);
   };
 
@@ -41,7 +44,7 @@ export const Payment: FC<PaymentProps> = ({ changeStep }) => {
           {Boolean(!sendOffer) && (
             <>
               <PriceInRun price={MINTING_COST} />
-              <PrimaryButton onClick={() => sendOfferToWallet()}>
+              <PrimaryButton onClick={sendOfferToWallet}>
                 <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
               </PrimaryButton>
             </>
@@ -60,14 +63,14 @@ export const Payment: FC<PaymentProps> = ({ changeStep }) => {
         </Step>
       </StepContainer>
       {Boolean(!sendOffer) && (
-        <PreviousButtonContainer onClick={()=>changeStep(INFORMATION_STEP)}>
+        <PreviousButtonContainer onClick={()=>submit(INFORMATION_STEP)}>
           <SecondaryButton>
             <ButtonText >{text.mint.previous}</ButtonText>
           </SecondaryButton>
         </PreviousButtonContainer>
       )}
       <ButtonContainer>
-        <PrimaryButton onClick={()=>changeStep(CONFIRMATION_STEP)} disabled={!acceptOffer}>
+        <PrimaryButton onClick={()=>submit(CONFIRMATION_STEP)} disabled={!acceptOffer}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
           <ArrowUp />
         </PrimaryButton>

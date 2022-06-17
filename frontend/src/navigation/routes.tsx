@@ -6,6 +6,7 @@ import { routes } from "./route-names";
 import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemSell, CharacterSell } from "../pages";
 import { MainContainer, ErrorFallback } from "../components";
 import { Item } from "../pages/item";
+import { TestServiceUI } from "../service/test-service-ui";
 
 export const AppRoutes: FC = () => {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ export const AppRoutes: FC = () => {
 
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
+          <Route path={"/test"} element={<TestServiceUI />} />
+
         </Routes>
       </MainContainer>
     </ErrorBoundary>

@@ -191,7 +191,7 @@ export const TestServiceUI = () => {
   const buyCharacter = async (characterIndex: number) => {
     // const auctionPublicFacet = await E(service.agoric.zoe).getPublicFacet(auctionInstance);
     console.log("🥵>>>>> AUCTION PUBLIC FACET");
-    const nfts = await E(CBPublicFacet).getCharacterArray();
+    const nfts = await E(service.contracts.characterBuilder.publicFacet).getCharacterArray();
     const character = nfts[characterIndex];
     console.log(character.auction.publicFacet);
     await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
@@ -210,13 +210,13 @@ export const TestServiceUI = () => {
         onClick={getTimer}>GET TIMER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={()=>console.log("oops")}>CREATE CHARACTER</button>
+        onClick={()=>mintCharacters(service, [FakeCharctersNoItems[0], FakeCharctersNoItems[1]], 1n)}>CREATE CHARACTER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={checkOwned}>CHECK MY CHARACTERS</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async ()=> await buyCharacter(5)}>BUY CHARACTER</button>
+        onClick={async ()=> await buyCharacter(3)}>BUY CHARACTER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={async () => await getCharacters()}>GET CHARACTERS</button>

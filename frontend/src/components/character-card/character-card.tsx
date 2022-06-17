@@ -28,7 +28,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
   const [showDetail, setShowDetail] = useState(false);
   const [character, setCharacter] = useState<Character>();
   const { width, height } = useViewport();
-
+  console.log(characters);
   const sortedCharacters = useMemo(
     () => {
       const allItems = [...characters];
