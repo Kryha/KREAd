@@ -30,7 +30,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep }) => {
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <GeneralInfo>
+        <GeneralInfo active={sendOffer}>
           <PricingContainer>
             <NumberContainer active>{sendOffer ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
             <StepText>{text.mint.sendOfferToWallet}</StepText>
@@ -45,7 +45,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep }) => {
           )}
         </GeneralInfo>
         <Line />
-        <Step>
+        <Step active={!acceptOffer && sendOffer}>
           <NumberContainer active={!!sendOffer}>{acceptOffer ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}</NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
           {!acceptOffer && !!sendOffer && (

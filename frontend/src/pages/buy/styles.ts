@@ -9,6 +9,9 @@ export const Tick = styled(TickIcon)`
   margin-right: 20px;
   margin-bottom: 10px;
 `;
+interface ActiveProps {
+  active: boolean;
+}
 
 export const TickContainer = styled.div`
   display: flex;
@@ -76,7 +79,7 @@ export const StepText = styled(ButtonText)`
   line-height: 20.5px;
 `;
 
-export const Step = styled.div`
+export const Step = styled.div<ActiveProps>`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -164,7 +167,7 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const GeneralInfo = styled.div`
+export const GeneralInfo = styled.div<ActiveProps>`
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
@@ -179,6 +182,7 @@ export const GeneralInfo = styled.div`
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: 24px;
+
   ${StepText} {
     margin: 0px ${margins.small};
   }
