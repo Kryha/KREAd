@@ -34,7 +34,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep }) => {
           <PricingContainer>
             <NumberContainer active>{sendOffer ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
             <StepText>{text.mint.sendOfferToWallet}</StepText>
-            {Boolean(!sendOffer) && (
+            {!sendOffer && (
               <PriceInRun price={data.price} />
             )}
           </PricingContainer>

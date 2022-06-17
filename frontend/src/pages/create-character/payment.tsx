@@ -55,13 +55,13 @@ export const Payment: FC<PaymentProps> = ({ changeStep }) => {
             {acceptOffer ? <Tick /> :<ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
-          {Boolean(!acceptOffer && !!sendOffer) && (
+          {(!acceptOffer && !!sendOffer) && (
             // TODO: remove this onclick
             <Badge onClick={() => acceptOfferInWallet()}><ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText></Badge>
           )}
         </Step>
       </StepContainer>
-      {Boolean(!sendOffer) && (
+      {!sendOffer && (
         <PreviousButtonContainer onClick={()=>changeStep(INFORMATION_STEP)}>
           <SecondaryButton>
             <ButtonText >{text.mint.previous}</ButtonText>
