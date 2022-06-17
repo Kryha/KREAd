@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { margins } from "../../design";
+import { margins, zIndex } from "../../design";
 
 export const LeftItemContainer = styled.div`
   position: absolute;
@@ -7,6 +7,7 @@ export const LeftItemContainer = styled.div`
   height: 408px;
   left: ${margins.small};
   bottom: ${margins.big};
+  z-index: ${zIndex.overCharacter};
 `;
 
 export const RightItemContainer = styled.div`
@@ -15,6 +16,7 @@ export const RightItemContainer = styled.div`
   height: 408px;
   right: ${margins.big};
   bottom: ${margins.big};
+  z-index: ${zIndex.overCharacter};
 `;
 
 export const RightItems = styled.div`

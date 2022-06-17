@@ -76,28 +76,47 @@ export const CharacterWrapper = styled.div`
 `;
 
 export const CharacterContainer = styled.div<ImageProps>`
-  ${({ size, width, height }): string => {
-    switch (size) {
-      case "mini":
-        if (width <= SMALL_SCREEN_SIZE) {
-          return "zoom: 0.1;";
-        }
-        if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
-          return "zoom: 0.055;";
-        }
-        return "zoom:0.075;";
-      case "medium":
-        return "zoom: 0.3079;";
-      case "half":
-        return "zoom: 0.5;";
-      case "normal":
-        return `width: ${width * 0.4}px; height: ${height}px;`;
-      case "large":
-        return "zoom: 1.6;";
-      case "extraLarge":
-        return "zoom: 1.8;";
-      default:
-        return `width: ${width * 0.4}px; height: ${height}px;`;
+${({ size, width, height }): string => {
+    if (size === "mini") {
+      if (width <= SMALL_SCREEN_SIZE) {
+        return "zoom: 0.1;";
+      }
+      if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
+        return "zoom: 0.055;";
+      }
+      return "zoom:0.075;";
+    }
+    else if (size === "medium") {
+      if (width <= SMALL_SCREEN_SIZE) {
+        return "zoom: 0.357;";
+      }
+      if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
+        return "zoom: 0.304;";
+      }
+      if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
+        return "zoom: 0.295;";
+      }
+      if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
+        return "zoom: 0.222;";
+      }
+      else {
+        return "zoom: 0.304;";
+      }
+    }
+    else if (size === "half") {
+      return "zoom: 0.5;";
+    }
+    else if (size === "normal") {
+      return `width: ${width * 0.4}px; height: ${height}px;`;
+    }
+    else if (size === "large") {
+      return "zoom: 1.6;";
+    }
+    else if (size === "extraLarge") {
+      return "zoom: 1.8;";
+    }
+    else {
+      return `width: ${width * 0.4}px; height: ${height}px;`;
     }
   }};
 `;

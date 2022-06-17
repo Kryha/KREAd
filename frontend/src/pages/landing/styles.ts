@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
 import { CloseIcon, MenuIcon } from "../../assets";
 
-import { TopbarContainer } from "../../components/base-route/styles";
-
 interface ImageProps {
   isZoomed?: boolean;
 }
@@ -19,18 +17,4 @@ export const Close = styled(CloseIcon)`
   width: 12px;
 `;
 
-interface BaseView {
-  hideView: boolean;
-}
-
-export const BaseWrapper = styled.div<BaseView>`
-  ${({ hideView }): string => {
-    return hideView
-      ? `
-      ${TopbarContainer} {
-       display: none;
-      }
-        `
-      : "";
-  }};
-`;
+export const BaseWrapper = styled.div``;
