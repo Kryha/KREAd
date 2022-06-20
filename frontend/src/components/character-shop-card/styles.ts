@@ -26,6 +26,7 @@ export const ImageContainer = styled.div`
   width: 354px;
   height: 320px;
   box-sizing: border-box;
+  overflow: hidden;
   border-radius: ${margins.medium};
   margin-bottom: ${margins.medium};
   position: relative;

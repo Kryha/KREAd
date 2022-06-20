@@ -126,7 +126,7 @@ export const ItemIcon = styled.img<ImageProps>`
   top: 0;
   left: 0;
   ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.mid};`};
-  ${({ height }): string => `z-index: ${height}px;`};
+  ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
       return "width: 542.82px;";

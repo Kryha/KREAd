@@ -84,7 +84,6 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
           </DetailContent>
         </Content>
         <CardActionsContainer>
-          {/* TODO: link to store */}
           <PrimaryButton onClick={() => navigate(routes.shop)}><ButtonText customColor={color.white}>{text.character.deleteCharacter}</ButtonText></PrimaryButton>
         </CardActionsContainer>
       </Detail>

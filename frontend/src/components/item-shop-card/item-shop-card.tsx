@@ -5,15 +5,14 @@ import { text } from "../../assets";
 import { color } from "../../design";
 import { Badge, BoldLabel, Label, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
-import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, OwnedByContainer, ItemImage } from "./styles";
+import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, OwnedByContainer, ItemImage, Line } from "./styles";
 
 interface ShopCardProps {
   item: Item;
   onClick?: (item: Item) => void;
 }
 
-// TODO: rename to ItemShopCard
-export const ShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
+export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
   const handleClick = () => {
     if (!onClick) return;
     onClick(item);
@@ -37,7 +36,8 @@ export const ShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
             <Badge>
               <Label>{item.category}</Label>
             </Badge>
-            <Label>{text.param.oneOutOf(item.rarity)}</Label>
+            <Line />
+            <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
           </Tag>
           <PriceInRun price={item.price} />
         </Footer>

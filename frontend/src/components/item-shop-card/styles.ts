@@ -3,6 +3,12 @@ import styled from "@emotion/styled";
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
 
+export const Line = styled.div`
+  border: 0.5px solid ${color.darkGrey};
+  transform: rotate(-90deg);
+  width: 23px;
+`;
+
 export const Product = styled.div`
   width: 402px;
   background: ${color.white};
