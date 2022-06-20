@@ -36,7 +36,7 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
         <Card />
         <ElementContainer>
           <ItemWrapper>
-            {image ?
+            {image ?(
               <Img
                 src={image}
                 width={width || imageSize.medium}
@@ -44,12 +44,13 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
                 marginTop={marginTop}
                 marginBottom={marginBottom}
                 marginLeft={marginLeft}
-                marginRight={marginRight} />
-              :
+                marginRight={marginRight}
+              />
+            ) : (
               <NoImage>
                 <Diagonal />
               </NoImage>
-            }
+            )}
           </ItemWrapper>
         </ElementContainer>
       </ElementWrapper>
