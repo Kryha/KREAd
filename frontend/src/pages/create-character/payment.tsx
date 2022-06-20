@@ -5,20 +5,19 @@ import {  Badge, ButtonText, FormText, PriceInRun, PrimaryButton, SecondaryButto
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
 import { Character } from "../../interfaces";
-import { ArrowUp, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
+import { ArrowUp, GeneralInfo, PricingContainer, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
 
 interface PaymentProps {
   submit: (step: number) => void;
   sendOfferHandler: ()=> Promise<void>;
 }
 
-
 export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
   const [sendOffer, setSendOffer] = useState(false);
   const [acceptOffer, setAcceptOffer] = useState(false);
 
   const sendOfferToWallet = async () => {
-    console.log("SENDING OFFER");
+    console.info("SENDING OFFER TO WALLET");
     await sendOfferHandler();
     setSendOffer(true);
   };
@@ -28,35 +27,36 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
     setAcceptOffer(true);
   };
 
-
   return (
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <Step>
-          <NumberContainer active={true}>
-            {sendOffer ?
-              <Tick />:
-              <ButtonText>{text.mint.stepOne}</ButtonText>
-            }
-          </NumberContainer>
-          <StepText>{text.mint.sendOfferToWallet}</StepText>
-          {Boolean(!sendOffer) && (
-            <>
-              <PriceInRun price={MINTING_COST} />
-              <PrimaryButton onClick={sendOfferToWallet}>
-                <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
-              </PrimaryButton>
-            </>
-          )}
-        </Step>
+        <GeneralInfo>
+          <PricingContainer>
+            <NumberContainer active={true}>
+              {sendOffer ?
+                <Tick />:
+                <ButtonText>{text.mint.stepOne}</ButtonText>
+              }
+            </NumberContainer>
+            <StepText>{text.mint.sendOfferToWallet}</StepText>
+            {Boolean(!sendOffer) && (
+              <>
+                <PriceInRun price={MINTING_COST} />
+                <PrimaryButton onClick={sendOfferToWallet}>
+                  <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
+                </PrimaryButton>
+              </>
+            )}
+          </PricingContainer>
+        </GeneralInfo>
         <Line />
         <Step>
           <NumberContainer active={!!sendOffer}>
             {acceptOffer ? <Tick /> :<ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
-          {Boolean(!acceptOffer && !!sendOffer) && (
+          {(!acceptOffer && !!sendOffer) && (
             // TODO: remove this onclick
             <Badge onClick={() => acceptOfferInWallet()}><ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText></Badge>
           )}

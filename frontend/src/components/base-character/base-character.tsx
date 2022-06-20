@@ -1,11 +1,10 @@
 import { FC } from "react";
 
 import { CharacterItems } from "../../interfaces";
-import { CharacterContainer, CharacterIcon, CharacterWrapper, ExpandButton, ItemIcon } from "./styles";
+import { CharacterContainer, CharacterIcon, CharacterWrapper, ItemIcon } from "./styles";
 import { useViewport } from "../../hooks";
-import { CharacterBase, Empty, ExpandIcon, text } from "../../assets";
-import { color, zIndex } from "../../design";
-import { ButtonText } from "../atoms";
+import { CharacterBase, Empty, text } from "../../assets";
+import { zIndex } from "../../design";
 
 interface BaseCharacterProps {
   items: CharacterItems;
@@ -69,15 +68,6 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false,
           height={height}
         />
       </CharacterContainer>
-      {/* TODO: do something with expanding */}
-      {size === "mini" || size === "large" ? (
-        <></>
-      ) : (
-        <ExpandButton backgroundColor={color.white}>
-          <ExpandIcon />
-          <ButtonText>{text.general.showFull}</ButtonText>
-        </ExpandButton>
-      )}
     </CharacterWrapper>
   );
 };

@@ -163,3 +163,37 @@ export const InfoContainer = styled.div`
     margin-bottom: ${margins.medium};
   }
 `;
+
+export const GeneralInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: center;
+  padding: ${margins.medium};
+  position: static;
+  width: 100%;
+  height: 88px;
+  left: 0px;
+  top: 0px;
+  background: ${color.white};
+  border: 1px solid ${color.darkGrey};
+  border-radius: 24px;
+  ${StepText} {
+    margin: 0px ${margins.small};
+  }
+  ${PrimaryButton} {
+    margin-left: ${margins.small};
+  }
+  ${Badge} {
+    background: transparent;
+  }
+`;
+
+export const PricingContainer = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: center;
+  position: static;
+`;

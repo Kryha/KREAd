@@ -11,7 +11,7 @@ export const Item: FC = () => {
   const { category } = useParams<"category">();
   const { data: items, isLoading: isLoadingItems, isError: isErrorItems } = useMyItems();
   const { data: character, isLoading: isLoadingCharacter, isError: isErrorCharacters } = useMyCharacter();
-  const { height } = useViewport();
+  const { height, width } = useViewport();
 
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage />;
 
@@ -20,7 +20,7 @@ export const Item: FC = () => {
   const categoryItems = items.filter((item) => item.category === category);
 
   return (
-    <ItemWrapper height={height} position={category}>
+    <ItemWrapper height={height} position={category} width={width}>
       <BaseCharacter items={character.items} size="extraLarge" isZoomed />
       <MenuCard title={category} items={categoryItems} amount={categoryItems.length} />
     </ItemWrapper>

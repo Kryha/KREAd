@@ -4,13 +4,13 @@ import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter, BaseRoute, ButtonText, CharacterCard, CharacterItems, LoadingPage, SecondaryButton } from "../../components";
 import { Close, LandingContainer, Menu } from "./styles";
-import { useMyCharacter, useMyCharacters } from "../../service";
+import { useMyCharacter } from "../../service";
 import { useCharacterContext } from "../../context/characters";
 
 export const Landing: FC = () => {
   // Use useCharacterContext instead of use My characters
   // const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
-  const [characterState, dispatch] = useCharacterContext();
+  const [characterState,] = useCharacterContext();
   const { fetched } = characterState;
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
@@ -35,6 +35,7 @@ export const Landing: FC = () => {
       }
     >
       <LandingContainer isZoomed={openTab}>
+        {/* FIXME: do not rely on !*/}
         <BaseCharacter items={character!.items} isZoomed={openTab} size={openTab ? "large" : "normal"} />
       </LandingContainer>
       {!openTab && <CharacterItems items={character!.items} />}

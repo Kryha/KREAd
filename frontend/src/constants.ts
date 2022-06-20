@@ -19,3 +19,7 @@ export const CTP_LOG_CONFIG = {
   RETURN: false,
   CALL: true,
 };
+export const SMALL_SCREEN_SIZE = 1600;
+export const MEDIUM_SCREEN_SIZE = 1780;
+export const LARGE_SCREEN_SIZE = 1920;
+export const EXTRA_LARGE_SCREEN_SIZE = 2560;

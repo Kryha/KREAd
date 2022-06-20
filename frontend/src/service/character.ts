@@ -46,7 +46,6 @@ export const useMyFilteredCharacters = () => {
 // TODO: invalidate queries + intergrate me
 export const useCreateCharacter = () => {
   return useMutation(async (body: CharacterCreation) => {
-    if (!body.title) throw new Error("Title not specified");
     if (!body.name) throw new Error("Name not specified");
     const res = await api.post("/character", body);
     return res.data.character;

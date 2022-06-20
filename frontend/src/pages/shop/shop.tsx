@@ -6,7 +6,7 @@ import { ShopWrapper } from "./styles";
 import { ItemsShop } from "./items-shop";
 import { CharactersShop } from "./characters-shop";
 
-enum Page {
+export enum Page {
   Items = 0,
   Characters = 1,
 }
