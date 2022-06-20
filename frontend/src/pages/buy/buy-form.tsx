@@ -4,7 +4,7 @@ import { text } from "../../assets";
 import { Badge, ButtonText, FormText, PriceInRun, PrimaryButton } from "../../components";
 import { CONFIRMATION_STEP } from "../../constants";
 import { color } from "../../design";
-import { ArrowUp, ButtonContainer, ContentWrapper, Line, NumberContainer, Step, StepContainer, StepText, Tick } from "./styles";
+import { ArrowUp, ButtonContainer, ContentWrapper, GeneralInfo, Line, NumberContainer, PricingContainer, Step, StepContainer, StepText, Tick } from "./styles";
 import { BuyData } from "./types";
 
 interface BuyFormProps {
@@ -30,18 +30,20 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep }) => {
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <Step>
-          <NumberContainer active>{sendOffer ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
-          <StepText>{text.mint.sendOfferToWallet}</StepText>
-          {!sendOffer && (
-            <>
+        <GeneralInfo>
+          <PricingContainer>
+            <NumberContainer active>{sendOffer ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
+            <StepText>{text.mint.sendOfferToWallet}</StepText>
+            {!sendOffer && (
               <PriceInRun price={data.price} />
-              <PrimaryButton onClick={() => sendOfferToWallet()}>
-                <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
-              </PrimaryButton>
-            </>
+            )}
+          </PricingContainer>
+          {!sendOffer && (
+            <PrimaryButton onClick={() => sendOfferToWallet()}>
+              <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
+            </PrimaryButton>
           )}
-        </Step>
+        </GeneralInfo>
         <Line />
         <Step>
           <NumberContainer active={!!sendOffer}>{acceptOffer ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}</NumberContainer>

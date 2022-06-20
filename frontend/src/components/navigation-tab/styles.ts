@@ -26,16 +26,22 @@ export const ActiveLine = styled.div<NavTabProps>`
   ${({ active }) => {
     return active
       ? `
-    height: 4px;
-    background: ${color.black}
+        height: 4px;
+        background: ${color.black};
       `
       : `
-      height: 3px;
-      border-bottom: 1px solid ${color.grey};
+        height: 3px;
+        border-bottom: 1px solid ${color.grey};
     `;
   }}
 `;
 
 export const Tab = styled.div`
   cursor: pointer;
+  &:hover {
+    ${ActiveLine} {
+      height: 3px;
+      border-bottom: 1px solid ${color.black};
+    }
+  }
 `;

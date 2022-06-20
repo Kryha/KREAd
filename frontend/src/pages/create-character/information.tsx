@@ -23,16 +23,6 @@ export const Information: FC<InformationProps> = ({ submitForm, disabled }) => {
     <ContentWrapper>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormFields>
-          <Label>{text.mint.characterTitle}</Label>
-          <Input type="text" defaultValue="" {...register("title", { required: true })} />
-          <InputWrapper>
-            {Boolean(errors.title) && (<Exclamation />)}
-            {Boolean(!errors.title && dirtyFields.title) &&  (<Tick />)}
-            <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
-          </InputWrapper>
-          {errors.title && <ButtonText customColor={color.darkGrey}>{text.general.thisFieldIsRequired}</ButtonText>}
-        </FormFields>
-        <FormFields>
           <Label>{text.mint.characterName}</Label>
           <Input type="text" {...register("name", { required: true })}/>
           <InputWrapper>

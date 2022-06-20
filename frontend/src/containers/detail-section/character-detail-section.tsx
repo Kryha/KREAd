@@ -12,6 +12,7 @@ import { text, UnnamedCreator } from "../../assets";
 import { Character } from "../../interfaces";
 import { DetailSectionItems } from "./detail-section-items";
 import { DetailSectionActions } from "./types";
+import { useViewport } from "../../hooks";
 
 interface ItemDetailSectionProps {
   character: Character;
@@ -20,8 +21,10 @@ interface ItemDetailSectionProps {
 
 // TODO: Make index dynamic
 export const CharacterDetailSection: FC<ItemDetailSectionProps> = ({ character, actions }) => {
+  const { width } = useViewport();
+
   return (
-    <DetailSectionWrap>
+    <DetailSectionWrap width={width}>
       {/* header */}
       <DetailSectionHeader data={{ ...character, id: character.characterId, category: character.type }} actions={actions} />
 

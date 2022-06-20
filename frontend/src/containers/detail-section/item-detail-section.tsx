@@ -11,6 +11,7 @@ import { DetailSectionWrap } from "./styles";
 import { text, UnnamedCreator } from "../../assets";
 import { Item } from "../../interfaces";
 import { DetailSectionActions } from "./types";
+import { useViewport } from "../../hooks";
 
 interface ItemDetailSectionProps {
   item: Item;
@@ -19,8 +20,9 @@ interface ItemDetailSectionProps {
 
 // TODO: Make index dynamic
 export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions }) => {
+  const { width } = useViewport();
   return (
-    <DetailSectionWrap>
+    <DetailSectionWrap width={width}>
       {/* header */}
       <DetailSectionHeader data={item} actions={actions} />
 

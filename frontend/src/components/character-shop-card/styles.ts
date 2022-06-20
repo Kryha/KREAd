@@ -66,4 +66,5 @@ export const Element = styled.div`
   height: 320px;
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
+  overflow: hidden;
 `;

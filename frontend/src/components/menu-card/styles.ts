@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, CloseIcon } from "../../assets";
-import { color, margins } from "../../design";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
+import { color, margins, zIndex } from "../../design";
 import { Label } from "../atoms";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 
@@ -31,7 +32,7 @@ interface MenuProps {
 
 export const Menu = styled.div<MenuProps>`
   ${({ width, height }): string =>
-    `min-width: ${width * 0.375}px; max-width: ${width * 0.375}px; width: ${width * 0.375}px; max-height: ${height - 80}px;`};
+    `min-width: 450px; max-width: ${width * 0.375}px; width: ${width * 0.375}px; max-height: ${height - 80}px;`};
   background: ${color.white};
   border: 1px solid ${color.grey};
   box-sizing: border-box;
@@ -88,10 +89,20 @@ export const ArrowUpRight = styled(ArrowUpRightIcon)`
 export const CardActionsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
   margin-bottom: ${margins.large};
   margin-right: ${margins.large};
   margin-top: ${margins.medium};
+  margin-left: ${margins.large};
   box-shadow: none;
+`;
+
+export const MenuCardWrapper = styled.div`
+  ${DetailSectionWrap} {
+    position: absolute;
+    bottom: ${margins.large};
+    left: ${margins.large};
+    z-index: ${zIndex.overCharacter};
+  }
 `;
