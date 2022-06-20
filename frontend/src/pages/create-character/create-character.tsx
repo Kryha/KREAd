@@ -1,16 +1,15 @@
 import { FC, useState } from "react";
 
 import { DefaultIcon, text } from "../../assets";
-import { mint } from "../../assets/text/mint";
 import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
-import { useServiceContext } from "../../context/service";
+import { useServiceState } from "../../context/service";
 import { useViewport } from "../../hooks";
-import { Character, CharacterCreation } from "../../interfaces";
+import { CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
-import { makeBidOfferForCharacter, mintAndBuy, mintCharacters } from "../../service/character-actions";
+import { makeBidOfferForCharacter, mintCharacters } from "../../service/character-actions";
 import { FakeCharctersNoItems } from "../../service/fake-characters";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
@@ -18,7 +17,7 @@ import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
 
 export const CreateCharacter: FC = () => {
-  const [service, serviceDispatch] = useServiceContext();
+  const service = useServiceState();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [character, setCharacter] = useState<any>();
@@ -35,7 +34,7 @@ export const CreateCharacter: FC = () => {
   const submitForm = async (data: CharacterCreation): Promise<void> => {
     // createCharacter.mutate(data);
     const baseCharacter = FakeCharctersNoItems[0];
-    const newCharacter = { ...baseCharacter, name: data.name, title: data.title };
+    const newCharacter = { ...baseCharacter, name: data.name };
     const bought = await mintCharacters(service, [newCharacter], 1n);
 
     // setCurrentStep(PAYMENT_STEP);
