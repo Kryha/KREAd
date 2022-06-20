@@ -4,10 +4,11 @@ import { activateSocket as startApi } from "../lib/api-client.js";
 
 /**
  * @param {string} endpointPath
- * @param {(obj: { type: string, data: any }) => void} recv
+ * @param {(obj: { type: string, data: any }, args: any) => void} recv
+ * @param {object} recvArgs
  * @param {string} [query='']
  */
-export const connect = (endpointPath, recv, query = "") => {
+export const connect = (endpointPath, recv, recvArgs, query = "", ) => {
   const statusId = endpointPath === "wallet" ? "wallet-status" : "api-status";
   const endpoint =
     endpointPath === "wallet" ? `/private/wallet-bridge${query}` : endpointPath;
@@ -49,7 +50,7 @@ export const connect = (endpointPath, recv, query = "") => {
           displayObj.data = JSON.parse(obj.data);
         }
         console.log(`${endpointPath}<`, obj);
-        recv(obj);
+        recv(obj, recvArgs);
       },
       onDisconnect() {
         reject();

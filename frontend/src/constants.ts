@@ -14,3 +14,8 @@ export const SELL_FLOW_STEPS = 2;
 export const BUY_FLOW_WIDTH = 80;
 export const SELL_FLOW_WIDTH = 140;
 export const SMALL_SCREEN_WIDTH = 0.4;
+
+export const CTP_LOG_CONFIG = {
+  RETURN: false,
+  CALL: true,
+};

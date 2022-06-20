@@ -1,6 +1,4 @@
 /// <reference types="ses"/>
-// import { assert } from '@agoric/assert';
-// import '@endo/init';
 import React, { createContext, useReducer, useContext, useEffect, useRef } from "react";
 import { Far } from "@endo/marshal";
 import { makeCapTP, E } from "@endo/captp";
@@ -14,7 +12,8 @@ import {
 } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
 import { useCharacterStateDispatch } from "./characters";
-import { getCharacters } from "../service/character-actions";
+import { apiRecv } from "../service/api/receive";
+import { processPurses } from "../service/purses/process";
 
 const {
   INSTANCE_BOARD_ID,
@@ -32,7 +31,7 @@ const {
   },
 } = dappConstants;
 
-console.log(dappConstants);
+console.info(`DAPP CONSTANTS: ${dappConstants}`);
 
 export interface AgoricService {
   zoe: any;
@@ -162,11 +161,11 @@ export type ServiceStateActions =
   | SetApiSend
   | SetLoading;
 
-type Dispatch = React.Dispatch<ServiceStateActions>;
+export type ServiceDispatch = React.Dispatch<ServiceStateActions>;
 type ProviderProps = Omit<React.ProviderProps<ServiceState>, "value">;
 
 const Context = createContext<ServiceState | undefined>(undefined);
-const DispatchContext = createContext<Dispatch | undefined>(undefined);
+const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
 const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState => {
   switch (action.type) {
@@ -212,7 +211,6 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
   const [state, dispatch] = useReducer(Reducer, initialState);
   const characterDispatch = useCharacterStateDispatch();
   const walletPRef = useRef(undefined);
-  const publicFacetRef = useRef(undefined);
   
   useEffect(() => {
     // Receive callbacks from the wallet connection.
@@ -233,54 +231,9 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
     const onConnect = async () => {
       console.info("Connecting to wallet...");
 
-      const apiRecv = (obj: any) => {
-        switch (obj.type) {
-          case "nft-maker/nftTestResponse": {
-            console.log("GOT CHARACTERS:");
-            console.log(obj.data);
-            characterDispatch({ type: "SET_CHARACTERS", payload: obj.data });
-            return obj.data;
-          }
-          case "nft-maker/nftListResponse": {
-            console.log("GOT CHARACTERS:");
-            console.log(obj.data);
-            characterDispatch({ type: "SET_CHARACTERS", payload: obj.data });
-            return obj.data;
-          }
-          case "nft-maker/nftMintResponse": {
-            console.log("MINT RESPONSE");
-            console.log(obj.data);
-            return obj.data;
-          }
-          case "response/character/mint": {
-            console.log("~MINT RESPONSE");
-            console.log(obj.data);
-            return obj.data;
-          }
-          case "nftFaucet/sendInvitationResponse": {
-          // Once the invitation has been sent to the user, we update the
-          // offer to include the invitationBoardId. Then we make a
-          // request to the user's wallet to send the proposed offer for
-          // acceptance/rejection.
-            const { offer } = obj.data;
-            console.log("OFFER INCOMING: ", offer);
-            // eslint-disable-next-line no-use-before-define
-            // addOffer(offer);
-            break;
-          }
-          case "CTP_DISCONNECT": {
-          // TODO: handle this appropriately
-            break;
-          }
-          default: {
-            throw Error(`unexpected apiRecv obj.type ${obj.type}`);
-          }
-        }
-      };
-
-      const rawApiSend = await connect("/api/nft-maker", apiRecv);
+      const rawApiSend = await connect("/api/nft-maker", apiRecv, { characterDispatch });
       dispatch({ type: "SET_APISEND", payload: rawApiSend });  
-      dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
+      
       const socket = getActiveSocket();
       const {
         abort: ctpAbort,
@@ -295,69 +248,43 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       walletDispatch = ctpDispatch;
       const walletP = getBootstrap();
       walletPRef.current = walletP;
-
-      const processPurses = (purses: any[]) => {
-        const newTokenPurses = purses.filter(
-          ({ brandBoardId }) => brandBoardId === MONEY_BRAND_BOARD_ID,
-        );
-        const newCharacterPurses = purses.filter(
-          ({ brandBoardId }) => brandBoardId === CHARACTER_BRAND_BOARD_ID, // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
-        );
-        // const newCharacterZCFPurses = purses.filter(
-        //   ({ brandBoardId }) => brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
-        // );
-        dispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
-        dispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
-
-        const ownedCharacters = newCharacterPurses.flatMap((purse) => {
-          return purse.value;
-        });
-        console.log(newCharacterPurses, ownedCharacters);
-        characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
-        console.log("Token Purse Info: ", newTokenPurses[0].displayInfo);
-        console.log("Token Purse Petname: ", newTokenPurses[0].brandPetname);
-        console.log("Character Purse Info: ", newCharacterPurses[0].displayInfo);
-        console.log("Character Purse Petname: ", newCharacterPurses[0].brandPetname);
-      };
+      dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
 
       async function watchPurses() {
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
-          // dispatch(setPurses(purses));
-          console.log("CHECKING PURSE: ", purses);
-          processPurses(purses);
+          console.info("🧐 CHECKING PURSES");
+          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID });
         }
       }
       watchPurses().catch((err) => {
         console.error("got watchPurses err", err);
-        console.log(err);
       });
 
+      // Suggest installation and brands to wallet
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestInstance("Instance", INSTANCE_BOARD_ID),
         E(walletP).suggestIssuer("CB", CHARACTER_ISSUER_BOARD_ID),
-        // E(walletP).suggestIssuer("KCB", CHARACTER_ZCF_ISSUER_BOARD_ID),
         // E(walletP).suggestIssuer("CBI", ITEM_ISSUER_BOARD_ID),
       ]);
 
+      // Initialize agoric service based on constants
       const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
       const zoe = E(walletP).getZoe();
       const board = E(walletP).getBoard();
-      const instance = await E(board).getValue(INSTANCE_BOARD_ID);
       const instanceNft = await E(board).getValue(INSTANCE_NFT_MAKER_BOARD_ID);
       const nftPublicFacet = await E(zoe).getPublicFacet(instanceNft);
-      // const publicFacet = E(zoe).getPublicFacet(instance);
       const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
-      // publicFacetRef.current = "publicFacet";
-      const nfts = await E(nftPublicFacet).getCharacterArray();
-      characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
+      
+      // Fetch Characters from Chain
+      const nfts = await E(nftPublicFacet).getCharacterArray();
+      characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
 
-      // TODO: fetch available characters
-
+      // TODO: set up chain notifiers
       // const availableItemsNotifier = E(
       //   publicFacetRef.current,
       // ).getAvailableItemsNotifier();
@@ -410,4 +337,4 @@ export const useServiceStateDispatch = (): React.Dispatch<ServiceStateActions> =
   return dispatch;
 };
 
-export const useServiceContext = (): [ServiceState, Dispatch] => [useServiceState(), useServiceStateDispatch()];
+export const useServiceContext = (): [ServiceState, ServiceDispatch] => [useServiceState(), useServiceStateDispatch()];

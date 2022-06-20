@@ -28,18 +28,26 @@ const formBidOfferForCharacter = (invitation: any, character: any, purses: Purse
 });
 
 export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
-  const { agoric, purses } = service;
+  const { agoric: { walletP }, purses } = service;
+  if (!auctionPublicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
+    console.error("Could not make bid for character: undefined parameter");
+    return;
+  }
   const invitation = await E(auctionPublicFacet).makeBidInvitationForKey(character);
   console.info("Invitation successful, sending to wallet for approval");
   // Adjust based on Money Brand decimals
   const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
   const offerConfig = formBidOfferForCharacter(invitation, character, purses, adjustedPrice);
 
-  return E(agoric.walletP).addOffer(offerConfig);
+  return E(walletP).addOffer(offerConfig);
 };
 
 export const mintCharacters = async (service: ServiceState, characters: any, price: bigint) => {
   const { contracts: { characterBuilder }, purses } = service;
+  if (!characterBuilder.publicFacet || !purses.money[0].brand) {
+    console.error("Could not mint characters: Public Facet or Purses undefined");
+    return;
+  }
   const pricePerNFT = AmountMath.make(purses.money[0].brand, price);
   const newCharacters = harden(characters);
   const mintResponse = await E(characterBuilder.publicFacet).auctionCharactersPublic(newCharacters, pricePerNFT);
@@ -59,11 +67,16 @@ export const mintAndBuy = async (service: ServiceState, characters: any) => {
 
 export const getCharacters = async (service: ServiceState, characterDispatch: CharacterDispatch) => {
   const { contracts: { characterBuilder } } = service;
+  if (!characterBuilder.publicFacet) {
+    console.error("Could not fetch Characters: Public Facet is undefined");
+    return;
+  }
   const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
-  console.info(`Fetched Characters: ${nfts.map((nft: any)=>nft.character.name)}`);
+  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any)=>nft.character.name)}`);
   characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
 };
 
+// TODO: Remove if unused
 // const { AUCTION_INSTALLATION_BOARD_ID } = installationConstants;
 // const {
 //   INSTANCE_BOARD_ID,

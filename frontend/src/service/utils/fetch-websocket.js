@@ -1,6 +1,6 @@
 /* eslint-disable */
-
 /* global process */
+import { CTP_LOG_CONFIG } from '../../constants.ts';
 import dappConstants from '../constants.js';
 
 const { API_URL, BRIDGE_URL, CONTRACT_NAME } = dappConstants;
@@ -17,13 +17,13 @@ function logMsg(obj, direction = 'send:') {
       // console.log(direction, obj);
       return;
     case 'CTP_CALL':
-      console.log(direction, type, obj.method && obj.method.body, obj);
+      CTP_LOG_CONFIG.CALL && console.info(direction, type, obj.method && obj.method.body, obj);
       return;
     case 'CTP_RETURN':
-      console.log(direction, type, (obj.exception || obj.result).body, obj);
+      CTP_LOG_CONFIG.RETURN && console.info(direction, type, (obj.exception || obj.result).body, obj);
       return;
     default:
-      console.log(direction, type, obj);
+      console.info(direction, type, obj);
   }
 }
 

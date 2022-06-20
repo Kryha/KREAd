@@ -12,30 +12,16 @@ const spawnHandler = (
         switch (obj.type) {
           case 'nftFaucet/sendInvitation': {
             const { depositFacetId, offer } = obj.data;
-            console.log('CREATOR FACET');
-            console.log(creatorFacet);
-            console.log('INVITATION ISSUER');
-            console.log(invitationIssuer);
             const depositFacet = E(board).getValue(depositFacetId);
-            console.log('DEPOSIT FACET');
-            console.log(depositFacet);
             const invitation = await E(creatorFacet).makeInvitation();
-            console.log('INVITATION');
-            console.log(invitation);
             const invitationAmount = await E(invitationIssuer).getAmountOf(
               invitation,
             );
-            console.log('INVITATION AMOUNT');
-            console.log(invitationAmount);
             const {
               value: [{ handle }],
             } = invitationAmount;
             const invitationHandleBoardId = await E(board).getId(handle);
-            console.log('INVITATION BOARD ID');
-            console.log(invitationHandleBoardId);
             const updatedOffer = { ...offer, invitationHandleBoardId };
-            console.log('UPDATED OFFER');
-            console.log(updatedOffer);
             // We need to wait for the invitation to be
             // received, or we will possibly win the race of
             // proposing the offer before the invitation is ready.
