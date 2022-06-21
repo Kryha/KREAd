@@ -45,7 +45,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
         <InfoContainer>
           <TitleContainer>
             <MenuItemName>{character.name}</MenuItemName>
-            <EquippedLabel customColor={color.black}>{text.param.itemId(character.characterId)}</EquippedLabel>
+            <EquippedLabel customColor={color.black}>{text.param.id(character.characterId)}</EquippedLabel>
           </TitleContainer>
           <SubTitleContainer>
             <Badge>

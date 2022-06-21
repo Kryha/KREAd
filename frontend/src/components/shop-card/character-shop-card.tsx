@@ -3,10 +3,20 @@ import { FC } from "react";
 import { Character } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
-import { BoldLabel, TitleText } from "../atoms";
+import { Badge, BoldLabel, Label, TitleText } from "../atoms";
 import { PriceInRun } from "../price-in-run";
-import { Product, Content, ImageContainer, Footer, TitleWrapper, OwnedByContainer, Element } from "./styles";
 import { BaseCharacter } from "../base-character";
+import {
+  Content,
+  ImageContainer,
+  Product,
+  Element,
+  TitleWrapper,
+  OwnedByContainer,
+  Footer,
+  Tag,
+  Line,
+} from "./styles";
 
 interface CharacterShopCardProps {
   character: Character;
@@ -24,10 +34,17 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
         <TitleWrapper>
           <TitleText>{character.name}</TitleText>
           <OwnedByContainer>
-            <BoldLabel customColor={color.black}>{text.param.itemId(character.characterId)}</BoldLabel>
+            <BoldLabel customColor={color.black}>{text.param.id(character.characterId)}</BoldLabel>
           </OwnedByContainer>
         </TitleWrapper>
         <Footer>
+          <Tag>
+            <Badge>
+              <Label>{character.type}</Label>
+            </Badge>
+            <Line />
+            <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
+          </Tag>
           <PriceInRun price={character.price} />
         </Footer>
       </Content>

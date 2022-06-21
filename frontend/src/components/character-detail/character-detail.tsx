@@ -56,7 +56,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
                 <Heading>{character.name}</Heading>
                 <SubTitleContainer>
                   <Badge>{character.type}</Badge>
-                  <BoldLabel customColor={color.black}>{text.param.itemId(character.characterId)}</BoldLabel>
+                  <BoldLabel customColor={color.black}>{text.param.id(character.characterId)}</BoldLabel>
                 </SubTitleContainer>
               </TitleContainer>
               <InfoContainer>

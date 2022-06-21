@@ -22,7 +22,7 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
   const [showStats, setShowStats] = useState(false);
   return (
     <>
-      {showStats && item &&
+      {showStats && !!item &&
         <ItemStats
           item={item}
           position={position}

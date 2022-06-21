@@ -14,7 +14,7 @@ export const VerticalInfo: FC<VerticalInfoProps> = ({ code, id, isRight = false 
   return (
     <InfoContainer>
       {id ?
-        <Id customColor={color.black} isRight={isRight}>{text.param.itemId(id)}</Id>
+        <Id customColor={color.black} isRight={isRight}>{text.param.id(id)}</Id>
         :
         <DiagonalContainer>
           <Diagonal />

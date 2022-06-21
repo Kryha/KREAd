@@ -25,7 +25,7 @@ export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
               <Badge>
                 <ButtonText customColor={color.darkGrey}>{item.category}</ButtonText>
               </Badge>
-              <ButtonText>{text.param.itemId(item.id)}</ButtonText>
+              <ButtonText>{text.param.id(item.id)}</ButtonText>
             </Footer>
           </Header>
           <StatsContainer>

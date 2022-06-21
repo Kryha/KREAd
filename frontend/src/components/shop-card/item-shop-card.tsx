@@ -28,7 +28,7 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
         <TitleWrapper>
           <TitleText>{item.name}</TitleText>
           <OwnedByContainer>
-            <BoldLabel customColor={color.black}>{text.param.itemId(item.id)}</BoldLabel>
+            <BoldLabel customColor={color.black}>{text.param.id(item.id)}</BoldLabel>
           </OwnedByContainer>
         </TitleWrapper>
         <Footer>

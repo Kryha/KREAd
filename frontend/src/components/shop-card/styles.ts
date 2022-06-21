@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
+import { CharacterWrapper } from "../base-character/styles";
 
 export const Line = styled.div`
   border: 0.5px solid ${color.darkGrey};
@@ -11,6 +12,7 @@ export const Line = styled.div`
 
 export const Product = styled.div`
   width: 402px;
+  min-width: 402px;
   background: ${color.white};
   border: 1px solid ${color.grey};
   box-sizing: border-box;
@@ -35,6 +37,11 @@ export const ImageContainer = styled.div`
   border-radius: ${margins.medium};
   margin-bottom: ${margins.medium};
   overflow: hidden;
+  position: relative;
+  ${CharacterWrapper} {
+    left: 20%;
+    right: 0;
+  }
 `;
 
 export const Content = styled.div`
@@ -64,6 +71,8 @@ export const Tag = styled.div`
   display: flex;
   align-items: center;
   gap: ${margins.small};
+  width: 235px;
+  overflow-x: scroll;
 `;
 
 interface ImageProps {
@@ -94,4 +103,12 @@ export const ItemImage = styled(Img) <ImageProps>`
         return "width: 354px; height: 320px;";
     }
   }};
+`;
+
+export const Element = styled.div`
+  width: 345px;
+  height: 320px;
+  border: 1px solid ${color.grey};
+  border-radius: ${margins.medium};
+  overflow: hidden;
 `;
