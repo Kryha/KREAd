@@ -4,19 +4,21 @@ import { text } from "../../assets";
 import {  Badge, ButtonText, FormText, PriceInRun, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
-import { ArrowUp, ButtonContainer, ContentWrapper, GeneralInfo, Line, NumberContainer, PreviousButtonContainer, PricingContainer, Step, StepContainer, StepText, Tick, } from "./styles";
+import { Character } from "../../interfaces";
+import { ArrowUp, GeneralInfo, PricingContainer, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
 
 interface PaymentProps {
-  changeStep: (step: number) => void;
+  submit: (step: number) => void;
+  sendOfferHandler: ()=> Promise<void>;
 }
 
-
-export const Payment: FC<PaymentProps> = ({ changeStep }) => {
+export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
   const [sendOffer, setSendOffer] = useState(false);
   const [acceptOffer, setAcceptOffer] = useState(false);
 
-  const sendOfferToWallet = () => {
-    // TODO: send offer
+  const sendOfferToWallet = async () => {
+    console.info("SENDING OFFER TO WALLET");
+    await sendOfferHandler();
     setSendOffer(true);
   };
 
@@ -24,7 +26,6 @@ export const Payment: FC<PaymentProps> = ({ changeStep }) => {
     // TODO: send accept
     setAcceptOffer(true);
   };
-
 
   return (
     <ContentWrapper>
@@ -40,14 +41,14 @@ export const Payment: FC<PaymentProps> = ({ changeStep }) => {
             </NumberContainer>
             <StepText>{text.mint.sendOfferToWallet}</StepText>
             {Boolean(!sendOffer) && (
-              <PriceInRun price={MINTING_COST} />
+              <>
+                <PriceInRun price={MINTING_COST} />
+                <PrimaryButton onClick={sendOfferToWallet}>
+                  <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
+                </PrimaryButton>
+              </>
             )}
           </PricingContainer>
-          {Boolean(!sendOffer) && (
-            <PrimaryButton onClick={() => sendOfferToWallet()}>
-              <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
-            </PrimaryButton>
-          )}
         </GeneralInfo>
         <Line />
         <Step>
@@ -61,15 +62,15 @@ export const Payment: FC<PaymentProps> = ({ changeStep }) => {
           )}
         </Step>
       </StepContainer>
-      {!sendOffer && (
-        <PreviousButtonContainer onClick={()=>changeStep(INFORMATION_STEP)}>
+      {Boolean(!sendOffer) && (
+        <PreviousButtonContainer onClick={()=>submit(INFORMATION_STEP)}>
           <SecondaryButton>
             <ButtonText >{text.mint.previous}</ButtonText>
           </SecondaryButton>
         </PreviousButtonContainer>
       )}
       <ButtonContainer>
-        <PrimaryButton onClick={()=>changeStep(CONFIRMATION_STEP)} disabled={!acceptOffer}>
+        <PrimaryButton onClick={()=>submit(CONFIRMATION_STEP)} disabled={!acceptOffer}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
           <ArrowUp />
         </PrimaryButton>

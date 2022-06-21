@@ -30,5 +30,23 @@
 
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error"
+  },
+  "ignorePatterns": [
+    "**/*.umd.js",
+    "**/generated/*"
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js"
+        ]
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
   }
 }
