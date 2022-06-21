@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ButtonText, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useMyFilteredCharacters } from "../../service";
@@ -45,6 +45,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
           </Filters>
         </SortContainer>
       </ListHeader>
+      <ButtonText>{text.param.amountOfCharacters(characters.length)}</ButtonText>
       <ListContainer>
         {characters.map((character) => (
           <MenuItem

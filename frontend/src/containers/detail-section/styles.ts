@@ -22,7 +22,7 @@ export const DetailSectionWrap = styled.section<ViewProps>`
   ::-webkit-scrollbar {
     display: none;
   }
-  ${({ width }): string => `width: ${width * 0.49}px;`};
+  width: 55%;
 `;
 
 export const EmptyView = styled.section`

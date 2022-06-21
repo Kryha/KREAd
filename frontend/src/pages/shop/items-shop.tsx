@@ -10,7 +10,6 @@ import {
   Label,
   LoadingPage,
   PriceSelector,
-  SecondaryButton,
   Select,
   ItemShopCard,
 } from "../../components";
@@ -25,8 +24,6 @@ import {
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
-  LoadMore,
-  Refresh,
   SelectorContainer,
   SortByContainer,
 } from "./styles";
@@ -92,6 +89,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             </Filters>
           </SortByContainer>
         </FilterContainer>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
       {!!noFilteredItems || (
@@ -101,13 +99,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
               <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
             ))}
           </ItemContainer>
-          {/* TODO: do something with load more */}
-          <LoadMore>
-            <SecondaryButton>
-              <ButtonText>{text.general.loadMore}</ButtonText>
-              <Refresh />
-            </SecondaryButton>
-          </LoadMore>
         </ItemWrapper>
       )}
       {!!selectedItem && (

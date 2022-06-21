@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { RefreshIcon } from "../../assets";
-import { Label } from "../../components";
+import { HorizontalDivider, Label } from "../../components";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins } from "../../design";
 
@@ -9,7 +9,7 @@ interface ShopProps {
 }
 
 export const ShopWrapper = styled.div`
-  margin: ${margins.big} ${margins.big} 120px ${margins.big};
+  margin: 0px ${margins.big} 120px ${margins.big};
   position: relative;
 
   ${DetailSectionWrap} {
@@ -26,6 +26,9 @@ export const FilterWrapper = styled.div`
   flex-direction: column;
   padding: 0px;
   z-index: 30000000;
+  ${HorizontalDivider} {
+    margin-top: 4px;
+  }
 `;
 
 export const FilterContainer = styled.div`
@@ -64,6 +67,7 @@ export const ItemContainer = styled.div`
   gap: ${margins.big};
   padding-top: ${margins.big};
   align-items: flex-start;
+  padding-bottom: 140px;
 `;
 
 export const LoadMore = styled.div`
