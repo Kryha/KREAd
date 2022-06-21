@@ -12,7 +12,7 @@ import {
   PriceSelector,
   SecondaryButton,
   Select,
-  ShopCard,
+  ItemShopCard,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -98,7 +98,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         <ItemWrapper height={height}>
           <ItemContainer>
             {items.map((item, index) => (
-              <ShopCard item={item} key={index} onClick={setSelectedItem} />
+              <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
             ))}
           </ItemContainer>
           {/* TODO: do something with load more */}

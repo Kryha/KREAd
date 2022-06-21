@@ -44,7 +44,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>
-        <IdLabel>{text.param.itemId(item.id)}</IdLabel>
+        <IdLabel>{text.param.id(item.id)}</IdLabel>
         <RedirectArrow />
       </InfoWrapper>
     </Info>
