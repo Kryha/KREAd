@@ -7,9 +7,10 @@ import { CategoryButton } from "../../containers/detail-section/detail-section-h
 import { getDatefromEpoch } from "../../util";
 import { color } from "../../design";
 import { BoldLabel } from "../atoms";
+import json5 from "json5";
 
 interface ActivityTableProps {
-  events: ActivityEvent[];
+  events?: ActivityEvent[];
 }
 
 interface RowProps {
@@ -44,6 +45,7 @@ const Row: FC<RowProps> = ({ event }) => {
   );
 };
 
+// TODO: Define how we'll construct the Events since they'll not be a property of the Character NFT directly
 export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
   return (
     <ActivityTableWrap>
@@ -51,11 +53,11 @@ export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
         <Header />
       </HeaderWrap>
       <BodyWrap>
-        {events.map((event) => (
+        {/* {events?.map((event) => (
           <RowWrap key={event.date}>
             <Row event={event} />
           </RowWrap>
-        ))}
+        ))} */}
       </BodyWrap>
     </ActivityTableWrap>
   );
