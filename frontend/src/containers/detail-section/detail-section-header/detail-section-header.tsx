@@ -34,7 +34,7 @@ export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, action
 
       <DetailSectionHeaderDetails>
         <CategoryButton>{data.category}</CategoryButton>
-        <DetailSectionHeaderId>{text.param.itemId(data.id)}</DetailSectionHeaderId>
+        <DetailSectionHeaderId>{text.param.id(data.id)}</DetailSectionHeaderId>
       </DetailSectionHeaderDetails>
     </DetailSectionHeaderWrap>
   );

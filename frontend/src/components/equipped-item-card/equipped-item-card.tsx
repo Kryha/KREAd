@@ -17,10 +17,11 @@ interface EquippedItemCardProps {
   marginRight?: string;
   marginBottom?: string;
   category: string;
+  area: "top" | "middle" | "bottom";
 }
 
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category, area }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`${routes.items}/${category}`, { state: { category: category} });
@@ -30,6 +31,9 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
       onClick={() => handleClick()}>
       <VerticalInfo code={code} id={item?.id} />
       <ItemCard
+        position="left"
+        area={area}
+        item={item}
         image={item?.image}
         width={width}
         height={height}
@@ -43,7 +47,7 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
 };
 
 export const RightEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category, area }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`${routes.items}/${category}`, { state: { category: category } });
@@ -52,6 +56,9 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> =
     <EquippedContainer
       onClick={() => handleClick()}>
       <ItemCard
+        position="right"
+        area={area}
+        item={item}
         image={item?.image}
         width={width}
         height={height}

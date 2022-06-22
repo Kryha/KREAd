@@ -23,9 +23,11 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           marginTop={margins.big}
           height={imageSize.mediumLarge}
           category={text.itemSlots.hair}
+          area="top"
         />
         <Row>
           <LeftEquippedItemCard
+            area="middle"
             item={items.headPiece}
             code={text.itemSlots.headPieceCode}
             width={imageSize.large}
@@ -34,6 +36,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
             category={text.itemSlots.headPiece}
           />
           <LeftEquippedItemCard
+            area="middle"
             item={items.clothing}
             code={text.itemSlots.clothingCode}
             width={imageSize.medium}
@@ -44,11 +47,13 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
         </Row>
         <Row>
           <LeftEquippedItemCard
+            area="bottom"
             item={items.midBackground}
             code={text.itemSlots.midBackgroundCode}
             category={text.itemSlots.midBackground}
           />
           <LeftEquippedItemCard
+            area="bottom"
             item={items.background}
             code={text.itemSlots.backgroundCode}
             category={text.itemSlots.background}
@@ -58,6 +63,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
       <RightItemContainer>
         <RightItems>
           <RightEquippedItemCard
+            area="top"
             item={items.mask}
             code={text.itemSlots.maskCode}
             width={imageSize.extralarge}
@@ -69,6 +75,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
         </RightItems>
         <Row>
           <RightEquippedItemCard
+            area="middle"
             item={items.noseline}
             code={text.itemSlots.noselineCode}
             width={imageSize.large}
@@ -78,6 +85,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
             category={text.itemSlots.noseline}
           />
           <RightEquippedItemCard
+            area="middle"
             item={items.airResevoir}
             code={text.itemSlots.airResevoirCode}
             width={imageSize.mediumLarge}
@@ -89,6 +97,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
         </Row>
         <Row>
           <RightEquippedItemCard
+            area="bottom"
             item={items.liquid}
             code={text.itemSlots.liquidCode}
             width={imageSize.extraExtraLarge}
@@ -98,6 +107,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
             category={text.itemSlots.liquid}
           />
           <RightEquippedItemCard
+            area="bottom"
             item={items.frontMask}
             code={text.itemSlots.frontMaskCode}
             width={imageSize.extraExtraLarge}

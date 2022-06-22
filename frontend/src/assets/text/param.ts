@@ -1,10 +1,15 @@
 export const param = {
   amountOfItems: (amount: number | string) => `${amount} items`,
-  itemId: (id: number | string) => `#${id}`,
+  id: (id: number | string) => `#${id}`,
   ownedBy: (owner: string) => `owned by ${owner}`,
   oneOutOf: (rarity: number | string) => `1 / ${rarity}`,
   runPrice: (run: number | string) => `RUN ${run}`,
   nOutOfOnehundred: (n: number | string) => `${n} / 100`,
   withZeroPrefix: (n: number) => (n.toString().length === 1 ? `0${n}` : n),
+  notificationSold: (price: number) => `has been sold. RUN ${price} is transfered to your wallet.`,
+  itemQuoted: (itemName: string) => `${itemName}`,
+  theItemIsUpForSale: (itemName: string, price: number) => `the '${itemName}' is up for sale in the shop now ... As soon as it's sold, you'll receive ${price} inter and be notified your item has sold`,
+  yourItemHasBeenSold: (itemName: string, price: number) => `your item '${itemName}' has been sold. RUN ${price} is transfered to your wallet.`,
+  theItemIsSussfullyPurchased: (itemName: string) => `the '${itemName}' has been successfully purchased from the shop.`,
   level: (level: number) => `lvl. ${level}`,
 };

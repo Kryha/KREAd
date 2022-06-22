@@ -34,13 +34,13 @@ export const FiltersContainer = styled.div<FilterProps>`
     }
   }
   &:focus {
-    border: 2px solid ${color.darkGrey};
+    border: 1px solid ${color.darkGrey};
     ${ButtonText} {
       color: ${color.black};
     }
   }
   &:active {
-    border: 2px solid ${color.grey};
+    border: 1px solid ${color.grey};
   }
   ${({ isOpen }): string => {
     return isOpen

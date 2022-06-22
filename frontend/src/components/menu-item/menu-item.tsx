@@ -45,7 +45,7 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
       <InfoWrapper>
         <InfoContainer>
           <MenuItemName>{data.name}</MenuItemName>
-          <Label>{text.param.itemId(data.id)}</Label>
+          <Label>{text.param.id(data.id)}</Label>
         </InfoContainer>
         {/* TODO: actually track if equipped or not */}
         <EquippedLabel>{text.general.equipped}</EquippedLabel>

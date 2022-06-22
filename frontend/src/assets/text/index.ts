@@ -8,6 +8,7 @@ import { character } from "./character";
 import { item } from "./item";
 import { filters } from "./filters";
 import { mint } from "./mint";
+import { notifications } from "./notifications";
 
 export const text = {
   error,
@@ -20,4 +21,5 @@ export const text = {
   item,
   filters,
   mint,
+  notifications,
 };

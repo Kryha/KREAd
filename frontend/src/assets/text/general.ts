@@ -14,7 +14,6 @@ export const general = {
   sortBy: "sort by",
   latest: "latest",
   equipped: "equipped",
-  showFull: "show full",
   createNew: "create new",
   choose: "choose",
   sell: "sell",
@@ -26,4 +25,5 @@ export const general = {
   thisFieldIsRequired: "this field is required",
   mintNew: "mint new",
   theMinimiumAmountIs: "the minimum amount is RUN 1",
+  moreInfo: "more info",
 };
