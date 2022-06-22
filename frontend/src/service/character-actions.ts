@@ -1,7 +1,7 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
-import { Purses, ServiceState } from "../context/service";
+import { Purses, ServiceState } from "../interfaces/agoric.interfaces";
 import { AmountMath } from "@agoric/ertp";
 import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
 // import dappConstants from "../service/conf/defaults";

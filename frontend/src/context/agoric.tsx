@@ -5,15 +5,12 @@ import { makeCapTP, E } from "@endo/captp";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import dappConstants from "../service/conf/defaults";
 
-import {
-  activateWebSocket,
-  deactivateWebSocket,
-  getActiveSocket,
-} from "../service/utils/fetch-websocket";
+import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
 import { useCharacterStateDispatch } from "./characters";
 import { apiRecv } from "../service/api/receive";
 import { processPurses } from "../service/purses/process";
+import { ServiceDispatch, ServiceState, ServiceStateActions } from "../interfaces/agoric.interfaces";
 
 const {
   INSTANCE_BOARD_ID,
@@ -22,7 +19,7 @@ const {
   INSTALLATION_BOARD_ID,
   issuerBoardIds: {
     // CharacterZCF: CHARACTER_ZCF_ISSUER_BOARD_ID,
-    Character: CHARACTER_ISSUER_BOARD_ID
+    Character: CHARACTER_ISSUER_BOARD_ID,
   },
   brandBoardIds: {
     Money: MONEY_BRAND_BOARD_ID,
@@ -32,43 +29,6 @@ const {
 } = dappConstants;
 
 console.info(`DAPP CONSTANTS: ${dappConstants}`);
-
-export interface AgoricService {
-  zoe: any;
-  board: any;
-  zoeInvitationDepositFacetId: any;
-  invitationIssuer: any;
-  walletP: any;
-  apiSend: any;
-}
-
-export interface Contract {
-  instance: any;
-  publicFacet: any;
-  instanceBoardId?: string;
-}
-export interface Contracts {
-  characterBuilder: Contract;
-  auctions: Contract[];
-}
-export interface Status {
-  walletConnected: boolean;
-  dappApproved: boolean;
-  showApproveDappModal: boolean;
-}
-export interface Purses {
-  money: any[];
-  character: any[];
-}
-export interface ServiceState {
-  status: Status;
-  purses: Purses;
-  contracts: Contracts;
-  agoric: AgoricService;
-  isLoading: boolean;
-}
-
-export type PursePetname = [string, string];
 
 const initialState: ServiceState = {
   status: {
@@ -98,70 +58,6 @@ const initialState: ServiceState = {
   isLoading: false,
 };
 
-export interface SetDappApproved {
-  type: "SET_DAPP_APPROVED";
-  payload: boolean;
-}
-
-export interface SetWalletConnected {
-  type: "SET_WALLET_CONNECTED";
-  payload: boolean;
-}
-
-export interface SetShowApproveDappModal {
-  type: "SET_SHOW_APPROVE_DAPP_MODAL";
-  payload: boolean;
-}
-
-export interface SetTokenPurses {
-  type: "SET_TOKEN_PURSES";
-  payload: any[];
-}
-
-export interface SetCharacterPurses {
-  type: "SET_CHARACTER_PURSES";
-  payload: any[];
-}
-
-export interface SetAgoric {
-  type: "SET_AGORIC";
-  payload: Omit<AgoricService, "apiSend">;
-}
-export interface SetCharacterContract {
-  type: "SET_CHARACTER_CONTRACT";
-  payload: Contract;
-}
-export interface SetAuctionContract {
-  type: "ADD_AUCTION_CONTRACT";
-  payload: Contract;
-}
-export interface SetApiSend {
-  type: "SET_APISEND";
-  payload: any;
-}
-export interface SetLoading {
-  type: "SET_LOADING";
-  payload: boolean;
-}
-
-export interface Reset {
-  type: "RESET";
-}
-
-export type ServiceStateActions =
-  | Reset
-  | SetDappApproved
-  | SetWalletConnected
-  | SetShowApproveDappModal
-  | SetTokenPurses
-  | SetCharacterPurses
-  | SetAgoric
-  | SetCharacterContract
-  | SetAuctionContract
-  | SetApiSend
-  | SetLoading;
-
-export type ServiceDispatch = React.Dispatch<ServiceStateActions>;
 type ProviderProps = Omit<React.ProviderProps<ServiceState>, "value">;
 
 const Context = createContext<ServiceState | undefined>(undefined);
@@ -180,25 +76,25 @@ const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState
 
     case "SET_TOKEN_PURSES":
       return { ...state, purses: { ...state.purses, money: action.payload } };
-    
+
     case "SET_CHARACTER_PURSES":
       return { ...state, purses: { ...state.purses, character: action.payload } };
-    
+
     case "SET_AGORIC":
-      return { ...state, agoric: { ...state.agoric, ...action.payload }};
-      
+      return { ...state, agoric: { ...state.agoric, ...action.payload } };
+
     case "SET_APISEND":
       return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
-    
+
     case "SET_CHARACTER_CONTRACT":
-      return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload }};
-      
+      return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
+
     case "ADD_AUCTION_CONTRACT":
       return { ...state, contracts: { ...state.contracts, auctions: [...state.contracts.auctions, action.payload] } };
-    
+
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
-    
+
     case "RESET":
       return initialState;
 
@@ -211,7 +107,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
   const [state, dispatch] = useReducer(Reducer, initialState);
   const characterDispatch = useCharacterStateDispatch();
   const walletPRef = useRef(undefined);
-  
+
   useEffect(() => {
     // Receive callbacks from the wallet connection.
     const otherSide = Far("otherSide", {
@@ -232,18 +128,14 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       console.info("Connecting to wallet...");
 
       const rawApiSend = await connect("/api/nft-maker", apiRecv, { characterDispatch });
-      dispatch({ type: "SET_APISEND", payload: rawApiSend });  
-      
+      dispatch({ type: "SET_APISEND", payload: rawApiSend });
+
       const socket = getActiveSocket();
       const {
         abort: ctpAbort,
         dispatch: ctpDispatch,
         getBootstrap,
-      } = makeCapTP(
-        "CB",
-        (obj: any) => socket.send(JSON.stringify(obj)),
-        otherSide,
-      );
+      } = makeCapTP("CB", (obj: any) => socket.send(JSON.stringify(obj)), otherSide);
       walletAbort = ctpAbort;
       walletDispatch = ctpDispatch;
       const walletP = getBootstrap();
@@ -279,7 +171,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
-      
+
       // Fetch Characters from Chain
       const nfts = await E(nftPublicFacet).getCharacterArray();
       characterDispatch({ type: "SET_CHARACTERS", payload: nfts });

@@ -4,7 +4,7 @@ import { DefaultIcon, text } from "../../assets";
 import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
-import { useServiceState } from "../../context/service";
+import { useServiceState } from "../../context/agoric";
 import { useViewport } from "../../hooks";
 import { CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -45,7 +45,6 @@ export const CreateCharacter: FC = () => {
     }
   };
 
-
   if (createCharacter.isError) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
@@ -53,7 +52,7 @@ export const CreateCharacter: FC = () => {
       case 0:
         return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
       case 1:
-        return <Payment sendOfferHandler={()=>sendOfferHandler()} submit={changeStep} />;
+        return <Payment sendOfferHandler={() => sendOfferHandler()} submit={changeStep} />;
       case 2:
         return <Confirmation character={character.character} />;
       default:
@@ -65,11 +64,7 @@ export const CreateCharacter: FC = () => {
     <PageContainer
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader
-            currentStep={currentStep}
-            title={text.mint.mintNew}
-            link={routes.root}
-          />
+          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.root} />
           <>{perStepDisplay()}</>
         </FormCard>
       }

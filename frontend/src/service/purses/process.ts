@@ -1,4 +1,4 @@
-import { ServiceDispatch } from "../../context/service";
+import { ServiceDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 
 export const processPurses = (
