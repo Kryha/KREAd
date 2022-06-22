@@ -11,6 +11,7 @@ import {
   LoadingPage,
   MenuText,
   NotificationCard,
+  Overlay,
   SecondaryButton
 } from "../../components";
 import {
@@ -22,7 +23,7 @@ import {
   Notification,
   DetailContainer,
   ButtonContainer,
-  CharacterCardWrapper
+  CharacterCardWrapper,
 } from "./styles";
 import { useMyCharacter } from "../../service";
 import { useCharacterContext } from "../../context/characters";
@@ -94,6 +95,7 @@ export const Landing: FC = () => {
         </CharacterCardWrapper>
       )}
       {openNotification && <NotificationCard />}
+      {showDetail && <Overlay />}
     </BaseRoute>
   );
 };

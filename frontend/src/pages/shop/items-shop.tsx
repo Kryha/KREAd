@@ -12,6 +12,7 @@ import {
   PriceSelector,
   Select,
   ItemShopCard,
+  Overlay,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -111,6 +112,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           }}
         />
       )}
+      {!!selectedItem && <Overlay />}
     </>
   );
 };

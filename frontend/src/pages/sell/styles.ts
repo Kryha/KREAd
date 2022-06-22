@@ -33,7 +33,9 @@ export const TickContainer = styled.div`
 
 export const ContentWrapper = styled.div`
   ${DetailSectionWrap} {
-    margin-top: 124px;
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
   }
   ${DetailSectionHeaderNavigationWrap} {
     display: none;

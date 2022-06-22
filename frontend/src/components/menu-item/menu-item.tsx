@@ -50,7 +50,6 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
         {/* TODO: actually track if equipped or not */}
         <EquippedLabel>{text.general.equipped}</EquippedLabel>
         <ButtonContainer>
-          <Divider />
           <PrimaryButton>
             <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
           </PrimaryButton>

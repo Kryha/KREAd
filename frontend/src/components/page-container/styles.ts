@@ -11,4 +11,5 @@ export const PageWrap = styled.section`
   box-sizing: border-box;
   padding: 0 40px;
   overflow: hidden;
+  margin-bottom: 40px;
 `;

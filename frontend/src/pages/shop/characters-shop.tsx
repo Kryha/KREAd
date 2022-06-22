@@ -9,6 +9,7 @@ import {
   HorizontalDivider,
   Label,
   LoadingPage,
+  Overlay,
   PriceSelector,
   Select,
 } from "../../components";
@@ -85,7 +86,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
             </Filters>
           </SortByContainer>
         </FilterContainer>
-        <ButtonText>{text.param.amountOfCharacters(characters.length)}</ButtonText>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(characters.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
       {noFilteredCharacters || (
@@ -103,6 +104,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           actions={{ onClose: () => setSelectedCharacter(undefined), primary: { text: text.item.buy, onClick: buy } }}
         />
       )}
+      {!!selectedCharacter && <Overlay />}
     </>
   );
 };

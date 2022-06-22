@@ -25,7 +25,7 @@ export const FilterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0px;
-  z-index: 30000000;
+  z-index: 30;
   ${HorizontalDivider} {
     margin-top: 4px;
   }
