@@ -4,6 +4,7 @@ import { useMutation, useQuery, UseQueryResult } from "react-query";
 
 import { FakeCharcters } from "./fake-characters";
 import { api } from "./config";
+import { useCharacterContext } from "../context/characters";
 
 export const useCharacters = (): UseQueryResult<Character[]> => {
   return useQuery(["characters", "all"], async () => {
@@ -30,12 +31,11 @@ export const useMyCharacter = (): UseQueryResult<Character> => {
   });
 };
 
-export const useMyCharacters = (): UseQueryResult<Character[]> => {
-  return useQuery(["characters", "my"], async () => {
-    //  TODO: intergrate me
-
-    return FakeCharcters;
-  });
+export const useMyCharacters = (): [Character[], boolean] => {
+  const [{ owned, fetched }] = useCharacterContext();
+  const myCharacters = owned;
+  const isLoading = !fetched;
+  return [myCharacters, isLoading];
 };
 
 // TODO: actually implement filtering

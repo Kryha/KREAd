@@ -4,26 +4,24 @@ import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter, BaseRoute, ButtonText, CharacterCard, CharacterItems, LoadingPage, SecondaryButton } from "../../components";
 import { Close, LandingContainer, Menu } from "./styles";
-import { useMyCharacter } from "../../service";
-import { useCharacterContext } from "../../context/characters";
+import { useMyCharacter, useMyCharacters } from "../../service";
 
 export const Landing: FC = () => {
-  // Use useCharacterContext instead of use My characters
-  // const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
-  const [characterState,] = useCharacterContext();
-  const { fetched } = characterState;
+  const [myCharacters, isLoading] = useMyCharacters();
+  // const [characterState] = useCharacterContext();
+
+  // TODO: Removed mocked selected character
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
-  const[selectedCharacter, setSelectedCharacter] = useState(character);
+  const [selectedCharacter, setSelectedCharacter] = useState(character);
 
   useEffect(() => {
-    setSelectedCharacter(characterState.owned[0]);
-    console.log(characterState);
-  }, [characterState]);
-  
+    setSelectedCharacter(myCharacters[0]);
+  }, [myCharacters]);
+
   if (isLoadingCharacter) return <LoadingPage />;
   // TODO: get an empty page
-  // if (!character || !characters || !characters.length) return <></>;
+  // if (!character || !myCharacters || !myCharacters.length) return <></>;
 
   return (
     <BaseRoute
@@ -39,7 +37,7 @@ export const Landing: FC = () => {
         <BaseCharacter items={character!.items} isZoomed={openTab} size={openTab ? "large" : "normal"} />
       </LandingContainer>
       {!openTab && <CharacterItems items={character!.items} />}
-      {openTab && characterState.owned && <CharacterCard id={character!.characterId} characters={characterState.owned} />}
+      {openTab && myCharacters && <CharacterCard id={character!.characterId} characters={myCharacters} />}
     </BaseRoute>
   );
 };
