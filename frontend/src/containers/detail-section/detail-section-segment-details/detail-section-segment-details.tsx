@@ -26,7 +26,7 @@ export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> =
     <DetailSectionSegmentDetailsWrap>
       <FlexRow>
         <DetailSectionElement title={text.item.brand}>
-          <DetailSectionBody>{data.brand && truncateAddress(data.brand)}</DetailSectionBody>
+          <DetailSectionBody>{truncateAddress(data.brand)}</DetailSectionBody>
         </DetailSectionElement>
         <DetailSectionElement title={text.item.boardId}>
           <DetailSectionBody>
