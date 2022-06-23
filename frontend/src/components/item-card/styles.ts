@@ -77,6 +77,8 @@ export const ItemWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  position: relative;
+  z-index: 100;
 `;
 
 export const Plus = styled(PlusIcon)`

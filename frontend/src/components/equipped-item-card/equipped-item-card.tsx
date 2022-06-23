@@ -28,8 +28,10 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
   };
   return (
     <EquippedContainer
-      onClick={() => handleClick()}>
-      <VerticalInfo code={code} id={item?.id} />
+      onClick={() => handleClick()}
+      isRight={false}
+    >
+      <VerticalInfo code={code} />
       <ItemCard
         position="left"
         area={area}
@@ -54,7 +56,9 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> =
   };
   return (
     <EquippedContainer
-      onClick={() => handleClick()}>
+      onClick={() => handleClick()}
+      isRight
+    >
       <ItemCard
         position="right"
         area={area}
@@ -66,7 +70,7 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> =
         marginBottom={marginBottom}
         marginLeft={marginLeft}
         marginRight={marginRight} />
-      <VerticalInfo code={code} id={item?.id} isRight />
+      <VerticalInfo code={code} isRight />
     </EquippedContainer>
   );
 };
