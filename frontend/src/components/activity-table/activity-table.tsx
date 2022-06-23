@@ -7,7 +7,6 @@ import { CategoryButton } from "../../containers/detail-section/detail-section-h
 import { getDatefromEpoch } from "../../util";
 import { color } from "../../design";
 import { BoldLabel } from "../atoms";
-import json5 from "json5";
 
 interface ActivityTableProps {
   events?: ActivityEvent[];
