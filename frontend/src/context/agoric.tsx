@@ -10,7 +10,7 @@ import { connect } from "../service/lib/connect";
 import { useCharacterStateDispatch } from "./characters";
 import { apiRecv } from "../service/api/receive";
 import { processPurses } from "../service/purses/process";
-import { ServiceDispatch, ServiceState, ServiceStateActions } from "../interfaces/agoric.interfaces";
+import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 
 const {
   INSTANCE_BOARD_ID,
@@ -30,7 +30,7 @@ const {
 
 console.info(`DAPP CONSTANTS: ${dappConstants}`);
 
-const initialState: ServiceState = {
+const initialState: AgoricState = {
   status: {
     walletConnected: false,
     dappApproved: false,
@@ -58,12 +58,12 @@ const initialState: ServiceState = {
   isLoading: false,
 };
 
-type ProviderProps = Omit<React.ProviderProps<ServiceState>, "value">;
+type ProviderProps = Omit<React.ProviderProps<AgoricState>, "value">;
 
-const Context = createContext<ServiceState | undefined>(undefined);
-const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
+const Context = createContext<AgoricState | undefined>(undefined);
+const DispatchContext = createContext<AgoricDispatch | undefined>(undefined);
 
-const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState => {
+const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
@@ -213,20 +213,20 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
   );
 };
 
-export const useServiceState = (): ServiceState => {
+export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
   if (state === undefined) {
-    throw new Error("useServiceState can only be called inside a ServiceProvider.");
+    throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
   return state;
 };
 
-export const useServiceStateDispatch = (): React.Dispatch<ServiceStateActions> => {
+export const useAgoricStateDispatch = (): React.Dispatch<AgoricStateActions> => {
   const dispatch = useContext(DispatchContext);
   if (dispatch === undefined) {
-    throw new Error("useServiceDispatch can only be called inside a ServiceProvider.");
+    throw new Error("useAgoricDispatch can only be called inside a ServiceProvider.");
   }
   return dispatch;
 };
 
-export const useServiceContext = (): [ServiceState, ServiceDispatch] => [useServiceState(), useServiceStateDispatch()];
+export const useAgoricContext = (): [AgoricState, AgoricDispatch] => [useAgoricState(), useAgoricStateDispatch()];

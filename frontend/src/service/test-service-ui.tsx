@@ -1,7 +1,7 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
-import { useServiceContext } from "../context/agoric";
+import { useAgoricContext } from "../context/agoric";
 import { makeBidOfferForCharacter, getCharacters, mintCharacters } from "./character-actions";
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";
@@ -10,7 +10,8 @@ import { send } from "process";
 import { FakeCharctersNoItems } from "./fake-characters";
 
 export const TestServiceUI = () => {
-  const [service, serviceDispatch] = useServiceContext();
+  // service referse to agoricContext
+  const [service, agoricDispatch] = useAgoricContext();
   const [characters, charactersDispatch] = useCharacterContext();
 
   const CBPublicFacet = service.contracts.characterBuilder.publicFacet;

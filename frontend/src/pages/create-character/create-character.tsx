@@ -4,7 +4,7 @@ import { DefaultIcon, text } from "../../assets";
 import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
-import { useServiceState } from "../../context/agoric";
+import { useAgoricContext } from "../../context/agoric";
 import { useViewport } from "../../hooks";
 import { CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -17,7 +17,7 @@ import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
 
 export const CreateCharacter: FC = () => {
-  const service = useServiceState();
+  const agoricContext = useAgoricContext();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [character, setCharacter] = useState<any>();
@@ -28,14 +28,14 @@ export const CreateCharacter: FC = () => {
   };
 
   const sendOfferHandler = async (): Promise<void> => {
-    await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
+    await makeBidOfferForCharacter(agoricContext, character.auction.publicFacet, character.character, 10n);
   };
 
   const submitForm = async (data: CharacterCreation): Promise<void> => {
     // createCharacter.mutate(data);
     const baseCharacter = FakeCharctersNoItems[0];
     const newCharacter = { ...baseCharacter, name: data.name };
-    const bought = await mintCharacters(service, [newCharacter], 1n);
+    const bought = await mintCharacters(agoricContext, [newCharacter], 1n);
 
     // setCurrentStep(PAYMENT_STEP);
     // setCharacter(createCharacter.data);

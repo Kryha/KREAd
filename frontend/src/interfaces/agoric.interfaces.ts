@@ -29,7 +29,7 @@ export interface Purses {
   character: any[];
 }
 
-export interface ServiceState {
+export interface AgoricState {
   status: Status;
   purses: Purses;
   contracts: Contracts;
@@ -90,9 +90,9 @@ interface Reset {
   type: "RESET";
 }
 
-export type ServiceDispatch = React.Dispatch<ServiceStateActions>;
+export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 
-export type ServiceStateActions =
+export type AgoricStateActions =
   | Reset
   | SetDappApproved
   | SetWalletConnected
