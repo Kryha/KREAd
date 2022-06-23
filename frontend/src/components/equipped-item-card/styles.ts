@@ -5,4 +5,5 @@ export const EquippedContainer = styled.div`
   flex-direction: row;
   align-items: flex-end;
   padding: 0px;
+  gap: 8px;
 `;

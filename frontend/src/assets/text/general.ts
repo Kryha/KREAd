@@ -26,4 +26,5 @@ export const general = {
   mintNew: "mint new",
   theMinimiumAmountIs: "the minimum amount is RUN 1",
   moreInfo: "more info",
+  thereAreNoAssetsAvailable: "there are no assets available",
 };

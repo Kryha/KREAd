@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, ErrorView, LoadingPage, SwitchSelector } from "../../components";
+import { BaseRoute, ButtonText, EmptyItemCard, ErrorView, ItemCard, LoadingPage, MenuItemName, OverviewEmpty, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
@@ -11,7 +11,8 @@ import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { InventoryWrapper } from "./styles";
+import { InfoContainer, InventoryWrapper, ItemContainer, OverviewContainer } from "./styles";
+import { color } from "../../design";
 
 const ItemsInventory: FC = () => {
   const { data: items, isLoading, isError } = useItems();
@@ -32,14 +33,43 @@ const ItemsInventory: FC = () => {
 
   if (isLoading) return <LoadingPage />;
 
-  if (isError || !items || !items.length) return <ErrorView />;
+  if (isError) return <ErrorView />;
+  const isEmpty = !items || !items.length;
+  const equipItems = () => {
+    console.log("djh");
+  };
 
   return (
-    <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
-      <ItemDetailSection
-        item={item || items[0]}
-        actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
-      />
+    <PageContainer sidebarContent={
+      isEmpty ? (
+        <div>
+          <ItemContainer>
+            <EmptyItemCard />
+            <InfoContainer>
+              <MenuItemName>{text.item.noItemEquipped}</MenuItemName>
+              <ButtonText customColor={color.darkGrey}>{text.item.selectAnItemFrom}</ButtonText>
+            </InfoContainer>
+          </ItemContainer>
+        </div>
+      ) : (
+        <ItemsList onItemClick={setSelectedId} />
+      )
+    }>
+      {isEmpty ? (
+        <OverviewContainer>
+          <OverviewEmpty
+            headingText={text.item.noItemEquipped}
+            descriptionText={text.item.youDidNotEquipp}
+            buttonText={text.item.startEquipping}
+            onButtonClick={equipItems}
+          />
+        </OverviewContainer>
+      ) : (
+        <ItemDetailSection
+          item={item || items[0]}
+          actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+        />
+      )}
     </PageContainer>
   );
 };

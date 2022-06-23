@@ -34,6 +34,8 @@ import RangeIcon from "./range.png";
 import DefaultIcon from "./default-character.png";
 import { ReactComponent as DownArrowIcon } from "./down-arrow.svg";
 import { ReactComponent as BellIcon } from "./bell.svg";
+import ErrorImage from "./error-image.png";
+import { ReactComponent as PlusIcon } from "./plus.svg";
 
 export {
   ErrorIcon,
@@ -72,4 +74,6 @@ export {
   ExclamationIcon,
   DownArrowIcon,
   BellIcon,
+  ErrorImage,
+  PlusIcon,
 };

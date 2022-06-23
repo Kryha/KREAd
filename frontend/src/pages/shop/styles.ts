@@ -14,7 +14,7 @@ export const ShopWrapper = styled.div`
 
   ${DetailSectionWrap} {
     position: absolute;
-    top: -5px;
+    top: -80px;
     left: 0px;
     z-index: 30000000;
   }

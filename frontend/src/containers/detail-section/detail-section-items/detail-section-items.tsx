@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { ButtonText, ItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
+import { ButtonText, EmptyItemCard, ItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
 import { color } from "../../../design";
 import { Item } from "../../../interfaces";
 import { CategoryButton } from "../detail-section-header/styles";
@@ -54,7 +54,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
 const EmptyItem: FC = () => {
   return (
     <EmptyInfo>
-      <ItemCard />
+      <EmptyItemCard />
       <InfoWrapper>
         <InfoContainer>
           <MenuItemName>{text.character.noItemEquipped}</MenuItemName>
