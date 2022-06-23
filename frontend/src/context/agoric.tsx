@@ -103,7 +103,7 @@ const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState
   }
 };
 
-export const ServiceStateProvider = (props: ProviderProps): React.ReactElement => {
+export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
   const characterDispatch = useCharacterStateDispatch();
   const walletPRef = useRef(undefined);
