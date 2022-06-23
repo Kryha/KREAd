@@ -16,7 +16,7 @@ export const Landing: FC = () => {
   const [selectedCharacter, setSelectedCharacter] = useState(character);
 
   useEffect(() => {
-    setSelectedCharacter(myCharacters[0]);
+    myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
   if (isLoadingCharacter) return <LoadingPage />;
