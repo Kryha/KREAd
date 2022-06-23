@@ -26,6 +26,24 @@ const formBidOfferForCharacter = (invitation: any, character: any, purses: Purse
     },
   },
 });
+export const formOfferForCharacter = (invitation: any, character: any, purses: Purses, price: bigint) => ({
+  // JSONable ID for this offer.  This is scoped to the origin.
+  id: Date.now(),
+  invitation,
+  proposalTemplate: {
+    want: {
+      Asset: {
+        pursePetname: purses.character[0].pursePetname,
+      },
+    },
+    give: {
+      Price: {
+        pursePetname: purses.money[0].pursePetname,
+        value: 0,
+      },
+    },
+  },
+});
 
 export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
   const { agoric: { walletP }, purses } = service;
@@ -34,6 +52,21 @@ export const makeBidOfferForCharacter = async (service: ServiceState, auctionPub
     return;
   }
   const invitation = await E(auctionPublicFacet).makeBidInvitationForKey(character);
+  console.info("Invitation successful, sending to wallet for approval");
+  // Adjust based on Money Brand decimals
+  const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
+  const offerConfig = formBidOfferForCharacter(invitation, character, purses, adjustedPrice);
+
+  return E(walletP).addOffer(offerConfig);
+};
+
+export const makeOfferForCharacter = async (service: ServiceState, character: any, price: bigint) => {
+  const { agoric: { walletP }, purses } = service;
+  if (!service.contracts.characterBuilder.publicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
+    console.error("Could not make bid for character: undefined parameter");
+    return;
+  }
+  const invitation = await E(service.contracts.characterBuilder.publicFacet).ge(character);
   console.info("Invitation successful, sending to wallet for approval");
   // Adjust based on Money Brand decimals
   const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));

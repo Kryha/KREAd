@@ -122,12 +122,13 @@ export default async function deployApi(
 
   const chainTimerService = await chainTimerServiceP;
   console.log(
-    await E(nftMakerSellerFacet).initConfig(
+    await E(nftMakerSellerFacet).initConfig({
       moneyIssuer,
       auctionInstallation,
       auctionItemsInstallation,
       chainTimerService,
-    ),
+      baseCharacters: KCB,
+    }),
   );
   const {
     // TODO: implement exiting the creatorSeat and taking the earnings

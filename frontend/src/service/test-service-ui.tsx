@@ -167,6 +167,7 @@ export const TestServiceUI = () => {
     const nfts = await E(CBPublicFacet).getCharacterArray();
     charactersDispatch({ type: "SET_CHARACTERS", payload: nfts });
   };
+  
 
   const setMintNext = async () => {
     await E(CBPublicFacet).setMintNext("c-los");

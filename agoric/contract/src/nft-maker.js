@@ -1,11 +1,44 @@
 // @ts-check
 import '@agoric/zoe/exported';
-
 import { makeIssuerKit, AssetKind, AmountMath } from '@agoric/ertp';
+import {
+  assertIssuerKeywords,
+  satisfies,
+  depositToSeat,
+  swap,
+} from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { E } from '@endo/eventual-send';
+import { assert, details as X } from '@agoric/assert';
 
 import { FIRST_PRICE } from '@agoric/zoe/src/contracts/auction';
+import { errors } from './errors';
+
+/**
+ * @typedef {{
+ * characterNames: string[]
+ * characters: CharacterRecord[]
+ * config?: Config
+ * mintNext: string
+ * }} State
+ * @typedef {{
+ * moneyIssuer: Issuer
+ * auctionInstallation: Installation
+ * auctionItemsInstallation: Installation
+ * timeAuthority: any
+ * baseCharacters: object[]
+ * completed?: boolean
+ * }} Config
+ * @typedef {{
+ * name: string
+ * character: object
+ * seat?: ZCFSeat
+ * auction?: {
+ *   instance: Instance,
+ *   publicFacet: any,
+ * },
+ * }} CharacterRecord
+ */
 
 /**
  * This contract mints non-fungible tokens (Characters) and creates a contract
@@ -14,64 +47,57 @@ import { FIRST_PRICE } from '@agoric/zoe/src/contracts/auction';
  * @type {ContractStartFn}
  */
 const start = async (zcf) => {
-  // Create the internal character mint
+  // Define Assets
   const { issuer, mint, brand } = makeIssuerKit('Character', AssetKind.SET);
-
   const characterMint = await zcf.makeZCFMint('KCB', AssetKind.SET);
   const { issuer: characterIssuer, brand: characterBrand } =
     characterMint.getIssuerRecord();
 
   const zoeService = zcf.getZoeService();
 
-  // const characterList = new Map();
-  let characterArray = [];
-  let config = {
-    completed: false,
-  };
-  let counter = 1;
-
-  // TODO: establish a rarity system set by the creator of the character set
-  // const pickRandomCharacter = () => {
-  //   const number = Math.random() * (characterSet.length - 1);
-  //   return characterSet[number];
-  // };
-  const mintCharacterZCF = (seat) => {
-    const amount = AmountMath.make(
-      characterBrand,
-      harden([
-        {
-          name: `Pablo${counter}`,
-          url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
-        },
-      ]),
-    );
-
-    // Synchronously mint and allocate amount to seat.
-    characterMint.mintGains(harden(amount), seat);
-    // Exit the seat so that the user gets a payout.
-    seat.exit();
-
-    characterArray = [
-      ...characterArray,
-      {
-        name: `Pablo${counter}`,
-        url: 'https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512',
-      },
-    ];
-    counter += 1;
-    // Since the user is getting the payout through Zoe, we can
-    // return anything here. Let's return some helpful instructions.
-    return 'Offer completed. You should receive a payment from Zoe';
+  /**
+   * Mutable contract state
+   *
+   * @type{State}
+   */
+  const state = {
+    characterNames: [],
+    characters: [],
+    mintNext: 'PABLO',
   };
 
-  const initConfig = (
+  /**
+   * Checks if giveSeat satisfies wantSeat
+   *
+   * @param {ZCFSeat} wantSeat
+   * @param {ZCFSeat} giveSeat
+   * @returns {boolean}
+   */
+  const satisfiedBy = (wantSeat, giveSeat) =>
+    satisfies(zcf, wantSeat, giveSeat.getCurrentAllocation());
+  /**
+   * Checks if two seats satisfy each other
+   *
+   * @param {ZCFSeat} seatA
+   * @param {ZCFSeat} seatB
+   * @returns {boolean}
+   */
+  const seatsFulfilled = (seatA, seatB) =>
+    satisfiedBy(seatA, seatB) && satisfiedBy(seatB, seatA);
+  /**
+   * Set contract configuration, must be called befor most methods
+   *
+   * @param {Config} config
+   * @returns {string}
+   */
+  const initConfig = ({
     moneyIssuer,
     auctionInstallation,
     auctionItemsInstallation,
     timeAuthority,
     baseCharacters,
-  ) => {
-    config = {
+  }) => {
+    state.config = {
       moneyIssuer,
       auctionInstallation,
       auctionItemsInstallation,
@@ -82,17 +108,75 @@ const start = async (zcf) => {
     return 'Setup completed';
   };
 
-  // TODO: establish a rarity system set by the creator of the character set
+  /**
+   * TODO: establish a rarity system set by the creator of the character set
+   * TODO: add character type in return
+   *
+   * @returns {any}
+   */
   const getRandomBaseCharacter = () => {
-    const number = Math.random() * (config.baseCharacters.length - 1);
-    return config.baseCharacters[number];
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    const number = Math.random() * (state.config.baseCharacters.length - 1);
+    return state.config.baseCharacters[number];
+  };
+  /**
+   * @param {string} name
+   * @returns {boolean}
+   */
+  const nameIsUnique = (name) => {
+    return !state.characterNames.includes(name);
+  };
+  /**
+   * Starting a transfer revokes the vault holder. The associated updater will
+   * get a special notification that the vault is being transferred.
+   *
+   * @param {ZCFSeat} seat
+   * @param {{
+   * name: string
+   * }} args
+   */
+  const createNewCharacterSeat = async (seat, args) => {
+    const name = args.name;
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assert(args.name, X`${errors.noNameArg}`);
+    assert(nameIsUnique(name), X`${errors.nameTaken}`);
+
+    // const { want, give, exit } = seat.getProposal();
+
+    assertIssuerKeywords(zcf, harden(['Asset', 'Price']));
+
+    const newCharacter = {
+      ...getRandomBaseCharacter(),
+      name,
+    };
+    const newCharactersForSaleAmount = AmountMath.make(brand, [newCharacter]);
+    const allCharactersForSalePayment = mint.mintPayment(
+      newCharactersForSaleAmount,
+    );
+
+    const depositP = await depositToSeat(
+      zcf,
+      seat,
+      { Asset: newCharactersForSaleAmount },
+      { Asset: allCharactersForSalePayment },
+    );
+    assert(depositP, X`${errors.depositToSeatFailed}`);
+
+    /**
+     * @type {CharacterRecord}
+     */
+    const character = {
+      name: newCharacter.name,
+      character: newCharacter,
+      seat,
+    };
+    state.characters = [...state.characters, character];
+    seat.exit();
+    return 'Offer Complete';
   };
 
   const createNewCharacter = async (name) => {
-    assert(
-      config.completed,
-      'Configuration not found, please use creatorFacet.initConfig(<config>) to enable this method',
-    );
+    assert(state.config?.completed, X`${errors.noConfig}`);
     const newCharacter = {
       ...getRandomBaseCharacter(),
       name,
@@ -109,26 +193,29 @@ const start = async (zcf) => {
 
     const issuerKeywordRecord = harden({
       Items: issuer,
-      Money: config.moneyIssuer,
+      Money: state.config.moneyIssuer,
     });
     // Adjust for 6 decimals
     const moneyValue = 10n ** 6n;
-    const minBidPerCharacter = AmountMath.make(config.moneyBrand, moneyValue);
+    const minBidPerCharacter = AmountMath.make(
+      state.config.moneyIssuer.getBrand(),
+      moneyValue,
+    );
     // Terms used here are set via creatorFacet.initConfig(<config obj>)
     // Short bidDuration of 1s for [almost] instant sell
     const auctionItemsTerms = harden({
       bidDuration: 1n,
       winnerPriceOption: FIRST_PRICE,
       ...zcf.getTerms(),
-      auctionInstallation: config.auctionInstallation,
+      auctionInstallation: state.config.auctionInstallation,
       minimalBid: minBidPerCharacter,
-      timeAuthority: config.timeAuthority,
+      timeAuthority: state.config.timeAuthority,
     });
 
     const { creatorInvitation, instance, publicFacet } = await E(
       zoeService,
     ).startInstance(
-      config.auctionItemsInstallation,
+      state.config.auctionItemsInstallation,
       issuerKeywordRecord,
       auctionItemsTerms,
     );
@@ -141,15 +228,13 @@ const start = async (zcf) => {
       character: newCharacter,
       auction: { instance, publicFacet },
     };
-    characterArray = [...characterArray, character];
+    state.characters = [...state.characters, character];
 
     await E(zoeService).offer(
       creatorInvitation,
       proposal,
       paymentKeywordRecord,
     );
-
-    counter += 1;
 
     return harden({
       msg: 'Character mint successful, use attached public facet to purchase',
@@ -158,10 +243,8 @@ const start = async (zcf) => {
   };
 
   const auctionCharactersPublic = async (newCharacters, minBidPerCharacter) => {
-    assert(
-      config.completed,
-      'Configuration not found, please use creatorFacet.initConfig(<config>) to enable this method',
-    );
+    assert(state.config?.completed, X`${errors.noConfig}`);
+
     const newCharactersForSaleAmount = AmountMath.make(brand, newCharacters);
     const allCharactersForSalePayment = mint.mintPayment(
       newCharactersForSaleAmount,
@@ -173,7 +256,7 @@ const start = async (zcf) => {
 
     const issuerKeywordRecord = harden({
       Items: issuer,
-      Money: config.moneyIssuer,
+      Money: state.config.moneyIssuer,
     });
     // Terms used here are set via creatorFacet.initConfig(<config obj>)
     // Short bidDuration of 1s for [almost] instant sell
@@ -181,15 +264,15 @@ const start = async (zcf) => {
       bidDuration: 1n,
       winnerPriceOption: FIRST_PRICE,
       ...zcf.getTerms(),
-      auctionInstallation: config.auctionInstallation,
+      auctionInstallation: state.config.auctionInstallation,
       minimalBid: minBidPerCharacter,
-      timeAuthority: config.timeAuthority,
+      timeAuthority: state.config.timeAuthority,
     });
 
     const { creatorInvitation, instance, publicFacet } = await E(
       zoeService,
     ).startInstance(
-      config.auctionItemsInstallation,
+      state.config.auctionItemsInstallation,
       issuerKeywordRecord,
       auctionItemsTerms,
     );
@@ -203,7 +286,7 @@ const start = async (zcf) => {
         character: newCharacter,
         auction: { instance, publicFacet },
       };
-      characterArray = [...characterArray, character];
+      state.characters = [...state.characters, character];
     });
 
     await E(zoeService).offer(
@@ -211,8 +294,6 @@ const start = async (zcf) => {
       proposal,
       paymentKeywordRecord,
     );
-
-    counter += 1;
 
     return harden({
       msg: 'Character mint successful, use attached public facet to purchase',
@@ -273,7 +354,7 @@ const start = async (zcf) => {
         character: newCharacter,
         auction: { instance, publicFacet },
       };
-      characterArray = [...characterArray, character];
+      state.characters = [...state.characters, character];
       // characterArray.push(character);
       // characterList.set(newCharacter.name, {
       //   character: newCharacter,
@@ -296,38 +377,53 @@ const start = async (zcf) => {
   // Opportunity for more complex queries
   const getCharacters = () => {
     return harden({
-      characters: characterArray,
+      characters: state.characters,
     });
   };
   const creatorFacet = Far('Character store creator', {
     auctionCharacters,
     auctionCharactersPublic,
-    mintCharacter: () =>
-      zcf.makeInvitation(
-        mintCharacterZCF,
-        'mint a character nft via mintGains',
-      ),
+    // mintCharacter: () =>
+    //   zcf.makeInvitation(
+    //     mintCharacterZCF,
+    //     'mint a character nft via mintGains',
+    //   ),
     getIssuer: () => issuer,
     getCharacterIssuer: () => characterIssuer,
     getCharacters,
-    getConfig: () => config,
+    setMintNext: (nextName) => {
+      state.mintNext = nextName;
+    },
+    getMintNext: () => state.mintNext,
+    getConfig: () => state.config,
     initConfig,
   });
 
   const publicFacet = Far('Chracter store public', {
     getIssuer: () => issuer,
     getCharacterIssuer: () => characterIssuer,
-    mintCharacter: () =>
-      zcf.makeInvitation(
-        mintCharacterZCF,
-        'mint a character nft via mintGains',
-      ),
+    setMintNext: (nextName) => {
+      state.mintNext = nextName;
+    },
+    getMintNext: () => state.mintNext,
+    // mintCharacter: () =>
+    //   zcf.makeInvitation(
+    //     mintCharacterZCF,
+    //     'mint a character nft via mintGains',
+    //   ),
     getCharacters,
-    getCharacterArray: () => characterArray,
+    getCharacterArray: () => state.characters,
+    getCharacterNames: () => state.characterNames,
     auctionCharactersPublic,
     createNewCharacter,
-    getCount: () => counter,
-    getConfig: () => config,
+    createNewCharacterSeat: (args) =>
+      zcf.makeInvitation(
+        createNewCharacterSeat,
+        'createNewCharacterSeat',
+        args,
+      ),
+    getCount: () => state.characterNames.length,
+    getConfig: () => state.config,
   });
 
   return harden({ creatorFacet, publicFacet });

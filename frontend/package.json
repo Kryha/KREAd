@@ -2,6 +2,7 @@
   "name": "@builder/frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@agoric/assert": "^0.4.0",
     "@agoric/ertp": "^0.14.2",
