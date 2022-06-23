@@ -37,6 +37,7 @@ export interface ServiceState {
   isLoading: boolean;
 }
 
+// TODO: remove if keeps unused
 type PursePetname = [string, string];
 
 interface SetDappApproved {
