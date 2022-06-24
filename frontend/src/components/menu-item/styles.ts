@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { margins, color } from "../../design";
-import { Label, MenuItemName } from "../atoms";
+import { BoldLabel, MenuItemName } from "../atoms";
 import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 
-export const EquippedLabel = styled(Label)``;
+export const EquippedLabel = styled(BoldLabel)``;
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -23,12 +23,6 @@ export const InfoWrapper = styled.div`
 `;
 
 export const MenuItemWrapper = styled.div``;
-
-export const Divider = styled.div`
-  width: 48px;
-  border: 1px solid #d0d0d0;
-  transform: rotate(90deg);
-`;
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -65,12 +59,6 @@ export const Info = styled.div<InfoProps>`
     ${EquippedLabel} {
       display: none;
     }
-    // ${InfoContainer} {
-    //   margin-right: 0px;
-    // }
-    // ${ButtonContainer} {
-    //   margin-left: -30px;
-    // }
   }
   :not(:hover) {
     ${ButtonContainer} {
@@ -96,4 +84,17 @@ export const ImageContainer = styled.div`
   ${ExpandButton} {
     display: none;
   }
+`;
+
+export const InlineDetails = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: ${margins.nano};
+`;
+
+export const Divider = styled.div`
+  height: 0px;
+  width: 24px;
+  border: 0.5px solid #d0d0d0;
+  transform: rotate(90deg);
 `;

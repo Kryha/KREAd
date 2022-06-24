@@ -20,7 +20,7 @@ export const Landing: FC = () => {
     setSelectedCharacter(characterState.owned[0]);
     console.log(characterState);
   }, [characterState]);
-  
+
   if (isLoadingCharacter) return <LoadingPage />;
   // TODO: get an empty page
   // if (!character || !characters || !characters.length) return <></>;

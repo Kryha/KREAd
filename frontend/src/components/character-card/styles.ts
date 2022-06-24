@@ -111,3 +111,8 @@ export const CharacterCardWrapper = styled.div`
     left: ${margins.big};
   }
 `;
+
+export const EmptyViewContainer = styled.div`
+  padding-top: 40px;
+  padding-left: 40px;
+`;

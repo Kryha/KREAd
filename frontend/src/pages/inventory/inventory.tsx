@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, ButtonText, EmptyItemCard, ErrorView, ItemCard, LoadingPage, MenuItemName, OverviewEmpty, SwitchSelector } from "../../components";
+import { BaseRoute, ErrorView, LoadingPage, OverviewEmpty, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
@@ -11,8 +11,8 @@ import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { InfoContainer, InventoryWrapper, ItemContainer, OverviewContainer } from "./styles";
-import { color } from "../../design";
+import { InventoryWrapper,  OverviewContainer } from "./styles";
+import { EmptyCard } from "../../components/empty-card";
 
 const ItemsInventory: FC = () => {
   const { data: items, isLoading, isError } = useItems();
@@ -42,15 +42,7 @@ const ItemsInventory: FC = () => {
   return (
     <PageContainer sidebarContent={
       isEmpty ? (
-        <div>
-          <ItemContainer>
-            <EmptyItemCard />
-            <InfoContainer>
-              <MenuItemName>{text.item.noItemEquipped}</MenuItemName>
-              <ButtonText customColor={color.darkGrey}>{text.item.selectAnItemFrom}</ButtonText>
-            </InfoContainer>
-          </ItemContainer>
-        </div>
+        <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
       ) : (
         <ItemsList onItemClick={setSelectedId} />
       )

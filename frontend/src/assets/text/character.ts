@@ -38,4 +38,8 @@ export const character = {
   buy: "buy",
   select: "select",
   selected: "selected",
+  thereAreNoCharactersAvailable: "there are no characters available",
+  minANewCharcater: "mint a new character",
+  thereAreNoItemsInYourInventory: "there are no items in your inventory",
+  buyItemsInTheStore: "buy items in the store",
 };

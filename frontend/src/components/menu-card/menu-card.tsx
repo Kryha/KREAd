@@ -78,7 +78,11 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
       {item && (
         <ItemDetailSection
           item={item}
-          actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+          actions={{
+            primary: { text: text.item.equip, onClick: equip },
+            secondary: { text: text.item.sell, onClick: sell },
+            onClose: () => setSelectedId(""),
+          }}
         />
       )}
     </MenuCardWrapper>

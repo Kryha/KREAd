@@ -59,10 +59,10 @@ export const mintCharacters = async (service: ServiceState, characters: any, pri
 export const mintAndBuy = async (service: ServiceState, characters: any) => {
   console.log(characters);
   assert(characters.length === 1, "mintAndBuy expects an array with a single character");
-  const newCharacter = await mintCharacters(service, characters, 1n);
+  const newCharacter = await mintCharacters(service, characters, BigInt(1));
   if (newCharacter.msg !== SUCCESSFUL_MINT_REPONSE_MSG) throw new Error("There was a problem minting the character");
   console.info(newCharacter.msg);
-  await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
+  await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, BigInt(1));
 };
 
 export const getCharacters = async (service: ServiceState, characterDispatch: CharacterDispatch) => {
@@ -72,7 +72,7 @@ export const getCharacters = async (service: ServiceState, characterDispatch: Ch
     return;
   }
   const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
-  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any)=>nft.character.name)}`);
+  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any) => nft.character.name)}`);
   characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
 };
 
@@ -317,4 +317,3 @@ export const getCharacters = async (service: ServiceState, characterDispatch: Ch
 //   await E(depositFacet).receive(invitation);
 //   await E(agoric.walletP).addOffer(updatedOffer);
 // };
-

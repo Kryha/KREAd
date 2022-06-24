@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
+import { Info, ButtonContainer as Button } from "../../components/menu-item/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
@@ -43,6 +44,14 @@ export const ContentWrapper = styled.div`
   }
   ${TickContainer} {
     margin-top: ${margins.big};
+  }
+  ${Info} {
+    border: 1px solid ${color.darkGrey};
+    background-color: ${color.lightGrey};
+    margin-top: 40px;
+  }
+  ${Button} {
+    display: none;
   }
 `;
 

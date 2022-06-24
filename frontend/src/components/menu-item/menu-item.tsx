@@ -1,19 +1,20 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isString } from "../../interfaces";
-import { ButtonContainer, Divider, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper } from "./styles";
-import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
+import { ButtonContainer, Divider, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails } from "./styles";
+import { Badge, ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
 import { ItemThumbnail } from "../item-thumbnail";
 
-interface Data {
+export interface Data {
   image: string | CharacterItems;
   name: string;
   level: number;
   category: string;
   id: string;
+  equipped?: boolean;
 }
 
 interface MenuItemProps {
@@ -45,12 +46,16 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
       <InfoWrapper>
         <InfoContainer>
           <MenuItemName>{data.name}</MenuItemName>
-          <Label>{text.param.id(data.id)}</Label>
+          <InlineDetails>
+            <Badge>
+              <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
+            </Badge>
+            <Divider />
+            <Label>{text.param.level(data.level)}</Label>
+          </InlineDetails>
         </InfoContainer>
-        {/* TODO: actually track if equipped or not */}
-        <EquippedLabel>{text.general.equipped}</EquippedLabel>
+        <EquippedLabel customColor={color.black}>{text.param.id(data.id)}</EquippedLabel>
         <ButtonContainer>
-          <Divider />
           <PrimaryButton>
             <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
           </PrimaryButton>
