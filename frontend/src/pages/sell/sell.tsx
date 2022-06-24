@@ -36,7 +36,7 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data }) => {
         }
       >
         <FormCard height={height} width={width}>
-          <FormHeaderClose title={pText.sell} link={routes.root} />
+          <FormHeaderClose title={pText.sell} link={routes.character} />
           <MenuItem data={data} />
           <form onSubmit={handleSubmit((data) => onSubmit(data.price))}>
             <FormFields>

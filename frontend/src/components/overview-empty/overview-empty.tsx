@@ -20,7 +20,7 @@ export const OverviewEmpty: FC<OverviewProps> = ({ redirectRoute, headingText, b
 
   const handleButtonClick = () => {
     if (onButtonClick) return onButtonClick();
-    navigate(redirectRoute || routes.root);
+    navigate(redirectRoute || routes.character);
   };
 
   return (

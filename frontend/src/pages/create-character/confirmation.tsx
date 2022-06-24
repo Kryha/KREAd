@@ -24,7 +24,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
   };
 
   // TODO: add noticifaction
-  if (equipCharacter.isSuccess) return <Navigate to={routes.root} />;
+  if (equipCharacter.isSuccess) return <Navigate to={routes.character} />;
 
   if (equipCharacter.isError) return <ErrorView />;
 

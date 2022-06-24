@@ -68,7 +68,7 @@ export const CreateCharacter: FC = () => {
           <FormHeader
             currentStep={currentStep}
             title={text.mint.mintNew}
-            link={routes.root}
+            link={routes.character}
           />
           <>{perStepDisplay()}</>
         </FormCard>

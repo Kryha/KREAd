@@ -32,7 +32,7 @@ export const ErrorView: FC<ErrorViewProps> = ({ redirectRoute, headingText, navi
 
   const handleButtonClick = () => {
     if (onButtonClick) return onButtonClick();
-    navigate(redirectRoute || routes.root);
+    navigate(redirectRoute || routes.character);
   };
 
   return (

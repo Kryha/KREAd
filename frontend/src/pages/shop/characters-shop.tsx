@@ -89,7 +89,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           headingText={text.store.thereAreNoCharactersInTheShop}
           descriptionText={text.store.thereAreNoCharactersAvailable}
           buttonText={text.navigation.goHome}
-          redirectRoute={routes.root}
+          redirectRoute={routes.character}
         />
       ) : (
         <>

@@ -92,7 +92,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         headingText={text.store.thereAreNoItemsInTheShop}
         descriptionText={text.store.thereAreNoItemsAvailable}
         buttonText={text.navigation.goHome}
-        redirectRoute={routes.root}
+        redirectRoute={routes.character}
       />}
       {!!noFilteredItems || (
         <ItemWrapper height={height}>
