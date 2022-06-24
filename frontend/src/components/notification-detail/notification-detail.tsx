@@ -18,20 +18,20 @@ import {
 } from "./styles";
 
 interface NotificationDetailProps {
-  error?: boolean;
+  isError?: boolean;
   title: string;
   info: string;
   closeToast: () => void;
   buttonTitle?: string;
 }
 
-export const NotificationDetail: FC<NotificationDetailProps> = ({ error, title, info, closeToast, buttonTitle }) => {
+export const NotificationDetail: FC<NotificationDetailProps> = ({ isError, title, info, closeToast, buttonTitle }) => {
   const navigate = useNavigate();
 
   return(
     <ToastContainer>
       <IconContainer>
-        {error ? <Exclamation /> : <Tick />}
+        {isError ? <Exclamation /> : <Tick />}
       </IconContainer>
       <InfoContainer>
         <ToastTitle>{title}</ToastTitle>

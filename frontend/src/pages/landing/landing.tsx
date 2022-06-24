@@ -75,7 +75,7 @@ export const Landing: FC = () => {
         {/* FIXME: do not rely on !*/}
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
-      {!openTab || !openNotification && <CharacterItems items={character.items} />}
+      {!openTab && !openNotification && <CharacterItems items={character.items} />}
       {openTab && characterState.owned && <CharacterCard id={character.characterId} characters={characterState.owned} />}
       <DetailContainer>
         <MenuText>{character.name}</MenuText>
