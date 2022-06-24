@@ -2,15 +2,13 @@ import { FC, ReactNode, useState } from "react";
 
 import { text } from "../../assets";
 import {
-  ButtonText,
   CharacterShopCard,
-  ErrorView,
   Filters,
   HorizontalDivider,
   Label,
   LoadingPage,
+  OverviewEmpty,
   PriceSelector,
-  SecondaryButton,
   Select,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
@@ -23,8 +21,6 @@ import {
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
-  LoadMore,
-  Refresh,
   SelectorContainer,
   SortByContainer,
 } from "./styles";
@@ -64,8 +60,6 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   if (isLoading) return <LoadingPage />;
 
-  if (!characters || !characters.length) return <ErrorView />;
-
   return (
     <>
       <FilterWrapper>
@@ -90,21 +84,25 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         </FilterContainer>
         <HorizontalDivider />
       </FilterWrapper>
-      {noFilteredCharacters || (
-        <ItemWrapper height={height}>
-          <ItemContainer>
-            {characters.map((character, index) => (
-              <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
-            ))}
-          </ItemContainer>
-          {/* TODO: do something with load more */}
-          <LoadMore>
-            <SecondaryButton>
-              <ButtonText>{text.general.loadMore}</ButtonText>
-              <Refresh />
-            </SecondaryButton>
-          </LoadMore>
-        </ItemWrapper>
+      {!characters || !characters.length ? (
+        <OverviewEmpty
+          headingText={text.store.thereAreNoCharactersInTheShop}
+          descriptionText={text.store.thereAreNoCharactersAvailable}
+          buttonText={text.navigation.goHome}
+          redirectRoute={routes.root}
+        />
+      ) : (
+        <>
+          {noFilteredCharacters || (
+            <ItemWrapper height={height}>
+              <ItemContainer>
+                {characters.map((character, index) => (
+                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                ))}
+              </ItemContainer>
+            </ItemWrapper>
+          )}
+        </>
       )}
       {!!selectedCharacter && (
         <CharacterDetailSection

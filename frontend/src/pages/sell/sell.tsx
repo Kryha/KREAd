@@ -7,7 +7,7 @@ import { PageContainer } from "../../components/page-container";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { FormCard } from "../create-character/styles";
-import { ArrowUp, ButtonContainer, ContentWrapper, Exclamation, FormFields, InputContainer, InputWrapper, TextLabel, Tick } from "./styles";
+import { ArrowUp, ButtonContainer, ContentWrapper, ErrorContainer, FormFields, InputContainer, InputWrapper, TextLabel, Tick, Warning } from "./styles";
 import { color } from "../../design";
 import { ButtonInfo } from "../../components/button-info";
 import { SellText } from "./types";
@@ -47,15 +47,20 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data }) => {
                 </TextLabel>
               </InputContainer>
               <InputWrapper>
-                {Boolean(errors.price) && <Exclamation />}
                 {Boolean(!errors.price && dirtyFields.price) && <Tick />}
                 <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
               </InputWrapper>
               {Boolean(errors.price && errors.price.type === "required") && (
-                <ButtonText customColor={color.darkGrey}>{text.general.thisFieldIsRequired}</ButtonText>
+                <ErrorContainer>
+                  <Warning />
+                  <ButtonText>{text.general.thisFieldIsRequired}</ButtonText>
+                </ErrorContainer>
               )}
               {Boolean(errors.price && errors.price.type === "min") && (
-                <ButtonText customColor={color.darkGrey}>{text.general.theMinimiumAmountIs}</ButtonText>
+                <ErrorContainer>
+                  <Warning />
+                  <ButtonText>{text.general.theMinimiumAmountIs}</ButtonText>
+                </ErrorContainer>
               )}
             </FormFields>
             <FormText>{text.store.sellDescription}</FormText>

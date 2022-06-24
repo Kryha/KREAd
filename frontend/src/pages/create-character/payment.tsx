@@ -31,7 +31,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <GeneralInfo>
+        <GeneralInfo active={sendOffer}>
           <PricingContainer>
             <NumberContainer active={true}>
               {sendOffer ?
@@ -51,7 +51,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
           </PricingContainer>
         </GeneralInfo>
         <Line />
-        <Step>
+        <Step active={!sendOffer}>
           <NumberContainer active={!!sendOffer}>
             {acceptOffer ? <Tick /> :<ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>

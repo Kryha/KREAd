@@ -23,6 +23,7 @@ import { routes } from "../../navigation";
 import { GO_BACK } from "../../constants";
 import { useViewport } from "../../hooks";
 import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
+import { EmptyCard } from "../empty-card";
 
 interface MenuCardProps extends ImageProps {
   title: string;
@@ -63,6 +64,9 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
         </MenuHeader>
         <Content>
           <MenuContent>
+            {!items.length && (
+              <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
+            )}
             {items.map((item) => (
               <MenuItem data={item} key={item.id} imageProps={{ width, height, marginTop, marginLeft }} onClick={() => setSelectedId(item.id)} />
             ))}

@@ -6,4 +6,5 @@ export const OverviewWrapper = styled.div`
   padding: 40px;
   gap: 40px;
   align-items: flex-start;
+  max-width: 680px;
 `;

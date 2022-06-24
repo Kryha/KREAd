@@ -42,7 +42,7 @@ const ItemsInventory: FC = () => {
   return (
     <PageContainer sidebarContent={
       isEmpty ? (
-        <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
+        <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />
       ) : (
         <ItemsList onItemClick={setSelectedId} />
       )

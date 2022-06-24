@@ -36,6 +36,7 @@ import { ReactComponent as DownArrowIcon } from "./down-arrow.svg";
 import { ReactComponent as BellIcon } from "./bell.svg";
 import ErrorImage from "./error-image.png";
 import { ReactComponent as PlusIcon } from "./plus.svg";
+import { ReactComponent as WarningIcon } from "./warning-icon.svg";
 
 export {
   ErrorIcon,
@@ -76,4 +77,5 @@ export {
   BellIcon,
   ErrorImage,
   PlusIcon,
+  WarningIcon,
 };
