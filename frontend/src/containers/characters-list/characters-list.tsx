@@ -17,12 +17,12 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
 
-  const { data: characters, isLoading } = useMyFilteredCharacters();
+  const [myCharacters, isLoading] = useMyFilteredCharacters();
 
   if (isLoading) return <LoadingPage />;
 
   // TODO: get an empty section view
-  if (!characters || !characters.length) return <></>;
+  if (!myCharacters || !myCharacters.length) return <></>;
 
   const handleCategoryChange = (selected: string) => {
     setSelectedCategory(selected);
@@ -46,7 +46,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
         </SortContainer>
       </ListHeader>
       <ListContainer>
-        {characters.map((character) => (
+        {myCharacters.map((character) => (
           <MenuItem
             data={{ ...character, image: character.items, category: character.type, id: character.characterId }}
             key={character.characterId}

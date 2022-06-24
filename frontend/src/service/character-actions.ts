@@ -1,9 +1,9 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
-import { Purses, ServiceState } from "../context/service";
+import { Purses, ServiceState } from "../interfaces/agoric.interfaces";
 import { AmountMath } from "@agoric/ertp";
-import { CharacterDispatch } from "../context/characters";
+import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
 // import dappConstants from "../service/conf/defaults";
 // import installationConstants from "../service/conf/installation-constants-nft-maker.js";
 
@@ -28,7 +28,10 @@ const formBidOfferForCharacter = (invitation: any, character: any, purses: Purse
 });
 
 export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
-  const { agoric: { walletP }, purses } = service;
+  const {
+    agoric: { walletP },
+    purses,
+  } = service;
   if (!auctionPublicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
     console.error("Could not make bid for character: undefined parameter");
     return;
@@ -43,7 +46,10 @@ export const makeBidOfferForCharacter = async (service: ServiceState, auctionPub
 };
 
 export const mintCharacters = async (service: ServiceState, characters: any, price: bigint) => {
-  const { contracts: { characterBuilder }, purses } = service;
+  const {
+    contracts: { characterBuilder },
+    purses,
+  } = service;
   if (!characterBuilder.publicFacet || !purses.money[0].brand) {
     console.error("Could not mint characters: Public Facet or Purses undefined");
     return;
@@ -66,13 +72,15 @@ export const mintAndBuy = async (service: ServiceState, characters: any) => {
 };
 
 export const getCharacters = async (service: ServiceState, characterDispatch: CharacterDispatch) => {
-  const { contracts: { characterBuilder } } = service;
+  const {
+    contracts: { characterBuilder },
+  } = service;
   if (!characterBuilder.publicFacet) {
     console.error("Could not fetch Characters: Public Facet is undefined");
     return;
   }
   const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
-  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any)=>nft.character.name)}`);
+  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any) => nft.character.name)}`);
   characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
 };
 
@@ -317,4 +325,3 @@ export const getCharacters = async (service: ServiceState, characterDispatch: Ch
 //   await E(depositFacet).receive(invitation);
 //   await E(agoric.walletP).addOffer(updatedOffer);
 // };
-

@@ -6,7 +6,7 @@ export const FakeCharcters: Character[] = [
     title: "character 1",
     name: "character 1",
     type: "Tempet Scavenger",
-    characterId: "7899",
+    characterId: "7999",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
     level: 1,
@@ -34,7 +34,7 @@ export const FakeCharcters: Character[] = [
     title: "character 2",
     name: "character 2",
     type: "Tempet Scavenger",
-    characterId: "78992",
+    characterId: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
     level: 1,
@@ -121,11 +121,11 @@ export const FakeCharctersNoItems: any[] = [
     title: "character 1",
     name: "character 1",
     type: "Tempet Scavenger",
-    characterId: "7899",
+    characterId: "9899",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
     level: 1,
-    items: [],//FakeCharacterItems,
+    items: [], //FakeCharacterItems,
     detail: {
       boardId: "06553",
       contractAddresss: "0x0177812bsjs7998",
@@ -179,7 +179,7 @@ export const FakeCharctersNoItems: any[] = [
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
     level: 1,
-    items: [],//FakeCharacterItems,
+    items: [], //FakeCharacterItems,
     detail: {
       boardId: "06553",
       contractAddresss: "0x0177812bsjs7998",
@@ -197,5 +197,5 @@ export const FakeCharctersNoItems: any[] = [
     },
     price: 123123,
     slots: [],
-  }
+  },
 ];
