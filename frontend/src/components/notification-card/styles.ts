@@ -30,13 +30,10 @@ export const NotificationWrapper = styled.div<NotificationProps>`
   top: 101px;
   position: absolute;
   z-index: 10000;
-  ${({ width, height }): string =>
+  ${({ height }): string =>
     `
-      min-width: ${width * 0.375}px;
-      max-width: ${width * 0.375}px;
-      width: ${width * 0.375}px;
+      width: 45%;
       max-height: ${height - 140}px;
-      height:
    `};
    overflow-y: scroll;
 `;

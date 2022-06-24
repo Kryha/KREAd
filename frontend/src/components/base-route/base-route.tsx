@@ -3,7 +3,7 @@ import { FC } from "react";
 import { text } from "../../assets";
 import { routes } from "../../navigation";
 import { NavigationSection, NavigationTab } from "../navigation-tab";
-import { TopbarContainer, Box } from "./styles";
+import { TopbarContainer, Box, ChildrenContainer } from "./styles";
 
 interface BaseRouteProps {
   sideNavigation: React.ReactNode;
@@ -27,7 +27,7 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation }) => {
         </Box>
         {sideNavigation}
       </TopbarContainer>
-      {children}
+      <ChildrenContainer>{children}</ChildrenContainer>
     </>
   );
 };

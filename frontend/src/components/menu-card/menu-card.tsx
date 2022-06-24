@@ -16,7 +16,7 @@ import {
   ArrowUpRight,
   MenuCardWrapper,
 } from "./styles";
-import { ButtonText, ImageProps, Label, MenuText, SecondaryButton } from "../atoms";
+import { ButtonText, ImageProps, Label, MenuText, Overlay, SecondaryButton } from "../atoms";
 import { MenuItem } from "../menu-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -89,6 +89,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
           }}
         />
       )}
+      {item && <Overlay />}
     </MenuCardWrapper>
   );
 };

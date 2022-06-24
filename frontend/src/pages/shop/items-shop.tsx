@@ -11,6 +11,8 @@ import {
   Select,
   ItemShopCard,
   OverviewEmpty,
+  Overlay,
+  ButtonText,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -86,6 +88,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             </Filters>
           </SortByContainer>
         </FilterContainer>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
       {!items || !items.length && <OverviewEmpty
@@ -113,6 +116,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           }}
         />
       )}
+      {!!selectedItem && <Overlay />}
     </>
   );
 };

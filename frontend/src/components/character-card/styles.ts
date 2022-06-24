@@ -31,7 +31,7 @@ export const CharacterWrapper = styled.div<CharacterProps>`
   right: ${margins.big};
   top: 101px;
   position: absolute;
-  z-index: 10000;
+  z-index: 100;
   ${({ width, height }): string =>
     `
       min-width: ${width * 0.375}px;

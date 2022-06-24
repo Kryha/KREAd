@@ -8,8 +8,10 @@ import {
   Label,
   LoadingPage,
   OverviewEmpty,
+  Overlay,
   PriceSelector,
   Select,
+  ButtonText,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -82,6 +84,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
             </Filters>
           </SortByContainer>
         </FilterContainer>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(!characters ? 0 : characters.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
       {!characters || !characters.length ? (
@@ -102,6 +105,15 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
               </ItemContainer>
             </ItemWrapper>
           )}
+          {noFilteredCharacters || (
+            <ItemWrapper height={height}>
+              <ItemContainer>
+                {characters.map((character, index) => (
+                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                ))}
+              </ItemContainer>
+            </ItemWrapper>
+          )}
         </>
       )}
       {!!selectedCharacter && (
@@ -110,6 +122,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           actions={{ onClose: () => setSelectedCharacter(undefined), primary: { text: text.item.buy, onClick: buy } }}
         />
       )}
+      {!!selectedCharacter && <Overlay />}
     </>
   );
 };
