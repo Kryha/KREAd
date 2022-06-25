@@ -40,11 +40,11 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
   return (
     <>
       {showStats && !!item &&
-        <ItemStats
-          item={item}
-          position={position}
-          area={area}
-        />
+      <ItemStats
+        item={item}
+        position={position}
+        area={area}
+      />
       }
       <ElementWrapper
         onMouseEnter={() => setShowStats(!showStats)}

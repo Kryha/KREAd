@@ -28,9 +28,6 @@ export const ReturnContainer = styled.div`
 `;
 
 export const ArrowContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   box-sizing: border-box;
   border-radius: ${margins.medium};
   margin-left: 46px;

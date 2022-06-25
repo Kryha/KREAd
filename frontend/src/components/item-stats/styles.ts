@@ -26,24 +26,24 @@ export const StatsWrapper = styled.div<ItemProps>`
     switch (area) {
       case "top":
         if (position === "left") {
-          return "left: 189px; top: -197px;";
+          return "left: 158px; top: -197px;";
         }
         else {
-          return "right: 169px; top: -197px;";
+          return "right: 145px; top: -197px;";
         }
       case "middle":
         if (position === "left") {
-          return "left: 350px; top: -53px;";
+          return "left: 317px; top: -53px;";
         }
         else {
-          return "right: 330px; top: -53px;";
+          return "right: 309px; top: -53px;";
         }
       case "bottom":
         if (position === "left") {
-          return "left: 350px; top: 90px;";
+          return "left: 317px; top: 90px;";
         }
         else {
-          return "right: 330px; top: 90px;";
+          return "right: 309px; top: 90px;";
         }
       default:
         if (position === "left") {
@@ -99,3 +99,5 @@ export const StatsContainer = styled.div`
 export const ProgressContainer = styled.div`
   width: 100%;
 `;
+
+export const LevelContainer = styled.div``;

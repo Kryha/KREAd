@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
+import { CloseIcon, BellIcon } from "../../assets";
+import { SecondaryButton } from "../../components";
 
 import { Group } from "../../components/switch-selector/styles";
-import { margins } from "../../design";
+import { color, margins } from "../../design";
 
 export const InventoryWrapper = styled.div`
   ${Group} {
@@ -31,4 +33,46 @@ export const InfoContainer = styled.div`
   align-items: flex-start;
   padding: 0px;
   gap: 8px;
+`;
+
+export const NotificationWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: ${margins.small};
+`;
+
+export const Close = styled(CloseIcon)`
+  margin: 0px 0px 0px 11px !important;
+  width: 12px;
+`;
+
+export const Notification = styled(BellIcon)`
+  width: 15px;
+  height: 15px;
+`;
+
+interface NotificationProps {
+  open: boolean;
+}
+
+export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
+  padding: ${margins.mini};
+  position: relative;
+  z-index: 1000;
+  ${Close} {
+    margin: 0px 6px !important;
+    width: 15px;
+    height: 15px;
+  }
+  ${({ open }): string => {
+    return open
+      ? `
+        border-color: ${color.black} !important;
+        `
+      : `
+
+      `;
+  }};
 `;

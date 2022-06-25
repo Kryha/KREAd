@@ -9,9 +9,8 @@ import {
   SubTitleContainer,
   Info,
   InfoWrapper,
-  Divider
 } from "./styles";
-import { Badge, BoldLabel, ButtonText, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
+import { Badge, BoldLabel, ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";

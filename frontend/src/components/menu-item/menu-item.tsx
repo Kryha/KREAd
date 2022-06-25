@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isString } from "../../interfaces";
-import { ButtonContainer, Divider, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails } from "./styles";
+import { ButtonContainer, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
 import { Badge, ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
@@ -45,16 +45,17 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
       )}
       <InfoWrapper>
         <InfoContainer>
-          <MenuItemName>{data.name}</MenuItemName>
+          <TitleContainer>
+            <MenuItemName>{data.name}</MenuItemName>
+            <EquippedLabel customColor={color.black}>{text.param.id(data.id)}</EquippedLabel>
+          </TitleContainer>
           <InlineDetails>
             <Badge>
               <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
             </Badge>
-            <Divider />
             <Label>{text.param.level(data.level)}</Label>
           </InlineDetails>
         </InfoContainer>
-        <EquippedLabel customColor={color.black}>{text.param.id(data.id)}</EquippedLabel>
         <ButtonContainer>
           <PrimaryButton>
             <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>

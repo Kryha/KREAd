@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, ErrorView, LoadingPage, OverviewEmpty, SwitchSelector } from "../../components";
+import { BaseRoute, ErrorView, LoadingPage, NotificationCard, Overlay, OverviewEmpty, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
@@ -11,8 +11,9 @@ import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { InventoryWrapper,  OverviewContainer } from "./styles";
+import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification } from "./styles";
 import { EmptyCard } from "../../components/empty-card";
+import { color } from "../../design";
 
 const ItemsInventory: FC = () => {
   const { data: items, isLoading, isError } = useItems();
@@ -35,6 +36,7 @@ const ItemsInventory: FC = () => {
 
   if (isError) return <ErrorView />;
   const isEmpty = !items || !items.length;
+
   const equipItems = () => {
     console.log("djh");
   };
@@ -100,6 +102,7 @@ const CharactersInventory: FC = () => {
 
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
+  const [openNotification, setOpenNotifications] = useState(false);
 
   const pageSelector = useMemo(
     () => (
@@ -114,9 +117,26 @@ export const Inventory: FC = () => {
   );
   // TODO: switch between items and characters
   return (
-    <BaseRoute sideNavigation={<Title title={text.navigation.inventory} />}>
+    <BaseRoute sideNavigation={
+      <NotificationWrapper>
+        <Title title={text.navigation.inventory} />
+        <NotificationButton
+          onClick={() => setOpenNotifications(!openNotification)}
+          backgroundColor={openNotification ? color.lightGrey : color.white}
+          open={openNotification}
+        >
+          {openNotification ? <Close /> : <Notification />}
+        </NotificationButton>
+      </NotificationWrapper>
+    }>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
       {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
+      {openNotification && (
+        <>
+          <NotificationCard />
+          <Overlay />
+        </>
+      )}
     </BaseRoute>
   );
 };

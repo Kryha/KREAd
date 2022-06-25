@@ -24,6 +24,8 @@ import {
   DetailContainer,
   ButtonContainer,
   CharacterCardWrapper,
+  NotificationContainer,
+  Tag,
 } from "./styles";
 import { useMyCharacter } from "../../service";
 import { useCharacterContext } from "../../context/characters";
@@ -65,9 +67,16 @@ export const Landing: FC = () => {
             <ButtonText>{text.navigation.myCharacters}</ButtonText>
             {openTab ? <Close /> : <Menu />}
           </SecondaryButton>
-          <NotificationButton onClick={() => setOpenNotifications(!openNotification)} backgroundColor={openNotification ? color.lightGrey : color.white}>
-            {openNotification ? <Close /> : <Notification />}
-          </NotificationButton>
+          <NotificationContainer>
+            <NotificationButton
+              open={openNotification}
+              onClick={() => setOpenNotifications(!openNotification)}
+              backgroundColor={openNotification ? color.lightGrey : color.white}
+            >
+              {openNotification ? <Close /> : <Notification />}
+            </NotificationButton>
+            <Tag />
+          </NotificationContainer>
         </NotificationWrapper>
       }
     >
@@ -95,7 +104,7 @@ export const Landing: FC = () => {
         </CharacterCardWrapper>
       )}
       {openNotification && <NotificationCard />}
-      {showDetail && <Overlay />}
+      {showDetail || openNotification && <Overlay />}
     </BaseRoute>
   );
 };

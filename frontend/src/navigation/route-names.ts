@@ -9,4 +9,6 @@ export const routes = {
   buyCharacter: "/buy-character",
   sellItem: "/sell-item",
   sellCharacter: "/sell-character",
+  about: "/about",
+  privacy: "/privacy",
 };

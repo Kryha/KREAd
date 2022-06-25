@@ -5,3 +5,4 @@ export * from "./create-character";
 export * from "./buy";
 export * from "./sell";
 export * from "./onboarding";
+export * from "./about";

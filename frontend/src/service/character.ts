@@ -26,7 +26,7 @@ export const useMyCharacter = (): UseQueryResult<Character> => {
   return useQuery(["character"], async () => {
     //  TODO: intergrate me
 
-    return FakeCharcters[3];
+    return FakeCharcters[0];
   });
 };
 

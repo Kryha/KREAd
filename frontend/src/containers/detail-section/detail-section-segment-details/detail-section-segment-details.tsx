@@ -4,9 +4,8 @@ import { text } from "../../../assets";
 import { FlexRow } from "../../../components";
 import { DetailSectionElement } from "../detail-section-element";
 import { DetailSectionBody } from "../detail-section-segment/styles";
-import { DetailSectionSegmentDetailsWrap, DetailSectionSegmentDetailsLink } from "./styles";
+import { DetailSectionSegmentDetailsWrap, DetailSectionSegmentDetailsLink, ArrowUpRight } from "./styles";
 
-import { LinkExternalIcon } from "../../../assets/icons";
 import { truncateAddress } from "../../../util";
 
 interface Data {
@@ -41,7 +40,7 @@ export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> =
           <DetailSectionBody>
             {/* TODO: redirect to a real place */}
             <DetailSectionSegmentDetailsLink href={data.metadata} target="_blank" rel="noreferrer">
-              {text.item.view} <LinkExternalIcon />
+              {text.item.view} <ArrowUpRight />
             </DetailSectionSegmentDetailsLink>
           </DetailSectionBody>
         </DetailSectionElement>

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { margins, color } from "../../design";
-import { BoldLabel, MenuItemName } from "../atoms";
+import { Badge, BoldLabel, MenuItemName } from "../atoms";
 import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 
 export const EquippedLabel = styled(BoldLabel)``;
@@ -33,6 +33,7 @@ export const InfoContainer = styled.div`
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
+  width: 100%;
 `;
 interface InfoProps {
   selected: boolean;
@@ -90,11 +91,13 @@ export const InlineDetails = styled.div`
   display: flex;
   align-items: center;
   margin-top: ${margins.nano};
+  ${Badge} {
+    margin-right: 16px;
+  }
 `;
 
-export const Divider = styled.div`
-  height: 0px;
-  width: 24px;
-  border: 0.5px solid #d0d0d0;
-  transform: rotate(90deg);
+export const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;

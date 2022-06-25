@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { ButtonText, EmptyItemCard, ItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
-import { color } from "../../../design";
+import { EmptyItemCard, ItemThumbnail, Label, MenuItemName } from "../../../components";
 import { Item } from "../../../interfaces";
 import { CategoryButton } from "../detail-section-header/styles";
 import {
@@ -60,13 +59,6 @@ const EmptyItem: FC = () => {
           <MenuItemName>{text.character.noItemEquipped}</MenuItemName>
           <Label>{text.character.noItemEquippedCharacter}</Label>
         </InfoContainer>
-        <PrimaryButton
-          onClick={() => {
-            // TODO: redirect to character builder page
-          }}
-        >
-          <ButtonText customColor={color.white}>{text.character.startEquipping}</ButtonText>
-        </PrimaryButton>
       </InfoWrapper>
     </EmptyInfo>
   );

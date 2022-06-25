@@ -17,7 +17,7 @@ import {
   BodyMessage,
   MessageContainer,
 } from "./styles";
-import { ButtonText, HorizontalDivider, MenuText, SecondaryButton } from "../atoms";
+import { ButtonText, MenuText, SecondaryButton } from "../atoms";
 import { useViewport } from "../../hooks";
 import { useNotifications } from "../../service";
 import { LoadingPage } from "../content-loader";
@@ -92,7 +92,6 @@ export const NotificationCard: FC = () => {
                       </SecondaryButton>
                     </NotificationHeader>
                   </NotificationItemContainer>
-                  <HorizontalDivider />
                 </Content>
               </InfoContainer>
             </InfoWrapper>
