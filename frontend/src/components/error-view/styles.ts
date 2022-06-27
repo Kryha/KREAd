@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
 
 import { color, margins } from "../../design";
-import { Img } from "../atoms";
+import { Img, PrimaryButton } from "../atoms";
 
 export const ErrorContainer = styled.div`
   margin-left: 40px;
@@ -18,12 +18,28 @@ export const InformationContainer = styled.div`
   width: 680px;
 `;
 
+export const ArrowUp = styled(ArrowUpRightIcon)`
+  padding-left: 13px;
+  path {
+    stroke: ${color.white};
+  }
+`;
+
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
   gap: ${margins.small};
+  ${PrimaryButton} {
+    &:hover {
+      ${ArrowUp} {
+        path {
+          stroke: ${color.black};
+        }
+      }
+    }
+  }
 `;
 
 export const ErrorTitle = styled.h1`
@@ -61,11 +77,4 @@ export const ErrorIcon = styled(Img)`
 
 export const ArrowBack = styled(ArrowUpRightIcon)`
   padding-left: 13px;
-`;
-
-export const ArrowUp = styled(ArrowUpRightIcon)`
-  padding-left: 13px;
-  path {
-    stroke: ${color.white};
-  }
 `;

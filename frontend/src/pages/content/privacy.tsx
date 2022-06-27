@@ -1,15 +1,15 @@
 import { FC } from "react";
 import { text } from "../../assets";
-import { FormText, MenuItemName, MenuText, TitleText } from "../../components";
+import { Footer, FormText, MenuItemName, MenuText, TitleText } from "../../components";
 import { color } from "../../design";
-import { ContentWrapper, GeneralInfo, InfoContainer, Title } from "./styles";
+import { ContentWrapper, FooterContainer, GeneralInfo, InfoContainer, Title } from "./styles";
 
-export const About: FC = () => {
+export const Privacy: FC = () => {
   return (
     <ContentWrapper>
       <MenuItemName>{text.general.logo}</MenuItemName>
       <InfoContainer>
-        <MenuText>{text.content.about}</MenuText>
+        <MenuText>{text.content.privacyAndTerms}</MenuText>
         <TitleText customColor={color.darkGrey}>{text.content.weAreCommittedTo}</TitleText>
         <GeneralInfo>
           <Title>{text.content.whatInformationDoWe}</Title>
@@ -18,6 +18,9 @@ export const About: FC = () => {
           <FormText customColor={color.darkGrey}>{text.content.weUseTheInformation}</FormText>
         </GeneralInfo>
       </InfoContainer>
+      <FooterContainer>
+        <Footer />
+      </FooterContainer>
     </ContentWrapper>
   );
 };

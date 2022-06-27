@@ -5,6 +5,7 @@ export const ContentWrapper = styled.div`
   padding: 40px;
   overflow-y: scroll;
   width: 100%;
+  height: 100vh;
 `;
 export const Title = styled(FormText)``;
 
@@ -26,4 +27,10 @@ export const InfoContainer = styled.div`
 
 export const GeneralInfo = styled.div`
   width: 640px;
+`;
+
+export const FooterContainer = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: 0;
 `;

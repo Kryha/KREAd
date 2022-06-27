@@ -3,6 +3,7 @@ import { ArrowUpRightIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins, zIndex } from "../../design";
+import { PrimaryButton } from "../atoms";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 import { ButtonInfoWrap } from "../button-info/styles";
 import { PriceContainer } from "../price-in-run/styles";
@@ -77,6 +78,13 @@ export const CharacterItemContainer = styled.div`
   padding: ${margins.big} ${margins.medium} ${margins.big} ${margins.mini};
 `;
 
+export const ArrowUp = styled(ArrowUpRightIcon)`
+  margin-left: ${margins.mini};
+  path {
+    stroke: ${color.white};
+  }
+`;
+
 export const CardActionsContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -94,12 +102,14 @@ export const CardActionsContainer = styled.div`
     margin-top: 30px;
     margin-right: ${margins.small};
   }
-`;
-
-export const ArrowUp = styled(ArrowUpRightIcon)`
-  margin-left: ${margins.mini};
-  path {
-    stroke: ${color.white};
+  ${PrimaryButton} {
+    &:hover {
+      ${ArrowUp} {
+        path {
+          stroke: ${color.black};
+        }
+      }
+    }
   }
 `;
 
