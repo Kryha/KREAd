@@ -6,7 +6,7 @@ import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./st
 import { useMyFilteredCharacters } from "../../service";
 
 import { text } from "../../assets";
-import { categories, sorting } from "../../assets/text/filter-options";
+import { characterCategories, sorting } from "../../assets/text/filter-options";
 
 interface Props {
   onCharacterClick: (id: string) => void;
@@ -17,7 +17,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
 
-  const { data: characters, isLoading } = useMyFilteredCharacters();
+  const { data: characters, isLoading } = useMyFilteredCharacters(selectedCategory, selectedSorting);
 
   if (isLoading) return <LoadingPage />;
 
@@ -36,7 +36,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
     <SortableListWrap>
       <ListHeader>
         <Filters label={text.filters.category}>
-          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
+          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
         </Filters>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>

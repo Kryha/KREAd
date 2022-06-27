@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isString } from "../../interfaces";
-import { ButtonContainer, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
-import { Badge, ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
+import { ButtonContainer, Dash, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
+import { Badge, ButtonText, ImageProps, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
@@ -25,6 +25,9 @@ interface MenuItemProps {
 
 export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
   const [selected, setSelected] = useState(false);
+  // TODO: find if item is equipped
+  const isEquipped = false;
+  const isForSale = false;
 
   return (
     <Info
@@ -54,12 +57,31 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
               <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
             </Badge>
             <Label>{text.param.level(data.level)}</Label>
+            {isEquipped && (
+              <>
+                <Dash />
+                <ButtonText customColor={color.darkGrey}>{text.general.equipped}</ButtonText>
+              </>
+            )}
+            {isForSale && (
+              <>
+                <Dash />
+                <ButtonText customColor={color.darkGrey}>{text.general.forSale}</ButtonText>
+              </>
+            )}
           </InlineDetails>
         </InfoContainer>
         <ButtonContainer>
-          <PrimaryButton>
-            <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
-          </PrimaryButton>
+          {isEquipped && (
+            <SecondaryButton>
+              <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
+            </SecondaryButton>
+          )}
+          {!isEquipped && (
+            <PrimaryButton>
+              <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
+            </PrimaryButton>
+          )}
         </ButtonContainer>
       </InfoWrapper>
     </Info>

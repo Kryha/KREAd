@@ -16,8 +16,8 @@ import {
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useCharacters } from "../../service";
-import { categories, sorting } from "../../assets/text/filter-options";
+import { useFilteredCharacters } from "../../service";
+import { characterCategories, sorting } from "../../assets/text/filter-options";
 import {
   FilterContainer,
   FilterWrapper,
@@ -45,8 +45,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
 
-  // TODO: actually use character filters
-  const { data: characters, isLoading: isLoading } = useCharacters();
+  const { data: characters, isLoading: isLoading } = useFilteredCharacters(selectedCategory, selectedSorting, selectedPrice);
 
   const noFilteredCharacters =
     (!selectedCategory.length || !selectedSorting.length || !selectedPrice) && (!characters || !characters.length);
@@ -69,7 +68,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           <SelectorContainer>
             {pageSelector}
             <Filters label={text.filters.category}>
-              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={categories} />
+              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
             <Filters label={text.filters.price}>

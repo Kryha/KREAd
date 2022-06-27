@@ -16,7 +16,7 @@ import {
   ArrowUpRight,
   MenuCardWrapper,
 } from "./styles";
-import { ButtonText, ImageProps, Label, MenuText, Overlay, SecondaryButton } from "../atoms";
+import { ButtonText, HorizontalDivider, ImageProps, Label, MenuText, Overlay, SecondaryButton } from "../atoms";
 import { MenuItem } from "../menu-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -68,7 +68,10 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
               <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
             )}
             {items.map((item) => (
-              <MenuItem data={item} key={item.id} imageProps={{ width, height, marginTop, marginLeft }} onClick={() => setSelectedId(item.id)} />
+              <>
+                <MenuItem data={item} key={item.id} imageProps={{ width, height, marginTop, marginLeft }} onClick={() => setSelectedId(item.id)} />
+                {item === items[0] && <HorizontalDivider />}
+              </>
             ))}
           </MenuContent>
         </Content>

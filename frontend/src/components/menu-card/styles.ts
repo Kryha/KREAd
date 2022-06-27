@@ -3,7 +3,7 @@ import { ArrowUpRightIcon, CloseIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins } from "../../design";
 import { Label } from "../atoms";
-import { HeaderHorizontalDivider } from "../atoms/lines";
+import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
 
 export const Content = styled.div`
   padding: 0px ${margins.small};
@@ -73,6 +73,10 @@ export const Divider = styled(HeaderHorizontalDivider)`
 
 export const MenuContent = styled.div`
   padding: 0px ${margins.medium} 0px ${margins.medium};
+  ${HorizontalDivider} {
+    margin-top: 16px;
+    margin-bottom: 24px;
+  }
 `;
 
 export const MenuItemContainer = styled.div`

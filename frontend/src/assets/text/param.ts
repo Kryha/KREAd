@@ -13,4 +13,5 @@ export const param = {
   theItemIsSussfullyPurchased: (itemName: string) => `the '${itemName}' has been successfully purchased from the shop.`,
   level: (level: number) => `lvl. ${level}`,
   amountOfCharacters: (amount: number | string) => `${amount} characters`,
+  forSale: (price: number) => `for sale ${price}`,
 };

@@ -38,4 +38,5 @@ export const general = {
   contactUs: "contact us",
   questionsBug: "Questions, bug reports, feedback... we are here for it all.",
   sendEmailTo: "Send an email to x@kryha.io",
+  forSale: "for sale",
 };
