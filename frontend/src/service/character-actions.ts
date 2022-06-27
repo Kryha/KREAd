@@ -1,9 +1,9 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
-import { Purses, ServiceState } from "../context/service";
+import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
 import { AmountMath } from "@agoric/ertp";
-import { CharacterDispatch } from "../context/characters";
+import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
 // import dappConstants from "../service/conf/defaults";
 // import installationConstants from "../service/conf/installation-constants-nft-maker.js";
 
@@ -27,8 +27,11 @@ const formBidOfferForCharacter = (invitation: any, character: any, purses: Purse
   },
 });
 
-export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
-  const { agoric: { walletP }, purses } = service;
+export const makeBidOfferForCharacter = async (service: AgoricState, auctionPublicFacet: any, character: any, price: bigint) => {
+  const {
+    agoric: { walletP },
+    purses,
+  } = service;
   if (!auctionPublicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
     console.error("Could not make bid for character: undefined parameter");
     return;
@@ -42,8 +45,11 @@ export const makeBidOfferForCharacter = async (service: ServiceState, auctionPub
   return E(walletP).addOffer(offerConfig);
 };
 
-export const mintCharacters = async (service: ServiceState, characters: any, price: bigint) => {
-  const { contracts: { characterBuilder }, purses } = service;
+export const mintCharacters = async (service: AgoricState, characters: any, price: bigint) => {
+  const {
+    contracts: { characterBuilder },
+    purses,
+  } = service;
   if (!characterBuilder.publicFacet || !purses.money[0].brand) {
     console.error("Could not mint characters: Public Facet or Purses undefined");
     return;
@@ -56,7 +62,7 @@ export const mintCharacters = async (service: ServiceState, characters: any, pri
   return mintResponse;
 };
 
-export const mintAndBuy = async (service: ServiceState, characters: any) => {
+export const mintAndBuy = async (service: AgoricState, characters: any) => {
   console.log(characters);
   assert(characters.length === 1, "mintAndBuy expects an array with a single character");
   const newCharacter = await mintCharacters(service, characters, 1n);
@@ -65,14 +71,16 @@ export const mintAndBuy = async (service: ServiceState, characters: any) => {
   await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
 };
 
-export const getCharacters = async (service: ServiceState, characterDispatch: CharacterDispatch) => {
-  const { contracts: { characterBuilder } } = service;
+export const getCharacters = async (service: AgoricState, characterDispatch: CharacterDispatch) => {
+  const {
+    contracts: { characterBuilder },
+  } = service;
   if (!characterBuilder.publicFacet) {
     console.error("Could not fetch Characters: Public Facet is undefined");
     return;
   }
   const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
-  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any)=>nft.character.name)}`);
+  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any) => nft.character.name)}`);
   characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
 };
 
@@ -108,7 +116,7 @@ export const getCharacters = async (service: ServiceState, characterDispatch: Ch
 //   console.log(nfts);
 //   return nfts;
 // };
-// export const mintCharacters = async (service: ServiceState) => {
+// export const mintCharacters = async (service: AgoricState) => {
 //   const characters = harden([{
 //     name: "NOPE",
 //     url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
@@ -317,4 +325,3 @@ export const getCharacters = async (service: ServiceState, characterDispatch: Ch
 //   await E(depositFacet).receive(invitation);
 //   await E(agoric.walletP).addOffer(updatedOffer);
 // };
-

@@ -1,13 +1,7 @@
 import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
-import {
-  CardActionsContainer,
-  CharacterWrapper,
-  CharacterContent,
-  ArrowUp,
-  CharacterCardWrapper,
-} from "./styles";
+import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper } from "./styles";
 import { ButtonText, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
@@ -28,14 +22,12 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
   const navigate = useNavigate();
   const [character, setCharacter] = useState<Character>();
   const { width, height } = useViewport();
-  console.log(characters);
-  const sortedCharacters = useMemo(
-    () => {
-      const allItems = [...characters];
-      const fromIndex = characters.findIndex((character) => character.characterId === id);
-      allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
-      return allItems;
-    }, [characters, id]);
+  const sortedCharacters = useMemo(() => {
+    const allItems = [...characters];
+    const fromIndex = characters.findIndex((character) => character.characterId === id);
+    allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
+    return allItems;
+  }, [characters, id]);
 
   const showInfo = (values: Character) => {
     setCharacter(values);

@@ -32,7 +32,10 @@
     "lint": "yarn workspaces run lint-fix",
     "lint-check": "yarn workspaces run lint-check",
     "test": "yarn workspaces run test",
-    "build": "yarn workspaces run build"
+    "build": "yarn workspaces run build",
+    "start": "agoric start -v",
+    "open:wallet": "agoric open --repl",
+    "deploy:contract": "agoric deploy contract/nft-maker-contract-deploy.js api/nft-maker-deploy-api.js"
   },
   "dependencies": {},
   "prettier": {
