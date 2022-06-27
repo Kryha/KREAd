@@ -1,7 +1,7 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
-import { Purses, ServiceState } from "../interfaces/agoric.interfaces";
+import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
 import { AmountMath } from "@agoric/ertp";
 import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
 // import dappConstants from "../service/conf/defaults";
@@ -27,7 +27,7 @@ const formBidOfferForCharacter = (invitation: any, character: any, purses: Purse
   },
 });
 
-export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
+export const makeBidOfferForCharacter = async (service: AgoricState, auctionPublicFacet: any, character: any, price: bigint) => {
   const {
     agoric: { walletP },
     purses,
@@ -45,7 +45,7 @@ export const makeBidOfferForCharacter = async (service: ServiceState, auctionPub
   return E(walletP).addOffer(offerConfig);
 };
 
-export const mintCharacters = async (service: ServiceState, characters: any, price: bigint) => {
+export const mintCharacters = async (service: AgoricState, characters: any, price: bigint) => {
   const {
     contracts: { characterBuilder },
     purses,
@@ -62,7 +62,7 @@ export const mintCharacters = async (service: ServiceState, characters: any, pri
   return mintResponse;
 };
 
-export const mintAndBuy = async (service: ServiceState, characters: any) => {
+export const mintAndBuy = async (service: AgoricState, characters: any) => {
   console.log(characters);
   assert(characters.length === 1, "mintAndBuy expects an array with a single character");
   const newCharacter = await mintCharacters(service, characters, 1n);
@@ -71,7 +71,7 @@ export const mintAndBuy = async (service: ServiceState, characters: any) => {
   await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
 };
 
-export const getCharacters = async (service: ServiceState, characterDispatch: CharacterDispatch) => {
+export const getCharacters = async (service: AgoricState, characterDispatch: CharacterDispatch) => {
   const {
     contracts: { characterBuilder },
   } = service;
@@ -116,7 +116,7 @@ export const getCharacters = async (service: ServiceState, characterDispatch: Ch
 //   console.log(nfts);
 //   return nfts;
 // };
-// export const mintCharacters = async (service: ServiceState) => {
+// export const mintCharacters = async (service: AgoricState) => {
 //   const characters = harden([{
 //     name: "NOPE",
 //     url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
