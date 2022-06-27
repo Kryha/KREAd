@@ -71,7 +71,7 @@ export const Landing: FC = () => {
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
       {!openTab && !openNotification && <CharacterItems items={character.items} />}
-      {openTab &&  myCharacters && <CharacterCard id={character.characterId} characters={myCharacters} />}
+      {openTab && !!myCharacters && <CharacterCard id={character.characterId} characters={myCharacters} />}
       <DetailContainer>
         <MenuText>{character.name}</MenuText>
         <ButtonContainer>
