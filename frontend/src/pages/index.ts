@@ -6,3 +6,4 @@ export * from "./buy";
 export * from "./sell";
 export * from "./onboarding";
 export * from "./about";
+export * from "./privacy";

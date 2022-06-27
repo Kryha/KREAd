@@ -58,6 +58,7 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> =
     <EquippedContainer
       onClick={() => handleClick()}
       isRight
+      isSecond={code === "noseline" || code === "liquid"}
     >
       <ItemCard
         position="right"

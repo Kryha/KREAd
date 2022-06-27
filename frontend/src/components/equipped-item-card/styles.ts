@@ -5,6 +5,7 @@ import { Id } from "../vertical-info/styles";
 
 interface DirectionProps {
   isRight: boolean;
+  isSecond?: boolean;
 }
 
 export const EquippedContainer = styled.div<DirectionProps>`
@@ -15,6 +16,7 @@ export const EquippedContainer = styled.div<DirectionProps>`
   ${({ isRight }): string => {
     return isRight
       ? `
+      margin-top: -3px;
       ${ElementWrapper} {
         margin-right: 8px;
         margin-left: 24px;
@@ -25,6 +27,13 @@ export const EquippedContainer = styled.div<DirectionProps>`
         margin-right: 24px;
       }
       `;
+  }}
+  ${({ isSecond }): string => {
+    return isSecond
+      ? `
+      margin-top: 2px;
+        `
+      : "";
   }}
   &: hover{
     ${Id} {

@@ -3,6 +3,7 @@ import { CloseIcon, BellIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
 
 import { Group } from "../../components/switch-selector/styles";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins } from "../../design";
 
 export const InventoryWrapper = styled.div`
@@ -75,4 +76,11 @@ export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
 
       `;
   }};
+`;
+
+export const DetailWrapper = styled.section`
+  ${DetailSectionWrap} {
+    height: 70vh;
+    max-width: 100%;
+  }
 `;

@@ -11,7 +11,7 @@ import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification } from "./styles";
+import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification, DetailWrapper } from "./styles";
 import { EmptyCard } from "../../components/empty-card";
 import { color } from "../../design";
 
@@ -37,10 +37,6 @@ const ItemsInventory: FC = () => {
   if (isError) return <ErrorView />;
   const isEmpty = !items || !items.length;
 
-  const equipItems = () => {
-    console.log("djh");
-  };
-
   return (
     <PageContainer sidebarContent={
       isEmpty ? (
@@ -55,10 +51,11 @@ const ItemsInventory: FC = () => {
             headingText={text.item.noItemEquipped}
             descriptionText={text.item.youDidNotEquipp}
             buttonText={text.item.startEquipping}
-            onButtonClick={equipItems}
+            onButtonClick={equip}
           />
         </OverviewContainer>
       ) : (
+
         <ItemDetailSection
           item={item || items[0]}
           actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
@@ -92,10 +89,12 @@ const CharactersInventory: FC = () => {
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
-      <CharacterDetailSection
-        character={character || characters[0]}
-        actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
-      />
+      <DetailWrapper>
+        <CharacterDetailSection
+          character={character || characters[0]}
+          actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
+        />
+      </DetailWrapper>
     </PageContainer>
   );
 };
