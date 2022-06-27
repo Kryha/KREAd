@@ -51,3 +51,13 @@ export const MiddleContent = styled.div<HeightProps>`
     margin-top: 16px;
   }
 `;
+
+export const FooterContainer = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+`;
+
+export const OnboardingContainer = styled.div`
+  overflow-y: scroll;
+`;
