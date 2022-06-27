@@ -25,3 +25,5 @@ export * from "./form-header";
 export * from "./form-header-close";
 export * from "./item-thumbnail";
 export * from "./shop-card";
+export * from "./notification-card";
+export * from "./notification-detail";

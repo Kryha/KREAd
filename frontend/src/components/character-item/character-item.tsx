@@ -51,7 +51,6 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
             <Badge>
               <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
             </Badge>
-            <Divider />
             <ButtonText>{text.param.level(character.level)}</ButtonText>
             {isCharacterEquipped && (
               <>

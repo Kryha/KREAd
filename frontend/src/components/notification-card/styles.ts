@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { TickIcon } from "../../assets";
 
-import { color, fontWeight, margins } from "../../design";
-import { NavigationTitle, SecondaryButton } from "../atoms";
-import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
+import { color, margins } from "../../design";
+import { SecondaryButton } from "../atoms";
+import { HeaderHorizontalDivider } from "../atoms/lines";
 
 export const ArrowContainer = styled.div`
   display: flex;
@@ -30,25 +30,12 @@ export const NotificationWrapper = styled.div<NotificationProps>`
   top: 101px;
   position: absolute;
   z-index: 10000;
-  ${({ width, height }): string =>
+  ${({ height }): string =>
     `
-      min-width: ${width * 0.375}px;
-      max-width: ${width * 0.375}px;
-      width: ${width * 0.375}px;
+      width: 45%;
       max-height: ${height - 140}px;
-      height:
    `};
    overflow-y: scroll;
-`;
-
-export const NotificationHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px;
-  gap: ${margins.medium};
-  width: 100%;
 `;
 
 export const NotificationContainer = styled.div`
@@ -86,10 +73,6 @@ export const NotificationContent = styled.div`
   padding: ${margins.big} ${margins.big} 0px ${margins.big};
 `;
 
-export const NotificationItemContainer = styled.div`
-  width: 100%;
-`;
-
 export const CardActionsContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -118,41 +101,3 @@ export const TickContainer = styled.div`
   border: 1px solid ${color.black};
   margin-bottom: ${margins.small};
 `;
-
-export const BodyMessage = styled(NavigationTitle)`
-  font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.light};
-  text-transform: capitalize;
-`;
-
-export const BoldText = styled(NavigationTitle)`
-  font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.medium};
-`;
-export const BodyText = styled(NavigationTitle)`
-  font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.light};
-`;
-
-export const Content = styled.div`
-  width: 100%;
-  ${BodyText} {
-    display: inline;
-    margin: 0px 3px;
-  }
-  ${BoldText} {
-    display: inline;
-  }
-  ${BodyMessage} {
-    display: inline;
-    margin: 0px 3px 0px 0px;
-  }
-  ${HorizontalDivider} {
-    margin-top: ${margins.medium};
-  }
-  ${SecondaryButton} {
-    min-width: 95px;
-  }
-`;
-
-export const MessageContainer = styled.div``;

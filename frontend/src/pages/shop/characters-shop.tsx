@@ -9,8 +9,8 @@ import {
   HorizontalDivider,
   Label,
   LoadingPage,
+  Overlay,
   PriceSelector,
-  SecondaryButton,
   Select,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
@@ -23,8 +23,6 @@ import {
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
-  LoadMore,
-  Refresh,
   SelectorContainer,
   SortByContainer,
 } from "./styles";
@@ -88,6 +86,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
             </Filters>
           </SortByContainer>
         </FilterContainer>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(characters.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
       {noFilteredCharacters || (
@@ -97,13 +96,6 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
               <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
             ))}
           </ItemContainer>
-          {/* TODO: do something with load more */}
-          <LoadMore>
-            <SecondaryButton>
-              <ButtonText>{text.general.loadMore}</ButtonText>
-              <Refresh />
-            </SecondaryButton>
-          </LoadMore>
         </ItemWrapper>
       )}
       {!!selectedCharacter && (
@@ -112,6 +104,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           actions={{ onClose: () => setSelectedCharacter(undefined), primary: { text: text.item.buy, onClick: buy } }}
         />
       )}
+      {!!selectedCharacter && <Overlay />}
     </>
   );
 };

@@ -103,6 +103,6 @@ export const MenuCardWrapper = styled.div`
     position: absolute;
     bottom: ${margins.large};
     left: ${margins.large};
-    z-index: ${zIndex.overCharacter};
+    z-index: 1000;
   }
 `;
