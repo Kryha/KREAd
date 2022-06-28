@@ -9,7 +9,7 @@ interface EmptyCardProps {
   description: string;
 }
 
-export const EmptyCard: FC<EmptyCardProps> = ({title, description}) => {
+export const EmptyCard: FC<EmptyCardProps> = ({ title, description }) => {
   return (
     <EmptyCardWrapper>
       <ItemContainer>

@@ -34,9 +34,11 @@ export const general = {
   connectWallet: "connect wallet",
   whoWeAre: "who we are",
   ourLeadership: "our leadership includes some of the most inventive and experienced executives in the technology industry.",
+  // TODO: add actual name of app
   isPartOfAgoric: "'Name of dApp' is part of Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by Kryha.",
   contactUs: "contact us",
   questionsBug: "questions, bug reports, feedback... we are here for it all.",
+  // TODO: add actual email
   sendEmailTo: "send an email to x@kryha.io",
   forSale: "for sale",
 };
