@@ -18,6 +18,7 @@ interface Props {
 export const ItemsList: FC<Props> = ({ onItemClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
+  const [close, setClose] = useState<boolean>(false);
 
   const { data: items, isLoading } = useFilteredItems(selectedCategory, selectedSorting, { min: 0, max: 10000 }, "");
 
@@ -35,14 +36,14 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
   };
 
   return (
-    <SortableListWrap>
+    <SortableListWrap tabIndex={0} onBlur={() => setClose(false)}>
       <ListHeader>
-        <Filters label={text.filters.category}>
+        <Filters label={text.filters.category} close={close}>
           <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={itemCategories} />
         </Filters>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
-          <Filters label={text.filters.latest}>
+          <Filters label={text.filters.latest} close={close}>
             <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
           </Filters>
         </SortContainer>

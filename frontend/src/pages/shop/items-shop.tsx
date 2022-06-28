@@ -42,7 +42,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const navigate = useNavigate();
 
   const [selectedItem, setSelectedItem] = useState<Item>();
-
+  const [close, setClose] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -70,20 +70,20 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category}>
+            <Filters label={text.filters.category} close={close}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={itemCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price}>
+            <Filters label={text.filters.price} close={close}>
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
-            <Filters label={text.filters.color}>
+            <Filters label={text.filters.color} close={close}>
               <ColorSelector handleChange={setSelectedColor} colors={colors} />
             </Filters>
           </SelectorContainer>
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest}>
+            <Filters label={text.filters.latest} close={close}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>

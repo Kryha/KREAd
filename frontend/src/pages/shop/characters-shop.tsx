@@ -40,7 +40,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const navigate = useNavigate();
 
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
-
+  const [close, setClose] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
@@ -64,21 +64,21 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <FilterWrapper>
-        <FilterContainer>
+        <FilterContainer tabIndex={0} onBlur={() => setClose(false)}>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category}>
+            <Filters label={text.filters.category} close>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price}>
+            <Filters label={text.filters.price} close={close}>
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
           </SelectorContainer>
 
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest}>
+            <Filters label={text.filters.latest} close={close}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>
