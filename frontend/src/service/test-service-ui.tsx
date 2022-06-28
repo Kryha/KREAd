@@ -175,7 +175,7 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-    const nfts = await E(CBPublicFacet).getCharacterArray();
+    const nfts = await E(CBPublicFacet).getCharacters();
     const counter = await E(CBPublicFacet).getCount();
     const config = await E(CBPublicFacet).getConfig();
     const mintNext = await E(CBPublicFacet).getMintNext();

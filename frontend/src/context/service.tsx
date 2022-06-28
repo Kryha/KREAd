@@ -276,8 +276,8 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
       
       // Fetch Characters from Chain
-      const nfts = await E(nftPublicFacet).getCharacterArray();
-      characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
+      const nfts = await E(nftPublicFacet).getCharacters();
+      characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
 
       // TODO: set up chain notifiers
       // const availableItemsNotifier = E(

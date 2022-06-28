@@ -62,7 +62,7 @@ export const mintNfts = async (service: ServiceState, name: string, price: bigin
     return;
   }
 
-  const { characterBrand } = await E(publicFacet).getKCB();
+  const { characterBrand } = await E(publicFacet).getCharacterBrand();
   const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
   console.log(characterBrand);
   const character = {
