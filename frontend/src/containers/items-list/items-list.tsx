@@ -6,7 +6,7 @@ import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./st
 import { useFilteredItems } from "../../service";
 
 import { text } from "../../assets";
-import { itemCategories, sorting } from "../../assets/text/filter-options";
+import { categories, sorting } from "../../assets/text/filter-options";
 import { color } from "../../design";
 
 interface Props {
@@ -38,7 +38,7 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
     <SortableListWrap>
       <ListHeader>
         <Filters label={text.filters.category}>
-          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={itemCategories} />
+          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
         </Filters>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>

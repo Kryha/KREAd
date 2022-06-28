@@ -10,6 +10,8 @@ import {
   ItemWrapper,
   NoImage,
   Card,
+  Plus,
+  PlusContainer,
 } from "./styles";
 interface ItemCardProps extends ImageProps {
   image?: string;
@@ -18,16 +20,31 @@ interface ItemCardProps extends ImageProps {
   area?: "top" | "middle" | "bottom";
 }
 
+export const EmptyItemCard = () => {
+  return (
+    <ElementWrapper>
+      <ElementContainer>
+        <Card />
+        <ItemWrapper>
+          <NoImage>
+            <Diagonal />
+          </NoImage>
+        </ItemWrapper>
+      </ElementContainer>
+    </ElementWrapper>
+  );
+};
+
 export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight, item, position = "left", area ="middle" }) => {
   const [showStats, setShowStats] = useState(false);
   return (
     <>
       {showStats && !!item &&
-        <ItemStats
-          item={item}
-          position={position}
-          area={area}
-        />
+      <ItemStats
+        item={item}
+        position={position}
+        area={area}
+      />
       }
       <ElementWrapper
         onMouseEnter={() => setShowStats(!showStats)}
@@ -48,6 +65,9 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
               />
             ) : (
               <NoImage>
+                <PlusContainer>
+                  <Plus />
+                </PlusContainer>
                 <Diagonal />
               </NoImage>
             )}
