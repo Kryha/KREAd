@@ -32,7 +32,7 @@ export const item = {
   zero: 0,
   noItemEquipped: "no item equipped",
   startEquipping: "start equipping",
-  youDidNotEquipp: "you did not equipped any item yet. Your inventory it is empty, start equipping some items and building your own characters!",
+  youDidNotEquipp: "you did not equipped any item yet. Your inventory is empty, start equipping some items and building your own characters!",
   selectAnItemFrom: "select an item from the the store",
   noItemsInInventory: "no items in inventory",
   buyItemsFromStore: "buy items from the store",
