@@ -2,7 +2,7 @@
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { useServiceContext } from "../context/service";
-import { makeBidOfferForCharacter, getCharacters, mintCharacters } from "./character-actions";
+import { makeBidOfferForCharacter, getCharacters, mintCharacters, makeOfferForCharacter, mintViaDepositFacet, mintNfts } from "./character-actions";
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";
 import { useCharacterContext } from "../context/characters";
@@ -160,7 +160,7 @@ export const TestServiceUI = () => {
     const ownedCharacters = service.purses.character.map((purse) => {
       return purse.value;
     });
-    console.log( service.purses.character, ownedCharacters);
+    console.log(service.purses.character, ownedCharacters);
     charactersDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
   };
   const getCharacters = async () => {
@@ -178,15 +178,16 @@ export const TestServiceUI = () => {
     const nfts = await E(CBPublicFacet).getCharacterArray();
     const counter = await E(CBPublicFacet).getCount();
     const config = await E(CBPublicFacet).getConfig();
-
-    console.log(nfts, counter, config);
-    const character = nfts[2];
-    if (!character) {
-      console.log("Character not found");
-      return;
-    }
-    console.log(character);
-    await makeOffer(character);
+    const mintNext = await E(CBPublicFacet).getMintNext();
+    console.log(nfts, counter, config, mintNext);
+    // const character = nfts[2];
+    // if (!character) {
+    //   console.log("Character not found");
+    //   return;
+    // }
+    // console.log(character);
+    // await mintViaDepositFacet(service, "Pablo");
+    console.log(await mintNfts(service, "PABLO", 10n));
   };
 
   const buyCharacter = async (characterIndex: number) => {
@@ -197,12 +198,14 @@ export const TestServiceUI = () => {
     console.log(character.auction.publicFacet);
     await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
   };
+
   const makeOffer = async (character: any) => {
     // const auctionPublicFacet = await E(service.agoric.zoe).getPublicFacet(auctionInstance);
     console.log("🥵>>>>> AUCTION PUBLIC FACET");
     console.log(character.auction.publicFacet);
     await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
   };
+
   return <>
     <h1>SERVICE TEST UI</h1>
     <div style={{width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row"}}>
@@ -220,7 +223,7 @@ export const TestServiceUI = () => {
         onClick={async ()=> await buyCharacter(3)}>BUY CHARACTER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async () => await getCharacters()}>GET CHARACTERS</button>
+        onClick={async () => await makeOfferForCharacter(service,"CLOS")}>GET CHARACTERS</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={() => console.log(characters)}>CHARACTERS</button>
