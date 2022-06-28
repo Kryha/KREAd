@@ -9,6 +9,7 @@ import { item } from "./item";
 import { filters } from "./filters";
 import { mint } from "./mint";
 import { notifications } from "./notifications";
+import { content } from "./content";
 
 export const text = {
   error,
@@ -22,4 +23,5 @@ export const text = {
   filters,
   mint,
   notifications,
+  content,
 };

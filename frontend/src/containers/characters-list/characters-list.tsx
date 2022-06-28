@@ -17,7 +17,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
 
-  const [myCharacters, isLoading] = useMyFilteredCharacters();
+  const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
 
   if (isLoading) return <LoadingPage />;
 

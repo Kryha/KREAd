@@ -50,7 +50,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
             area="bottom"
             item={items.midBackground}
             code={text.itemSlots.midBackgroundCode}
-            category={text.itemSlots.midBackground}
+            category={text.itemSlots.background2}
           />
           <LeftEquippedItemCard
             area="bottom"

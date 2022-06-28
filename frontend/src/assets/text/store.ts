@@ -22,4 +22,12 @@ export const store = {
   sellDescription:
     "etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Aenean ut eros et nisl sagittis vestibulum. Nullam nulla eros, ultricies sit amet, nonummy id, imperdiet feugiat, pede. Sed lectus. Donec mollis hendrerit risus.",
   placeInShop: "place in shop",
+  noResults: "no results",
+  thereAreNoItemsAvailableFilter: "there are no items available with the chosen filter combination. Please change it to find more items.",
+  thereAreNoCharactersAvailableFilter: "there are no characters available with the chosen filter combination. Please change it to find more characters.",
+  clearFilters: "clear filters",
+  thereAreNoItemsInTheShop: "there are no items in the shop",
+  thereAreNoCharactersInTheShop: "there are no characters in the shop",
+  thereAreNoItemsAvailable: "there are no items available in the shop. Wait for items to be placed in the shop",
+  thereAreNoCharactersAvailable: "there are no characters available in the shop. Wait for characters to be placed in the shop",
 };

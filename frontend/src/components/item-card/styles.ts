@@ -1,11 +1,23 @@
 import styled from "@emotion/styled";
 import { color } from "../../design";
-import { CardElementIcon } from "../../assets";
+import { CardElementIcon, PlusIcon } from "../../assets";
 
 export const Card = styled(CardElementIcon)`
   position: absolute;
   left: 0;
   top: 0;
+`;
+
+export const PlusContainer = styled.div`
+  position: absolute;
+  left: 30.77%;
+  right: 30.77%;
+  top: 34%;
+  bottom: 34%;
+  z-index: 1;
+  border-radius: 24px;
+  background-color: ${color.white};
+  border: none;
 `;
 
 export const ElementWrapper = styled.div`
@@ -14,11 +26,16 @@ export const ElementWrapper = styled.div`
   height: 120px;
   overflow: hidden;
   cursor: pointer;
+
   &:hover {
+    ${PlusContainer} {
+      background-color: ${color.lightGrey};
+    }
     ${Card} {
       > rect {
         stroke: ${color.black};
       }
+      fill: ${color.lightGrey};
     }
   }
 `;
@@ -60,4 +77,12 @@ export const ItemWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  position: relative;
+  z-index: 100;
+`;
+
+export const Plus = styled(PlusIcon)`
+  margin: 0px 0px 10px 0px;
+  width: 14px;
+  height: 14px;
 `;

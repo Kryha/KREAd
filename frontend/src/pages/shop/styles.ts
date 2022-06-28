@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { RefreshIcon } from "../../assets";
-import { HorizontalDivider, Label } from "../../components";
+import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
+import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { margins } from "../../design";
+import { color, margins } from "../../design";
 
 interface ShopProps {
   height: number;
@@ -14,7 +14,7 @@ export const ShopWrapper = styled.div`
 
   ${DetailSectionWrap} {
     position: absolute;
-    top: -5px;
+    top: -80px;
     left: 0px;
     z-index: 30000000;
   }
@@ -80,4 +80,46 @@ export const LoadMore = styled.div`
 
 export const Refresh = styled(RefreshIcon)`
   margin-left: ${margins.mini};
+`;
+
+export const NotificationWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: ${margins.small};
+`;
+
+export const Close = styled(CloseIcon)`
+  margin: 0px 0px 0px 11px !important;
+  width: 12px;
+`;
+
+export const Notification = styled(BellIcon)`
+  width: 15px;
+  height: 15px;
+`;
+
+interface NotificationProps {
+  open: boolean;
+}
+
+export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
+  padding: ${margins.mini};
+  position: relative;
+  z-index: 1000;
+  ${Close} {
+    margin: 0px 6px !important;
+    width: 15px;
+    height: 15px;
+  }
+  ${({ open }): string => {
+    return open
+      ? `
+        border-color: ${color.black} !important;
+        `
+      : `
+
+      `;
+  }};
 `;
