@@ -5,4 +5,7 @@ export const navigation = {
   shop: "shop",
   inventory: "inventory",
   myCharacters: "my characters",
+  about: "about",
+  agoric2022: "©2022 Agoric",
+  privacyAndTerms: "privacy & terms",
 };
