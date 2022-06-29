@@ -24,14 +24,20 @@ import {
   DetailContainer,
   ButtonContainer,
   CharacterCardWrapper,
+  NotificationContainer,
+  Tag,
 } from "./styles";
-import { useMyCharacter, useMyCharacters } from "../../service";
+import { useMyCharacter } from "../../service";
+import { useCharacterContext } from "../../context/characters";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 
 export const Landing: FC = () => {
-  const [myCharacters, isLoading] = useMyCharacters();
+  // Use useCharacterContext instead of use My characters
+  // const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
+  const [characterState,] = useCharacterContext();
+  const { fetched } = characterState;
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
   const [openNotification, setOpenNotifications] = useState(false);
@@ -40,10 +46,11 @@ export const Landing: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    myCharacters[0] && setSelectedCharacter(myCharacters[0]);
-  }, [myCharacters]);
+    setSelectedCharacter(characterState.owned[0]);
+    console.log(characterState);
+  }, [characterState]);
 
-  if (isLoading || isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingCharacter) return <LoadingPage />;
   // TODO: get an empty page
   if (!character) return <></>;
 
@@ -60,9 +67,16 @@ export const Landing: FC = () => {
             <ButtonText>{text.navigation.myCharacters}</ButtonText>
             {openTab ? <Close /> : <Menu />}
           </SecondaryButton>
-          <NotificationButton onClick={() => setOpenNotifications(!openNotification)} backgroundColor={openNotification ? color.lightGrey : color.white}>
-            {openNotification ? <Close /> : <Notification />}
-          </NotificationButton>
+          <NotificationContainer>
+            <NotificationButton
+              open={openNotification}
+              onClick={() => setOpenNotifications(!openNotification)}
+              backgroundColor={openNotification ? color.lightGrey : color.white}
+            >
+              {openNotification ? <Close /> : <Notification />}
+            </NotificationButton>
+            <Tag />
+          </NotificationContainer>
         </NotificationWrapper>
       }
     >
@@ -71,7 +85,7 @@ export const Landing: FC = () => {
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
       {!openTab && !openNotification && <CharacterItems items={character.items} />}
-      {openTab && !!myCharacters && <CharacterCard id={character.characterId} characters={myCharacters} />}
+      {openTab && characterState.owned && <CharacterCard id={character.characterId} characters={characterState.owned} />}
       <DetailContainer>
         <MenuText>{character.name}</MenuText>
         <ButtonContainer>
@@ -90,7 +104,7 @@ export const Landing: FC = () => {
         </CharacterCardWrapper>
       )}
       {openNotification && <NotificationCard />}
-      {showDetail && <Overlay />}
+      {showDetail || openNotification && <Overlay />}
     </BaseRoute>
   );
 };

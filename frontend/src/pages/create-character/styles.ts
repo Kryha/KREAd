@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
+import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
 import { Badge, ButtonText, Input, MenuItemName, PrimaryButton } from "../../components";
 
 import { color, margins } from "../../design";
@@ -25,6 +25,9 @@ export const Tick = styled(TickIcon)`
   margin-right: 20px;
   margin-bottom: 10px;
 `;
+interface ActiveProps {
+  active: boolean;
+}
 
 export const FormCard = styled.div<ViewProps>`
   position: relative;
@@ -39,6 +42,16 @@ export const FormCard = styled.div<ViewProps>`
   ${({ height, width }): string => `height: ${height - 80}px; width: ${width * 0.4}px; min-width: 526px;`};
 `;
 
+export const Warning = styled(WarningIcon)``;
+
+export const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 4px;
+`;
+
 export const FormFields = styled.div`
   display: flex;
   flex-direction: column;
@@ -51,6 +64,9 @@ export const FormFields = styled.div`
     padding-right: 75px;
   }
   ${ButtonText} {
+    margin-top: ${margins.mini};
+  }
+  ${Warning} {
     margin-top: ${margins.mini};
   }
 `;
@@ -94,7 +110,7 @@ export const StepText = styled(ButtonText)`
   line-height: 20.5px;
 `;
 
-export const Step = styled.div`
+export const Step = styled.div<ActiveProps>`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -117,6 +133,15 @@ export const Step = styled.div`
   ${Badge} {
     background: transparent;
   }
+  ${({ active }): string => {
+    return active
+      ? `
+      background: ${color.white};
+        `
+      : `
+      background: ${color.lightGrey};
+      `;
+  }};
 `;
 
 export const Line = styled.div`
@@ -126,11 +151,8 @@ export const Line = styled.div`
   margin: ${margins.small} 20px ${margins.small} 39px;
 `;
 
-interface NumberProps {
-  active: boolean;
-}
 
-export const NumberContainer = styled.div<NumberProps>`
+export const NumberContainer = styled.div<ActiveProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -139,6 +161,7 @@ export const NumberContainer = styled.div<NumberProps>`
   border-radius: 50%;
   width: 32px;
   height: 32px;
+  min-width: 32px;
   ${({ active }): string => {
     return active
       ? `
@@ -198,7 +221,7 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const GeneralInfo = styled.div`
+export const GeneralInfo = styled.div<ActiveProps>`
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
@@ -222,6 +245,15 @@ export const GeneralInfo = styled.div`
   ${Badge} {
     background: transparent;
   }
+  ${({ active }): string => {
+    return active
+      ? `
+      background: ${color.white};
+        `
+      : `
+      background: ${color.lightGrey};
+      `;
+  }};
 `;
 
 export const PricingContainer = styled.div`
