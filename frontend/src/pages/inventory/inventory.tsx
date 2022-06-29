@@ -6,7 +6,7 @@ import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
 import { Title } from "../../components/title";
 import { ItemsList } from "../../containers/items-list";
-import { useCharacters, useItems } from "../../service";
+import { useCharacters, useItems, useMyCharacters } from "../../service";
 import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import { Page } from "../shop";
 import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification, DetailWrapper } from "./styles";
 import { EmptyCard } from "../../components/empty-card";
 import { color } from "../../design";
+import { Character } from "../../interfaces";
 
 const ItemsInventory: FC = () => {
   const { data: items, isLoading, isError } = useItems();
@@ -68,10 +69,13 @@ const ItemsInventory: FC = () => {
 // TODO: uncomment when designs will be done
 const CharactersInventory: FC = () => {
   const navigate = useNavigate();
-  const { data: characters, isLoading, isError } = useCharacters();
+  const [myCharacters, isLoading] = useMyCharacters();
   const [selectedId, setSelectedId] = useState<string>("");
 
-  const character = useMemo(() => characters?.find((character) => character.characterId === selectedId), [characters, selectedId]);
+  const character = useMemo(
+    () => myCharacters?.find((character: Character) => character.characterId === selectedId),
+    [myCharacters, selectedId]
+  );
 
   const choose = () => {
     // TODO: implement character choose
@@ -85,13 +89,13 @@ const CharactersInventory: FC = () => {
 
   if (isLoading) return <LoadingPage />;
 
-  if (isError || !characters || !characters.length) return <ErrorView />;
+  if (!myCharacters || !myCharacters.length) return <ErrorView />;
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
       <DetailWrapper>
         <CharacterDetailSection
-          character={character || characters[0]}
+          character={character || myCharacters[0]}
           actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
         />
       </DetailWrapper>

@@ -4,6 +4,7 @@ import { Footer, FormText, MenuItemName, MenuText, TitleText } from "../../compo
 import { color } from "../../design";
 import { ContentWrapper, FooterContainer, GeneralInfo, InfoContainer, Title } from "./styles";
 
+// TODO: make content for these pages
 export const About: FC = () => {
   return (
     <ContentWrapper>
