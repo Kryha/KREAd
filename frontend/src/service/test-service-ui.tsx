@@ -1,7 +1,7 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
-import { useServiceContext } from "../context/service";
+import { useAgoricContext } from "../context/agoric";
 import { makeBidOfferForCharacter, getCharacters, mintCharacters } from "./character-actions";
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";
@@ -10,7 +10,8 @@ import { send } from "process";
 import { FakeCharctersNoItems } from "./fake-characters";
 
 export const TestServiceUI = () => {
-  const [service, serviceDispatch] = useServiceContext();
+  // service referse to agoricContext
+  const [service, agoricDispatch] = useAgoricContext();
   const [characters, charactersDispatch] = useCharacterContext();
 
   const CBPublicFacet = service.contracts.characterBuilder.publicFacet;
@@ -19,13 +20,16 @@ export const TestServiceUI = () => {
     console.log("CHARACTERS: ", characters);
   }, [service, characters]);
 
-  const nfts = [{
-    name: "Tsun Tsun!",
-    url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
-  },{
-    name: "Cmoney!",
-    url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
-  }];
+  const nfts = [
+    {
+      name: "Tsun Tsun!",
+      url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
+    },
+    {
+      name: "Cmoney!",
+      url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
+    },
+  ];
 
   const getTimer = () => {
     if (!service.agoric.apiSend) {
@@ -37,7 +41,7 @@ export const TestServiceUI = () => {
     });
     console.log("SENT GET TIMER");
   };
-  
+
   const mint = () => {
     if (!service.agoric.apiSend) {
       console.log("NO API", service);
@@ -46,19 +50,21 @@ export const TestServiceUI = () => {
     service.agoric.apiSend({
       type: "nft/mint",
       data: {
-        characters: [{
-          name: "NOPE",
-          url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
-        },
-        {
-          name: "WHY",
-          url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
-        }],
-      }
+        characters: [
+          {
+            name: "NOPE",
+            url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
+          },
+          {
+            name: "WHY",
+            url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
+          },
+        ],
+      },
     });
     console.log("SENT GET CHARACTERS");
   };
-  
+
   const mintCharacter = async () => {
     if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
       console.log("NO API / INVITATION", service);
@@ -73,7 +79,7 @@ export const TestServiceUI = () => {
       proposalTemplate: {
         want: {
           Token: {
-            pursePetname:  ["CHARACTER", "CB"],
+            pursePetname: ["CHARACTER", "CB"],
             value: 1,
           },
         },
@@ -90,8 +96,8 @@ export const TestServiceUI = () => {
       },
     });
   };
-  
-  const callMintApi =async () =>  {
+
+  const callMintApi = async () => {
     if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
       console.log("NO API / INVITATION", service);
       return;
@@ -101,11 +107,11 @@ export const TestServiceUI = () => {
     const moneyBrand = service.purses.money[0].brandPetname;
     const pricePerNFT = {
       brand: moneyBrand,
-      value: 1+1,
+      value: 1 + 1,
     };
     const nftAmount = {
       brand: service.purses.character[1].brandPetname[1],
-      value:[{ id: 1 }],
+      value: [{ id: 1 }],
     };
 
     // const nftAmount = AmountMath.make(service.purses.character.brand, harden([{ id: 1n }]));
@@ -135,7 +141,7 @@ export const TestServiceUI = () => {
 
       // Tell the wallet that we're handling the offer result.
       dappContext: true,
-    }; 
+    };
     */
     const payload = {
       type: "nftFaucet/sendInvitation",
@@ -155,12 +161,11 @@ export const TestServiceUI = () => {
     console.log("SENT");
   };
 
-
   const checkOwned = () => {
     const ownedCharacters = service.purses.character.map((purse) => {
       return purse.value;
     });
-    console.log( service.purses.character, ownedCharacters);
+    console.log(service.purses.character, ownedCharacters);
     charactersDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
   };
   const getCharacters = async () => {
@@ -202,30 +207,44 @@ export const TestServiceUI = () => {
     console.log(character.auction.publicFacet);
     await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
   };
-  return <>
-    <h1>SERVICE TEST UI</h1>
-    <div style={{width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row"}}>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={getTimer}>GET TIMER</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={()=>mintCharacters(service, [FakeCharctersNoItems[0], FakeCharctersNoItems[1]], 1n)}>CREATE CHARACTER</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={checkOwned}>CHECK MY CHARACTERS</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async ()=> await buyCharacter(3)}>BUY CHARACTER</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async () => await getCharacters()}>GET CHARACTERS</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={() => console.log(characters)}>CHARACTERS</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={test}>TEST</button>
-    </div>
-  </>;
+  return (
+    <>
+      <h1>SERVICE TEST UI</h1>
+      <div style={{ width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row" }}>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={getTimer}>
+          GET TIMER
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={() => mintCharacters(service, [FakeCharctersNoItems[0], FakeCharctersNoItems[1]], 1n)}
+        >
+          CREATE CHARACTER
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={checkOwned}>
+          CHECK MY CHARACTERS
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={async () => await buyCharacter(3)}
+        >
+          BUY CHARACTER
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={async () => await getCharacters()}
+        >
+          GET CHARACTERS
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={() => console.log(characters)}
+        >
+          CHARACTERS
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={test}>
+          TEST
+        </button>
+      </div>
+    </>
+  );
 };

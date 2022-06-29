@@ -32,9 +32,9 @@ export const DetailSectionSegmentDetailsLink = styled.a`
     }
   }
   &: focus {
-    border: 1px solid #A1A1A1;
-    border-radius: 24px;
+    border: 1px solid ${color.darkGrey};
+    border-radius: ${margins.medium};
     box-sizing: border-box;
-    padding: 8px 16px 8px 16px;
+    padding: ${margins.mini} ${margins.small} ${margins.mini} ${margins.small};
   }
 `;

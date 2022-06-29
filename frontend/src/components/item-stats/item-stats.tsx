@@ -6,7 +6,7 @@ import { color } from "../../design";
 
 import { Item } from "../../interfaces";
 import { Badge, ButtonText, HorizontalDivider, MenuText } from "../atoms";
-import { Footer, Header, LevelContainer, ProgressContainer, StatsContainer, StatsWrapper, Title } from "./styles";
+import { Footer, Header, ProgressContainer, StatsContainer, StatsWrapper, Title } from "./styles";
 
 interface ItemStatsProps {
   item?: Item;
@@ -30,10 +30,8 @@ export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
       </Header>
       <StatsContainer>
         <HorizontalDivider />
-        <LevelContainer>
-          <ButtonText customColor={color.darkGrey}>{text.item.level}</ButtonText>
-          <MenuText>{item.level}</MenuText>
-        </LevelContainer>
+        <ButtonText customColor={color.darkGrey}>{text.item.level}</ButtonText>
+        <MenuText>{item.level}</MenuText>
         <ProgressContainer>
           <ButtonText>{text.item.effectiveness}</ButtonText>
           <DetailSectionProgress id={text.item.effectiveness} value={item.effectiveness || 0} max={ONE_HUNDRED_PERCENT}>

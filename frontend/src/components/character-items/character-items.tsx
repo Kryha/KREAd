@@ -19,7 +19,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
       <LeftItemContainer>
         <LeftEquippedItemCard
           item={items.hair}
-          code={text.itemSlots.hair}
+          code={text.itemSlots.hairCode}
           marginTop={margins.big}
           height={imageSize.mediumLarge}
           category={text.itemSlots.hair}
@@ -29,7 +29,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <LeftEquippedItemCard
             area="middle"
             item={items.headPiece}
-            code={text.itemSlots.headPiece}
+            code={text.itemSlots.headPieceCode}
             width={imageSize.large}
             height={imageSize.large}
             marginLeft={`-${margins.extraLarge}`}
@@ -38,7 +38,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <LeftEquippedItemCard
             area="middle"
             item={items.clothing}
-            code={text.itemSlots.clothing}
+            code={text.itemSlots.clothingCode}
             width={imageSize.medium}
             height={imageSize.mediumLarge}
             marginTop={`-${margins.big}`}
@@ -49,13 +49,13 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <LeftEquippedItemCard
             area="bottom"
             item={items.midBackground}
-            code={text.itemSlots.background2}
+            code={text.itemSlots.midBackgroundCode}
             category={text.itemSlots.background2}
           />
           <LeftEquippedItemCard
             area="bottom"
             item={items.background}
-            code={text.itemSlots.background}
+            code={text.itemSlots.backgroundCode}
             category={text.itemSlots.background}
           />
         </Row>
@@ -65,7 +65,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <RightEquippedItemCard
             area="top"
             item={items.mask}
-            code={text.itemSlots.mask}
+            code={text.itemSlots.maskCode}
             width={imageSize.extralarge}
             height={imageSize.large}
             marginTop={`-${imageSize.mediumLarge}`}
@@ -77,7 +77,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <RightEquippedItemCard
             area="middle"
             item={items.noseline}
-            code={text.itemSlots.noseline}
+            code={text.itemSlots.noselineCode}
             width={imageSize.large}
             height={imageSize.gigantic}
             marginTop={`-${imageSize.mediumLarge}`}
@@ -87,7 +87,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <RightEquippedItemCard
             area="middle"
             item={items.airResevoir}
-            code={text.itemSlots.airResevoir}
+            code={text.itemSlots.airResevoirCode}
             width={imageSize.mediumLarge}
             height={imageSize.big}
             marginTop={`-${margins.extraLarge}`}
@@ -99,7 +99,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <RightEquippedItemCard
             area="bottom"
             item={items.liquid}
-            code={text.itemSlots.liquid}
+            code={text.itemSlots.liquidCode}
             width={imageSize.extraExtraLarge}
             height={imageSize.extraExtraLarge}
             marginTop={`-${imageSize.big}`}
@@ -109,7 +109,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           <RightEquippedItemCard
             area="bottom"
             item={items.frontMask}
-            code={text.itemSlots.frontMask}
+            code={text.itemSlots.frontMaskCode}
             width={imageSize.extraExtraLarge}
             height={imageSize.extraExtraLarge}
             marginTop={`-${imageSize.big}`}

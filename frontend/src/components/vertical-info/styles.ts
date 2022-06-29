@@ -1,57 +1,77 @@
 import styled from "@emotion/styled";
-import { color, fontWeight } from "../../design";
+import { color, fontWeight, margins } from "../../design";
+
+import { Label } from "../atoms";
 
 interface DirectionProps {
   isRight: boolean;
-  category: string;
 }
 
-export const Id = styled.h3<DirectionProps>`
-  :first-letter {
-    text-transform: capitalize;
-  }
-  font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.medium};
-  font-size: 12px;
-  white-space: nowrap;
-  color: ${color.darkGrey};
-  ${({ isRight, category }): string => {
-    if (isRight) {
-      if (category === "air resevoir" || category === "front mask") {
-        return `
-        transform: rotate(90deg);
-        line-height: 125px;
-        `;
-      }
-      else if (category === "noseline") {
-        return `
-        transform: rotate(90deg);
-        line-height: 95px;
-        `;
-      }
-      else {
-        return `
-        transform: rotate(90deg);
-        line-height: 65px;
-        `;
-      }
-
-    } else {
-      return `
-      margin-right: 8px;
-      transform: rotate(-90deg);
-      `;
-    }
-  }}
-
+export const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px;
 `;
 
-export const InfoContainer = styled.div`
-  width: 15px;
-  cursor: pointer;
-  // &:hover {
-  //   ${Id} {
-  //     color: ${color.black};
-  //   }
-  // }
+export const CategoryCode = styled(Label)<DirectionProps>`
+  margin: ${margins.mini} 0px;
+  text-transform: uppercase;
+  font-family: aktiv-grotesk;
+  font-weight: ${fontWeight.light};
+  flex: none;
+  order: 3;
+  flex-grow: 0;
+  ${({ isRight }): string => {
+    return isRight
+      ? `
+      transform: rotate(90deg);
+        `
+      : `
+      transform: rotate(-90deg);
+      `;
+  }}
+`;
+
+export const Id = styled(CategoryCode)<DirectionProps>`
+  margin: ${margins.medium} 0px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+`;
+
+export const Dash = styled.div<DirectionProps>`
+  width: ${margins.small};
+  border: 0.5px solid ${color.darkGrey};
+  margin: ${margins.mini} 0px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  ${({ isRight }): string => {
+    return isRight
+      ? `
+      transform: rotate(90deg);
+        `
+      : `
+      transform: rotate(-90deg);
+      `;
+  }}
+`;
+
+export const DiagonalContainer = styled.div`
+  box-sizing: border-box;
+  width: 13px;
+  height: 13px;
+  border: 1px solid ${color.grey};
+  position: relative;
+  margin: ${margins.medium} ${margins.small};
+`;
+
+export const Diagonal = styled.div`
+  border: 0.5px solid ${color.grey};
+  transform: rotate(135deg);
+  left: -2px;
+  position: absolute;
+  width: 14px;
+  top: 4.5px;
 `;

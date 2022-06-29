@@ -48,7 +48,7 @@ export const ItemWrapper = styled.div<ViewProps>`
   }
   ${Menu} {
     position: absolute;
-    z-index: 1000;
+    z-index: 41;
     top: 40px;
     right: 40px;
   }

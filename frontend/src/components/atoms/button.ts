@@ -36,6 +36,11 @@ export const PrimaryButton = styled.button<ButtonProps>`
     ${ButtonText} {
       color: ${(props): string => props.fontColor || color.black};
     }
+    > svg {
+      path {
+        stroke: ${color.black} !important;
+      }
+    }
   }
   &:active {
     background: ${(props): string => props.backgroundColor || color.white};

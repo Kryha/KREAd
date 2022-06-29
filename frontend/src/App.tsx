@@ -4,21 +4,21 @@ import { BrowserRouter } from "react-router-dom";
 
 import { AppRoutes } from "./navigation";
 import { queryClient } from "./service";
-import { ServiceStateProvider } from "./context/service";
+import { AgoricStateProvider } from "./context/agoric";
 import { TestServiceUI } from "./service/test-service-ui";
 import { CharacterStateProvider } from "./context/characters";
 
 function App() {
   return (
     <CharacterStateProvider>
-      <ServiceStateProvider>
+      <AgoricStateProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <AppRoutes />
             {/* <TestServiceUI /> */}
           </BrowserRouter>
         </QueryClientProvider>
-      </ServiceStateProvider>
+      </AgoricStateProvider>
     </CharacterStateProvider>
   );
 }

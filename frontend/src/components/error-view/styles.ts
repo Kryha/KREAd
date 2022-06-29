@@ -47,7 +47,7 @@ export const ErrorTitle = styled.h1`
   font-weight: 500;
   font-size: 46px;
   line-height: 51px;
-  color: #141414;
+  color: ${color.black};
   :first-letter {
     text-transform: capitalize;
   }
@@ -58,7 +58,7 @@ export const DescriptionTitle = styled.h2`
   font-weight: 400;
   font-size: 24px;
   line-height: 31px;
-  color: #141414;
+  color: ${color.black};
   :first-letter {
     text-transform: capitalize;
   }

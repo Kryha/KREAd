@@ -26,7 +26,7 @@ export const ItemSell = () => {
   if (!data || isError) return <ErrorView />;
 
   return (
-    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={data}>
+    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }}>
       <ItemDetailSection item={data} />
     </Sell>
   );

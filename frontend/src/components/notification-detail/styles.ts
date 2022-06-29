@@ -7,6 +7,7 @@ export const ToastContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: ${margins.medium} ${margins.medium} ${margins.medium} 32px;
   gap: ${margins.medium};
   background: ${color.lightGrey};
@@ -14,11 +15,9 @@ export const ToastContainer = styled.div`
   border-radius: ${margins.small};
   bottom: ${margins.big};
   z-index: 10000;
-  width: 45%;
-  top: 100px;
+  width: 720px;
   position: absolute;
-  left: 40px;
-  height: fit-content;
+  left: 30%;
 `;
 
 export const Tick = styled(TickIcon)`
@@ -83,4 +82,9 @@ export const InfoContainer = styled.div`
   gap: 4px;
 `;
 
-export const DividerContainer = styled.div``;
+export const DividerContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+`;

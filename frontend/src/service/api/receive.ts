@@ -1,5 +1,3 @@
-import { CharacterDispatch } from "../../context/characters";
-
 export const apiRecv = (obj: any, args: any) => {
   const { characterDispatch } = args;
   switch (obj.type) {

@@ -4,6 +4,7 @@ import { text } from "../../assets";
 import {  Badge, ButtonText, FormText, PriceInRun, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
+import { Character } from "../../interfaces";
 import { ArrowUp, GeneralInfo, PricingContainer, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
 
 interface PaymentProps {
@@ -30,7 +31,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <GeneralInfo active={sendOffer}>
+        <GeneralInfo>
           <PricingContainer>
             <NumberContainer active={true}>
               {sendOffer ?
@@ -50,7 +51,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
           </PricingContainer>
         </GeneralInfo>
         <Line />
-        <Step active={!sendOffer}>
+        <Step>
           <NumberContainer active={!!sendOffer}>
             {acceptOffer ? <Tick /> :<ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>

@@ -34,8 +34,6 @@ export const Line = styled.div`
   width: ${margins.small};
   border: 0.5px solid ${color.darkGrey};
   height: 1px;
-  margin-left: 4px;
-  margin-right: 4px;
 `;
 
 interface InfoProps {
@@ -48,10 +46,11 @@ export const Info = styled.div<InfoProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 5px 15px;
+  padding: 8px 8px;
   cursor: pointer;
   border-radius: ${margins.medium};
   border: 1px solid transparent;
+  margin-bottom: ${margins.small};
   ${({ selected }) =>
     selected &&
     `
@@ -61,6 +60,12 @@ export const Info = styled.div<InfoProps>`
   :hover {
     border: 1px solid ${color.darkGrey};
     ${EquippedLabel} {
+      display: none;
+    }
+    ${BoldLabel} {
+      display: none;
+    }
+    ${Line} {
       display: none;
     }
   }
@@ -100,8 +105,7 @@ export const InfoWrapper = styled.div`
 `;
 
 export const Divider = styled.div`
-  height: 0px;
-  width: 24px;
+  width: 23px;
   border: 0.5px solid #d0d0d0;
   transform: rotate(90deg);
 `;
@@ -118,8 +122,10 @@ export const SelectedContainer = styled.div`
 
 export const SubTitleContainer = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
-  margin-top: ${margins.nano};
+  padding: 0px;
+  gap: ${margins.small};
 `;
 
 export const TitleContainer = styled.div`

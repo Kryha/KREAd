@@ -1,6 +1,6 @@
 import { Options } from "../../components";
 
-export const itemCategories: Options[] = [
+export const categories: Options[] = [
   { label: "head pieces", value: "head piece" },
   { label: "noselines", value: "noseline" },
   { label: "front masks", value: "front mask" },
@@ -11,10 +11,6 @@ export const itemCategories: Options[] = [
   { label: "hair", value: "hair" },
   { label: "background I", value: "background" },
   { label: "background II", value: "mid background" },
-];
-
-export const characterCategories: Options[] = [
-  { label: "Tempet Scavengers", value: "Tempet Scavenger" },
 ];
 
 export const sorting: Options[] = [

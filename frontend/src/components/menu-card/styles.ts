@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, CloseIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { color, margins } from "../../design";
+import { color, margins, zIndex } from "../../design";
 import { Label } from "../atoms";
-import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
+import { HeaderHorizontalDivider } from "../atoms/lines";
 
 export const Content = styled.div`
   padding: 0px ${margins.small};
@@ -73,10 +73,6 @@ export const Divider = styled(HeaderHorizontalDivider)`
 
 export const MenuContent = styled.div`
   padding: 0px ${margins.medium} 0px ${margins.medium};
-  ${HorizontalDivider} {
-    margin-top: 16px;
-    margin-bottom: 24px;
-  }
 `;
 
 export const MenuItemContainer = styled.div`
@@ -95,7 +91,7 @@ export const CardActionsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: ${margins.big};
+  margin-bottom: ${margins.large};
   margin-right: ${margins.large};
   margin-top: ${margins.medium};
   margin-left: ${margins.large};

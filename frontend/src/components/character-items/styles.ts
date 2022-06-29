@@ -5,7 +5,7 @@ export const LeftItemContainer = styled.div`
   position: absolute;
   width: 310px;
   height: 408px;
-  left: ${margins.big};
+  left: ${margins.small};
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
 `;
@@ -14,7 +14,7 @@ export const RightItemContainer = styled.div`
   position: absolute;
   width: 310px;
   height: 408px;
-  right: 60px;
+  right: ${margins.big};
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
 `;
@@ -23,7 +23,7 @@ export const RightItems = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  margin-right: -22px;
+  margin-right: -20px;
 `;
 
 export const Row = styled.div`

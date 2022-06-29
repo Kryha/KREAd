@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, DownArrowIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
-import { color, margins } from "../../design";
+import { margins } from "../../design";
 
 interface ImageProps {
   isZoomed?: boolean;
@@ -21,28 +21,13 @@ export const Close = styled(CloseIcon)`
 
 export const BaseWrapper = styled.div``;
 
-interface NotificationProps {
-  open: boolean;
-}
-
-export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
+export const NotificationButton = styled(SecondaryButton)`
   padding: ${margins.mini};
-  position: relative;
-  z-index: 1000;
   ${Close} {
     margin: 0px 6px !important;
     width: 15px;
     height: 15px;
   }
-  ${({ open }): string => {
-    return open
-      ? `
-        border-color: ${color.black} !important;
-        `
-      : `
-
-      `;
-  }};
 `;
 
 export const NotificationWrapper = styled.div`
@@ -80,29 +65,4 @@ export const CharacterCardWrapper = styled.div`
   z-index: 10000;
   bottom: ${margins.big};
   left: 30px;
-`;
-
-export const NotificationContainer = styled.div`
-  position: relative;
-`;
-
-export const Tag = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 4px 8px;
-  gap: 10px;
-
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  left: 27px;
-  top: -3px;
-
-  /* Tint - 100 */
-
-  background: #141414;
-  border-radius: 24px;
-  z-index: 1000;
 `;

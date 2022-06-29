@@ -24,7 +24,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
   };
 
   // TODO: add noticifaction
-  if (equipCharacter.isSuccess) return <Navigate to={routes.character} />;
+  if (equipCharacter.isSuccess) return <Navigate to={routes.root} />;
 
   if (equipCharacter.isError) return <ErrorView />;
 
@@ -40,7 +40,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
         <ButtonText customColor={color.darkGrey}>{text.mint.characterName}</ButtonText>
         <MenuItemName>{character.name}</MenuItemName>
         <ButtonText customColor={color.darkGrey}>{text.mint.creationDate}</ButtonText>
-        <MenuItemName>{getDatefromEpoch(character.itemActivity[0].date || Date.now())}</MenuItemName>
+        <MenuItemName>{getDatefromEpoch(Date.now())}</MenuItemName>
       </InfoContainer>
       <ButtonContainer>
         <PrimaryButton onClick={() => equipNewCharacter()}>

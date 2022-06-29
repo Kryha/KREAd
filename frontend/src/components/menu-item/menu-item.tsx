@@ -1,20 +1,19 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isString } from "../../interfaces";
-import { ButtonContainer, Dash, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
-import { Badge, ButtonText, ImageProps, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
+import { ButtonContainer, Divider, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper } from "./styles";
+import { ButtonText, ImageProps, Label, MenuItemName, PrimaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
 import { ItemThumbnail } from "../item-thumbnail";
 
-export interface Data {
+interface Data {
   image: string | CharacterItems;
   name: string;
   level: number;
   category: string;
   id: string;
-  equipped?: boolean;
 }
 
 interface MenuItemProps {
@@ -25,9 +24,6 @@ interface MenuItemProps {
 
 export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
   const [selected, setSelected] = useState(false);
-  // TODO: find if item is equipped
-  const isEquipped = false;
-  const isForSale = false;
 
   return (
     <Info
@@ -48,40 +44,15 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
       )}
       <InfoWrapper>
         <InfoContainer>
-          <TitleContainer>
-            <MenuItemName>{data.name}</MenuItemName>
-            <EquippedLabel customColor={color.black}>{text.param.id(data.id)}</EquippedLabel>
-          </TitleContainer>
-          <InlineDetails>
-            <Badge>
-              <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
-            </Badge>
-            <Label>{text.param.level(data.level)}</Label>
-            {isEquipped && (
-              <>
-                <Dash />
-                <ButtonText customColor={color.darkGrey}>{text.general.equipped}</ButtonText>
-              </>
-            )}
-            {isForSale && (
-              <>
-                <Dash />
-                <ButtonText customColor={color.darkGrey}>{text.general.forSale}</ButtonText>
-              </>
-            )}
-          </InlineDetails>
+          <MenuItemName>{data.name}</MenuItemName>
+          <Label>{text.param.id(data.id)}</Label>
         </InfoContainer>
+        {/* TODO: actually track if equipped or not */}
+        <EquippedLabel>{text.general.equipped}</EquippedLabel>
         <ButtonContainer>
-          {isEquipped && (
-            <SecondaryButton>
-              <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
-            </SecondaryButton>
-          )}
-          {!isEquipped && (
-            <PrimaryButton>
-              <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
-            </PrimaryButton>
-          )}
+          <PrimaryButton>
+            <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
+          </PrimaryButton>
         </ButtonContainer>
       </InfoWrapper>
     </Info>

@@ -12,7 +12,6 @@ export const ActivityTableWrap = styled.section`
 export const Cell = styled.div`
   flex-grow: 1;
   width: 50px;
-  word-break: break-all;
 `;
 
 export const HeaderWrap = styled.header`

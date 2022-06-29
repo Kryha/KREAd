@@ -23,21 +23,11 @@ interface NavTabProps {
 interface WidthProps {
   width: number;
   amount: number;
-  active?: boolean;
 }
 
-export const NavTitle = styled(NavigationTitle) <WidthProps>`
+export const NavTitle = styled(NavigationTitle)<WidthProps>`
   text-align: center;
   padding: 0px 0px ${margins.medium} 0px;
-  ${({ active }) => {
-    return active
-      ? `
-        color: ${color.black}
-      `
-      : `
-        color: ${color.darkGrey};
-    `;
-  }}
 `;
 
 export const ActiveLine = styled.div<NavTabProps>`

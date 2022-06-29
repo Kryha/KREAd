@@ -2,21 +2,21 @@ import { FC, ReactNode, useState } from "react";
 
 import { text } from "../../assets";
 import {
+  ButtonText,
   CharacterShopCard,
+  ErrorView,
   Filters,
   HorizontalDivider,
   Label,
   LoadingPage,
-  OverviewEmpty,
   Overlay,
   PriceSelector,
   Select,
-  ButtonText,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useFilteredCharacters } from "../../service";
+import { useCharacters } from "../../service";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
 import {
   FilterContainer,
@@ -40,12 +40,12 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const navigate = useNavigate();
 
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
-  const [close, setClose] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
 
-  const { data: characters, isLoading: isLoading } = useFilteredCharacters(selectedCategory, selectedSorting, selectedPrice);
+  // TODO: actually use character filters
+  const { data: characters, isLoading: isLoading } = useCharacters();
 
   const noFilteredCharacters =
     (!selectedCategory.length || !selectedSorting.length || !selectedPrice) && (!characters || !characters.length);
@@ -61,59 +61,41 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   if (isLoading) return <LoadingPage />;
 
+  if (!characters || !characters.length) return <ErrorView />;
+
   return (
     <>
       <FilterWrapper>
-        <FilterContainer tabIndex={0} onBlur={() => setClose(false)}>
+        <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category} close>
+            <Filters label={text.filters.category}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price} close={close}>
+            <Filters label={text.filters.price}>
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
           </SelectorContainer>
 
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest} close={close}>
+            <Filters label={text.filters.latest}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>
         </FilterContainer>
-        <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(!characters ? 0 : characters.length)}</ButtonText>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(characters.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
-      {!characters || !characters.length ? (
-        <OverviewEmpty
-          headingText={text.store.thereAreNoCharactersInTheShop}
-          descriptionText={text.store.thereAreNoCharactersAvailable}
-          buttonText={text.navigation.goHome}
-          redirectRoute={routes.character}
-        />
-      ) : (
-        <>
-          {noFilteredCharacters || (
-            <ItemWrapper height={height}>
-              <ItemContainer>
-                {characters.map((character, index) => (
-                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
-                ))}
-              </ItemContainer>
-            </ItemWrapper>
-          )}
-          {noFilteredCharacters || (
-            <ItemWrapper height={height}>
-              <ItemContainer>
-                {characters.map((character, index) => (
-                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
-                ))}
-              </ItemContainer>
-            </ItemWrapper>
-          )}
-        </>
+      {noFilteredCharacters || (
+        <ItemWrapper height={height}>
+          <ItemContainer>
+            {characters.map((character, index) => (
+              <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+            ))}
+          </ItemContainer>
+        </ItemWrapper>
       )}
       {!!selectedCharacter && (
         <CharacterDetailSection

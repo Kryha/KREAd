@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { TickIcon } from "../../assets";
 
-import { color, fontWeight, margins } from "../../design";
-import { NavigationTitle, SecondaryButton } from "../atoms";
-import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
+import { color, margins } from "../../design";
+import { SecondaryButton } from "../atoms";
+import { HeaderHorizontalDivider } from "../atoms/lines";
 
 export const ArrowContainer = styled.div`
   display: flex;
@@ -38,30 +38,17 @@ export const NotificationWrapper = styled.div<NotificationProps>`
    overflow-y: scroll;
 `;
 
-export const NotificationHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px;
-  gap: ${margins.medium};
-  width: 100%;
-  margin-bottom: 16px;
-`;
-
 export const NotificationContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
   gap: ${margins.medium};
-  margin: 0px ${margins.big} ${margins.big} ${margins.big};
+  margin: ${margins.big};
 `;
 
 export const InfoWrapper = styled.div`
   width: 100%;
-  min-height: 70px;
-  max-height: 70px;
   :not(:hover) {
     ${SecondaryButton} {
       display: none;
@@ -83,15 +70,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const NotificationContent = styled.div`
-  padding: ${margins.big} ${margins.big} ${margins.big} ${margins.big};
-  position: sticky;
-  top: 0;
-  background-color: ${color.white};
-`;
-
-export const NotificationItemContainer = styled.div`
-  width: 100%;
-  border-bottom: 1px solid ${color.grey};
+  padding: ${margins.big} ${margins.big} 0px ${margins.big};
 `;
 
 export const CardActionsContainer = styled.div`
@@ -122,41 +101,3 @@ export const TickContainer = styled.div`
   border: 1px solid ${color.black};
   margin-bottom: ${margins.small};
 `;
-
-export const BodyMessage = styled(NavigationTitle)`
-  font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.light};
-  text-transform: capitalize;
-`;
-
-export const BoldText = styled(NavigationTitle)`
-  font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.medium};
-`;
-export const BodyText = styled(NavigationTitle)`
-  font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.light};
-`;
-
-export const Content = styled.div`
-  width: 100%;
-  ${BodyText} {
-    display: inline;
-    margin: 0px 3px;
-  }
-  ${BoldText} {
-    display: inline;
-  }
-  ${BodyMessage} {
-    display: inline;
-    margin: 0px 3px 0px 0px;
-  }
-  ${HorizontalDivider} {
-    margin-top: ${margins.medium};
-  }
-  ${SecondaryButton} {
-    min-width: 95px;
-  }
-`;
-
-export const MessageContainer = styled.div``;

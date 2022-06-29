@@ -6,7 +6,7 @@ import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../compone
 import { ButtonInfo } from "../../components/button-info";
 import { color } from "../../design";
 import { CharacterCreation } from "../../interfaces";
-import { ArrowUp, ButtonContainer, ContentWrapper, ErrorContainer, FormFields, InputWrapper, Tick, Warning } from "./styles";
+import { ArrowUp, ButtonContainer, ContentWrapper, Exclamation, FormFields, InputWrapper, Tick } from "./styles";
 
 interface InformationProps {
   submitForm: (data: CharacterCreation) => void;
@@ -26,15 +26,11 @@ export const Information: FC<InformationProps> = ({ submitForm, disabled }) => {
           <Label>{text.mint.characterName}</Label>
           <Input type="text" {...register("name", { required: true })}/>
           <InputWrapper>
+            {Boolean(errors.name) && (<Exclamation />)}
             {Boolean(!errors.name && dirtyFields.name) &&  (<Tick />)}
             <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
           </InputWrapper>
-          {errors.name && (
-            <ErrorContainer>
-              <Warning />
-              <ButtonText>{text.general.thisFieldIsRequired}</ButtonText>
-            </ErrorContainer>
-          )}
+          {errors.name && <ButtonText customColor={color.darkGrey}>{text.general.thisFieldIsRequired}</ButtonText>}
         </FormFields>
         <FormText>{text.mint.theCostsOfMinting}</FormText>
         <ButtonContainer>

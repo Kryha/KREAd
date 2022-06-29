@@ -1,16 +1,27 @@
 import { FC } from "react";
+import { text } from "../../assets";
 
-import {  Id, InfoContainer } from "./styles";
+import { color } from "../../design";
+import { CategoryCode, Dash, Diagonal, DiagonalContainer, Id, InfoContainer } from "./styles";
 
 interface VerticalInfoProps {
   code: string;
+  id: string | undefined;
   isRight?: boolean;
 }
 
-export const VerticalInfo: FC<VerticalInfoProps> = ({ code, isRight = false }) => {
+export const VerticalInfo: FC<VerticalInfoProps> = ({ code, id, isRight = false }) => {
   return (
     <InfoContainer>
-      <Id isRight={isRight} category={code}>{code}</Id>
+      {id ?
+        <Id customColor={color.black} isRight={isRight}>{text.param.id(id)}</Id>
+        :
+        <DiagonalContainer>
+          <Diagonal />
+        </DiagonalContainer>
+      }
+      <Dash isRight={isRight} />
+      <CategoryCode isRight={isRight}>{code}</CategoryCode>
     </InfoContainer>
   );
 };

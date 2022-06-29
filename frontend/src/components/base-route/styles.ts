@@ -18,9 +18,3 @@ export const Box = styled.div`
 export const ChildrenContainer = styled.div`
   margin-bottom: 40px;
 `;
-
-export const FooterContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-`;

@@ -3,19 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
-import {
-  Landing,
-  Shop,
-  Inventory,
-  CreateCharacter,
-  ItemBuy,
-  CharacterBuy,
-  ItemSell,
-  CharacterSell,
-  Onboarding,
-  About,
-  Privacy
-} from "../pages";
+import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemSell, CharacterSell } from "../pages";
 import { MainContainer, ErrorFallback } from "../components";
 import { Item } from "../pages/item";
 import { TestServiceUI } from "../service/test-service-ui";
@@ -24,11 +12,10 @@ export const AppRoutes: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
+    <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.root)}>
       <MainContainer>
         <Routes>
-          <Route path={routes.root} element={<Onboarding />} />
-          <Route path={routes.character} element={<Landing />} />
+          <Route path={routes.root} element={<Landing />} />
           <Route path={`${routes.items}/:category`} element={<Item />} />
           <Route path={routes.shop} element={<Shop />} />
           <Route path={routes.inventory} element={<Inventory />} />
@@ -40,8 +27,7 @@ export const AppRoutes: FC = () => {
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
           <Route path={"/test"} element={<TestServiceUI />} />
-          <Route path={routes.about} element={<About />} />
-          <Route path={routes.privacy} element={<Privacy />} />
+
         </Routes>
       </MainContainer>
     </ErrorBoundary>

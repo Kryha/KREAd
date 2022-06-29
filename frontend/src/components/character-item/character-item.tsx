@@ -7,8 +7,10 @@ import {
   Line,
   InfoContainer,
   SubTitleContainer,
+  TitleContainer,
   Info,
   InfoWrapper,
+  Divider
 } from "./styles";
 import { Badge, BoldLabel, ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
@@ -41,7 +43,10 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>
-          <MenuItemName>{character.name}</MenuItemName>
+          <TitleContainer>
+            <MenuItemName>{character.name}</MenuItemName>
+            <EquippedLabel customColor={color.black}>{text.param.id(character.characterId)}</EquippedLabel>
+          </TitleContainer>
           <SubTitleContainer>
             <Badge>
               <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
@@ -55,7 +60,6 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
             )}
           </SubTitleContainer>
         </InfoContainer>
-        <EquippedLabel customColor={color.black}>{text.param.id(character.characterId)}</EquippedLabel>
         <ButtonContainer>
           {isCharacterEquipped ? (
             <PrimaryButton>

@@ -7,11 +7,10 @@ interface FiltersProps {
   children?: React.ReactNode;
   label: string;
   value?: string;
-  close: boolean;
 }
 
-export const Filters: FC<FiltersProps> = ({ children, label, value, close = false }) => {
-  const [open, setOpened] = useState(close);
+export const Filters: FC<FiltersProps> = ({ children, label, value }) => {
+  const [open, setOpened] = useState(false);
 
   return (
     <FiltersWrapper>

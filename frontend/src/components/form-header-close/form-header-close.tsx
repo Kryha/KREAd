@@ -2,7 +2,7 @@ import { FC } from "react";
 import {useNavigate,  } from "react-router-dom";
 
 import { MenuText } from "../atoms";
-import { ArrowContainer, Close, HeaderContainer, ReturnContainer } from "./styles";
+import { ArrowContainer, Close, Divider,  HeaderContainer, ReturnContainer } from "./styles";
 
 interface FormHeaderCloseProps {
   title: string;
@@ -16,6 +16,7 @@ export const FormHeaderClose: FC<FormHeaderCloseProps> = ({  title, link }) => {
     <HeaderContainer>
       <MenuText>{title}</MenuText>
       <ReturnContainer>
+        <Divider />
         <ArrowContainer>
           <Close onClick={() => navigate(link)} />
         </ArrowContainer>

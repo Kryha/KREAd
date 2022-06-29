@@ -1,6 +1,6 @@
 import { Character, Item } from "../interfaces";
 
-/* eslint-disable indent */
+
 export const sortItems = (sorting: string, items: Item[]): Item[] => {
   switch (sorting) {
     case "atoz":

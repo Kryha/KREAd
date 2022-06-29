@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import { SecondaryButton } from "../../../components";
 
-import { color, margins, fontWeight, fontSize } from "../../../design";
+import { color, margins, fontWeight, fontSize, zIndex } from "../../../design";
 
 export const DetailSectionHeaderWrap = styled.header`
   position: sticky;
   top: 0;
-  z-index: 101;
+  z-index: ${zIndex.overCharacter};
   background-color: ${color.lightGrey};
   display: flex;
   flex-flow: column nowrap;

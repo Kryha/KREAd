@@ -2,9 +2,8 @@ import { FC } from "react";
 
 import { text } from "../../assets";
 import { routes } from "../../navigation";
-import { Footer } from "../footer";
 import { NavigationSection, NavigationTab } from "../navigation-tab";
-import { TopbarContainer, Box, ChildrenContainer, FooterContainer } from "./styles";
+import { TopbarContainer, Box, ChildrenContainer } from "./styles";
 
 interface BaseRouteProps {
   sideNavigation: React.ReactNode;
@@ -16,8 +15,8 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation }) => {
     <>
       <TopbarContainer>
         <Box>
-          <NavigationSection route={routes.character}>
-            <NavigationTab title={text.navigation.character} route={routes.character} />
+          <NavigationSection route={routes.root}>
+            <NavigationTab title={text.navigation.character} route={routes.root} />
           </NavigationSection>
           <NavigationSection route={routes.shop}>
             <NavigationTab title={text.navigation.shop} route={routes.shop} />
@@ -29,9 +28,6 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation }) => {
         {sideNavigation}
       </TopbarContainer>
       <ChildrenContainer>{children}</ChildrenContainer>
-      <FooterContainer>
-        <Footer />
-      </FooterContainer>
     </>
   );
 };
