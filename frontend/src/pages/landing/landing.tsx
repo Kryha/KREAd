@@ -33,8 +33,6 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 
 export const Landing: FC = () => {
-  // Use useCharacterContext instead of use My characters
-  // const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
   const [myCharacters, isLoading] = useMyCharacters();
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
