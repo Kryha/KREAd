@@ -8,6 +8,7 @@ import {
   ButtonText,
   CharacterCard,
   CharacterItems,
+  ErrorView,
   LoadingPage,
   MenuText,
   NotificationCard,
@@ -24,6 +25,8 @@ import {
   DetailContainer,
   ButtonContainer,
   CharacterCardWrapper,
+  NotificationContainer,
+  Tag,
 } from "./styles";
 import { useMyCharacter, useMyCharacters } from "../../service";
 import { CharacterDetailSection } from "../../containers/detail-section";
@@ -32,6 +35,8 @@ import { routes } from "../../navigation";
 
 export const Landing: FC = () => {
   const [myCharacters, isLoading] = useMyCharacters();
+
+  // TODO: Removed mocked selected character
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
   const [openNotification, setOpenNotifications] = useState(false);
@@ -43,9 +48,10 @@ export const Landing: FC = () => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
-  if (isLoading || isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingCharacter || isLoading) return <LoadingPage />;
   // TODO: get an empty page
-  if (!character) return <></>;
+  if (!character || !myCharacters || !myCharacters.length) return <ErrorView />;
+
 
   const sell = () => {
     if (!character) return;
@@ -60,9 +66,16 @@ export const Landing: FC = () => {
             <ButtonText>{text.navigation.myCharacters}</ButtonText>
             {openTab ? <Close /> : <Menu />}
           </SecondaryButton>
-          <NotificationButton onClick={() => setOpenNotifications(!openNotification)} backgroundColor={openNotification ? color.lightGrey : color.white}>
-            {openNotification ? <Close /> : <Notification />}
-          </NotificationButton>
+          <NotificationContainer>
+            <NotificationButton
+              open={openNotification}
+              onClick={() => setOpenNotifications(!openNotification)}
+              backgroundColor={openNotification ? color.lightGrey : color.white}
+            >
+              {openNotification ? <Close /> : <Notification />}
+            </NotificationButton>
+            <Tag />
+          </NotificationContainer>
         </NotificationWrapper>
       }
     >
@@ -90,7 +103,7 @@ export const Landing: FC = () => {
         </CharacterCardWrapper>
       )}
       {openNotification && <NotificationCard />}
-      {showDetail && <Overlay />}
+      {showDetail || openNotification && <Overlay />}
     </BaseRoute>
   );
 };

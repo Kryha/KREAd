@@ -26,7 +26,11 @@ export const CharacterSell = () => {
   if (!data || isError) return <ErrorView />;
 
   return (
-    <Sell onSubmit={submitForm} text={{ sell: text.store.sellCharacter }}>
+    <Sell
+      onSubmit={submitForm}
+      text={{ sell: text.store.sellCharacter }}
+      data={{ ...data, image: data.items, category: data.type, id: data.characterId }}
+    >
       <CharacterDetailSection character={data} />
     </Sell>
   );

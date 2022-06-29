@@ -4,7 +4,7 @@ import { DefaultIcon, text } from "../../assets";
 import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
-import { useAgoricContext, useAgoricState } from "../../context/agoric";
+import { useAgoricState } from "../../context/agoric";
 import { useViewport } from "../../hooks";
 import { CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -64,7 +64,7 @@ export const CreateCharacter: FC = () => {
     <PageContainer
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.root} />
+          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.character} />
           <>{perStepDisplay()}</>
         </FormCard>
       }
