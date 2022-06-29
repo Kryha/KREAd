@@ -2,7 +2,9 @@ import { FC, ReactNode, useState } from "react";
 
 import { text } from "../../assets";
 import {
+  ButtonText,
   ColorSelector,
+  ErrorView,
   Filters,
   HorizontalDivider,
   Label,
@@ -10,9 +12,7 @@ import {
   PriceSelector,
   Select,
   ItemShopCard,
-  OverviewEmpty,
   Overlay,
-  ButtonText,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -42,6 +42,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const navigate = useNavigate();
 
   const [selectedItem, setSelectedItem] = useState<Item>();
+
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -62,6 +63,8 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   };
 
   if (isLoading) return <LoadingPage />;
+
+  if (!items || !items.length) return <ErrorView />;
 
   return (
     <>
@@ -90,12 +93,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
-      {!items || !items.length && <OverviewEmpty
-        headingText={text.store.thereAreNoItemsInTheShop}
-        descriptionText={text.store.thereAreNoItemsAvailable}
-        buttonText={text.navigation.goHome}
-        redirectRoute={routes.character}
-      />}
       {!!noFilteredItems || (
         <ItemWrapper height={height}>
           <ItemContainer>

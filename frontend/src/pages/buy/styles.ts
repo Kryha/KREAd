@@ -76,11 +76,7 @@ export const StepText = styled(ButtonText)`
   line-height: 20.5px;
 `;
 
-interface ActiveProps {
-  active: boolean;
-}
-
-export const Step = styled.div<ActiveProps>`
+export const Step = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -103,15 +99,6 @@ export const Step = styled.div<ActiveProps>`
   ${Badge} {
     background: transparent;
   }
-  ${({ active }): string => {
-    return active
-      ? `
-      background: ${color.white};
-        `
-      : `
-      background: ${color.lightGrey};
-      `;
-  }};
 `;
 
 export const Line = styled.div`
@@ -121,7 +108,11 @@ export const Line = styled.div`
   margin: ${margins.small} 20px ${margins.small} 39px;
 `;
 
-export const NumberContainer = styled.div<ActiveProps>`
+interface NumberProps {
+  active: boolean;
+}
+
+export const NumberContainer = styled.div<NumberProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -130,7 +121,6 @@ export const NumberContainer = styled.div<ActiveProps>`
   border-radius: 50%;
   width: 32px;
   height: 32px;
-  min-width: 32px;
   ${({ active }): string => {
     return active
       ? `
@@ -174,7 +164,7 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const GeneralInfo = styled.div<ActiveProps>`
+export const GeneralInfo = styled.div`
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
@@ -198,15 +188,6 @@ export const GeneralInfo = styled.div<ActiveProps>`
   ${Badge} {
     background: transparent;
   }
-  ${({ active }): string => {
-    return active
-      ? `
-      background: ${color.white};
-        `
-      : `
-      background: ${color.lightGrey};
-      `;
-  }};
 `;
 
 export const PricingContainer = styled.div`
