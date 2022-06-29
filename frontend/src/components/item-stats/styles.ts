@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { color, fontWeight, margins } from "../../design";
 import { DetailSectionProgress } from "../../containers/detail-section/detail-section-progress-bar/styles";
 import { HorizontalDivider } from "../atoms";
+import { fadeIn } from "../atoms/animations";
 
 interface ItemProps {
   position: string;
@@ -22,6 +23,7 @@ export const StatsWrapper = styled.div<ItemProps>`
   border-radius: ${margins.medium};
   position: absolute;
   z-index: 1000;
+  animation: ${fadeIn} 0.4s;
   ${({ position, area }): string => {
     switch (area) {
       case "top":

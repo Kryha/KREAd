@@ -17,6 +17,7 @@ import {
   Tag,
   Line,
 } from "./styles";
+import { useViewport } from "../../hooks";
 
 interface CharacterShopCardProps {
   character: Character;
@@ -24,8 +25,10 @@ interface CharacterShopCardProps {
 }
 
 export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onClick }) => {
+  const { width } = useViewport();
+
   return (
-    <Product onClick={() => onClick && onClick(character)}>
+    <Product onClick={() => onClick && onClick(character)} width={width}>
       <Content>
         <ImageContainer>
           <Element />
