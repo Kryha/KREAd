@@ -66,7 +66,6 @@ const ItemsInventory: FC = () => {
   );
 };
 
-// TODO: uncomment when designs will be done
 const CharactersInventory: FC = () => {
   const navigate = useNavigate();
   const [myCharacters, isLoading] = useMyCharacters();
