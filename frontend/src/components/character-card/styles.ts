@@ -123,6 +123,6 @@ export const CharacterCardWrapper = styled.div`
 `;
 
 export const EmptyViewContainer = styled.div`
-  padding-top: 40px;
-  padding-left: 40px;
+  padding-top: ${margins.big};
+  padding-left: ${margins.big};
 `;

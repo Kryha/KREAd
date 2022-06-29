@@ -48,9 +48,9 @@ export const Landing: FC = () => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
-  if (isLoadingCharacter || isLoading) return <LoadingPage />;
+  if (isLoadingCharacter) return <LoadingPage />;
   // TODO: get an empty page
-  if (!character || !myCharacters || !myCharacters.length) return <ErrorView />;
+  if (!character) return <ErrorView />;
 
 
   const sell = () => {

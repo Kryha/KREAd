@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { fadeIn, slideUpOpacity } from "../../components/atoms/animations";
 import { color, margins } from "../../design";
 
 interface ViewProps {
@@ -22,6 +23,8 @@ export const DetailSectionWrap = styled.section<ViewProps>`
   ::-webkit-scrollbar {
     display: none;
   }
+  opacity: 0;
+  animation: ${slideUpOpacity} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 500ms forwards;
 `;
 
 export const EmptyView = styled.section`

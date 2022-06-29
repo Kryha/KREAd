@@ -25,7 +25,7 @@ interface MenuItemProps {
 
 export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
   const [selected, setSelected] = useState(false);
-  // TODO: find if item is equipped
+  // TODO: find if item is equipped/on sale
   const isEquipped = false;
   const isForSale = false;
 
