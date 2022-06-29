@@ -72,12 +72,11 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
           </InlineDetails>
         </InfoContainer>
         <ButtonContainer>
-          {isEquipped && (
+          {isEquipped ? (
             <SecondaryButton>
               <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
             </SecondaryButton>
-          )}
-          {!isEquipped && (
+          ) : (
             <PrimaryButton>
               <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
             </PrimaryButton>

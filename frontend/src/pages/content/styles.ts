@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { FormText, TitleText } from "../../components";
+import { margins } from "../../design";
 
 export const ContentWrapper = styled.div`
-  padding: 40px;
+  padding: ${margins.big};
   overflow-y: scroll;
   width: 100%;
   height: 100vh;
@@ -10,16 +11,16 @@ export const ContentWrapper = styled.div`
 export const Title = styled(FormText)``;
 
 export const InfoContainer = styled.div`
-  margin-top: 40px;
+  margin-top: ${margins.big};
   ${TitleText} {
-    margin-top: 8px;
+    margin-top: ${margins.mini};
     margin-bottom: 28px;
   }
   ${Title} {
-    margin-top: 8px;
+    margin-top: ${margins.mini};
   }
   ${FormText} {
-    margin-top: 8px;
+    margin-top: ${margins.mini};
     margin-bottom: 28px;
   }
   width: 820px;

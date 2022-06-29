@@ -64,7 +64,11 @@ export const CreateCharacter: FC = () => {
     <PageContainer
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.character} />
+          <FormHeader
+            currentStep={currentStep}
+            title={text.mint.mintNew}
+            link={routes.character}
+          />
           <>{perStepDisplay()}</>
         </FormCard>
       }

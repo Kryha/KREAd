@@ -14,6 +14,7 @@ export const itemCategories: Options[] = [
   { label: "background II", value: "mid background" },
 ];
 
+// TODO: add real categories
 export const characterCategories: Options[] = [
   { label: "Tempet Scavengers", value: "Tempet Scavenger" },
 ];

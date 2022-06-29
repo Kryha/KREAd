@@ -34,9 +34,9 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 
 export const Landing: FC = () => {
+  // Use useCharacterContext instead of use My characters
+  // const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
   const [myCharacters, isLoading] = useMyCharacters();
-
-  // TODO: Removed mocked selected character
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
   const [openNotification, setOpenNotifications] = useState(false);
@@ -52,6 +52,8 @@ export const Landing: FC = () => {
   // TODO: get an empty page
   if (!character) return <ErrorView />;
 
+  // TODO: get an empty page
+  if (!character) return <></>;
 
   const sell = () => {
     if (!character) return;
@@ -80,7 +82,6 @@ export const Landing: FC = () => {
       }
     >
       <LandingContainer isZoomed={openTab}>
-        {/* FIXME: do not rely on !*/}
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
       {!openTab && !openNotification && <CharacterItems items={character.items} />}
