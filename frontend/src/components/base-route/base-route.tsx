@@ -17,7 +17,7 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation }) => {
       <TopbarContainer>
         <Box>
           <NavigationSection route={routes.root}>
-            <NavigationTab title={text.navigation.character} route={routes.root} />
+            <NavigationTab title={text.navigation.character} route={routes.character} />
           </NavigationSection>
           <NavigationSection route={routes.shop}>
             <NavigationTab title={text.navigation.shop} route={routes.shop} />
