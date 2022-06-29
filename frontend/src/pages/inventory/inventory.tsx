@@ -11,8 +11,9 @@ import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { InventoryWrapper } from "./styles";
+import { Close, InventoryWrapper, NotificationButton, NotificationWrapper, Notification } from "./styles";
 import { Character } from "../../interfaces";
+import { color } from "../../design";
 
 const ItemsInventory: FC = () => {
   const { data: items, isLoading, isError } = useItems();
@@ -81,6 +82,7 @@ const CharactersInventory: FC = () => {
 
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
+  const [openNotification, setOpenNotifications] = useState(false);
 
   const pageSelector = useMemo(
     () => (
@@ -95,7 +97,18 @@ export const Inventory: FC = () => {
   );
   // TODO: switch between items and characters
   return (
-    <BaseRoute sideNavigation={<Title title={text.navigation.inventory} />}>
+    <BaseRoute sideNavigation={
+      <NotificationWrapper>
+        <Title title={text.navigation.inventory} />
+        <NotificationButton
+          onClick={() => setOpenNotifications(!openNotification)}
+          backgroundColor={openNotification ? color.lightGrey : color.white}
+          open={openNotification}
+        >
+          {openNotification ? <Close /> : <Notification />}
+        </NotificationButton>
+      </NotificationWrapper>
+    }>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
       {selectedPage === Page.Items ? <ItemsInventory /> : <CharactersInventory />}
     </BaseRoute>
