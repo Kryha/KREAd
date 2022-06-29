@@ -17,7 +17,7 @@ import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useCharacters } from "../../service";
-import { categories, sorting } from "../../assets/text/filter-options";
+import { characterCategories, sorting } from "../../assets/text/filter-options";
 import {
   FilterContainer,
   FilterWrapper,
@@ -71,7 +71,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           <SelectorContainer>
             {pageSelector}
             <Filters label={text.filters.category}>
-              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={categories} />
+              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
             <Filters label={text.filters.price}>

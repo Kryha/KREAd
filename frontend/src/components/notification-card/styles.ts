@@ -38,17 +38,30 @@ export const NotificationWrapper = styled.div<NotificationProps>`
    overflow-y: scroll;
 `;
 
+export const NotificationHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px;
+  gap: ${margins.medium};
+  width: 100%;
+  margin-bottom: 16px;
+`;
+
 export const NotificationContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
   gap: ${margins.medium};
-  margin: ${margins.big};
+  margin: 0px ${margins.big} ${margins.big} ${margins.big};
 `;
 
 export const InfoWrapper = styled.div`
   width: 100%;
+  min-height: 70px;
+  max-height: 70px;
   :not(:hover) {
     ${SecondaryButton} {
       display: none;
@@ -70,7 +83,15 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const NotificationContent = styled.div`
-  padding: ${margins.big} ${margins.big} 0px ${margins.big};
+  padding: ${margins.big} ${margins.big} ${margins.big} ${margins.big};
+  position: sticky;
+  top: 0;
+  background-color: ${color.white};
+`;
+
+export const NotificationItemContainer = styled.div`
+  width: 100%;
+  border-bottom: 1px solid ${color.grey};
 `;
 
 export const CardActionsContainer = styled.div`

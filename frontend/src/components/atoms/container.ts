@@ -44,6 +44,7 @@ export const Overlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(50% 158.18% at 50% 79.69%, rgba(20, 20, 20, 0) 0%, rgba(20, 20, 20, 0.03) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.46);
+  filter: blur(4px);
   z-index: 100;
 `;
