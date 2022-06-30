@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { BaseRoute, NotificationCard, Overlay, SwitchSelector, Title } from "../../components";
-import { Close, NotificationButton, NotificationWrapper, ShopWrapper, Notification } from "./styles";
+import { Close, NotificationButton, NotificationWrapper, ShopWrapper, Notification, NotificationContainer, Tag } from "./styles";
 import { ItemsShop } from "./items-shop";
 import { CharactersShop } from "./characters-shop";
 import { color } from "../../design";
@@ -32,13 +32,16 @@ export const Shop: FC = () => {
     <BaseRoute sideNavigation={
       <NotificationWrapper>
         <Title title={text.navigation.shop} />
-        <NotificationButton
-          onClick={() => setOpenNotifications(!openNotification)}
-          backgroundColor={openNotification ? color.lightGrey : color.white}
-          open={openNotification}
-        >
-          {openNotification ? <Close /> : <Notification />}
-        </NotificationButton>
+        <NotificationContainer>
+          <NotificationButton
+            open={openNotification}
+            onClick={() => setOpenNotifications(!openNotification)}
+            backgroundColor={openNotification ? color.lightGrey : color.white}
+          >
+            {openNotification ? <Close /> : <Notification />}
+          </NotificationButton>
+          <Tag />
+        </NotificationContainer>
       </NotificationWrapper>
     }>
       <ShopWrapper>

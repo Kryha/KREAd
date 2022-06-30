@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { color, margins } from "../../design";
+import { color, margins, zIndex } from "../../design";
 
 interface ShopProps {
   height: number;
@@ -122,4 +122,28 @@ export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
 
       `;
   }};
+`;
+
+export const NotificationContainer = styled.div`
+  position: relative;
+  z-index: ${zIndex.overCharacter};
+`;
+
+export const Tag = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: ${margins.nano} ${margins.mini};
+  gap: 10px;
+
+  position: absolute;
+  width:  ${margins.small};
+  height: ${margins.small};
+  left: 27px;
+  top: -3px;
+
+  background: ${color.black};
+  border-radius: ${margins.medium};
+  z-index: 1000;
 `;

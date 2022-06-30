@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { margins } from "../../design";
+import { margins, zIndex } from "../../design";
 
 export const TopbarContainer = styled.header`
   display: flex;
@@ -23,4 +23,5 @@ export const FooterContainer = styled.div`
   position: absolute;
   bottom: 0;
   right: 0;
+  z-index: ${zIndex.overCharacter};
 `;

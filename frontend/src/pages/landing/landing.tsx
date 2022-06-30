@@ -34,8 +34,6 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 
 export const Landing: FC = () => {
-  // Use useCharacterContext instead of use My characters
-  // const { data: characters, isLoading: isLoadingCharacters } = useMyCharacters();
   const [myCharacters, isLoading] = useMyCharacters();
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
@@ -48,7 +46,7 @@ export const Landing: FC = () => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
-  if (isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingCharacter || isLoading) return <LoadingPage />;
   // TODO: get an empty page
   if (!character) return <ErrorView />;
 
@@ -103,9 +101,13 @@ export const Landing: FC = () => {
           />
         </CharacterCardWrapper>
       )}
-      {openNotification && <NotificationCard />}
+      {openNotification && (
+        <>
+          <NotificationCard />
+          <Overlay />
+        </>
+      )}
       {showDetail && <Overlay />}
-      {openNotification && <Overlay />}
     </BaseRoute>
   );
 };
