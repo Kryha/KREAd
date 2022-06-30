@@ -60,3 +60,4 @@ agoric/_agstate/yarn-links/
 .idea/
 .vscode/
 
+/frontend/src/service/conf/
