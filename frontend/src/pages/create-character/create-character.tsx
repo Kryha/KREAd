@@ -3,14 +3,12 @@ import { FC, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
 import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
-import { PAYMENT_STEP } from "../../constants";
 import { useAgoricState } from "../../context/agoric";
 import { useViewport } from "../../hooks";
 import { CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
-// import { makeBidOfferForCharacter, mintCharacters } from "../../service/character-actions";
-import { FakeCharctersNoItems } from "../../service/fake-characters";
+import { mintNfts } from "../../service/character-actions";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
@@ -34,8 +32,9 @@ export const CreateCharacter: FC = () => {
 
   const submitForm = async (data: CharacterCreation): Promise<void> => {
     // createCharacter.mutate(data);
-    const baseCharacter = FakeCharctersNoItems[0];
-    const newCharacter = { ...baseCharacter, name: data.name };
+    // const baseCharacter = FakeCharctersNoItems[0];
+    // const newCharacter = { ...baseCharacter, name: data.name };
+    await mintNfts(agoricState, data.name);
     // const bought = await mintCharacters(service, [newCharacter], 1n);
 
     // setCurrentStep(PAYMENT_STEP);
@@ -53,6 +52,7 @@ export const CreateCharacter: FC = () => {
       case 0:
         return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
       case 1:
+        // TODO: remove step or change
         return <Payment sendOfferHandler={() => sendOfferHandler()} submit={changeStep} />;
       case 2:
         return <Confirmation character={character.character} />;
@@ -65,11 +65,7 @@ export const CreateCharacter: FC = () => {
     <PageContainer
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader
-            currentStep={currentStep}
-            title={text.mint.mintNew}
-            link={routes.character}
-          />
+          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.character} />
           <>{perStepDisplay()}</>
         </FormCard>
       }

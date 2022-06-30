@@ -3,7 +3,6 @@ import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { mintNfts } from "./character-actions";
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
-import { AmountMath } from "@agoric/ertp";
 import { useCharacterContext } from "../context/characters";
 import { send } from "process";
 import { FakeCharctersNoItems } from "./fake-characters";
@@ -20,7 +19,6 @@ export const TestServiceUI = () => {
     console.log("CHARACTERS: ", characters);
   }, [service, characters]);
 
-  
   const getTimer = () => {
     if (!service.agoric.apiSend) {
       console.log("NO API", service);
@@ -31,7 +29,7 @@ export const TestServiceUI = () => {
     });
     console.log("SENT GET TIMER");
   };
-  
+
   const mintItem = () => {
     //TODO: call mint
   };
@@ -144,7 +142,6 @@ export const TestServiceUI = () => {
     const nfts = await E(CBPublicFacet).getCharacterArray();
     charactersDispatch({ type: "SET_CHARACTERS", payload: nfts });
   };
-  
 
   const setMintNext = async () => {
     await E(CBPublicFacet).setMintNext("c-los");
@@ -165,7 +162,7 @@ export const TestServiceUI = () => {
     // }
     // console.log(character);
     // await mintViaDepositFacet(service, "Pablo");
-    console.log(await mintNfts(service, "PABLO", 10n));
+    console.log(await mintNfts(service, "PABLO"));
   };
 
   const getCharacterInventory = async () => {
@@ -178,24 +175,32 @@ export const TestServiceUI = () => {
     console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name));
   };
 
-  return <>
-    <h1>SERVICE TEST UI</h1>
-    <div style={{width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row"}}>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={getTimer}>GET TIMER</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={checkOwned}>CHECK MY CHARACTERS</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async ()=> await getCharacterInventory()}>GET CHARACTER INVENTORY</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={() => console.log(characters)}>CHARACTERS</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={test}>TEST</button>
-    </div>
-  </>;
+  return (
+    <>
+      <h1>SERVICE TEST UI</h1>
+      <div style={{ width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row" }}>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={getTimer}>
+          GET TIMER
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={checkOwned}>
+          CHECK MY CHARACTERS
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={async () => await getCharacterInventory()}
+        >
+          GET CHARACTER INVENTORY
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={() => console.log(characters)}
+        >
+          CHARACTERS
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={test}>
+          TEST
+        </button>
+      </div>
+    </>
+  );
 };
