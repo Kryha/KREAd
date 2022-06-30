@@ -3,29 +3,14 @@ import { E } from "@endo/eventual-send";
 import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
 import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
 import { AmountMath } from "@agoric/ertp";
-
 import dappConstants from "../service/conf/defaults";
-import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
+import { ServiceState } from "../context/agoric";
+// import installationConstants from "../service/conf/installation-constants-nft-maker.js";
 
-const formBidOfferForCharacter = (invitation: any, character: any, purses: Purses, price: bigint) => ({
-  // JSONable ID for this offer.  This is scoped to the origin.
-  id: Date.now(),
-  invitation,
-  proposalTemplate: {
-    want: {
-      Asset: {
-        pursePetname: purses.character[0].pursePetname,
-        value: harden([character]),
-      },
-    },
-    give: {
-      Bid: {
-        pursePetname: purses.money[0].pursePetname,
-        value: price,
-      },
-    },
-  },
-});
+const {
+  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID },
+} = dappConstants;
+
 export const formOfferForCharacter = (purses: Purses, character: any) => ({
   want: {
     Asset: {
@@ -65,14 +50,8 @@ export const mintNfts = async (service: AgoricState, name: string, price: bigint
   const characterBrand = await E(publicFacet).getCharacterBrand();
   // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
   console.log(characterBrand);
-  const { baseCharacters } = await E(publicFacet).getConfig();
-  const expectedCharacters = baseCharacters.map((character: any) => ({
-    ...character,
-    name,
-  }));
-  console.log("🫀", expectedCharacters);
 
-  const invitation = await E(publicFacet).mintNFTsRandomBase();
+  const invitation = await E(publicFacet).mintCharacterNFT();
 
   console.info("Invitation successful, sending to wallet for approval");
 
@@ -92,11 +71,10 @@ export const mintNfts = async (service: AgoricState, name: string, price: bigint
   return E(walletP).addOffer(offerConfig);
 };
 
-export const makeBidOfferForCharacter = async (service: AgoricState, auctionPublicFacet: any, character: any, price: bigint) => {
-  const {
-    agoric: { walletP },
-    purses,
-  } = service;
+// TODO: Remove if unused
+/*
+export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
+  const { agoric: { walletP }, purses } = service;
   if (!auctionPublicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
     console.error("Could not make bid for character: undefined parameter");
     return;
@@ -106,10 +84,11 @@ export const makeBidOfferForCharacter = async (service: AgoricState, auctionPubl
   // Adjust based on Money Brand decimals
   const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
   const offerConfig = formBidOfferForCharacter(invitation, character, purses, adjustedPrice);
-
+  
   return E(walletP).addOffer(offerConfig);
 };
-export const mintViaDepositFacet = async (service: AgoricState, name: any) => {
+
+export const mintViaDepositFacet = async (service: ServiceState, name: any) => {
   console.log("mintViaDepositFacet");
   const {
     agoric: { walletP, board },
@@ -229,11 +208,8 @@ export const makeOfferForCharacter = async (service: AgoricState, name: any) => 
   // return E(walletP).addOffer(offerConfig);
 };
 
-export const mintCharacters = async (service: AgoricState, characters: any, price: bigint) => {
-  const {
-    contracts: { characterBuilder },
-    purses,
-  } = service;
+export const mintCharacters = async (service: ServiceState, characters: any, price: bigint) => {
+  const { contracts: { characterBuilder }, purses } = service;
   if (!characterBuilder.publicFacet || !purses.money[0].brand) {
     console.error("Could not mint characters: Public Facet or Purses undefined");
     return;
@@ -256,20 +232,27 @@ export const mintAndBuy = async (service: AgoricState, characters: any) => {
   await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
 };
 
-export const getCharacters = async (service: AgoricState, characterDispatch: CharacterDispatch) => {
-  const {
-    contracts: { characterBuilder },
-  } = service;
-  if (!characterBuilder.publicFacet) {
-    console.error("Could not fetch Characters: Public Facet is undefined");
-    return;
-  }
-  const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
-  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any) => nft.character.name)}`);
-  characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
-};
 
-// TODO: Remove if unused
+// Used to make an bid offer to an auction nft contract
+// const formBidOfferForCharacter = (invitation: any, character: any, purses: Purses, price: bigint) => ({
+//   // JSONable ID for this offer.  This is scoped to the origin.
+//   id: Date.now(),
+//   invitation,
+//   proposalTemplate: {
+//     want: {
+//       Asset: {
+//         pursePetname: purses.character[0].pursePetname,
+//         value: harden([character]),
+//       },
+//     },
+//     give: {
+//       Bid: {
+//         pursePetname: purses.money[0].pursePetname,
+//         value: price,
+//       },
+//     },
+//   },
+// });
 // const { AUCTION_INSTALLATION_BOARD_ID } = installationConstants;
 // const {
 //   INSTANCE_BOARD_ID,

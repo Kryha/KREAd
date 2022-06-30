@@ -22,7 +22,45 @@ const {
 
 console.info(`DAPP CONSTANTS: ${dappConstants}`);
 
-const initialState: AgoricState = {
+export interface AgoricService {
+  zoe: any;
+  board: any;
+  zoeInvitationDepositFacetId: any;
+  invitationIssuer: any;
+  walletP: any;
+  apiSend: any;
+}
+
+export interface Contract {
+  instance: any;
+  publicFacet: any;
+  instanceBoardId?: string;
+}
+export interface Contracts {
+  characterBuilder: Contract;
+  auctions: Contract[];
+}
+export interface Status {
+  walletConnected: boolean;
+  dappApproved: boolean;
+  showApproveDappModal: boolean;
+}
+export interface Purses {
+  money: any[];
+  character: any[];
+  item: any[];
+}
+export interface ServiceState {
+  status: Status;
+  purses: Purses;
+  contracts: Contracts;
+  agoric: AgoricService;
+  isLoading: boolean;
+}
+
+export type PursePetname = [string, string];
+
+const initialState: ServiceState = {
   status: {
     walletConnected: false,
     dappApproved: false,
@@ -31,6 +69,7 @@ const initialState: AgoricState = {
   purses: {
     money: [],
     character: [],
+    item: [],
   },
   agoric: {
     zoe: undefined,
@@ -50,12 +89,13 @@ const initialState: AgoricState = {
   isLoading: false,
 };
 
-type ProviderProps = Omit<React.ProviderProps<AgoricState>, "value">;
+export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
+type ProviderProps = Omit<React.ProviderProps<ServiceState>, "value">;
 
-const Context = createContext<AgoricState | undefined>(undefined);
-const DispatchContext = createContext<AgoricDispatch | undefined>(undefined);
+const Context = createContext<ServiceState | undefined>(undefined);
+const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
-const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
+const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState => {
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
@@ -71,6 +111,9 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
     case "SET_CHARACTER_PURSES":
       return { ...state, purses: { ...state.purses, character: action.payload } };
+
+    case "SET_ITEM_PURSES":
+      return { ...state, purses: { ...state.purses, item: action.payload } };
 
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
@@ -138,7 +181,11 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID });
+          processPurses(purses, characterDispatch, dispatch, {
+            money: MONEY_BRAND_BOARD_ID,
+            character: CHARACTER_BRAND_BOARD_ID,
+            item: ITEM_BRAND_BOARD_ID,
+          });
         }
       }
       watchPurses().catch((err) => {

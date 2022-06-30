@@ -4,16 +4,19 @@ import { CharacterDispatch } from "../../interfaces/character-actions.interfaces
 export const processPurses = (
   purses: any[],
   characterDispatch: CharacterDispatch,
-  agoricDispatch: AgoricDispatch,
-  brandsToCheck: { money: string; character: string }
+  serviceDispatch: AgoricDispatch,
+  brandsToCheck: { money: string; character: string; item: string }
 ) => {
   const newTokenPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.money);
   const newCharacterPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.character // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
-
-  agoricDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
-  agoricDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
+  const newItemPurses = purses.filter(
+    ({ brandBoardId }) => brandBoardId === brandsToCheck.item // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
+  );
+  serviceDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
+  serviceDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
+  serviceDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });
 
   const ownedCharacters = newCharacterPurses.flatMap((purse) => {
     return purse.value;
