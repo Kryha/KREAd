@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { text } from "../../assets";
 
-import {  Badge, ButtonText, FormText, PriceInRun, PrimaryButton, SecondaryButton } from "../../components";
+import {  Badge, ButtonText, FormText, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
 import { ArrowUp, GeneralInfo, PricingContainer, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
@@ -41,7 +41,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
             <StepText>{text.mint.sendOfferToWallet}</StepText>
             {Boolean(!sendOffer) && (
               <>
-                <PriceInRun price={MINTING_COST} />
+                <PriceInIst price={MINTING_COST} />
                 <PrimaryButton onClick={sendOfferToWallet}>
                   <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
                 </PrimaryButton>

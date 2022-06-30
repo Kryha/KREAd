@@ -6,7 +6,7 @@ import { color, margins, zIndex } from "../../design";
 import { PrimaryButton } from "../atoms";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 import { ButtonInfoWrap } from "../button-info/styles";
-import { PriceContainer } from "../price-in-run/styles";
+import { PriceContainer } from "../price-in-ist/styles";
 
 export const ArrowContainer = styled.div`
   display: flex;

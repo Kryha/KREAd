@@ -6,15 +6,15 @@ import { toTwoDecimals } from "../../util";
 import { BoldLabel } from "../atoms";
 import { Diamond, PriceContainer } from "./styles";
 
-interface PriceInRunProps {
+interface PriceInIstProps {
   price: number;
 }
 
-export const PriceInRun: FC<PriceInRunProps> = ({ price }) => {
+export const PriceInIst: FC<PriceInIstProps> = ({ price }) => {
   return (
     <PriceContainer>
       <Diamond />
-      <BoldLabel customColor={color.black}>{text.param.runPrice(toTwoDecimals(price))}</BoldLabel>
+      <BoldLabel customColor={color.black}>{text.param.istPrice(toTwoDecimals(price))}</BoldLabel>
     </PriceContainer>
   );
 };

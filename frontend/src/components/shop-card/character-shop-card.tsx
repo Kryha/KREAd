@@ -4,7 +4,7 @@ import { Character } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { Badge, BoldLabel, Label, TitleText } from "../atoms";
-import { PriceInRun } from "../price-in-run";
+import { PriceInIst } from "../price-in-ist";
 import { BaseCharacter } from "../base-character";
 import {
   Content,
@@ -48,7 +48,7 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
             <Line />
             <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
           </Tag>
-          <PriceInRun price={character.price} />
+          <PriceInIst price={character.price} />
         </Footer>
       </Content>
     </Product>
