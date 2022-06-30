@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { TickIcon } from "../../assets";
 
 import { color, fontWeight, margins } from "../../design";
 import { NavigationTitle, SecondaryButton } from "../atoms";
@@ -15,12 +14,6 @@ export const ArrowContainer = styled.div`
   border-radius: ${margins.medium};
 `;
 
-interface NotificationProps {
-  width: number;
-  height: number;
-}
-
-
 export const NotificationHeader = styled.div`
   display: flex;
   flex-direction: row;
@@ -35,7 +28,6 @@ export const Divider = styled(HeaderHorizontalDivider)`
   transform: rotate(90deg);
   width: ${margins.big};
 `;
-
 
 export const NotificationItemContainer = styled.div`
   width: 100%;

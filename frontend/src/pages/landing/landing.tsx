@@ -24,6 +24,8 @@ import {
   DetailContainer,
   ButtonContainer,
   CharacterCardWrapper,
+  NotificationContainer,
+  Tag,
 } from "./styles";
 import { useMyCharacter, useMyCharacters } from "../../service";
 import { CharacterDetailSection } from "../../containers/detail-section";
@@ -44,6 +46,7 @@ export const Landing: FC = () => {
   }, [myCharacters]);
 
   if (isLoading || isLoadingCharacter) return <LoadingPage />;
+
   // TODO: get an empty page
   if (!character) return <></>;
 
@@ -60,14 +63,20 @@ export const Landing: FC = () => {
             <ButtonText>{text.navigation.myCharacters}</ButtonText>
             {openTab ? <Close /> : <Menu />}
           </SecondaryButton>
-          <NotificationButton onClick={() => setOpenNotifications(!openNotification)} backgroundColor={openNotification ? color.lightGrey : color.white}>
-            {openNotification ? <Close /> : <Notification />}
-          </NotificationButton>
+          <NotificationContainer>
+            <NotificationButton
+              open={openNotification}
+              onClick={() => setOpenNotifications(!openNotification)}
+              backgroundColor={openNotification ? color.lightGrey : color.white}
+            >
+              {openNotification ? <Close /> : <Notification />}
+            </NotificationButton>
+            <Tag />
+          </NotificationContainer>
         </NotificationWrapper>
       }
     >
       <LandingContainer isZoomed={openTab}>
-        {/* FIXME: do not rely on !*/}
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
       {!openTab && !openNotification && <CharacterItems items={character.items} />}
@@ -89,7 +98,12 @@ export const Landing: FC = () => {
           />
         </CharacterCardWrapper>
       )}
-      {openNotification && <NotificationCard />}
+      {openNotification && (
+        <>
+          <NotificationCard />
+          <Overlay />
+        </>
+      )}
       {showDetail && <Overlay />}
     </BaseRoute>
   );
