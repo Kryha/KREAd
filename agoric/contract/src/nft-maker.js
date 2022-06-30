@@ -12,57 +12,66 @@ import { mulberry32 } from './prng';
 
 /**
  * @typedef {{
- * characterNames: string[]
- * characters: CharacterRecord[]
- * config?: Config
- * mintNext: string
+ *   characterNames: string[]
+ *   characters: CharacterRecord[]
+ *   items: ItemRecord[]
+ *   config?: Config
+ *   mintNext: string
  * }} State
+ *
  * @typedef {{
- * baseCharacters: object[]
- * defaultItems: object[]
- * completed?: boolean
+ *   baseCharacters: object[]
+ *   defaultItems: object[]
+ *   completed?: boolean
  * }} Config
+ *
  * @typedef {{
- * name: string
- * character: object
- * inventory: ZCFSeat
- * seat?: ZCFSeat
- * auction?: {
- *   instance: Instance,
- *   publicFacet: any,
- * },
+ *   name: string
+ *   character: object
+ *   seat?: ZCFSeat
+ *   auction?: {
+ *     instance: Instance,
+ *     publicFacet: any,
+ *   },
  * }} CharacterRecord
+ *
  * @typedef {{
- * noseline?: Item;
- * midBackground?: Item;
- * mask?: Item;
- * headPiece?: Item;
- * hair?: Item;
- * frontMask?: Item;
- * liquid?: Item;
- * background?: Item;
- * airResevoir?: Item;
- * clothing?: Item;
+ *   id: bigint
+ *   item: object
+ * }} ItemRecord
+ *
+ * @typedef {{
+ *   noseline?: Item;
+ *   midBackground?: Item;
+ *   mask?: Item;
+ *   headPiece?: Item;
+ *   hair?: Item;
+ *   frontMask?: Item;
+ *   liquid?: Item;
+ *   background?: Item;
+ *   airResevoir?: Item;
+ *   clothing?: Item;
  * }}
+ *
  * @typedef {{
- * name: string;
- * category: string;
- * id: string;
- * description: string;
- * image: string;
- * level: number;
- * rarity: number;
- * effectiveness?: number;
- * layerComplexity?: number;
- * forged: string;
- * baseMaterial: string;
- * colors: string[];
- * projectDescription: string;
- * price: number;
- * details: any;
- * date: string;
- * slots?: any[];
- * activity: any[];
+ *   name: string;
+ *   category: string;
+ *   id: string;
+ *   description: string;
+ *   image: string;
+ *   level: number;
+ *   rarity: number;
+ *   effectiveness?: number;
+ *   layerComplexity?: number;
+ *   forged: string;
+ *   baseMaterial: string;
+ *   colors: string[];
+ *   projectDescription: string;
+ *   price: number;
+ *   details: any;
+ *   date: string;
+ *   slots?: any[];
+ *   activity: any[];
  * }} Item
  */
 
@@ -93,6 +102,7 @@ const start = async (zcf) => {
     config: undefined,
     characterNames: [],
     characters: [],
+    items: [],
     mintNext: 'PABLO',
   };
   /**
@@ -210,19 +220,28 @@ const start = async (zcf) => {
     characterMint.mintGains({ Asset: newCharacterAmount }, seat);
 
     // Mint items to inventory seat
-    const allDefaultItems = Object.values(state.config.defaultItems);
+    const allDefaultItems = Object.values(state.config.defaultItems).map(
+      (item, i) => {
+        const id = state.items.length + i;
+
+        return { ...item, id };
+      },
+    );
     const itemsAmount = AmountMath.make(itemBrand, harden(allDefaultItems));
-    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
-    itemMint.mintGains({ Items: itemsAmount }, inventorySeat);
+    itemMint.mintGains({ Items: itemsAmount }, seat);
+
     /**
      * @type {CharacterRecord}
      */
     const character = {
       name: newCharacter.name,
       character: newCharacter,
-      inventory: inventorySeat,
     };
     state.characters = [...state.characters, character];
+
+    const itemRecords = allDefaultItems.map((item) => ({ id: item.id, item }));
+    state.items = [...state.items, ...itemRecords];
+
     seat.exit();
 
     return 'You minted an NFT!';

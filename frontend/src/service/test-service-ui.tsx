@@ -162,7 +162,7 @@ export const TestServiceUI = () => {
     // }
     // console.log(character);
     // await mintViaDepositFacet(service, "Pablo");
-    console.log(await mintNfts(service, "PABLO", 10n));
+    console.log(await mintNfts(service, "PABLO"));
   };
 
   const getCharacterInventory = async () => {

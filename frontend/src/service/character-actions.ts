@@ -34,7 +34,7 @@ export const formOfferForCharacterAmount = (characterBrand: any, character: any,
   },
 });
 
-export const mintNfts = async (service: AgoricState, name: string, price: bigint) => {
+export const mintNfts = async (service: AgoricState, name: string) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -208,28 +208,33 @@ export const makeOfferForCharacter = async (service: AgoricState, name: any) => 
   // return E(walletP).addOffer(offerConfig);
 };
 
-export const mintCharacters = async (service: ServiceState, characters: any, price: bigint) => {
-  const { contracts: { characterBuilder }, purses } = service;
-  if (!characterBuilder.publicFacet || !purses.money[0].brand) {
+export const mintCharacters = async (service: AgoricState, characters: any[]) => {
+  const {
+    agoric: { walletP },
+    contracts: { characterBuilder },
+    purses,
+  } = service;
+  if (!characterBuilder.publicFacet || !purses.character[0] || !purses.character[0].brandPetname) {
     console.error("Could not mint characters: Public Facet or Purses undefined");
     return;
   }
 
-  const pricePerNFT = AmountMath.make(purses.money[0].brand, price);
-  const newCharacters = harden(characters);
-  const mintResponse = await E(characterBuilder.publicFacet).auctionCharactersPublic(newCharacters, pricePerNFT);
-  if (mintResponse.msg !== SUCCESSFUL_MINT_REPONSE_MSG) throw new Error("There was a problem minting the character");
-  console.info(mintResponse.msg);
-  return mintResponse;
-};
+  const invitation = await E(characterBuilder.publicFacet).mintCharacterNFT();
+  const offerConfig = harden({
+    id: Date.now().toString(),
+    invitation: invitation,
+    proposalTemplate: {
+      want: {
+        Asset: {
+          pursePetname: purses.character[0].brandPetname,
+          value: characters,
+        },
+      },
+    },
+    dappContext: true,
+  });
 
-export const mintAndBuy = async (service: AgoricState, characters: any) => {
-  console.log(characters);
-  assert(characters.length === 1, "mintAndBuy expects an array with a single character");
-  const newCharacter = await mintCharacters(service, characters, 1n);
-  if (newCharacter.msg !== SUCCESSFUL_MINT_REPONSE_MSG) throw new Error("There was a problem minting the character");
-  console.info(newCharacter.msg);
-  await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
+  return E(walletP).addOffer(offerConfig);
 };
 
 
@@ -492,4 +497,17 @@ export const mintAndBuy = async (service: AgoricState, characters: any) => {
 //   console.log(updatedOffer);
 //   await E(depositFacet).receive(invitation);
 //   await E(agoric.walletP).addOffer(updatedOffer);
+// };
+
+// export const getCharacters = async (service: AgoricState, characterDispatch: CharacterDispatch) => {
+//   const {
+//     contracts: { characterBuilder },
+//   } = service;
+//   if (!characterBuilder.publicFacet) {
+//     console.error("Could not fetch Characters: Public Facet is undefined");
+//     return;
+//   }
+//   const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
+//   console.info(`Fetched Characters from Contract: ${nfts.map((nft: any) => nft.character.name)}`);
+//   characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
 // };
