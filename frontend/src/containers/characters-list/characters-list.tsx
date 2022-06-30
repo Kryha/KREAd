@@ -1,12 +1,12 @@
 import { FC, useState } from "react";
 
-import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ButtonText, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useMyFilteredCharacters } from "../../service";
 
 import { text } from "../../assets";
-import { categories, sorting } from "../../assets/text/filter-options";
+import { characterCategories, sorting } from "../../assets/text/filter-options";
 
 interface Props {
   onCharacterClick: (id: string) => void;
@@ -17,12 +17,12 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
 
-  const { data: characters, isLoading } = useMyFilteredCharacters();
+  const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
 
   if (isLoading) return <LoadingPage />;
 
   // TODO: get an empty section view
-  if (!characters || !characters.length) return <></>;
+  if (!myCharacters || !myCharacters.length) return <></>;
 
   const handleCategoryChange = (selected: string) => {
     setSelectedCategory(selected);
@@ -36,7 +36,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
     <SortableListWrap>
       <ListHeader>
         <Filters label={text.filters.category}>
-          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
+          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
         </Filters>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
@@ -45,8 +45,9 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
           </Filters>
         </SortContainer>
       </ListHeader>
+      <ButtonText>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
       <ListContainer>
-        {characters.map((character) => (
+        {myCharacters.map((character) => (
           <MenuItem
             data={{ ...character, image: character.items, category: character.type, id: character.characterId }}
             key={character.characterId}

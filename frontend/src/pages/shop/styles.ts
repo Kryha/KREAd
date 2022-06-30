@@ -1,20 +1,20 @@
 import styled from "@emotion/styled";
-import { RefreshIcon } from "../../assets";
-import { Label } from "../../components";
+import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
+import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { margins } from "../../design";
+import { color, margins, zIndex } from "../../design";
 
 interface ShopProps {
   height: number;
 }
 
 export const ShopWrapper = styled.div`
-  margin: ${margins.big} ${margins.big} 120px ${margins.big};
+  margin: 0px ${margins.big} 120px ${margins.big};
   position: relative;
 
   ${DetailSectionWrap} {
     position: absolute;
-    top: -5px;
+    top: -80px;
     left: 0px;
     z-index: 30000000;
   }
@@ -25,7 +25,10 @@ export const FilterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0px;
-  z-index: 30000000;
+  z-index: 30;
+  ${HorizontalDivider} {
+    margin-top: 4px;
+  }
 `;
 
 export const FilterContainer = styled.div`
@@ -64,6 +67,7 @@ export const ItemContainer = styled.div`
   gap: ${margins.big};
   padding-top: ${margins.big};
   align-items: flex-start;
+  padding-bottom: 140px;
 `;
 
 export const LoadMore = styled.div`
@@ -76,4 +80,70 @@ export const LoadMore = styled.div`
 
 export const Refresh = styled(RefreshIcon)`
   margin-left: ${margins.mini};
+`;
+
+export const NotificationWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: ${margins.small};
+`;
+
+export const Close = styled(CloseIcon)`
+  margin: 0px 0px 0px 11px !important;
+  width: 12px;
+`;
+
+export const Notification = styled(BellIcon)`
+  width: 15px;
+  height: 15px;
+`;
+
+interface NotificationProps {
+  open: boolean;
+}
+
+export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
+  padding: ${margins.mini};
+  position: relative;
+  z-index: 1000;
+  ${Close} {
+    margin: 0px 6px !important;
+    width: 15px;
+    height: 15px;
+  }
+  ${({ open }): string => {
+    return open
+      ? `
+        border-color: ${color.black} !important;
+        `
+      : `
+
+      `;
+  }};
+`;
+
+export const NotificationContainer = styled.div`
+  position: relative;
+  z-index: ${zIndex.overCharacter};
+`;
+
+export const Tag = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: ${margins.nano} ${margins.mini};
+  gap: 10px;
+
+  position: absolute;
+  width:  ${margins.small};
+  height: ${margins.small};
+  left: 27px;
+  top: -3px;
+
+  background: ${color.black};
+  border-radius: ${margins.medium};
+  z-index: 1000;
 `;

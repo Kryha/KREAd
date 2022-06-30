@@ -1,1 +1,2 @@
-export * from "./shop-card";
+export * from "./item-shop-card";
+export * from "./character-shop-card";

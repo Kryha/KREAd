@@ -17,19 +17,25 @@ interface EquippedItemCardProps {
   marginRight?: string;
   marginBottom?: string;
   category: string;
+  area: "top" | "middle" | "bottom";
 }
 
 export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category, area }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`${routes.items}/${category}`, { state: { category: category} });
   };
   return (
     <EquippedContainer
-      onClick={() => handleClick()}>
-      <VerticalInfo code={code} id={item?.id} />
+      onClick={() => handleClick()}
+      isRight={false}
+    >
+      <VerticalInfo code={code} />
       <ItemCard
+        position="left"
+        area={area}
+        item={item}
         image={item?.image}
         width={width}
         height={height}
@@ -43,15 +49,21 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
 };
 
 export const RightEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category }) => {
+({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category, area }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(`${routes.items}/${category}`, { state: { category: category } });
   };
   return (
     <EquippedContainer
-      onClick={() => handleClick()}>
+      onClick={() => handleClick()}
+      isRight
+      isSecond={code === "noseline" || code === "liquid"}
+    >
       <ItemCard
+        position="right"
+        area={area}
+        item={item}
         image={item?.image}
         width={width}
         height={height}
@@ -59,7 +71,7 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> =
         marginBottom={marginBottom}
         marginLeft={marginLeft}
         marginRight={marginRight} />
-      <VerticalInfo code={code} id={item?.id} isRight />
+      <VerticalInfo code={code} isRight />
     </EquippedContainer>
   );
 };

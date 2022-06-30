@@ -4,6 +4,10 @@ import { useMutation, useQuery, UseQueryResult } from "react-query";
 
 import { FakeCharcters } from "./fake-characters";
 import { api } from "./config";
+import { useCharacterContext } from "../context/characters";
+import { MAX_PRICE, MIN_PRICE } from "../constants";
+import { useMemo } from "react";
+import { sortCharacters } from "../util";
 
 export const useCharacters = (): UseQueryResult<Character[]> => {
   return useQuery(["characters", "all"], async () => {
@@ -30,17 +34,27 @@ export const useMyCharacter = (): UseQueryResult<Character> => {
   });
 };
 
-export const useMyCharacters = (): UseQueryResult<Character[]> => {
-  return useQuery(["characters", "my"], async () => {
-    //  TODO: intergrate me
-
-    return FakeCharcters;
-  });
+export const useMyCharacters = (): [Character[], boolean] => {
+  const [{ owned, fetched }] = useCharacterContext();
+  const myCharacters = owned;
+  const isLoading = !fetched;
+  return [myCharacters, isLoading];
 };
 
 // TODO: actually implement filtering
-export const useMyFilteredCharacters = () => {
-  return useMyCharacters();
+export const useMyFilteredCharacters = (category: string, sorting: string): [Character[], boolean] => {
+  const [data, isLoading] = useMyCharacters();
+
+  const isInCategory = (character: Character, category: string) => (category ? character.type === category : true);
+
+  return useMemo(() => {
+    if (!data) return [[], isLoading];
+    if (!category && !sorting) return [data, isLoading];
+
+    const filteredCharacters = data.filter((character) => isInCategory(character, category));
+    const sortedCharacters = sortCharacters(sorting, filteredCharacters);
+    return [sortedCharacters, isLoading];
+  }, [category, data, isLoading, sorting]);
 };
 
 // TODO: invalidate queries + intergrate me
@@ -57,4 +71,24 @@ export const useEquipCharacter = () => {
     if (!body.id) throw new Error("Id not specified");
     // TODO: intergrate
   });
+};
+
+export const useFilteredCharacters = (
+  category: string,
+  sorting: string,
+  price: { min: number; max: number }
+): [Character[], boolean] => {
+  const { data, isLoading } = useCharacters();
+  const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
+
+  const isInCategory = (character: Character, category: string) => (category ? character.type === category : true);
+  return useMemo(() => {
+    if (!data) return [[], isLoading];
+    if (!category && !sorting && !changedRange) return [data, isLoading];
+    const filteredCharacters = data.filter((character) => isInCategory(character, category));
+    const filteredPrice = filteredCharacters.filter((character) => character.price > price.min && character.price < price.max);
+    const sortedCharacters = sortCharacters(sorting, filteredPrice);
+
+    return [sortedCharacters, isLoading];
+  }, [category, data, isLoading, price, sorting, changedRange]);
 };

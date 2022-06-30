@@ -6,7 +6,7 @@ export const FakeCharcters: Character[] = [
     title: "character 1",
     name: "character 1",
     type: "Tempet Scavenger",
-    characterId: "7899",
+    characterId: "7999",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
     level: 1,
@@ -34,10 +34,10 @@ export const FakeCharcters: Character[] = [
     title: "character 2",
     name: "character 2",
     type: "Tempet Scavenger",
-    characterId: "78992",
+    characterId: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
-    level: 1,
+    level: 2,
     items: FakeCharacterItems,
     detail: {
       boardId: "06553",
@@ -65,7 +65,7 @@ export const FakeCharcters: Character[] = [
     characterId: "78993",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
-    level: 1,
+    level: 3,
     items: FakeCharacterItems,
     detail: {
       boardId: "06553",
@@ -93,7 +93,7 @@ export const FakeCharcters: Character[] = [
     characterId: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
-    level: 1,
+    level: 4,
     items: {},
     detail: {
       boardId: "06553",

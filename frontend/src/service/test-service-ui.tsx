@@ -1,16 +1,17 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
-import { useServiceContext } from "../context/service";
 import { mintNfts } from "./character-actions";
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";
 import { useCharacterContext } from "../context/characters";
 import { send } from "process";
 import { FakeCharctersNoItems } from "./fake-characters";
+import { useAgoricContext } from "../context/agoric";
 
 export const TestServiceUI = () => {
-  const [service, serviceDispatch] = useServiceContext();
+  // service referse to agoricContext
+  const [service, agoricDispatch] = useAgoricContext();
   const [characters, charactersDispatch] = useCharacterContext();
 
   const CBPublicFacet = service.contracts.characterBuilder.publicFacet;
@@ -34,7 +35,7 @@ export const TestServiceUI = () => {
   const mintItem = () => {
     //TODO: call mint
   };
-  
+
   const mintCharacter = async () => {
     if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
       console.log("NO API / INVITATION", service);
@@ -49,7 +50,7 @@ export const TestServiceUI = () => {
       proposalTemplate: {
         want: {
           Token: {
-            pursePetname:  ["CHARACTER", "CB"],
+            pursePetname: ["CHARACTER", "CB"],
             value: 1,
           },
         },
@@ -66,8 +67,8 @@ export const TestServiceUI = () => {
       },
     });
   };
-  
-  const callMintApi =async () =>  {
+
+  const callMintApi = async () => {
     if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
       console.log("NO API / INVITATION", service);
       return;
@@ -77,11 +78,11 @@ export const TestServiceUI = () => {
     const moneyBrand = service.purses.money[0].brandPetname;
     const pricePerNFT = {
       brand: moneyBrand,
-      value: 1+1,
+      value: 1 + 1,
     };
     const nftAmount = {
       brand: service.purses.character[1].brandPetname[1],
-      value:[{ id: 1 }],
+      value: [{ id: 1 }],
     };
 
     // const nftAmount = AmountMath.make(service.purses.character.brand, harden([{ id: 1n }]));
@@ -111,7 +112,7 @@ export const TestServiceUI = () => {
 
       // Tell the wallet that we're handling the offer result.
       dappContext: true,
-    }; 
+    };
     */
     const payload = {
       type: "nftFaucet/sendInvitation",
@@ -131,9 +132,8 @@ export const TestServiceUI = () => {
     console.log("SENT");
   };
 
-
   const checkOwned = () => {
-    const ownedCharacters = service.purses.character.map((purse) => {
+    const ownedCharacters = service.purses.character.map((purse: any) => {
       return purse.value;
     });
     console.log(service.purses.character, ownedCharacters);

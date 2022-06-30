@@ -1,6 +1,7 @@
 import { Options } from "../../components";
 
-export const categories: Options[] = [
+
+export const itemCategories: Options[] = [
   { label: "head pieces", value: "head piece" },
   { label: "noselines", value: "noseline" },
   { label: "front masks", value: "front mask" },
@@ -11,6 +12,11 @@ export const categories: Options[] = [
   { label: "hair", value: "hair" },
   { label: "background I", value: "background" },
   { label: "background II", value: "mid background" },
+];
+
+// TODO: add real categories
+export const characterCategories: Options[] = [
+  { label: "Tempet Scavengers", value: "Tempet Scavenger" },
 ];
 
 export const sorting: Options[] = [

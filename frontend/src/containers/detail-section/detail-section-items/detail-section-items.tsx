@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { ButtonText, ItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
-import { color } from "../../../design";
+import { EmptyItemCard, ItemThumbnail, Label, MenuItemName } from "../../../components";
 import { Item } from "../../../interfaces";
 import { CategoryButton } from "../detail-section-header/styles";
 import {
@@ -44,7 +43,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>
-        <IdLabel>{text.param.itemId(item.id)}</IdLabel>
+        <IdLabel>{text.param.id(item.id)}</IdLabel>
         <RedirectArrow />
       </InfoWrapper>
     </Info>
@@ -54,19 +53,12 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
 const EmptyItem: FC = () => {
   return (
     <EmptyInfo>
-      <ItemCard />
+      <EmptyItemCard />
       <InfoWrapper>
         <InfoContainer>
           <MenuItemName>{text.character.noItemEquipped}</MenuItemName>
           <Label>{text.character.noItemEquippedCharacter}</Label>
         </InfoContainer>
-        <PrimaryButton
-          onClick={() => {
-            // TODO: redirect to character builder page
-          }}
-        >
-          <ButtonText customColor={color.white}>{text.character.startEquipping}</ButtonText>
-        </PrimaryButton>
       </InfoWrapper>
     </EmptyInfo>
   );

@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { DetailSectionHeaderNavigationWrap } from "./styles";
-import { ButtonText, PriceInRun, PrimaryButton, SecondaryButton } from "../../../components";
+import { ButtonText, PriceInIst, PrimaryButton, SecondaryButton } from "../../../components";
 import { ButtonClose } from "../../../components/button-close";
 import { color } from "../../../design";
 import { DetailSectionActions } from "../types";
@@ -17,7 +17,7 @@ export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ actio
 
   return (
     <DetailSectionHeaderNavigationWrap>
-      {!!price && <PriceInRun price={price} />}
+      {!!price && <PriceInIst price={price} />}
 
       {!!primary && (
         <PrimaryButton onClick={() => primary.onClick()}>

@@ -37,3 +37,14 @@ export const FlexColumn = styled.div`
   flex-flow: column nowrap;
   width: 100%;
 `;
+
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.46);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+`;

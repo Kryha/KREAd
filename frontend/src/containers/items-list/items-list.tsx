@@ -1,12 +1,13 @@
 import { FC, useState } from "react";
 
-import { Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ButtonText, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useFilteredItems } from "../../service";
 
 import { text } from "../../assets";
-import { categories, sorting } from "../../assets/text/filter-options";
+import { itemCategories, sorting } from "../../assets/text/filter-options";
+import { color } from "../../design";
 
 interface Props {
   onItemClick: (id: string) => void;
@@ -37,7 +38,7 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
     <SortableListWrap>
       <ListHeader>
         <Filters label={text.filters.category}>
-          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} />
+          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={itemCategories} />
         </Filters>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
@@ -46,6 +47,8 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
           </Filters>
         </SortContainer>
       </ListHeader>
+      <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
+      <HorizontalDivider />
       <ListContainer>
         {items.map((item) => (
           <MenuItem data={item} key={item.id} onClick={() => onItemClick(item.id)} />

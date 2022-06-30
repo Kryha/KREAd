@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { CharacterWrapper, ExpandButton } from "../../components/base-character/styles";
 import { Menu } from "../../components/menu-card/styles";
 import { SMALL_SCREEN_SIZE, EXTRA_LARGE_SCREEN_SIZE } from "../../constants";
+import { margins } from "../../design";
 
 interface ViewProps {
   width: number;
@@ -49,7 +50,7 @@ export const ItemWrapper = styled.div<ViewProps>`
   ${Menu} {
     position: absolute;
     z-index: 1000;
-    top: 40px;
-    right: 40px;
+    top: ${margins.big};
+    right: ${margins.big};
   }
 `;

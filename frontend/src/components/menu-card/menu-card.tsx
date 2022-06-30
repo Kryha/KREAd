@@ -16,13 +16,14 @@ import {
   ArrowUpRight,
   MenuCardWrapper,
 } from "./styles";
-import { ButtonText, ImageProps, Label, MenuText, SecondaryButton } from "../atoms";
+import { ButtonText, HorizontalDivider, ImageProps, Label, MenuText, Overlay, SecondaryButton } from "../atoms";
 import { MenuItem } from "../menu-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { GO_BACK } from "../../constants";
 import { useViewport } from "../../hooks";
 import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
+import { EmptyCard } from "../empty-card";
 
 interface MenuCardProps extends ImageProps {
   title: string;
@@ -63,8 +64,14 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
         </MenuHeader>
         <Content>
           <MenuContent>
+            {!items.length && (
+              <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
+            )}
             {items.map((item) => (
-              <MenuItem data={item} key={item.id} imageProps={{ width, height, marginTop, marginLeft }} onClick={() => setSelectedId(item.id)} />
+              <>
+                <MenuItem data={item} key={item.id} imageProps={{ width, height, marginTop, marginLeft }} onClick={() => setSelectedId(item.id)} />
+                {item === items[0] && <HorizontalDivider />}
+              </>
             ))}
           </MenuContent>
         </Content>
@@ -78,9 +85,14 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
       {item && (
         <ItemDetailSection
           item={item}
-          actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+          actions={{
+            primary: { text: text.item.equip, onClick: equip },
+            secondary: { text: text.item.sell, onClick: sell },
+            onClose: () => setSelectedId(""),
+          }}
         />
       )}
+      {item && <Overlay />}
     </MenuCardWrapper>
   );
 };

@@ -5,15 +5,12 @@ import { makeCapTP, E } from "@endo/captp";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import dappConstants from "../service/conf/defaults";
 
-import {
-  activateWebSocket,
-  deactivateWebSocket,
-  getActiveSocket,
-} from "../service/utils/fetch-websocket";
+import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
 import { useCharacterStateDispatch } from "./characters";
 import { apiRecv } from "../service/api/receive";
 import { processPurses } from "../service/purses/process";
+import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
@@ -99,79 +96,13 @@ const initialState: ServiceState = {
   isLoading: false,
 };
 
-export interface SetDappApproved {
-  type: "SET_DAPP_APPROVED";
-  payload: boolean;
-}
-export interface SetWalletConnected {
-  type: "SET_WALLET_CONNECTED";
-  payload: boolean;
-}
-
-export interface SetShowApproveDappModal {
-  type: "SET_SHOW_APPROVE_DAPP_MODAL";
-  payload: boolean;
-}
-
-export interface SetTokenPurses {
-  type: "SET_TOKEN_PURSES";
-  payload: any[];
-}
-
-export interface SetCharacterPurses {
-  type: "SET_CHARACTER_PURSES";
-  payload: any[];
-}
-export interface SetItemPurses {
-  type: "SET_ITEM_PURSES";
-  payload: any[];
-}
-export interface SetAgoric {
-  type: "SET_AGORIC";
-  payload: Omit<AgoricService, "apiSend">;
-}
-export interface SetCharacterContract {
-  type: "SET_CHARACTER_CONTRACT";
-  payload: Contract;
-}
-export interface SetAuctionContract {
-  type: "ADD_AUCTION_CONTRACT";
-  payload: Contract;
-}
-export interface SetApiSend {
-  type: "SET_APISEND";
-  payload: any;
-}
-export interface SetLoading {
-  type: "SET_LOADING";
-  payload: boolean;
-}
-
-export interface Reset {
-  type: "RESET";
-}
-
-export type ServiceStateActions =
-  | Reset
-  | SetDappApproved
-  | SetWalletConnected
-  | SetShowApproveDappModal
-  | SetTokenPurses
-  | SetCharacterPurses
-  | SetItemPurses
-  | SetAgoric
-  | SetCharacterContract
-  | SetAuctionContract
-  | SetApiSend
-  | SetLoading;
-
-export type ServiceDispatch = React.Dispatch<ServiceStateActions>;
+export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
 type ProviderProps = Omit<React.ProviderProps<ServiceState>, "value">;
 
 const Context = createContext<ServiceState | undefined>(undefined);
 const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
-const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState => {
+const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState => {
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
@@ -184,7 +115,7 @@ const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState
 
     case "SET_TOKEN_PURSES":
       return { ...state, purses: { ...state.purses, money: action.payload } };
-    
+
     case "SET_CHARACTER_PURSES":
       return { ...state, purses: { ...state.purses, character: action.payload } };
     
@@ -192,20 +123,20 @@ const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState
       return { ...state, purses: { ...state.purses, item: action.payload } };
     
     case "SET_AGORIC":
-      return { ...state, agoric: { ...state.agoric, ...action.payload }};
-      
+      return { ...state, agoric: { ...state.agoric, ...action.payload } };
+
     case "SET_APISEND":
       return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
-    
+
     case "SET_CHARACTER_CONTRACT":
-      return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload }};
-      
+      return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
+
     case "ADD_AUCTION_CONTRACT":
       return { ...state, contracts: { ...state.contracts, auctions: [...state.contracts.auctions, action.payload] } };
-    
+
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
-    
+
     case "RESET":
       return initialState;
 
@@ -214,11 +145,11 @@ const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState
   }
 };
 
-export const ServiceStateProvider = (props: ProviderProps): React.ReactElement => {
+export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
   const characterDispatch = useCharacterStateDispatch();
   const walletPRef = useRef(undefined);
-  
+
   useEffect(() => {
     // Receive callbacks from the wallet connection.
     const otherSide = Far("otherSide", {
@@ -239,18 +170,14 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       console.info("Connecting to wallet...");
 
       const rawApiSend = await connect("/api/nft-maker", apiRecv, { characterDispatch });
-      dispatch({ type: "SET_APISEND", payload: rawApiSend });  
-      
+      dispatch({ type: "SET_APISEND", payload: rawApiSend });
+
       const socket = getActiveSocket();
       const {
         abort: ctpAbort,
         dispatch: ctpDispatch,
         getBootstrap,
-      } = makeCapTP(
-        "CB",
-        (obj: any) => socket.send(JSON.stringify(obj)),
-        otherSide,
-      );
+      } = makeCapTP("CB", (obj: any) => socket.send(JSON.stringify(obj)), otherSide);
       walletAbort = ctpAbort;
       walletDispatch = ctpDispatch;
       const walletP = getBootstrap();
@@ -286,7 +213,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
-      
+
       // Fetch Characters from Chain
       const nfts = await E(nftPublicFacet).getCharacters();
       characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
@@ -328,20 +255,20 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
   );
 };
 
-export const useServiceState = (): ServiceState => {
+export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
   if (state === undefined) {
-    throw new Error("useServiceState can only be called inside a ServiceProvider.");
+    throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
   return state;
 };
 
-export const useServiceStateDispatch = (): React.Dispatch<ServiceStateActions> => {
+export const useAgoricStateDispatch = (): React.Dispatch<AgoricStateActions> => {
   const dispatch = useContext(DispatchContext);
   if (dispatch === undefined) {
-    throw new Error("useServiceDispatch can only be called inside a ServiceProvider.");
+    throw new Error("useAgoricDispatch can only be called inside a ServiceProvider.");
   }
   return dispatch;
 };
 
-export const useServiceContext = (): [ServiceState, ServiceDispatch] => [useServiceState(), useServiceStateDispatch()];
+export const useAgoricContext = (): [AgoricState, AgoricDispatch] => [useAgoricState(), useAgoricStateDispatch()];

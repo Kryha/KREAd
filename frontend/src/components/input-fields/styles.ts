@@ -167,7 +167,7 @@ export const TextLabel = styled(BodyText)`
   display: flex;
   ::before {
     position: absolute;
-    content: "RUN";
+    content: "IST";
     font-family: aktiv-grotesk;
     font-weight: ${fontWeight.light};
     font-size: 14px;

@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { margins, color } from "../../design";
-import { Label, MenuItemName } from "../atoms";
+import { Badge, BoldLabel, MenuItemName } from "../atoms";
 import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 
-export const EquippedLabel = styled(Label)``;
+export const EquippedLabel = styled(BoldLabel)``;
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -24,12 +24,6 @@ export const InfoWrapper = styled.div`
 
 export const MenuItemWrapper = styled.div``;
 
-export const Divider = styled.div`
-  width: 48px;
-  border: 1px solid #d0d0d0;
-  transform: rotate(90deg);
-`;
-
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,6 +33,7 @@ export const InfoContainer = styled.div`
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
+  width: 100%;
 `;
 interface InfoProps {
   selected: boolean;
@@ -65,12 +60,6 @@ export const Info = styled.div<InfoProps>`
     ${EquippedLabel} {
       display: none;
     }
-    // ${InfoContainer} {
-    //   margin-right: 0px;
-    // }
-    // ${ButtonContainer} {
-    //   margin-left: -30px;
-    // }
   }
   :not(:hover) {
     ${ButtonContainer} {
@@ -96,4 +85,28 @@ export const ImageContainer = styled.div`
   ${ExpandButton} {
     display: none;
   }
+`;
+
+export const Dash = styled.div`
+  width: 16px;
+  height: 0px;
+  border: 0.5px solid ${color.darkGrey};
+  margin-right: 8px;
+  margin-left: 8px;
+`;
+
+
+export const InlineDetails = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: ${margins.nano};
+  ${Badge} {
+    margin-right: 16px;
+  }
+`;
+
+export const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;

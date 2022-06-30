@@ -2,31 +2,29 @@ import { FC, ReactNode, useState } from "react";
 
 import { text } from "../../assets";
 import {
-  ButtonText,
   ColorSelector,
-  ErrorView,
   Filters,
   HorizontalDivider,
   Label,
   LoadingPage,
   PriceSelector,
-  SecondaryButton,
   Select,
-  ShopCard,
+  ItemShopCard,
+  OverviewEmpty,
+  Overlay,
+  ButtonText,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useFilteredItems } from "../../service";
 import { colors } from "../../service/fake-item-data";
-import { categories, sorting } from "../../assets/text/filter-options";
+import { itemCategories, sorting } from "../../assets/text/filter-options";
 import {
   FilterContainer,
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
-  LoadMore,
-  Refresh,
   SelectorContainer,
   SortByContainer,
 } from "./styles";
@@ -44,7 +42,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const navigate = useNavigate();
 
   const [selectedItem, setSelectedItem] = useState<Item>();
-
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -66,8 +63,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
 
   if (isLoading) return <LoadingPage />;
 
-  if (!items || !items.length) return <ErrorView />;
-
   return (
     <>
       <FilterWrapper>
@@ -75,7 +70,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           <SelectorContainer>
             {pageSelector}
             <Filters label={text.filters.category}>
-              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={categories} />
+              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={itemCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
             <Filters label={text.filters.price}>
@@ -92,22 +87,22 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             </Filters>
           </SortByContainer>
         </FilterContainer>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
+      {!items || !items.length && <OverviewEmpty
+        headingText={text.store.thereAreNoItemsInTheShop}
+        descriptionText={text.store.thereAreNoItemsAvailable}
+        buttonText={text.navigation.goHome}
+        redirectRoute={routes.character}
+      />}
       {!!noFilteredItems || (
         <ItemWrapper height={height}>
           <ItemContainer>
             {items.map((item, index) => (
-              <ShopCard item={item} key={index} onClick={setSelectedItem} />
+              <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
             ))}
           </ItemContainer>
-          {/* TODO: do something with load more */}
-          <LoadMore>
-            <SecondaryButton>
-              <ButtonText>{text.general.loadMore}</ButtonText>
-              <Refresh />
-            </SecondaryButton>
-          </LoadMore>
         </ItemWrapper>
       )}
       {!!selectedItem && (
@@ -120,6 +115,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           }}
         />
       )}
+      {!!selectedItem && <Overlay />}
     </>
   );
 };

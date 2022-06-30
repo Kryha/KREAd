@@ -3,7 +3,12 @@ import { color, fontWeight, margins } from "../../design";
 import { DetailSectionProgress } from "../../containers/detail-section/detail-section-progress-bar/styles";
 import { HorizontalDivider } from "../atoms";
 
-export const StatsWrapper = styled.div`
+interface ItemProps {
+  position: string;
+  area: string;
+}
+
+export const StatsWrapper = styled.div<ItemProps>`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -16,9 +21,39 @@ export const StatsWrapper = styled.div`
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   position: absolute;
-  z-index: 100;
-  left: 189px;
-  top: -197px;
+  z-index: 1000;
+  ${({ position, area }): string => {
+    switch (area) {
+      case "top":
+        if (position === "left") {
+          return "left: 158px; top: -197px;";
+        }
+        else {
+          return "right: 145px; top: -197px;";
+        }
+      case "middle":
+        if (position === "left") {
+          return "left: 317px; top: -53px;";
+        }
+        else {
+          return "right: 309px; top: -53px;";
+        }
+      case "bottom":
+        if (position === "left") {
+          return "left: 317px; top: 90px;";
+        }
+        else {
+          return "right: 309px; top: 90px;";
+        }
+      default:
+        if (position === "left") {
+          return "left: 350px; top: -53px;";
+        }
+        else {
+          return "right: 330px; top: -53px;";
+        }
+    }
+  }};
 `;
 
 export const Header = styled.div`
@@ -52,6 +87,7 @@ export const StatsContainer = styled.div`
   align-items: flex-start;
   padding: 0px;
   gap: ${margins.small};
+  width: 100%;
   ${DetailSectionProgress} {
     width: 229px;
   }
@@ -60,4 +96,8 @@ export const StatsContainer = styled.div`
   }
 `;
 
-export const ProgressContainer = styled.div``;
+export const ProgressContainer = styled.div`
+  width: 100%;
+`;
+
+export const LevelContainer = styled.div``;

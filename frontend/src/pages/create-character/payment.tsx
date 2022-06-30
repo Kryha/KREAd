@@ -1,10 +1,9 @@
 import { FC, useState } from "react";
 import { text } from "../../assets";
 
-import {  Badge, ButtonText, FormText, PriceInRun, PrimaryButton, SecondaryButton } from "../../components";
+import {  Badge, ButtonText, FormText, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
-import { Character } from "../../interfaces";
 import { ArrowUp, GeneralInfo, PricingContainer, ButtonContainer, ContentWrapper, Line, NumberContainer, PreviousButtonContainer, Step, StepContainer, StepText, Tick, } from "./styles";
 
 interface PaymentProps {
@@ -31,7 +30,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <GeneralInfo>
+        <GeneralInfo active={sendOffer}>
           <PricingContainer>
             <NumberContainer active={true}>
               {sendOffer ?
@@ -42,7 +41,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
             <StepText>{text.mint.sendOfferToWallet}</StepText>
             {Boolean(!sendOffer) && (
               <>
-                <PriceInRun price={MINTING_COST} />
+                <PriceInIst price={MINTING_COST} />
                 <PrimaryButton onClick={sendOfferToWallet}>
                   <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
                 </PrimaryButton>
@@ -51,7 +50,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler }) => {
           </PricingContainer>
         </GeneralInfo>
         <Line />
-        <Step>
+        <Step active={!sendOffer}>
           <NumberContainer active={!!sendOffer}>
             {acceptOffer ? <Tick /> :<ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>

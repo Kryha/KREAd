@@ -32,6 +32,11 @@ import { ReactComponent as ExclamationIcon } from "./exclamation.svg";
 import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.svg";
 import RangeIcon from "./range.png";
 import DefaultIcon from "./default-character.png";
+import { ReactComponent as DownArrowIcon } from "./down-arrow.svg";
+import { ReactComponent as BellIcon } from "./bell.svg";
+import ErrorImage from "./error-image.png";
+import { ReactComponent as PlusIcon } from "./plus.svg";
+import { ReactComponent as WarningIcon } from "./warning-icon.svg";
 
 export {
   ErrorIcon,
@@ -68,4 +73,9 @@ export {
   RangeIcon,
   DefaultIcon,
   ExclamationIcon,
+  DownArrowIcon,
+  BellIcon,
+  ErrorImage,
+  PlusIcon,
+  WarningIcon,
 };

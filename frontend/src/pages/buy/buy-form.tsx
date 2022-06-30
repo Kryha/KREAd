@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 
 import { text } from "../../assets";
-import { Badge, ButtonText, FormText, PriceInRun, PrimaryButton } from "../../components";
+import { Badge, ButtonText, FormText, PriceInIst, PrimaryButton } from "../../components";
 import { CONFIRMATION_STEP } from "../../constants";
 import { color } from "../../design";
 import { ArrowUp, ButtonContainer, ContentWrapper, GeneralInfo, Line, NumberContainer, PricingContainer, Step, StepContainer, StepText, Tick } from "./styles";
@@ -30,12 +30,12 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep }) => {
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <GeneralInfo>
+        <GeneralInfo active={sendOffer}>
           <PricingContainer>
             <NumberContainer active>{sendOffer ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
             <StepText>{text.mint.sendOfferToWallet}</StepText>
             {!sendOffer && (
-              <PriceInRun price={data.price} />
+              <PriceInIst price={data.price} />
             )}
           </PricingContainer>
           {!sendOffer && (
@@ -45,7 +45,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep }) => {
           )}
         </GeneralInfo>
         <Line />
-        <Step>
+        <Step active={!sendOffer}>
           <NumberContainer active={!!sendOffer}>{acceptOffer ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}</NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
           {!acceptOffer && !!sendOffer && (

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import { ArrowUpRightIcon, ExclamationIcon, TickIcon } from "../../assets";
+import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
+import { Info, ButtonContainer as Button } from "../../components/menu-item/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
@@ -33,7 +34,9 @@ export const TickContainer = styled.div`
 
 export const ContentWrapper = styled.div`
   ${DetailSectionWrap} {
-    margin-top: 124px;
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
   }
   ${DetailSectionHeaderNavigationWrap} {
     display: none;
@@ -43,6 +46,14 @@ export const ContentWrapper = styled.div`
   }
   ${TickContainer} {
     margin-top: ${margins.big};
+  }
+  ${Info} {
+    border: 1px solid ${color.darkGrey};
+    background-color: ${color.lightGrey};
+    margin-top: 40px;
+  }
+  ${Button} {
+    display: none;
   }
 `;
 
@@ -126,6 +137,7 @@ export const NumberContainer = styled.div<NumberProps>`
   border-radius: 50%;
   width: 32px;
   height: 32px;
+  min-width: 32px;
   ${({ active }): string => {
     return active
       ? `
@@ -169,6 +181,8 @@ export const InfoContainer = styled.div`
   }
 `;
 
+export const Warning = styled(WarningIcon)``;
+
 export const FormFields = styled.div`
   display: flex;
   flex-direction: column;
@@ -185,6 +199,9 @@ export const FormFields = styled.div`
   ${ButtonText} {
     margin-top: ${margins.mini};
   }
+  ${Warning} {
+    margin-top: ${margins.mini};
+  }
 `;
 
 export const TextLabel = styled(BodyText)`
@@ -192,7 +209,7 @@ export const TextLabel = styled(BodyText)`
   width: 100%;
   ::before {
     position: absolute;
-    content: "RUN";
+    content: "IST";
     font-family: "aktiv-grotesk";
     font-weight: 400;
     font-size: 14px;
@@ -211,4 +228,12 @@ export const InputContainer = styled.div`
   ${Input} {
     width: 100%;
   }
+`;
+
+export const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 4px;
 `;
