@@ -13,6 +13,8 @@ export const PriceContainer = styled.div`
 export const Diamond = styled.div`
   width: 10px;
   height: 10px;
+  max-width: 10px;
+  max-height: 10px;
   background: ${color.black};
   transform: rotate(45deg);
   margin: 0px ${margins.small};
