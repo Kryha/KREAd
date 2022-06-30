@@ -3,9 +3,9 @@ import { E } from "@endo/eventual-send";
 import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
 import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
 import { AmountMath } from "@agoric/ertp";
+
+import dappConstants from "../service/conf/defaults";
 import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
-// import dappConstants from "../service/conf/defaults";
-// import installationConstants from "../service/conf/installation-constants-nft-maker.js";
 
 const formBidOfferForCharacter = (invitation: any, character: any, purses: Purses, price: bigint) => ({
   // JSONable ID for this offer.  This is scoped to the origin.
@@ -26,6 +26,71 @@ const formBidOfferForCharacter = (invitation: any, character: any, purses: Purse
     },
   },
 });
+export const formOfferForCharacter = (purses: Purses, character: any) => ({
+  want: {
+    Asset: {
+      pursePetname: purses.character[0].pursePetname,
+      value: character,
+    },
+  },
+  give: {
+    Price: {
+      pursePetname: purses.money[0].pursePetname,
+      value: 10,
+    },
+  },
+});
+export const formOfferForCharacterAmount = (characterBrand: any, character: any, moneyBrand: any, price: bigint) => ({
+  want: {
+    Asset: AmountMath.make(characterBrand, [character]),
+  },
+  give: {
+    Price: AmountMath.make(moneyBrand, price),
+  },
+});
+
+export const mintNfts = async (service: AgoricState, name: string, price: bigint) => {
+  const {
+    agoric: { walletP },
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    purses,
+  } = service;
+  if (!publicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
+    console.error("Could not make bid for character: undefined parameter");
+    return;
+  }
+
+  const characterBrand = await E(publicFacet).getCharacterBrand();
+  // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
+  console.log(characterBrand);
+  const { baseCharacters } = await E(publicFacet).getConfig();
+  const expectedCharacters = baseCharacters.map((character: any) => ({
+    ...character,
+    name,
+  }));
+  console.log("🫀", expectedCharacters);
+
+  const invitation = await E(publicFacet).mintNFTsRandomBase();
+
+  console.info("Invitation successful, sending to wallet for approval");
+
+  const offerConfig = harden({
+    id: `${Date.now()}`,
+    invitation: invitation,
+    proposalTemplate: {
+      want: {
+        Asset: {
+          pursePetname: service.purses.character[0].brandPetname,
+          value: [{ name }],
+        },
+      },
+    },
+    dappContext: true,
+  });
+  return E(walletP).addOffer(offerConfig);
+};
 
 export const makeBidOfferForCharacter = async (service: AgoricState, auctionPublicFacet: any, character: any, price: bigint) => {
   const {
@@ -44,6 +109,125 @@ export const makeBidOfferForCharacter = async (service: AgoricState, auctionPubl
 
   return E(walletP).addOffer(offerConfig);
 };
+export const mintViaDepositFacet = async (service: AgoricState, name: any) => {
+  console.log("mintViaDepositFacet");
+  const {
+    agoric: { walletP, board },
+    purses,
+  } = service;
+  const publicFacet = service.contracts.characterBuilder.publicFacet;
+  if (!publicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
+    console.error("Could not make offer for character: undefined parameter");
+    return;
+  }
+
+  console.log("😈", "1");
+
+  const characterDepositFacetId = await E(walletP).getDepositFacetId(dappConstants.brandBoardIds.Character);
+  console.log("😈", "2", characterDepositFacetId);
+
+  const characterDepositFacet = await E(board).getValue(characterDepositFacetId);
+  console.log("😈", "3", characterDepositFacet);
+
+  const characterBrand = await E(publicFacet).getCharacterBrand();
+
+  console.log(characterDepositFacetId, characterBrand);
+
+  // const characterBrand = await E(service.agoric.board).getValue(dappConstants.brandBoardIds.Character);
+  // const moneyBrand = await E(service.agoric.board).getValue(dappConstants.brandBoardIds.Money);
+
+  // const nftAmount = AmountMath.make(characterBrand, harden([expectedCharacter]));
+  // const paymentAmount = AmountMath.make(moneyBrand, 0n);
+  // const payment = purses.money[0].withdraw(paymentAmount);
+
+  const response = await E(publicFacet).mintCharacterViaFacet(characterDepositFacet, name);
+  console.info("😈😈😈response", response);
+  // const nftSeat = await E(service.agoric.zoe).offer(harden(invitation), harden(offer));
+  // const nftOfferResult = await E(nftSeat).getOfferResult();
+  // const nftPayout = await E(nftSeat).getPayout("Asset");
+
+  return undefined;
+
+  // Adjust based on Money Brand decimals
+  // const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
+
+  // return E(walletP).addOffer(offerConfig);
+};
+export const makeOfferForCharacter = async (service: AgoricState, name: any) => {
+  console.log("making offer for character");
+  const {
+    agoric: { walletP },
+    purses,
+  } = service;
+  const publicFacet = service.contracts.characterBuilder.publicFacet;
+  if (!publicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
+    console.error("Could not make offer for character: undefined parameter");
+    return;
+  }
+
+  const characterBrand = await E(publicFacet).getCharacterBrand();
+  console.log(characterBrand);
+  const character = {
+    title: "character 3",
+    url: "https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png",
+    name: "character 3",
+    type: "Tempet Scavenger",
+    characterId: "78991",
+    description:
+      "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
+    level: 1,
+    items: [],
+    detail: {
+      boardId: "06553",
+      contractAddresss: "0x0177812bsjs7998",
+      standard: "standard",
+      artist: "emily",
+      metadata: "https://yourmetadata.info",
+    },
+    projectDescription: "this is a project",
+    itemActivity: {
+      event: "0x0177812bsjs7998",
+      price: 1234,
+      to: "0x0177812bsjs7998",
+      from: "0x0177812bsjs7998",
+      date: "1235667272",
+    },
+    price: 123123,
+    slots: [],
+  }; //await E(publicFacet).getCharacterBase();
+  const expectedCharacter = {
+    ...character,
+    name,
+  };
+  console.log(expectedCharacter);
+  // const characterBrand = await E(service.agoric.board).getValue(dappConstants.brandBoardIds.Character);
+  // const moneyBrand = await E(service.agoric.board).getValue(dappConstants.brandBoardIds.Money);
+
+  const nftAmount = AmountMath.make(characterBrand, harden([expectedCharacter]));
+  // const paymentAmount = AmountMath.make(moneyBrand, 0n);
+  // const payment = purses.money[0].withdraw(paymentAmount);
+
+  const offer = {
+    want: { Asset: nftAmount },
+  };
+  console.log("😈", character);
+  console.log("😈", expectedCharacter);
+  console.log("😈", offer);
+
+  const invitation = await E(publicFacet).createNextCharacter();
+  console.info("Invitation successful, sending contract");
+  const nftSeat = await E(service.agoric.zoe).offer(harden(invitation), harden(offer));
+  const nftOfferResult = await E(nftSeat).getOfferResult();
+  const nftPayout = await E(nftSeat).getPayout("Asset");
+  console.log("😈😈😈", nftOfferResult, nftPayout);
+
+  return undefined;
+
+  // Adjust based on Money Brand decimals
+  // const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
+
+  // return E(walletP).addOffer(offerConfig);
+};
 
 export const mintCharacters = async (service: AgoricState, characters: any, price: bigint) => {
   const {
@@ -54,6 +238,7 @@ export const mintCharacters = async (service: AgoricState, characters: any, pric
     console.error("Could not mint characters: Public Facet or Purses undefined");
     return;
   }
+
   const pricePerNFT = AmountMath.make(purses.money[0].brand, price);
   const newCharacters = harden(characters);
   const mintResponse = await E(characterBuilder.publicFacet).auctionCharactersPublic(newCharacters, pricePerNFT);

@@ -13,19 +13,11 @@ import { processPurses } from "../service/purses/process";
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 
 const {
-  INSTANCE_BOARD_ID,
   INSTANCE_NFT_MAKER_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: {
-    // CharacterZCF: CHARACTER_ZCF_ISSUER_BOARD_ID,
-    Character: CHARACTER_ISSUER_BOARD_ID,
-  },
-  brandBoardIds: {
-    Money: MONEY_BRAND_BOARD_ID,
-    Character: CHARACTER_BRAND_BOARD_ID,
-    // CharacterZCF: CHARACTER_ZFC_BRAND_BOARD_ID
-  },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
+  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
 } = dappConstants;
 
 console.info(`DAPP CONSTANTS: ${dappConstants}`);
@@ -157,9 +149,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestInstance("Instance", INSTANCE_BOARD_ID),
-        E(walletP).suggestIssuer("CB", CHARACTER_ISSUER_BOARD_ID),
-        // E(walletP).suggestIssuer("CBI", ITEM_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
       ]);
 
       // Initialize agoric service based on constants
@@ -173,8 +164,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
 
       // Fetch Characters from Chain
-      const nfts = await E(nftPublicFacet).getCharacterArray();
-      characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
+      const nfts = await E(nftPublicFacet).getCharacters();
+      characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
 
       // TODO: set up chain notifiers
       // const availableItemsNotifier = E(
