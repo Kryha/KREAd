@@ -4,7 +4,7 @@ import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { Badge, BoldLabel, Label, TitleText } from "../atoms";
-import { PriceInRun } from "../price-in-run";
+import { PriceInIst } from "../price-in-ist";
 import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, OwnedByContainer, ItemImage, Line } from "./styles";
 
 interface ShopCardProps {
@@ -39,7 +39,7 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
             <Line />
             <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
           </Tag>
-          <PriceInRun price={item.price} />
+          <PriceInIst price={item.price} />
         </Footer>
       </Content>
     </Product>
