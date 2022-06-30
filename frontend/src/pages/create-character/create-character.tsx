@@ -9,7 +9,7 @@ import { useViewport } from "../../hooks";
 import { CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
-import { makeBidOfferForCharacter, mintCharacters } from "../../service/character-actions";
+// import { makeBidOfferForCharacter, mintCharacters } from "../../service/character-actions";
 import { FakeCharctersNoItems } from "../../service/fake-characters";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
@@ -28,21 +28,22 @@ export const CreateCharacter: FC = () => {
   };
 
   const sendOfferHandler = async (): Promise<void> => {
-    await makeBidOfferForCharacter(agoricState, character.auction.publicFacet, character.character, 10n);
+    // FIXME: integrate
+    // await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
   };
 
   const submitForm = async (data: CharacterCreation): Promise<void> => {
     // createCharacter.mutate(data);
     const baseCharacter = FakeCharctersNoItems[0];
     const newCharacter = { ...baseCharacter, name: data.name };
-    const bought = await mintCharacters(agoricState, [newCharacter], 1n);
+    // const bought = await mintCharacters(service, [newCharacter], 1n);
 
     // setCurrentStep(PAYMENT_STEP);
     // setCharacter(createCharacter.data);
-    if (bought) {
-      setCurrentStep(PAYMENT_STEP);
-      setCharacter({ character: newCharacter, auction: { publicFacet: bought.auctionItemsPublicFacet } });
-    }
+    // if (bought) {
+    //   setCurrentStep(PAYMENT_STEP);
+    //   setCharacter({ character: newCharacter, auction: { publicFacet: bought.auctionItemsPublicFacet } });
+    // }
   };
 
   if (createCharacter.isError) return <ErrorView />;
