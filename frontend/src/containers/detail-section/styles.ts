@@ -24,7 +24,7 @@ export const DetailSectionWrap = styled.section<ViewProps>`
     display: none;
   }
   opacity: 0;
-  animation: ${slideUpOpacity} 0.6s cubic-bezier(0.4, 0, 0.2, 1) 500ms forwards;
+  animation: ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
 `;
 
 export const EmptyView = styled.section`
