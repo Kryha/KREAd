@@ -1,5 +1,5 @@
 import { AmountMath } from "@agoric/ertp";
-import { Purses } from "../context/service";
+import { Purses } from "../context/agoric";
 
 export const formOfferForItem = (purses: Purses, item: any) => ({  
   want: {
