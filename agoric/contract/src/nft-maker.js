@@ -28,6 +28,7 @@ import { mulberry32 } from './prng';
  * @typedef {{
  *   name: string
  *   character: object
+ *   inventory: ZCFSeat
  *   seat?: ZCFSeat
  *   auction?: {
  *     instance: Instance,
@@ -228,7 +229,10 @@ const start = async (zcf) => {
       },
     );
     const itemsAmount = AmountMath.make(itemBrand, harden(allDefaultItems));
-    itemMint.mintGains({ Items: itemsAmount }, seat);
+    itemMint.mintGains({ Items: itemsAmount }, seat); // TODO: remove this
+
+    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
+    // itemMint.mintGains({ Items: itemsAmount }, inventorySeat); // TODO: uncomment this after removing mint to user seat
 
     /**
      * @type {CharacterRecord}
@@ -236,6 +240,7 @@ const start = async (zcf) => {
     const character = {
       name: newCharacter.name,
       character: newCharacter,
+      inventory: inventorySeat,
     };
     state.characters = [...state.characters, character];
 
