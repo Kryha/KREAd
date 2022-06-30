@@ -2,7 +2,7 @@
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { useServiceContext } from "../context/service";
-import { makeBidOfferForCharacter, getCharacters, mintCharacters, makeOfferForCharacter, mintViaDepositFacet, mintNfts } from "./character-actions";
+import { mintNfts } from "./character-actions";
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";
 import { useCharacterContext } from "../context/characters";
@@ -19,14 +19,7 @@ export const TestServiceUI = () => {
     console.log("CHARACTERS: ", characters);
   }, [service, characters]);
 
-  const nfts = [{
-    name: "Tsun Tsun!",
-    url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
-  },{
-    name: "Cmoney!",
-    url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
-  }];
-
+  
   const getTimer = () => {
     if (!service.agoric.apiSend) {
       console.log("NO API", service);
@@ -38,25 +31,8 @@ export const TestServiceUI = () => {
     console.log("SENT GET TIMER");
   };
   
-  const mint = () => {
-    if (!service.agoric.apiSend) {
-      console.log("NO API", service);
-      return;
-    }
-    service.agoric.apiSend({
-      type: "nft/mint",
-      data: {
-        characters: [{
-          name: "NOPE",
-          url: "https://ca.slack-edge.com/T4P05TL1F-U01E63R6WM7-611299dd1870-512",
-        },
-        {
-          name: "WHY",
-          url: "https://ca.slack-edge.com/T4P05TL1F-UGXFGC8F2-ff1dfa5543f9-512",
-        }],
-      }
-    });
-    console.log("SENT GET CHARACTERS");
+  const mintItem = () => {
+    //TODO: call mint
   };
   
   const mintCharacter = async () => {
@@ -163,6 +139,7 @@ export const TestServiceUI = () => {
     console.log(service.purses.character, ownedCharacters);
     charactersDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
   };
+
   const getCharacters = async () => {
     const nfts = await E(CBPublicFacet).getCharacterArray();
     charactersDispatch({ type: "SET_CHARACTERS", payload: nfts });
@@ -191,15 +168,6 @@ export const TestServiceUI = () => {
     console.log(await mintNfts(service, "PABLO", 10n));
   };
 
-  const buyCharacter = async (characterIndex: number) => {
-    // const auctionPublicFacet = await E(service.agoric.zoe).getPublicFacet(auctionInstance);
-    console.log("🥵>>>>> AUCTION PUBLIC FACET");
-    const nfts = await E(service.contracts.characterBuilder.publicFacet).getCharacterArray();
-    const character = nfts[characterIndex];
-    console.log(character.auction.publicFacet);
-    await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
-  };
-
   const getCharacterInventory = async () => {
     // const auctionPublicFacet = await E(service.agoric.zoe).getPublicFacet(auctionInstance);
     console.log("🥵>>>>> GETTING INVENTORY");
@@ -218,16 +186,10 @@ export const TestServiceUI = () => {
         onClick={getTimer}>GET TIMER</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={()=>mintCharacters(service, [FakeCharctersNoItems[0], FakeCharctersNoItems[1]], 1n)}>CREATE CHARACTER</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={checkOwned}>CHECK MY CHARACTERS</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={async ()=> await getCharacterInventory()}>GET CHARACTER INVENTORY</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async () => await makeOfferForCharacter(service,"CLOS")}>GET CHARACTERS</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={() => console.log(characters)}>CHARACTERS</button>

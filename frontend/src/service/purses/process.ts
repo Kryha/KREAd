@@ -1,16 +1,19 @@
 import { CharacterDispatch } from "../../context/characters";
 import { ServiceDispatch } from "../../context/service";
 
-export const processPurses = (purses: any[], characterDispatch: CharacterDispatch, serviceDispatch: ServiceDispatch, brandsToCheck: { money: string, character: string}) => {
+export const processPurses = (purses: any[], characterDispatch: CharacterDispatch, serviceDispatch: ServiceDispatch, brandsToCheck: { money: string, character: string, item: string}) => {
   const newTokenPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.money,
   );
   const newCharacterPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.character, // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
-
+  const newItemPurses = purses.filter(
+    ({ brandBoardId }) => brandBoardId === brandsToCheck.item, // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
+  );
   serviceDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
   serviceDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
+  serviceDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });
 
   const ownedCharacters = newCharacterPurses.flatMap((purse) => {
     return purse.value;

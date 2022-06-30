@@ -58,6 +58,7 @@ export interface Status {
 export interface Purses {
   money: any[];
   character: any[];
+  item: any[];
 }
 export interface ServiceState {
   status: Status;
@@ -78,6 +79,7 @@ const initialState: ServiceState = {
   purses: {
     money: [],
     character: [],
+    item: [],
   },
   agoric: {
     zoe: undefined,
@@ -101,7 +103,6 @@ export interface SetDappApproved {
   type: "SET_DAPP_APPROVED";
   payload: boolean;
 }
-
 export interface SetWalletConnected {
   type: "SET_WALLET_CONNECTED";
   payload: boolean;
@@ -121,7 +122,10 @@ export interface SetCharacterPurses {
   type: "SET_CHARACTER_PURSES";
   payload: any[];
 }
-
+export interface SetItemPurses {
+  type: "SET_ITEM_PURSES";
+  payload: any[];
+}
 export interface SetAgoric {
   type: "SET_AGORIC";
   payload: Omit<AgoricService, "apiSend">;
@@ -154,6 +158,7 @@ export type ServiceStateActions =
   | SetShowApproveDappModal
   | SetTokenPurses
   | SetCharacterPurses
+  | SetItemPurses
   | SetAgoric
   | SetCharacterContract
   | SetAuctionContract
@@ -182,6 +187,9 @@ const Reducer = (state: ServiceState, action: ServiceStateActions): ServiceState
     
     case "SET_CHARACTER_PURSES":
       return { ...state, purses: { ...state.purses, character: action.payload } };
+    
+    case "SET_ITEM_PURSES":
+      return { ...state, purses: { ...state.purses, item: action.payload } };
     
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload }};
@@ -253,7 +261,7 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID });
+          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID, item: ITEM_BRAND_BOARD_ID });
         }
       }
       watchPurses().catch((err) => {

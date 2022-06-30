@@ -13,25 +13,6 @@ const {
   },
 } = dappConstants;
 
-const formBidOfferForCharacter = (invitation: any, character: any, purses: Purses, price: bigint) => ({
-  // JSONable ID for this offer.  This is scoped to the origin.
-  id: Date.now(),
-  invitation,
-  proposalTemplate: {
-    want: {
-      Asset: {
-        pursePetname: purses.character[0].pursePetname,
-        value: harden([character]),
-      },
-    },
-    give: {
-      Bid: {
-        pursePetname: purses.money[0].pursePetname,
-        value: price,
-      },
-    },
-  },
-});
 export const formOfferForCharacter = (purses: Purses, character: any) => ({  
   want: {
     Asset: {
@@ -65,14 +46,8 @@ export const mintNfts = async (service: ServiceState, name: string, price: bigin
   const characterBrand = await E(publicFacet).getCharacterBrand();
   // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
   console.log(characterBrand);
-  const { baseCharacters } = await E(publicFacet).getConfig();
-  const expectedCharacters = baseCharacters.map((character: any) => ({
-    ...character,
-    name,
-  }));
-  console.log("🫀", expectedCharacters);
   
-  const invitation = await E(publicFacet).mintNFTsRandomBase();
+  const invitation = await E(publicFacet).mintCharacterNFT();
 
   console.info("Invitation successful, sending to wallet for approval");
   
@@ -84,7 +59,7 @@ export const mintNfts = async (service: ServiceState, name: string, price: bigin
         Asset: {
           pursePetname: service.purses.character[0].brandPetname,
           value: [{name}],
-        },
+        }
       },
     },
     dappContext: true,
@@ -92,6 +67,8 @@ export const mintNfts = async (service: ServiceState, name: string, price: bigin
   return E(walletP).addOffer(offerConfig);
 };
 
+// TODO: Remove if unused
+/*
 export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {
   const { agoric: { walletP }, purses } = service;
   if (!auctionPublicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
@@ -103,9 +80,10 @@ export const makeBidOfferForCharacter = async (service: ServiceState, auctionPub
   // Adjust based on Money Brand decimals
   const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
   const offerConfig = formBidOfferForCharacter(invitation, character, purses, adjustedPrice);
-
+  
   return E(walletP).addOffer(offerConfig);
 };
+
 export const mintViaDepositFacet = async (service: ServiceState, name: any) => {
   console.log("mintViaDepositFacet");
   const { agoric: { walletP, board }, purses } = service;
@@ -244,18 +222,27 @@ export const mintAndBuy = async (service: ServiceState, characters: any) => {
   await makeBidOfferForCharacter(service, newCharacter.auction.publicFacet, newCharacter.character, 1n);
 };
 
-export const getCharacters = async (service: ServiceState, characterDispatch: CharacterDispatch) => {
-  const { contracts: { characterBuilder } } = service;
-  if (!characterBuilder.publicFacet) {
-    console.error("Could not fetch Characters: Public Facet is undefined");
-    return;
-  }
-  const nfts = await E(characterBuilder.publicFacet).getCharacterArray();
-  console.info(`Fetched Characters from Contract: ${nfts.map((nft: any)=>nft.character.name)}`);
-  characterDispatch({ type: "SET_CHARACTERS", payload: nfts });
-};
 
-// TODO: Remove if unused
+// Used to make an bid offer to an auction nft contract
+// const formBidOfferForCharacter = (invitation: any, character: any, purses: Purses, price: bigint) => ({
+//   // JSONable ID for this offer.  This is scoped to the origin.
+//   id: Date.now(),
+//   invitation,
+//   proposalTemplate: {
+//     want: {
+//       Asset: {
+//         pursePetname: purses.character[0].pursePetname,
+//         value: harden([character]),
+//       },
+//     },
+//     give: {
+//       Bid: {
+//         pursePetname: purses.money[0].pursePetname,
+//         value: price,
+//       },
+//     },
+//   },
+// });
 // const { AUCTION_INSTALLATION_BOARD_ID } = installationConstants;
 // const {
 //   INSTANCE_BOARD_ID,
