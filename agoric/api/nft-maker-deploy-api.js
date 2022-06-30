@@ -9,7 +9,8 @@ import '@agoric/zoe/exported.js';
 
 import installationConstants from '../../frontend/src/service/conf/installation-constants-nft-maker.js';
 
-import { KCB } from './characters.js';
+import { defaultCharacters } from './characters.js';
+import { defaultItems } from './items.js';
 
 // deploy.js runs in an ephemeral Node.js outside of swingset. The
 // spawner runs within ag-solo, so is persistent.  Once the deploy.js
@@ -101,11 +102,10 @@ export default async function deployApi(
     E(moneyBrandP).getDisplayInfo(),
   ]);
 
-  const allcharacters = harden(KCB);
-
   console.log(
     await E(nftMakerSellerFacet).initConfig({
-      baseCharacters: allcharacters,
+      baseCharacters: defaultCharacters,
+      defaultItems,
     }),
   );
 
@@ -116,18 +116,30 @@ export default async function deployApi(
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
   const characterIssuerP = E(nftMakerPublicFacet).getCharacterIssuer();
-  const [characterIssuer, characterBrand, invitationBrand, invitationIssuer] =
-    await Promise.all([
-      characterIssuerP,
-      E(characterIssuerP).getBrand(),
-      invitationBrandP,
-      invitationBrandP,
-    ]);
+  const itemIssuerP = E(nftMakerPublicFacet).getItemIssuer();
+
+  const [
+    characterIssuer,
+    characterBrand,
+    itemIssuer,
+    itemBrand,
+    invitationBrand,
+    invitationIssuer,
+  ] = await Promise.all([
+    characterIssuerP,
+    E(characterIssuerP).getBrand(),
+    itemIssuerP,
+    E(itemIssuerP).getBrand(),
+    invitationBrandP,
+    invitationBrandP,
+  ]);
 
   const [
     INSTANCE_NFT_MAKER_BOARD_ID,
     CHARACTER_BRAND_BOARD_ID,
     CHARACTER_ISSUER_BOARD_ID,
+    ITEM_BRAND_BOARD_ID,
+    ITEM_ISSUER_BOARD_ID,
     MONEY_BRAND_BOARD_ID,
     MONEY_ISSUER_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
@@ -136,6 +148,8 @@ export default async function deployApi(
     E(board).getId(instanceNftMaker),
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
+    E(board).getId(itemBrand),
+    E(board).getId(itemIssuer),
     E(board).getId(moneyBrand),
     E(board).getId(moneyIssuer),
     E(board).getId(invitationBrand),
@@ -193,10 +207,12 @@ export default async function deployApi(
     BRIDGE_URL: 'agoric-lookup:https://local.agoric.com?append=/bridge',
     brandBoardIds: {
       Character: CHARACTER_BRAND_BOARD_ID,
+      Item: ITEM_BRAND_BOARD_ID,
       Money: MONEY_BRAND_BOARD_ID,
     },
     issuerBoardIds: {
       Character: CHARACTER_ISSUER_BOARD_ID,
+      Item: ITEM_ISSUER_BOARD_ID,
       Money: MONEY_ISSUER_BOARD_ID,
     },
     MONEY_DECIMAL_PLACES: decimalPlaces,

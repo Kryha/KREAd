@@ -7,10 +7,12 @@ export default {
   "BRIDGE_URL": "agoric-lookup:https://local.agoric.com?append=/bridge",
   "brandBoardIds": {
     "Character": "board02021",
+    "Item": "board03523",
     "Money": "board0074"
   },
   "issuerBoardIds": {
     "Character": "board01422",
+    "Item": "board05024",
     "Money": "board0223"
   },
   "MONEY_DECIMAL_PLACES": 6,

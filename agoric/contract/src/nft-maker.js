@@ -1,6 +1,6 @@
 // @ts-check
 import '@agoric/zoe/exported';
-import { AssetKind } from '@agoric/ertp';
+import { AssetKind, AmountMath } from '@agoric/ertp';
 import {
   satisfies,
   assertProposalShape,
@@ -8,6 +8,7 @@ import {
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
 import { errors } from './errors';
+import { mulberry32 } from './prng';
 
 /**
  * @typedef {{
@@ -18,17 +19,51 @@ import { errors } from './errors';
  * }} State
  * @typedef {{
  * baseCharacters: object[]
+ * defaultItems: object[]
  * completed?: boolean
  * }} Config
  * @typedef {{
  * name: string
  * character: object
+ * inventory: ZCFSeat
  * seat?: ZCFSeat
  * auction?: {
  *   instance: Instance,
  *   publicFacet: any,
  * },
  * }} CharacterRecord
+ * @typedef {{
+ * noseline?: Item;
+ * midBackground?: Item;
+ * mask?: Item;
+ * headPiece?: Item;
+ * hair?: Item;
+ * frontMask?: Item;
+ * liquid?: Item;
+ * background?: Item;
+ * airResevoir?: Item;
+ * clothing?: Item;
+ * }}
+ * @typedef {{
+ * name: string;
+ * category: string;
+ * id: string;
+ * description: string;
+ * image: string;
+ * level: number;
+ * rarity: number;
+ * effectiveness?: number;
+ * layerComplexity?: number;
+ * forged: string;
+ * baseMaterial: string;
+ * colors: string[];
+ * projectDescription: string;
+ * price: number;
+ * details: any;
+ * date: string;
+ * slots?: any[];
+ * activity: any[];
+ * }} Item
  */
 
 /**
@@ -39,9 +74,15 @@ import { errors } from './errors';
  */
 const start = async (zcf) => {
   // Define Assets
-  const characterMint = await zcf.makeZCFMint('KCB', AssetKind.SET);
+  const characterMint = await zcf.makeZCFMint('KREA', AssetKind.SET);
   const { issuer: characterIssuer, brand: characterBrand } =
     characterMint.getIssuerRecord();
+
+  // Define Items
+  const itemMint = await zcf.makeZCFMint('KREAITEM', AssetKind.SET);
+  const { issuer: itemIssuer, brand: itemBrand } = itemMint.getIssuerRecord();
+
+  let PRNG;
 
   /**
    * Mutable contract state
@@ -57,14 +98,21 @@ const start = async (zcf) => {
   /**
    * Set contract configuration, must be called befor most methods
    *
-   * @param {Config} config
+   * @param {{
+   * baseCharacters: any[],
+   * defaultItems: any[],
+   * seed: number
+   * }} config
    * @returns {string}
    */
-  const initConfig = ({ baseCharacters }) => {
+  const initConfig = ({ baseCharacters, defaultItems, seed }) => {
     state.config = {
       baseCharacters,
+      defaultItems,
       completed: true,
     };
+    assert(!Number.isNaN(seed), X`Seed must be a number`);
+    PRNG = mulberry32(seed);
     return 'Setup completed';
   };
 
@@ -91,14 +139,22 @@ const start = async (zcf) => {
   /**
    * TODO: establish a rarity system set by the creator of the character set
    * TODO: add character type in return
-   *
-   * @returns {any}
    */
   const getRandomBaseCharacter = () => {
     assert(state.config?.completed, X`${errors.noConfig}`);
-    const number = Math.random() * (state.config.baseCharacters.length - 1);
+    const number = Math.floor(PRNG() * state.config.baseCharacters.length);
     return state.config.baseCharacters[number];
   };
+  /**
+   * TODO: establish a rarity system set by the creator of the character set
+   * TODO: add character type in return
+   */
+  const getRandomItem = () => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    const number = Math.floor(PRNG() * state.config.defaultItems.length);
+    return state.config.defaultItems[number];
+  };
+
   /**
    * @param {string} name
    * @returns {boolean}
@@ -112,25 +168,84 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintNFTs = (seat) => {
+  const mintItemNFT = (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      want: { Item: null },
+    });
+    // Mint character to user seat
+    const { want } = seat.getProposal();
+    itemMint.mintGains(want, seat);
+
+    seat.exit();
+
+    return 'You minted an Item NFT!';
+  };
+
+  /**
+   * Mints a new character to a depositFacet
+   *
+   * @param {ZCFSeat} seat
+   */
+  const mintCharacterNFT = (seat) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
     assertProposalShape(seat, {
       want: { Asset: null },
     });
     const { want } = seat.getProposal();
-    const newCharacter = want.Asset.value[0];
-    characterMint.mintGains(want, seat);
+    const newCharacterName = want.Asset.value[0].name;
+    assert(nameIsUnique(newCharacterName), X`${errors.nameTaken}`);
+
+    // Get random base character and merge with name input
+    const newCharacter = {
+      ...getRandomBaseCharacter(),
+      name: newCharacterName,
+    };
+
+    const newCharacterAmount = AmountMath.make(
+      characterBrand,
+      harden([newCharacter]),
+    );
+    // Mint character to user seat
+    characterMint.mintGains({ Asset: newCharacterAmount }, seat);
+
+    // Mint items to inventory seat
+    const allDefaultItems = Object.values(state.config.defaultItems);
+    const itemsAmount = AmountMath.make(itemBrand, harden(allDefaultItems));
+    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
+    itemMint.mintGains({ Items: itemsAmount }, inventorySeat);
     /**
      * @type {CharacterRecord}
      */
     const character = {
       name: newCharacter.name,
       character: newCharacter,
+      inventory: inventorySeat,
     };
     state.characters = [...state.characters, character];
     seat.exit();
 
     return 'You minted an NFT!';
+  };
+
+  /**
+   * Adds item to inventory
+   *
+   * @param {ZCFSeat} seat
+   */
+  const addToInventory = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      give: { Item: null },
+    });
+    const { give } = seat.getProposal();
+
+    const characterSeat = state.characters[0].inventory;
+    characterSeat.decrementBy(give);
+    seat.incrementBy(give);
+    zcf.reallocate(characterSeat, seat);
+
+    seat.exit();
   };
 
   // Opportunity for more complex queries
@@ -140,9 +255,27 @@ const start = async (zcf) => {
     });
   };
 
+  /**
+   * Gets the inventory of a given character
+   *
+   * @param {string} characterName
+   */
+  const getCharacterInventory = (characterName) => {
+    const characterRecord = state.characters.find(
+      ({ character }) => character.name === characterName,
+    );
+    assert(characterRecord, X`${errors.character404}`);
+    const { inventory } = characterRecord;
+    const items = inventory.getAmountAllocated('Item', itemBrand);
+    const all = inventory.getCurrentAllocation();
+    return { items, all };
+  };
+
   const creatorFacet = Far('Character store creator', {
     initConfig,
     getCharacterIssuer: () => characterIssuer,
+    getItemIssuer: () => itemIssuer,
+    getItemBrand: () => itemBrand,
     getCharacters,
     getConfig: () => state.config,
     setMintNext: (nextName) => {
@@ -155,15 +288,24 @@ const start = async (zcf) => {
     getConfig: () => state.config,
     getCharacterBase: () => state.config?.baseCharacters[0],
     getCharacters,
+    getCharacterInventory,
     getCount: () => state.characterNames.length,
     getCharacterIssuer: () => characterIssuer,
     getCharacterBrand: () => characterBrand,
+    getItemIssuer: () => itemIssuer,
+    getItemBrand: () => itemBrand,
     getMintNext: () => state.mintNext,
     getNftConfig: () => ({ characterBrand, characterIssuer }),
     setMintNext: (nextName) => {
       state.mintNext = nextName;
     },
-    mintNFTs: () => zcf.makeInvitation(mintNFTs, 'mintNfts'),
+    getRandomBaseCharacter,
+    getRandomItem,
+    testPRNG: () => PRNG().toString(),
+    addToInventory: () => zcf.makeInvitation(addToInventory, 'addToInventory'),
+    mintCharacterNFT: () =>
+      zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
+    mintItemNFT: () => zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
   });
 
   return harden({ creatorFacet, publicFacet });

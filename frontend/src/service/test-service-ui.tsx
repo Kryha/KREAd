@@ -175,11 +175,12 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-    const nfts = await E(CBPublicFacet).getCharacters();
-    const counter = await E(CBPublicFacet).getCount();
-    const config = await E(CBPublicFacet).getConfig();
-    const mintNext = await E(CBPublicFacet).getMintNext();
-    console.log(nfts, counter, config, mintNext);
+    // const nfts = await E(CBPublicFacet).getCharacters();
+    // const rand = await E(CBPublicFacet).testPRNG();
+    // const config = await E(CBPublicFacet).getConfig();
+    // const mintNext = await E(CBPublicFacet).getMintNext();
+    // console.log(nfts, rand, config, mintNext);
+    console.log(await E(CBPublicFacet).getRandomBaseCharacter());
     // const character = nfts[2];
     // if (!character) {
     //   console.log("Character not found");
@@ -199,11 +200,14 @@ export const TestServiceUI = () => {
     await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
   };
 
-  const makeOffer = async (character: any) => {
+  const getCharacterInventory = async () => {
     // const auctionPublicFacet = await E(service.agoric.zoe).getPublicFacet(auctionInstance);
-    console.log("🥵>>>>> AUCTION PUBLIC FACET");
-    console.log(character.auction.publicFacet);
-    await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
+    console.log("🥵>>>>> GETTING INVENTORY");
+    if (!characters.owned[0].name) {
+      console.log("no characters owned");
+      return;
+    }
+    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name));
   };
 
   return <>
@@ -220,7 +224,7 @@ export const TestServiceUI = () => {
         onClick={checkOwned}>CHECK MY CHARACTERS</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async ()=> await buyCharacter(3)}>BUY CHARACTER</button>
+        onClick={async ()=> await getCharacterInventory()}>GET CHARACTER INVENTORY</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={async () => await makeOfferForCharacter(service,"CLOS")}>GET CHARACTERS</button>

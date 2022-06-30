@@ -62,53 +62,20 @@ export const mintNfts = async (service: ServiceState, name: string, price: bigin
     return;
   }
 
-  const { characterBrand } = await E(publicFacet).getCharacterBrand();
-  const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
+  const characterBrand = await E(publicFacet).getCharacterBrand();
+  // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
   console.log(characterBrand);
-  const character = {
-    title: "character 34",
-    url: "https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png",
-    name: "character 34",
-    type: "Tempet Scavenger",
-    characterId: "78991",
-    description:
-      "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
-    level: 1,
-    items: [],
-    detail: {
-      boardId: "06553",
-      contractAddresss: "0x0177812bsjs7998",
-      standard: "standard",
-      artist: "emily",
-      metadata: "https://yourmetadata.info",
-    },
-    projectDescription: "this is a project",
-    itemActivity: {
-      event: "0x0177812bsjs7998",
-      price: 1234,
-      to: "0x0177812bsjs7998",
-      from: "0x0177812bsjs7998",
-      date: "1235667272",
-    },
-    price: 123123,
-    slots: [],
-  };//await E(publicFacet).getCharacterBase();
-  const expectedCharacter = {
+  const { baseCharacters } = await E(publicFacet).getConfig();
+  const expectedCharacters = baseCharacters.map((character: any) => ({
     ...character,
     name,
-  };
-  console.log(expectedCharacter);
-  // const characterBrand = await E(service.agoric.board).getValue(dappConstants.brandBoardIds.Character);
-  // const moneyBrand = await E(service.agoric.board).getValue(dappConstants.brandBoardIds.Money);
-
-  // const nftAmount =  AmountMath.make(characterBrand, harden([expectedCharacter]));
-  const invitation = await E(publicFacet).mintNFTs();
+  }));
+  console.log("🫀", expectedCharacters);
+  
+  const invitation = await E(publicFacet).mintNFTsRandomBase();
 
   console.info("Invitation successful, sending to wallet for approval");
-  // Adjust based on Money Brand decimals
-  // const adjustedPrice = BigInt(price * BigInt(10 ** MONEY_DECIMALS));
-  // const offerConfig = formOfferForCharacterAmount(characterBrand, character, moneyBrand, adjustedPrice);
-
+  
   const offerConfig = harden({
     id: `${Date.now()}`,
     invitation: invitation,
@@ -116,14 +83,13 @@ export const mintNfts = async (service: ServiceState, name: string, price: bigin
       want: {
         Asset: {
           pursePetname: service.purses.character[0].brandPetname,
-          value: [expectedCharacter],
+          value: [{name}],
         },
       },
     },
     dappContext: true,
   });
   return E(walletP).addOffer(offerConfig);
-  // return E(walletP).addOfferInvitation(offerConfig, invitation);
 };
 
 export const makeBidOfferForCharacter = async (service: ServiceState, auctionPublicFacet: any, character: any, price: bigint) => {

@@ -20,11 +20,13 @@ const {
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
   issuerBoardIds: {
-    Character: CHARACTER_ISSUER_BOARD_ID
+    Character: CHARACTER_ISSUER_BOARD_ID,
+    Item: ITEM_ISSUER_BOARD_ID,
   },
   brandBoardIds: {
     Money: MONEY_BRAND_BOARD_ID,
     Character: CHARACTER_BRAND_BOARD_ID,
+    Item: ITEM_BRAND_BOARD_ID,
   },
 } = dappConstants;
 
@@ -262,7 +264,9 @@ export const ServiceStateProvider = (props: ProviderProps): React.ReactElement =
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestIssuer("CB", CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
+
       ]);
 
       // Initialize agoric service based on constants
