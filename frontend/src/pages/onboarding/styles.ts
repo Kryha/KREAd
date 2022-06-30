@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
 import { PrimaryButton, TitleText } from "../../components";
 import { SMALL_SCREEN_WIDTH } from "../../constants";
-import { color } from "../../design";
+import { color, zIndex } from "../../design";
 
 interface HeightProps {
   height: number;
@@ -71,6 +71,7 @@ export const FooterContainer = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
+  z-index: ${zIndex.overCharacter};
 `;
 interface ViewProps {
   height: number;

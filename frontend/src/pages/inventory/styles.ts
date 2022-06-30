@@ -84,3 +84,26 @@ export const DetailWrapper = styled.section`
     max-width: 100%;
   }
 `;
+
+export const NotificationContainer = styled.div`
+  position: relative;
+`;
+
+export const Tag = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: ${margins.nano} ${margins.mini};
+  gap: 10px;
+
+  position: absolute;
+  width:  ${margins.small};
+  height: ${margins.small};
+  left: 27px;
+  top: -3px;
+
+  background: ${color.black};
+  border-radius: ${margins.medium};
+  z-index: 1000;
+`;

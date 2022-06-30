@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, DownArrowIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
-import { color, margins } from "../../design";
+import { color, margins, zIndex } from "../../design";
 
 interface ImageProps {
   isZoomed?: boolean;
@@ -91,18 +91,16 @@ export const Tag = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 4px 8px;
+  padding: ${margins.nano} ${margins.mini};
   gap: 10px;
 
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width:  ${margins.small};
+  height: ${margins.small};
   left: 27px;
   top: -3px;
 
-  /* Tint - 100 */
-
-  background: #141414;
-  border-radius: 24px;
+  background: ${color.black};
+  border-radius: ${margins.medium};
   z-index: 1000;
 `;

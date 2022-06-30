@@ -98,8 +98,13 @@ export const Landing: FC = () => {
           />
         </CharacterCardWrapper>
       )}
-      {openNotification && <NotificationCard />}
-      {showDetail || openNotification && <Overlay />}
+      {openNotification && (
+        <>
+          <NotificationCard />
+          <Overlay />
+        </>
+      )}
+      {showDetail && <Overlay />}
     </BaseRoute>
   );
 };

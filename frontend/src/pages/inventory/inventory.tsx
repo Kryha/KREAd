@@ -6,12 +6,12 @@ import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
 import { Title } from "../../components/title";
 import { ItemsList } from "../../containers/items-list";
-import { useCharacters, useItems, useMyCharacters } from "../../service";
+import { useItems, useMyCharacters } from "../../service";
 import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification, DetailWrapper } from "./styles";
+import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification, DetailWrapper, NotificationContainer, Tag } from "./styles";
 import { EmptyCard } from "../../components/empty-card";
 import { color } from "../../design";
 import { Character } from "../../interfaces";
@@ -122,13 +122,16 @@ export const Inventory: FC = () => {
     <BaseRoute sideNavigation={
       <NotificationWrapper>
         <Title title={text.navigation.inventory} />
-        <NotificationButton
-          onClick={() => setOpenNotifications(!openNotification)}
-          backgroundColor={openNotification ? color.lightGrey : color.white}
-          open={openNotification}
-        >
-          {openNotification ? <Close /> : <Notification />}
-        </NotificationButton>
+        <NotificationContainer>
+          <NotificationButton
+            open={openNotification}
+            onClick={() => setOpenNotifications(!openNotification)}
+            backgroundColor={openNotification ? color.lightGrey : color.white}
+          >
+            {openNotification ? <Close /> : <Notification />}
+          </NotificationButton>
+          <Tag />
+        </NotificationContainer>
       </NotificationWrapper>
     }>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
