@@ -1,25 +1,53 @@
 import styled from "@emotion/styled";
 import { margins, zIndex } from "../../design";
-import { fadeIn } from "../atoms";
+import { disappear, fadeIn, fadeOut } from "../atoms";
 
-export const LeftItemContainer = styled.div`
+interface Animation {
+  showItems: boolean;
+}
+
+export const LeftItemContainer = styled.div<Animation>`
   position: absolute;
   width: 310px;
   height: 408px;
   left: ${margins.big};
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
-  animation: ${fadeIn} 10s;
+  ${({ showItems }): string => {
+    return showItems
+      ? `
+        animation: ${disappear}, ${fadeIn};
+        animation-duration: 2.6s, 2s;
+        animation-delay: 0s, 2.6s;
+        `
+      : `
+      animation: ${fadeOut};
+      animation-duration:2s;
+      // animation-delay: 0s, 2.6s;
+      `;
+  }};
 `;
 
-export const RightItemContainer = styled.div`
+export const RightItemContainer = styled.div<Animation>`
   position: absolute;
   width: 310px;
   height: 408px;
   right: 60px;
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
-  animation: ${fadeIn} 10s;
+  ${({ showItems }): string => {
+    return showItems
+      ? `
+        animation: ${disappear}, ${fadeIn};
+        animation-duration: 2.6s, 2s;
+        animation-delay: 0s, 2.6s;
+        `
+      : `
+      animation: ${fadeOut};
+      animation-duration: 2s;
+      // animation-delay: 0s, 2.6s;
+      `;
+  }};
 `;
 
 export const RightItems = styled.div`

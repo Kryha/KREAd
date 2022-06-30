@@ -3,10 +3,10 @@ import { ArrowUpRightIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins, zIndex } from "../../design";
-import { PrimaryButton } from "../atoms";
+import { disappear, PrimaryButton, slideUpOpacity } from "../atoms";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 import { ButtonInfoWrap } from "../button-info/styles";
-import { PriceContainer } from "../price-in-ist/styles";
+import { PriceContainer } from "../price-in-run/styles";
 
 export const ArrowContainer = styled.div`
   display: flex;
@@ -40,6 +40,9 @@ export const CharacterWrapper = styled.div<CharacterProps>`
       width: ${width * 0.375}px;
       max-height: ${height - 80}px;
    `};
+   animation: ${disappear}, ${slideUpOpacity} cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
+   animation-duration: 1s, 2s;
+   animation-delay: 0s, 1s;
 `;
 
 export const CharacterHeader = styled.div`

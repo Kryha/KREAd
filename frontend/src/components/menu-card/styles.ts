@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon, CloseIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins } from "../../design";
-import { Label } from "../atoms";
+import { disappear, fadeIn, Label, slideUpOpacity } from "../atoms";
 import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
 
 export const Content = styled.div`
@@ -109,4 +109,5 @@ export const MenuCardWrapper = styled.div`
     left: ${margins.large};
     z-index: 1000;
   }
+  animation: ${fadeIn} 0.6s;
 `;

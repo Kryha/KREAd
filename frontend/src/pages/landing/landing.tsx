@@ -79,7 +79,7 @@ export const Landing: FC = () => {
         </NotificationWrapper>
       }
     >
-      <LandingContainer isZoomed={openTab}>
+      <LandingContainer isZoomed={!openTab && !openNotification}>
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
       {!openTab && !openNotification && <CharacterItems items={character.items} />}
