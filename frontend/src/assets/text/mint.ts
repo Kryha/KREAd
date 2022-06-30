@@ -13,7 +13,7 @@ export const mint = {
   acceptOfferIn: "accept offer in your wallet",
   sendOfferToWallet: "send offer to your wallet",
   characterSuccessfullyMinted: "character successfully minted!",
-  yourNewCharacterIsSucessfullyMinted: "your new character is successfully minted. Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada.",
+  yourNewCharacterIsSucessfullyMinted: "your new character is successfully minted.",
   creationDate: "creation date",
   goToCharacter: "go to character",
   newCharacterMinted: "new character minted",
