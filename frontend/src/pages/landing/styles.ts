@@ -3,6 +3,8 @@ import { BellIcon, CloseIcon, DownArrowIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
 import { fadeIn } from "../../components/atoms/animations";
 import { CharacterWrapper } from "../../components/base-character/styles";
+import { LeftItemContainer, RightItemContainer } from "../../components/character-items/styles";
+import { EquippedContainer } from "../../components/equipped-item-card/styles";
 import { color, margins, zIndex } from "../../design";
 
 interface ImageProps {
@@ -10,9 +12,9 @@ interface ImageProps {
 }
 
 export const LandingContainer = styled.div<ImageProps>`
-    ${CharacterWrapper} {
-      animation: ${fadeIn} 5s;
-    }
+  ${CharacterWrapper} {
+    animation: ${fadeIn} 4s;
+  }
 `;
 
 export const Menu = styled(DownArrowIcon)`

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { margins, zIndex } from "../../design";
+import { fadeIn } from "../atoms";
 
 export const LeftItemContainer = styled.div`
   position: absolute;
@@ -8,6 +9,7 @@ export const LeftItemContainer = styled.div`
   left: ${margins.big};
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
+  animation: ${fadeIn} 10s;
 `;
 
 export const RightItemContainer = styled.div`
@@ -17,6 +19,7 @@ export const RightItemContainer = styled.div`
   right: 60px;
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
+  animation: ${fadeIn} 10s;
 `;
 
 export const RightItems = styled.div`
