@@ -42,7 +42,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
           <PricingContainer>
             <NumberContainer active={true}>{sendOffer ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
             <StepText>{text.mint.sendOfferToWallet}</StepText>
-            {Boolean(!sendOffer) && (
+            {!sendOffer && (
               <>
                 <PriceInIst price={MINTING_COST} />
                 <PrimaryButton onClick={sendOfferToWallet}>
