@@ -93,7 +93,7 @@ export default async function deployApi(
   /**
    * @type {ERef<Issuer>}
    */
-  const moneyIssuerP = E(home.agoricNames).lookup('issuer', 'RUN');
+  const moneyIssuerP = E(home.agoricNames).lookup('issuer', 'IST');
 
   const moneyBrandP = E(moneyIssuerP).getBrand();
   const [moneyIssuer, moneyBrand, { decimalPlaces = 0 }] = await Promise.all([
