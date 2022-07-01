@@ -55,7 +55,7 @@ export const CreateCharacter: FC = () => {
       case 0:
         return <Information setData={setData} disabled={createCharacter.isLoading} />;
       case 1:
-        return <Payment sendOfferHandler={() => sendOfferHandler()} submit={changeStep} isOfferAccepted={isOfferAccepted} />;
+        return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} />;
       case 2:
         return <Confirmation character={mintedCharacter} />;
       default:
