@@ -17,6 +17,7 @@ import { mulberry32 } from './prng';
  *   characterNames: string[]
  *   characters: CharacterRecord[]
  *   items: ItemRecord[]
+ *   market: ItemInMarket[]
  *   config?: Config
  *   mintNext: string
  * }} State
@@ -44,6 +45,15 @@ import { mulberry32 } from './prng';
  *   id: bigint
  *   item: object
  * }} ItemRecord
+ *
+ * @typedef {{
+ *   id: bigint
+ *   item: object
+ *   sell: {
+ *    instance: Instance
+ *    publicFacet: any
+ *  }
+ * }} ItemInMarket
  *
  * @typedef {{
  *   noseline?: Item;
@@ -110,6 +120,7 @@ const start = async (zcf) => {
     characterNames: [],
     characters: [],
     items: [],
+    market: [],
     mintNext: 'PABLO',
   };
   /**
@@ -273,11 +284,14 @@ const start = async (zcf) => {
    *
    * TODO: finish function
    */
-  const sellItem = async (item, price) => {
+  const sellItem = async (itemId, price) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
 
-    // TODO: check if item exists
-    // TODO: check if user owns item
+    const item = state.items.find((i) => i.id === itemId);
+
+    assert(item, X`Item with id ${itemId} not found`);
+
+    // TODO: check if user owns item, maybe need to use seats for this
 
     // assertProposalShape(seat, {
     //   want: { Money: null },
@@ -308,13 +322,22 @@ const start = async (zcf) => {
       brands: itemBrand, // TODO: check if needs array
     });
 
-    const { creatorInvitation, instance, publicFacet } = await E(
-      zoeService,
-    ).startInstance(
-      state.config.sellItemsInstallation, // TODO: inject in deploy script
+    const {
+      creatorInvitation: _, // ?do we need to do something with invitation? Maybe offer?
+      instance,
+      publicFacet,
+    } = await E(zoeService).startInstance(
+      state.config.sellItemsInstallation,
       issuerKeywordRecord,
       sellItemsTerms,
     );
+
+    /**
+     * @type {ItemInMarket}
+     */
+    const itemInMarket = { ...item.item, sell: { instance, publicFacet } };
+
+    state.market = [...state.market, itemInMarket];
 
     // const shouldBeInvitationMsg = `The auctionItemsContract instance should return a creatorInvitation`;
     // assert(creatorInvitation, shouldBeInvitationMsg);
