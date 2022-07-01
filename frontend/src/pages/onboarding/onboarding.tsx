@@ -32,7 +32,7 @@ export const Onboarding: FC = () => {
           <ButtonContainer>
             <SecondaryButton onClick={() => navigate(routes.createCharacter)}>
               {/* <ButtonText>{text.general.explore}</ButtonText> */}
-              <ButtonText>{"Create Character"}</ButtonText>
+              <ButtonText>{text.general.createCharacter}</ButtonText>
 
               <ArrowUpRight />
             </SecondaryButton>
