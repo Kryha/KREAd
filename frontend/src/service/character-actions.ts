@@ -26,7 +26,7 @@ export const formOfferForCharacterAmount = (characterBrand: any, character: any,
   },
 });
 
-export const mintNfts = async (service: AgoricState, name: string, price: bigint) => {
+export const mintNfts = async (service: AgoricState, name: string) => {
   const {
     agoric: { walletP },
     contracts: {
