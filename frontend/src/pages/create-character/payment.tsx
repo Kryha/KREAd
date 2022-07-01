@@ -58,14 +58,14 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
             {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
-          {!isOfferAccepted && !!sendOffer && (
+          {!isOfferAccepted && sendOffer && (
             <Badge>
               <ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText>
             </Badge>
           )}
         </Step>
       </StepContainer>
-      {Boolean(!sendOffer) && (
+      {!sendOffer && (
         <PreviousButtonContainer onClick={() => submit(INFORMATION_STEP)}>
           <SecondaryButton>
             <ButtonText>{text.mint.previous}</ButtonText>

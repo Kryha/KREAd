@@ -63,7 +63,7 @@ export const useCreateCharacter = () => {
   const [agoricState] = useAgoricContext();
   return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
-    await mintNfts(agoricState, body.name, 0n);
+    await mintNfts(agoricState, body.name);
   });
 };
 
