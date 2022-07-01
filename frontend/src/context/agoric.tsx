@@ -16,18 +16,9 @@ const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: {
-    Character: CHARACTER_ISSUER_BOARD_ID,
-    Item: ITEM_ISSUER_BOARD_ID,
-  },
-  brandBoardIds: {
-    Money: MONEY_BRAND_BOARD_ID,
-    Character: CHARACTER_BRAND_BOARD_ID,
-    Item: ITEM_BRAND_BOARD_ID,
-  },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
+  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
 } = dappConstants;
-
-console.info(`DAPP CONSTANTS: ${dappConstants}`);
 
 export interface AgoricService {
   zoe: any;
@@ -118,10 +109,10 @@ const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState 
 
     case "SET_CHARACTER_PURSES":
       return { ...state, purses: { ...state.purses, character: action.payload } };
-    
+
     case "SET_ITEM_PURSES":
       return { ...state, purses: { ...state.purses, item: action.payload } };
-    
+
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
 
@@ -188,7 +179,11 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID, item: ITEM_BRAND_BOARD_ID });
+          processPurses(purses, characterDispatch, dispatch, {
+            money: MONEY_BRAND_BOARD_ID,
+            character: CHARACTER_BRAND_BOARD_ID,
+            item: ITEM_BRAND_BOARD_ID,
+          });
         }
       }
       watchPurses().catch((err) => {
@@ -201,7 +196,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
-
       ]);
 
       // Initialize agoric service based on constants
