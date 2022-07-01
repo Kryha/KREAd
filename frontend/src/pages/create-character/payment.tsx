@@ -54,9 +54,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
         </GeneralInfo>
         <Line />
         <Step active={!sendOffer}>
-          <NumberContainer active={!!sendOffer}>
-            {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
-          </NumberContainer>
+          <NumberContainer active={sendOffer}>{isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}</NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
           {!isOfferAccepted && sendOffer && (
             <Badge>
