@@ -38,10 +38,7 @@ const API_PORT = process.env.API_PORT || '8000';
  * A promise for the references available from REPL home
  * @param {DeployPowers} powers
  */
-export default async function deployApi(
-  homePromise,
-  { pathResolve, bundleSource },
-) {
+export default async function deployApi(homePromise, { pathResolve }) {
   // Let's wait for the promise to resolve.
   const home = await homePromise;
 
@@ -74,8 +71,15 @@ export default async function deployApi(
   // To get the backend of our dapp up and running, first we need to
   // grab the installation that our contract deploy script put
   // in the public board.
-  const { INSTALLATION_BOARD_ID, CONTRACT_NAME } = installationConstants;
+  const {
+    INSTALLATION_BOARD_ID,
+    CONTRACT_NAME,
+    SELL_ITEMS_INSTALLATION_BOARD_ID,
+  } = installationConstants;
   const installation = await E(board).getValue(INSTALLATION_BOARD_ID);
+  const sellItemsInstallation = await E(board).getValue(
+    SELL_ITEMS_INSTALLATION_BOARD_ID,
+  );
 
   // Second, we can use the installation to create a new instance of
   // our contract code on Zoe. A contract instance is a running
@@ -106,6 +110,8 @@ export default async function deployApi(
     await E(nftMakerSellerFacet).initConfig({
       baseCharacters: defaultCharacters,
       defaultItems,
+      sellItemsInstallation,
+      moneyIssuerP,
     }),
   );
 
@@ -202,6 +208,7 @@ export default async function deployApi(
   const dappConstants = {
     INSTANCE_NFT_MAKER_BOARD_ID,
     INSTALLATION_BOARD_ID,
+    SELL_ITEMS_INSTALLATION_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
     INVITE_ISSUER_BOARD_ID,
     BRIDGE_URL: 'agoric-lookup:https://local.agoric.com?append=/bridge',

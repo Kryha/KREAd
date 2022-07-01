@@ -1,5 +1,6 @@
 // @ts-check
 import '@agoric/zoe/exported';
+import { E } from '@endo/eventual-send';
 import { AssetKind, AmountMath } from '@agoric/ertp';
 import {
   satisfies,
@@ -7,6 +8,7 @@ import {
 } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
+
 import { errors } from './errors';
 import { mulberry32 } from './prng';
 
@@ -23,6 +25,8 @@ import { mulberry32 } from './prng';
  *   baseCharacters: object[]
  *   defaultItems: object[]
  *   completed?: boolean
+ *   moneyIssuer: Issuer
+ *   sellItemsInstallation: Installation
  * }} Config
  *
  * @typedef {{
@@ -92,6 +96,8 @@ const start = async (zcf) => {
   const itemMint = await zcf.makeZCFMint('KREAITEM', AssetKind.SET);
   const { issuer: itemIssuer, brand: itemBrand } = itemMint.getIssuerRecord();
 
+  const zoeService = zcf.getZoeService();
+
   let PRNG;
 
   /**
@@ -110,17 +116,27 @@ const start = async (zcf) => {
    * Set contract configuration, must be called befor most methods
    *
    * @param {{
-   * baseCharacters: any[],
-   * defaultItems: any[],
-   * seed: number
+   *   baseCharacters: any[],
+   *   defaultItems: any[],
+   *   seed: number
+   *   moneyIssuer: Issuer
+   *   sellItemsInstallation: Installation
    * }} config
    * @returns {string}
    */
-  const initConfig = ({ baseCharacters, defaultItems, seed }) => {
+  const initConfig = ({
+    baseCharacters,
+    defaultItems,
+    seed,
+    moneyIssuer,
+    sellItemsInstallation,
+  }) => {
     state.config = {
       baseCharacters,
       defaultItems,
       completed: true,
+      moneyIssuer,
+      sellItemsInstallation,
     };
     assert(!Number.isNaN(seed), X`Seed must be a number`);
     PRNG = mulberry32(seed);
@@ -253,6 +269,70 @@ const start = async (zcf) => {
   };
 
   /**
+   * Sells an item
+   *
+   * TODO: finish function
+   */
+  const sellItem = async (item, price) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+
+    // TODO: check if item exists
+    // TODO: check if user owns item
+
+    // assertProposalShape(seat, {
+    //   want: { Money: null },
+    //   give: { Items: null },
+    // });
+
+    // const { want } = seat.getProposal();
+    // const price = want.Money.value;
+
+    // const allCharactersForSalePayment = mint.mintPayment(
+    //   newCharactersForSaleAmount,
+    // );
+    // const proposal = harden({
+    //   give: { Items: newCharactersForSaleAmount },
+    // });
+
+    // const paymentKeywordRecord = harden({ Money: price });
+
+    const issuerKeywordRecord = harden({
+      Items: itemIssuer,
+      Money: state.config.moneyIssuer,
+    });
+
+    // Terms used here are set via creatorFacet.initConfig(<config obj>)
+    const sellItemsTerms = harden({
+      pricePerItem: price,
+      issuers: itemIssuer, // TODO: check if needs array
+      brands: itemBrand, // TODO: check if needs array
+    });
+
+    const { creatorInvitation, instance, publicFacet } = await E(
+      zoeService,
+    ).startInstance(
+      state.config.sellItemsInstallation, // TODO: inject in deploy script
+      issuerKeywordRecord,
+      sellItemsTerms,
+    );
+
+    // const shouldBeInvitationMsg = `The auctionItemsContract instance should return a creatorInvitation`;
+    // assert(creatorInvitation, shouldBeInvitationMsg);
+
+    // await E(zoeService).offer(
+    //   creatorInvitation,
+    //   // proposal,
+    //   seat.getProposal(),
+    //   // paymentKeywordRecord,
+    // );
+
+    // return harden({
+    //   msg: 'Character mint successful, use attached public facet to purchase',
+    //   auctionItemsPublicFacet: publicFacet,
+    // });
+  };
+
+  /**
    * Adds item to inventory
    *
    * @param {ZCFSeat} seat
@@ -330,6 +410,7 @@ const start = async (zcf) => {
     mintCharacterNFT: () =>
       zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
     mintItemNFT: () => zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
+    sellItem,
   });
 
   return harden({ creatorFacet, publicFacet });

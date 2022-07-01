@@ -3,6 +3,7 @@
 import fs from 'fs';
 import '@agoric/zoe/exported.js';
 import { E } from '@endo/eventual-send';
+import { resolve } from 'import-meta-resolve';
 
 // This script takes our contract code, installs it on Zoe, and makes
 // the installation publicly available. Our backend API script will
@@ -60,6 +61,15 @@ export default async function deployContract(
   const bundle = await bundleSource(pathResolve(`./src/nft-maker.js`));
   const installation = await E(zoe).install(bundle);
 
+  // We also need to bundle and install the sell-items contract
+  const sellItemsBundleUrl = await resolve(
+    '@agoric/zoe/src/contracts/sellItems.js',
+    import.meta.url,
+  );
+  const sellItemsBundlePath = new URL(sellItemsBundleUrl).pathname;
+  const sellItemsBundle = await bundleSource(sellItemsBundlePath);
+  const sellItemsInstallation = await E(zoe).install(sellItemsBundle);
+
   // Let's share this installation with other people, so that
   // they can run our contract code by making a contract
   // instance (see the api deploy script in this repo to see an
@@ -71,15 +81,22 @@ export default async function deployContract(
   // strings to objects.
   const CONTRACT_NAME = 'CHARACTER';
   const INSTALLATION_BOARD_ID = await E(board).getId(installation);
+  const SELL_ITEMS_INSTALLATION_BOARD_ID = await E(board).getId(
+    sellItemsInstallation,
+  );
 
   console.log('- SUCCESS! contract code installed on Zoe');
   console.log(`-- Contract Name: ${CONTRACT_NAME}`);
   console.log(`-- Installation Board Id: ${INSTALLATION_BOARD_ID}`);
+  console.log(
+    `-- Sell Items Installation Board Id: ${SELL_ITEMS_INSTALLATION_BOARD_ID}`,
+  );
 
   // Save the constants somewhere where the UI and api can find it.
   const dappConstants = {
     CONTRACT_NAME,
     INSTALLATION_BOARD_ID,
+    SELL_ITEMS_INSTALLATION_BOARD_ID,
   };
   const defaultsFolder = pathResolve(`../../frontend/src/service/conf`);
   const defaultsFile = pathResolve(
