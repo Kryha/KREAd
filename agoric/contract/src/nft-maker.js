@@ -213,7 +213,7 @@ const start = async (zcf) => {
     const allDefaultItems = Object.values(state.config.defaultItems);
     const itemsAmount = AmountMath.make(itemBrand, harden(allDefaultItems));
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
-    itemMint.mintGains({ Items: itemsAmount }, inventorySeat);
+    itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
     /**
      * @type {CharacterRecord}
      */
@@ -241,8 +241,83 @@ const start = async (zcf) => {
     const { give } = seat.getProposal();
 
     const characterSeat = state.characters[0].inventory;
-    characterSeat.decrementBy(give);
-    seat.incrementBy(give);
+    seat.decrementBy(give);
+    characterSeat.incrementBy(give);
+    zcf.reallocate(seat, characterSeat);
+
+    seat.exit();
+  };
+
+  /**
+   * Adds item to inventory
+   *
+   * @param {ZCFSeat} seat
+   */
+  const addToInventoryContinued = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      give: { Item: null },
+    });
+    const { give } = seat.getProposal();
+
+    const characterSeat = state.characters[0].inventory;
+    seat.decrementBy(give);
+    characterSeat.incrementBy(give);
+    const addInvitation = zcf.makeInvitation(addToInventory, 'addToInventory');
+    const invitationAmount = AmountMath.make(
+      zcf.getInvitationIssuer().getBrand(),
+      [addInvitation],
+    );
+    seat.incrementBy({ addToInventory: invitationAmount });
+    zcf.reallocate(characterSeat, seat);
+    seat.exit();
+  };
+
+  /**
+   * Removes an item from inventory
+   *
+   * @param {ZCFSeat} seat
+   */
+  const removeFromInventory = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      want: { Item: null },
+    });
+    const { want } = seat.getProposal();
+
+    const characterSeat = state.characters[0].inventory;
+    characterSeat.decrementBy(want);
+    seat.incrementBy(want);
+    zcf.reallocate(characterSeat, seat);
+
+    seat.exit();
+  };
+
+  /**
+   * Removes an item from inventory
+   *
+   * @param {ZCFSeat} seat
+   */
+  const removeFromInventoryContinued = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      want: { Item: null },
+    });
+    const { want } = seat.getProposal();
+
+    const characterSeat = state.characters[0].inventory;
+    characterSeat.decrementBy(want);
+    seat.incrementBy(want);
+
+    const removeInvitation = zcf.makeInvitation(
+      removeFromInventory,
+      'removeFromInventory',
+    );
+    const invitationAmount = AmountMath.make(
+      zcf.getInvitationIssuer().getBrand(),
+      [removeInvitation],
+    );
+    seat.incrementBy({ removeFromInventory: invitationAmount });
     zcf.reallocate(characterSeat, seat);
 
     seat.exit();
@@ -303,6 +378,15 @@ const start = async (zcf) => {
     getRandomItem,
     testPRNG: () => PRNG().toString(),
     addToInventory: () => zcf.makeInvitation(addToInventory, 'addToInventory'),
+    addToInventoryContinued: () =>
+      zcf.makeInvitation(addToInventoryContinued, 'addToInventoryContinued'),
+    removeFromInventory: () =>
+      zcf.makeInvitation(removeFromInventory, 'removeFromInventory'),
+    removeFromInventoryContinued: () =>
+      zcf.makeInvitation(
+        removeFromInventoryContinued,
+        'removeFromInventoryContinued',
+      ),
     mintCharacterNFT: () =>
       zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
     mintItemNFT: () => zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),

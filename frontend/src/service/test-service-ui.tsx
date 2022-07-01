@@ -2,6 +2,8 @@
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { mintNfts } from "./character-actions";
+import { addToInventory, addToInventoryContinued, mintItem, removeFromInventory } from "./item-actions";
+
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";
 import { useCharacterContext } from "../context/characters";
@@ -30,10 +32,6 @@ export const TestServiceUI = () => {
       type: "nft/getTimerService",
     });
     console.log("SENT GET TIMER");
-  };
-  
-  const mintItem = () => {
-    //TODO: call mint
   };
 
   const mintCharacter = async () => {
@@ -140,14 +138,22 @@ export const TestServiceUI = () => {
     charactersDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
   };
 
-  const getCharacters = async () => {
-    const nfts = await E(CBPublicFacet).getCharacterArray();
-    charactersDispatch({ type: "SET_CHARACTERS", payload: nfts });
+  const mintItemNFT = async () => {
+    console.log(await mintItem(service));
   };
   
+  const addItemToInventory = async () => {
+    const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
+    console.log(item);
+    await addToInventory(service, item);
+    console.log("done");
+  };
 
-  const setMintNext = async () => {
-    await E(CBPublicFacet).setMintNext("c-los");
+  const removeItemFromInventory = async () => {
+    const { items: { value: equippedItems } } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
+
+    const item = equippedItems[0];
+    await removeFromInventory(service, item);
     console.log("done");
   };
 
@@ -183,10 +189,13 @@ export const TestServiceUI = () => {
     <div style={{width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row"}}>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={getTimer}>GET TIMER</button>
+        onClick={mintItemNFT}>MINT ITEM</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={checkOwned}>CHECK MY CHARACTERS</button>
+        onClick={addItemToInventory}>ADD TO INVENTORY</button>
+      <button
+        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+        onClick={removeItemFromInventory}>REMOVE FROM INVENTORY</button>
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={async ()=> await getCharacterInventory()}>GET CHARACTER INVENTORY</button>

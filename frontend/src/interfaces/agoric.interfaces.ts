@@ -27,6 +27,7 @@ interface Status {
 export interface Purses {
   money: any[];
   character: any[];
+  item: any[];
 }
 
 export interface AgoricState {
