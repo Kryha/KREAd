@@ -23,7 +23,7 @@ export const StatsWrapper = styled.div<ItemProps>`
   border-radius: ${margins.medium};
   position: absolute;
   z-index: 1000;
-  animation: ${fadeIn} 0.4s;
+  animation: ${fadeIn} 0.3s;
   ${({ position, area }): string => {
     switch (area) {
       case "top":

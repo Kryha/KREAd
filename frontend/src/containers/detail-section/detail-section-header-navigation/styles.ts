@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { PriceContainer } from "../../../components/price-in-run/styles";
+import { PriceContainer } from "../../../components/price-in-ist/styles";
 import { margins } from "../../../design";
 
 export const DetailSectionHeaderNavigationWrap = styled.section`

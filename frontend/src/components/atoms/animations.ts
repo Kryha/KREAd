@@ -23,6 +23,7 @@ export const fadeOut = keyframes`
     opacity: 0;
   }
 `;
+
 export const slideUpOpacity = keyframes`
   0% {
     opacity: 0;

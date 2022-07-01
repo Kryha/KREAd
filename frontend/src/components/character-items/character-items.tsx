@@ -14,7 +14,7 @@ interface CharacterItemsProps {
 }
 
 // TODO: update component with item slots
-export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = false }) => {
+export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = true }) => {
   return (
     <>
       <LeftItemContainer showItems={showItems}>

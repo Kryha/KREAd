@@ -23,8 +23,6 @@ export const DetailSectionWrap = styled.section<ViewProps>`
   ::-webkit-scrollbar {
     display: none;
   }
-  opacity: 0;
-  animation: ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
 `;
 
 export const EmptyView = styled.section`

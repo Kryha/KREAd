@@ -13,7 +13,7 @@ interface ImageProps {
 
 export const LandingContainer = styled.div<ImageProps>`
   ${CharacterWrapper} {
-    animation: ${fadeIn} 2.5s;
+    animation: ${fadeIn} 1.5s;
   }
 `;
 

@@ -29,3 +29,4 @@ export * from "./overview-empty";
 export * from "./notification-card";
 export * from "./notification-detail";
 export * from "./footer";
+export * from "./fade-in-out";

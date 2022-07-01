@@ -1,12 +1,15 @@
+
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins, zIndex } from "../../design";
 import { disappear, PrimaryButton, slideUpOpacity } from "../atoms";
+import { fadeOut } from "../atoms/animations";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 import { ButtonInfoWrap } from "../button-info/styles";
-import { PriceContainer } from "../price-in-run/styles";
+import { PriceContainer } from "../price-in-ist/styles";
 
 export const ArrowContainer = styled.div`
   display: flex;
@@ -21,6 +24,7 @@ export const ArrowContainer = styled.div`
 interface CharacterProps {
   width: number;
   height: number;
+  showCard: boolean;
 }
 
 export const CharacterWrapper = styled.div<CharacterProps>`
@@ -40,9 +44,6 @@ export const CharacterWrapper = styled.div<CharacterProps>`
       width: ${width * 0.375}px;
       max-height: ${height - 80}px;
    `};
-   animation: ${disappear}, ${slideUpOpacity} cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-   animation-duration: 1s, 2s;
-   animation-delay: 0s, 1s;
 `;
 
 export const CharacterHeader = styled.div`
