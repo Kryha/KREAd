@@ -8,10 +8,7 @@ interface Props {
   events: ActivityEvent[];
 }
 
+// TODO: Fis missing activity
 export const DetailSectionSegmentActivity: FC<Props> = ({ events }) => {
-  return (
-    <DetailSectionSegmentActivityWrap>
-      <ActivityTable events={events} />
-    </DetailSectionSegmentActivityWrap>
-  );
+  return <DetailSectionSegmentActivityWrap>{/* <ActivityTable events={events} /> */}</DetailSectionSegmentActivityWrap>;
 };
