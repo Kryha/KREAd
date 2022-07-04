@@ -1,11 +1,7 @@
 import { FC, ReactNode, useCallback, useEffect, useState } from "react";
+import { UNMOUNTED, EXITED, ENTERED, EXITING } from "../../constants";
 import { useTimer } from "../../hooks/hooks";
 import { FadeInOutWrapper } from "./styles";
-
-const UNMOUNTED = "unmounted";
-const EXITED = "exited";
-const ENTERED = "entered";
-const EXITING = "entered";
 
 interface FadeInOutProps {
   show: boolean;

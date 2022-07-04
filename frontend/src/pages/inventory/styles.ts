@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { CloseIcon, BellIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
+import { disappear, slideUpOpacity } from "../../components/atoms/animations";
 
 import { Group } from "../../components/switch-selector/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -106,4 +107,14 @@ export const Tag = styled.div`
   background: ${color.black};
   border-radius: ${margins.medium};
   z-index: 1000;
+`;
+
+export const DetailContainer = styled.div`
+  animation: ${disappear}, ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
+  animation-duration: 1.6s, 2s;
+  animation-delay: 0s, 1.6s;
+  width: 60%;
+  ${DetailSectionWrap}{
+    max-width: 100%;
+  }
 `;
