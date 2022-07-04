@@ -36,7 +36,8 @@ export const useFilteredItems = (
   price: { min: number; max: number },
   color: string
 ): { data: Item[]; isLoading: boolean } => {
-  const { data, isLoading } = useItems();
+  // TODO: Refactor so we can reuse filteredItems with different source (myItemx vs shopItems)
+  const [data, isLoading] = useMyItems();
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
   const isInCategory = (item: Item, category: string) => (category ? item.category === category : true);

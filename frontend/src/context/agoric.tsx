@@ -7,11 +7,12 @@ import dappConstants from "../service/conf/defaults";
 
 import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
-import { useCharacterStateDispatch } from "./characters";
 import { apiRecv } from "../service/api/receive";
 import { processPurses } from "../service/purses/process";
-import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
+import { useCharacterStateDispatch } from "./characters";
 import { useItemStateDispatch } from "./items";
+
+import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 // import { NotificationWrapper } from "../components/notification-card/styles";
 
 const {
@@ -144,7 +145,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, dispatch, {
+          processPurses(purses, characterDispatch, itemDispatch, dispatch, {
             money: MONEY_BRAND_BOARD_ID,
             character: CHARACTER_BRAND_BOARD_ID,
             item: ITEM_BRAND_BOARD_ID,
@@ -177,8 +178,9 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const nfts = await E(nftPublicFacet).getCharacters();
       characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
 
-      // TODO: GetItems and SET_ITEMS
+      // Fetch Items from Chain
       const walletItems = await E(nftPublicFacet).getItems();
+      console.log("Ag Context walletItems: ", walletItems);
       itemDispatch({ type: "SET_ITEMS", payload: walletItems.items });
 
       // TODO: set up chain notifiers

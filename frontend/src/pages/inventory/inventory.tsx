@@ -33,11 +33,11 @@ const ItemsInventory: FC = () => {
 
   const item = useMemo(() => items?.find((item) => item.id === selectedId), [items, selectedId]);
 
+  // TODO: move to Item service
   const equip = () => {
     // TODO: implement item equip
     console.log("TODO: implement item equip");
   };
-
   const sell = () => {
     if (!selectedId) return;
     navigate(`${routes.sellItem}/${selectedId}`);
@@ -94,6 +94,7 @@ const CharactersInventory: FC = () => {
     console.log("TODO: implement character choose");
   };
 
+  // TODO: Move to Character service
   const sell = () => {
     if (!selectedId) return;
     navigate(`${routes.sellCharacter}/${selectedId}`);
