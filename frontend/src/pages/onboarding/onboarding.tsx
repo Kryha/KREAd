@@ -2,12 +2,21 @@ import { FC } from "react";
 
 import { DefaultIcon, text } from "../../assets";
 import { color } from "../../design";
-import {  ButtonText, Footer, MenuItemName, MenuText, PrimaryButton, SecondaryButton, TitleText } from "../../components";
-import { ArrowUp, ArrowUpRight, ButtonContainer, DefaultImage, FooterContainer, InfoText, MiddleContent, OnboardingContainer, OnboardingWrapper } from "./styles";
+import { ButtonText, Footer, MenuItemName, MenuText, PrimaryButton, SecondaryButton, TitleText } from "../../components";
+import {
+  ArrowUp,
+  ArrowUpRight,
+  ButtonContainer,
+  DefaultImage,
+  FooterContainer,
+  InfoText,
+  MiddleContent,
+  OnboardingContainer,
+  OnboardingWrapper,
+} from "./styles";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { useViewport } from "../../hooks";
-
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
@@ -21,8 +30,10 @@ export const Onboarding: FC = () => {
           <MenuText>{text.general.launchingTheFirst}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
           <ButtonContainer>
-            <SecondaryButton onClick={() => navigate(routes.character)}>
-              <ButtonText>{text.general.explore}</ButtonText>
+            <SecondaryButton onClick={() => navigate(routes.createCharacter)}>
+              {/* <ButtonText>{text.general.explore}</ButtonText> */}
+              <ButtonText>{text.general.createCharacter}</ButtonText>
+
               <ArrowUpRight />
             </SecondaryButton>
             {/* TODO: connect to wallet */}

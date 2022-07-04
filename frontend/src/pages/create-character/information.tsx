@@ -9,24 +9,30 @@ import { CharacterCreation } from "../../interfaces";
 import { ArrowUp, ButtonContainer, ContentWrapper, ErrorContainer, FormFields, InputWrapper, Tick, Warning } from "./styles";
 
 interface InformationProps {
-  submitForm: (data: CharacterCreation) => void;
+  setData: (data: CharacterCreation) => void;
   disabled: boolean;
 }
 
+export const Information: FC<InformationProps> = ({ setData, disabled }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, dirtyFields },
+  } = useForm<CharacterCreation>({
+    mode: "onChange",
+    reValidateMode: "onChange",
+  });
 
-export const Information: FC<InformationProps> = ({ submitForm, disabled }) => {
-  const { register, handleSubmit, formState: { errors, isValid, dirtyFields } } = useForm<CharacterCreation>( { mode: "onChange",
-    reValidateMode: "onChange"});
-  const onSubmit: SubmitHandler<CharacterCreation> = data => submitForm(data);
+  const onSubmit: SubmitHandler<CharacterCreation> = (data) => setData(data);
 
   return (
     <ContentWrapper>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormFields>
           <Label>{text.mint.characterName}</Label>
-          <Input type="text" {...register("name", { required: true })}/>
+          <Input type="text" {...register("name", { required: true })} />
           <InputWrapper>
-            {Boolean(!errors.name && dirtyFields.name) &&  (<Tick />)}
+            {Boolean(!errors.name && dirtyFields.name) && <Tick />}
             <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
           </InputWrapper>
           {errors.name && (
