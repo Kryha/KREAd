@@ -20,8 +20,6 @@ const {
   brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
 } = dappConstants;
 
-console.info(`DAPP CONSTANTS: ${dappConstants}`);
-
 export interface AgoricService {
   zoe: any;
   board: any;

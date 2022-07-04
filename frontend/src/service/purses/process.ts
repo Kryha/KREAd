@@ -24,7 +24,7 @@ export const processPurses = (
 
   characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
 
-  console.info(`👤 Found characters: ${[ownedCharacters]}`);
+  console.info(`👤 Found characters: ${JSON.stringify(ownedCharacters, null, 2)}`);
   console.info("👛 Money Purse Info: ", newTokenPurses[0].displayInfo);
   console.info("👛 Money Purse Petname: ", newTokenPurses[0].brandPetname);
   console.info("👛 Character Purse Info: ", newCharacterPurses[0].displayInfo);
