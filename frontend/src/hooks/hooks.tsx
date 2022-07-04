@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MILLISECONDS } from "../constants";
 
 export const useTimer = (delay: number, condition: boolean) => {
   const [showFirstPage, setShowFirstPage] = useState(false);
@@ -7,7 +8,7 @@ export const useTimer = (delay: number, condition: boolean) => {
     () => {
       let timer1: NodeJS.Timeout;
       if(condition) {
-        timer1 = setTimeout(() => setShowFirstPage(true), delay * 1000);
+        timer1 = setTimeout(() => setShowFirstPage(true), delay * MILLISECONDS);
       }
       return () => {
         clearTimeout(timer1);

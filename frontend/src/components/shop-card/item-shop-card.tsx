@@ -18,7 +18,6 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
     onClick(item);
   };
 
-
   return (
     <Product onClick={() => handleClick()}>
       <Content>

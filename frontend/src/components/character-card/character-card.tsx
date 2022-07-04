@@ -20,6 +20,7 @@ import { useViewport } from "../../hooks";
 import { CharacterDetailSection } from "../../containers/detail-section/character-detail-section";
 import { EmptyCard } from "../empty-card";
 import { FadeInOut } from "../fade-in-out";
+
 interface CharacterCardProps {
   id: string;
   characters: Character[];
@@ -30,6 +31,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
   const navigate = useNavigate();
   const [character, setCharacter] = useState<Character>();
   const { width, height } = useViewport();
+
   const sortedCharacters = useMemo(
     () => {
       const allItems = [...characters];

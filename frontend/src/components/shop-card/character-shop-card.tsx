@@ -24,7 +24,6 @@ interface CharacterShopCardProps {
 }
 
 export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onClick }) => {
-
   return (
     <Product onClick={() => onClick && onClick(character)}>
       <Content>

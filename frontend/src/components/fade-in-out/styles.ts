@@ -39,9 +39,7 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
   }
   ${Overlay} {
     ${({ exiting }) => {
-    if (exiting === true) return css`
-
-        `;
+    if (exiting === true) return css``;
   }}
     }
   }

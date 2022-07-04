@@ -11,6 +11,7 @@ interface FiltersProps {
 
 export const Filters: FC<FiltersProps> = ({ children, label, value }) => {
   const [open, setOpened] = useState(false);
+
   return (
     <FiltersWrapper>
       <FiltersContainer isOpen={open} onClick={() => setOpened(!open)}>

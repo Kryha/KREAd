@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon, CloseIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins } from "../../design";
-import { disappear, fadeIn, Label, slideUpOpacity } from "../atoms";
+import { fadeIn, Label } from "../atoms";
 import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
 
 export const Content = styled.div`

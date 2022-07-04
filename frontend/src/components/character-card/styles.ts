@@ -1,4 +1,3 @@
-
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";

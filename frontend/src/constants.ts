@@ -29,3 +29,4 @@ export const UNMOUNTED = "unmounted";
 export const EXITED = "exited";
 export const ENTERED = "entered";
 export const EXITING = "entered";
+export const MILLISECONDS = 1000;

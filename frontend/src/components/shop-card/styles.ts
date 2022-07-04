@@ -10,6 +10,21 @@ export const Line = styled.div`
   width: 23px;
 `;
 
+export const Product = styled.div`
+  min-width: 302px;
+  background: ${color.white};
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  box-shadow: none;
+  padding-top: ${margins.medium};
+  align-items: center;
+  min-height: 485px;
+  cursor: pointer;
+  :hover {
+    border: 1px solid ${color.black};
+  }
+`;
 
 export const ImageContainer = styled.div`
   display: flex;
@@ -25,22 +40,6 @@ export const ImageContainer = styled.div`
   ${CharacterWrapper} {
     left: 20%;
     right: 0;
-  }
-`;
-
-export const Product = styled.div`
-  min-width: 302px;
-  background: ${color.white};
-  border: 1px solid ${color.grey};
-  box-sizing: border-box;
-  border-radius: ${margins.medium};
-  box-shadow: none;
-  padding-top: ${margins.medium};
-  align-items: center;
-  min-height: 485px;
-  cursor: pointer;
-  :hover {
-    border: 1px solid ${color.black};
   }
 `;
 

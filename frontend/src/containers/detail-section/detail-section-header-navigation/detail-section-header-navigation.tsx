@@ -1,8 +1,7 @@
 import { FC } from "react";
 
 import { DetailSectionHeaderNavigationWrap } from "./styles";
-import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
-import { PriceInIst } from "../../../components/price-in-ist";
+import { ButtonText, PriceInIst, PrimaryButton, SecondaryButton } from "../../../components";
 import { ButtonClose } from "../../../components/button-close";
 import { color } from "../../../design";
 import { DetailSectionActions } from "../types";
