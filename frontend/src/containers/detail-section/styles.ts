@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { fadeIn, slideUpOpacity } from "../../components/atoms/animations";
 import { color, margins } from "../../design";
 
 interface ViewProps {

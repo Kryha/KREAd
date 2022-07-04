@@ -1,12 +1,10 @@
 
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins, zIndex } from "../../design";
-import { disappear, PrimaryButton, slideUpOpacity } from "../atoms";
-import { fadeOut } from "../atoms/animations";
+import { PrimaryButton } from "../atoms";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 import { ButtonInfoWrap } from "../button-info/styles";
 import { PriceContainer } from "../price-in-ist/styles";

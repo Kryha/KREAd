@@ -3,9 +3,7 @@ import { BellIcon, CloseIcon, DownArrowIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
 import { fadeIn } from "../../components/atoms/animations";
 import { CharacterWrapper } from "../../components/base-character/styles";
-import { LeftItemContainer, RightItemContainer } from "../../components/character-items/styles";
-import { EquippedContainer } from "../../components/equipped-item-card/styles";
-import { color, margins, zIndex } from "../../design";
+import { color, margins } from "../../design";
 
 interface ImageProps {
   isZoomed?: boolean;

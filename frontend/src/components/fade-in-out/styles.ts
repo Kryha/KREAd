@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { Overlay } from "../atoms";
-import { disappear, fadeIn, fadeOut, slideUpOpacity } from "../atoms/animations";
+import { disappear, fadeOut, slideUpOpacity } from "../atoms/animations";
 import { CharacterWrapper } from "../character-card/styles";
 
 interface AnimationProps {
@@ -38,7 +38,7 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
   }}
   }
   ${Overlay} {
-    ${({ entering, exiting }) => {
+    ${({ exiting }) => {
     if (exiting === true) return css`
 
         `;

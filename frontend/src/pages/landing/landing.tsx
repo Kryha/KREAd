@@ -59,7 +59,6 @@ export const Landing: FC = () => {
     navigate(`${routes.sellCharacter}/${character.characterId}`);
   };
 
-  console.log(openTab && !!myCharacters);
   return (
     <BaseRoute
       sideNavigation={
