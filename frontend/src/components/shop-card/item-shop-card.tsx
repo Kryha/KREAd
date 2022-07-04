@@ -6,7 +6,6 @@ import { color } from "../../design";
 import { Badge, BoldLabel, Label, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, OwnedByContainer, ItemImage, Line } from "./styles";
-import { useViewport } from "../../hooks";
 
 interface ShopCardProps {
   item: Item;
@@ -14,7 +13,6 @@ interface ShopCardProps {
 }
 
 export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
-  const { width } = useViewport();
   const handleClick = () => {
     if (!onClick) return;
     onClick(item);
@@ -22,7 +20,7 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
 
 
   return (
-    <Product onClick={() => handleClick()} width={width}>
+    <Product onClick={() => handleClick()}>
       <Content>
         <ImageContainer>
           {/* TODO: use slots */}

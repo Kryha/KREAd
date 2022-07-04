@@ -19,8 +19,9 @@ export const LeftItemContainer = styled.div<Animation>`
     animation-duration: 1.0s, 1.5s;
     animation-delay: 0s, 1.0s;`
     :
-    css`animation: ${fadeOut};
-   animation-duration: 1.5s;
+    css`
+    animation: ${fadeOut};
+    animation-duration: 1.5s;
    `)};
    ${({ showItems }): string => {
     return showItems
@@ -46,8 +47,9 @@ export const RightItemContainer = styled.div<Animation>`
     animation-duration: 1.0s, 1.5s;
     animation-delay: 0s, 1.0s;`
     :
-    css`animation: ${fadeOut};
-   animation-duration: 1.5s;
+    css`
+    animation: ${fadeOut};
+    animation-duration: 1.5s;
   `)};
   ${({ showItems }): string => {
     return showItems

@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE, SMALL_SCREEN_WIDTH } from "../../constants";
 
 import { color, margins } from "../../design";
 import { Img } from "../atoms";
@@ -10,10 +9,6 @@ export const Line = styled.div`
   transform: rotate(-90deg);
   width: 23px;
 `;
-
-interface ViewProps {
-  width: number;
-}
 
 
 export const ImageContainer = styled.div`
@@ -33,7 +28,7 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const Product = styled.div<ViewProps>`
+export const Product = styled.div`
   min-width: 302px;
   background: ${color.white};
   border: 1px solid ${color.grey};
@@ -46,44 +41,6 @@ export const Product = styled.div<ViewProps>`
   cursor: pointer;
   :hover {
     border: 1px solid ${color.black};
-  }
-  ${({ width }): string => {
-    if (width <= 1366) {
-      console.log("as");
-      return "width: 402px;";
-    }
-    else if (width <= SMALL_SCREEN_SIZE && width >= 1366) {
-      return `width: 426px;
-      ${ImageContainer} {
-        margin-left: 15px;
-      }
-      `;
-    }
-    else if (width >= SMALL_SCREEN_SIZE && width <= MEDIUM_SCREEN_SIZE) {
-      return `width: 506.67px;
-      ${ImageContainer} {
-        margin-left: 50px;
-      }
-      `;
-    }
-    else if (width >= MEDIUM_SCREEN_SIZE && width <= LARGE_SCREEN_SIZE) {
-      return `width: 395px;
-      ${ImageContainer} {
-        // margin-left: 15px;
-      }
-      `;
-    }
-    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
-      return `width: 402px;
-      ${ImageContainer} {
-        margin-left: 15px;
-      }
-      `;
-    }
-    else {
-      return "width: 402px;";
-    }
-  }
   }
 `;
 
