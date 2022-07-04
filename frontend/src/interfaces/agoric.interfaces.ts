@@ -1,4 +1,4 @@
-interface AgoricService {
+export interface AgoricService {
   zoe: any;
   board: any;
   zoeInvitationDepositFacetId: any;
@@ -27,6 +27,7 @@ interface Status {
 export interface Purses {
   money: any[];
   character: any[];
+  item: any[];
 }
 
 export interface AgoricState {

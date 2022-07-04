@@ -20,45 +20,7 @@ const {
   brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
 } = dappConstants;
 
-export interface AgoricService {
-  zoe: any;
-  board: any;
-  zoeInvitationDepositFacetId: any;
-  invitationIssuer: any;
-  walletP: any;
-  apiSend: any;
-}
-
-export interface Contract {
-  instance: any;
-  publicFacet: any;
-  instanceBoardId?: string;
-}
-export interface Contracts {
-  characterBuilder: Contract;
-  auctions: Contract[];
-}
-export interface Status {
-  walletConnected: boolean;
-  dappApproved: boolean;
-  showApproveDappModal: boolean;
-}
-export interface Purses {
-  money: any[];
-  character: any[];
-  item: any[];
-}
-export interface ServiceState {
-  status: Status;
-  purses: Purses;
-  contracts: Contracts;
-  agoric: AgoricService;
-  isLoading: boolean;
-}
-
-export type PursePetname = [string, string];
-
-const initialState: ServiceState = {
+const initialState: AgoricState = {
   status: {
     walletConnected: false,
     dappApproved: false,
@@ -88,12 +50,12 @@ const initialState: ServiceState = {
 };
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
-type ProviderProps = Omit<React.ProviderProps<ServiceState>, "value">;
+type ProviderProps = Omit<React.ProviderProps<AgoricState>, "value">;
 
-const Context = createContext<ServiceState | undefined>(undefined);
+const Context = createContext<AgoricState | undefined>(undefined);
 const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
-const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState => {
+const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
