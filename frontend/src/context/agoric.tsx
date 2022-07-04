@@ -11,6 +11,8 @@ import { useCharacterStateDispatch } from "./characters";
 import { apiRecv } from "../service/api/receive";
 import { processPurses } from "../service/purses/process";
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
+import { useItemStateDispatch } from "./items";
+// import { NotificationWrapper } from "../components/notification-card/styles";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
@@ -101,6 +103,7 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
   const characterDispatch = useCharacterStateDispatch();
+  const itemDispatch = useItemStateDispatch();
   const walletPRef = useRef(undefined);
 
   useEffect(() => {
@@ -174,6 +177,10 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const nfts = await E(nftPublicFacet).getCharacters();
       characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
 
+      // TODO: GetItems and SET_ITEMS
+      const walletItems = await E(nftPublicFacet).getItems();
+      itemDispatch({ type: "SET_ITEMS", payload: walletItems.items });
+
       // TODO: set up chain notifiers
       // const availableItemsNotifier = E(
       //   publicFacetRef.current,
@@ -202,7 +209,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       onMessage,
     });
     return deactivateWebSocket;
-  }, [characterDispatch]);
+  }, [characterDispatch, itemDispatch]);
 
   return (
     <Context.Provider value={state}>

@@ -38,9 +38,6 @@ export interface AgoricState {
   isLoading: boolean;
 }
 
-// TODO: remove if keeps unused
-type PursePetname = [string, string];
-
 interface SetDappApproved {
   type: "SET_DAPP_APPROVED";
   payload: boolean;

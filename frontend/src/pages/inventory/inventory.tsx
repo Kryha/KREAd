@@ -6,18 +6,28 @@ import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
 import { Title } from "../../components/title";
 import { ItemsList } from "../../containers/items-list";
-import { useItems, useMyCharacters } from "../../service";
+import { useMyItems, useMyCharacters } from "../../service";
 import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification, DetailWrapper, NotificationContainer, Tag } from "./styles";
+import {
+  Close,
+  InventoryWrapper,
+  NotificationButton,
+  NotificationWrapper,
+  OverviewContainer,
+  Notification,
+  DetailWrapper,
+  NotificationContainer,
+  Tag,
+} from "./styles";
 import { EmptyCard } from "../../components/empty-card";
 import { color } from "../../design";
 import { Character } from "../../interfaces";
 
 const ItemsInventory: FC = () => {
-  const { data: items, isLoading, isError } = useItems();
+  const [items, isLoading] = useMyItems();
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState<string>("");
 
@@ -35,17 +45,21 @@ const ItemsInventory: FC = () => {
 
   if (isLoading) return <LoadingPage />;
 
-  if (isError) return <ErrorView />;
+  // TODO: Implement error handling at servive level
+  // if (isError) return <ErrorView />;
+
   const isEmpty = !items || !items.length;
 
   return (
-    <PageContainer sidebarContent={
-      isEmpty ? (
-        <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />
-      ) : (
-        <ItemsList onItemClick={setSelectedId} />
-      )
-    }>
+    <PageContainer
+      sidebarContent={
+        isEmpty ? (
+          <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />
+        ) : (
+          <ItemsList onItemClick={setSelectedId} />
+        )
+      }
+    >
       {isEmpty ? (
         <OverviewContainer>
           <OverviewEmpty
@@ -56,7 +70,6 @@ const ItemsInventory: FC = () => {
           />
         </OverviewContainer>
       ) : (
-
         <ItemDetailSection
           item={item || items[0]}
           actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
@@ -119,23 +132,25 @@ export const Inventory: FC = () => {
   );
   // TODO: switch between items and characters
   return (
-    <BaseRoute sideNavigation={
-      <NotificationWrapper>
-        <Title title={text.navigation.inventory} />
-        <NotificationContainer>
-          <NotificationButton
-            open={openNotification}
-            onClick={() => setOpenNotifications(!openNotification)}
-            backgroundColor={openNotification ? color.lightGrey : color.white}
-          >
-            {openNotification ? <Close /> : <Notification />}
-          </NotificationButton>
-          <Tag />
-        </NotificationContainer>
-      </NotificationWrapper>
-    }>
+    <BaseRoute
+      sideNavigation={
+        <NotificationWrapper>
+          <Title title={text.navigation.inventory} />
+          <NotificationContainer>
+            <NotificationButton
+              open={openNotification}
+              onClick={() => setOpenNotifications(!openNotification)}
+              backgroundColor={openNotification ? color.lightGrey : color.white}
+            >
+              {openNotification ? <Close /> : <Notification />}
+            </NotificationButton>
+            <Tag />
+          </NotificationContainer>
+        </NotificationWrapper>
+      }
+    >
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
-      {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
+      {selectedPage === Page.Items ? <ItemsInventory /> : <CharactersInventory />}
       {openNotification && (
         <>
           <NotificationCard />

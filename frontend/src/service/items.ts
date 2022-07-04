@@ -5,6 +5,7 @@ import { Item } from "../interfaces";
 import { Items } from "./fake-item-data";
 import { sortItems } from "../util";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
+import { useItemContext } from "../context/items";
 
 export const useItems = (): UseQueryResult<Item[]> => {
   return useQuery(["items", "all"], async () => {
@@ -22,12 +23,11 @@ export const useItem = (id: string): UseQueryResult<Item> => {
   });
 };
 
-export const useMyItems = (): UseQueryResult<Item[]> => {
-  return useQuery(["items"], async () => {
-    //  TODO: intergrate me
-
-    return Items;
-  });
+export const useMyItems = (): [Item[], boolean] => {
+  const [{ owned, fetched }] = useItemContext();
+  const myItems = owned;
+  const isLoading = !fetched;
+  return [myItems, isLoading];
 };
 
 export const useFilteredItems = (
