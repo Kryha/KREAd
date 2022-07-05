@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { DefaultIcon, text } from "../../assets";
 import { color } from "../../design";
-import { ButtonText, Footer, MenuItemName, MenuText, PrimaryButton, SecondaryButton, TitleText } from "../../components";
+import { ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, SecondaryButton, TitleText } from "../../components";
 import {
   ArrowUp,
   ArrowUpRight,
@@ -54,7 +54,7 @@ export const Onboarding: FC = () => {
           <TitleText customColor={color.darkGrey}>{text.general.sendEmailTo}</TitleText>
         </MiddleContent>
       </OnboardingWrapper>
-      <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />
+      <OnboardingCharacter />
       <FooterContainer>
         <Footer />
       </FooterContainer>
