@@ -1,7 +1,7 @@
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 
-export const processPurses = (purses: any[], characterDispatch: CharacterDispatch, serviceDispatch: AgoricDispatch, brandsToCheck: { money: string, character: string, item: string}) => {
+export const processPurses = (purses: any[], characterDispatch: CharacterDispatch, serviceDispatch: AgoricDispatch, brandsToCheck: { money: string, character: string, item: string, inventoryKey: string}) => {
   const newTokenPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.money,
   );
@@ -11,9 +11,13 @@ export const processPurses = (purses: any[], characterDispatch: CharacterDispatc
   const newItemPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.item, // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
+  const newInventoryKeyPurses = purses.filter(
+    ({ brandBoardId }) => brandBoardId === brandsToCheck.inventoryKey, // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
+  );
   serviceDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
   serviceDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
   serviceDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });
+  serviceDispatch({ type: "SET_INVENTORY_KEY_PURSES", payload: newInventoryKeyPurses });
 
   const ownedCharacters = newCharacterPurses.flatMap((purse) => {
     return purse.value;

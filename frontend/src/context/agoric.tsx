@@ -19,11 +19,13 @@ const {
   issuerBoardIds: {
     Character: CHARACTER_ISSUER_BOARD_ID,
     Item: ITEM_ISSUER_BOARD_ID,
+    InventoryKey: INVENTORY_KEY_ISSUER_BOARD_ID,
   },
   brandBoardIds: {
     Money: MONEY_BRAND_BOARD_ID,
     Character: CHARACTER_BRAND_BOARD_ID,
     Item: ITEM_BRAND_BOARD_ID,
+    InventoryKey: INVENTORY_KEY_BRAND_BOARD_ID,
   },
 } = dappConstants;
 
@@ -56,6 +58,7 @@ export interface Purses {
   money: any[];
   character: any[];
   item: any[];
+  inventoryKey: any[];
 }
 export interface ServiceState {
   status: Status;
@@ -77,6 +80,7 @@ const initialState: ServiceState = {
     money: [],
     character: [],
     item: [],
+    inventoryKey: [],
   },
   agoric: {
     zoe: undefined,
@@ -121,6 +125,9 @@ const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState 
     
     case "SET_ITEM_PURSES":
       return { ...state, purses: { ...state.purses, item: action.payload } };
+    
+    case "SET_INVENTORY_KEY_PURSES":
+      return { ...state, purses: { ...state.purses, inventoryKey: action.payload } };
     
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
@@ -188,11 +195,23 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID, item: ITEM_BRAND_BOARD_ID });
+          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID, item: ITEM_BRAND_BOARD_ID, inventoryKey: INVENTORY_KEY_BRAND_BOARD_ID });
         }
       }
       watchPurses().catch((err) => {
         console.error("got watchPurses err", err);
+      });
+
+      async function watchOffers() {
+        const on = E(walletP).getOffersNotifier();
+        for await (const offer of iterateNotifier(on)) {
+          console.info("📡 OFFER UPDATE");
+          const last3 = offer.slice(-3);
+          console.info(last3);
+        }
+      }
+      watchOffers().catch((err) => {
+        console.error("got watchOffers err", err);
       });
 
       // Suggest installation and brands to wallet
@@ -201,6 +220,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("KREAINVENTORYEKEY", INVENTORY_KEY_ISSUER_BOARD_ID),
 
       ]);
 

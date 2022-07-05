@@ -153,17 +153,59 @@ export const TestServiceUI = () => {
     const { items: { value: equippedItems } } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
 
     const item = equippedItems[0];
+    console.log(item);
     await removeFromInventory(service, item);
     console.log("done");
   };
 
   const test = async () => {
+
+    // const inviteReturnMsg = await E(CBPublicFacet).testPRNG();
+    // const config = await E(CBPublicFacet).getConfig();
+    // const mintNext = await E(CBPublicFacet).getMintNext();
+
+    /*
+    const invitationMsg = await E(CBPublicFacet).invitationReturnMsg();
+    const invitationParam1 = await E(CBPublicFacet).invitationParam1({ msg: "MY SECRET MSG" });
+    const invitationParam2 = await E(CBPublicFacet).invitationParam2({ msg: "MY SECRET MSG" });
+
+    console.info("Invitations successful, sending to wallet for approval", invitationMsg, invitationParam1, invitationParam2);
+    
+    const offerConfigMsg = harden({
+      id: `${Date.now()}msg`,
+      invitation: invitationMsg,
+      proposalTemplate: {},
+      dappContext: true,
+    });
+    const offerConfigParam1 = harden({
+      id: `${Date.now()}p1`,
+      invitation: invitationParam1,
+      proposalTemplate: {},
+      dappContext: true,
+    });
+    const offerConfigParam2 = harden({
+      id: `${Date.now()}p2`,
+      invitation: invitationParam2,
+      proposalTemplate: {},
+      dappContext: true,
+    });
+    const results = await Promise.allSettled([
+      E(service.agoric.walletP).addOffer(offerConfigMsg), 
+      E(service.agoric.walletP).addOffer(offerConfigParam1),
+      E(service.agoric.walletP).addOffer(offerConfigParam2),
+    ]
+    );
+
+    console.log("🦐 ", results); */
+  
+  
+    console.log(await mintNfts(service, "PABLO", 10n));
     // const nfts = await E(CBPublicFacet).getCharacters();
     // const rand = await E(CBPublicFacet).testPRNG();
     // const config = await E(CBPublicFacet).getConfig();
     // const mintNext = await E(CBPublicFacet).getMintNext();
     // console.log(nfts, rand, config, mintNext);
-    console.log(await E(CBPublicFacet).getRandomBaseCharacter());
+    // console.log(await E(CBPublicFacet).getRandomBaseCharacter());
     // const character = nfts[2];
     // if (!character) {
     //   console.log("Character not found");
@@ -171,7 +213,14 @@ export const TestServiceUI = () => {
     // }
     // console.log(character);
     // await mintViaDepositFacet(service, "Pablo");
-    console.log(await mintNfts(service, "PABLO", 10n));
+  };
+
+  const getLogs = async () => {
+    const privateState = await E(CBPublicFacet).getPrivateState();
+    const keyLogs = await E(CBPublicFacet).getKeyLogs();
+
+    console.log("🪙", privateState);
+    console.log(keyLogs);
   };
 
   const getCharacterInventory = async () => {
@@ -205,6 +254,9 @@ export const TestServiceUI = () => {
       <button
         style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
         onClick={test}>TEST</button>
+      <button
+        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+        onClick={getLogs}>LOGS</button>
     </div>
   </>;
 };

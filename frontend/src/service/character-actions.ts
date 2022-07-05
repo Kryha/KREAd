@@ -59,6 +59,10 @@ export const mintNfts = async (service: AgoricState, name: string, price: bigint
         Asset: {
           pursePetname: service.purses.character[service.purses.character.length-1].brandPetname,
           value: [{name}],
+        },
+        InventoryKey: {
+          pursePetname: service.purses.inventoryKey[service.purses.inventoryKey.length-1].brandPetname,
+          value: [{name}],
         }
       },
     },

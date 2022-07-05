@@ -8,11 +8,13 @@ export default {
   "brandBoardIds": {
     "Character": "board02021",
     "Item": "board03523",
+    "InventoryKey": "board03125",
     "Money": "board0074"
   },
   "issuerBoardIds": {
     "Character": "board01422",
     "Item": "board05024",
+    "InventoryKey": "board00126",
     "Money": "board0223"
   },
   "MONEY_DECIMAL_PLACES": 6,
