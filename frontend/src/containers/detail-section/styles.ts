@@ -5,7 +5,7 @@ interface ViewProps {
   width: number;
 }
 
-export const DetailSectionWrap = styled.section<ViewProps>`
+export const DetailSectionWrap = styled.div<ViewProps>`
   height: 80vh;
   background-color: ${color.lightGrey};
   border: 1px solid ${color.grey};

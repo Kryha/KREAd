@@ -80,8 +80,11 @@ export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
 
 export const DetailWrapper = styled.section`
   ${DetailSectionWrap} {
-    height: 70vh;
-    max-width: 100%;
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+    height: 80vh;
+    max-width: 52.7%;
   }
 `;
 

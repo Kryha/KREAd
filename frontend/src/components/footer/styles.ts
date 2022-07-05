@@ -12,7 +12,6 @@ export const FooterWrapper = styled.div<FooterProps>`
   flex-direction: row;
   justify-content: flex-end;
   align-items: flex-start;
-  padding: 0px 0px 0px 40px;
   gap: 20px;
   position: relative;
   z-index: 1000;

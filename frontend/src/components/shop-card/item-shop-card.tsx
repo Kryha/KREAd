@@ -3,9 +3,10 @@ import { FC } from "react";
 import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
-import { Badge, BoldLabel, Label, TitleText } from "../atoms";
+import { Badge, BoldLabel, ButtonText, Label, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, OwnedByContainer, ItemImage, Line } from "./styles";
+import { useViewport } from "../../hooks";
 
 interface ShopCardProps {
   item: Item;
@@ -13,13 +14,14 @@ interface ShopCardProps {
 }
 
 export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
+  const { width, height } = useViewport();
   const handleClick = () => {
     if (!onClick) return;
     onClick(item);
   };
 
   return (
-    <Product onClick={() => handleClick()}>
+    <Product onClick={() => handleClick()} width={width} height={height}>
       <Content>
         <ImageContainer>
           {/* TODO: use slots */}
@@ -27,19 +29,16 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
         </ImageContainer>
         <TitleWrapper>
           <TitleText>{item.name}</TitleText>
-          <OwnedByContainer>
-            <BoldLabel customColor={color.black}>{text.param.id(item.id)}</BoldLabel>
-          </OwnedByContainer>
+          <BoldLabel>{item.category}</BoldLabel>
         </TitleWrapper>
         <Footer>
           <Tag>
-            <Badge>
-              <Label>{item.category}</Label>
-            </Badge>
-            <Line />
             <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
           </Tag>
           <PriceInIst price={item.price} />
+          <PrimaryButton>
+            <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
+          </PrimaryButton>
         </Footer>
       </Content>
     </Product>

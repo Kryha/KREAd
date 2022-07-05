@@ -5,7 +5,7 @@ export const TopbarContainer = styled.header`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
   padding: ${margins.big};
 `;
 

@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
+import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
 
 import { color, margins } from "../../design";
-import { Img } from "../atoms";
+import { Img, PrimaryButton, TitleText } from "../atoms";
 import { CharacterWrapper } from "../base-character/styles";
 
 export const Line = styled.div`
@@ -10,8 +11,12 @@ export const Line = styled.div`
   width: 23px;
 `;
 
-export const Product = styled.div`
-  width: 402px;
+interface ViewProps {
+  width: number;
+  height: number;
+}
+
+export const Product = styled.div<ViewProps>`
   min-width: 402px;
   background: ${color.white};
   border: 1px solid ${color.grey};
@@ -20,10 +25,32 @@ export const Product = styled.div`
   box-shadow: none;
   padding-top: ${margins.medium};
   align-items: center;
-  min-height: 485px;
+  min-height: 525px;
   cursor: pointer;
   :hover {
     border: 1px solid ${color.black};
+  }
+  flex: 1 0 500px;
+  box-sizing: border-box;
+  ${({ width }): string => {
+    if (width <= 1300) {
+      return "flex: 0 1 calc(49.6% - 1em);";
+    }
+    else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
+      return "flex: 0 1 calc(32.4% - 1em);";
+    }
+    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
+      return "flex: 0 1 calc(24.41% - 1em);";
+    }
+    else {
+      return "flex: 1 0 500px;";
+    }
+  }
+  }
+  :not(:hover) {
+    ${PrimaryButton} {
+      display: none;
+    }
   }
 `;
 
@@ -38,6 +65,7 @@ export const ImageContainer = styled.div`
   margin-bottom: ${margins.medium};
   overflow: hidden;
   position: relative;
+  margin: 0 auto;
   ${CharacterWrapper} {
     left: 20%;
     right: 0;
@@ -54,6 +82,10 @@ export const TitleWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   min-height: 54px;
+  margin-top: 24px;
+  ${TitleText} {
+    font-weight: 500;
+  }
 `;
 
 export const OwnedByContainer = styled.div`
@@ -106,9 +138,7 @@ export const ItemImage = styled(Img) <ImageProps>`
 `;
 
 export const Element = styled.div`
-  width: 345px;
   height: 320px;
-  border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   overflow: hidden;
 `;

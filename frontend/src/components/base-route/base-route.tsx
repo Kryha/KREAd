@@ -9,15 +9,17 @@ import { TopbarContainer, Box, ChildrenContainer, FooterContainer } from "./styl
 interface BaseRouteProps {
   sideNavigation: React.ReactNode;
   children?: React.ReactNode;
+  onboarding?: boolean;
 }
 
-export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation }) => {
+export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboarding = false }) => {
+  const isOnboarding = onboarding ? routes.onboarding : routes.character;
   return (
     <>
       <TopbarContainer>
         <Box>
-          <NavigationSection route={routes.character}>
-            <NavigationTab title={text.navigation.character} route={routes.character} />
+          <NavigationSection route={isOnboarding}>
+            <NavigationTab title={text.navigation.character} route={isOnboarding} />
           </NavigationSection>
           <NavigationSection route={routes.shop}>
             <NavigationTab title={text.navigation.shop} route={routes.shop} />

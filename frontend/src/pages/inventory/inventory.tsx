@@ -56,11 +56,12 @@ const ItemsInventory: FC = () => {
           />
         </OverviewContainer>
       ) : (
-
-        <ItemDetailSection
-          item={item || items[0]}
-          actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
-        />
+        <DetailWrapper>
+          <ItemDetailSection
+            item={item || items[0]}
+            actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+          />
+        </DetailWrapper>
       )}
     </PageContainer>
   );

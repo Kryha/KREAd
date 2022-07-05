@@ -12,7 +12,7 @@ export const NavigationTab: FC<NavigationTabProps> = ({route, title}) => {
   const match = useMatch({ path: resolved.pathname, end: true });
   return (
     <NavTabs>
-      <Tab>
+      <Tab active={!!match}>
         <NavTitle>{title}</NavTitle>
         <ActiveLine active={!!match}/>
       </Tab>

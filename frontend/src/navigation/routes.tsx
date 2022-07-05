@@ -14,7 +14,8 @@ import {
   CharacterSell,
   Onboarding,
   About,
-  Privacy
+  Privacy,
+  OnboardingConnect
 } from "../pages";
 import { MainContainer, ErrorFallback } from "../components";
 import { Item } from "../pages/item";
@@ -28,6 +29,7 @@ export const AppRoutes: FC = () => {
       <MainContainer>
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
+          <Route path={routes.onboarding} element={<OnboardingConnect />} />
           <Route path={routes.character} element={<Landing />} />
           <Route path={`${routes.items}/:category`} element={<Item />} />
           <Route path={routes.shop} element={<Shop />} />

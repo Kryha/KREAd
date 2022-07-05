@@ -30,14 +30,14 @@ export const Onboarding: FC = () => {
           <MenuText>{text.general.launchingTheFirst}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
           <ButtonContainer>
-            <SecondaryButton onClick={() => navigate(routes.createCharacter)}>
-              {/* <ButtonText>{text.general.explore}</ButtonText> */}
-              <ButtonText>{text.general.createCharacter}</ButtonText>
+            <SecondaryButton onClick={() => navigate(routes.onboarding)}>
+              <ButtonText>{text.general.explore}</ButtonText>
+              {/* <ButtonText>{text.general.createCharacter}</ButtonText> */}
 
               <ArrowUpRight />
             </SecondaryButton>
             {/* TODO: connect to wallet */}
-            <PrimaryButton>
+            <PrimaryButton onClick={() => navigate(routes.character)}>
               <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
               <ArrowUp />
             </PrimaryButton>

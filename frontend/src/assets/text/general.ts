@@ -44,4 +44,6 @@ export const general = {
   sendEmailTo: "send an email to x@kryha.io",
   forSale: "for sale",
   createCharacter: "create character",
+  thereIsNoActity: "there is no activity currently.",
+  buy: "buy",
 };
