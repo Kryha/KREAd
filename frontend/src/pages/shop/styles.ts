@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
+import { slideInUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -72,6 +73,12 @@ export const ItemContainer = styled.div`
   gap: ${margins.big};
   padding-top: 20px;
   padding-bottom: 140px;
+  -webkit-animation-name: ${slideInUp};
+  animation-name: ${slideInUp};
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 `;
 
 export const LoadMore = styled.div`

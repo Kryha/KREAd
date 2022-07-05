@@ -1,7 +1,10 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { TriangleIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { ButtonText } from "../atoms";
+import { disappear, fadeIn, fadeOut } from "../atoms/animations";
+import { SelectBox } from "../input-fields/styles";
 
 interface FilterProps {
   isOpen: boolean;
@@ -88,4 +91,12 @@ export const FilterOption = styled.div<FilterProps>`
         display: none;
       `;
   }};
+  ${({ isOpen }) => (isOpen === true ?
+    css` animation: ${disappear}, ${fadeIn};
+    animation-duration: 0.5s, 1.0s;
+    animation-delay: 0s, 0.5s;`
+    :
+    css`animation: ${fadeOut};
+   animation-duration: 1.0s;
+  `)};
 `;

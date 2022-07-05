@@ -103,7 +103,7 @@ export const Tag = styled.div`
   display: flex;
   align-items: center;
   gap: ${margins.small};
-  width: 235px;
+  width: 150px;
   overflow-x: scroll;
 `;
 
