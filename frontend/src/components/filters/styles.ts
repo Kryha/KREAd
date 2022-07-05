@@ -4,7 +4,6 @@ import { TriangleIcon } from "../../assets";
 import { color, margins } from "../../design";
 import { ButtonText } from "../atoms";
 import { disappear, fadeIn, fadeOut } from "../atoms/animations";
-import { SelectBox } from "../input-fields/styles";
 
 interface FilterProps {
   isOpen: boolean;
@@ -88,7 +87,7 @@ export const FilterOption = styled.div<FilterProps>`
         z-index: 1000;
         `
       : `
-        display: none;
+      display: none;
       `;
   }};
   ${({ isOpen }) => (isOpen === true ?

@@ -8,6 +8,8 @@ import {
   ButtonText,
   CharacterCard,
   CharacterItems,
+  ErrorView,
+  FadeInOut,
   LoadingPage,
   MenuText,
   NotificationCard,
@@ -76,11 +78,11 @@ export const Landing: FC = () => {
         </NotificationWrapper>
       }
     >
-      <LandingContainer isZoomed={openTab}>
+      <LandingContainer isZoomed={!openTab && !openNotification}>
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
-      {!openTab && !openNotification && <CharacterItems items={character.items} />}
-      {openTab && !!myCharacters && <CharacterCard id={character.characterId} characters={myCharacters} />}
+      <CharacterItems items={character.items} showItems={!openTab && !openNotification} />
+      <CharacterCard id={character.characterId} characters={myCharacters} showCard={openTab && !!myCharacters}/>
       <DetailContainer>
         <MenuText>{character.name}</MenuText>
         <ButtonContainer>
@@ -90,21 +92,23 @@ export const Landing: FC = () => {
           <ButtonText>{text.param.level(character.level)}</ButtonText>
         </ButtonContainer>
       </DetailContainer>
-      {showDetail && (
-        <CharacterCardWrapper>
+      <CharacterCardWrapper>
+        <FadeInOut show={showDetail}>
           <CharacterDetailSection
             character={character}
             actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => setShowDetail(false) }}
           />
-        </CharacterCardWrapper>
-      )}
+        </FadeInOut>
+      </CharacterCardWrapper>
       {openNotification && (
         <>
           <NotificationCard />
           <Overlay />
         </>
       )}
-      {showDetail && <Overlay />}
+      <FadeInOut show={showDetail}>
+        <Overlay />
+      </FadeInOut>
     </BaseRoute>
   );
 };

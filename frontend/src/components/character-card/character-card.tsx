@@ -19,12 +19,15 @@ import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { CharacterDetailSection } from "../../containers/detail-section/character-detail-section";
 import { EmptyCard } from "../empty-card";
+import { FadeInOut } from "../fade-in-out";
+
 interface CharacterCardProps {
   id: string;
   characters: Character[];
+  showCard?: boolean;
 }
 
-export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
+export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard = false }) => {
   const navigate = useNavigate();
   const [character, setCharacter] = useState<Character>();
   const { width, height } = useViewport();
@@ -53,32 +56,33 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters }) => {
 
   return (
     <>
-      <CharacterWrapper width={width} height={height}>
-        <>
-          <EmptyViewContainer>
-            {!sortedCharacters.length && (
-              <EmptyCard
-                title={text.character.thereAreNoCharactersAvailable}
-                description={text.character.minANewCharcater}
-              />
-            )}
-          </EmptyViewContainer>
-          <CharacterContent>
-            {sortedCharacters.map((character, index) => (
-              <CharacterItem character={character} key={index} onClick={showInfo} id={id} />
-            ))}
-          </CharacterContent>
+      <FadeInOut show={showCard}>
+        <CharacterWrapper width={width} height={height} showCard={showCard}>
+          <>
+            <EmptyViewContainer>
+              {!sortedCharacters.length && (
+                <EmptyCard
+                  title={text.character.thereAreNoCharactersAvailable}
+                  description={text.character.minANewCharcater}
+                />
+              )}
+            </EmptyViewContainer>
+            <CharacterContent>
+              {sortedCharacters.map((character, index) => (
+                <CharacterItem character={character} key={index} onClick={showInfo} id={id} />
+              ))}
+            </CharacterContent>
 
-          <CardActionsContainer>
-            <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
-            <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
-              <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
-              <ArrowUp />
-            </PrimaryButton>
-          </CardActionsContainer>
-        </>
-      </CharacterWrapper>
-
+            <CardActionsContainer>
+              <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
+              <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
+                <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </CardActionsContainer>
+          </>
+        </CharacterWrapper>
+      </FadeInOut>
       {character && (
         <CharacterCardWrapper>
           <CharacterDetailSection

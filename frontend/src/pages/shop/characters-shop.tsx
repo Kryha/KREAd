@@ -12,6 +12,7 @@ import {
   PriceSelector,
   Select,
   ButtonText,
+  FadeInOut,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -114,13 +115,15 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           )}
         </>
       )}
-      {!!selectedCharacter && (
-        <CharacterDetailSection
-          character={selectedCharacter}
-          actions={{ onClose: () => setSelectedCharacter(undefined), primary: { text: text.item.buy, onClick: buy } }}
-        />
-      )}
-      {!!selectedCharacter && <Overlay />}
+      <FadeInOut show={!!selectedCharacter}>
+        {!!selectedCharacter && (
+          <CharacterDetailSection
+            character={selectedCharacter}
+            actions={{ onClose: () => setSelectedCharacter(undefined), primary: { text: text.item.buy, onClick: buy } }}
+          />
+        )}
+        <Overlay />
+      </FadeInOut>
     </>
   );
 };

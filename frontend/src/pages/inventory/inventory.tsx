@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, ErrorView, LoadingPage, NotificationCard, Overlay, OverviewEmpty, SwitchSelector } from "../../components";
+import { BaseRoute, ErrorView, FadeInOut, LoadingPage, NotificationCard, Overlay, OverviewEmpty, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { PageContainer } from "../../components/page-container";
 import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
@@ -11,7 +11,7 @@ import { CharactersList } from "../../containers/characters-list";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification, DetailWrapper, NotificationContainer, Tag } from "./styles";
+import { Close, InventoryWrapper,  NotificationButton,  NotificationWrapper,  OverviewContainer, Notification, DetailWrapper, NotificationContainer, Tag, DetailContainer } from "./styles";
 import { EmptyCard } from "../../components/empty-card";
 import { color } from "../../design";
 import { Character } from "../../interfaces";
@@ -93,12 +93,14 @@ const CharactersInventory: FC = () => {
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
-      <DetailWrapper>
-        <CharacterDetailSection
-          character={character || myCharacters[0]}
-          actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
-        />
-      </DetailWrapper>
+      <DetailContainer>
+        <DetailWrapper>
+          <CharacterDetailSection
+            character={character || myCharacters[0]}
+            actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
+          />
+        </DetailWrapper>
+      </DetailContainer>
     </PageContainer>
   );
 };
@@ -118,7 +120,7 @@ export const Inventory: FC = () => {
     ),
     [selectedPage]
   );
-  // TODO: switch between items and characters
+
   return (
     <BaseRoute sideNavigation={
       <NotificationWrapper>
@@ -137,12 +139,10 @@ export const Inventory: FC = () => {
     }>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
       {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
-      {openNotification && (
-        <>
-          <NotificationCard />
-          <Overlay />
-        </>
-      )}
+      <FadeInOut show={openNotification}>
+        <NotificationCard />
+        <Overlay />
+      </FadeInOut>
     </BaseRoute>
   );
 };

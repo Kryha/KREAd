@@ -13,6 +13,7 @@ import {
   OverviewEmpty,
   Overlay,
   ButtonText,
+  FadeInOut,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -108,17 +109,19 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           </ItemContainer>
         </ItemWrapper>
       )}
-      {!!selectedItem && (
-        <ItemDetailSection
-          item={selectedItem}
-          actions={{
-            onClose: () => setSelectedItem(undefined),
-            price: selectedItem.price,
-            primary: { text: text.item.buy, onClick: buy },
-          }}
-        />
-      )}
-      {!!selectedItem && <Overlay />}
+      <FadeInOut show={!!selectedItem}>
+        {!!selectedItem && (
+          <ItemDetailSection
+            item={selectedItem}
+            actions={{
+              onClose: () => setSelectedItem(undefined),
+              price: selectedItem.price,
+              primary: { text: text.item.buy, onClick: buy },
+            }}
+          />
+        )}
+        <Overlay />
+      </FadeInOut>
     </>
   );
 };
