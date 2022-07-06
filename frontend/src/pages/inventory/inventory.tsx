@@ -1,112 +1,13 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, ErrorView, LoadingPage, NotificationCard, Overlay, OverviewEmpty, SwitchSelector } from "../../components";
+import { BaseRoute, NotificationCard, Overlay, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
-import { PageContainer } from "../../components/page-container";
-import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
 import { Title } from "../../components/title";
-import { ItemsList } from "../../containers/items-list";
-import { useMyItems, useMyCharacters } from "../../service";
-import { CharactersList } from "../../containers/characters-list";
-import { routes } from "../../navigation";
-import { useNavigate } from "react-router-dom";
 import { Page } from "../shop";
-import {
-  Close,
-  InventoryWrapper,
-  NotificationButton,
-  NotificationWrapper,
-  OverviewContainer,
-  Notification,
-  DetailWrapper,
-  NotificationContainer,
-  Tag,
-} from "./styles";
-import { EmptyCard } from "../../components/empty-card";
+import { Close, InventoryWrapper, NotificationButton, NotificationWrapper, Notification, NotificationContainer, Tag } from "./styles";
 import { color } from "../../design";
-import { Character } from "../../interfaces";
-
-const ItemsInventory: FC = () => {
-  const [items, isLoading] = useMyItems();
-  const navigate = useNavigate();
-  const [selectedId, setSelectedId] = useState<string>("");
-
-  const item = useMemo(() => items?.find((item) => item.id === selectedId), [items, selectedId]);
-
-  // TODO: move to Item service
-  const equip = () => {
-    // TODO: implement item equip
-    console.log("TODO: implement item equip");
-  };
-  const sell = () => {
-    if (!selectedId) return;
-    navigate(`${routes.sellItem}/${selectedId}`);
-  };
-
-  if (isLoading) return <LoadingPage />;
-
-  // TODO: Implement error handling at servive level
-  // if (isError) return <ErrorView />;
-
-  const isEmpty = !items || !items.length;
-
-  return isEmpty ? (
-    <PageContainer sidebarContent={<EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />}>
-      <OverviewContainer>
-        <OverviewEmpty
-          headingText={text.item.noItemEquipped}
-          descriptionText={text.item.youDidNotEquip}
-          buttonText={text.item.startEquipping}
-          onButtonClick={equip}
-        />
-      </OverviewContainer>
-    </PageContainer>
-  ) : (
-    <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
-      <ItemDetailSection
-        item={item || items[0]}
-        actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
-      />
-    </PageContainer>
-  );
-};
-
-const CharactersInventory: FC = () => {
-  const navigate = useNavigate();
-  const [myCharacters, isLoading] = useMyCharacters();
-  const [selectedId, setSelectedId] = useState<string>("");
-
-  const character = useMemo(
-    () => myCharacters?.find((character: Character) => character.characterId === selectedId),
-    [myCharacters, selectedId]
-  );
-
-  const choose = () => {
-    // TODO: implement character choose
-    console.log("TODO: implement character choose");
-  };
-
-  // TODO: Move to Character service
-  const sell = () => {
-    if (!selectedId) return;
-    navigate(`${routes.sellCharacter}/${selectedId}`);
-  };
-
-  if (isLoading) return <LoadingPage />;
-
-  if (!myCharacters || !myCharacters.length) return <ErrorView />;
-
-  return (
-    <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
-      <DetailWrapper>
-        <CharacterDetailSection
-          character={character || myCharacters[0]}
-          actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
-        />
-      </DetailWrapper>
-    </PageContainer>
-  );
-};
+import { ItemsInventory } from "./itemInventory";
+import { CharactersInventory } from "./characterInventory";
 
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
@@ -123,6 +24,9 @@ export const Inventory: FC = () => {
     ),
     [selectedPage]
   );
+
+  const showItemsInventory = selectedPage === Page.Items;
+
   // TODO: switch between items and characters
   return (
     <BaseRoute
@@ -143,7 +47,7 @@ export const Inventory: FC = () => {
       }
     >
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
-      {selectedPage === Page.Items ? <ItemsInventory /> : <CharactersInventory />}
+      {showItemsInventory ? <ItemsInventory /> : <CharactersInventory />}
       {openNotification && (
         <>
           <NotificationCard />
