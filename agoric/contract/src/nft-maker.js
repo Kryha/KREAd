@@ -8,108 +8,40 @@ import { errors } from './errors';
 import { mulberry32 } from './prng';
 
 /**
- * @typedef {{
- * characterNames: string[]
- * characters: CharacterRecord[]
- * config?: Config
- * mintNext: string
- * }} State
- * @typedef {{
- * baseCharacters: object[]
- * defaultItems: object[]
- * completed?: boolean
- * }} Config
- * @typedef {{
- * name: string
- * character: object
- * inventory: ZCFSeat
- * seat?: ZCFSeat
- * auction?: {
- *   instance: Instance,
- *   publicFacet: any,
- * },
- * }} CharacterRecord
- * @typedef {{
- * noseline?: Item;
- * midBackground?: Item;
- * mask?: Item;
- * headPiece?: Item;
- * hair?: Item;
- * frontMask?: Item;
- * liquid?: Item;
- * background?: Item;
- * airResevoir?: Item;
- * clothing?: Item;
- * }} DefaultItems
- * @typedef {{
- * name: string;
- * category: string;
- * id: string;
- * description: string;
- * image: string;
- * level: number;
- * rarity: number;
- * effectiveness?: number;
- * layerComplexity?: number;
- * forged: string;
- * baseMaterial: string;
- * colors: string[];
- * projectDescription: string;
- * price: number;
- * details: any;
- * date: string;
- * slots?: any[];
- * activity: any[];
- * }} Item
- *
- * // PRIVATE STORAGE
- * @typedef {{
- * id: number;
- * add?: string[];
- * remove?: string[];
- * }} InventoryEvent
- * @typedef {{
- * seat?: ZCFSeat;
- * name: string;
- * history: InventoryEvent[];
- * }} InventoryKeyRecord
- * @typedef {InventoryKeyRecord[]} InventoryKeyStorage
- */
-
-/**
- * This contract mints non-fungible tokens (Characters) and creates a contract
- * instance to auction the Characters in exchange for some sort of money.
+ * This contract handles the mint of KREAd characters,
+ * along with its corresponding item inventories and keys.
+ * It also allows for equiping and unequiping items to
+ * and from the inventory, using a token as access
  *
  * @type {ContractStartFn}
  */
 const start = async (zcf) => {
   // Define Assets
-  const characterMint = await zcf.makeZCFMint('KREA', AssetKind.SET);
-  const { issuer: characterIssuer, brand: characterBrand } =
-    characterMint.getIssuerRecord();
-  // Define Inventory Access
-  const inventoryKeyMint = await zcf.makeZCFMint(
-    'KREAINVENTORYKEY',
-    AssetKind.SET,
-  );
-  const { issuer: inventoryKeyIssuer, brand: inventoryKeyBrand } =
-    inventoryKeyMint.getIssuerRecord();
-  // Define Items
-  const itemMint = await zcf.makeZCFMint('KREAITEM', AssetKind.SET);
-  const { issuer: itemIssuer, brand: itemBrand } = itemMint.getIssuerRecord();
+  const assetMints = await Promise.all([
+    await zcf.makeZCFMint('KREA', AssetKind.SET),
+    await zcf.makeZCFMint('KREAITEM', AssetKind.SET),
+    await zcf.makeZCFMint('KREAINVENTORYKEY', AssetKind.SET),
+  ]);
 
-  let PRNG;
+  const [
+    { issuer: characterIssuer, brand: characterBrand },
+    { issuer: itemIssuer, brand: itemBrand },
+    { issuer: inventoryKeyIssuer, brand: inventoryKeyBrand },
+  ] = assetMints.map((mint) => mint.getIssuerRecord);
+
+  const [characterMint, itemMint, inventoryKeyMint] = assetMints;
+
+  let PRNG; // Pseudo random number generator (mulberry32)
 
   /**
-   * Mutable contract state
+   * Contract state
    *
    * @type {State}
    */
   const state = {
-    config: undefined,
-    characterNames: [],
-    characters: [],
-    mintNext: 'PABLO',
+    config: undefined, // Holds list of base characters and default items
+    characterNames: [], // Holds a list of minted character names, used to check for uniqueness
+    characters: [], // Holds each character's inventory + copy of its data
   };
   /**
    * Private state
@@ -117,8 +49,12 @@ const start = async (zcf) => {
    * @type {InventoryKeyStorage}
    */
   let privateState = [];
+
   /**
-   * Set contract configuration, must be called befor most methods
+   * Set contract configuration, required for most contract features,
+   * base characters will be picked at random on new mint
+   * default items will be minted along each character
+   * seed is used to init the PRNG
    *
    * @param {{
    * baseCharacters: any[],
@@ -149,7 +85,6 @@ const start = async (zcf) => {
   };
   /**
    * TODO: establish a rarity system set by the creator of the character set
-   * TODO: add character type in return
    */
   const getRandomItem = () => {
     assert(state.config?.completed, X`${errors.noConfig}`);
@@ -166,7 +101,7 @@ const start = async (zcf) => {
   };
 
   /**
-   * Mints a new character to a depositFacet
+   * Mints Item NFTs via mintGains
    *
    * @param {ZCFSeat} seat
    */
@@ -175,17 +110,14 @@ const start = async (zcf) => {
     assertProposalShape(seat, {
       want: { Item: null },
     });
-    // Mint character to user seat
     const { want } = seat.getProposal();
     itemMint.mintGains(want, seat);
-
     seat.exit();
-
     return 'You minted an Item NFT!';
   };
 
   /**
-   * Mints a new character to a depositFacet
+   * Mints a new character
    *
    * @param {ZCFSeat} seat
    */
@@ -440,10 +372,6 @@ const start = async (zcf) => {
     getItemBrand: () => itemBrand,
     getCharacters,
     getConfig: () => state.config,
-    setMintNext: (nextName) => {
-      state.mintNext = nextName;
-    },
-    getMintNext: () => state.mintNext,
   });
 
   const publicFacet = Far('Chracter store public', {
