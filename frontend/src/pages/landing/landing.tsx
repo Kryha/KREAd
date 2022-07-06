@@ -50,7 +50,7 @@ export const Landing: FC = () => {
   if (isLoadingCharacter) return <LoadingPage />;
 
   // TODO: get an empty page
-  if (!character) return <></>;
+  if (!character) return <ErrorView />;
 
   const sell = () => {
     if (!character) return;

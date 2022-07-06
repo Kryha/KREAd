@@ -4,7 +4,7 @@ import { SecondaryButton } from "../../components";
 import { Box } from "../../components/base-route/styles";
 import { EquippedContainer } from "../../components/equipped-item-card/styles";
 import { ActiveLine, Tab } from "../../components/navigation-tab/styles";
-import { color, margins, zIndex } from "../../design";
+import { color, margins } from "../../design";
 
 interface ImageProps {
   isZoomed?: boolean;

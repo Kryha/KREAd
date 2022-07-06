@@ -22,15 +22,12 @@ import { useFilteredItems } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import {
-  Card,
-  Container,
   FilterContainer,
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
   SelectorContainer,
   SortByContainer,
-  Wrapper,
 } from "./styles";
 import { Item } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
@@ -42,7 +39,7 @@ interface Props {
 }
 
 export const ItemsShop: FC<Props> = ({ pageSelector }) => {
-  const { width, height } = useViewport();
+  const { height } = useViewport();
   const navigate = useNavigate();
   const [filterId, setFilterId] = useState("");
   const [selectedItem, setSelectedItem] = useState<Item>();

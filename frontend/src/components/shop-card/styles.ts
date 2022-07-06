@@ -46,7 +46,7 @@ export const Product = styled.div<ViewProps>`
       return "flex: 1 0 500px;";
     }
   }
-  }
+}
   :not(:hover) {
     ${PrimaryButton} {
       display: none;

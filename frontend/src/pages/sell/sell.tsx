@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 
 import { text } from "../../assets";
 import { ButtonText, Data, FormHeaderClose, FormText, Input, Label, MenuItem, PrimaryButton } from "../../components";
-import { PageContainer } from "../../components/page-container";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { FormCard } from "../create-character/styles";

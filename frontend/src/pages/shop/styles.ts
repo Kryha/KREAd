@@ -3,7 +3,7 @@ import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { slideInUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
-import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
+import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins, zIndex } from "../../design";
 
@@ -198,5 +198,5 @@ export const Card = styled.div<ViewProps>`
       return "flex: 1 0 500px;";
     }
   }
-  }
+}
 `;

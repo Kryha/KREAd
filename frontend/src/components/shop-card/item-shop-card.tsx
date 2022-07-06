@@ -3,9 +3,9 @@ import { FC } from "react";
 import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
-import { Badge, BoldLabel, ButtonText, Label, PrimaryButton, TitleText } from "../atoms";
+import { BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
-import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, OwnedByContainer, ItemImage, Line } from "./styles";
+import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, ItemImage } from "./styles";
 import { useViewport } from "../../hooks";
 
 interface ShopCardProps {

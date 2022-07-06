@@ -1,13 +1,12 @@
 import { FC } from "react";
 
-import { DefaultIcon, text } from "../../assets";
+import { text } from "../../assets";
 import { color } from "../../design";
 import { ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, SecondaryButton, TitleText } from "../../components";
 import {
   ArrowUp,
   ArrowUpRight,
   ButtonContainer,
-  DefaultImage,
   FooterContainer,
   InfoText,
   MiddleContent,

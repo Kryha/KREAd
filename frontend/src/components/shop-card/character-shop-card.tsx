@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Character } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
-import { Badge, BoldLabel, ButtonText, Label, PrimaryButton, TitleText } from "../atoms";
+import {  BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { BaseCharacter } from "../base-character";
 import {
@@ -12,10 +12,8 @@ import {
   Product,
   Element,
   TitleWrapper,
-  OwnedByContainer,
   Footer,
   Tag,
-  Line,
 } from "./styles";
 import { useViewport } from "../../hooks";
 
