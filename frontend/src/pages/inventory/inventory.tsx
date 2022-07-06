@@ -6,8 +6,8 @@ import { Title } from "../../components/title";
 import { Page } from "../shop";
 import { Close, InventoryWrapper, NotificationButton, NotificationWrapper, Notification, NotificationContainer, Tag } from "./styles";
 import { color } from "../../design";
-import { ItemsInventory } from "./itemInventory";
-import { CharactersInventory } from "./characterInventory";
+import { ItemsInventory } from "./item-inventory";
+import { CharactersInventory } from "./character-inventory";
 
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);

@@ -1,14 +1,13 @@
 import { FC, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoadingPage, OverviewEmpty } from "../../components";
-import { EmptyCard } from "../../components/empty-card";
+import { LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { routes } from "../../navigation";
 import { useMyItems } from "../../service";
 import { text } from "../../assets/text";
-import { OverviewContainer } from "./styles";
 import { ItemsList } from "../../containers/items-list";
 import { ItemDetailSection } from "../../containers/detail-section";
+import { EmptyItemInventory } from "./empty-item-inventory";
 
 export const ItemsInventory: FC = () => {
   const [items, isLoading] = useMyItems();
@@ -35,16 +34,7 @@ export const ItemsInventory: FC = () => {
   const isEmpty = !items || !items.length;
 
   return isEmpty ? (
-    <PageContainer sidebarContent={<EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />}>
-      <OverviewContainer>
-        <OverviewEmpty
-          headingText={text.item.noItemEquipped}
-          descriptionText={text.item.youDidNotEquip}
-          buttonText={text.item.startEquipping}
-          onButtonClick={equip}
-        />
-      </OverviewContainer>
-    </PageContainer>
+    <EmptyItemInventory />
   ) : (
     <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
       <ItemDetailSection
