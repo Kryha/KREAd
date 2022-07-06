@@ -3,6 +3,7 @@ import { Item } from "./item.interfaces";
 export type ItemState = {
   items: Item[];
   owned: Item[];
+  equipped: Item[];
   fetched: boolean;
 };
 

@@ -4,6 +4,7 @@ import { ItemDispatch, ItemState, ItemStateActions } from "../interfaces/item-ac
 const initialState: ItemState = {
   items: [],
   owned: [],
+  equipped: [],
   fetched: false,
 };
 
