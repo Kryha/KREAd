@@ -16,7 +16,7 @@ interface Props {
 export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
-
+  const [filterId, setFilterId] = useState("");
   const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
 
   if (isLoading) return <LoadingPage />;
@@ -32,15 +32,19 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
     setSelectedSorting(selected);
   };
 
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
+
   return (
     <SortableListWrap>
       <ListHeader>
-        <Filters label={text.filters.category}>
+        <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
           <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
         </Filters>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
-          <Filters label={text.filters.latest}>
+          <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
             <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
           </Filters>
         </SortContainer>

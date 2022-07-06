@@ -39,7 +39,7 @@ interface Props {
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
-
+  const [filterId, setFilterId] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
@@ -59,6 +59,10 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
     navigate(`${routes.buyCharacter}/${selectedCharacter.characterId}`);
   };
 
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
+
   if (isLoading) return <LoadingPage />;
 
   return (
@@ -67,18 +71,18 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category}>
+            <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price}>
+            <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
           </SelectorContainer>
 
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest}>
+            <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>

@@ -44,7 +44,7 @@ interface Props {
 export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const { width, height } = useViewport();
   const navigate = useNavigate();
-
+  const [filterId, setFilterId] = useState("");
   const [selectedItem, setSelectedItem] = useState<Item>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
@@ -66,27 +66,31 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   };
 
   if (isLoading) return <LoadingPage />;
-  console.log("shope wifth", width);
+
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
+
   return (
     <>
       <FilterWrapper>
         <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category}>
+            <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={itemCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price}>
+            <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
-            <Filters label={text.filters.color}>
+            <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
               <ColorSelector handleChange={setSelectedColor} colors={colors} />
             </Filters>
           </SelectorContainer>
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest}>
+            <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>

@@ -71,7 +71,7 @@ export const ItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${margins.big};
-  padding-top: 20px;
+  padding-top: 40px;
   padding-bottom: 140px;
   -webkit-animation-name: ${slideInUp};
   animation-name: ${slideInUp};

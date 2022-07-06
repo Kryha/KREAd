@@ -7,18 +7,21 @@ interface FiltersProps {
   children?: React.ReactNode;
   label: string;
   value?: string;
+  isOpen?: boolean;
+  openFilter: (id: string) => void;
+  id: string;
 }
 
-export const Filters: FC<FiltersProps> = ({ children, label, value }) => {
+export const Filters: FC<FiltersProps> = ({ children, label, value, openFilter, id }) => {
   const [open, setOpened] = useState(false);
 
   return (
     <FiltersWrapper>
-      <FiltersContainer isOpen={open} onClick={() => setOpened(!open)}>
+      <FiltersContainer isOpen={id === label} onClick={() => openFilter(label)}>
         <ButtonText>{value ? value : label}</ButtonText>
         <Triangle />
       </FiltersContainer>
-      <FilterOption isOpen={open}>{children}</FilterOption>
+      <FilterOption isOpen={id === label}>{children}</FilterOption>
     </FiltersWrapper>
   );
 };
