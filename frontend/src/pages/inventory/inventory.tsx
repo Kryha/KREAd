@@ -50,31 +50,23 @@ const ItemsInventory: FC = () => {
 
   const isEmpty = !items || !items.length;
 
-  return (
-    <PageContainer
-      sidebarContent={
-        isEmpty ? (
-          <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />
-        ) : (
-          <ItemsList onItemClick={setSelectedId} />
-        )
-      }
-    >
-      {isEmpty ? (
-        <OverviewContainer>
-          <OverviewEmpty
-            headingText={text.item.noItemEquipped}
-            descriptionText={text.item.youDidNotEquip}
-            buttonText={text.item.startEquipping}
-            onButtonClick={equip}
-          />
-        </OverviewContainer>
-      ) : (
-        <ItemDetailSection
-          item={item || items[0]}
-          actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+  return isEmpty ? (
+    <PageContainer sidebarContent={<EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />}>
+      <OverviewContainer>
+        <OverviewEmpty
+          headingText={text.item.noItemEquipped}
+          descriptionText={text.item.youDidNotEquip}
+          buttonText={text.item.startEquipping}
+          onButtonClick={equip}
         />
-      )}
+      </OverviewContainer>
+    </PageContainer>
+  ) : (
+    <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
+      <ItemDetailSection
+        item={item || items[0]}
+        actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+      />
     </PageContainer>
   );
 };
