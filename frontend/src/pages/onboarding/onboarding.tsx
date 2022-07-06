@@ -5,8 +5,9 @@ import { color } from "../../design";
 import { ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, SecondaryButton, TitleText } from "../../components";
 import {
   ArrowUp,
-  ArrowUpRight,
   ButtonContainer,
+  Email,
+  EmailContainer,
   FooterContainer,
   InfoText,
   MiddleContent,
@@ -21,6 +22,11 @@ export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
 
+  const connectWallet = () => {
+    // TODO: check if you have any assets in your wallet & connect to wallet
+    navigate(routes.createCharacter);
+  };
+
   return (
     <OnboardingContainer height={height} width={width}>
       <OnboardingWrapper>
@@ -29,14 +35,8 @@ export const Onboarding: FC = () => {
           <MenuText>{text.general.launchingTheFirst}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
           <ButtonContainer>
-            <SecondaryButton onClick={() => navigate(routes.onboarding)}>
-              <ButtonText>{text.general.explore}</ButtonText>
-              {/* <ButtonText>{text.general.createCharacter}</ButtonText> */}
-
-              <ArrowUpRight />
-            </SecondaryButton>
             {/* TODO: connect to wallet */}
-            <PrimaryButton onClick={() => navigate(routes.character)}>
+            <PrimaryButton onClick={() => connectWallet()}>
               <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
               <ArrowUp />
             </PrimaryButton>
@@ -50,7 +50,10 @@ export const Onboarding: FC = () => {
         <MiddleContent height={height}>
           <MenuText>{text.general.contactUs}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-          <TitleText customColor={color.darkGrey}>{text.general.sendEmailTo}</TitleText>
+          <EmailContainer>
+            {text.general.sendEmailTo} </EmailContainer>
+          <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
+
         </MiddleContent>
       </OnboardingWrapper>
       <OnboardingCharacter />

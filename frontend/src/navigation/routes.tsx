@@ -13,9 +13,7 @@ import {
   ItemSell,
   CharacterSell,
   Onboarding,
-  About,
   Privacy,
-  OnboardingConnect
 } from "../pages";
 import { MainContainer, ErrorFallback } from "../components";
 import { Item } from "../pages/item";
@@ -29,7 +27,6 @@ export const AppRoutes: FC = () => {
       <MainContainer>
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
-          <Route path={routes.onboarding} element={<OnboardingConnect />} />
           <Route path={routes.character} element={<Landing />} />
           <Route path={`${routes.items}/:category`} element={<Item />} />
           <Route path={routes.shop} element={<Shop />} />
@@ -42,7 +39,6 @@ export const AppRoutes: FC = () => {
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
           <Route path={"/test"} element={<TestServiceUI />} />
-          <Route path={routes.about} element={<About />} />
           <Route path={routes.privacy} element={<Privacy />} />
         </Routes>
       </MainContainer>

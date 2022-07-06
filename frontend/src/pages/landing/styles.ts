@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, DownArrowIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
-import { fadeIn } from "../../components/atoms/animations";
+import { disappear, fadeIn } from "../../components/atoms/animations";
 import { CharacterWrapper } from "../../components/base-character/styles";
 import { color, margins } from "../../design";
 
@@ -71,6 +71,9 @@ export const DetailContainer = styled.div`
   padding: 0px;
   gap: ${margins.nano};
   margin-left: ${margins.big};
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 1.5s, 1.6s;
+  animation-delay: 0s, 1.5s;
 `;
 
 export const ButtonContainer = styled.div`

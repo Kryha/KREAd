@@ -30,6 +30,8 @@ interface CharacterCardProps {
 export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard = false }) => {
   const navigate = useNavigate();
   const [character, setCharacter] = useState<Character>();
+  const [close, setClose] = useState(false);
+
   const { width, height } = useViewport();
 
   const sortedCharacters = useMemo(
@@ -56,7 +58,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
 
   return (
     <>
-      <FadeInOut show={showCard}>
+      <FadeInOut show={showCard} exiting={close}>
         <CharacterWrapper width={width} height={height} showCard={showCard}>
           <>
             <EmptyViewContainer>
@@ -90,7 +92,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
             actions={{
               primary: { text: text.character.choose, onClick: choose },
               secondary: { text: text.character.sell, onClick: sell },
-              onClose: () => setCharacter(undefined),
+              onClose: () => {setCharacter(undefined); setClose(true); } ,
             }}
           />
         </CharacterCardWrapper>

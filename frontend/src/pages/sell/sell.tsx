@@ -30,7 +30,7 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data }) => {
   return (
     <ContentWrapper width={width} height={height}>
       <FormCard height={height} width={width}>
-        <FormHeaderClose title={pText.sell} link={routes.character} />
+        <FormHeaderClose title={pText.sell} link={routes.inventory} />
         <CardContainer>
           <MenuItem data={data} />
         </CardContainer>

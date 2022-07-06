@@ -9,5 +9,6 @@ export const DetailSectionHeaderNavigationWrap = styled.section`
   align-items: flex-start;
   ${PriceContainer} {
     margin-right: ${margins.mini};
+    margin-top: ${margins.mini};
   }
 `;

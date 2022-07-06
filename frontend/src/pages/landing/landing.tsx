@@ -42,6 +42,8 @@ export const Landing: FC = () => {
   const[selectedCharacter, setSelectedCharacter] = useState(character);
   const [showDetail, setShowDetail] = useState(false);
   const navigate = useNavigate();
+  const [closeDetail, setCloseDetail] = useState(false);
+  const [closeOverlay, setCloseOverlay] = useState(false);
 
   useEffect(() => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
@@ -93,10 +95,10 @@ export const Landing: FC = () => {
         </ButtonContainer>
       </DetailContainer>
       <CharacterCardWrapper>
-        <FadeInOut show={showDetail}>
+        <FadeInOut show={showDetail} exiting={closeDetail}>
           <CharacterDetailSection
             character={character}
-            actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => setShowDetail(false) }}
+            actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => { setShowDetail(false); setCloseDetail(true); }}}
           />
         </FadeInOut>
       </CharacterCardWrapper>
@@ -106,7 +108,7 @@ export const Landing: FC = () => {
           <Overlay />
         </>
       )}
-      <FadeInOut show={showDetail}>
+      <FadeInOut show={showDetail} exiting={closeDetail}>
         <Overlay />
       </FadeInOut>
     </BaseRoute>

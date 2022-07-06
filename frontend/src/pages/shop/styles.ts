@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
-import { slideInUp } from "../../components/atoms/animations";
+import { slideInUp, slideUpOpacity } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
+import { PriceContainer } from "../../components/price-in-ist/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
+import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins, zIndex } from "../../design";
 
@@ -35,7 +37,7 @@ export const FilterWrapper = styled.div`
 `;
 
 export const FilterContainer = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -75,8 +77,8 @@ export const ItemContainer = styled.div`
   padding-bottom: 140px;
   -webkit-animation-name: ${slideInUp};
   animation-name: ${slideInUp};
-  -webkit-animation-duration: 3s;
-  animation-duration: 3s;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 `;
@@ -198,5 +200,14 @@ export const Card = styled.div<ViewProps>`
       return "flex: 1 0 500px;";
     }
   }
-}
+  }
+`;
+
+export const DetailContainer = styled.div`
+  ${DetailSectionHeaderNavigationWrap} {
+    min-width: 220px;
+  }
+  ${PriceContainer} {
+    margin-top: 8px;
+  }
 `;

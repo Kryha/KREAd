@@ -22,6 +22,7 @@ import { useFilteredItems } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import {
+  DetailContainer,
   FilterContainer,
   FilterWrapper,
   ItemContainer,
@@ -47,6 +48,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
+  const [close, setClose] = useState(false);
 
   const { data: items, isLoading: isLoading } = useFilteredItems(selectedCategory, selectedSorting, selectedPrice, selectedColor);
 
@@ -110,16 +112,18 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           </ItemContainer>
         </ItemWrapper>
       )}
-      <FadeInOut show={!!selectedItem}>
+      <FadeInOut show={!!selectedItem} exiting={close}>
         {!!selectedItem && (
-          <ItemDetailSection
-            item={selectedItem}
-            actions={{
-              onClose: () => setSelectedItem(undefined),
-              price: selectedItem.price,
-              primary: { text: text.item.buy, onClick: buy },
-            }}
-          />
+          <DetailContainer>
+            <ItemDetailSection
+              item={selectedItem}
+              actions={{
+                onClose: () => { setSelectedItem(undefined); setClose(true); },
+                price: selectedItem.price,
+                primary: { text: text.item.buy, onClick: buy },
+              }}
+            />
+          </DetailContainer>
         )}
         <Overlay />
       </FadeInOut>

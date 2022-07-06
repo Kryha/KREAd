@@ -21,9 +21,11 @@ interface MenuItemProps {
   data: Data;
   onClick?: (id: string) => void;
   imageProps?: ImageProps;
+  isInitial?: boolean;
+  removeInitial?: () => void;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
+export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isInitial = false, removeInitial }) => {
   const [selected, setSelected] = useState(false);
   // TODO: find if item is equipped
   const isEquipped = false;
@@ -32,9 +34,10 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
   return (
     <Info
       tabIndex={0}
-      selected={selected}
+      selected={selected || isInitial}
       onClick={() => {
         onClick && onClick(data.id);
+        removeInitial && removeInitial();
         setSelected(true);
       }}
       onBlur={() => setSelected(false)}

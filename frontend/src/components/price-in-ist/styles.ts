@@ -19,5 +19,5 @@ export const Diamond = styled.div`
   min-height: 10px;
   background: ${color.black};
   transform: rotate(45deg);
-  margin: 0px ${margins.small};
+  margin: 0px 8px;
 `;

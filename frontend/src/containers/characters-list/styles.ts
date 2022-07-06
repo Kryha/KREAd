@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { HorizontalDivider, Label } from "../../components";
+import { FiltersContainer } from "../../components/filters/styles";
 import { color, margins } from "../../design";
 
 export const SortableListWrap = styled.section`
@@ -40,4 +41,11 @@ export const ListContainer = styled.div`
   padding-top: ${margins.medium};
   gap: ${margins.small};
   padding-bottom: 260px;
+`;
+
+export const CategoryContainer = styled.div`
+  ${FiltersContainer} {
+    width: 263.3px;
+    min-width: 263.3px;
+  }
 `;

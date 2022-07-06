@@ -15,8 +15,8 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering === true) return css`
       animation: ${disappear}, ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-      animation-duration: 1.6s, 2s;
-      animation-delay: 0s, 1.6s;
+      animation-duration: 1.4s, 1.8s;
+      animation-delay: 0s, 1.4s;
       `;
     if (exiting === true) return css`
       animation: ${fadeOut};
@@ -28,12 +28,12 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering === true) return css`
       animation: ${disappear}, ${slideUpOpacity} 1.5s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-      animation-duration: 0.5s, 1s;
-      animation-delay: 0s, 0.5s;
+      animation-duration: 0.4s, 0.8s;
+      animation-delay: 0s, 0.4s;
       `;
     if (exiting === true) return css`
       animation: ${fadeOut};
-      animation-duration: 0.7s;
+      animation-duration: 2s;
       `;
   }}
   }

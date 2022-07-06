@@ -49,12 +49,25 @@ export const disappear = keyframes`
 
 export const slideInUp = keyframes`
   0% {
-    -webkit-transform: translateY(100%);
-    transform: translateY(100%);
-    visibility: visible;
+    -webkit-transform: translate3d(0,5%,0);
+    opacity: 0;
+    transform: translate3d(0,5%, 0);
   }
   100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
+    -webkit-transform: none;
+    transform: none;
+    opacity: 1;
+  }
+`;
+
+export const slideLeft = keyframes`
+  0% {
+    right: 0;
+  }
+  50% {
+    right: 140%;
+  }
+  100% {
+    right: 140%;
   }
 `;

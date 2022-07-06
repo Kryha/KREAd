@@ -16,8 +16,8 @@ export const LeftItemContainer = styled.div<Animation>`
   z-index: ${zIndex.overCharacter};
   ${props => (props.showItems === true ?
     css` animation: ${disappear}, ${fadeIn};
-    animation-duration: 1.0s, 1.5s;
-    animation-delay: 0s, 1.0s;`
+    animation-duration: 1.5s, 1.6s;
+    animation-delay: 0s, 1.5s;`
     :
     css`
     animation: ${fadeOut};
@@ -44,8 +44,8 @@ export const RightItemContainer = styled.div<Animation>`
   z-index: ${zIndex.overCharacter};
   ${props => (props.showItems === true ?
     css` animation: ${disappear}, ${fadeIn};
-    animation-duration: 1.0s, 1.5s;
-    animation-delay: 0s, 1.0s;`
+    animation-duration: 1.5s, 1.6s;
+    animation-delay: 0s, 1.5s;`
     :
     css`
     animation: ${fadeOut};

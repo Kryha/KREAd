@@ -40,11 +40,12 @@ interface ViewProps {
 }
 
 export const ContentWrapper = styled.div<ViewProps>`
+margin-left: 40px;
   ${DetailSectionWrap} {
     position: absolute;
     bottom: 40px;
     right: 40px;
-    max-width: 55%;
+    max-width: 50%;
   }
   ${FormCard} {
     width: 40%;

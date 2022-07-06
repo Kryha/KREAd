@@ -49,7 +49,7 @@ export const AboutText = styled(ButtonText)`
 `;
 export const PrivacyText = styled(AboutText)``;
 
-export const AgoricText = styled(AboutText)``;
+export const AgoricText = styled(ButtonText)``;
 
 export const Link = styled(NavLink)`
   text-decoration: none;

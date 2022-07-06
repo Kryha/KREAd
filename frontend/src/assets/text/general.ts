@@ -40,8 +40,9 @@ export const general = {
     "'Name of dApp' is part of Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by Kryha.",
   contactUs: "contact us",
   questionsBug: "questions, bug reports, feedback... we are here for it all.",
+  sendEmailTo: "send an email to",
   // TODO: add actual email
-  sendEmailTo: "send an email to x@kryha.io",
+  contactEmail: "x@kryha.io",
   forSale: "for sale",
   createCharacter: "create character",
   thereIsNoActity: "there is no activity currently.",

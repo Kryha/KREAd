@@ -41,9 +41,9 @@ export const OnboardingConnect: FC = () => {
         }
       >
         <LandingContainer isZoomed>
-          <BaseCharacter items={FakeCharcters[0].items} isZoomed size="normal" />
+          <BaseCharacter items={FakeCharcters[3].items} isZoomed size="normal" />
         </LandingContainer>
-        <CharacterItems items={FakeCharcters[0].items} />
+        <CharacterItems items={FakeCharcters[3].items} />
         <DetailContainer>
           <MenuText>{FakeCharcters[0].name}</MenuText>
           <ButtonContainer>
@@ -56,7 +56,7 @@ export const OnboardingConnect: FC = () => {
         {showDetail && (
           <CharacterCardWrapper>
             <CharacterDetailSection
-              character={FakeCharcters[0]}
+              character={FakeCharcters[3]}
               actions={{ onClose: () => setShowDetail(false) }}
             />
           </CharacterCardWrapper>

@@ -37,7 +37,6 @@ const ItemsInventory: FC = () => {
 
   if (isError) return <ErrorView />;
   const isEmpty = !items || !items.length;
-
   return (
     <PageContainer sidebarContent={
       isEmpty ? (
@@ -108,6 +107,7 @@ const CharactersInventory: FC = () => {
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
   const [openNotification, setOpenNotifications] = useState(false);
+  const [close, setClose] = useState(false);
 
   const pageSelector = useMemo(
     () => (
@@ -128,7 +128,12 @@ export const Inventory: FC = () => {
         <NotificationContainer>
           <NotificationButton
             open={openNotification}
-            onClick={() => setOpenNotifications(!openNotification)}
+            onClick={() => {
+              setOpenNotifications(!openNotification);
+              if(!openNotification) {
+                setClose(true);
+              }
+            }}
             backgroundColor={openNotification ? color.lightGrey : color.white}
           >
             {openNotification ? <Close /> : <Notification />}
@@ -139,7 +144,7 @@ export const Inventory: FC = () => {
     }>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
       {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
-      <FadeInOut show={openNotification}>
+      <FadeInOut show={openNotification} exiting={close}>
         <NotificationCard />
         <Overlay />
       </FadeInOut>

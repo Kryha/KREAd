@@ -20,6 +20,7 @@ import { useViewport } from "../../hooks";
 import { useFilteredCharacters } from "../../service";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
 import {
+  DetailContainer,
   FilterContainer,
   FilterWrapper,
   ItemContainer,
@@ -44,6 +45,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
+  const [close, setClose] = useState(false);
 
   const [characters, isLoading] = useFilteredCharacters(selectedCategory, selectedSorting, selectedPrice);
 
@@ -119,12 +121,14 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           )}
         </>
       )}
-      <FadeInOut show={!!selectedCharacter}>
+      <FadeInOut show={!!selectedCharacter} exiting={close}>
         {!!selectedCharacter && (
-          <CharacterDetailSection
-            character={selectedCharacter}
-            actions={{ onClose: () => setSelectedCharacter(undefined), primary: { text: text.item.buy, onClick: buy } }}
-          />
+          <DetailContainer>
+            <CharacterDetailSection
+              character={selectedCharacter}
+              actions={{ onClose: () => { setSelectedCharacter(undefined); setClose(true);}, primary: { text: text.item.buy, onClick: buy } }}
+            />
+          </DetailContainer>
         )}
         <Overlay />
       </FadeInOut>

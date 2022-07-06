@@ -28,5 +28,5 @@ export const ONE_HUNDRED_PERCENT = 100;
 export const UNMOUNTED = "unmounted";
 export const EXITED = "exited";
 export const ENTERED = "entered";
-export const EXITING = "entered";
+export const EXITING = "exiting";
 export const MILLISECONDS = 1000;

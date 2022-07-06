@@ -14,6 +14,7 @@ import {
   TitleWrapper,
   Footer,
   Tag,
+  PriceContainer,
 } from "./styles";
 import { useViewport } from "../../hooks";
 
@@ -39,10 +40,12 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
           <Tag>
             <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
           </Tag>
-          <PriceInIst price={character.price} />
-          <PrimaryButton>
-            <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
-          </PrimaryButton>
+          <PriceContainer>
+            <PriceInIst price={character.price} />
+            <PrimaryButton>
+              <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
+            </PrimaryButton>
+          </PriceContainer>
         </Footer>
       </Content>
     </Product>

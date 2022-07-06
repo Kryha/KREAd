@@ -68,7 +68,7 @@ export const CharacterIcon = styled.img<ImageProps>`
 
 export const CharacterWrapper = styled.div`
   position: absolute;
-  right: 358px;
+  right: 15%;
   top: 0;
   margin: 0;
 `;
@@ -103,30 +103,30 @@ export const FirstIcon = styled.img<ImageProps>`
     }
   }};
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 1.0s, 0.6s;
-  animation-delay: 0s, 1.0s;
+  animation-duration: 0.3s, 0.2s;
+  animation-delay: 0s, 0.3s;
 `;
 
 export const SecondIcon = styled(FirstIcon)`
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 2.5s, 0.6s;
-  animation-delay: 0s, 2.5s;
+  animation-duration: 0.6s, 0.2s;
+  animation-delay: 0s, 0.6s;
 `;
 
 export const ThirdIcon = styled(FirstIcon)`
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 4.5s, 0.6s;
-  animation-delay: 0s, 4.5s;
+  animation-duration: 1.1s, 0.2s;
+  animation-delay: 0s, 1.1s;
 `;
 
 export const FourthIcon = styled(FirstIcon)`
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 6.5s, 0.6s;
-  animation-delay: 0s, 6.5s;
+  animation-duration: 1.4s, 0.2s;
+  animation-delay: 0s, 1.4s;
 `;
 
 export const FifthIcon = styled(FirstIcon)`
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 8.5s, 0.6s;
-  animation-delay: 0s, 8.5s;
+  animation-duration: 1.7s, 0.2s;
+  animation-delay: 0s, 1.7s;
 `;
