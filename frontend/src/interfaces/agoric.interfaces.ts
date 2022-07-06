@@ -1,4 +1,4 @@
-interface AgoricService {
+export interface AgoricService {
   zoe: any;
   board: any;
   zoeInvitationDepositFacetId: any;
@@ -27,6 +27,7 @@ interface Status {
 export interface Purses {
   money: any[];
   character: any[];
+  item: any[];
 }
 
 export interface AgoricState {
@@ -36,9 +37,6 @@ export interface AgoricState {
   agoric: AgoricService;
   isLoading: boolean;
 }
-
-// TODO: remove if keeps unused
-type PursePetname = [string, string];
 
 interface SetDappApproved {
   type: "SET_DAPP_APPROVED";

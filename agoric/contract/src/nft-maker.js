@@ -279,6 +279,12 @@ const start = async (zcf) => {
     });
   };
 
+  const getItems = () => {
+    return harden({
+      items: state.items,
+    });
+  };
+
   /**
    * Gets the inventory of a given character
    *
@@ -318,6 +324,7 @@ const start = async (zcf) => {
     getCharacterBrand: () => characterBrand,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
+    getItems,
     getMintNext: () => state.mintNext,
     getNftConfig: () => ({ characterBrand, characterIssuer }),
     setMintNext: (nextName) => {
