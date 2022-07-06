@@ -27,7 +27,7 @@ const start = async (zcf) => {
     { issuer: characterIssuer, brand: characterBrand },
     { issuer: itemIssuer, brand: itemBrand },
     { issuer: inventoryKeyIssuer, brand: inventoryKeyBrand },
-  ] = assetMints.map((mint) => mint.getIssuerRecord);
+  ] = assetMints.map((mint) => mint.getIssuerRecord());
 
   const [characterMint, itemMint, inventoryKeyMint] = assetMints;
 
