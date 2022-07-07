@@ -13,6 +13,7 @@ import {
   OverviewEmpty,
   Overlay,
   ButtonText,
+  FadeInOut,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -21,6 +22,7 @@ import { useFilteredItems } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import {
+  DetailContainer,
   FilterContainer,
   FilterWrapper,
   ItemContainer,
@@ -40,12 +42,13 @@ interface Props {
 export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
-
+  const [filterId, setFilterId] = useState("");
   const [selectedItem, setSelectedItem] = useState<Item>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
+  const [close, setClose] = useState(false);
 
   const { data: items, isLoading: isLoading } = useFilteredItems(selectedCategory, selectedSorting, selectedPrice, selectedColor);
 
@@ -63,26 +66,30 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
 
   if (isLoading) return <LoadingPage />;
 
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
+
   return (
     <>
       <FilterWrapper>
         <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category}>
+            <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={itemCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price}>
+            <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
-            <Filters label={text.filters.color}>
+            <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
               <ColorSelector handleChange={setSelectedColor} colors={colors} />
             </Filters>
           </SelectorContainer>
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest}>
+            <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>
@@ -105,17 +112,21 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           </ItemContainer>
         </ItemWrapper>
       )}
-      {!!selectedItem && (
-        <ItemDetailSection
-          item={selectedItem}
-          actions={{
-            onClose: () => setSelectedItem(undefined),
-            price: selectedItem.price,
-            primary: { text: text.item.buy, onClick: buy },
-          }}
-        />
-      )}
-      {!!selectedItem && <Overlay />}
+      <FadeInOut show={!!selectedItem} exiting={close}>
+        {!!selectedItem && (
+          <DetailContainer>
+            <ItemDetailSection
+              item={selectedItem}
+              actions={{
+                onClose: () => { setSelectedItem(undefined); setClose(true); },
+                price: selectedItem.price,
+                primary: { text: text.item.buy, onClick: buy },
+              }}
+            />
+          </DetailContainer>
+        )}
+        <Overlay />
+      </FadeInOut>
     </>
   );
 };

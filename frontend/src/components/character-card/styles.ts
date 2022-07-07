@@ -21,6 +21,7 @@ export const ArrowContainer = styled.div`
 interface CharacterProps {
   width: number;
   height: number;
+  showCard: boolean;
 }
 
 export const CharacterWrapper = styled.div<CharacterProps>`
@@ -123,6 +124,6 @@ export const CharacterCardWrapper = styled.div`
 `;
 
 export const EmptyViewContainer = styled.div`
-  padding-top: 40px;
-  padding-left: 40px;
+  padding-top: ${margins.big};
+  padding-left: ${margins.big};
 `;

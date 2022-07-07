@@ -11,4 +11,5 @@ export const routes = {
   sellCharacter: "/sell-character",
   about: "/about",
   privacy: "/privacy",
+  onboarding: "/onboarding",
 };

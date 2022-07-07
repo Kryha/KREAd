@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, NotificationCard, Overlay, SwitchSelector } from "../../components";
+import { BaseRoute, FadeInOut, NotificationCard, Overlay, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { Title } from "../../components/title";
 import { Page } from "../shop";
@@ -12,6 +12,7 @@ import { CharactersInventory } from "./character-inventory";
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
   const [openNotification, setOpenNotifications] = useState(false);
+  const [close, setClose] = useState(false);
 
   const pageSelector = useMemo(
     () => (
@@ -25,8 +26,6 @@ export const Inventory: FC = () => {
     [selectedPage]
   );
 
-  const showItemsInventory = selectedPage === Page.Items;
-
   // TODO: switch between items and characters
   return (
     <BaseRoute
@@ -36,7 +35,12 @@ export const Inventory: FC = () => {
           <NotificationContainer>
             <NotificationButton
               open={openNotification}
-              onClick={() => setOpenNotifications(!openNotification)}
+              onClick={() => {
+                setOpenNotifications(!openNotification);
+                if(!openNotification) {
+                  setClose(true);
+                }
+              }}
               backgroundColor={openNotification ? color.lightGrey : color.white}
             >
               {openNotification ? <Close /> : <Notification />}
@@ -47,13 +51,11 @@ export const Inventory: FC = () => {
       }
     >
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
-      {showItemsInventory ? <ItemsInventory /> : <CharactersInventory />}
-      {openNotification && (
-        <>
-          <NotificationCard />
-          <Overlay />
-        </>
-      )}
+      {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
+      <FadeInOut show={openNotification} exiting={close}>
+        <NotificationCard />
+        <Overlay />
+      </FadeInOut>
     </BaseRoute>
   );
 };

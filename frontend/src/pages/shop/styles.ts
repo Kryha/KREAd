@@ -1,6 +1,11 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
+import { disappear, fadeIn, slideInUp, slideUpOpacity } from "../../components/atoms/animations";
+import { FilterOption } from "../../components/filters/styles";
+import { PriceContainer } from "../../components/price-in-ist/styles";
+import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
+import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins, zIndex } from "../../design";
 
@@ -14,7 +19,7 @@ export const ShopWrapper = styled.div`
 
   ${DetailSectionWrap} {
     position: absolute;
-    top: -80px;
+    top: 0px;
     left: 0px;
     z-index: 30000000;
   }
@@ -29,6 +34,9 @@ export const FilterWrapper = styled.div`
   ${HorizontalDivider} {
     margin-top: 4px;
   }
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.6s, 1s;
+  animation-delay: 0s, 0.6s;
 `;
 
 export const FilterContainer = styled.div`
@@ -54,6 +62,9 @@ export const SortByContainer = styled.div`
   ${Label} {
     margin-right: 10px;
   }
+  ${FilterOption} {
+    margin-left: -20px;
+  }
 `;
 
 export const ItemWrapper = styled.div<ShopProps>`
@@ -65,9 +76,14 @@ export const ItemContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${margins.big};
-  padding-top: ${margins.big};
-  align-items: flex-start;
+  padding-top: 40px;
   padding-bottom: 140px;
+  -webkit-animation-name: ${slideInUp};
+  animation-name: ${slideInUp};
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 `;
 
 export const LoadMore = styled.div`
@@ -146,4 +162,55 @@ export const Tag = styled.div`
   background: ${color.black};
   border-radius: ${margins.medium};
   z-index: 1000;
+`;
+
+interface ViewProps {
+  width: number;
+  height: number;
+}
+
+export const Wrapper = styled.div<ViewProps>`
+  overflow-y: scroll;
+  ${({ height }): string => `height: ${height - 132}px;`};
+`;
+
+export const Container = styled.div<ViewProps>`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+`;
+
+export const Card = styled.div<ViewProps>`
+  color: black;
+  background: black;
+  height: 520px;
+  border: 1px solid red;
+  // change this based on screen size
+  // flex: 0 1 24%;
+  flex: 1 0 500px;
+  box-sizing: border-box;
+  ${({ width }): string => {
+    if (width <= 1300) {
+      return "flex: 0 1 calc(49.6% - 1em);";
+    }
+    else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
+      return "flex: 0 1 calc(32.4% - 1em);";
+    }
+    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
+      return "flex: 0 1 calc(24.41% - 1em);";
+    }
+    else {
+      return "flex: 1 0 500px;";
+    }
+  }
+  }
+`;
+
+export const DetailContainer = styled.div`
+  ${DetailSectionHeaderNavigationWrap} {
+    min-width: 220px;
+  }
+  ${PriceContainer} {
+    margin-top: 8px;
+  }
 `;

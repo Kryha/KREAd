@@ -123,6 +123,7 @@ export const SectionHeader = styled.h1`
   :first-letter {
     text-transform: capitalize;
   }
+  min-width: 200px;
 `;
 
 export const FormText = styled(BodyText)`

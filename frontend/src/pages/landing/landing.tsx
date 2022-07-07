@@ -8,6 +8,8 @@ import {
   ButtonText,
   CharacterCard,
   CharacterItems,
+  ErrorView,
+  FadeInOut,
   LoadingPage,
   MenuText,
   NotificationCard,
@@ -40,15 +42,16 @@ export const Landing: FC = () => {
   const[selectedCharacter, setSelectedCharacter] = useState(character);
   const [showDetail, setShowDetail] = useState(false);
   const navigate = useNavigate();
+  const [closeDetail, setCloseDetail] = useState(false);
 
   useEffect(() => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
-  if (isLoading || isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingCharacter || isLoading) return <LoadingPage />;
 
   // TODO: get an empty page
-  if (!character) return <></>;
+  if (!character) return <ErrorView />;
 
   const sell = () => {
     if (!character) return;
@@ -57,6 +60,7 @@ export const Landing: FC = () => {
 
   return (
     <BaseRoute
+      isLanding
       sideNavigation={
         <NotificationWrapper>
           <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
@@ -76,11 +80,11 @@ export const Landing: FC = () => {
         </NotificationWrapper>
       }
     >
-      <LandingContainer isZoomed={openTab}>
+      <LandingContainer isZoomed={!openTab && !openNotification}>
         <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
       </LandingContainer>
-      {!openTab && !openNotification && <CharacterItems items={character.items} />}
-      {openTab && !!myCharacters && <CharacterCard id={character.characterId} characters={myCharacters} />}
+      <CharacterItems items={character.items} showItems={!openTab && !openNotification} />
+      <CharacterCard id={character.characterId} characters={myCharacters} showCard={openTab && !!myCharacters}/>
       <DetailContainer>
         <MenuText>{character.name}</MenuText>
         <ButtonContainer>
@@ -90,21 +94,23 @@ export const Landing: FC = () => {
           <ButtonText>{text.param.level(character.level)}</ButtonText>
         </ButtonContainer>
       </DetailContainer>
-      {showDetail && (
-        <CharacterCardWrapper>
+      <CharacterCardWrapper>
+        <FadeInOut show={showDetail} exiting={closeDetail}>
           <CharacterDetailSection
             character={character}
-            actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => setShowDetail(false) }}
+            actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => { setShowDetail(false); setCloseDetail(true); }}}
           />
-        </CharacterCardWrapper>
-      )}
+        </FadeInOut>
+      </CharacterCardWrapper>
       {openNotification && (
         <>
           <NotificationCard />
           <Overlay />
         </>
       )}
-      {showDetail && <Overlay />}
+      <FadeInOut show={showDetail} exiting={closeDetail}>
+        <Overlay />
+      </FadeInOut>
     </BaseRoute>
   );
 };

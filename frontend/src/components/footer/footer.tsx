@@ -10,13 +10,16 @@ import { AboutText, AgoricText, FooterContainer, FooterWrapper, PrivacyText, Lin
 export const Footer: FC = () => {
   const resolved = useResolvedPath(routes.shop);
   const match = useMatch({ path: resolved.pathname, end: true });
+  const isLanding =  resolved.pathname === routes.root;
 
   return (
     <FooterWrapper isShop={!!match}>
       <FooterContainer>
-        <Link to={routes.about}>
-          <AboutText customColor={color.darkGrey}>{text.navigation.about}</AboutText>
-        </Link>
+        {!isLanding && (
+          <Link to={routes.root}>
+            <AboutText customColor={color.darkGrey}>{text.navigation.about}</AboutText>
+          </Link>
+        )}
         <Link to={routes.privacy}>
           <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
         </Link>

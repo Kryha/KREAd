@@ -12,6 +12,7 @@ interface ButtonProps {
 }
 
 export const PrimaryButton = styled.button<ButtonProps>`
+  max-height: 35px;
   transition: all 0.4s ease 0s;
   display: flex;
   flex-direction: row;
@@ -35,11 +36,6 @@ export const PrimaryButton = styled.button<ButtonProps>`
     box-sizing: border-box;
     ${ButtonText} {
       color: ${(props): string => props.fontColor || color.black};
-    }
-    > svg {
-      path {
-        stroke: ${color.black} !important;
-      }
     }
   }
   &:active {

@@ -1,14 +1,14 @@
 import { FC, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { text } from "../../assets";
-import { ErrorView, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { CharactersList } from "../../containers/characters-list";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { Character } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useMyCharacters } from "../../service";
-import { DetailWrapper } from "./styles";
+import { DetailContainer, DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
@@ -37,12 +37,16 @@ export const CharactersInventory: FC = () => {
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
-      <DetailWrapper>
-        <CharacterDetailSection
-          character={character || myCharacters[0]}
-          actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
-        />
-      </DetailWrapper>
+      <FadeInOut show={true} exiting={false}>
+        <DetailContainer>
+          <DetailWrapper>
+            <CharacterDetailSection
+              character={character || myCharacters[0]}
+              actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
+            />
+          </DetailWrapper>
+        </DetailContainer>
+      </FadeInOut>
     </PageContainer>
   );
 };

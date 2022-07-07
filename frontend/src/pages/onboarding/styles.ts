@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
 import { PrimaryButton, TitleText } from "../../components";
 import { SMALL_SCREEN_WIDTH } from "../../constants";
-import { color, zIndex } from "../../design";
+import { color, fontWeight, zIndex } from "../../design";
 
 interface HeightProps {
   height: number;
@@ -98,4 +98,30 @@ export const DefaultImage = styled.img<ViewProps>`
   top: 0;
   ${({ width, height }): string =>
     `min-width: ${width * SMALL_SCREEN_WIDTH}px; max-width: ${width * SMALL_SCREEN_WIDTH}px; width: ${width * SMALL_SCREEN_WIDTH}px; height: ${height}px;`};
+`;
+
+export const Email = styled.a`
+  text-decoration: none;
+  font-family: "aktiv-grotesk";
+  font-weight: ${fontWeight.light};
+  font-size: 24px;
+  line-height: 31px;
+  :first-letter {
+    text-transform: capitalize;
+  }
+  color: ${color.darkGrey};
+  display: inline;
+`;
+
+export const EmailContainer = styled.span`
+  font-family: "aktiv-grotesk";
+  font-weight: ${fontWeight.light};
+  font-size: 24px;
+  line-height: 31px;
+  :first-letter {
+    text-transform: capitalize;
+  }
+  display: inline-block;
+  color: ${color.darkGrey};
+  margin-top: 8px;
 `;

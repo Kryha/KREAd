@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoadingPage } from "../../components";
+import { FadeInOut, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { routes } from "../../navigation";
 import { useMyItems } from "../../service";
@@ -8,6 +8,7 @@ import { text } from "../../assets/text";
 import { ItemsList } from "../../containers/items-list";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { EmptyItemInventory } from "./empty-item-inventory";
+import { DetailWrapper } from "./styles";
 
 export const ItemsInventory: FC = () => {
   const [items, isLoading] = useMyItems();
@@ -37,10 +38,14 @@ export const ItemsInventory: FC = () => {
     <EmptyItemInventory />
   ) : (
     <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
-      <ItemDetailSection
-        item={item || items[0]}
-        actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
-      />
+      <FadeInOut show={true} exiting={false}>
+        <DetailWrapper>
+          <ItemDetailSection
+            item={item || items[0]}
+            actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+          />
+        </DetailWrapper>
+      </FadeInOut>
     </PageContainer>
   );
 };

@@ -1,10 +1,13 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
-import { Info, ButtonContainer as Button } from "../../components/menu-item/styles";
+import { disappear, fadeIn } from "../../components/atoms/animations";
+import { EquippedLabel } from "../../components/character-item/styles";
+import { Info, ButtonContainer as Button, EquippedLabel as ItemLabel } from "../../components/menu-item/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
+import { FormCard } from "../create-character/styles";
 
 export const Exclamation = styled(ExclamationIcon)`
   margin-right: 20px;
@@ -32,11 +35,24 @@ export const TickContainer = styled.div`
   margin-bottom: ${margins.small};
 `;
 
-export const ContentWrapper = styled.div`
+interface ViewProps {
+  height: number;
+  width: number;
+}
+
+export const ContentWrapper = styled.div<ViewProps>`
+margin-left: 40px;
   ${DetailSectionWrap} {
     position: absolute;
     bottom: 40px;
     right: 40px;
+  }
+  ${FormCard} {
+    width: 40%;
+    min-width: 40%;
+    animation: ${disappear}, ${fadeIn};
+    animation-duration: 0.6s, 1s;
+    animation-delay: 0s, 0.6s;
   }
   ${DetailSectionHeaderNavigationWrap} {
     display: none;
@@ -237,3 +253,17 @@ export const ErrorContainer = styled.div`
   padding: 0px;
   gap: 4px;
 `;
+
+export const CardContainer = styled.div`
+  ${ItemLabel} {
+    display: none;
+  }
+  ${EquippedLabel} {
+    display: none;
+  }
+  ${Info} {
+    cursor: default;
+  }
+`;
+
+export const DetailContainer = styled.div``;

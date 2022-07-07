@@ -1,7 +1,7 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-import { ButtonText, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
-import { ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
+import { ButtonText, ErrorView, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useMyFilteredCharacters } from "../../service";
 
@@ -12,17 +12,24 @@ interface Props {
   onCharacterClick: (id: string) => void;
 }
 
-// TODO: Add filter & sortyng Hooks and components
 export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
+  const [filterId, setFilterId] = useState("");
+  const [intitial, setInitial] = useState(true);
 
   const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
 
+  useEffect(() => {
+    if(myCharacters) {
+      onCharacterClick(myCharacters[0].characterId);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (isLoading) return <LoadingPage />;
 
-  // TODO: get an empty section view
-  if (!myCharacters || !myCharacters.length) return <></>;
+  if (!myCharacters || !myCharacters.length) return <ErrorView />;
 
   const handleCategoryChange = (selected: string) => {
     setSelectedCategory(selected);
@@ -32,26 +39,43 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
     setSelectedSorting(selected);
   };
 
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
+
+  const removeInitial = () => {
+    setInitial(false);
+  };
+
   return (
     <SortableListWrap>
       <ListHeader>
-        <Filters label={text.filters.category}>
-          <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
-        </Filters>
+        <CategoryContainer>
+          <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
+            <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
+          </Filters>
+        </CategoryContainer>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
-          <Filters label={text.filters.latest}>
+          <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
             <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
           </Filters>
         </SortContainer>
       </ListHeader>
       <ButtonText>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
       <ListContainer>
-        {myCharacters.map((character) => (
+        <MenuItem
+          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].characterId }}
+          key={myCharacters[0].characterId}
+          onClick={onCharacterClick}
+          removeInitial={removeInitial}
+        />
+        {myCharacters.slice(1).map((character) => (
           <MenuItem
             data={{ ...character, image: character.items, category: character.type, id: character.characterId }}
             key={character.characterId}
             onClick={onCharacterClick}
+            removeInitial={removeInitial}
           />
         ))}
       </ListContainer>
