@@ -53,7 +53,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const { data: items, isLoading: isLoading } = useFilteredItems(selectedCategory, selectedSorting, selectedPrice, selectedColor);
 
   const noFilteredItems =
-    (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice) && (!items || !items.length);
+    (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice)  && (!items || !items.length);
 
   const handlePriceChange = (min: number, max: number) => {
     setSelectedPrice({ min: min, max: max });
@@ -63,8 +63,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
     if (!selectedItem) return;
     navigate(`${routes.buyItem}/${selectedItem.id}`);
   };
-
-  if (isLoading) return <LoadingPage />;
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
@@ -97,36 +95,48 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
-      {!items || !items.length && <OverviewEmpty
-        headingText={text.store.thereAreNoItemsInTheShop}
-        descriptionText={text.store.thereAreNoItemsAvailable}
-        buttonText={text.navigation.goHome}
-        redirectRoute={routes.character}
-      />}
-      {!!noFilteredItems || (
-        <ItemWrapper height={height}>
-          <ItemContainer>
-            {items.map((item, index) => (
-              <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
+      {isLoading ? (
+        <LoadingPage />
+      ) : (
+        <>
+          {!items ||
+            (!items.length && (
+              <OverviewEmpty
+                headingText={text.store.thereAreNoItemsInTheShop}
+                descriptionText={text.store.thereAreNoItemsAvailable}
+                buttonText={text.navigation.goHome}
+                redirectRoute={routes.character}
+              />
             ))}
-          </ItemContainer>
-        </ItemWrapper>
+          {!!noFilteredItems || (
+            <ItemWrapper height={height}>
+              <ItemContainer>
+                {items.map((item, index) => (
+                  <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
+                ))}
+              </ItemContainer>
+            </ItemWrapper>
+          )}
+          <FadeInOut show={!!selectedItem} exiting={close}>
+            {!!selectedItem && (
+              <DetailContainer>
+                <ItemDetailSection
+                  item={selectedItem}
+                  actions={{
+                    onClose: () => {
+                      setSelectedItem(undefined);
+                      setClose(true);
+                    },
+                    price: selectedItem.price,
+                    primary: { text: text.item.buy, onClick: buy },
+                  }}
+                />
+              </DetailContainer>
+            )}
+            <Overlay />
+          </FadeInOut>
+        </>
       )}
-      <FadeInOut show={!!selectedItem} exiting={close}>
-        {!!selectedItem && (
-          <DetailContainer>
-            <ItemDetailSection
-              item={selectedItem}
-              actions={{
-                onClose: () => { setSelectedItem(undefined); setClose(true); },
-                price: selectedItem.price,
-                primary: { text: text.item.buy, onClick: buy },
-              }}
-            />
-          </DetailContainer>
-        )}
-        <Overlay />
-      </FadeInOut>
     </>
   );
 };

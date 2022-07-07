@@ -2,7 +2,7 @@ import { FC } from "react";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import { ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, SecondaryButton, TitleText } from "../../components";
+import { ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowUp,
   ButtonContainer,

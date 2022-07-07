@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Character } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
-import { Badge, BoldLabel, Label, TitleText } from "../atoms";
+import {  BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { BaseCharacter } from "../base-character";
 import {
@@ -12,11 +12,11 @@ import {
   Product,
   Element,
   TitleWrapper,
-  OwnedByContainer,
   Footer,
   Tag,
-  Line,
+  PriceContainer,
 } from "./styles";
+import { useViewport } from "../../hooks";
 
 interface CharacterShopCardProps {
   character: Character;
@@ -24,8 +24,9 @@ interface CharacterShopCardProps {
 }
 
 export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onClick }) => {
+  const { width, height } = useViewport();
   return (
-    <Product onClick={() => onClick && onClick(character)}>
+    <Product onClick={() => onClick && onClick(character)} width={width} height={height}>
       <Content>
         <ImageContainer>
           <Element />
@@ -33,19 +34,18 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
         </ImageContainer>
         <TitleWrapper>
           <TitleText>{character.name}</TitleText>
-          <OwnedByContainer>
-            <BoldLabel customColor={color.black}>{text.param.id(character.characterId)}</BoldLabel>
-          </OwnedByContainer>
+          <BoldLabel>{character.type}</BoldLabel>
         </TitleWrapper>
         <Footer>
           <Tag>
-            <Badge>
-              <Label>{character.type}</Label>
-            </Badge>
-            <Line />
             <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
           </Tag>
-          <PriceInIst price={character.price} />
+          <PriceContainer>
+            <PriceInIst price={character.price} />
+            <PrimaryButton>
+              <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
+            </PrimaryButton>
+          </PriceContainer>
         </Footer>
       </Content>
     </Product>

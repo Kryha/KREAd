@@ -16,7 +16,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [filterId, setFilterId] = useState("");
-  const [intitial, setInitial] = useState(true);
+  const [_intitial, setInitial] = useState(true);
 
   const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
 

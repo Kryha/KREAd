@@ -65,8 +65,6 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
     setFilterId(id !== filterId ? id : "");
   };
 
-  if (isLoading) return <LoadingPage />;
-
   return (
     <>
       <FilterWrapper>
@@ -81,7 +79,6 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
           </SelectorContainer>
-
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
             <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
@@ -92,46 +89,52 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(!characters ? 0 : characters.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
-      {!characters || !characters.length ? (
-        <OverviewEmpty
-          headingText={text.store.thereAreNoCharactersInTheShop}
-          descriptionText={text.store.thereAreNoCharactersAvailable}
-          buttonText={text.navigation.goHome}
-          redirectRoute={routes.character}
-        />
+      {isLoading ? (
+        <LoadingPage />
       ) : (
         <>
-          {noFilteredCharacters || (
-            <ItemWrapper height={height}>
-              <ItemContainer>
-                {characters.map((character, index) => (
-                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
-                ))}
-              </ItemContainer>
-            </ItemWrapper>
+          {!characters || !characters.length ? (
+            <OverviewEmpty
+              headingText={text.store.thereAreNoCharactersInTheShop}
+              descriptionText={text.store.thereAreNoCharactersAvailable}
+              buttonText={text.navigation.goHome}
+              redirectRoute={routes.character}
+            />
+          ) : (
+            <>
+              {noFilteredCharacters || (
+                <ItemWrapper height={height}>
+                  <ItemContainer>
+                    {characters.map((character, index) => (
+                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                    ))}
+                  </ItemContainer>
+                </ItemWrapper>
+              )}
+              {noFilteredCharacters || (
+                <ItemWrapper height={height}>
+                  <ItemContainer>
+                    {characters.map((character, index) => (
+                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                    ))}
+                  </ItemContainer>
+                </ItemWrapper>
+              )}
+            </>
           )}
-          {noFilteredCharacters || (
-            <ItemWrapper height={height}>
-              <ItemContainer>
-                {characters.map((character, index) => (
-                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
-                ))}
-              </ItemContainer>
-            </ItemWrapper>
-          )}
+          <FadeInOut show={!!selectedCharacter} exiting={close}>
+            {!!selectedCharacter && (
+              <DetailContainer>
+                <CharacterDetailSection
+                  character={selectedCharacter}
+                  actions={{ onClose: () => { setSelectedCharacter(undefined); setClose(true);}, primary: { text: text.item.buy, onClick: buy } }}
+                />
+              </DetailContainer>
+            )}
+            <Overlay />
+          </FadeInOut>
         </>
       )}
-      <FadeInOut show={!!selectedCharacter} exiting={close}>
-        {!!selectedCharacter && (
-          <DetailContainer>
-            <CharacterDetailSection
-              character={selectedCharacter}
-              actions={{ onClose: () => { setSelectedCharacter(undefined); setClose(true);}, primary: { text: text.item.buy, onClick: buy } }}
-            />
-          </DetailContainer>
-        )}
-        <Overlay />
-      </FadeInOut>
     </>
   );
 };
