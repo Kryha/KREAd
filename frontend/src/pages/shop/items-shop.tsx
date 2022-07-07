@@ -108,7 +108,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
                 redirectRoute={routes.character}
               />
             ))}
-          {!!noFilteredItems || (
+          {!noFilteredItems && (
             <ItemWrapper height={height}>
               <ItemContainer>
                 {items.map((item, index) => (

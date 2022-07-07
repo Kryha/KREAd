@@ -102,7 +102,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
             />
           ) : (
             <>
-              {noFilteredCharacters || (
+              {noFilteredCharacters && (
                 <ItemWrapper height={height}>
                   <ItemContainer>
                     {characters.map((character, index) => (
@@ -111,7 +111,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                   </ItemContainer>
                 </ItemWrapper>
               )}
-              {noFilteredCharacters || (
+              {!noFilteredCharacters && (
                 <ItemWrapper height={height}>
                   <ItemContainer>
                     {characters.map((character, index) => (

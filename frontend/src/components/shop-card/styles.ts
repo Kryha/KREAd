@@ -150,6 +150,10 @@ export const Product = styled.div<ViewProps>`
       -webkit-animation-name: ${slideLeft};
       -webkit-animation-duration: 1s;
       -webkit-animation-fill-mode: forwards;
+      animation: linear 1;
+      animation-name: ${slideLeft};
+      animation-duration: 1s;
+      animation-fill-mode: forwards;
       align-items: center;
     }
     ${PrimaryButton} {

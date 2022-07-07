@@ -16,7 +16,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [filterId, setFilterId] = useState("");
-  const [_intitial, setInitial] = useState(true);
+  const [intitial, setInitial] = useState(true);
 
   const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
 
@@ -69,6 +69,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
           key={myCharacters[0].characterId}
           onClick={onCharacterClick}
           removeInitial={removeInitial}
+          isInitial={intitial}
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
