@@ -39,7 +39,7 @@ export const Landing: FC = () => {
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
   const [openNotification, setOpenNotifications] = useState(false);
-  const[selectedCharacter, setSelectedCharacter] = useState(character);
+  const[_selectedCharacter, setSelectedCharacter] = useState(character);
   const [showDetail, setShowDetail] = useState(false);
   const navigate = useNavigate();
   const [closeDetail, setCloseDetail] = useState(false);
