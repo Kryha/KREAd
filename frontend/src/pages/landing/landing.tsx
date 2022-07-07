@@ -43,13 +43,12 @@ export const Landing: FC = () => {
   const [showDetail, setShowDetail] = useState(false);
   const navigate = useNavigate();
   const [closeDetail, setCloseDetail] = useState(false);
-  const [closeOverlay, setCloseOverlay] = useState(false);
 
   useEffect(() => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
-  if (isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingCharacter || isLoading) return <LoadingPage />;
 
   // TODO: get an empty page
   if (!character) return <ErrorView />;
