@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, TickIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText } from "../../components";
+import { disappear, fadeIn } from "../../components/atoms/animations";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
+import { FormCard } from "../create-character/styles";
 
 export const Tick = styled(TickIcon)`
   margin-right: 20px;
@@ -27,11 +29,19 @@ export const TickContainer = styled.div`
 `;
 
 export const ContentWrapper = styled.div`
+  ${FormCard} {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    animation: ${disappear}, ${fadeIn};
+    animation-duration: 0.6s, 1s;
+    animation-delay: 0s, 0.6s;
+  }
   ${DetailSectionWrap} {
     margin-top: 40px;
     position: absolute;
     bottom: 40px;
-    right: 40px;
+    left: 40px;
     height: 80vh;
   }
   ${DetailSectionHeaderNavigationWrap} {

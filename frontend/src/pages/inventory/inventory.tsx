@@ -55,12 +55,14 @@ const ItemsInventory: FC = () => {
           />
         </OverviewContainer>
       ) : (
-        <DetailWrapper>
-          <ItemDetailSection
-            item={item || items[0]}
-            actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
-          />
-        </DetailWrapper>
+        <FadeInOut show={true} exiting={false}>
+          <DetailWrapper>
+            <ItemDetailSection
+              item={item || items[0]}
+              actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
+            />
+          </DetailWrapper>
+        </FadeInOut>
       )}
     </PageContainer>
   );
@@ -92,14 +94,16 @@ const CharactersInventory: FC = () => {
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
-      <DetailContainer>
-        <DetailWrapper>
-          <CharacterDetailSection
-            character={character || myCharacters[0]}
-            actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
-          />
-        </DetailWrapper>
-      </DetailContainer>
+      <FadeInOut show={true} exiting={false}>
+        <DetailContainer>
+          <DetailWrapper>
+            <CharacterDetailSection
+              character={character || myCharacters[0]}
+              actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
+            />
+          </DetailWrapper>
+        </DetailContainer>
+      </FadeInOut>
     </PageContainer>
   );
 };
@@ -141,7 +145,8 @@ export const Inventory: FC = () => {
           <Tag />
         </NotificationContainer>
       </NotificationWrapper>
-    }>
+    }
+    >
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
       {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
       <FadeInOut show={openNotification} exiting={close}>

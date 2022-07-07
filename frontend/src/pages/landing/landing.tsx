@@ -61,6 +61,7 @@ export const Landing: FC = () => {
 
   return (
     <BaseRoute
+      isLanding
       sideNavigation={
         <NotificationWrapper>
           <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>

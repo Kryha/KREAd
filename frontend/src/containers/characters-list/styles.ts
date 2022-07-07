@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { HorizontalDivider, Label } from "../../components";
+import { disappear, fadeIn } from "../../components/atoms/animations";
 import { FiltersContainer } from "../../components/filters/styles";
 import { color, margins } from "../../design";
 
@@ -13,6 +14,9 @@ export const SortableListWrap = styled.section`
   ${HorizontalDivider} {
     margin-top: ${margins.nano};
   }
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.6s, 1s;
+  animation-delay: 0s, 0.6s;
 `;
 
 export const ListHeader = styled.header`

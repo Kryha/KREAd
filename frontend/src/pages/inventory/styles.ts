@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { CloseIcon, BellIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
-import { disappear, slideUpOpacity } from "../../components/atoms/animations";
+import { disappear, fadeIn, slideUpOpacity } from "../../components/atoms/animations";
 
 import { Group } from "../../components/switch-selector/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -12,6 +12,9 @@ export const InventoryWrapper = styled.div`
     margin-left: ${margins.big};
     margin-bottom: ${margins.small};
   }
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.6s, 1s;
+  animation-delay: 0s, 0.6s;
 `;
 
 export const OverviewContainer = styled.div`

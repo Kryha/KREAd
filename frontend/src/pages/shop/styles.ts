@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
-import { slideInUp, slideUpOpacity } from "../../components/atoms/animations";
+import { disappear, fadeIn, slideInUp, slideUpOpacity } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
 import { PriceContainer } from "../../components/price-in-ist/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
@@ -34,6 +34,9 @@ export const FilterWrapper = styled.div`
   ${HorizontalDivider} {
     margin-top: 4px;
   }
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.6s, 1s;
+  animation-delay: 0s, 0.6s;
 `;
 
 export const FilterContainer = styled.div`

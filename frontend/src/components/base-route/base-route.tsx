@@ -10,13 +10,14 @@ interface BaseRouteProps {
   sideNavigation: React.ReactNode;
   children?: React.ReactNode;
   onboarding?: boolean;
+  isLanding?: boolean;
 }
 
-export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboarding = false }) => {
+export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboarding = false, isLanding = false }) => {
   const isOnboarding = onboarding ? routes.onboarding : routes.character;
   return (
     <>
-      <TopbarContainer>
+      <TopbarContainer isLanding={isLanding}>
         <Box>
           <NavigationSection route={isOnboarding}>
             <NavigationTab title={text.navigation.character} route={isOnboarding} />
@@ -31,7 +32,7 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
         {sideNavigation}
       </TopbarContainer>
       <ChildrenContainer>{children}</ChildrenContainer>
-      <FooterContainer>
+      <FooterContainer isLanding={isLanding}>
         <Footer />
       </FooterContainer>
     </>
