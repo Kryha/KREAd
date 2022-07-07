@@ -1,11 +1,8 @@
 import styled from "@emotion/styled";
-import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
 
 import { color, margins } from "../../design";
-import { BoldLabel, Img, PrimaryButton, TitleText } from "../atoms";
-import { disappear, fadeIn, slideLeft } from "../atoms/animations";
+import { Img } from "../atoms";
 import { CharacterWrapper } from "../base-character/styles";
-import { PriceContainer as Price } from "../price-in-ist/styles";
 
 export const Line = styled.div`
   border: 0.5px solid ${color.darkGrey};
@@ -13,12 +10,22 @@ export const Line = styled.div`
   width: 23px;
 `;
 
-interface ViewProps {
-  width: number;
-  height: number;
-}
-
-
+export const Product = styled.div`
+  width: 402px;
+  min-width: 402px;
+  background: ${color.white};
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  border-radius: ${margins.medium};
+  box-shadow: none;
+  padding-top: ${margins.medium};
+  align-items: center;
+  min-height: 485px;
+  cursor: pointer;
+  :hover {
+    border: 1px solid ${color.black};
+  }
+`;
 
 export const ImageContainer = styled.div`
   display: flex;
@@ -31,7 +38,6 @@ export const ImageContainer = styled.div`
   margin-bottom: ${margins.medium};
   overflow: hidden;
   position: relative;
-  margin: 0 auto;
   ${CharacterWrapper} {
     left: 20%;
     right: 0;
@@ -48,13 +54,6 @@ export const TitleWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   min-height: 54px;
-  margin-top: 24px;
-  ${TitleText} {
-    font-weight: 500;
-  }
-  ${BoldLabel} {
-    margin-top: 4px;
-  }
 `;
 
 export const OwnedByContainer = styled.div`
@@ -66,14 +65,13 @@ export const Footer = styled.div`
   display: flex;
   align-items: space-between;
   justify-content: space-between;
-  height: 32px;
 `;
 
 export const Tag = styled.div`
   display: flex;
   align-items: center;
   gap: ${margins.small};
-  width: 150px;
+  width: 235px;
   overflow-x: scroll;
 `;
 
@@ -108,76 +106,9 @@ export const ItemImage = styled(Img) <ImageProps>`
 `;
 
 export const Element = styled.div`
+  width: 345px;
   height: 320px;
+  border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   overflow: hidden;
-`;
-
-export const InfoContainer = styled.div`
-  bottom: 40px;
-  position: absolute;
-  width: 90%;
-`;
-
-export const PriceContainer = styled.div`
-  display: flex;
-  gap: 24px;
-  position: relative;
-  align-items: center;
-`;
-
-export const Product = styled.div<ViewProps>`
-  position: relative;
-  min-width: 402px;
-  background: ${color.white};
-  border: 1px solid ${color.grey};
-  box-sizing: border-box;
-  border-radius: ${margins.medium};
-  box-shadow: none;
-  padding-top: ${margins.medium};
-  align-items: center;
-  min-height: 525px;
-  cursor: pointer;
-  ${Price} {
-    min-width: 80px;
-    align-items: center;
-  }
-  :hover {
-    border: 1px solid ${color.black};
-    ${Price} {
-      position: absolute;
-      -webkit-animation: linear 1;
-      -webkit-animation-name: ${slideLeft};
-      -webkit-animation-duration: 1s;
-      -webkit-animation-fill-mode: forwards;
-      align-items: center;
-    }
-    ${PrimaryButton} {
-      animation: ${disappear}, ${fadeIn};
-      animation-duration: 0.5s, 0.5s;
-      animation-delay: 0s, 0.5s;
-    }
-  }
-  flex: 1 0 500px;
-  box-sizing: border-box;
-  ${({ width }): string => {
-    if (width <= 1300) {
-      return "flex: 0 1 calc(49.6% - 1em);";
-    }
-    else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
-      return "flex: 0 1 calc(32.4% - 1em);";
-    }
-    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
-      return "flex: 0 1 calc(24.41% - 1em);";
-    }
-    else {
-      return "flex: 1 0 500px;";
-    }
-  }
-  }
-  :not(:hover) {
-    ${PrimaryButton} {
-      display: none;
-    }
-  }
 `;

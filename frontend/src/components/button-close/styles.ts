@@ -5,7 +5,7 @@ import { color, margins } from "../../design";
 export const Close = styled(CloseIcon)`
   width: 12px;
   height: 12px;
-  margin-left: ${margins.medium};
+  margin-left: 46px;
   margin-top: 10px;
   cursor: pointer;
 `;

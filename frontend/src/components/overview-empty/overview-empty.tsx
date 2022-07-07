@@ -27,11 +27,9 @@ export const OverviewEmpty: FC<OverviewProps> = ({ redirectRoute, headingText, b
     <OverviewWrapper>
       <MenuText>{headingText || text.general.dataNotFound}</MenuText>
       <BodyText>{descriptionText || text.general.thereAreNoAssetsAvailable}</BodyText>
-      {buttonText && (
-        <PrimaryButton onClick={() => handleButtonClick()}>
-          <ButtonText customColor={color.white}>{buttonText || text.general.goHome}</ButtonText>
-        </PrimaryButton>
-      )}
+      <PrimaryButton onClick={() => handleButtonClick()}>
+        <ButtonText customColor={color.white}>{buttonText || text.general.goHome}</ButtonText>
+      </PrimaryButton>
     </OverviewWrapper>
   );
 };

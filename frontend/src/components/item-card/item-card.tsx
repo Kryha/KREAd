@@ -49,7 +49,6 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
       <ElementWrapper
         onMouseEnter={() => setShowStats(!showStats)}
         onMouseLeave={() => setShowStats(!showStats)}
-        onBlur={() => setShowStats(false)}
       >
         <Card />
         <ElementContainer>
