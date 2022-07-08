@@ -33,15 +33,11 @@ export const Buy: FC<Props> = ({ children, data, text: pText }) => {
 
   return (
     <ContentWrapper>
-      <PageContainer
-        sidebarContent={
-          <FormCard height={height} width={width}>
-            <FormHeader currentStep={currentStep} title={pText.buy} link={routes.shop} isBuyFlow />
-            {perStepDisplay()}
-          </FormCard>
-        }
-      >
-        {children}
+      <PageContainer sidebarContent={children}>
+        <FormCard height={height} width={width}>
+          <FormHeader currentStep={currentStep} title={pText.buy} link={routes.shop} isBuyFlow />
+          {perStepDisplay()}
+        </FormCard>
       </PageContainer>
     </ContentWrapper>
   );

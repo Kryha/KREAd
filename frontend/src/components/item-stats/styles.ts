@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { color, fontWeight, margins } from "../../design";
 import { DetailSectionProgress } from "../../containers/detail-section/detail-section-progress-bar/styles";
 import { HorizontalDivider } from "../atoms";
+import { fadeIn } from "../atoms/animations";
 
 interface ItemProps {
   position: string;
@@ -22,28 +23,29 @@ export const StatsWrapper = styled.div<ItemProps>`
   border-radius: ${margins.medium};
   position: absolute;
   z-index: 1000;
+  animation: ${fadeIn} 0.3s;
   ${({ position, area }): string => {
     switch (area) {
       case "top":
         if (position === "left") {
-          return "left: 158px; top: -197px;";
+          return "left: 175px; top: -197px;";
         }
         else {
-          return "right: 145px; top: -197px;";
+          return "right: 165px; top: -197px;";
         }
       case "middle":
         if (position === "left") {
-          return "left: 317px; top: -53px;";
+          return "left: 335px; top: -53px;";
         }
         else {
-          return "right: 309px; top: -53px;";
+          return "right: 329px; top: -53px;";
         }
       case "bottom":
         if (position === "left") {
-          return "left: 317px; top: 90px;";
+          return "left: 335px; top: 90px;";
         }
         else {
-          return "right: 309px; top: 90px;";
+          return "right: 329px; top: 90px;";
         }
       default:
         if (position === "left") {

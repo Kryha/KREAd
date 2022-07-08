@@ -1,13 +1,19 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, DownArrowIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
-import { color, margins, zIndex } from "../../design";
+import { disappear, fadeIn } from "../../components/atoms/animations";
+import { CharacterWrapper } from "../../components/base-character/styles";
+import { color, margins } from "../../design";
 
 interface ImageProps {
   isZoomed?: boolean;
 }
 
-export const LandingContainer = styled.div<ImageProps>``;
+export const LandingContainer = styled.div<ImageProps>`
+  ${CharacterWrapper} {
+    animation: ${fadeIn} 1.5s;
+  }
+`;
 
 export const Menu = styled(DownArrowIcon)`
   margin: 0px 0px 0px 11px !important;
@@ -65,6 +71,9 @@ export const DetailContainer = styled.div`
   padding: 0px;
   gap: ${margins.nano};
   margin-left: ${margins.big};
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 1.5s, 1.6s;
+  animation-delay: 0s, 1.5s;
 `;
 
 export const ButtonContainer = styled.div`

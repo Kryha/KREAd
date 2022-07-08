@@ -1,7 +1,7 @@
 import { Navigate, useParams } from "react-router-dom";
 
 import { text } from "../../assets";
-import { ErrorView, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
 import { useItem, useSellItem } from "../../service";
@@ -26,8 +26,10 @@ export const ItemSell = () => {
   if (!data || isError) return <ErrorView />;
 
   return (
-    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={data}>
-      <ItemDetailSection item={data} />
+    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={data} >
+      <FadeInOut show exiting={false} >
+        <ItemDetailSection item={data} />
+      </FadeInOut>
     </Sell>
   );
 };

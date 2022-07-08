@@ -9,7 +9,7 @@ export const NavTab = styled(NavLink)`
 `;
 
 export const NavTitle = styled(NavigationTitle)`
-  padding: 0px 36px ${margins.medium} 36px;
+  padding: 0px ${margins.small} ${margins.small} ${margins.small};
 `;
 
 export const NavTabs = styled.div`
@@ -36,12 +36,18 @@ export const ActiveLine = styled.div<NavTabProps>`
   }}
 `;
 
-export const Tab = styled.div`
+export const Tab = styled.div<NavTabProps>`
   cursor: pointer;
-  &:hover {
-    ${ActiveLine} {
-      height: 3px;
-      border-bottom: 1px solid ${color.black};
-    }
-  }
+  ${({ active }) => {
+    return active
+      ? ""
+      : `
+      &:hover {
+        ${ActiveLine} {
+          height: 3px;
+          border-bottom: 1px solid ${color.black};
+        }
+      }
+    `;
+  }}
 `;

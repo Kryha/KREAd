@@ -15,7 +15,6 @@ export enum Page {
 export const Shop: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
   const [openNotification, setOpenNotifications] = useState(false);
-
   const pageSelector = useMemo(
     () => (
       <SwitchSelector

@@ -186,6 +186,13 @@ export const InputContainer = styled.div`
 
 export const ColorWrapper = styled.div<SelectProps>`
   cursor: pointer;
+  &: hover {
+    ${DetailSectionColorPaletteWrap} {
+      svg {
+        border: 1px solid ${color.black};
+      }
+    }
+  }
   ${({ selected }): string => {
     return selected
       ? `

@@ -1,10 +1,25 @@
 import styled from "@emotion/styled";
-import { color, fontSize, fontWeight, margins } from "../../../design";
+import { OverviewWrapper } from "../../../components/overview-empty/styles";
+import { color, fontSize, fontWeight } from "../../../design";
 
-export const DetailSectionSegmentWrap = styled.div`
-  margin-bottom: ${margins.extraLarge};
+interface DetailSectionProps {
+  isActivity: boolean;
+}
+
+export const DetailSectionSegmentWrap = styled.div<DetailSectionProps>`
   display: flex;
   flex-flow: column nowrap;
+  ${({ isActivity }): string => {
+    return isActivity
+      ? `
+        `
+      : `
+        margin-bottom: 150px;
+      `;
+  }};
+  ${OverviewWrapper} {
+    padding-left: 0px;
+  }
 `;
 
 export const DetailSectionBody = styled.p`

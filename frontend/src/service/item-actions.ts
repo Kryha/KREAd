@@ -109,7 +109,7 @@ export const addToInventory = async (service: AgoricState, item: any, price?: bi
   return E(walletP).addOffer(offerConfig);
 };
 
-export const removeFromInventory = async (service: AgoricState, item: any, price?: bigint) => {
+export const removeFromInventory = async (service: AgoricState, item: any) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -163,7 +163,7 @@ export const removeFromInventory = async (service: AgoricState, item: any, price
   return E(walletP).addOffer(offerConfig);
 };
 
-export const addToInventoryContinued = async (service: AgoricState, item: any, price?: bigint) => {
+export const addToInventoryContinued = async (service: AgoricState, item: any) => {
   const {
     agoric: { walletP },
     contracts: {
