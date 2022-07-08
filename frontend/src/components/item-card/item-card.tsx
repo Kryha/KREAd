@@ -59,10 +59,6 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
                 src={image}
                 width={width || imageSize.medium}
                 height={height || imageSize.small}
-                marginTop={marginTop}
-                marginBottom={marginBottom}
-                marginLeft={marginLeft}
-                marginRight={marginRight}
               />
             ) : (
               <NoImage>

@@ -1,15 +1,22 @@
 import { CharacterItems, Item } from "../interfaces";
 import {
   AirResevoir1,
+  AirResevoir1Icon,
   Background1,
+  Background1Icon,
   Clothing1,
+  Clothing1Icon,
   FrontMask1,
+  FrontMask1Icon,
   Hair7,
+  Hair7Icon,
   HeadPiece1,
   Liquid1,
   Mask1,
+  Mask1Icon,
   MidBackground1,
   Noseline1,
+  Noseline1Icon,
 } from "../assets/icons";
 
 export const FakeCharacterItems: CharacterItems = {
@@ -20,6 +27,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Noseline1,
+    icon: Noseline1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -83,6 +91,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: MidBackground1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -146,6 +155,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Mask1,
+    icon: Mask1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -209,6 +219,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: HeadPiece1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -272,6 +283,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Hair7,
+    icon: Hair7Icon,
     level: 64,
     rarity: 3,
     effectiveness: 12,
@@ -335,6 +347,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: FrontMask1,
+    icon: FrontMask1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -398,6 +411,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Liquid1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -461,6 +475,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Background1,
+    icon: Background1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -524,6 +539,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: AirResevoir1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -587,6 +603,7 @@ export const FakeCharacterItems: CharacterItems = {
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Clothing1,
+    icon: Clothing1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -653,6 +670,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Noseline1,
+    icon: Noseline1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -716,6 +734,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: MidBackground1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 200,
     effectiveness: 12,
@@ -779,6 +798,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Mask1,
+    icon: Mask1Icon,
     level: 64,
     rarity: 200,
     effectiveness: 12,
@@ -842,6 +862,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: HeadPiece1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -905,6 +926,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Hair7,
+    icon: Hair7Icon,
     level: 64,
     rarity: 10,
     effectiveness: 12,
@@ -968,6 +990,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: FrontMask1,
+    icon: FrontMask1Icon,
     level: 64,
     rarity: 1,
     effectiveness: 12,
@@ -1031,6 +1054,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Liquid1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 30,
     effectiveness: 12,
@@ -1094,6 +1118,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Background1,
+    icon: Background1Icon,
     level: 64,
     rarity: 1,
     effectiveness: 12,
@@ -1157,6 +1182,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: AirResevoir1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 30,
     effectiveness: 12,
@@ -1220,6 +1246,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Clothing1,
+    icon: Clothing1Icon,
     level: 64,
     rarity: 100,
     effectiveness: 12,
@@ -1283,6 +1310,7 @@ export const Items: Item[] = [
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: AirResevoir1,
+    icon: AirResevoir1Icon,
     level: 64,
     rarity: 30,
     effectiveness: 12,

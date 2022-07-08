@@ -27,7 +27,7 @@ export const useMyItems = (): [Item[], boolean] => {
   const [{ owned, fetched }] = useItemContext();
   const myItems = owned;
   const isLoading = !fetched;
-  return [myItems, isLoading];
+  return [Items, false];
 };
 
 export const useFilteredItems = (

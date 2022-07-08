@@ -78,7 +78,7 @@ export const Landing: FC = () => {
         </NotificationWrapper>
       }
     >
-      {isLoadingCharacter || isLoading ? (
+      {isLoadingCharacter ? (
         <LoadingPage />
       ) : (
         <>
