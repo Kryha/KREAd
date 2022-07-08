@@ -23,7 +23,7 @@ export const FakeCharacterItems: CharacterItems = {
   noseline: {
     name: "AirTox: Fairy Dust Elite",
     category: "noseline",
-    id: "11332",
+    id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Noseline1,
@@ -87,7 +87,7 @@ export const FakeCharacterItems: CharacterItems = {
   midBackground: {
     name: "AirTox: Fairy Dust Elite",
     category: "mid background",
-    id: "12334",
+    id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: MidBackground1,
@@ -151,7 +151,7 @@ export const FakeCharacterItems: CharacterItems = {
   mask: {
     name: "AirTox: Fairy Dust Elite",
     category: "mask",
-    id: "12335",
+    id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Mask1,
@@ -215,7 +215,7 @@ export const FakeCharacterItems: CharacterItems = {
   headPiece: {
     name: "AirTox: Fairy Dust Elite",
     category: "head piece",
-    id: "13330",
+    id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: HeadPiece1,
@@ -279,7 +279,7 @@ export const FakeCharacterItems: CharacterItems = {
   hair: {
     name: "AirTox: Fairy Dust Elite",
     category: "hair",
-    id: "12336",
+    id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Hair7,
@@ -343,7 +343,7 @@ export const FakeCharacterItems: CharacterItems = {
   frontMask: {
     name: "AirTox: Fairy Dust Elite",
     category: "front mask",
-    id: "12335",
+    id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: FrontMask1,
@@ -407,7 +407,7 @@ export const FakeCharacterItems: CharacterItems = {
   liquid: {
     name: "AirTox: Fairy Dust Elite",
     category: "liquid",
-    id: "12338",
+    id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Liquid1,
@@ -471,7 +471,7 @@ export const FakeCharacterItems: CharacterItems = {
   background: {
     name: "AirTox: Fairy Dust Elite",
     category: "background",
-    id: "12340",
+    id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Background1,
@@ -535,7 +535,7 @@ export const FakeCharacterItems: CharacterItems = {
   airResevoir: {
     name: "AirTox: Fairy Dust Elite",
     category: "air resevoir",
-    id: "12341",
+    id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: AirResevoir1,
@@ -666,7 +666,7 @@ export const Items: Item[] = [
   {
     name: "NoseLine: Fairy Dust Elite",
     category: "noseline",
-    id: "12344",
+    id: "1",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Noseline1,
@@ -730,7 +730,7 @@ export const Items: Item[] = [
   {
     name: "Mid Background: Fairy Dust Elite",
     category: "mid background",
-    id: "12345",
+    id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: MidBackground1,
@@ -794,7 +794,7 @@ export const Items: Item[] = [
   {
     name: "Mask: Fairy Dust Elite",
     category: "mask",
-    id: "12346",
+    id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Mask1,
@@ -858,7 +858,7 @@ export const Items: Item[] = [
   {
     name: "Head Piece: Fairy Dust Elite",
     category: "head piece",
-    id: "12347",
+    id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: HeadPiece1,
@@ -922,7 +922,7 @@ export const Items: Item[] = [
   {
     name: "Hair: Fairy Dust Elite",
     category: "hair",
-    id: "11333",
+    id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Hair7,
@@ -986,7 +986,7 @@ export const Items: Item[] = [
   {
     name: "Front Mask: Fairy Dust Elite",
     category: "front mask",
-    id: "11334",
+    id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: FrontMask1,
@@ -1050,7 +1050,7 @@ export const Items: Item[] = [
   {
     name: "Liquid: Fairy Dust Elite",
     category: "liquid",
-    id: "11335",
+    id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Liquid1,
@@ -1114,7 +1114,7 @@ export const Items: Item[] = [
   {
     name: "Background: Fairy Dust Elite",
     category: "background",
-    id: "12333",
+    id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Background1,
@@ -1178,7 +1178,7 @@ export const Items: Item[] = [
   {
     name: "Air Reservoir: Fairy Dust Elite",
     category: "air resevoir",
-    id: "12337",
+    id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: AirResevoir1,
@@ -1242,7 +1242,7 @@ export const Items: Item[] = [
   {
     name: "Clothing: Fairy Dust Elite",
     category: "clothing",
-    id: "12310",
+    id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Clothing1,
