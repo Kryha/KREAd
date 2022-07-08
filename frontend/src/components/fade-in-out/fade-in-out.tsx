@@ -1,6 +1,5 @@
-import { FC, ReactNode, useCallback, useEffect, useState } from "react";
-import { UNMOUNTED, EXITED, ENTERED, EXITING } from "../../constants";
-import { useTimer } from "../../hooks/hooks";
+import { FC, ReactNode, useState } from "react";
+import { UNMOUNTED } from "../../constants";
 import { FadeInOutWrapper } from "./styles";
 
 interface FadeInOutProps {
@@ -10,30 +9,7 @@ interface FadeInOutProps {
 }
 
 export const FadeInOut: FC<FadeInOutProps> = ({ show, children, exiting }) => {
-  const [state, setState] = useState({ status: UNMOUNTED });
-  // const [hide, setHide] = useTimer(0.4, state.status === EXITED);
-
-  // const statusChange = useCallback(() => {
-  //   if(show === true) {
-  //     setState({ status: ENTERED });
-  //   }
-  //   if(show === false && state.status === ENTERED) {
-  //     setState({ status: EXITING });
-  //   }
-  //   if(state.status === EXITING) {
-  //     setState({ status: EXITED });
-  //   }
-  //   if(hide) {
-  //     setState({ status: UNMOUNTED });
-  //     setHide(false);
-  //   }
-  // },[hide, setHide, show, state.status]);
-
-  // useEffect(() => {
-  //   statusChange();
-
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const [state, _setState] = useState({ status: UNMOUNTED });
 
   if(state.status === UNMOUNTED && !show ) return <></>;
 

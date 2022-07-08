@@ -39,7 +39,7 @@ export const Landing: FC = () => {
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
   const [openNotification, setOpenNotifications] = useState(false);
-  const[selectedCharacter, setSelectedCharacter] = useState(character);
+  const [_selectedCharacter, setSelectedCharacter] = useState(character);
   const [showDetail, setShowDetail] = useState(false);
   const navigate = useNavigate();
   const [closeDetail, setCloseDetail] = useState(false);
@@ -47,8 +47,6 @@ export const Landing: FC = () => {
   useEffect(() => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
-
-  if (isLoadingCharacter || isLoading) return <LoadingPage />;
 
   // TODO: get an empty page
   if (!character) return <ErrorView />;
@@ -80,37 +78,43 @@ export const Landing: FC = () => {
         </NotificationWrapper>
       }
     >
-      <LandingContainer isZoomed={!openTab && !openNotification}>
-        <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
-      </LandingContainer>
-      <CharacterItems items={character.items} showItems={!openTab && !openNotification} />
-      <CharacterCard id={character.characterId} characters={myCharacters} showCard={openTab && !!myCharacters}/>
-      <DetailContainer>
-        <MenuText>{character.name}</MenuText>
-        <ButtonContainer>
-          <SecondaryButton onClick={() => setShowDetail(true)}>
-            <ButtonText>{text.general.moreInfo}</ButtonText>
-          </SecondaryButton>
-          <ButtonText>{text.param.level(character.level)}</ButtonText>
-        </ButtonContainer>
-      </DetailContainer>
-      <CharacterCardWrapper>
-        <FadeInOut show={showDetail} exiting={closeDetail}>
-          <CharacterDetailSection
-            character={character}
-            actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => { setShowDetail(false); setCloseDetail(true); }}}
-          />
-        </FadeInOut>
-      </CharacterCardWrapper>
-      {openNotification && (
+      {isLoadingCharacter || isLoading ? (
+        <LoadingPage />
+      ) : (
         <>
-          <NotificationCard />
-          <Overlay />
+          <LandingContainer isZoomed={!openTab && !openNotification}>
+            <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
+          </LandingContainer>
+          <CharacterItems items={character.items} showItems={!openTab && !openNotification} />
+          <DetailContainer>
+            <MenuText>{character.name}</MenuText>
+            <ButtonContainer>
+              <SecondaryButton onClick={() => setShowDetail(true)}>
+                <ButtonText>{text.general.moreInfo}</ButtonText>
+              </SecondaryButton>
+              <ButtonText>{text.param.level(character.level)}</ButtonText>
+            </ButtonContainer>
+          </DetailContainer>
+          <CharacterCardWrapper>
+            <FadeInOut show={showDetail} exiting={closeDetail}>
+              <CharacterDetailSection
+                character={character}
+                actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => { setShowDetail(false); setCloseDetail(true); }}}
+              />
+            </FadeInOut>
+          </CharacterCardWrapper>
+          {openNotification && (
+            <>
+              <NotificationCard />
+              <Overlay />
+            </>
+          )}
+          <FadeInOut show={showDetail} exiting={closeDetail}>
+            <Overlay />
+          </FadeInOut>
         </>
       )}
-      <FadeInOut show={showDetail} exiting={closeDetail}>
-        <Overlay />
-      </FadeInOut>
+      <CharacterCard id={character.characterId} characters={myCharacters} showCard={openTab && !!myCharacters}/>
     </BaseRoute>
   );
 };

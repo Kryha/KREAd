@@ -26,6 +26,7 @@ export const Inventory: FC = () => {
     [selectedPage]
   );
 
+  const showItemsInventory = selectedPage === Page.Items;
   // TODO: switch between items and characters
   return (
     <BaseRoute
@@ -51,7 +52,7 @@ export const Inventory: FC = () => {
       }
     >
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
-      {selectedPage === Page.Items  ? <ItemsInventory /> : <CharactersInventory />}
+      {showItemsInventory ? <ItemsInventory /> : <CharactersInventory />}
       <FadeInOut show={openNotification} exiting={close}>
         <NotificationCard />
         <Overlay />

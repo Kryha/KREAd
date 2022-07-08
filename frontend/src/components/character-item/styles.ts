@@ -17,10 +17,7 @@ export const InfoContainer = styled.div`
   width: 100%;
 `;
 
-export const EquippedLabel = styled(BoldLabel)`
-  display: flex;
-  justify-content: space-between;
-`;
+export const EquippedLabel = styled(BoldLabel)``;
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -125,7 +122,6 @@ export const SubTitleContainer = styled.div`
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
   padding: 0px;
   gap: ${margins.medium};
   justify-content: space-between;

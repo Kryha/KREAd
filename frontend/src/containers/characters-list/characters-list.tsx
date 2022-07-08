@@ -69,6 +69,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
           key={myCharacters[0].characterId}
           onClick={onCharacterClick}
           removeInitial={removeInitial}
+          isInitial={intitial}
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
