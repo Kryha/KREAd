@@ -69,7 +69,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const CharacterContent = styled.div`
-  padding: ${margins.medium} ${margins.big} 0px ${margins.medium};
+  padding: 0px ${margins.big} 0px ${margins.medium};
 `;
 
 export const CharacterItemContainer = styled.div`
