@@ -2,7 +2,7 @@
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { mintNfts } from "./character-actions";
-import { addToInventory, addToInventoryContinued, mintItem, removeFromInventory } from "./item-actions";
+import { addToInventory, mintItem, removeFromInventory } from "./item-actions";
 
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { AmountMath } from "@agoric/ertp";

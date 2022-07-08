@@ -195,7 +195,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID, item: ITEM_BRAND_BOARD_ID, inventoryKey: INVENTORY_KEY_BRAND_BOARD_ID });
+          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID, item: ITEM_BRAND_BOARD_ID });
         }
       }
       watchPurses().catch((err) => {

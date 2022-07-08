@@ -1,17 +1,6 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
-import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
-import { Purses, ServiceState } from "../context/agoric";
-import { AmountMath } from "@agoric/ertp";
-import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
-// import installationConstants from "../service/conf/installation-constants-nft-maker.js";
-
-const {
-  brandBoardIds: {
-    Money: MONEY_BRAND_BOARD_ID,
-  },
-} = dappConstants;
 
 export const mintItem = async (service: AgoricState, item?: any, price?: bigint) => {
   const { agoric: { walletP }, contracts: { characterBuilder: { publicFacet } }, purses } = service;
@@ -54,12 +43,12 @@ export const mintItem = async (service: AgoricState, item?: any, price?: bigint)
 export const addToInventory = async (service: AgoricState, item: any, price?: bigint) => {
   const { agoric: { walletP }, contracts: { characterBuilder: { publicFacet } }, purses } = service;
   const itemPurse = service.purses.item[service.purses.item.length - 1];
-  const inventoryKeyPurse = service.purses.inventoryKey[service.purses.inventoryKey.length - 1];
-  const inventoryKey = inventoryKeyPurse.value[0];
-  const wantedInventoryKey = { ...inventoryKey, id: inventoryKey.id===1 ? 2 : 1};
-  console.log(inventoryKeyPurse, inventoryKey, wantedInventoryKey);
+  const characterPurse = service.purses.character[service.purses.character.length - 1];
+  const character = characterPurse.value[0];
 
-  if (!publicFacet || !walletP || !itemPurse || !inventoryKeyPurse) {
+  const wantedCharacter = { ...character, id: character.id===1 ? 2 : 1};
+
+  if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
     console.error("undefined parameter");
     return;
   }
@@ -81,14 +70,14 @@ export const addToInventory = async (service: AgoricState, item: any, price?: bi
           value: [item],
         },
         InventoryKey1: {
-          pursePetname: inventoryKeyPurse.brandPetname,
-          value: [inventoryKey],
+          pursePetname: characterPurse.brandPetname,
+          value: [character],
         },
       },
       want: {
         InventoryKey2: {
-          pursePetname: inventoryKeyPurse.brandPetname,
-          value: [wantedInventoryKey],
+          pursePetname: characterPurse.brandPetname,
+          value: [wantedCharacter],
         },
       },
     },
@@ -102,13 +91,12 @@ export const addToInventory = async (service: AgoricState, item: any, price?: bi
 export const removeFromInventory = async (service: AgoricState, item: any, price?: bigint) => {
   const { agoric: { walletP }, contracts: { characterBuilder: { publicFacet } }, purses } = service;
   const itemPurse = service.purses.item[service.purses.item.length - 1];
-  const inventoryKeyPurse = service.purses.inventoryKey[service.purses.inventoryKey.length - 1];
-  const inventoryKey = inventoryKeyPurse.value[0];
-  const wantedInventoryKey = { ...inventoryKey, id: inventoryKey.id===1 ? 2 : 1};
+  const characterPurse = service.purses.character[service.purses.character.length - 1];
+  const character = characterPurse.value[0];
 
-  console.log(inventoryKeyPurse, inventoryKey);
+  const wantedCharacter = { ...character, id: character.id===1 ? 2 : 1};
 
-  if (!publicFacet || !walletP || !itemPurse || !inventoryKeyPurse) {
+  if (!publicFacet || !walletP || !itemPurse || !characterPurse) {
     console.error("undefined parameter");
     return;
   }
@@ -126,8 +114,8 @@ export const removeFromInventory = async (service: AgoricState, item: any, price
     proposalTemplate: {
       give: {
         InventoryKey1: {
-          pursePetname: inventoryKeyPurse.brandPetname,
-          value: [inventoryKey],
+          pursePetname: characterPurse.brandPetname,
+          value: [character],
         },
       },
       want: {
@@ -136,44 +124,13 @@ export const removeFromInventory = async (service: AgoricState, item: any, price
           value: [item],
         },
         InventoryKey2: {
-          pursePetname: inventoryKeyPurse.brandPetname,
-          value: [wantedInventoryKey],
+          pursePetname: characterPurse.brandPetname,
+          value: [wantedCharacter],
         },
       },
     },
     dappContext: true,
   });
   console.log(offerConfig);
-  return E(walletP).addOffer(offerConfig);
-};
-
-export const addToInventoryContinued = async (service: AgoricState, item: any, price?: bigint) => {
-  const { agoric: { walletP }, contracts: { characterBuilder: { publicFacet } }, purses } = service;
-  if (!publicFacet || !walletP || !service.purses.item[service.purses.item.length-1]) {
-    console.error("undefined parameter");
-    return;
-  }
-
-  // const characterBrand = await E(publicFacet).getItemBrand();
-  // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
-  
-
-  const invitation = await E(publicFacet).addToInventoryContinued();
-
-  console.info("Invitation successful, sending to wallet for approval");
-  
-  const offerConfig = harden({
-    id: `${Date.now()}`,
-    invitation: invitation,
-    proposalTemplate: {
-      give: {
-        Item: {
-          pursePetname: service.purses.item[service.purses.item.length-1].brandPetname,
-          value: [item],
-        },
-      },
-    },
-    dappContext: true,
-  });
   return E(walletP).addOffer(offerConfig);
 };

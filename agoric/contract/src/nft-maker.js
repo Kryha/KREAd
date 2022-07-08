@@ -18,18 +18,16 @@ import { mulberry32 } from './prng';
 const start = async (zcf) => {
   // Define Assets
   const assetMints = await Promise.all([
-    await zcf.makeZCFMint('KREA', AssetKind.SET),
-    await zcf.makeZCFMint('KREAITEM', AssetKind.SET),
-    await zcf.makeZCFMint('KREAINVENTORYKEY', AssetKind.SET),
+    zcf.makeZCFMint('KREA', AssetKind.SET),
+    zcf.makeZCFMint('KREAITEM', AssetKind.SET),
   ]);
 
   const [
     { issuer: characterIssuer, brand: characterBrand },
     { issuer: itemIssuer, brand: itemBrand },
-    { issuer: inventoryKeyIssuer, brand: inventoryKeyBrand },
   ] = assetMints.map((mint) => mint.getIssuerRecord());
 
-  const [characterMint, itemMint, inventoryKeyMint] = assetMints;
+  const [characterMint, itemMint] = assetMints;
 
   let PRNG; // Pseudo random number generator (mulberry32)
 
@@ -138,13 +136,19 @@ const start = async (zcf) => {
       ...getRandomBaseCharacter(),
       name: newCharacterName,
     };
+    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
-    const newCharacterAmount = AmountMath.make(
+    const newCharacterAmount1 = AmountMath.make(
       characterBrand,
-      harden([newCharacter]),
+      harden([{ ...newCharacter, id: 1 }]),
+    );
+    const newCharacterAmount2 = AmountMath.make(
+      characterBrand,
+      harden([{ ...newCharacter, id: 2 }]),
     );
     // Mint character to user seat
-    characterMint.mintGains({ Asset: newCharacterAmount }, seat);
+    characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
+    characterMint.mintGains({ Character: newCharacterAmount2 }, inventorySeat);
 
     // Mint items to inventory seat
     const allDefaultItems = Object.values(state.config.defaultItems);
@@ -153,34 +157,7 @@ const start = async (zcf) => {
       id: state.characterNames.length,
     }));
     const itemsAmount = AmountMath.make(itemBrand, harden(uniqueItems));
-    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
-
-    // Create Inventory Key Pair for Access to Inventory
-    const newInventoryKeyAmount1 = AmountMath.make(
-      inventoryKeyBrand,
-      harden([
-        {
-          name: newCharacterName,
-          id: 1,
-        },
-      ]),
-    );
-    const newInventoryKeyAmount2 = AmountMath.make(
-      inventoryKeyBrand,
-      harden([
-        {
-          name: newCharacterName,
-          id: 2,
-        },
-      ]),
-    );
-    // Mint key to character inventory
-    inventoryKeyMint.mintGains({ InventoryKey: newInventoryKeyAmount1 }, seat);
-    inventoryKeyMint.mintGains(
-      { InventoryKey: newInventoryKeyAmount2 },
-      inventorySeat,
-    );
 
     // Add to public state
     /**
@@ -231,7 +208,7 @@ const start = async (zcf) => {
 
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item');
-    const providedKeyAmount = seat.getAmountAllocated('InventoryKey1');
+    const providedKeyAmount = seat.getAmountAllocated('CharacterA');
     const providedKey = providedKeyAmount.value[0];
     const characterName = providedKey.name;
 
@@ -244,8 +221,7 @@ const start = async (zcf) => {
     assert(inventorySeat, X`${errors.inventory404}`);
 
     // Get current inventory items and key from inventorySeat
-    const currentInventoryKey =
-      inventorySeat.getAmountAllocated('InventoryKey');
+    const currentInventoryKey = inventorySeat.getAmountAllocated('Character');
 
     // Widthdraw Item and Key from user seat
     seat.decrementBy(harden({ Item: providedItemAmount }));
@@ -286,11 +262,11 @@ const start = async (zcf) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
     assertProposalShape(seat, {
       give: {
-        InventoryKey1: null,
+        Character1: null,
       },
       want: {
         Item: null,
-        InventoryKey2: null,
+        Character2: null,
       },
     });
 
@@ -361,8 +337,7 @@ const start = async (zcf) => {
     assert(characterRecord, X`${errors.character404}`);
     const { inventory } = characterRecord;
     const items = inventory.getAmountAllocated('Item', itemBrand);
-    const all = inventory.getCurrentAllocation();
-    return { items, all };
+    return { items };
   };
 
   const creatorFacet = Far('Character store creator', {
@@ -384,8 +359,6 @@ const start = async (zcf) => {
     getCharacterBrand: () => characterBrand,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
-    getinventoryKeyIssuer: () => inventoryKeyIssuer,
-    getinventoryKeyBrand: () => inventoryKeyBrand,
     getNftConfig: () => ({ characterBrand, characterIssuer }),
     getRandomBaseCharacter,
     getRandomItem,
