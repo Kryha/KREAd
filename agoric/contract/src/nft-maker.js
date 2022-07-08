@@ -229,6 +229,12 @@ const start = async (zcf) => {
       },
     });
 
+    /**
+     * TODO:
+     * Verify that the item slot is empty before exsquipping.
+     * If not empty unequip present item
+     */
+
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item');
     const providedKeyAmount = seat.getAmountAllocated('InventoryKey1');
@@ -389,8 +395,9 @@ const start = async (zcf) => {
     getNftConfig: () => ({ characterBrand, characterIssuer }),
     getRandomBaseCharacter,
     getRandomItem,
-    equip: () => zcf.makeInvitation(equip, 'addToInventory'),
-    unequip: () => zcf.makeInvitation(unequip, 'removeFromInventory'),
+    makeEquipInvitation: () => zcf.makeInvitation(equip, 'addToInventory'),
+    makeUnequipInvitation: () =>
+      zcf.makeInvitation(unequip, 'removeFromInventory'),
     mintCharacterNFT: () =>
       zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
     mintItemNFT: () => zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
