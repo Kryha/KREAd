@@ -472,6 +472,7 @@ const start = async (zcf) => {
     getNftConfig: () => ({ characterBrand, characterIssuer }),
     getRandomBaseCharacter,
     getRandomItem,
+    getItems,
     makeEquipInvitation: () => zcf.makeInvitation(equip, 'addToInventory'),
     makeUnequipInvitation: () =>
       zcf.makeInvitation(unequip, 'removeFromInventory'),
