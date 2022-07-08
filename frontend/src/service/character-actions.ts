@@ -40,6 +40,7 @@ export const mintNfts = async (service: AgoricState, name: string) => {
   }
 
   const characterBrand = await E(publicFacet).getCharacterBrand();
+  // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
   console.log(characterBrand);
 
   const invitation = await E(publicFacet).mintCharacterNFT();
@@ -52,7 +53,11 @@ export const mintNfts = async (service: AgoricState, name: string) => {
     proposalTemplate: {
       want: {
         Asset: {
-          pursePetname: service.purses.character[0].brandPetname,
+          pursePetname: service.purses.character[service.purses.character.length - 1].brandPetname,
+          value: [{ name }],
+        },
+        InventoryKey: {
+          pursePetname: service.purses.inventoryKey[service.purses.inventoryKey.length - 1].brandPetname,
           value: [{ name }],
         },
       },
