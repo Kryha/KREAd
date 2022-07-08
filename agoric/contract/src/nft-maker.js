@@ -231,7 +231,7 @@ const start = async (zcf) => {
 
     /**
      * TODO:
-     * Verify that the item slot is empty before exsquipping.
+     * Verify that the item slot is empty before equipping.
      * If not empty unequip present item
      */
 
