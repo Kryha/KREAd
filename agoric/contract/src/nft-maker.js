@@ -309,6 +309,9 @@ const start = async (zcf) => {
     const providedKey = providedKeyAmount.value[0];
     const characterName = providedKey.name;
 
+    // TODO: Validate Issuer
+    // Make sure that a token with a correct key value  but minted from a different issuer is not allowed
+
     // Find characterRecord entry based on provided key
     const characterRecord = state.characters.find(
       (c) => c.name === characterName,
