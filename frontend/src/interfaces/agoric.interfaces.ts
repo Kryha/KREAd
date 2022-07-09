@@ -1,4 +1,4 @@
-interface AgoricService {
+export interface AgoricService {
   zoe: any;
   board: any;
   zoeInvitationDepositFacetId: any;
@@ -38,9 +38,6 @@ export interface AgoricState {
   agoric: AgoricService;
   isLoading: boolean;
 }
-
-// TODO: remove if keeps unused
-type PursePetname = [string, string];
 
 interface SetDappApproved {
   type: "SET_DAPP_APPROVED";
@@ -99,6 +96,8 @@ interface SetLoading {
 interface Reset {
   type: "RESET";
 }
+
+export type PursePetname = [string, string];
 
 export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 

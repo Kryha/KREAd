@@ -13,8 +13,7 @@ import {
   ItemSell,
   CharacterSell,
   Onboarding,
-  About,
-  Privacy
+  Privacy,
 } from "../pages";
 import { MainContainer, ErrorFallback } from "../components";
 import { Item } from "../pages/item";
@@ -40,7 +39,6 @@ export const AppRoutes: FC = () => {
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
           <Route path={"/test"} element={<TestServiceUI />} />
-          <Route path={routes.about} element={<About />} />
           <Route path={routes.privacy} element={<Privacy />} />
         </Routes>
       </MainContainer>

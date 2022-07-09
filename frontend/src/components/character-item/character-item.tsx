@@ -9,8 +9,9 @@ import {
   SubTitleContainer,
   Info,
   InfoWrapper,
+  TitleContainer,
 } from "./styles";
-import { Badge, BoldLabel, ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
+import { ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
@@ -41,21 +42,18 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>
-          <MenuItemName>{character.name}</MenuItemName>
-          <SubTitleContainer>
-            <Badge>
-              <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
-            </Badge>
-            <ButtonText>{text.param.level(character.level)}</ButtonText>
+          <TitleContainer>
+            <MenuItemName>{character.name}</MenuItemName>
             {isCharacterEquipped && (
-              <>
-                <Line />
-                <BoldLabel>{text.character.selected}</BoldLabel>
-              </>
+              <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>
             )}
+          </TitleContainer>
+          <SubTitleContainer>
+            <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
+            <Line />
+            <ButtonText>{text.param.level(character.level)}</ButtonText>
           </SubTitleContainer>
         </InfoContainer>
-        <EquippedLabel customColor={color.black}>{text.param.id(character.characterId)}</EquippedLabel>
         <ButtonContainer>
           {isCharacterEquipped ? (
             <PrimaryButton>

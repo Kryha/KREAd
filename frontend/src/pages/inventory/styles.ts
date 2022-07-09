@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { CloseIcon, BellIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
+import { disappear, fadeIn, slideUpOpacity } from "../../components/atoms/animations";
 
 import { Group } from "../../components/switch-selector/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -11,6 +12,9 @@ export const InventoryWrapper = styled.div`
     margin-left: ${margins.big};
     margin-bottom: ${margins.small};
   }
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.6s, 1s;
+  animation-delay: 0s, 0.6s;
 `;
 
 export const OverviewContainer = styled.div`
@@ -80,8 +84,11 @@ export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
 
 export const DetailWrapper = styled.section`
   ${DetailSectionWrap} {
-    height: 70vh;
-    max-width: 100%;
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+    height: 80vh;
+    max-width: 52.7%;
   }
 `;
 
@@ -106,4 +113,14 @@ export const Tag = styled.div`
   background: ${color.black};
   border-radius: ${margins.medium};
   z-index: 1000;
+`;
+
+export const DetailContainer = styled.div`
+  animation: ${disappear}, ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
+  animation-duration: 1.6s, 2s;
+  animation-delay: 0s, 1.6s;
+  width: 60%;
+  ${DetailSectionWrap}{
+    max-width: 100%;
+  }
 `;

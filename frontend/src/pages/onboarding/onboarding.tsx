@@ -1,17 +1,31 @@
 import { FC } from "react";
 
-import { DefaultIcon, text } from "../../assets";
+import { text } from "../../assets";
 import { color } from "../../design";
-import {  ButtonText, Footer, MenuItemName, MenuText, PrimaryButton, SecondaryButton, TitleText } from "../../components";
-import { ArrowUp, ArrowUpRight, ButtonContainer, DefaultImage, FooterContainer, InfoText, MiddleContent, OnboardingContainer, OnboardingWrapper } from "./styles";
+import { ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
+import {
+  ArrowUp,
+  ButtonContainer,
+  Email,
+  EmailContainer,
+  FooterContainer,
+  InfoText,
+  MiddleContent,
+  OnboardingContainer,
+  OnboardingWrapper,
+} from "./styles";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { useViewport } from "../../hooks";
 
-
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
+
+  const connectWallet = () => {
+    // TODO: check if you have any assets in your wallet & connect to wallet
+    navigate(routes.createCharacter);
+  };
 
   return (
     <OnboardingContainer height={height} width={width}>
@@ -21,12 +35,8 @@ export const Onboarding: FC = () => {
           <MenuText>{text.general.launchingTheFirst}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
           <ButtonContainer>
-            <SecondaryButton onClick={() => navigate(routes.character)}>
-              <ButtonText>{text.general.explore}</ButtonText>
-              <ArrowUpRight />
-            </SecondaryButton>
             {/* TODO: connect to wallet */}
-            <PrimaryButton>
+            <PrimaryButton onClick={() => connectWallet()}>
               <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
               <ArrowUp />
             </PrimaryButton>
@@ -40,10 +50,13 @@ export const Onboarding: FC = () => {
         <MiddleContent height={height}>
           <MenuText>{text.general.contactUs}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-          <TitleText customColor={color.darkGrey}>{text.general.sendEmailTo}</TitleText>
+          <EmailContainer>
+            {text.general.sendEmailTo} </EmailContainer>
+          <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
+
         </MiddleContent>
       </OnboardingWrapper>
-      <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />
+      <OnboardingCharacter />
       <FooterContainer>
         <Footer />
       </FooterContainer>

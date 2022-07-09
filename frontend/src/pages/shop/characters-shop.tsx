@@ -12,6 +12,7 @@ import {
   PriceSelector,
   Select,
   ButtonText,
+  FadeInOut,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
@@ -19,6 +20,7 @@ import { useViewport } from "../../hooks";
 import { useFilteredCharacters } from "../../service";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
 import {
+  DetailContainer,
   FilterContainer,
   FilterWrapper,
   ItemContainer,
@@ -38,11 +40,12 @@ interface Props {
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
-
+  const [filterId, setFilterId] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState<Character>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
+  const [close, setClose] = useState(false);
 
   const [characters, isLoading] = useFilteredCharacters(selectedCategory, selectedSorting, selectedPrice);
 
@@ -58,7 +61,9 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
     navigate(`${routes.buyCharacter}/${selectedCharacter.characterId}`);
   };
 
-  if (isLoading) return <LoadingPage />;
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
 
   return (
     <>
@@ -66,18 +71,17 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category}>
+            <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price}>
+            <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
               <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
             </Filters>
           </SelectorContainer>
-
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest}>
+            <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>
@@ -85,42 +89,52 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(!characters ? 0 : characters.length)}</ButtonText>
         <HorizontalDivider />
       </FilterWrapper>
-      {!characters || !characters.length ? (
-        <OverviewEmpty
-          headingText={text.store.thereAreNoCharactersInTheShop}
-          descriptionText={text.store.thereAreNoCharactersAvailable}
-          buttonText={text.navigation.goHome}
-          redirectRoute={routes.character}
-        />
+      {isLoading ? (
+        <LoadingPage />
       ) : (
         <>
-          {noFilteredCharacters || (
-            <ItemWrapper height={height}>
-              <ItemContainer>
-                {characters.map((character, index) => (
-                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
-                ))}
-              </ItemContainer>
-            </ItemWrapper>
+          {!characters || !characters.length ? (
+            <OverviewEmpty
+              headingText={text.store.thereAreNoCharactersInTheShop}
+              descriptionText={text.store.thereAreNoCharactersAvailable}
+              buttonText={text.navigation.goHome}
+              redirectRoute={routes.character}
+            />
+          ) : (
+            <>
+              {noFilteredCharacters && (
+                <ItemWrapper height={height}>
+                  <ItemContainer>
+                    {characters.map((character, index) => (
+                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                    ))}
+                  </ItemContainer>
+                </ItemWrapper>
+              )}
+              {!noFilteredCharacters && (
+                <ItemWrapper height={height}>
+                  <ItemContainer>
+                    {characters.map((character, index) => (
+                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                    ))}
+                  </ItemContainer>
+                </ItemWrapper>
+              )}
+            </>
           )}
-          {noFilteredCharacters || (
-            <ItemWrapper height={height}>
-              <ItemContainer>
-                {characters.map((character, index) => (
-                  <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
-                ))}
-              </ItemContainer>
-            </ItemWrapper>
-          )}
+          <FadeInOut show={!!selectedCharacter} exiting={close}>
+            {!!selectedCharacter && (
+              <DetailContainer>
+                <CharacterDetailSection
+                  character={selectedCharacter}
+                  actions={{ onClose: () => { setSelectedCharacter(undefined); setClose(true);}, primary: { text: text.item.buy, onClick: buy } }}
+                />
+              </DetailContainer>
+            )}
+            <Overlay />
+          </FadeInOut>
         </>
       )}
-      {!!selectedCharacter && (
-        <CharacterDetailSection
-          character={selectedCharacter}
-          actions={{ onClose: () => setSelectedCharacter(undefined), primary: { text: text.item.buy, onClick: buy } }}
-        />
-      )}
-      {!!selectedCharacter && <Overlay />}
     </>
   );
 };

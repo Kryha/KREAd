@@ -7,20 +7,19 @@ import dappConstants from "../service/conf/defaults";
 
 import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
-import { useCharacterStateDispatch } from "./characters";
 import { apiRecv } from "../service/api/receive";
 import { processPurses } from "../service/purses/process";
+import { useCharacterStateDispatch } from "./characters";
+import { useItemStateDispatch } from "./items";
+
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
+// import { NotificationWrapper } from "../components/notification-card/styles";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: {
-    Character: CHARACTER_ISSUER_BOARD_ID,
-    Item: ITEM_ISSUER_BOARD_ID,
-    InventoryKey: INVENTORY_KEY_ISSUER_BOARD_ID,
-  },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, InventoryKey: INVENTORY_KEY_ISSUER_BOARD_ID },
   brandBoardIds: {
     Money: MONEY_BRAND_BOARD_ID,
     Character: CHARACTER_BRAND_BOARD_ID,
@@ -31,46 +30,7 @@ const {
 
 console.info(`DAPP CONSTANTS: ${dappConstants}`);
 
-export interface AgoricService {
-  zoe: any;
-  board: any;
-  zoeInvitationDepositFacetId: any;
-  invitationIssuer: any;
-  walletP: any;
-  apiSend: any;
-}
-
-export interface Contract {
-  instance: any;
-  publicFacet: any;
-  instanceBoardId?: string;
-}
-export interface Contracts {
-  characterBuilder: Contract;
-  auctions: Contract[];
-}
-export interface Status {
-  walletConnected: boolean;
-  dappApproved: boolean;
-  showApproveDappModal: boolean;
-}
-export interface Purses {
-  money: any[];
-  character: any[];
-  item: any[];
-  inventoryKey: any[];
-}
-export interface ServiceState {
-  status: Status;
-  purses: Purses;
-  contracts: Contracts;
-  agoric: AgoricService;
-  isLoading: boolean;
-}
-
-export type PursePetname = [string, string];
-
-const initialState: ServiceState = {
+const initialState: AgoricState = {
   status: {
     walletConnected: false,
     dappApproved: false,
@@ -101,12 +61,12 @@ const initialState: ServiceState = {
 };
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
-type ProviderProps = Omit<React.ProviderProps<ServiceState>, "value">;
+type ProviderProps = Omit<React.ProviderProps<AgoricState>, "value">;
 
-const Context = createContext<ServiceState | undefined>(undefined);
+const Context = createContext<AgoricState | undefined>(undefined);
 const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
-const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState => {
+const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
@@ -122,13 +82,13 @@ const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState 
 
     case "SET_CHARACTER_PURSES":
       return { ...state, purses: { ...state.purses, character: action.payload } };
-    
+
     case "SET_ITEM_PURSES":
       return { ...state, purses: { ...state.purses, item: action.payload } };
-    
+
     case "SET_INVENTORY_KEY_PURSES":
       return { ...state, purses: { ...state.purses, inventoryKey: action.payload } };
-    
+
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
 
@@ -155,6 +115,7 @@ const Reducer = (state: ServiceState, action: AgoricStateActions): ServiceState 
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
   const characterDispatch = useCharacterStateDispatch();
+  const itemDispatch = useItemStateDispatch();
   const walletPRef = useRef(undefined);
 
   useEffect(() => {
@@ -221,7 +182,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("KREAINVENTORYEKEY", INVENTORY_KEY_ISSUER_BOARD_ID),
-
       ]);
 
       // Initialize agoric service based on constants
@@ -237,6 +197,11 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       // Fetch Characters from Chain
       const nfts = await E(nftPublicFacet).getCharacters();
       characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
+
+      // Fetch Items from Chain
+      const walletItems = await E(nftPublicFacet).getItems();
+      console.log("Ag Context walletItems: ", walletItems);
+      itemDispatch({ type: "SET_ITEMS", payload: walletItems.items });
 
       // TODO: set up chain notifiers
       // const availableItemsNotifier = E(
@@ -266,7 +231,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       onMessage,
     });
     return deactivateWebSocket;
-  }, [characterDispatch]);
+  }, [characterDispatch, itemDispatch]);
 
   return (
     <Context.Provider value={state}>

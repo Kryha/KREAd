@@ -5,11 +5,11 @@ import { mintNfts } from "./character-actions";
 import { addToInventory, mintItem, removeFromInventory } from "./item-actions";
 
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
-import { AmountMath } from "@agoric/ertp";
 import { useCharacterContext } from "../context/characters";
-import { send } from "process";
-import { FakeCharctersNoItems } from "./fake-characters";
+// import { send } from "process";
+// import { FakeCharctersNoItems } from "./fake-characters";
 import { useAgoricContext } from "../context/agoric";
+import { AgoricState } from "../interfaces/agoric.interfaces";
 
 export const TestServiceUI = () => {
   // service referse to agoricContext
@@ -22,7 +22,6 @@ export const TestServiceUI = () => {
     console.log("CHARACTERS: ", characters);
   }, [service, characters]);
 
-  
   const getTimer = () => {
     if (!service.agoric.apiSend) {
       console.log("NO API", service);
@@ -32,6 +31,11 @@ export const TestServiceUI = () => {
       type: "nft/getTimerService",
     });
     console.log("SENT GET TIMER");
+  };
+
+  const mintItem = (agoric: AgoricState) => {
+    console.log(agoric);
+    //TODO: call mint
   };
 
   const mintCharacter = async () => {
@@ -141,7 +145,7 @@ export const TestServiceUI = () => {
   const mintItemNFT = async () => {
     console.log(await mintItem(service));
   };
-  
+
   const addItemToInventory = async () => {
     const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
     console.log(item);
@@ -150,7 +154,9 @@ export const TestServiceUI = () => {
   };
 
   const removeItemFromInventory = async () => {
-    const { items: { value: equippedItems } } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
+    const {
+      items: { value: equippedItems },
+    } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
 
     const item = equippedItems[0];
     console.log(item);
@@ -159,7 +165,6 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-
     // const inviteReturnMsg = await E(CBPublicFacet).testPRNG();
     // const config = await E(CBPublicFacet).getConfig();
     // const mintNext = await E(CBPublicFacet).getMintNext();
@@ -170,7 +175,7 @@ export const TestServiceUI = () => {
     const invitationParam2 = await E(CBPublicFacet).invitationParam2({ msg: "MY SECRET MSG" });
 
     console.info("Invitations successful, sending to wallet for approval", invitationMsg, invitationParam1, invitationParam2);
-    
+
     const offerConfigMsg = harden({
       id: `${Date.now()}msg`,
       invitation: invitationMsg,
@@ -190,16 +195,15 @@ export const TestServiceUI = () => {
       dappContext: true,
     });
     const results = await Promise.allSettled([
-      E(service.agoric.walletP).addOffer(offerConfigMsg), 
+      E(service.agoric.walletP).addOffer(offerConfigMsg),
       E(service.agoric.walletP).addOffer(offerConfigParam1),
       E(service.agoric.walletP).addOffer(offerConfigParam2),
     ]
     );
 
     console.log("🦐 ", results); */
-  
-  
-    console.log(await mintNfts(service, "PABLO", 10n));
+
+    console.log(await mintNfts(service, "PABLO"));
     // const nfts = await E(CBPublicFacet).getCharacters();
     // const rand = await E(CBPublicFacet).testPRNG();
     // const config = await E(CBPublicFacet).getConfig();
@@ -233,30 +237,44 @@ export const TestServiceUI = () => {
     console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name));
   };
 
-  return <>
-    <h1>SERVICE TEST UI</h1>
-    <div style={{width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row"}}>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={mintItemNFT}>MINT ITEM</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={addItemToInventory}>ADD TO INVENTORY</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={removeItemFromInventory}>REMOVE FROM INVENTORY</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={async ()=> await getCharacterInventory()}>GET CHARACTER INVENTORY</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={() => console.log(characters)}>CHARACTERS</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={test}>TEST</button>
-      <button
-        style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
-        onClick={getLogs}>LOGS</button>
-    </div>
-  </>;
+  return (
+    <>
+      <h1>SERVICE TEST UI</h1>
+      <div style={{ width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row" }}>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={mintItemNFT}>
+          MINT ITEM
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={addItemToInventory}
+        >
+          ADD TO INVENTORY
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={removeItemFromInventory}
+        >
+          REMOVE FROM INVENTORY
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={async () => await getCharacterInventory()}
+        >
+          GET CHARACTER INVENTORY
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={() => console.log(characters)}
+        >
+          CHARACTERS
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={test}>
+          TEST
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={getLogs}>
+          LOGS
+        </button>
+      </div>
+    </>
+  );
 };

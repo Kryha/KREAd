@@ -79,41 +79,74 @@ export const CharacterContainer = styled.div<ImageProps>`
 ${({ size, width, height }): string => {
     if (size === "mini") {
       if (width <= SMALL_SCREEN_SIZE) {
-        return "zoom: 0.1;";
+        return `zoom: 0.1;
+        -moz-transform: scale(0.1);
+        -moz-transform-origin: 0 0;
+        `;
       }
       if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
-        return "zoom: 0.055;";
+        return `zoom: 0.055;
+        -moz-transform: scale(0.055);
+        -moz-transform-origin: 0 0;
+        `;
       }
-      return "zoom:0.075;";
+      return `zoom:0.075;
+      -moz-transform: scale(0.1);
+      -moz-transform-origin: 0 0;
+      `;
     }
     else if (size === "medium") {
       if (width <= SMALL_SCREEN_SIZE) {
-        return "zoom: 0.42;";
+        return `zoom: 0.42;
+        -moz-transform: scale(0.42);
+        -moz-transform-origin: 0 0;
+        `;
       }
       if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
-        return "zoom: 0.304;";
+        return `zoom: 0.304;
+        -moz-transform: scale(0.304);
+        -moz-transform-origin: 0 0;
+        `;
       }
       if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
-        return "zoom: 0.295;";
+        return `zoom: 0.295;
+        -moz-transform: scale(0.295);
+        -moz-transform-origin: 0 0;
+        `;
       }
       if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
-        return "zoom: 0.222;";
+        return `zoom: 0.222;
+        -moz-transform: scale(0.222);
+        -moz-transform-origin: 0 0;
+        `;
       }
       else {
-        return "zoom: 0.304;";
+        return `zoom: 0.304;
+        -moz-transform: scale(0.304);
+        -moz-transform-origin: 0 0;
+        `;
       }
     }
     else if (size === "half") {
-      return "zoom: 0.5;";
+      return `zoom: 0.5;
+      -moz-transform: scale(0.5);
+      -moz-transform-origin: 0 0;
+      `;
     }
     else if (size === "normal") {
       return `width: ${width * 0.4}px; height: ${height}px;`;
     }
     else if (size === "large") {
-      return "zoom: 1.6;";
+      return `zoom: 1.6;
+      -moz-transform: scale(1.6);
+      -moz-transform-origin: 0 0;
+      `;
     }
     else if (size === "extraLarge") {
-      return "zoom: 1.8;";
+      return `zoom: 1.8;
+      -moz-transform: scale(1.8);
+      -moz-transform-origin: 0 0;
+      `;
     }
     else {
       return `width: ${width * 0.4}px; height: ${height}px;`;

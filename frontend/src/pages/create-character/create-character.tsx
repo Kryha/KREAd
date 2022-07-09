@@ -1,63 +1,65 @@
-import { FC, useState } from "react";
-
+import { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
-import { ErrorView, FormHeader } from "../../components";
+import { ContentLoader, ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
-import { useAgoricState } from "../../context/agoric";
 import { useViewport } from "../../hooks";
-import { CharacterCreation } from "../../interfaces";
+import { Character, CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
-import { useCreateCharacter } from "../../service";
-// import { makeBidOfferForCharacter, mintCharacters } from "../../service/character-actions";
-import { FakeCharctersNoItems } from "../../service/fake-characters";
+import { useCreateCharacter, useMyCharacters } from "../../service";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
 
 export const CreateCharacter: FC = () => {
-  const agoricState = useAgoricState();
+  const createCharacter = useCreateCharacter();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [character, setCharacter] = useState<any>();
-  const createCharacter = useCreateCharacter();
+  const [mintedCharacter, setMintedCharacter] = useState<Character>();
+  const [characterdata, setCharacterData] = useState<CharacterCreation>({ name: "" });
+  const [myCharacters] = useMyCharacters();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
+
+  // TODO: Implement wallet listener for cases where the user doesn't approve the mint
+  // const [isWalletError, setIsWalletError] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (myCharacters.map((c) => c.name).includes(characterdata.name)) {
+      setIsOfferAccepted(true);
+      const [newCharacter] = myCharacters.filter((character) => character.name === characterdata.name);
+      setMintedCharacter(newCharacter);
+      setIsLoading(false);
+    }
+  }, [myCharacters, characterdata]);
 
   const changeStep = async (step: number): Promise<void> => {
     setCurrentStep(step);
   };
 
   const sendOfferHandler = async (): Promise<void> => {
-    // FIXME: integrate
-    // await makeBidOfferForCharacter(service, character.auction.publicFacet, character.character, 10n);
+    setIsLoading(true);
+    await createCharacter.mutateAsync({ name: characterdata.name });
   };
 
-  const submitForm = async (data: CharacterCreation): Promise<void> => {
-    // createCharacter.mutate(data);
-    const baseCharacter = FakeCharctersNoItems[0];
-    const newCharacter = { ...baseCharacter, name: data.name };
-    // const bought = await mintCharacters(service, [newCharacter], 1n);
-
-    // setCurrentStep(PAYMENT_STEP);
-    // setCharacter(createCharacter.data);
-    // if (bought) {
-    //   setCurrentStep(PAYMENT_STEP);
-    //   setCharacter({ character: newCharacter, auction: { publicFacet: bought.auctionItemsPublicFacet } });
-    // }
+  const setData = async (data: CharacterCreation): Promise<void> => {
+    setCharacterData(data);
+    setCurrentStep(PAYMENT_STEP);
   };
 
-  if (createCharacter.isError) return <ErrorView />;
+  // if (createCharacter.isError) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
       case 0:
-        return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
+        return <Information setData={setData} disabled={createCharacter.isLoading} />;
       case 1:
-        return <Payment sendOfferHandler={() => sendOfferHandler()} submit={changeStep} />;
+        return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} />;
       case 2:
-        return <Confirmation character={character.character} />;
+        return <Confirmation character={mintedCharacter} />;
       default:
-        return <Information submitForm={submitForm} disabled={createCharacter.isLoading} />;
+        return <Information setData={setData} disabled={createCharacter.isLoading} />;
     }
   };
 
@@ -65,12 +67,9 @@ export const CreateCharacter: FC = () => {
     <PageContainer
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader
-            currentStep={currentStep}
-            title={text.mint.mintNew}
-            link={routes.character}
-          />
-          <>{perStepDisplay()}</>
+          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.character} />
+          {perStepDisplay()}
+          <ContentLoader loading={isLoading} />
         </FormCard>
       }
     >

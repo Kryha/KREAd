@@ -10,13 +10,14 @@ import { LeftItemContainer, RightItemContainer, Row, RightItems } from "./styles
 
 interface CharacterItemsProps {
   items: Items;
+  showItems?: boolean;
 }
 
 // TODO: update component with item slots
-export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
+export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = true }) => {
   return (
     <>
-      <LeftItemContainer>
+      <LeftItemContainer showItems={showItems}>
         <LeftEquippedItemCard
           item={items.hair}
           code={text.itemSlots.hair}
@@ -60,7 +61,7 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items }) => {
           />
         </Row>
       </LeftItemContainer>
-      <RightItemContainer>
+      <RightItemContainer showItems={showItems}>
         <RightItems>
           <RightEquippedItemCard
             area="top"
