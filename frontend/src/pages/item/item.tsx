@@ -9,13 +9,13 @@ import { useParams } from "react-router-dom";
 
 export const Item: FC = () => {
   const { category } = useParams<"category">();
-  const { data: items, isLoading: isLoadingItems, isError: isErrorItems } = useMyItems();
+  const [items, isLoadingItems] = useMyItems();
   const { data: character, isLoading: isLoadingCharacter, isError: isErrorCharacters } = useMyCharacter();
   const { height, width } = useViewport();
 
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage />;
 
-  if (!items || !character || !items.length || !category || isErrorCharacters || isErrorItems) return <ErrorView />;
+  if (!items || !character || !items.length || !category || isErrorCharacters) return <ErrorView />;
 
   const categoryItems = items.filter((item) => item.category === category);
 

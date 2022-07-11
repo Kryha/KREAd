@@ -1,11 +1,12 @@
 import { Item } from "./item.interfaces";
 
 export type ItemState = {
-  fetched: boolean;
   items: Item[];
-  inventory: Item[];
+  owned: Item[];
+  equipped: Item[];
   // TODO: use Item type enriched with instance and publicFacet instead of any
   market: any[];
+  fetched: boolean;
 };
 
 interface SetItems {
@@ -18,13 +19,12 @@ interface AddItems {
   payload: Item[];
 }
 
-interface SetItemsInventory {
-  type: "SET_ITEMS_INVENTORY";
+interface SetOwnedItems {
+  type: "SET_OWNED_ITEMS";
   payload: Item[];
 }
-
-interface AddItemsInventory {
-  type: "ADD_ITEMS_INVENTORY";
+interface AddOwnedItems {
+  type: "ADD_OWNED_ITEMS";
   payload: Item[];
 }
 
@@ -47,14 +47,6 @@ interface Reset {
   type: "RESET";
 }
 
-export type ItemStateActions =
-  | Reset
-  | SetFetched
-  | SetItems
-  | AddItems
-  | SetItemsInventory
-  | AddItemsInventory
-  | SetItemsMarket
-  | AddItemsMarket;
+export type ItemStateActions = Reset | SetFetched | SetItems | AddItems | SetOwnedItems | AddOwnedItems | SetItemsMarket | AddItemsMarket;
 
 export type ItemDispatch = React.Dispatch<ItemStateActions>;

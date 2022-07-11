@@ -6,12 +6,13 @@ interface DetailSectionSegmentProps {
   children?: React.ReactNode;
   title: string;
   sectionIndex: number;
+  isActivity?: boolean;
 }
 
 // TODO: Use props intead of hardcoded placeholder for image src
-export const DetailSectionSegment: FC<DetailSectionSegmentProps> = ({ children, title, sectionIndex }) => {
+export const DetailSectionSegment: FC<DetailSectionSegmentProps> = ({ children, title, sectionIndex, isActivity = false }) => {
   return (
-    <DetailSectionSegmentWrap>
+    <DetailSectionSegmentWrap isActivity={isActivity}>
       <DetailSectionSegmentTitle sectionIndex={sectionIndex} title={title} />
       {children}
     </DetailSectionSegmentWrap>

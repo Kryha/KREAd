@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 
-import { ErrorView, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useCharacter } from "../../service";
 import { Buy } from "./buy";
@@ -24,7 +24,9 @@ export const CharacterBuy = () => {
         check: text.store.checkCharacter,
       }}
     >
-      <CharacterDetailSection character={data} />
+      <FadeInOut show exiting={false}>
+        <CharacterDetailSection character={data} />
+      </FadeInOut>
     </Buy>
   );
 };

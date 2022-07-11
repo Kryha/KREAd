@@ -1,7 +1,7 @@
 import { AmountMath } from "@agoric/ertp";
-import { Purses } from "../context/agoric";
+import { Purses } from "../interfaces/agoric.interfaces";
 
-export const formOfferForItem = (purses: Purses, item: any) => ({  
+export const formOfferForItem = (purses: Purses, item: any) => ({
   want: {
     Item: {
       pursePetname: purses.character[0].pursePetname,
@@ -15,7 +15,7 @@ export const formOfferForItem = (purses: Purses, item: any) => ({
   //   },
   // },
 });
-export const formOfferForCharacter = (characterBrand: any, character: any, moneyBrand: any, price: bigint) => ({  
+export const formOfferForCharacter = (characterBrand: any, character: any, moneyBrand: any, price: bigint) => ({
   want: {
     Asset: AmountMath.make(characterBrand, [character]),
   },

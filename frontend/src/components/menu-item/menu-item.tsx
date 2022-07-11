@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isString } from "../../interfaces";
-import { ButtonContainer, Dash, EquippedLabel, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
-import { Badge, ButtonText, ImageProps, Label, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
+import { ButtonContainer, Dash, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
+import { BoldLabel, ButtonText, ImageProps, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
@@ -21,9 +21,11 @@ interface MenuItemProps {
   data: Data;
   onClick?: (id: string) => void;
   imageProps?: ImageProps;
+  isInitial?: boolean;
+  removeInitial?: () => void;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
+export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isInitial = false, removeInitial }) => {
   const [selected, setSelected] = useState(false);
   // TODO: find if item is equipped
   const isEquipped = false;
@@ -32,9 +34,10 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
   return (
     <Info
       tabIndex={0}
-      selected={selected}
+      selected={selected || isInitial}
       onClick={() => {
         onClick && onClick(data.id);
+        removeInitial && removeInitial();
         setSelected(true);
       }}
       onBlur={() => setSelected(false)}
@@ -50,13 +53,11 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick }) => {
         <InfoContainer>
           <TitleContainer>
             <MenuItemName>{data.name}</MenuItemName>
-            <EquippedLabel customColor={color.black}>{text.param.id(data.id)}</EquippedLabel>
           </TitleContainer>
           <InlineDetails>
-            <Badge>
-              <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
-            </Badge>
-            <Label>{text.param.level(data.level)}</Label>
+            <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
+            <Dash />
+            <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
             {isEquipped && (
               <>
                 <Dash />

@@ -6,7 +6,7 @@ import { HeaderHorizontalDivider, MenuText } from "../atoms";
 export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 0px;
   ${MenuText} {
@@ -31,7 +31,6 @@ export const ArrowContainer = styled.div`
   box-sizing: border-box;
   border-radius: ${margins.medium};
   margin-left: 46px;
-  margin-right: 14px;
 `;
 
 export const Close = styled(CloseIcon)`

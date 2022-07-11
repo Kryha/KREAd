@@ -5,7 +5,8 @@ export const defaultItems = {
     id: '11332',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'Noseline1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -68,7 +69,8 @@ export const defaultItems = {
     id: '12334',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'MidBackground1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/mid_background_01.1b4877e1786a55d07adb.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -131,7 +133,8 @@ export const defaultItems = {
     id: '12335',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'Mask1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/mask_01.7c37d3112ca6a4218be0.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -194,7 +197,8 @@ export const defaultItems = {
     id: '13330',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'HeadPiece1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/head_piece_01.724cbb90afb6d2692ce3.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -257,7 +261,8 @@ export const defaultItems = {
     id: '12336',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'Hair7',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/hair_07.6b786902faf18c06f899.png',
     level: 64,
     rarity: 3,
     effectiveness: 12,
@@ -383,7 +388,8 @@ export const defaultItems = {
     id: '12338',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'Liquid1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/liquid_01.3c70d277d60196b58a61.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -446,7 +452,8 @@ export const defaultItems = {
     id: '12340',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'Background1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/background_01.77fa5b9eaaf65acf826f.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -509,7 +516,8 @@ export const defaultItems = {
     id: '12341',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'AirResevoir1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/air_resevoir_01.d3d981e7575cbaeafdab.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -572,7 +580,8 @@ export const defaultItems = {
     id: '12343',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image: 'Clothing1',
+    image:
+      'https://builder.agoric.kryha.dev/static/media/clothing_01.a128a4c49bf79bb23310.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,

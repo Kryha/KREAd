@@ -1,4 +1,4 @@
-interface AgoricService {
+export interface AgoricService {
   zoe: any;
   board: any;
   zoeInvitationDepositFacetId: any;
@@ -27,6 +27,8 @@ interface Status {
 export interface Purses {
   money: any[];
   character: any[];
+  item: any[];
+  inventoryKey: any[];
 }
 
 export interface AgoricState {
@@ -36,9 +38,6 @@ export interface AgoricState {
   agoric: AgoricService;
   isLoading: boolean;
 }
-
-// TODO: remove if keeps unused
-type PursePetname = [string, string];
 
 interface SetDappApproved {
   type: "SET_DAPP_APPROVED";
@@ -69,6 +68,10 @@ interface SetItemPurses {
   type: "SET_ITEM_PURSES";
   payload: any[];
 }
+interface SetInventoryKeyPurses {
+  type: "SET_INVENTORY_KEY_PURSES";
+  payload: any[];
+}
 interface SetAgoric {
   type: "SET_AGORIC";
   payload: Omit<AgoricService, "apiSend">;
@@ -94,6 +97,8 @@ interface Reset {
   type: "RESET";
 }
 
+export type PursePetname = [string, string];
+
 export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 
 export type AgoricStateActions =
@@ -103,6 +108,7 @@ export type AgoricStateActions =
   | SetShowApproveDappModal
   | SetTokenPurses
   | SetCharacterPurses
+  | SetInventoryKeyPurses
   | SetAgoric
   | SetCharacterContract
   | SetItemPurses

@@ -6,4 +6,6 @@ export const errors = {
   depositToSeatFailed: `Could not deposit nft into Seat`,
   depositToFacetFailed: `Could not deposit nft into userFacet`,
   character404: `Character not found`,
+  inventory404: `Character inventory not found`,
+  invalidInventoryKey: `Brand of Inventory Key does not match the correct Issuer`,
 };

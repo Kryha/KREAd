@@ -3,11 +3,12 @@ import { Character, CharacterCreation } from "../interfaces";
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 
 import { FakeCharcters } from "./fake-characters";
-import { api } from "./config";
 import { useCharacterContext } from "../context/characters";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
 import { useMemo } from "react";
 import { sortCharacters } from "../util";
+import { mintNfts } from "./character-actions";
+import { useAgoricContext } from "../context/agoric";
 
 export const useCharacters = (): UseQueryResult<Character[]> => {
   return useQuery(["characters", "all"], async () => {
@@ -57,12 +58,12 @@ export const useMyFilteredCharacters = (category: string, sorting: string): [Cha
   }, [category, data, isLoading, sorting]);
 };
 
-// TODO: invalidate queries + intergrate me
+// TODO: Add error management
 export const useCreateCharacter = () => {
+  const [agoricState] = useAgoricContext();
   return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
-    const res = await api.post("/character", body);
-    return res.data.character;
+    await mintNfts(agoricState, body.name);
   });
 };
 
@@ -73,11 +74,7 @@ export const useEquipCharacter = () => {
   });
 };
 
-export const useFilteredCharacters = (
-  category: string,
-  sorting: string,
-  price: { min: number; max: number }
-): [Character[], boolean] => {
+export const useFilteredCharacters = (category: string, sorting: string, price: { min: number; max: number }): [Character[], boolean] => {
   const { data, isLoading } = useCharacters();
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 

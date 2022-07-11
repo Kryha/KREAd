@@ -2,10 +2,11 @@ import React, { createContext, useReducer, useContext } from "react";
 import { ItemDispatch, ItemState, ItemStateActions } from "../interfaces/item-actions.interfaces";
 
 const initialState: ItemState = {
-  fetched: false,
   items: [],
-  inventory: [],
+  owned: [],
+  equipped: [],
   market: [],
+  fetched: false,
 };
 
 const Context = createContext<ItemState | undefined>(undefined);
@@ -19,17 +20,17 @@ const Reducer = (state: ItemState, action: ItemStateActions): ItemState => {
     case "ADD_ITEMS":
       return { ...state, fetched: true, items: [...state.items, ...action.payload] };
 
-    case "SET_ITEMS_INVENTORY":
-      return { ...state, inventory: action.payload };
-
-    case "ADD_ITEMS_INVENTORY":
-      return { ...state, fetched: true, inventory: [...state.inventory, ...action.payload] };
-
     case "SET_ITEMS_MARKET":
       return { ...state, market: action.payload };
 
     case "ADD_ITEMS_MARKET":
       return { ...state, fetched: true, market: [...state.market, ...action.payload] };
+
+    case "SET_OWNED_ITEMS":
+      return { ...state, owned: action.payload };
+
+    case "ADD_OWNED_ITEMS":
+      return { ...state, fetched: true, owned: [...state.owned, ...action.payload] };
 
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };

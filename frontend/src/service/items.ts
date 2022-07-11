@@ -5,6 +5,7 @@ import { Item } from "../interfaces";
 import { Items } from "./fake-item-data";
 import { sortItems } from "../util";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
+import { useItemContext } from "../context/items";
 
 export const useItems = (): UseQueryResult<Item[]> => {
   return useQuery(["items", "all"], async () => {
@@ -22,12 +23,11 @@ export const useItem = (id: string): UseQueryResult<Item> => {
   });
 };
 
-export const useMyItems = (): UseQueryResult<Item[]> => {
-  return useQuery(["items"], async () => {
-    //  TODO: intergrate me
-
-    return Items;
-  });
+export const useMyItems = (): [Item[], boolean] => {
+  const [{ owned, fetched }] = useItemContext();
+  const myItems = owned;
+  const isLoading = !fetched;
+  return [myItems, isLoading];
 };
 
 export const useFilteredItems = (
@@ -36,7 +36,8 @@ export const useFilteredItems = (
   price: { min: number; max: number },
   color: string
 ): { data: Item[]; isLoading: boolean } => {
-  const { data, isLoading } = useItems();
+  // TODO: Refactor so we can reuse filteredItems with different source (myItemx vs shopItems)
+  const [data, isLoading] = useMyItems();
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
   const isInCategory = (item: Item, category: string) => (category ? item.category === category : true);

@@ -2,11 +2,14 @@
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { mintNfts } from "./character-actions";
+import { addToInventory, addToInventoryContinued, mintItem, removeFromInventory } from "./item-actions";
+
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { useCharacterContext } from "../context/characters";
-import { send } from "process";
-import { FakeCharctersNoItems } from "./fake-characters";
+// import { send } from "process";
+// import { FakeCharctersNoItems } from "./fake-characters";
 import { useAgoricContext } from "../context/agoric";
+import { AgoricState } from "../interfaces/agoric.interfaces";
 
 export const TestServiceUI = () => {
   // service referse to agoricContext
@@ -30,7 +33,8 @@ export const TestServiceUI = () => {
     console.log("SENT GET TIMER");
   };
 
-  const mintItem = () => {
+  const mintItem = (agoric: AgoricState) => {
+    console.log(agoric);
     //TODO: call mint
   };
 
@@ -138,23 +142,74 @@ export const TestServiceUI = () => {
     charactersDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
   };
 
-  const getCharacters = async () => {
-    const nfts = await E(CBPublicFacet).getCharacterArray();
-    charactersDispatch({ type: "SET_CHARACTERS", payload: nfts });
+  const mintItemNFT = async () => {
+    console.log(await mintItem(service));
   };
 
-  const setMintNext = async () => {
-    await E(CBPublicFacet).setMintNext("c-los");
+  const addItemToInventory = async () => {
+    const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
+    console.log(item);
+    await addToInventory(service, item);
+    console.log("done");
+  };
+
+  const removeItemFromInventory = async () => {
+    const {
+      items: { value: equippedItems },
+    } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
+
+    const item = equippedItems[0];
+    console.log(item);
+    await removeFromInventory(service, item);
     console.log("done");
   };
 
   const test = async () => {
+    // const inviteReturnMsg = await E(CBPublicFacet).testPRNG();
+    // const config = await E(CBPublicFacet).getConfig();
+    // const mintNext = await E(CBPublicFacet).getMintNext();
+
+    /*
+    const invitationMsg = await E(CBPublicFacet).invitationReturnMsg();
+    const invitationParam1 = await E(CBPublicFacet).invitationParam1({ msg: "MY SECRET MSG" });
+    const invitationParam2 = await E(CBPublicFacet).invitationParam2({ msg: "MY SECRET MSG" });
+
+    console.info("Invitations successful, sending to wallet for approval", invitationMsg, invitationParam1, invitationParam2);
+
+    const offerConfigMsg = harden({
+      id: `${Date.now()}msg`,
+      invitation: invitationMsg,
+      proposalTemplate: {},
+      dappContext: true,
+    });
+    const offerConfigParam1 = harden({
+      id: `${Date.now()}p1`,
+      invitation: invitationParam1,
+      proposalTemplate: {},
+      dappContext: true,
+    });
+    const offerConfigParam2 = harden({
+      id: `${Date.now()}p2`,
+      invitation: invitationParam2,
+      proposalTemplate: {},
+      dappContext: true,
+    });
+    const results = await Promise.allSettled([
+      E(service.agoric.walletP).addOffer(offerConfigMsg),
+      E(service.agoric.walletP).addOffer(offerConfigParam1),
+      E(service.agoric.walletP).addOffer(offerConfigParam2),
+    ]
+    );
+
+    console.log("🦐 ", results); */
+
+    console.log(await mintNfts(service, "PABLO"));
     // const nfts = await E(CBPublicFacet).getCharacters();
     // const rand = await E(CBPublicFacet).testPRNG();
     // const config = await E(CBPublicFacet).getConfig();
     // const mintNext = await E(CBPublicFacet).getMintNext();
     // console.log(nfts, rand, config, mintNext);
-    console.log(await E(CBPublicFacet).getRandomBaseCharacter());
+    // console.log(await E(CBPublicFacet).getRandomBaseCharacter());
     // const character = nfts[2];
     // if (!character) {
     //   console.log("Character not found");
@@ -162,7 +217,14 @@ export const TestServiceUI = () => {
     // }
     // console.log(character);
     // await mintViaDepositFacet(service, "Pablo");
-    console.log(await mintNfts(service, "PABLO"));
+  };
+
+  const getLogs = async () => {
+    const privateState = await E(CBPublicFacet).getPrivateState();
+    const keyLogs = await E(CBPublicFacet).getKeyLogs();
+
+    console.log("🪙", privateState);
+    console.log(keyLogs);
   };
 
   const getCharacterInventory = async () => {
@@ -179,11 +241,20 @@ export const TestServiceUI = () => {
     <>
       <h1>SERVICE TEST UI</h1>
       <div style={{ width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row" }}>
-        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={getTimer}>
-          GET TIMER
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={mintItemNFT}>
+          MINT ITEM
         </button>
-        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={checkOwned}>
-          CHECK MY CHARACTERS
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={addItemToInventory}
+        >
+          ADD TO INVENTORY
+        </button>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={removeItemFromInventory}
+        >
+          REMOVE FROM INVENTORY
         </button>
         <button
           style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
@@ -199,6 +270,9 @@ export const TestServiceUI = () => {
         </button>
         <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={test}>
           TEST
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={getLogs}>
+          LOGS
         </button>
       </div>
     </>
