@@ -72,8 +72,8 @@ export const DetailContainer = styled.div`
   gap: ${margins.nano};
   margin-left: ${margins.big};
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 1.5s, 1.6s;
-  animation-delay: 0s, 1.5s;
+  animation-duration: 0.8s, 1s;
+  animation-delay: 0s, 0.8s;
 `;
 
 export const ButtonContainer = styled.div`

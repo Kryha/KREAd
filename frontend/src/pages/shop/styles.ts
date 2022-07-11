@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
-import { disappear, fadeIn, slideInUp, slideUpOpacity } from "../../components/atoms/animations";
+import { disappear, fadeIn, slideInUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
 import { PriceContainer } from "../../components/price-in-ist/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
@@ -35,8 +35,8 @@ export const FilterWrapper = styled.div`
     margin-top: 4px;
   }
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.6s, 1s;
-  animation-delay: 0s, 0.6s;
+  animation-duration: 0.3s, 1s;
+  animation-delay: 0s, 0.3s;
 `;
 
 export const FilterContainer = styled.div`
@@ -80,8 +80,8 @@ export const ItemContainer = styled.div`
   padding-bottom: 140px;
   -webkit-animation-name: ${slideInUp};
   animation-name: ${slideInUp};
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: 1.3s;
+  animation-duration: 1.3s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 `;

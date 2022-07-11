@@ -1,33 +1,37 @@
 import { CharacterItems, Item } from "../interfaces";
+
 import {
-  AirResevoir1,
-  AirResevoir1Icon,
-  Background1,
-  Background1Icon,
-  Clothing1,
-  Clothing1Icon,
-  FrontMask1,
-  FrontMask1Icon,
-  Hair7,
-  Hair7Icon,
-  HeadPiece1,
-  Liquid1,
-  Mask1,
-  Mask1Icon,
-  MidBackground1,
-  Noseline1,
-  Noseline1Icon,
-} from "../assets/icons";
+  TempetAddons,
+  TempetAddonsThumbnail,
+  TempetBackground1,
+  TempetBackground1Thumbnail,
+  TempetBackground2,
+  TempetBackground2Thumbnail,
+  TempetClothing,
+  TempetClothingThumbnail,
+  TempetFilter1,
+  TempetFilter1Thumbnail,
+  TempetFilter2,
+  TempetFilter2Thumbnail,
+  TempetHair,
+  TempetHairThumbnail,
+  TempetHeadpiece,
+  TempetHeapieceThumbnail,
+  TempetMask,
+  TempetMaskThumbnail,
+  TempetStyleline,
+  TempetStylelineThumbnail
+} from "../assets";
 
 export const FakeCharacterItems: CharacterItems = {
-  noseline: {
+  styleline: {
     name: "AirTox: Fairy Dust Elite",
-    category: "noseline",
+    category: "styleline",
     id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Noseline1,
-    icon: Noseline1Icon,
+    image: TempetStyleline,
+    thumbnail: TempetStylelineThumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -84,14 +88,14 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  midBackground: {
+  background1: {
     name: "AirTox: Fairy Dust Elite",
-    category: "mid background",
+    category: "background 1",
     id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: MidBackground1,
-    icon: AirResevoir1Icon,
+    image: TempetBackground1,
+    thumbnail: TempetBackground1Thumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -154,8 +158,8 @@ export const FakeCharacterItems: CharacterItems = {
     id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Mask1,
-    icon: Mask1Icon,
+    image: TempetMask,
+    thumbnail: TempetMaskThumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -218,8 +222,8 @@ export const FakeCharacterItems: CharacterItems = {
     id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: HeadPiece1,
-    icon: AirResevoir1Icon,
+    image: TempetHeadpiece,
+    thumbnail: TempetHeapieceThumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -282,8 +286,8 @@ export const FakeCharacterItems: CharacterItems = {
     id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Hair7,
-    icon: Hair7Icon,
+    image: TempetHair,
+    thumbnail: TempetHairThumbnail,
     level: 64,
     rarity: 3,
     effectiveness: 12,
@@ -340,14 +344,14 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  frontMask: {
+  addOns: {
     name: "AirTox: Fairy Dust Elite",
-    category: "front mask",
+    category: "add ons",
     id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: FrontMask1,
-    icon: FrontMask1Icon,
+    image: TempetAddons,
+    thumbnail: TempetAddonsThumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -404,14 +408,14 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  liquid: {
+  filter1: {
     name: "AirTox: Fairy Dust Elite",
-    category: "liquid",
+    category: "filter 1",
     id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Liquid1,
-    icon: AirResevoir1Icon,
+    image: TempetFilter1,
+    thumbnail: TempetFilter1Thumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -468,14 +472,14 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  background: {
+  background2: {
     name: "AirTox: Fairy Dust Elite",
-    category: "background",
+    category: "background 2",
     id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Background1,
-    icon: Background1Icon,
+    image: TempetBackground2,
+    thumbnail: TempetBackground2Thumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -532,14 +536,14 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  airResevoir: {
+  filter2: {
     name: "AirTox: Fairy Dust Elite",
     category: "air resevoir",
     id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: AirResevoir1,
-    icon: AirResevoir1Icon,
+    image: TempetFilter2,
+    thumbnail: TempetFilter2Thumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -602,8 +606,8 @@ export const FakeCharacterItems: CharacterItems = {
     id: "12343",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Clothing1,
-    icon: Clothing1Icon,
+    image: TempetClothing,
+    thumbnail: TempetClothingThumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -665,12 +669,12 @@ export const FakeCharacterItems: CharacterItems = {
 export const Items: Item[] = [
   {
     name: "NoseLine: Fairy Dust Elite",
-    category: "noseline",
+    category: "styleline",
     id: "1",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Noseline1,
-    icon: Noseline1Icon,
+    image: TempetStyleline,
+    thumbnail: TempetStylelineThumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -729,12 +733,12 @@ export const Items: Item[] = [
   },
   {
     name: "Mid Background: Fairy Dust Elite",
-    category: "mid background",
+    category: "backgound 1",
     id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: MidBackground1,
-    icon: AirResevoir1Icon,
+    image: TempetBackground1,
+    thumbnail: TempetBackground1Thumbnail,
     level: 64,
     rarity: 200,
     effectiveness: 12,
@@ -797,8 +801,8 @@ export const Items: Item[] = [
     id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Mask1,
-    icon: Mask1Icon,
+    image: TempetMask,
+    thumbnail: TempetMaskThumbnail,
     level: 64,
     rarity: 200,
     effectiveness: 12,
@@ -861,8 +865,8 @@ export const Items: Item[] = [
     id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: HeadPiece1,
-    icon: AirResevoir1Icon,
+    image: TempetHeadpiece,
+    thumbnail: TempetHeapieceThumbnail,
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -925,8 +929,8 @@ export const Items: Item[] = [
     id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Hair7,
-    icon: Hair7Icon,
+    image: TempetHair,
+    thumbnail: TempetHairThumbnail,
     level: 64,
     rarity: 10,
     effectiveness: 12,
@@ -985,12 +989,12 @@ export const Items: Item[] = [
   },
   {
     name: "Front Mask: Fairy Dust Elite",
-    category: "front mask",
+    category: " add ons",
     id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: FrontMask1,
-    icon: FrontMask1Icon,
+    image: TempetAddons,
+    thumbnail: TempetAddonsThumbnail,
     level: 64,
     rarity: 1,
     effectiveness: 12,
@@ -1049,12 +1053,12 @@ export const Items: Item[] = [
   },
   {
     name: "Liquid: Fairy Dust Elite",
-    category: "liquid",
+    category: "filter 1",
     id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Liquid1,
-    icon: AirResevoir1Icon,
+    image: TempetFilter1,
+    thumbnail: TempetFilter1Thumbnail,
     level: 64,
     rarity: 30,
     effectiveness: 12,
@@ -1113,12 +1117,12 @@ export const Items: Item[] = [
   },
   {
     name: "Background: Fairy Dust Elite",
-    category: "background",
+    category: "background 2",
     id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Background1,
-    icon: Background1Icon,
+    image: TempetBackground2,
+    thumbnail: TempetBackground2Thumbnail,
     level: 64,
     rarity: 1,
     effectiveness: 12,
@@ -1177,12 +1181,12 @@ export const Items: Item[] = [
   },
   {
     name: "Air Reservoir: Fairy Dust Elite",
-    category: "air resevoir",
+    category: "filter 1",
     id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: AirResevoir1,
-    icon: AirResevoir1Icon,
+    image: TempetFilter1,
+    thumbnail: TempetFilter1Thumbnail,
     level: 64,
     rarity: 30,
     effectiveness: 12,
@@ -1245,8 +1249,8 @@ export const Items: Item[] = [
     id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: Clothing1,
-    icon: Clothing1Icon,
+    image: TempetClothing,
+    thumbnail: TempetClothingThumbnail,
     level: 64,
     rarity: 100,
     effectiveness: 12,
@@ -1305,12 +1309,12 @@ export const Items: Item[] = [
   },
   {
     name: "Air reservoir 2: Fairy Dust Elite",
-    category: "air resevoir",
+    category: "filter 2",
     id: "12339",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
-    image: AirResevoir1,
-    icon: AirResevoir1Icon,
+    image: TempetFilter2,
+    thumbnail: TempetFilter2Thumbnail,
     level: 64,
     rarity: 30,
     effectiveness: 12,

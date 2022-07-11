@@ -19,4 +19,8 @@ export const itemSlots = {
   background: "background I",
   airResevoir: "air resevoir",
   clothing: "clothing",
+  styleline: "styleline",
+  filter: "filter I",
+  filter2: "filter II",
+  addOns: "add ons",
 };

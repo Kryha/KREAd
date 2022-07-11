@@ -17,22 +17,34 @@ export const Id = styled.h3<DirectionProps>`
   color: ${color.darkGrey};
   ${({ isRight, category }): string => {
     if (isRight) {
-      if (category === "air resevoir" || category === "front mask") {
+      if (category === "styleline") {
         return `
         transform: rotate(90deg);
-        line-height: 125px;
+        line-height: 100px;
         `;
       }
-      else if (category === "noseline") {
+      else if (category === "add ons") {
         return `
         transform: rotate(90deg);
-        line-height: 95px;
+        line-height: 90px;
+        `;
+      }
+      else if (category === "filter II") {
+        return `
+        transform: rotate(90deg);
+        line-height: 75px;
+        `;
+      }
+      else if (category === "filter I") {
+        return `
+        transform: rotate(90deg);
+        line-height: 70px;
         `;
       }
       else {
         return `
         transform: rotate(90deg);
-        line-height: 65px;
+        line-height: 60px;
         `;
       }
 

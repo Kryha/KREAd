@@ -69,9 +69,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
             )}
             {items.map((item, index) => (
               <>
-                <div key={item.id}>
-                  <MenuItem data={{ ...item, image: item.icon }} imageProps={{ width, height, marginTop, marginLeft }} onClick={() => setSelectedId(item.id)} />
-                </div>
+                <MenuItem data={{ ...item, image: item.thumbnail }} imageProps={{ width, height, marginTop, marginLeft }} onClick={() => setSelectedId(item.id)} key={index}/>
                 {item === items[0] && <HorizontalDivider />}
               </>
             ))}

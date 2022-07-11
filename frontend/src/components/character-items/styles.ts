@@ -16,12 +16,12 @@ export const LeftItemContainer = styled.div<Animation>`
   z-index: ${zIndex.overCharacter};
   ${props => (props.showItems === true ?
     css` animation: ${disappear}, ${fadeIn};
-    animation-duration: 1.5s, 1.6s;
-    animation-delay: 0s, 1.5s;`
+    animation-duration: 0.8s, 1s;
+    animation-delay: 0s, 0.8s;`
     :
     css`
     animation: ${fadeOut};
-    animation-duration: 1.5s;
+    animation-duration: 1s;
    `)};
    ${({ showItems }): string => {
     return showItems
@@ -44,12 +44,12 @@ export const RightItemContainer = styled.div<Animation>`
   z-index: ${zIndex.overCharacter};
   ${props => (props.showItems === true ?
     css` animation: ${disappear}, ${fadeIn};
-    animation-duration: 1.5s, 1.6s;
-    animation-delay: 0s, 1.5s;`
+    animation-duration: 0.8s, 1s;
+    animation-delay: 0s, 0.8s;`
     :
     css`
     animation: ${fadeOut};
-    animation-duration: 1.5s;
+    animation-duration: 1s;
   `)};
   ${({ showItems }): string => {
     return showItems

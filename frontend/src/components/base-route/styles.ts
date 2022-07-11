@@ -25,8 +25,8 @@ export const TopbarContainer = styled.header<AnimationProps>`
     :
     css`
     animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.5s, 0.5s;
-    animation-delay: 0s, 0.5s;
+    animation-duration: 0.2s, 0.5s;
+    animation-delay: 0s, 0.2s;
   `)};
 `;
 

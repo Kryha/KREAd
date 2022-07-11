@@ -8,7 +8,8 @@ import { CharacterDetailSection } from "../../containers/detail-section";
 import { Character } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useMyCharacters } from "../../service";
-import { DetailContainer, DetailWrapper } from "./styles";
+import { EmptyItemInventory } from "./empty-item-inventory";
+import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
@@ -35,17 +36,18 @@ export const CharactersInventory: FC = () => {
 
   if (!myCharacters || !myCharacters.length) return <ErrorView />;
 
-  return (
+  const isEmpty = !myCharacters || !myCharacters.length;
+  return isEmpty ? (
+    <EmptyItemInventory />
+  ) : (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
       <FadeInOut show={true} exiting={false}>
-        <DetailContainer>
-          <DetailWrapper>
-            <CharacterDetailSection
-              character={character || myCharacters[0]}
-              actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
-            />
-          </DetailWrapper>
-        </DetailContainer>
+        <DetailWrapper>
+          <CharacterDetailSection
+            character={character || myCharacters[0]}
+            actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
+          />
+        </DetailWrapper>
       </FadeInOut>
     </PageContainer>
   );

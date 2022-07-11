@@ -3,7 +3,6 @@ import { FC } from "react";
 
 import { CharacterItems as Items } from "../../interfaces";
 import { text } from "../../assets";
-import { imageSize, margins } from "../../design";
 import { LeftEquippedItemCard, RightEquippedItemCard } from "../equipped-item-card";
 
 import { LeftItemContainer, RightItemContainer, Row, RightItems } from "./styles";
@@ -41,15 +40,15 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = tru
         <Row>
           <LeftEquippedItemCard
             area="bottom"
-            item={items.midBackground}
-            code={text.itemSlots.background2}
-            category={text.itemSlots.background2}
+            item={items.background1}
+            code={text.itemSlots.background}
+            category={text.itemSlots.background}
           />
           <LeftEquippedItemCard
             area="bottom"
-            item={items.background}
-            code={text.itemSlots.background}
-            category={text.itemSlots.background}
+            item={items.background2}
+            code={text.itemSlots.background2}
+            category={text.itemSlots.background2}
           />
         </Row>
       </LeftItemContainer>
@@ -65,29 +64,29 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = tru
         <Row>
           <RightEquippedItemCard
             area="middle"
-            item={items.noseline}
-            code={text.itemSlots.noseline}
-            category={text.itemSlots.noseline}
+            item={items.styleline}
+            code={text.itemSlots.styleline}
+            category={text.itemSlots.styleline}
           />
           <RightEquippedItemCard
             area="middle"
-            item={items.airResevoir}
-            code={text.itemSlots.airResevoir}
-            category={text.itemSlots.airResevoir}
+            item={items.filter1}
+            code={text.itemSlots.filter}
+            category={text.itemSlots.filter}
           />
         </Row>
         <Row>
           <RightEquippedItemCard
             area="bottom"
-            item={items.liquid}
-            code={text.itemSlots.liquid}
-            category={text.itemSlots.liquid}
+            item={items.filter2}
+            code={text.itemSlots.filter2}
+            category={text.itemSlots.filter2}
           />
           <RightEquippedItemCard
             area="bottom"
-            item={items.frontMask}
-            code={text.itemSlots.frontMask}
-            category={text.itemSlots.frontMask}
+            item={items.addOns}
+            code={text.itemSlots.addOns}
+            category={text.itemSlots.addOns}
           />
         </Row>
       </RightItemContainer>
