@@ -12,7 +12,6 @@ interface CharacterItemsProps {
   showItems?: boolean;
 }
 
-// TODO: update component with item slots
 export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = true }) => {
   return (
     <>

@@ -23,7 +23,7 @@ export const Id = styled.h3<DirectionProps>`
         line-height: 100px;
         `;
       }
-      else if (category === "add ons") {
+      else if (category === "add-ons") {
         return `
         transform: rotate(90deg);
         line-height: 90px;
@@ -61,9 +61,4 @@ export const Id = styled.h3<DirectionProps>`
 export const InfoContainer = styled.div`
   width: 15px;
   cursor: pointer;
-  // &:hover {
-  //   ${Id} {
-  //     color: ${color.black};
-  //   }
-  // }
 `;

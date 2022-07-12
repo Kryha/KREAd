@@ -3,15 +3,15 @@ import { Options } from "../../components";
 
 export const itemCategories: Options[] = [
   { label: "head pieces", value: "head piece" },
-  { label: "noselines", value: "noseline" },
-  { label: "front masks", value: "front mask" },
-  { label: "liquids", value: "liquid" },
+  { label: "stylelines", value: "styleline" },
+  { label: "filters I", value: "filter 1" },
+  { label: "filters II", value: "filter 2" },
   { label: "masks", value: "mask" },
-  { label: "air resevoirs", value: "air resevoir" },
+  { label: "add-ons", value: "add-ons" },
   { label: "clothing", value: "clothing" },
   { label: "hair", value: "hair" },
-  { label: "background I", value: "background" },
-  { label: "background II", value: "mid background" },
+  { label: "background I", value: "background 1" },
+  { label: "background II", value: "background 2" },
 ];
 
 // TODO: add real categories

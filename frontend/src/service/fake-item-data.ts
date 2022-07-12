@@ -346,7 +346,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   addOns: {
     name: "AirTox: Fairy Dust Elite",
-    category: "add ons",
+    category: "add-ons",
     id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -989,7 +989,7 @@ export const Items: Item[] = [
   },
   {
     name: "Front Mask: Fairy Dust Elite",
-    category: " add ons",
+    category: " add-ons",
     id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",

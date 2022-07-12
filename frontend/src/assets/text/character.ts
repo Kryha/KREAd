@@ -46,5 +46,5 @@ export const character = {
   filter1: "filter 1",
   filter2: "filter 2",
   background2: "background 2",
-  addOns: "add ons",
+  addOns: "add-ons",
 };

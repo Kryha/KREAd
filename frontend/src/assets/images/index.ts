@@ -21,6 +21,7 @@ import TempetStyleline from "./tempet_styleline_05.png";
 import TempetStylelineThumbnail from "./tempet_styleline_thumbnail.png";
 
 export {
+  // TODO: remove this once we use ipfs
   TempetCharacter,
   TempetAddons,
   TempetAddonsThumbnail,

@@ -22,5 +22,5 @@ export const itemSlots = {
   styleline: "styleline",
   filter: "filter I",
   filter2: "filter II",
-  addOns: "add ons",
+  addOns: "add-ons",
 };
