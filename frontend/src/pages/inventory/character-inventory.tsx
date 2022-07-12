@@ -8,7 +8,6 @@ import { CharacterDetailSection } from "../../containers/detail-section";
 import { Character } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useMyCharacters } from "../../service";
-import { EmptyItemInventory } from "./empty-item-inventory";
 import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
@@ -36,10 +35,7 @@ export const CharactersInventory: FC = () => {
 
   if (!myCharacters || !myCharacters.length) return <ErrorView />;
 
-  const isEmpty = !myCharacters || !myCharacters.length;
-  return isEmpty ? (
-    <EmptyItemInventory />
-  ) : (
+  return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
       <FadeInOut show={true} exiting={false}>
         <DetailWrapper>

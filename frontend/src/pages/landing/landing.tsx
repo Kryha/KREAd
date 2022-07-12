@@ -99,8 +99,14 @@ export const Landing: FC = () => {
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection
                 character={myCharacters[0] || character}
-                actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => { setShowDetail(false); setCloseDetail(true); }}}
-              />
+                actions={{
+                  secondary: { text: text.character.sell, onClick: sell },
+                  onClose: () => {
+                    setShowDetail(false);
+                    setCloseDetail(true);
+                  },
+                }}
+              />;
             </FadeInOut>
           </CharacterCardWrapper>
           {openNotification && (

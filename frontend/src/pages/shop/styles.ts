@@ -185,8 +185,6 @@ export const Card = styled.div<ViewProps>`
   background: black;
   height: 520px;
   border: 1px solid red;
-  // change this based on screen size
-  // flex: 0 1 24%;
   flex: 1 0 500px;
   box-sizing: border-box;
   ${({ width }): string => {
