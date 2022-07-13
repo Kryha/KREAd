@@ -99,6 +99,7 @@ export const addToInventory = async (service: AgoricState, item: any, price?: bi
   return E(walletP).addOffer(offerConfig);
 };
 
+// TODO: pass character as parameter to construct the proposal
 export const removeFromInventory = async (service: AgoricState, item: any, price?: bigint) => {
   const {
     agoric: { walletP },
