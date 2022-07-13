@@ -43,7 +43,7 @@ export const mintNfts = async (service: AgoricState, name: string) => {
   // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
   console.log(characterBrand);
 
-  const invitation = await E(publicFacet).mintCharacterNFT();
+  const invitation = await E(publicFacet).makeMintCharacterInvitation();
 
   console.info("Invitation successful, sending to wallet for approval");
 

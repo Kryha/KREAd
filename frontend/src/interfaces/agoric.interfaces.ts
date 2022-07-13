@@ -15,7 +15,6 @@ interface Contract {
 
 interface Contracts {
   characterBuilder: Contract;
-  auctions: Contract[];
 }
 
 interface Status {
@@ -28,7 +27,6 @@ export interface Purses {
   money: any[];
   character: any[];
   item: any[];
-  inventoryKey: any[];
 }
 
 export interface AgoricState {
@@ -108,7 +106,6 @@ export type AgoricStateActions =
   | SetShowApproveDappModal
   | SetTokenPurses
   | SetCharacterPurses
-  | SetInventoryKeyPurses
   | SetAgoric
   | SetCharacterContract
   | SetItemPurses

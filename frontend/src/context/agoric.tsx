@@ -19,13 +19,8 @@ const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, InventoryKey: INVENTORY_KEY_ISSUER_BOARD_ID },
-  brandBoardIds: {
-    Money: MONEY_BRAND_BOARD_ID,
-    Character: CHARACTER_BRAND_BOARD_ID,
-    Item: ITEM_BRAND_BOARD_ID,
-    InventoryKey: INVENTORY_KEY_BRAND_BOARD_ID,
-  },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
+  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
 } = dappConstants;
 
 console.info(`DAPP CONSTANTS: ${dappConstants}`);
@@ -40,7 +35,6 @@ const initialState: AgoricState = {
     money: [],
     character: [],
     item: [],
-    inventoryKey: [],
   },
   agoric: {
     zoe: undefined,
@@ -55,7 +49,6 @@ const initialState: AgoricState = {
       instance: undefined,
       publicFacet: undefined,
     },
-    auctions: [],
   },
   isLoading: false,
 };
@@ -86,9 +79,6 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_ITEM_PURSES":
       return { ...state, purses: { ...state.purses, item: action.payload } };
 
-    case "SET_INVENTORY_KEY_PURSES":
-      return { ...state, purses: { ...state.purses, inventoryKey: action.payload } };
-
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
 
@@ -97,9 +87,6 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
     case "SET_CHARACTER_CONTRACT":
       return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
-
-    case "ADD_AUCTION_CONTRACT":
-      return { ...state, contracts: { ...state.contracts, auctions: [...state.contracts.auctions, action.payload] } };
 
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
@@ -131,6 +118,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       },
     });
 
+    // TODO: Implement
     let walletAbort: () => any;
     let walletDispatch: (arg0: any) => any;
 
@@ -156,7 +144,11 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         const pn = E(walletP).getPursesNotifier();
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, dispatch, { money: MONEY_BRAND_BOARD_ID, character: CHARACTER_BRAND_BOARD_ID, item: ITEM_BRAND_BOARD_ID });
+          processPurses(purses, characterDispatch, itemDispatch, dispatch, {
+            money: MONEY_BRAND_BOARD_ID,
+            character: CHARACTER_BRAND_BOARD_ID,
+            item: ITEM_BRAND_BOARD_ID,
+          });
         }
       }
       watchPurses().catch((err) => {
@@ -181,7 +173,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer("KREAINVENTORYEKEY", INVENTORY_KEY_ISSUER_BOARD_ID),
       ]);
 
       // Initialize agoric service based on constants
@@ -195,13 +186,12 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
 
       // Fetch Characters from Chain
-      const nfts = await E(nftPublicFacet).getCharacters();
-      characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
+      const characterNFTs = await E(nftPublicFacet).getCharacters();
+      characterDispatch({ type: "SET_CHARACTERS", payload: characterNFTs.characters });
 
       // Fetch Items from Chain
-      const walletItems = await E(nftPublicFacet).getItems();
-      console.log("Ag Context walletItems: ", walletItems);
-      itemDispatch({ type: "SET_ITEMS", payload: walletItems.items });
+      const itemNFTs = await E(nftPublicFacet).getItems();
+      itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
 
       // TODO: set up chain notifiers
       // const availableItemsNotifier = E(

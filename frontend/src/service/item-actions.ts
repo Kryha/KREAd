@@ -26,7 +26,7 @@ export const mintItem = async (service: AgoricState, item?: any, price?: bigint)
   const uniqueItems = itemsToMint.map((item: any) => ({ ...item, id: new Date().toUTCString() }));
   console.log(uniqueItems);
 
-  const invitation = await E(publicFacet).mintItemNFT();
+  const invitation = await E(publicFacet).makeMintItemInvitation();
 
   console.info("Invitation successful, sending to wallet for approval");
 
@@ -46,13 +46,20 @@ export const mintItem = async (service: AgoricState, item?: any, price?: bigint)
   return E(walletP).addOffer(offerConfig);
 };
 
+// TODO: pass character as parameter to construct the proposal
 export const addToInventory = async (service: AgoricState, item: any, price?: bigint) => {
-  const { agoric: { walletP }, contracts: { characterBuilder: { publicFacet } }, purses } = service;
+  const {
+    agoric: { walletP },
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    purses,
+  } = service;
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
   const character = characterPurse.value[0];
 
-  const wantedCharacter = { ...character, id: character.id===1 ? 2 : 1};
+  const wantedCharacter = { ...character, id: character.id === 1 ? 2 : 1 };
 
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
     console.error("undefined parameter");
@@ -74,13 +81,13 @@ export const addToInventory = async (service: AgoricState, item: any, price?: bi
           pursePetname: itemPurse.brandPetname,
           value: [item],
         },
-        InventoryKey1: {
+        CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
           value: [character],
         },
       },
       want: {
-        InventoryKey2: {
+        CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
           value: [wantedCharacter],
         },
@@ -92,14 +99,19 @@ export const addToInventory = async (service: AgoricState, item: any, price?: bi
   return E(walletP).addOffer(offerConfig);
 };
 
-
 export const removeFromInventory = async (service: AgoricState, item: any, price?: bigint) => {
-  const { agoric: { walletP }, contracts: { characterBuilder: { publicFacet } }, purses } = service;
+  const {
+    agoric: { walletP },
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    purses,
+  } = service;
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
   const character = characterPurse.value[0];
 
-  const wantedCharacter = { ...character, id: character.id===1 ? 2 : 1};
+  const wantedCharacter = { ...character, id: character.id === 1 ? 2 : 1 };
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse) {
     console.error("undefined parameter");
