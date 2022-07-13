@@ -64,20 +64,23 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
         </MenuHeader>
         <Content>
           <MenuContent>
-            {!items.length && (
+            {!items.length ? (
               <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
-            )}
-            {items.map((item, index) => (
+            ) : (
               <>
-                <MenuItem
-                  data={{ ...item, image: item.thumbnail }}
-                  imageProps={{ width, height, marginTop, marginLeft }}
-                  onClick={() => setSelectedId(item.id)}
-                  key={index}
-                />
-                {item === items[0] && <HorizontalDivider />}
+                {items.map((item, index) => (
+                  <>
+                    <MenuItem
+                      data={{ ...item, image: item.thumbnail }}
+                      imageProps={{ width, height, marginTop, marginLeft }}
+                      onClick={() => setSelectedId(item.id)}
+                      key={index}
+                    />
+                    {item === items[0] && <HorizontalDivider />}
+                  </>
+                ))}
               </>
-            ))}
+            )}
           </MenuContent>
         </Content>
         <CardActionsContainer>

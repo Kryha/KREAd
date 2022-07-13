@@ -45,6 +45,7 @@ export const Landing: FC = () => {
   const [closeDetail, setCloseDetail] = useState(false);
 
   useEffect(() => {
+    // TODO: remove when when we have handled equiping a character
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
