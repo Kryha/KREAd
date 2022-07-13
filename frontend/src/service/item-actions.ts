@@ -2,7 +2,8 @@
 import { E } from "@endo/eventual-send";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 
-export const mintItem = async (service: AgoricState, item?: any, price?: bigint) => {
+// TODO: Add price for minting // price?: bigint
+export const mintItem = async (service: AgoricState, item?: any) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -16,7 +17,6 @@ export const mintItem = async (service: AgoricState, item?: any, price?: bigint)
   }
 
   const characterBrand = await E(publicFacet).getItemBrand();
-  // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
   console.log(characterBrand);
   const config = await E(publicFacet).getConfig();
   console.log(config);
@@ -47,13 +47,12 @@ export const mintItem = async (service: AgoricState, item?: any, price?: bigint)
 };
 
 // TODO: pass character as parameter to construct the proposal
-export const addToInventory = async (service: AgoricState, item: any, price?: bigint) => {
+export const addToInventory = async (service: AgoricState, item: any) => {
   const {
     agoric: { walletP },
     contracts: {
       characterBuilder: { publicFacet },
     },
-    purses,
   } = service;
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
