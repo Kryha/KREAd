@@ -118,8 +118,6 @@ export const removeFromInventory = async (service: AgoricState, item: any, price
     console.error("undefined parameter");
     return;
   }
-  // const characterBrand = await E(publicFacet).getItemBrand();
-  // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
 
   const invitation = await E(publicFacet).makeUnequipInvitation();
 
@@ -131,7 +129,7 @@ export const removeFromInventory = async (service: AgoricState, item: any, price
     invitation: invitation,
     proposalTemplate: {
       give: {
-        InventoryKey1: {
+        CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
           value: [character],
         },
@@ -141,7 +139,7 @@ export const removeFromInventory = async (service: AgoricState, item: any, price
           pursePetname: itemPurse.brandPetname,
           value: [item],
         },
-        InventoryKey2: {
+        CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
           value: [wantedCharacter],
         },
