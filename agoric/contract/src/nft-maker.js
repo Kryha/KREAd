@@ -214,7 +214,8 @@ const start = async (zcf) => {
       characterBrand,
       harden([{ ...newCharacter, id: 2 }]),
     );
-    // Mint character to user seat
+
+    // Mint character to user seat & inventorySeat
     characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
     characterMint.mintGains(
       { CharacterKey: newCharacterAmount2 },
