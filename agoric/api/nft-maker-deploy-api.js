@@ -38,10 +38,7 @@ const API_PORT = process.env.API_PORT || '8000';
  * A promise for the references available from REPL home
  * @param {DeployPowers} powers
  */
-export default async function deployApi(
-  homePromise,
-  { pathResolve, bundleSource },
-) {
+export default async function deployApi(homePromise, { pathResolve }) {
   // Let's wait for the promise to resolve.
   const home = await homePromise;
 
@@ -114,19 +111,15 @@ export default async function deployApi(
   console.log('Retrieving Board IDs for issuers and brands');
   const invitationIssuerP = E(zoe).getInvitationIssuer();
   const invitationBrandP = E(invitationIssuerP).getBrand();
-  const inventoryKeyBrandP = E(nftMakerPublicFacet).getinventoryKeyBrand();
 
   const characterIssuerP = E(nftMakerPublicFacet).getCharacterIssuer();
   const itemIssuerP = E(nftMakerPublicFacet).getItemIssuer();
-  const inventoryKeyIssuerP = E(nftMakerPublicFacet).getinventoryKeyIssuer();
 
   const [
     characterIssuer,
     characterBrand,
     itemIssuer,
     itemBrand,
-    inventoryKeyIssuer,
-    inventoryKeyBrand,
     invitationBrand,
     invitationIssuer,
   ] = await Promise.all([
@@ -134,8 +127,6 @@ export default async function deployApi(
     E(characterIssuerP).getBrand(),
     itemIssuerP,
     E(itemIssuerP).getBrand(),
-    inventoryKeyIssuerP,
-    E(inventoryKeyIssuerP).getBrand(),
     invitationBrandP,
     invitationBrandP,
   ]);
@@ -148,8 +139,6 @@ export default async function deployApi(
     ITEM_ISSUER_BOARD_ID,
     MONEY_BRAND_BOARD_ID,
     MONEY_ISSUER_BOARD_ID,
-    INVENTORY_KEY_BRAND_BOARD_ID,
-    INVENTORY_KEY_ISSUER_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
     INVITE_ISSUER_BOARD_ID,
   ] = await Promise.all([
@@ -160,8 +149,6 @@ export default async function deployApi(
     E(board).getId(itemIssuer),
     E(board).getId(moneyBrand),
     E(board).getId(moneyIssuer),
-    E(board).getId(inventoryKeyBrand),
-    E(board).getId(inventoryKeyIssuer),
     E(board).getId(invitationBrand),
     E(board).getId(invitationIssuer),
   ]);
@@ -218,13 +205,11 @@ export default async function deployApi(
     brandBoardIds: {
       Character: CHARACTER_BRAND_BOARD_ID,
       Item: ITEM_BRAND_BOARD_ID,
-      InventoryKey: INVENTORY_KEY_BRAND_BOARD_ID,
       Money: MONEY_BRAND_BOARD_ID,
     },
     issuerBoardIds: {
       Character: CHARACTER_ISSUER_BOARD_ID,
       Item: ITEM_ISSUER_BOARD_ID,
-      InventoryKey: INVENTORY_KEY_ISSUER_BOARD_ID,
       Money: MONEY_ISSUER_BOARD_ID,
     },
     MONEY_DECIMAL_PLACES: decimalPlaces,
