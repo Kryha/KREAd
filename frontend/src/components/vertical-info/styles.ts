@@ -17,41 +17,37 @@ export const Id = styled.h3<DirectionProps>`
   color: ${color.darkGrey};
   ${({ isRight, category }): string => {
     if (isRight) {
-      if (category === "styleline") {
-        return `
-        transform: rotate(90deg);
-        line-height: 100px;
+      switch (category) {
+        case "styline":
+          return `
+            transform: rotate(90deg);
+            line-height: 100px;
         `;
+        case "add-ons":
+          return `
+            transform: rotate(90deg);
+            line-height: 90px;
+          `;
+        case "filter II":
+          return `
+            transform: rotate(90deg);
+            line-height: 75px;
+          `;
+        case "filter I":
+          return `
+            transform: rotate(90deg);
+            line-height: 70px;
+          `;
+        default:
+          return `
+            transform: rotate(90deg);
+            line-height: 60px;
+          `;
       }
-      else if (category === "add-ons") {
-        return `
-        transform: rotate(90deg);
-        line-height: 90px;
-        `;
-      }
-      else if (category === "filter II") {
-        return `
-        transform: rotate(90deg);
-        line-height: 75px;
-        `;
-      }
-      else if (category === "filter I") {
-        return `
-        transform: rotate(90deg);
-        line-height: 70px;
-        `;
-      }
-      else {
-        return `
-        transform: rotate(90deg);
-        line-height: 60px;
-        `;
-      }
-
     } else {
       return `
-      margin-right: 8px;
-      transform: rotate(-90deg);
+        margin-right: 8px;
+        transform: rotate(-90deg);
       `;
     }
   }}

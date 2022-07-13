@@ -90,7 +90,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   background1: {
     name: "AirTox: Fairy Dust Elite",
-    category: "background 1",
+    category: "background1",
     id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -218,7 +218,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   headPiece: {
     name: "AirTox: Fairy Dust Elite",
-    category: "head piece",
+    category: "headpiece",
     id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -410,7 +410,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   filter1: {
     name: "AirTox: Fairy Dust Elite",
-    category: "filter 1",
+    category: "filter1",
     id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -474,7 +474,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   background2: {
     name: "AirTox: Fairy Dust Elite",
-    category: "background 2",
+    category: "background2",
     id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -538,7 +538,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   filter2: {
     name: "AirTox: Fairy Dust Elite",
-    category: "air resevoir",
+    category: "airresevoir",
     id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -733,7 +733,7 @@ export const Items: Item[] = [
   },
   {
     name: "Mid Background: Fairy Dust Elite",
-    category: "backgound 1",
+    category: "backgound1",
     id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -861,7 +861,7 @@ export const Items: Item[] = [
   },
   {
     name: "Head Piece: Fairy Dust Elite",
-    category: "head piece",
+    category: "headpiece",
     id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1053,7 +1053,7 @@ export const Items: Item[] = [
   },
   {
     name: "Liquid: Fairy Dust Elite",
-    category: "filter 1",
+    category: "filter1",
     id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1117,7 +1117,7 @@ export const Items: Item[] = [
   },
   {
     name: "Background: Fairy Dust Elite",
-    category: "background 2",
+    category: "background2",
     id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1181,7 +1181,7 @@ export const Items: Item[] = [
   },
   {
     name: "Air Reservoir: Fairy Dust Elite",
-    category: "filter 1",
+    category: "filter1",
     id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1309,7 +1309,7 @@ export const Items: Item[] = [
   },
   {
     name: "Air reservoir 2: Fairy Dust Elite",
-    category: "filter 2",
+    category: "filter2",
     id: "12339",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
