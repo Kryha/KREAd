@@ -112,18 +112,17 @@ export const removeFromInventory = async (service: AgoricState, item: any, price
   const characterPurse = service.purses.character[service.purses.character.length - 1];
   const character = characterPurse.value[0];
 
-  const wantedCharacter = { ...character, id: character.id === 1 ? 2 : 1 };
-
   if (!publicFacet || !walletP || !itemPurse || !characterPurse) {
     console.error("undefined parameter");
     return;
   }
 
+  const wantedCharacter = { ...character, id: character.id === 1 ? 2 : 1 };
+
   const invitation = await E(publicFacet).makeUnequipInvitation();
 
   console.info("Invitation successful, sending to wallet for approval");
 
-  // TODO: Replace inventoryKey for actual Character NLF
   const offerConfig = harden({
     id: `${Date.now()}`,
     invitation: invitation,
