@@ -37,7 +37,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://yourmetadata.com",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -100,7 +99,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -163,7 +161,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -226,7 +223,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -289,7 +285,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -352,7 +347,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -415,7 +409,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -478,7 +471,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -541,7 +533,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -604,7 +595,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -670,7 +660,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -733,7 +722,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -796,7 +784,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -859,7 +846,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -922,7 +908,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -985,7 +970,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1048,7 +1032,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1111,7 +1094,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1174,7 +1156,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1237,7 +1218,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1300,7 +1280,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
