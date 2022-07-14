@@ -6,6 +6,7 @@ import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
 import { errors } from './errors';
 import { mulberry32 } from './prng';
+import { makeHashId } from './utils';
 
 /**
  * @typedef {{
@@ -206,13 +207,15 @@ const start = async (zcf) => {
     };
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
+    const newCharacterId = makeHashId(newCharacter);
+
     const newCharacterAmount1 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, id: 1 }]),
+      harden([{ ...newCharacter, keyId: 1, id: newCharacterId }]),
     );
     const newCharacterAmount2 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, id: 2 }]),
+      harden([{ ...newCharacter, keyId: 2, id: newCharacterId }]),
     );
 
     // Mint character to user seat & inventorySeat
