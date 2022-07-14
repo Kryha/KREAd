@@ -203,11 +203,11 @@ const start = async (zcf) => {
     // Get random base character and merge with name input
     const newCharacter = {
       ...getRandomBaseCharacter(),
+      date: Date.now(),
       name: newCharacterName,
     };
-    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
-    const newCharacterId = makeHashId(newCharacter);
+    const newCharacterId = makeHashId(JSON.stringify(newCharacter));
 
     const newCharacterAmount1 = AmountMath.make(
       characterBrand,
@@ -218,6 +218,8 @@ const start = async (zcf) => {
       harden([{ ...newCharacter, keyId: 2, id: newCharacterId }]),
     );
 
+    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
+
     // Mint character to user seat & inventorySeat
     characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
     characterMint.mintGains(
@@ -227,10 +229,15 @@ const start = async (zcf) => {
 
     // Mint items to inventory seat
     const allDefaultItems = Object.values(state.config.defaultItems);
-    const uniqueItems = allDefaultItems.map((item) => ({
-      ...item,
-      id: state.characterNames.length,
-    }));
+    const uniqueItems = allDefaultItems.map((item) => {
+      const newItem = { ...item, date: Date.now() };
+      const newItemWithId = {
+        ...newItem,
+        id: makeHashId(JSON.stringify(newItem)),
+      };
+      return newItemWithId;
+    });
+
     const itemsAmount = AmountMath.make(itemBrand, harden(uniqueItems));
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
 
