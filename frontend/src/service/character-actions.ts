@@ -34,15 +34,13 @@ export const mintNfts = async (service: AgoricState, name: string) => {
     },
     purses,
   } = service;
+
   if (!publicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
     console.error("Could not make bid for character: undefined parameter");
     return;
   }
 
-  const characterBrand = await E(publicFacet).getCharacterBrand();
-  console.log(characterBrand);
-
-  const invitation = await E(publicFacet).mintCharacterNFT();
+  const invitation = await E(publicFacet).makeMintCharacterInvitation();
 
   console.info("Invitation successful, sending to wallet for approval");
 
@@ -52,7 +50,7 @@ export const mintNfts = async (service: AgoricState, name: string) => {
     proposalTemplate: {
       want: {
         Asset: {
-          pursePetname: service.purses.character[0].brandPetname,
+          pursePetname: service.purses.character[service.purses.character.length - 1].brandPetname,
           value: [{ name }],
         },
       },

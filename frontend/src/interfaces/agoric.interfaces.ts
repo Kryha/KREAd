@@ -15,7 +15,6 @@ interface Contract {
 
 interface Contracts {
   characterBuilder: Contract;
-  auctions: Contract[];
 }
 
 interface Status {
@@ -67,6 +66,10 @@ interface SetItemPurses {
   type: "SET_ITEM_PURSES";
   payload: any[];
 }
+interface SetInventoryKeyPurses {
+  type: "SET_INVENTORY_KEY_PURSES";
+  payload: any[];
+}
 interface SetAgoric {
   type: "SET_AGORIC";
   payload: Omit<AgoricService, "apiSend">;
@@ -91,6 +94,8 @@ interface SetLoading {
 interface Reset {
   type: "RESET";
 }
+
+export type PursePetname = [string, string];
 
 export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 

@@ -23,6 +23,8 @@ const {
   brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
 } = dappConstants;
 
+console.info(`DAPP CONSTANTS: ${dappConstants}`);
+
 const initialState: AgoricState = {
   status: {
     walletConnected: false,
@@ -47,7 +49,6 @@ const initialState: AgoricState = {
       instance: undefined,
       publicFacet: undefined,
     },
-    auctions: [],
   },
   isLoading: false,
 };
@@ -87,9 +88,6 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_CHARACTER_CONTRACT":
       return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
 
-    case "ADD_AUCTION_CONTRACT":
-      return { ...state, contracts: { ...state.contracts, auctions: [...state.contracts.auctions, action.payload] } };
-
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
 
@@ -120,6 +118,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       },
     });
 
+    // TODO: Implement
     let walletAbort: () => any;
     let walletDispatch: (arg0: any) => any;
 
@@ -156,6 +155,18 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         console.error("got watchPurses err", err);
       });
 
+      async function watchOffers() {
+        const on = E(walletP).getOffersNotifier();
+        for await (const offer of iterateNotifier(on)) {
+          console.info("📡 OFFER UPDATE");
+          const last3 = offer.slice(-3);
+          console.info(last3);
+        }
+      }
+      watchOffers().catch((err) => {
+        console.error("got watchOffers err", err);
+      });
+
       // Suggest installation and brands to wallet
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
@@ -175,13 +186,12 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
 
       // Fetch Characters from Chain
-      const nfts = await E(nftPublicFacet).getCharacters();
-      characterDispatch({ type: "SET_CHARACTERS", payload: nfts.characters });
+      const characterNFTs = await E(nftPublicFacet).getCharacters();
+      characterDispatch({ type: "SET_CHARACTERS", payload: characterNFTs.characters });
 
       // Fetch Items from Chain
-      const walletItems = await E(nftPublicFacet).getItems();
-      console.log("Ag Context walletItems: ", walletItems);
-      itemDispatch({ type: "SET_ITEMS", payload: walletItems.items });
+      const itemNFTs = await E(nftPublicFacet).getItems();
+      itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
 
       // TODO: set up chain notifiers
       // const availableItemsNotifier = E(

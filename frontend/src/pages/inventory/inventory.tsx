@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from "react";
 
-import { BaseRoute, FadeInOut, NotificationCard, Overlay, SwitchSelector } from "../../components";
+import { BaseRoute, NotificationCard, Overlay, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { Title } from "../../components/title";
 import { Page } from "../shop";
@@ -8,6 +8,7 @@ import { Close, InventoryWrapper, NotificationButton, NotificationWrapper, Notif
 import { color } from "../../design";
 import { ItemsInventory } from "./item-inventory";
 import { CharactersInventory } from "./character-inventory";
+import { FadeInOut } from "../../components/fade-in-out";
 
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
@@ -38,7 +39,7 @@ export const Inventory: FC = () => {
               open={openNotification}
               onClick={() => {
                 setOpenNotifications(!openNotification);
-                if(!openNotification) {
+                if (!openNotification) {
                   setClose(true);
                 }
               }}

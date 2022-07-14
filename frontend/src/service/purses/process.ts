@@ -2,6 +2,7 @@ import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
 
+// TODO: Add purses interface
 export const processPurses = (
   purses: any[],
   characterDispatch: CharacterDispatch,
@@ -16,6 +17,7 @@ export const processPurses = (
   const newItemPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.item // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
+
   agoricDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
   agoricDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
   agoricDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });

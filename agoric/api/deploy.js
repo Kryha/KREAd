@@ -10,7 +10,7 @@ import '@agoric/zoe/exported.js';
 
 import installationConstants from '../../frontend/src/service/conf/installation-constants.js';
 
-import { characters } from './characters.js';
+import { defaultCharacters as characters } from './characters.js';
 
 // const PRICE_PER_CARD_IN_MONEY_UNITS = 1n;
 

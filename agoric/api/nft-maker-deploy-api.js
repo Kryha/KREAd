@@ -38,10 +38,7 @@ const API_PORT = process.env.API_PORT || '8000';
  * A promise for the references available from REPL home
  * @param {DeployPowers} powers
  */
-export default async function deployApi(
-  homePromise,
-  { pathResolve, bundleSource },
-) {
+export default async function deployApi(homePromise, { pathResolve }) {
   // Let's wait for the promise to resolve.
   const home = await homePromise;
 
