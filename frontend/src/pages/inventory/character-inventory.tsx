@@ -15,10 +15,7 @@ export const CharactersInventory: FC = () => {
   const [myCharacters, isLoading] = useMyCharacters();
   const [selectedId, setSelectedId] = useState<string>("");
 
-  const character = useMemo(
-    () => myCharacters?.find((character: Character) => character.characterId === selectedId),
-    [myCharacters, selectedId]
-  );
+  const character = useMemo(() => myCharacters?.find((character: Character) => character.id === selectedId), [myCharacters, selectedId]);
 
   const choose = () => {
     // TODO: implement character choose
@@ -42,7 +39,10 @@ export const CharactersInventory: FC = () => {
           <DetailWrapper>
             <CharacterDetailSection
               character={character || myCharacters[0]}
-              actions={{ primary: { text: text.character.choose, onClick: choose }, secondary: { text: text.character.sell, onClick: sell } }}
+              actions={{
+                primary: { text: text.character.choose, onClick: choose },
+                secondary: { text: text.character.sell, onClick: sell },
+              }}
             />
           </DetailWrapper>
         </DetailContainer>

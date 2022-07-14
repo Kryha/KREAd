@@ -1,14 +1,7 @@
 import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
-import {
-  CardActionsContainer,
-  CharacterWrapper,
-  CharacterContent,
-  ArrowUp,
-  CharacterCardWrapper,
-  EmptyViewContainer,
-} from "./styles";
+import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper, EmptyViewContainer } from "./styles";
 import { ButtonText, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
@@ -34,13 +27,12 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
 
   const { width, height } = useViewport();
 
-  const sortedCharacters = useMemo(
-    () => {
-      const allItems = [...characters];
-      const fromIndex = characters.findIndex((character) => character.characterId === id);
-      allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
-      return allItems;
-    }, [characters, id]);
+  const sortedCharacters = useMemo(() => {
+    const allItems = [...characters];
+    const fromIndex = characters.findIndex((character) => character.id === id);
+    allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
+    return allItems;
+  }, [characters, id]);
 
   const showInfo = (values: Character) => {
     setCharacter(values);
@@ -53,7 +45,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
 
   const sell = () => {
     if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.characterId}`);
+    navigate(`${routes.sellCharacter}/${character.id}`);
   };
 
   return (
@@ -63,10 +55,7 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
           <>
             <EmptyViewContainer>
               {!sortedCharacters.length && (
-                <EmptyCard
-                  title={text.character.thereAreNoCharactersAvailable}
-                  description={text.character.minANewCharcater}
-                />
+                <EmptyCard title={text.character.thereAreNoCharactersAvailable} description={text.character.minANewCharcater} />
               )}
             </EmptyViewContainer>
             <CharacterContent>
@@ -92,7 +81,10 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
             actions={{
               primary: { text: text.character.choose, onClick: choose },
               secondary: { text: text.character.sell, onClick: sell },
-              onClose: () => {setCharacter(undefined); setClose(true); } ,
+              onClose: () => {
+                setCharacter(undefined);
+                setClose(true);
+              },
             }}
           />
         </CharacterCardWrapper>

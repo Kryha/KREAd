@@ -25,7 +25,7 @@ interface CharacterItemProps {
 
 export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }) => {
   const [selected, setSelected] = useState(false);
-  const isCharacterEquipped = character.characterId === id;
+  const isCharacterEquipped = character.id === id;
 
   return (
     <Info
@@ -44,9 +44,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
         <InfoContainer>
           <TitleContainer>
             <MenuItemName>{character.name}</MenuItemName>
-            {isCharacterEquipped && (
-              <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>
-            )}
+            {isCharacterEquipped && <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>}
           </TitleContainer>
           <SubTitleContainer>
             <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>

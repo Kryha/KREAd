@@ -14,7 +14,7 @@ import {
   MenuText,
   NotificationCard,
   Overlay,
-  SecondaryButton
+  SecondaryButton,
 } from "../../components";
 import {
   Close,
@@ -53,7 +53,7 @@ export const Landing: FC = () => {
 
   const sell = () => {
     if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.characterId}`);
+    navigate(`${routes.sellCharacter}/${character.id}`);
   };
 
   return (
@@ -99,7 +99,13 @@ export const Landing: FC = () => {
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection
                 character={character}
-                actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => { setShowDetail(false); setCloseDetail(true); }}}
+                actions={{
+                  secondary: { text: text.character.sell, onClick: sell },
+                  onClose: () => {
+                    setShowDetail(false);
+                    setCloseDetail(true);
+                  },
+                }}
               />
             </FadeInOut>
           </CharacterCardWrapper>
@@ -114,7 +120,7 @@ export const Landing: FC = () => {
           </FadeInOut>
         </>
       )}
-      <CharacterCard id={character.characterId} characters={myCharacters} showCard={openTab && !!myCharacters}/>
+      <CharacterCard id={character.id} characters={myCharacters} showCard={openTab && !!myCharacters} />
     </BaseRoute>
   );
 };

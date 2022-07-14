@@ -26,7 +26,7 @@ export const CharacterDetailSection: FC<ItemDetailSectionProps> = ({ character, 
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
-      <DetailSectionHeader data={{ ...character, id: character.characterId, category: character.type }} actions={actions} />
+      <DetailSectionHeader data={{ ...character, id: character.id, category: character.type }} actions={actions} />
 
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>

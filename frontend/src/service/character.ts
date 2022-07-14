@@ -22,7 +22,7 @@ export const useCharacter = (id: string): UseQueryResult<Character> => {
   return useQuery(["characters", id], async () => {
     //  TODO: intergrate me
 
-    return FakeCharcters.find((c) => c.characterId === id);
+    return FakeCharcters.find((c) => c.id === id);
   });
 };
 

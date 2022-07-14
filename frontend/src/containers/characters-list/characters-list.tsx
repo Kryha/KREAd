@@ -21,10 +21,10 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
 
   useEffect(() => {
-    if(myCharacters) {
-      onCharacterClick(myCharacters[0].characterId);
+    if (myCharacters) {
+      onCharacterClick(myCharacters[0].id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) return <LoadingPage />;
@@ -65,16 +65,16 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
       <ButtonText>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
       <ListContainer>
         <MenuItem
-          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].characterId }}
-          key={myCharacters[0].characterId}
+          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].id }}
+          key={myCharacters[0].id}
           onClick={onCharacterClick}
           removeInitial={removeInitial}
           isInitial={intitial}
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
-            data={{ ...character, image: character.items, category: character.type, id: character.characterId }}
-            key={character.characterId}
+            data={{ ...character, image: character.items, category: character.type, id: character.id }}
+            key={character.id}
             onClick={onCharacterClick}
             removeInitial={removeInitial}
           />

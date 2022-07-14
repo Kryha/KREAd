@@ -20,7 +20,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
   if (!character) return <ErrorView />;
 
   const equipNewCharacter = () => {
-    equipCharacter.mutate({ id: character.characterId });
+    equipCharacter.mutate({ id: character.id });
   };
 
   // TODO: add noticifaction
