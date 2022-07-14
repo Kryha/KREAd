@@ -27,6 +27,8 @@ export interface Detail {
 }
 
 export interface Character {
+  id: string;
+  keyId: number;
   title: string;
   name: string;
   type: string;
@@ -38,7 +40,6 @@ export interface Character {
   projectDescription: string;
   itemActivity: ActivityEvent[];
   price: number;
-  slots: Slots[];
 }
 
 export interface CharacterCreation {

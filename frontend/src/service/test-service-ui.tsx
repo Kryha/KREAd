@@ -148,8 +148,10 @@ export const TestServiceUI = () => {
 
   const addItemToInventory = async () => {
     const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
+    const character = service.purses.character[service.purses.character.length - 1].currentAmount.value[0];
     console.log(item);
-    await addToInventory(service, item);
+    console.log(character);
+    await addToInventory(service, item, character);
     console.log("done");
   };
 
@@ -159,8 +161,10 @@ export const TestServiceUI = () => {
     } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
 
     const item = equippedItems[0];
+    const character = characters.owned[0];
     console.log(item);
-    await removeFromInventory(service, item);
+    console.log(character);
+    await removeFromInventory(service, item, character);
     console.log("done");
   };
 

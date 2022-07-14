@@ -1,6 +1,6 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
-import { AgoricState } from "../interfaces/agoric.interfaces";
+import { Character, AgoricState } from "../interfaces";
 
 // TODO: Add price for minting // price?: bigint
 export const mintItem = async (service: AgoricState, item?: any) => {
@@ -46,8 +46,9 @@ export const mintItem = async (service: AgoricState, item?: any) => {
   return E(walletP).addOffer(offerConfig);
 };
 
-// TODO: pass character as parameter to construct the proposal
-export const addToInventory = async (service: AgoricState, item: any) => {
+// TODO: Add check for slot already in use
+// If slot not empty first call removeFromInventory
+export const addToInventory = async (service: AgoricState, item: any, character: Character) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -57,8 +58,7 @@ export const addToInventory = async (service: AgoricState, item: any) => {
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const character = characterPurse.value[0];
-  const wantedCharacter = { ...character, id: character.id === 1 ? 2 : 1 };
+  const wantedCharacter = { ...character, keyId: character.keyId === 1 ? 2 : 1 };
 
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
     console.error("undefined parameter");
@@ -92,12 +92,11 @@ export const addToInventory = async (service: AgoricState, item: any) => {
     },
     dappContext: true,
   });
-  console.log(offerConfig);
   return E(walletP).addOffer(offerConfig);
 };
 
 // TODO: pass character as parameter to construct the proposal
-export const removeFromInventory = async (service: AgoricState, item: any) => {
+export const removeFromInventory = async (service: AgoricState, item: any, character: Character) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -107,8 +106,7 @@ export const removeFromInventory = async (service: AgoricState, item: any) => {
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const character = characterPurse.value[0];
-  const wantedCharacter = { ...character, id: character.id === 1 ? 2 : 1 };
+  const wantedCharacter = { ...character, keyId: character.keyId === 1 ? 2 : 1 };
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacter) {
     console.error("undefined parameter");
@@ -142,6 +140,5 @@ export const removeFromInventory = async (service: AgoricState, item: any) => {
     },
     dappContext: true,
   });
-  console.log(offerConfig);
   return E(walletP).addOffer(offerConfig);
 };
