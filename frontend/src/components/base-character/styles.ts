@@ -47,7 +47,7 @@ export const ExpandButton = styled(SecondaryButton) <ViewProps>`
 export const CharacterIcon = styled.img<ImageProps>`
   position: relative;
   top: 0px;
-  ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.forground};`};
+  ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.character};`};
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
@@ -158,7 +158,7 @@ export const ItemIcon = styled.img<ImageProps>`
   position: absolute;
   top: 0;
   left: 0;
-  ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.mid};`};
+  ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.background};`};
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {

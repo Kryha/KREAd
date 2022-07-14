@@ -45,6 +45,7 @@ export const Landing: FC = () => {
   const [closeDetail, setCloseDetail] = useState(false);
 
   useEffect(() => {
+    // TODO: remove when when we have handled equiping a character
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
@@ -83,24 +84,30 @@ export const Landing: FC = () => {
       ) : (
         <>
           <LandingContainer isZoomed={!openTab && !openNotification}>
-            <BaseCharacter items={character.items} isZoomed={openTab} size="normal" />
+            <BaseCharacter items={myCharacters[0].items || character.items} isZoomed={openTab} size="normal" />
           </LandingContainer>
-          <CharacterItems items={character.items} showItems={!openTab && !openNotification} />
+          <CharacterItems items={myCharacters[0].items || character.items} showItems={!openTab && !openNotification} />
           <DetailContainer>
-            <MenuText>{character.name}</MenuText>
+            <MenuText>{myCharacters[0].name || character.name}</MenuText>
             <ButtonContainer>
               <SecondaryButton onClick={() => setShowDetail(true)}>
                 <ButtonText>{text.general.moreInfo}</ButtonText>
               </SecondaryButton>
-              <ButtonText>{text.param.level(character.level)}</ButtonText>
+              <ButtonText>{text.param.level(myCharacters[0].level || character.level)}</ButtonText>
             </ButtonContainer>
           </DetailContainer>
           <CharacterCardWrapper>
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection
-                character={character}
-                actions={{ secondary: { text: text.character.sell, onClick: sell }, onClose: () => { setShowDetail(false); setCloseDetail(true); }}}
-              />
+                character={myCharacters[0] || character}
+                actions={{
+                  secondary: { text: text.character.sell, onClick: sell },
+                  onClose: () => {
+                    setShowDetail(false);
+                    setCloseDetail(true);
+                  },
+                }}
+              />;
             </FadeInOut>
           </CharacterCardWrapper>
           {openNotification && (

@@ -11,11 +11,20 @@ export const margins = {
 };
 
 export const zIndex = {
-  background: 1,
-  backgroundTwo: 2,
   forground: 10,
   mid: 20,
   inFront: 30,
   onTop: 40,
   overCharacter: 41,
+  background: 0,
+  backgroundTwo: 1,
+  character: 2,
+  hair: 3,
+  mask: 4,
+  styleline: 5,
+  filter2: 6,
+  addOns: 7,
+  filter1: 8,
+  clothing: 9,
+  headPiece: 10,
 };

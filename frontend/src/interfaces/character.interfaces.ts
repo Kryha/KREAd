@@ -7,15 +7,15 @@ export interface Slots {
 }
 
 export interface CharacterItems {
-  noseline?: Item;
-  midBackground?: Item;
+  styleline?: Item;
+  background2?: Item;
   mask?: Item;
   headPiece?: Item;
   hair?: Item;
-  frontMask?: Item;
-  liquid?: Item;
-  background?: Item;
-  airResevoir?: Item;
+  filter1?: Item;
+  filter2?: Item;
+  background1?: Item;
+  addOns?: Item;
   clothing?: Item;
 }
 

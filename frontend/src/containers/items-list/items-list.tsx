@@ -80,9 +80,9 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
       <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
       <HorizontalDivider />
       <ListContainer>
-        <MenuItem data={items[0]} key={items[0].id} onClick={() => onItemClick(items[0].id)} isInitial={intitial} removeInitial={removeInitial} />
+        <MenuItem data={{ ...items[0], image: items[0].thumbnail }}  key={items[0].id} onClick={() => onItemClick(items[0].id)} isInitial={intitial} removeInitial={removeInitial} />
         {items.slice(1).map((item) => (
-          <MenuItem data={item} key={item.id} onClick={() => onItemClick(item.id)} removeInitial={removeInitial} />
+          <MenuItem data={{ ...item, image: item.thumbnail }}  key={item.id} onClick={() => onItemClick(item.id)} removeInitial={removeInitial} />
         ))}
       </ListContainer>
     </SortableListWrap>

@@ -38,7 +38,7 @@ export const DetailSectionSegmentStoryDescription = styled.p`
 
 export const DetailSectionSegmentStoryImg = styled.img`
   width: 100%;
-  height: auto;
+  max-height: 680px;
   box-sizing: border-box;
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
@@ -47,7 +47,6 @@ export const DetailSectionSegmentStoryImg = styled.img`
 
 export const ImageContainer = styled.div`
   width: 100%;
-  height: auto;
   box-sizing: border-box;
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};

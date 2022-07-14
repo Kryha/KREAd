@@ -35,17 +35,18 @@ export const EmptyItemCard = () => {
   );
 };
 
-export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, marginBottom, marginLeft, marginRight, item, position = "left", area ="middle" }) => {
+export const ItemCard: FC<ItemCardProps> = ({
+  image,
+  width,
+  height,
+  item,
+  position = "left",
+  area = "middle",
+}) => {
   const [showStats, setShowStats] = useState(false);
   return (
     <>
-      {showStats && !!item &&
-      <ItemStats
-        item={item}
-        position={position}
-        area={area}
-      />
-      }
+      {showStats && !!item && <ItemStats item={item} position={position} area={area} />}
       <ElementWrapper
         onMouseEnter={() => setShowStats(!showStats)}
         onMouseLeave={() => setShowStats(!showStats)}
@@ -54,15 +55,11 @@ export const ItemCard: FC<ItemCardProps> = ({ image, width, height, marginTop, m
         <Card />
         <ElementContainer>
           <ItemWrapper>
-            {image ?(
+            {image ? (
               <Img
                 src={image}
                 width={width || imageSize.medium}
                 height={height || imageSize.small}
-                marginTop={marginTop}
-                marginBottom={marginBottom}
-                marginLeft={marginLeft}
-                marginRight={marginRight}
               />
             ) : (
               <NoImage>
