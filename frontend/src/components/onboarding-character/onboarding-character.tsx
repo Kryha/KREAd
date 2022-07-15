@@ -11,7 +11,8 @@ import {
   FifthIcon,
 } from "./styles";
 import { useViewport } from "../../hooks";
-import { AirResevoir1, CharacterBase, Clothing1, Empty, Hair7, HeadPiece1, Mask1, text } from "../../assets";
+import {  Empty, TempetAddons, TempetCharacter, TempetClothing, TempetHair, TempetHeadpiece, TempetMask, text } from "../../assets";
+import { zIndex } from "../../design";
 
 export const OnboardingCharacter: FC = () => {
   const { width, height } = useViewport();
@@ -19,26 +20,41 @@ export const OnboardingCharacter: FC = () => {
   return (
     <CharacterWrapper>
       <CharacterContainer width={width} height={height}>
-        <CharacterIcon width={width} height={height} src={CharacterBase} />
-        <FourthIcon src={Hair7 || Empty} alt={text.character.hair} width={width} height={height} />
+        <CharacterIcon width={width} height={height} src={TempetCharacter} />
+        <FourthIcon
+          src={TempetHair || Empty}
+          alt={text.character.hair}
+          width={width}
+          height={height}
+          zIndex={zIndex.hair}
+        />
         <ThirdIcon
-          src={HeadPiece1|| Empty}
+          src={TempetHeadpiece|| Empty}
           alt={text.character.headPiece}
           width={width}
           height={height}
+          zIndex={zIndex.headPiece}
         />
-        <SecondIcon src={Mask1 || Empty} alt={text.character.mask} width={width} height={height} />
-        <FifthIcon
-          src={AirResevoir1 || Empty}
-          alt={text.character.airResevoir}
+        <SecondIcon
+          src={TempetMask || Empty}
+          alt={text.character.mask}
           width={width}
           height={height}
+          zIndex={zIndex.mask}
+        />
+        <FifthIcon
+          src={TempetAddons || Empty}
+          alt={text.character.addOns}
+          width={width}
+          height={height}
+          zIndex={zIndex.addOns}
         />
         <FirstIcon
-          src={Clothing1 || Empty}
+          src={TempetClothing || Empty}
           alt={text.character.clothing}
           width={width}
           height={height}
+          zIndex={zIndex.clothing}
         />
       </CharacterContainer>
     </CharacterWrapper>

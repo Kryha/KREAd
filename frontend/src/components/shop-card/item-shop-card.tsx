@@ -24,8 +24,7 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
     <Product onClick={() => handleClick()} width={width} height={height}>
       <Content>
         <ImageContainer>
-          {/* TODO: use slots */}
-          <ItemImage src={item.image} category={item.category} />
+          <ItemImage src={item.thumbnail} category={item.category} />
         </ImageContainer>
         <InfoContainer>
           <TitleWrapper>

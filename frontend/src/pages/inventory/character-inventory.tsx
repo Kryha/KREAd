@@ -8,7 +8,7 @@ import { CharacterDetailSection } from "../../containers/detail-section";
 import { Character } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useMyCharacters } from "../../service";
-import { DetailContainer, DetailWrapper } from "./styles";
+import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
@@ -35,17 +35,15 @@ export const CharactersInventory: FC = () => {
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
       <FadeInOut show={true} exiting={false}>
-        <DetailContainer>
-          <DetailWrapper>
-            <CharacterDetailSection
-              character={character || myCharacters[0]}
-              actions={{
-                primary: { text: text.character.choose, onClick: choose },
-                secondary: { text: text.character.sell, onClick: sell },
-              }}
-            />
-          </DetailWrapper>
-        </DetailContainer>
+        <DetailWrapper>
+          <CharacterDetailSection
+            character={character || myCharacters[0]}
+            actions={{
+              primary: { text: text.character.choose, onClick: choose },
+              secondary: { text: text.character.sell, onClick: sell },
+            }}
+          />
+        </DetailWrapper>
       </FadeInOut>
     </PageContainer>
   );

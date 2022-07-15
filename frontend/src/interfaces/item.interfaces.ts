@@ -7,6 +7,7 @@ export interface Item {
   id: string;
   description: string;
   image: string;
+  thumbnail: string;
   level: number;
   rarity: number;
   effectiveness?: number;
