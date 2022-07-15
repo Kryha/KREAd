@@ -201,6 +201,7 @@ const start = async (zcf) => {
     assert(nameIsUnique(newCharacterName), X`${errors.nameTaken}`);
 
     // Get random base character and merge with name input
+    // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter = {
       ...getRandomBaseCharacter(),
       date: Date.now(),
@@ -228,6 +229,7 @@ const start = async (zcf) => {
     );
 
     // Mint items to inventory seat
+    // TODO: Replace Date by a valid time generator now it returns NaN
     const allDefaultItems = Object.values(state.config.defaultItems);
     const uniqueItems = allDefaultItems.map((item) => {
       const newItem = { ...item, date: Date.now() };
