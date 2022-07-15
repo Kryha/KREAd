@@ -7,16 +7,17 @@ export const sameType = (a, b) => {
   else return false;
 };
 
-/* eslint-disable no-bitwise */
+/* eslint-disable no-bitwise, no-plusplus */
 export const makeHashId = (str, seed = 42) => {
   let h1 = 0xdeadbeef ^ seed;
   let h2 = 0x41c6ce57 ^ seed;
   const primeA = 2246822507;
   const primeB = 3266489909;
-  str.forEach((ch) => {
+  for (let i = 0, ch; i < str.length; i++) {
+    ch = str.charCodeAt(i);
     h1 = Math.imul(h1 ^ ch, 2654435761);
     h2 = Math.imul(h2 ^ ch, 1597334677);
-  });
+  }
   h1 =
     Math.imul(h1 ^ (h1 >>> 16), primeA) ^ Math.imul(h2 ^ (h2 >>> 13), primeB);
   h2 =
