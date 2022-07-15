@@ -8,6 +8,7 @@ export const sameType = (a, b) => {
 };
 
 /* eslint-disable no-bitwise, no-plusplus */
+// Based on 53-bit hash algorithm
 export const makeHashId = (str, seed = 42) => {
   let h1 = 0xdeadbeef ^ seed;
   let h2 = 0x41c6ce57 ^ seed;
@@ -22,5 +23,8 @@ export const makeHashId = (str, seed = 42) => {
     Math.imul(h1 ^ (h1 >>> 16), primeA) ^ Math.imul(h2 ^ (h2 >>> 13), primeB);
   h2 =
     Math.imul(h2 ^ (h2 >>> 16), primeA) ^ Math.imul(h1 ^ (h1 >>> 13), primeB);
-  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+  return (
+    (h2 >>> 0).toString(16).padStart(8, 0) +
+    (h1 >>> 0).toString(16).padStart(8, 0)
+  );
 };

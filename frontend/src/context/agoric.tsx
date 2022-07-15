@@ -167,6 +167,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         console.error("got watchOffers err", err);
       });
 
+      // TODO: Check if purses already exist before suggesting installation
       // Suggest installation and brands to wallet
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
