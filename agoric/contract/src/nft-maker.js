@@ -14,7 +14,6 @@ import { makeHashId } from './utils';
  *   characters: CharacterRecord[]
  *   items: ItemRecord[]
  *   config?: Config
- *   mintNext: string
  * }} State
  *
  * @typedef {{
@@ -108,7 +107,6 @@ const start = async (zcf) => {
     characterNames: [], // Holds a list of minted character names, used to check for uniqueness
     characters: [], // Holds each character's inventory + copy of its data
     items: [],
-    mintNext: 'PABLO',
   };
   /**
    * Private state
@@ -481,7 +479,7 @@ const start = async (zcf) => {
       zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
     mekeMintItemInvitation: () =>
       zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
-    getPrivateState: () => privateState,
+    getPrivateState: () => privateState, // TODO: do we really want to expose the privateState?
   });
 
   return harden({ creatorFacet, publicFacet });
