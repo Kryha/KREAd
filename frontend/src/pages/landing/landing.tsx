@@ -84,16 +84,17 @@ export const Landing: FC = () => {
       ) : (
         <>
           <LandingContainer isZoomed={!openTab && !openNotification}>
-            <BaseCharacter items={myCharacters[0].items || character.items} isZoomed={openTab} size="normal" />
+            {/* TODO: use _selectedCharacter if available */}
+            <BaseCharacter items={myCharacters[0]?.items || character.items} isZoomed={openTab} size="normal" />
           </LandingContainer>
-          <CharacterItems items={myCharacters[0].items || character.items} showItems={!openTab && !openNotification} />
+          <CharacterItems items={myCharacters[0]?.items || character.items} showItems={!openTab && !openNotification} />
           <DetailContainer>
-            <MenuText>{myCharacters[0].name || character.name}</MenuText>
+            <MenuText>{myCharacters[0]?.name || character.name}</MenuText>
             <ButtonContainer>
               <SecondaryButton onClick={() => setShowDetail(true)}>
                 <ButtonText>{text.general.moreInfo}</ButtonText>
               </SecondaryButton>
-              <ButtonText>{text.param.level(myCharacters[0].level || character.level)}</ButtonText>
+              <ButtonText>{text.param.level(myCharacters[0]?.level || character.level)}</ButtonText>
             </ButtonContainer>
           </DetailContainer>
           <CharacterCardWrapper>
