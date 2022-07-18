@@ -42,9 +42,4 @@ export const character = {
   minANewCharcater: "mint a new character",
   thereAreNoItemsInYourInventory: "there are no items in your inventory",
   buyItemsInTheStore: "buy items in the store",
-  styleline: "styleline",
-  filter1: "filter 1",
-  filter2: "filter 2",
-  background2: "background 2",
-  addOns: "add-ons",
 };

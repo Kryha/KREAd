@@ -18,7 +18,7 @@ export const CreateCharacter: FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [mintedCharacter, setMintedCharacter] = useState<Character>();
   const [characterdata, setCharacterData] = useState<CharacterCreation>({ name: "" });
-  const [myCharacters] = useMyCharacters();
+  const [{ owned: myCharacters, isLoading: isLoadingCharacters }] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
 

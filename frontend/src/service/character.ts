@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { sortCharacters } from "../util";
 import { mintNfts } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
+import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
 
 export const useCharacters = (): UseQueryResult<Character[]> => {
   return useQuery(["characters", "all"], async () => {
@@ -35,27 +36,25 @@ export const useMyCharacter = (): UseQueryResult<Character> => {
   });
 };
 
-export const useMyCharacters = (): [Character[], boolean] => {
-  const [{ owned, fetched }] = useCharacterContext();
-  const myCharacters = owned;
-  const isLoading = !fetched;
-  return [myCharacters, isLoading];
+export const useMyCharacters = (): [{ owned: Character[]; isLoading: boolean }, CharacterDispatch] => {
+  const [{ owned, fetched }, characterDispatch] = useCharacterContext();
+  return [{ owned, isLoading: !fetched }, characterDispatch];
 };
 
 // TODO: actually implement filtering
 export const useMyFilteredCharacters = (category: string, sorting: string): [Character[], boolean] => {
-  const [data, isLoading] = useMyCharacters();
+  const [{ owned, isLoading }] = useMyCharacters();
 
   const isInCategory = (character: Character, category: string) => (category ? character.type === category : true);
 
   return useMemo(() => {
-    if (!data) return [[], isLoading];
-    if (!category && !sorting) return [data, isLoading];
+    if (!owned) return [[], isLoading];
+    if (!category && !sorting) return [owned, isLoading];
 
-    const filteredCharacters = data.filter((character) => isInCategory(character, category));
+    const filteredCharacters = owned.filter((character) => isInCategory(character, category));
     const sortedCharacters = sortCharacters(sorting, filteredCharacters);
     return [sortedCharacters, isLoading];
-  }, [category, data, isLoading, sorting]);
+  }, [category, owned, isLoading, sorting]);
 };
 
 // TODO: Add error management

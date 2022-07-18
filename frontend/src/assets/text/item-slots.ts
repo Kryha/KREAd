@@ -10,7 +10,7 @@ export const itemSlots = {
   airResevoirCode: "ar",
   clothingCode: "c",
   noseline: "noseline",
-  background2: "background II",
+  midBackground: "background II",
   mask: "mask",
   headPiece: "head piece",
   hair: "hair",
@@ -19,8 +19,5 @@ export const itemSlots = {
   background: "background I",
   airResevoir: "air resevoir",
   clothing: "clothing",
-  styleline: "styleline",
   filter: "filter I",
-  filter2: "filter II",
-  addOns: "add-ons",
 };

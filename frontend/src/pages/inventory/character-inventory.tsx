@@ -12,7 +12,7 @@ import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
-  const [myCharacters, isLoading] = useMyCharacters();
+  const [{ owned: myCharacters, isLoading: isLoadingCharacters }] = useMyCharacters();
   const [selectedId, setSelectedId] = useState<string>("");
 
   const character = useMemo(() => myCharacters?.find((character: Character) => character.id === selectedId), [myCharacters, selectedId]);
@@ -28,7 +28,7 @@ export const CharactersInventory: FC = () => {
     navigate(`${routes.sellCharacter}/${selectedId}`);
   };
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoadingCharacters) return <LoadingPage />;
 
   if (!myCharacters || !myCharacters.length) return <ErrorView />;
 

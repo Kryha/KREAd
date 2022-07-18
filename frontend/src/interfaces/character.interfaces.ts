@@ -2,15 +2,15 @@ import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
 
 export interface CharacterItems {
-  styleline?: Item;
-  background2?: Item;
+  noseline?: Item;
+  midBackground?: Item;
   mask?: Item;
   headPiece?: Item;
   hair?: Item;
-  filter1?: Item;
-  filter2?: Item;
-  background1?: Item;
-  addOns?: Item;
+  airResevoir?: Item;
+  liquid?: Item;
+  background?: Item;
+  frontMask?: Item;
   clothing?: Item;
 }
 

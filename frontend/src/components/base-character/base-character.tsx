@@ -14,6 +14,7 @@ interface BaseCharacterProps {
 
 export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false, size = "normal" }) => {
   const { width, height } = useViewport();
+  console.log("🚀 ~ file: base-character.tsx ~ line 16 ~ items", items);
 
   return (
     <CharacterWrapper>
@@ -34,15 +35,15 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false,
           zIndex={zIndex.headPiece}
         />
         <ItemIcon
-          src={items.styleline?.image || Empty}
-          alt={items.styleline?.name || text.character.styleline}
+          src={items.noseline?.image || Empty}
+          alt={items.noseline?.name || text.character.noseline}
           width={width}
           height={height}
-          zIndex={zIndex.styleline}
+          zIndex={zIndex.noseline}
         />
         <ItemIcon
-          src={items.background1?.image || Empty}
-          alt={items.background1?.name || text.character.background}
+          src={items.background?.image || Empty}
+          alt={items.background?.name || text.character.background}
           width={width}
           height={height}
           zIndex={zIndex.background}
@@ -55,32 +56,32 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false,
           zIndex={zIndex.mask}
         />
         <ItemIcon
-          src={items.filter1?.image || Empty}
-          alt={items.filter1?.name || text.character.filter1}
+          src={items.airResevoir?.image || Empty}
+          alt={items.airResevoir?.name || text.character.airResevoir}
           width={width}
           height={height}
-          zIndex={zIndex.filter1}
+          zIndex={zIndex.airResevoir}
         />
         <ItemIcon
-          src={items.filter2?.image || Empty}
-          alt={items.filter2?.name || text.character.filter2}
+          src={items.liquid?.image || Empty}
+          alt={items.liquid?.name || text.character.liquid}
           width={width}
           height={height}
-          zIndex={zIndex.filter2}
+          zIndex={zIndex.liquid}
         />
         <ItemIcon
-          src={items.background2?.image || Empty}
-          alt={items.background2?.name || text.character.background2}
+          src={items.midBackground?.image || Empty}
+          alt={items.midBackground?.name || text.character.midBackground}
           width={width}
           height={height}
-          zIndex={zIndex.backgroundTwo}
+          zIndex={zIndex.midBackground}
         />
         <ItemIcon
-          src={items.addOns?.image || Empty}
-          alt={items.addOns?.name || text.character.addOns}
+          src={items.frontMask?.image || Empty}
+          alt={items.frontMask?.name || text.character.frontMask}
           width={width}
           height={height}
-          zIndex={zIndex.addOns}
+          zIndex={zIndex.frontMask}
         />
         <ItemIcon
           src={items.clothing?.image || Empty}

@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
 import { color } from "../../design";
@@ -29,32 +30,29 @@ import {
   NotificationContainer,
   Tag,
 } from "./styles";
-import { useMyCharacter, useMyCharacters } from "../../service";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useNavigate } from "react-router-dom";
+import { useMyCharacters } from "../../service";
 import { routes } from "../../navigation";
+import { Character } from "../../interfaces";
 
 export const Landing: FC = () => {
-  const [myCharacters, isLoading] = useMyCharacters();
-  const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
+  const navigate = useNavigate();
+  const [{ owned: myCharacters, isLoading: isLoadingCharacters }] = useMyCharacters();
   const [openTab, setOpenTab] = useState(false);
   const [openNotification, setOpenNotifications] = useState(false);
-  const [_selectedCharacter, setSelectedCharacter] = useState(character);
+  const [_selectedCharacter, setSelectedCharacter] = useState<Character>();
   const [showDetail, setShowDetail] = useState(false);
-  const navigate = useNavigate();
   const [closeDetail, setCloseDetail] = useState(false);
 
   useEffect(() => {
-    // TODO: remove when when we have handled equiping a character
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
-  }, [myCharacters]);
+  }, [myCharacters, isLoadingCharacters]);
 
   // TODO: get an empty page
-  if (!character) return <ErrorView />;
+  // if (!_selectedCharacter) return <ErrorView />;
 
-  const sell = () => {
-    if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.id}`);
+  const sell = (characterId: string) => {
+    navigate(`${routes.sellCharacter}/${characterId}`);
   };
 
   return (
@@ -79,30 +77,29 @@ export const Landing: FC = () => {
         </NotificationWrapper>
       }
     >
-      {isLoadingCharacter || isLoading ? (
+      {isLoadingCharacters || !_selectedCharacter ? (
         <LoadingPage />
       ) : (
         <>
           <LandingContainer isZoomed={!openTab && !openNotification}>
-            {/* TODO: use _selectedCharacter if available */}
-            <BaseCharacter items={myCharacters[0]?.items || character.items} isZoomed={openTab} size="normal" />
+            <BaseCharacter items={_selectedCharacter.items} isZoomed={openTab} size="normal" />
           </LandingContainer>
-          <CharacterItems items={myCharacters[0]?.items || character.items} showItems={!openTab && !openNotification} />
+          <CharacterItems items={_selectedCharacter.items} showItems={!openTab && !openNotification} />
           <DetailContainer>
-            <MenuText>{myCharacters[0]?.name || character.name}</MenuText>
+            <MenuText>{_selectedCharacter?.name}</MenuText>
             <ButtonContainer>
               <SecondaryButton onClick={() => setShowDetail(true)}>
                 <ButtonText>{text.general.moreInfo}</ButtonText>
               </SecondaryButton>
-              <ButtonText>{text.param.level(myCharacters[0]?.level || character.level)}</ButtonText>
+              <ButtonText>{text.param.level(_selectedCharacter?.level)}</ButtonText>
             </ButtonContainer>
           </DetailContainer>
           <CharacterCardWrapper>
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection
-                character={myCharacters[0] || character}
+                character={_selectedCharacter}
                 actions={{
-                  secondary: { text: text.character.sell, onClick: sell },
+                  secondary: { text: text.character.sell, onClick: () => sell(_selectedCharacter.id) },
                   onClose: () => {
                     setShowDetail(false);
                     setCloseDetail(true);
@@ -120,9 +117,9 @@ export const Landing: FC = () => {
           <FadeInOut show={showDetail} exiting={closeDetail}>
             <Overlay />
           </FadeInOut>
+          <CharacterCard id={_selectedCharacter.id} characters={myCharacters} showCard={openTab && !!myCharacters} />
         </>
       )}
-      <CharacterCard id={character.id} characters={myCharacters} showCard={openTab && !!myCharacters} />
     </BaseRoute>
   );
 };
