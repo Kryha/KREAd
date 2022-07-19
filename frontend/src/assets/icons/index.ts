@@ -26,6 +26,8 @@ import { ReactComponent as BellIcon } from "./bell.svg";
 import ErrorImage from "./error-image.png";
 import { ReactComponent as PlusIcon } from "./plus.svg";
 import { ReactComponent as WarningIcon } from "./warning-icon.svg";
+import { ReactComponent as Logo } from "./kread-logo.svg";
+import { ReactComponent as ArrowDownIcon } from "./arrow-down.svg";
 
 export {
   ErrorIcon,
@@ -56,4 +58,6 @@ export {
   ErrorImage,
   PlusIcon,
   WarningIcon,
+  Logo,
+  ArrowDownIcon,
 };

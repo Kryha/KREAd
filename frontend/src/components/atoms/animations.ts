@@ -71,3 +71,22 @@ export const slideLeft = keyframes`
     right: 140%;
   }
 `;
+
+export const bounce = keyframes`
+	0%,
+	25%,
+	50%,
+	75%,
+	100% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+	}
+	40% {
+		-webkit-transform: translateY(-20px);
+		transform: translateY(-20px);
+	}
+	60% {
+		-webkit-transform: translateY(-10px);
+		transform: translateY(-10px);
+	}
+`;

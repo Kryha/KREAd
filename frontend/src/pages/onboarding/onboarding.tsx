@@ -2,14 +2,17 @@ import { FC } from "react";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import { ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
+import { AnimatedLogo, BoldLabel, ButtonText, Footer, MenuItemName, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
+  ArrowDown,
   ArrowUp,
   ButtonContainer,
   Email,
   EmailContainer,
+  EndContent,
   FooterContainer,
   InfoText,
+  KreadContainer,
   MiddleContent,
   OnboardingContainer,
   OnboardingWrapper,
@@ -30,36 +33,40 @@ export const Onboarding: FC = () => {
   return (
     <OnboardingContainer height={height} width={width}>
       <OnboardingWrapper>
-        <MenuItemName>{text.general.logo}</MenuItemName>
+        <BoldLabel customColor={color.black}>{text.general.comingSoon}</BoldLabel>
         <InfoText height={height}>
           <MenuText>{text.general.launchingTheFirst}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-          <ButtonContainer>
-            {/* TODO: connect to wallet */}
+          {/* TODO: uncomment */}
+          {/* <ButtonContainer>
             <PrimaryButton onClick={() => connectWallet()}>
               <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
               <ArrowUp />
             </PrimaryButton>
           </ButtonContainer>
+          */}
         </InfoText>
         <MiddleContent height={height}>
           <MenuText>{text.general.whoWeAre}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.isPartOfAgoric}</TitleText>
           <TitleText customColor={color.darkGrey}>{text.general.ourLeadership}</TitleText>
         </MiddleContent>
-        <MiddleContent height={height}>
+        <EndContent height={height}>
           <MenuText>{text.general.contactUs}</MenuText>
           <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
           <EmailContainer>
             {text.general.sendEmailTo} </EmailContainer>
           <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
-
-        </MiddleContent>
+        </EndContent>
       </OnboardingWrapper>
       <OnboardingCharacter />
       <FooterContainer>
         <Footer />
       </FooterContainer>
+      <KreadContainer height={height} width={width}>
+        <AnimatedLogo />
+      </KreadContainer>
+      <ArrowDown />
     </OnboardingContainer>
   );
 };

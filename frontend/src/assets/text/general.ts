@@ -47,4 +47,5 @@ export const general = {
   createCharacter: "create character",
   thereIsNoActity: "there is no activity currently.",
   buy: "buy",
+  comingSoon: "coming soon!",
 };

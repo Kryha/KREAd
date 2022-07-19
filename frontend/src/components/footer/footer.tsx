@@ -8,7 +8,7 @@ import { AboutText, AgoricText, FooterContainer, FooterWrapper, PrivacyText, Lin
 
 
 export const Footer: FC = () => {
-  const resolved = useResolvedPath(routes.shop);
+  const resolved = useResolvedPath(routes.root);
   const match = useMatch({ path: resolved.pathname, end: true });
   const isLanding =  resolved.pathname === routes.root;
 
@@ -20,9 +20,10 @@ export const Footer: FC = () => {
             <AboutText customColor={color.darkGrey}>{text.navigation.about}</AboutText>
           </Link>
         )}
-        <Link to={routes.privacy}>
+        {/* TODO: UNCOMENT */}
+        {/* <Link to={routes.privacy}>
           <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
-        </Link>
+        </Link> */}
         {/* TODO: link somewhere */}
         <AgoricText customColor={color.darkGrey}>{text.navigation.agoric2022}</AgoricText>
       </FooterContainer>

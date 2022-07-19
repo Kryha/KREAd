@@ -27,7 +27,8 @@ export const AppRoutes: FC = () => {
       <MainContainer>
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
-          <Route path={routes.character} element={<Landing />} />
+          {/* TODO: uncomment */}
+          {/* <Route path={routes.character} element={<Landing />} />
           <Route path={`${routes.items}/:category`} element={<Item />} />
           <Route path={routes.shop} element={<Shop />} />
           <Route path={routes.inventory} element={<Inventory />} />
@@ -39,7 +40,7 @@ export const AppRoutes: FC = () => {
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
           <Route path={"/test"} element={<TestServiceUI />} />
-          <Route path={routes.privacy} element={<Privacy />} />
+          <Route path={routes.privacy} element={<Privacy />} /> */}
         </Routes>
       </MainContainer>
     </ErrorBoundary>
