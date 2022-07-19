@@ -23,7 +23,7 @@ export const Id = styled.h3<DirectionProps>`
             transform: rotate(90deg);
             line-height: 100px;
         `;
-        case "add-ons":
+        case "frontMask":
           return `
             transform: rotate(90deg);
             line-height: 90px;
@@ -51,7 +51,6 @@ export const Id = styled.h3<DirectionProps>`
       `;
     }
   }}
-
 `;
 
 export const InfoContainer = styled.div`

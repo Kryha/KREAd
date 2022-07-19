@@ -6,7 +6,7 @@ export const itemCategories: Options[] = [
   { label: "filters I", value: "airReservoir" },
   { label: "filters II", value: "liquid" },
   { label: "masks", value: "mask" },
-  { label: "add-ons", value: "add-ons" },
+  { label: "front mask", value: "frontMask" },
   { label: "clothing", value: "clothing" },
   { label: "hair", value: "hair" },
   { label: "background I", value: "background" },
