@@ -13,15 +13,14 @@ export const InventoryWrapper = styled.div`
     margin-bottom: ${margins.small};
   }
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.6s, 1s;
-  animation-delay: 0s, 0.6s;
+  animation-duration: 0.2s, 0.4s;
+  animation-delay: 0s, 0.2s;
 `;
 
 export const OverviewContainer = styled.div`
   border: 1px solid #D0D0D0;
   border-radius: 24px;
-  height: 80vh;
-  width: 55%;
+  height: 75vh;
 `;
 
 export const ItemContainer = styled.div`

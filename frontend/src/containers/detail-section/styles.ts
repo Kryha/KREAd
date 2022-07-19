@@ -39,7 +39,7 @@ export const DetailSectionWrap = styled.div<ViewProps>`
       return "max-width: 55%;";
     }
   }
-  }
+}
 `;
 
 export const EmptyView = styled.section`

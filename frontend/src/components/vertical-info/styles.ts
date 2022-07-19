@@ -18,7 +18,7 @@ export const Id = styled.h3<DirectionProps>`
   ${({ isRight, category }): string => {
     if (isRight) {
       switch (category) {
-        case "styline":
+        case "styleline":
           return `
             transform: rotate(90deg);
             line-height: 100px;

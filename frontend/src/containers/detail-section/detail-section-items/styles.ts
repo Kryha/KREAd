@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { ArrowUpRightIcon } from "../../../assets";
-import { MenuItemName } from "../../../components";
+import { HeaderHorizontalDivider, MenuItemName } from "../../../components";
 import { color, fontWeight, margins } from "../../../design";
 
 export const ListContainer = styled.div`
@@ -85,11 +85,9 @@ export const InlineDetails = styled.div`
   margin-top: ${margins.nano};
 `;
 
-export const Divider = styled.div`
-  height: 0px;
-  width: 24px;
-  border: 1px solid #d0d0d0;
-  transform: rotate(90deg);
+export const Divider = styled(HeaderHorizontalDivider)`
+  width: ${margins.small};
+  margin: 0px 12px;
 `;
 
 export const LevelLabel = styled.p`

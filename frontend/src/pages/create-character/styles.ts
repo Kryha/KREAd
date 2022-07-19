@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
 import { Badge, ButtonText, Input, MenuItemName, PrimaryButton } from "../../components";
+import { Spinner } from "../../components/content-loader/styles";
 
 import { color, margins } from "../../design";
 
@@ -92,6 +93,14 @@ export const ButtonContainer = styled.div`
         stroke: ${color.black};
       }
     }
+  }
+  ${Spinner} {
+    padding-left: 13px;
+    width: 12px;
+    height: 16px;
+    border: 2px solid ${color.white};
+    border-top: 2px solid ${color.grey};
+    margin-left: 3px;
   }
 `;
 

@@ -206,7 +206,7 @@ export const Card = styled.div<ViewProps>`
 
 export const DetailContainer = styled.div`
   ${DetailSectionHeaderNavigationWrap} {
-    min-width: 220px;
+    align-items: flex-end;
   }
   ${PriceContainer} {
     margin-top: 8px;

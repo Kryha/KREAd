@@ -47,4 +47,7 @@ export const character = {
   filter2: "filter 2",
   background2: "background 2",
   addOns: "add-ons",
+  youDoNotHave: "you do not own any characters",
+  createANewCharacter: "create a new character",
+  youDoNotOwnACharacter: "you do not own character. Mint a character to continue.",
 };
