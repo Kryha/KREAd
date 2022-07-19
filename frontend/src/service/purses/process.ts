@@ -35,7 +35,7 @@ export const processPurses = async (
       const {
         items: { value: equippedItems },
       } = await E(contractPublicFacet).getCharacterInventory(character.name);
-      console.log("🚀 ~ file: process.ts ~ line 37 ~ ownedCharacters.map ~ equippedItems", equippedItems);
+
       return {
         ...character,
         items: {
