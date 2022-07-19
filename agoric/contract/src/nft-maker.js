@@ -1,6 +1,5 @@
 // @ts-check
 import '@agoric/zoe/exported';
-import { E } from '@endo/eventual-send';
 import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
@@ -13,7 +12,8 @@ import { mulberry32 } from './prng';
  * @typedef {{
  *   characterNames: string[]
  *   characters: CharacterRecord[]
- *   market: ItemInMarket[]
+ *   itemsMarket: ItemInMarket[]
+ *   items: ItemRecord[]
  *   config?: Config
  *   mintNext: string
  * }} State
@@ -23,6 +23,7 @@ import { mulberry32 } from './prng';
  *   defaultItems: object[]
  *   completed?: boolean
  *   moneyIssuer: Issuer
+ *   moneyBrand: Brand
  *   sellItemsInstallation: Installation
  * }} Config
  *
@@ -48,6 +49,7 @@ import { mulberry32 } from './prng';
  *   sell: {
  *    instance: Instance
  *    publicFacet: any
+ *    price: bigint
  *  }
  * }} ItemInMarket
  *
@@ -108,8 +110,6 @@ const start = async (zcf) => {
     { issuer: inventoryKeyIssuer, brand: inventoryKeyBrand },
   ] = assetMints.map((mint) => mint.getIssuerRecord());
 
-  const zoeService = zcf.getZoeService();
-
   const [characterMint, itemMint, inventoryKeyMint] = assetMints;
 
   let PRNG; // Pseudo random number generator (mulberry32)
@@ -123,7 +123,8 @@ const start = async (zcf) => {
     config: undefined, // Holds list of base characters and default items
     characterNames: [], // Holds a list of minted character names, used to check for uniqueness
     characters: [], // Holds each character's inventory + copy of its data
-    market: [],
+    items: [],
+    itemsMarket: [],
     mintNext: 'PABLO',
   };
   /**
@@ -144,6 +145,7 @@ const start = async (zcf) => {
    *   defaultItems: any[],
    *   seed: number
    *   moneyIssuer: Issuer
+   *   moneyBrand: Brand
    *   sellItemsInstallation: Installation
    * }} config
    * @returns {string}
@@ -153,6 +155,7 @@ const start = async (zcf) => {
     defaultItems,
     seed,
     moneyIssuer,
+    moneyBrand,
     sellItemsInstallation,
   }) => {
     state.config = {
@@ -160,6 +163,7 @@ const start = async (zcf) => {
       defaultItems,
       completed: true,
       moneyIssuer,
+      moneyBrand,
       sellItemsInstallation,
     };
     assert(!Number.isNaN(seed), X`Seed must be a number`);
@@ -306,79 +310,29 @@ const start = async (zcf) => {
   };
 
   /**
-   * Sells an item
+   * This function has to be called after creating the sell offer
    *
-   * TODO: finish function
+   * @param {ItemInMarket} itemInMarket
+   * @returns {ItemInMarket}
    */
-  // TODO: make it an invitation and get items from user purse
-  const sellItem = async (seat) => {
-    assert(state.config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(seat, {
-      want: { Money: null },
-      give: { Items: null },
-    });
+  const storeItemInMarket = (itemInMarket) => {
+    state.itemsMarket = [...state.itemsMarket, itemInMarket];
 
-    const { want, give } = seat.getProposal();
+    return itemInMarket;
+  };
 
-    const price = want.Money.value;
-    const item = give.Items[0];
-
-    assert(item, X`No item has been provided in the give`);
-
-    // const allCharactersForSalePayment = mint.mintPayment(
-    //   newCharactersForSaleAmount,
-    // );
-    // const proposal = harden({
-    //   give: { Items: newCharactersForSaleAmount },
-    // });
-
-    // const paymentKeywordRecord = harden({ Money: price });
-
-    const issuerKeywordRecord = harden({
-      Items: itemIssuer,
-      Money: state.config.moneyIssuer,
-    });
-
-    // Terms used here are set via creatorFacet.initConfig(<config obj>)
-    const sellItemsTerms = harden({
-      pricePerItem: price,
-      issuers: itemIssuer, // TODO: check if needs array
-      brands: itemBrand, // TODO: check if needs array
-    });
-
-    const {
-      creatorInvitation, // ? do we need to do something with invitation? Maybe offer?
-      instance,
-      publicFacet,
-    } = await E(zoeService).startInstance(
-      state.config.sellItemsInstallation,
-      issuerKeywordRecord,
-      sellItemsTerms,
-    );
-
-    // TODO: call makeBuyerInvitation
-
-    /**
-     * @type {ItemInMarket}
-     */
-    const itemInMarket = { ...item, sell: { instance, publicFacet } }; // TODO: also store buyer invitation
-
-    state.market = [...state.market, itemInMarket];
-
-    // const shouldBeInvitationMsg = `The auctionItemsContract instance should return a creatorInvitation`;
-    // assert(creatorInvitation, shouldBeInvitationMsg);
-
-    // await E(zoeService).offer(
-    //   creatorInvitation,
-    //   // proposal,
-    //   seat.getProposal(),
-    //   // paymentKeywordRecord,
-    // );
-
-    // return harden({
-    //   msg: 'Character mint successful, use attached public facet to purchase',
-    //   auctionItemsPublicFacet: publicFacet,
-    // });
+  /**
+   * This function has to be called after completing the buy offer
+   *
+   * @param {bigint} itemId
+   */
+  const removeItemFromMarket = (itemId) => {
+    // TODO: eventually use a more efficient data structure
+    const newMarket = state.itemsMarket.reduce((market, item) => {
+      if (itemId !== item.id) return [...market, item];
+      return market;
+    }, []);
+    state.itemsMarket = newMarket;
   };
 
   /**
@@ -529,6 +483,18 @@ const start = async (zcf) => {
     });
   };
 
+  const getItems = () => {
+    return harden({
+      items: state.items,
+    });
+  };
+
+  const getItemsMarket = () => {
+    return harden({
+      items: state.itemsMarket,
+    });
+  };
+
   /**
    * Gets the inventory of a given character
    *
@@ -562,6 +528,8 @@ const start = async (zcf) => {
     getCount: () => state.characterNames.length,
     getCharacterIssuer: () => characterIssuer,
     getCharacterBrand: () => characterBrand,
+    getItems,
+    getItemsMarket,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
     getinventoryKeyIssuer: () => inventoryKeyIssuer,
@@ -572,7 +540,8 @@ const start = async (zcf) => {
     makeEquipInvitation: () => zcf.makeInvitation(equip, 'addToInventory'),
     makeUnequipInvitation: () =>
       zcf.makeInvitation(unequip, 'removeFromInventory'),
-    makeSellItem: () => zcf.makeInvitation(sellItem, 'sellItem'),
+    storeItemInMarket,
+    removeItemFromMarket,
     mintCharacterNFT: () =>
       zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
     mintItemNFT: () => zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),

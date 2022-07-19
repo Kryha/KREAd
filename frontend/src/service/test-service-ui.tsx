@@ -2,7 +2,7 @@
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 import { mintNfts } from "./character-actions";
-import { addToInventory, addToInventoryContinued, mintItem, removeFromInventory } from "./item-actions";
+import { addToInventory, addToInventoryContinued, buyItem, mintItem, removeFromInventory, sellItem } from "./item-actions";
 
 // import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { useCharacterContext } from "../context/characters";
@@ -33,10 +33,9 @@ export const TestServiceUI = () => {
     console.log("SENT GET TIMER");
   };
 
-  const mintItem = (agoric: AgoricState) => {
-    console.log(agoric);
-    //TODO: call mint
-  };
+  // const mintItem = (agoric: AgoricState) => {
+  //   console.log(agoric);
+  // };
 
   const mintCharacter = async () => {
     if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
@@ -146,6 +145,24 @@ export const TestServiceUI = () => {
     console.log(await mintItem(service));
   };
 
+  const sellItemNFT = async () => {
+    const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
+    if (!item) return;
+
+    await sellItem(service, item, 1n);
+  };
+
+  const buyItemNFT = async () => {
+    const {
+      contracts: {
+        characterBuilder: { publicFacet },
+      },
+    } = service;
+    const { items } = await E(publicFacet).getItemsMarket();
+    if (!items.length) return;
+    await buyItem(service, items[0]);
+  };
+
   const addItemToInventory = async () => {
     const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
     console.log(item);
@@ -243,6 +260,12 @@ export const TestServiceUI = () => {
       <div style={{ width: "100vw", height: "80vh", background: "#333", display: "flex", flexDirection: "row" }}>
         <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={mintItemNFT}>
           MINT ITEM
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={sellItemNFT}>
+          SELL ITEM
+        </button>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={buyItemNFT}>
+          BUY ITEM
         </button>
         <button
           style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}

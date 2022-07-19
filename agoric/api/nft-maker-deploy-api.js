@@ -111,7 +111,8 @@ export default async function deployApi(homePromise, { pathResolve }) {
       baseCharacters: defaultCharacters,
       defaultItems,
       sellItemsInstallation,
-      moneyIssuerP,
+      moneyIssuer,
+      moneyBrand,
     }),
   );
 
@@ -120,7 +121,6 @@ export default async function deployApi(homePromise, { pathResolve }) {
   console.log('Retrieving Board IDs for issuers and brands');
   const invitationIssuerP = E(zoe).getInvitationIssuer();
   const invitationBrandP = E(invitationIssuerP).getBrand();
-  const inventoryKeyBrandP = E(nftMakerPublicFacet).getinventoryKeyBrand();
 
   const characterIssuerP = E(nftMakerPublicFacet).getCharacterIssuer();
   const itemIssuerP = E(nftMakerPublicFacet).getItemIssuer();

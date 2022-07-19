@@ -3,24 +3,17 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
-import {
-  Landing,
-  Shop,
-  Inventory,
-  CreateCharacter,
-  ItemBuy,
-  CharacterBuy,
-  ItemSell,
-  CharacterSell,
-  Onboarding,
-  Privacy,
-} from "../pages";
-import { MainContainer, ErrorFallback } from "../components";
+import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemSell, CharacterSell, Onboarding, Privacy } from "../pages";
+import { MainContainer, ErrorFallback, LoadingPage } from "../components";
 import { Item } from "../pages/item";
 import { TestServiceUI } from "../service/test-service-ui";
+import { useAgoricContext } from "../context/agoric";
 
 export const AppRoutes: FC = () => {
   const navigate = useNavigate();
+  const [service] = useAgoricContext();
+
+  if (service.isLoading) return <LoadingPage />;
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>

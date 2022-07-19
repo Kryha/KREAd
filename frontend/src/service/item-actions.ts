@@ -1,19 +1,130 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
-// import { MONEY_DECIMALS, SUCCESSFUL_MINT_REPONSE_MSG } from "../constants";
-// import { Purses, ServiceState } from "../context/agoric";
-// import { AmountMath } from "@agoric/ertp";
-// import dappConstants from "../service/conf/defaults";
+
+import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
-// import installationConstants from "../service/conf/installation-constants-nft-maker.js";
+import { inter } from "../util";
 
-// const {
-//   brandBoardIds: {
-//     Money: MONEY_BRAND_BOARD_ID,
-//   },
-// } = dappConstants;
+export const sellItem = async (service: AgoricState, item: any, price: bigint) => {
+  const {
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    agoric: { walletP, board, zoe },
+    purses,
+  } = service;
 
-export const mintItem = async (service: AgoricState, item?: any, price?: bigint) => {
+  if (!publicFacet) return;
+
+  const itemPurse = purses.item[purses.item.length - 1];
+  const moneyPurse = purses.money[purses.money.length - 1];
+
+  if (!itemPurse || !moneyPurse) return;
+
+  const sellItemsInstallation = await E(board).getValue(dappConstants.SELL_ITEMS_INSTALLATION_BOARD_ID);
+  const itemIssuer = await E(publicFacet).getItemIssuer();
+  const { moneyIssuer } = await E(publicFacet).getConfig();
+
+  const issuerKeywordRecord = harden({
+    Items: itemIssuer,
+    Money: moneyIssuer,
+  });
+
+  const brandKeywordRecord = harden({
+    Items: itemPurse.brand,
+    Money: moneyPurse.brand,
+  });
+
+  const sellItemsTerms = harden({
+    pricePerItem: { value: price, brand: moneyPurse.brand },
+    issuers: issuerKeywordRecord,
+    brands: brandKeywordRecord,
+  });
+
+  const {
+    creatorInvitation,
+    instance,
+    publicFacet: sellItemsPublicFacet,
+  } = await E(zoe).startInstance(sellItemsInstallation, issuerKeywordRecord, sellItemsTerms);
+
+  await E(walletP).addOffer(
+    harden({
+      id: Date.now().toString(),
+      invitation: creatorInvitation,
+      proposalTemplate: {
+        want: {
+          Money: {
+            pursePetname: moneyPurse.pursePetname,
+            value: inter(price),
+          },
+        },
+        give: {
+          Items: {
+            pursePetname: itemPurse.pursePetname,
+            value: [item],
+          },
+        },
+      },
+      dappContext: true,
+    })
+  );
+
+  const itemInMarket = {
+    ...item,
+    sell: { instance, publicFacet: sellItemsPublicFacet, price },
+  };
+
+  // TODO: store in market after offer is accepted and processed
+  await E(publicFacet).storeItemInMarket(itemInMarket);
+};
+
+export const buyItem = async (service: AgoricState, itemInMarket: any) => {
+  const {
+    agoric: { walletP },
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    purses,
+  } = service;
+
+  if (!publicFacet || !walletP) return;
+
+  const itemPurse = purses.item[purses.item.length - 1];
+  const moneyPurse = purses.money[purses.money.length - 1];
+
+  if (!itemPurse || !moneyPurse) return;
+
+  const { sell, ...item } = itemInMarket;
+
+  const invitation = await E(sell.publicFacet).makeBuyerInvitation();
+
+  await E(walletP).addOffer(
+    harden({
+      id: Date.now().toString(),
+      invitation,
+      proposalTemplate: {
+        want: {
+          Items: {
+            pursePetname: itemPurse.pursePetname,
+            value: [item],
+          },
+        },
+        give: {
+          Money: {
+            pursePetname: moneyPurse.pursePetname,
+            value: inter(sell.price),
+          },
+        },
+      },
+      dappContext: true,
+    })
+  );
+
+  // TODO: remove item from market after offer is accepted and processed
+  await E(publicFacet).removeFromInventory(itemInMarket.id);
+};
+
+export const mintItem = async (service: AgoricState, item?: any) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -26,9 +137,6 @@ export const mintItem = async (service: AgoricState, item?: any, price?: bigint)
     return;
   }
 
-  const characterBrand = await E(publicFacet).getItemBrand();
-  // const moneyBrand = await E(service.agoric.board).getValue(MONEY_BRAND_BOARD_ID);
-  console.log(characterBrand);
   const config = await E(publicFacet).getConfig();
   console.log(config);
   const defaultItems = Object.values(config.defaultItems);
