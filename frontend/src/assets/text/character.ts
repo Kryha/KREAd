@@ -7,7 +7,7 @@ export const character = {
   frontMask: "front mask",
   liquid: "liquid",
   background: "background",
-  airResevoir: "air resevoir",
+  airReservoir: "air reservoir",
   clothing: "clothing",
   equip: "equip",
   sell: "sell",

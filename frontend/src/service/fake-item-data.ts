@@ -402,9 +402,9 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  airResevoir: {
+  airReservoir: {
     name: "AirTox: Fairy Dust Elite",
-    category: "airResevoir",
+    category: "airReservoir",
     id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -530,7 +530,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   liquid: {
     name: "AirTox: Fairy Dust Elite",
-    category: "airresevoir",
+    category: "airReservoir",
     id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1037,7 +1037,7 @@ export const Items: Item[] = [
   },
   {
     name: "Liquid: Fairy Dust Elite",
-    category: "airResevoir",
+    category: "airReservoir",
     id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1163,7 +1163,7 @@ export const Items: Item[] = [
   },
   {
     name: "Air Reservoir: Fairy Dust Elite",
-    category: "airResevoir",
+    category: "airReservoir",
     id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",

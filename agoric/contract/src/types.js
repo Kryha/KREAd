@@ -29,7 +29,7 @@
  * frontMask?: Item;
  * liquid?: Item;
  * background?: Item;
- * airResevoir?: Item;
+ * airReservoir?: Item;
  * clothing?: Item;
  * }} DefaultItems
  * @typedef {{

@@ -7,7 +7,7 @@ export const itemSlots = {
   frontMaskCode: "f",
   liquidCode: "l",
   backgroundCode: "bg II",
-  airResevoirCode: "ar",
+  airReservoirCode: "ar",
   clothingCode: "c",
   noseline: "noseline",
   midBackground: "background II",
@@ -17,7 +17,7 @@ export const itemSlots = {
   frontMask: "front mask",
   liquid: "liquid",
   background: "background I",
-  airResevoir: "air resevoir",
+  airReservoir: "air reservoir",
   clothing: "clothing",
   filter: "filter I",
 };

@@ -54,11 +54,11 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false,
           zIndex={zIndex.mask}
         />
         <ItemIcon
-          src={items.airResevoir?.image || Empty}
-          alt={items.airResevoir?.name || text.character.airResevoir}
+          src={items.airReservoir?.image || Empty}
+          alt={items.airReservoir?.name || text.character.airReservoir}
           width={width}
           height={height}
-          zIndex={zIndex.airResevoir}
+          zIndex={zIndex.airReservoir}
         />
         <ItemIcon
           src={items.liquid?.image || Empty}

@@ -43,9 +43,9 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = tru
           <RightEquippedItemCard area="middle" item={items.noseline} code={text.itemSlots.noseline} category={text.itemSlots.noseline} />
           <RightEquippedItemCard
             area="middle"
-            item={items.airResevoir}
-            code={text.itemSlots.airResevoir}
-            category={text.itemSlots.airResevoir}
+            item={items.airReservoir}
+            code={text.itemSlots.airReservoir}
+            category={text.itemSlots.airReservoir}
           />
         </Row>
         <Row>

@@ -7,7 +7,7 @@ export interface CharacterItems {
   mask?: Item;
   headPiece?: Item;
   hair?: Item;
-  airResevoir?: Item;
+  airReservoir?: Item;
   liquid?: Item;
   background?: Item;
   frontMask?: Item;

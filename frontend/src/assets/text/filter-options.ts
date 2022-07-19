@@ -3,7 +3,7 @@ import { Options } from "../../components";
 export const itemCategories: Options[] = [
   { label: "head pieces", value: "headpiece" },
   { label: "noselines", value: "noseline" },
-  { label: "filters I", value: "airResevoir" },
+  { label: "filters I", value: "airReservoir" },
   { label: "filters II", value: "liquid" },
   { label: "masks", value: "mask" },
   { label: "add-ons", value: "add-ons" },

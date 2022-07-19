@@ -196,7 +196,7 @@ export const defaultItems = {
   },
   headPiece: {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'head piece',
+    category: 'headPiece',
     id: '13330',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
@@ -518,9 +518,9 @@ export const defaultItems = {
       },
     ],
   },
-  airResevoir: {
+  airReservoir: {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'air resevoir',
+    category: 'airReservoir',
     id: '12341',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',

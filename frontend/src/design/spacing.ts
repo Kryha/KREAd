@@ -24,7 +24,7 @@ export const zIndex = {
   noseline: 5,
   liquid: 6,
   frontMask: 7,
-  airResevoir: 8,
+  airReservoir: 8,
   clothing: 9,
   headPiece: 10,
 };

@@ -45,7 +45,7 @@ export const processPurses = async (
           background: equippedItems.filter((item: Item) => item.category === "background")[0],
           midBackground: equippedItems.filter((item: Item) => item.category === "midBackground")[0],
           mask: equippedItems.filter((item: Item) => item.category === "mask")[0],
-          airResevoir: equippedItems.filter((item: Item) => item.category === "airResevoir")[0],
+          airReservoir: equippedItems.filter((item: Item) => item.category === "airReservoir")[0],
           liquid: equippedItems.filter((item: Item) => item.category === "liquid")[0],
           clothing: equippedItems.filter((item: Item) => item.category === "clothing")[0],
           frontMask: equippedItems.filter((item: Item) => item.category === "frontMask")[0],
