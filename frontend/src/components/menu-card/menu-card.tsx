@@ -28,10 +28,9 @@ import { EmptyCard } from "../empty-card";
 interface MenuCardProps extends ImageProps {
   title: string;
   items: Item[];
-  amount: number;
 }
 
-export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, height, marginTop, marginLeft }) => {
+export const MenuCard: FC<MenuCardProps> = ({ title, items, width, height, marginTop, marginLeft }) => {
   const navigate = useNavigate();
   const { width: viewWidth, height: viewHeight } = useViewport();
   const [selectedId, setSelectedId] = useState<string>("");
@@ -54,7 +53,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
           <MenuContainer>
             <MenuText>{title}</MenuText>
             <InfoContainer>
-              <Label>{text.param.amountOfItems(amount)}</Label>
+              <Label>{text.param.amountOfItems(items.length)}</Label>
               <Divider />
               <ArrowContainer>
                 <Close onClick={() => navigate(GO_BACK)} />
