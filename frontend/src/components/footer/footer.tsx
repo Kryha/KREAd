@@ -4,7 +4,7 @@ import { text } from "../../assets";
 import { color } from "../../design";
 import { routes } from "../../navigation";
 
-import { AboutText, AgoricText, FooterContainer, FooterWrapper, PrivacyText, Link } from "./styles";
+import { AboutText, AgoricText, FooterContainer, FooterWrapper, Link } from "./styles";
 
 
 export const Footer: FC = () => {

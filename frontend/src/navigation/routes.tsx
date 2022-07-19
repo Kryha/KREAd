@@ -3,21 +3,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
-import {
-  Landing,
-  Shop,
-  Inventory,
-  CreateCharacter,
-  ItemBuy,
-  CharacterBuy,
-  ItemSell,
-  CharacterSell,
-  Onboarding,
-  Privacy,
-} from "../pages";
+import { Onboarding } from "../pages";
 import { MainContainer, ErrorFallback } from "../components";
-import { Item } from "../pages/item";
-import { TestServiceUI } from "../service/test-service-ui";
 
 export const AppRoutes: FC = () => {
   const navigate = useNavigate();
