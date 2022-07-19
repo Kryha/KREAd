@@ -20,7 +20,7 @@ export const OnboardingCharacter: FC = () => {
   return (
     <CharacterWrapper>
       <CharacterContainer width={width} height={height}>
-        <CharacterIcon width={width} height={height} src={TempetCharacter} />
+        <CharacterIcon width={width} height={height} src={TempetCharacter} zIndex={zIndex.character} />
         <FourthIcon
           src={TempetHair || Empty}
           alt={text.character.hair}
