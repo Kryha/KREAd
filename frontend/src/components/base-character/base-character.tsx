@@ -14,8 +14,6 @@ interface BaseCharacterProps {
 
 export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false, size = "normal" }) => {
   const { width, height } = useViewport();
-  console.log("🚀 ~ file: base-character.tsx ~ line 16 ~ items", items);
-
   return (
     <CharacterWrapper>
       <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size}>
