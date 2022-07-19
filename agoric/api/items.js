@@ -26,7 +26,6 @@ export const defaultItems = {
       metadata: 'https://yourmetadata.com',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -92,7 +91,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -158,7 +156,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -224,7 +221,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -290,7 +286,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -355,7 +350,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -421,7 +415,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -487,7 +480,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -553,7 +545,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',
@@ -619,7 +610,6 @@ export const defaultItems = {
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
     date: '23213123',
-    slots: [],
     activity: [
       {
         name: 'transfer',

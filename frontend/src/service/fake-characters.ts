@@ -146,7 +146,6 @@ export const FakeCharctersNoItems: any[] = [
       date: "1235667272",
     },
     price: 123123,
-    slots: [],
   },
   {
     title: "RAMIRO",
@@ -173,7 +172,6 @@ export const FakeCharctersNoItems: any[] = [
       date: "1235667272",
     },
     price: 123123,
-    slots: [],
   },
   {
     title: "character 2",
@@ -200,7 +198,6 @@ export const FakeCharctersNoItems: any[] = [
       date: "1235667272",
     },
     price: 123123,
-    slots: [],
   },
   {
     title: "character 3",
@@ -228,7 +225,6 @@ export const FakeCharctersNoItems: any[] = [
       date: "1235667272",
     },
     price: 123123,
-    slots: [],
   },
   {
     title: "character 4",
@@ -256,6 +252,5 @@ export const FakeCharctersNoItems: any[] = [
       date: "1235667272",
     },
     price: 123123,
-    slots: [],
   },
 ];

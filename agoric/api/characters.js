@@ -24,7 +24,6 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
   {
     title: 'character 2',
@@ -51,7 +50,6 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
   {
     title: 'character 3',
@@ -79,7 +77,6 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
   {
     title: 'character 4',
@@ -107,6 +104,5 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
 ];

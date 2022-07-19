@@ -68,7 +68,6 @@ import { makeHashId } from './utils';
  *   price: number;
  *   details: any;
  *   date: string;
- *   slots?: any[];
  *   activity: any[];
  * }} Item
  */
