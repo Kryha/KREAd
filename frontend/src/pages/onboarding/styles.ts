@@ -149,8 +149,8 @@ export const ArrowDown = styled(ArrowDownIcon)`
   bottom: 53px;
   -webkit-animation: ${bounce} 2s;
   animation: ${bounce} 2s;
-  -webkit-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: 2;
+  animation-iteration-count: 2;
   animation-fill-mode: forwards;
   -webkit-animation-fill-mode: forwards;
   animation-delay: 0.5s;
