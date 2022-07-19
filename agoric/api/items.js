@@ -7,6 +7,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -71,6 +73,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/mid_background_01.1b4877e1786a55d07adb.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -135,6 +139,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/mask_01.7c37d3112ca6a4218be0.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -199,6 +205,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/head_piece_01.724cbb90afb6d2692ce3.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -263,6 +271,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/hair_07.6b786902faf18c06f899.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 3,
     effectiveness: 12,
@@ -326,6 +336,8 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image: 'FrontMask1',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -390,6 +402,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/liquid_01.3c70d277d60196b58a61.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -454,6 +468,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/background_01.77fa5b9eaaf65acf826f.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -518,6 +534,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/air_resevoir_01.d3d981e7575cbaeafdab.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,
@@ -582,6 +600,8 @@ export const defaultItems = {
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://builder.agoric.kryha.dev/static/media/clothing_01.a128a4c49bf79bb23310.png',
+    thumbnail:
+      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
     level: 64,
     rarity: 300,
     effectiveness: 12,

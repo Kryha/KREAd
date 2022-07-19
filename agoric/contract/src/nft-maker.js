@@ -99,18 +99,16 @@ import { mulberry32 } from './prng';
 const start = async (zcf) => {
   // Define Assets
   const assetMints = await Promise.all([
-    await zcf.makeZCFMint('KREA', AssetKind.SET),
-    await zcf.makeZCFMint('KREAITEM', AssetKind.SET),
-    await zcf.makeZCFMint('KREAINVENTORYKEY', AssetKind.SET),
+    zcf.makeZCFMint('KREA', AssetKind.SET),
+    zcf.makeZCFMint('KREAITEM', AssetKind.SET),
   ]);
 
   const [
     { issuer: characterIssuer, brand: characterBrand },
     { issuer: itemIssuer, brand: itemBrand },
-    { issuer: inventoryKeyIssuer, brand: inventoryKeyBrand },
   ] = assetMints.map((mint) => mint.getIssuerRecord());
 
-  const [characterMint, itemMint, inventoryKeyMint] = assetMints;
+  const [characterMint, itemMint] = assetMints;
 
   let PRNG; // Pseudo random number generator (mulberry32)
 
@@ -220,10 +218,10 @@ const start = async (zcf) => {
    */
   const mintCharacterNFT = (seat) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
+    // TODO add Give statement with Money
     assertProposalShape(seat, {
       want: {
         Asset: null,
-        InventoryKey: null,
       },
     });
     const { want } = seat.getProposal();
@@ -235,13 +233,23 @@ const start = async (zcf) => {
       ...getRandomBaseCharacter(),
       name: newCharacterName,
     };
+    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
-    const newCharacterAmount = AmountMath.make(
+    const newCharacterAmount1 = AmountMath.make(
       characterBrand,
-      harden([newCharacter]),
+      harden([{ ...newCharacter, id: 1 }]),
     );
-    // Mint character to user seat
-    characterMint.mintGains({ Asset: newCharacterAmount }, seat);
+    const newCharacterAmount2 = AmountMath.make(
+      characterBrand,
+      harden([{ ...newCharacter, id: 2 }]),
+    );
+
+    // Mint character to user seat & inventorySeat
+    characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
+    characterMint.mintGains(
+      { CharacterKey: newCharacterAmount2 },
+      inventorySeat,
+    );
 
     // Mint items to inventory seat
     const allDefaultItems = Object.values(state.config.defaultItems);
@@ -250,34 +258,7 @@ const start = async (zcf) => {
       id: state.characterNames.length,
     }));
     const itemsAmount = AmountMath.make(itemBrand, harden(uniqueItems));
-    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
-
-    // Create Inventory Key Pair for Access to Inventory
-    const newInventoryKeyAmount1 = AmountMath.make(
-      inventoryKeyBrand,
-      harden([
-        {
-          name: newCharacterName,
-          id: 1,
-        },
-      ]),
-    );
-    const newInventoryKeyAmount2 = AmountMath.make(
-      inventoryKeyBrand,
-      harden([
-        {
-          name: newCharacterName,
-          id: 2,
-        },
-      ]),
-    );
-    // Mint key to character inventory
-    inventoryKeyMint.mintGains({ InventoryKey: newInventoryKeyAmount1 }, seat);
-    inventoryKeyMint.mintGains(
-      { InventoryKey: newInventoryKeyAmount2 },
-      inventorySeat,
-    );
 
     // Add to public state
     /**
@@ -291,6 +272,7 @@ const start = async (zcf) => {
     state.characters = [...state.characters, character];
 
     // Add to private state
+    // TODO: Increment privateState history element id
     privateState = [
       ...privateState,
       {
@@ -345,10 +327,10 @@ const start = async (zcf) => {
     assertProposalShape(seat, {
       give: {
         Item: null,
-        InventoryKey1: null,
+        CharacterKey1: null,
       },
       want: {
-        InventoryKey2: null,
+        CharacterKey2: null,
       },
     });
 
@@ -356,13 +338,14 @@ const start = async (zcf) => {
      * TODO:
      * Verify that the item slot is empty before equipping.
      * If not empty unequip present item
+     * Or construct the proposal so that we "want" the currently equipped item back
      */
 
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item');
-    const providedKeyAmount = seat.getAmountAllocated('InventoryKey1');
-    const providedKey = providedKeyAmount.value[0];
-    const characterName = providedKey.name;
+    const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
+    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const characterName = providedCharacterKey.name;
 
     // TODO: Validate Issuer
     // Make sure that a token with a correct key value  but minted from a different issuer is not allowed
@@ -375,19 +358,23 @@ const start = async (zcf) => {
     const inventorySeat = characterRecord.inventory;
     assert(inventorySeat, X`${errors.inventory404}`);
 
-    // Get current inventory items and key from inventorySeat
-    const currentInventoryKey =
-      inventorySeat.getAmountAllocated('InventoryKey');
+    // Get current Character Key from inventorySeat
+    const currentCharacterKey =
+      inventorySeat.getAmountAllocated('CharacterKey');
 
     // Widthdraw Item and Key from user seat
     seat.decrementBy(harden({ Item: providedItemAmount }));
-    seat.decrementBy(harden({ InventoryKey1: providedKeyAmount }));
+    seat.decrementBy(harden({ CharacterKey1: providedCharacterKeyAmount }));
+
     // Deposit Item and Key to inventory seat
     inventorySeat.incrementBy(harden({ Item: providedItemAmount }));
-    inventorySeat.incrementBy(harden({ InventoryKey: providedKeyAmount }));
-    // Widthdraw Key from character seat and deposit into user seat
-    inventorySeat.decrementBy(harden({ InventoryKey: currentInventoryKey }));
-    seat.incrementBy(harden({ InventoryKey2: currentInventoryKey }));
+    inventorySeat.incrementBy(
+      harden({ CharacterKey: providedCharacterKeyAmount }),
+    );
+
+    // Widthdraw Key from character seat and Deposit into user seat
+    inventorySeat.decrementBy(harden({ CharacterKey: currentCharacterKey }));
+    seat.incrementBy(harden({ CharacterKey2: currentCharacterKey }));
 
     zcf.reallocate(seat, inventorySeat);
 
@@ -396,6 +383,7 @@ const start = async (zcf) => {
       (c) => c.name === characterName,
     );
     assert(characterIndex >= 0, X`no character private state found`);
+
     privateState[characterIndex] = {
       name: characterRecord.name,
       history: [
@@ -419,44 +407,49 @@ const start = async (zcf) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
     assertProposalShape(seat, {
       give: {
-        InventoryKey1: null,
+        CharacterKey1: null,
       },
       want: {
         Item: null,
-        InventoryKey2: null,
+        CharacterKey2: null,
       },
     });
 
-    const providedKeyAmount = seat.getAmountAllocated('InventoryKey1');
-    const providedKey = providedKeyAmount.value[0];
-    const characterName = providedKey.name;
+    // Retrieve Character key from user seat
+    const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
+    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const characterName = providedCharacterKey.name;
     const characterRecord = state.characters.find(
       (c) => c.name === characterName,
     );
 
     assert(characterRecord, X`${errors.inventory404}`);
-    const characterSeat = characterRecord.inventory;
-    assert(characterSeat, X`${errors.inventory404}`);
+    const inventorySeat = characterRecord.inventory;
+    assert(inventorySeat, X`${errors.inventory404}`);
+    assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 
-    const currentInventoryKey =
-      characterSeat.getAmountAllocated('InventoryKey');
-
+    // Get reference of the wanted item
     const { want } = seat.getProposal();
     const { Item: wantedItems } = want;
 
-    assert(providedKey, X`${errors.invalidInventoryKey}`);
+    // Get current Character Key from inventorySeat
+    const currentCharacterKey =
+      inventorySeat.getAmountAllocated('CharacterKey');
 
     // Widthdraw Key from user seat
-    seat.decrementBy({ InventoryKey1: providedKeyAmount });
-    // Deposit Item and Key to inventory seat
-    characterSeat.decrementBy({ Item: wantedItems });
+    seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
+    // Deposit Wanted Item & Character Key in user seat
     seat.incrementBy({ Item: wantedItems });
-    characterSeat.incrementBy({ InventoryKey: providedKeyAmount });
-    // Widthdraw Key from character seat and deposit into user seat
-    characterSeat.decrementBy({ InventoryKey: currentInventoryKey });
-    seat.incrementBy({ InventoryKey2: currentInventoryKey });
+    seat.incrementBy({ CharacterKey2: currentCharacterKey });
 
-    zcf.reallocate(seat, characterSeat);
+    // Widthdraw wanted Item & Character Key from inventory seat
+    inventorySeat.decrementBy({ Item: wantedItems });
+    inventorySeat.decrementBy({ CharacterKey: currentCharacterKey });
+
+    // Deposit Character key in inventory seat
+    inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
+
+    zcf.reallocate(seat, inventorySeat);
 
     // Add to private state
     const characterIndex = privateState.findIndex(
@@ -507,8 +500,7 @@ const start = async (zcf) => {
     assert(characterRecord, X`${errors.character404}`);
     const { inventory } = characterRecord;
     const items = inventory.getAmountAllocated('Item', itemBrand);
-    const all = inventory.getCurrentAllocation();
-    return { items, all };
+    return { items };
   };
 
   const creatorFacet = Far('Character store creator', {
@@ -525,16 +517,13 @@ const start = async (zcf) => {
     getCharacterBase: () => state.config?.baseCharacters[0],
     getCharacters,
     getCharacterInventory,
-    getCount: () => state.characterNames.length,
+    getCharacterCount: () => state.characterNames.length,
     getCharacterIssuer: () => characterIssuer,
     getCharacterBrand: () => characterBrand,
     getItems,
     getItemsMarket,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
-    getinventoryKeyIssuer: () => inventoryKeyIssuer,
-    getinventoryKeyBrand: () => inventoryKeyBrand,
-    getNftConfig: () => ({ characterBrand, characterIssuer }),
     getRandomBaseCharacter,
     getRandomItem,
     makeEquipInvitation: () => zcf.makeInvitation(equip, 'addToInventory'),
@@ -542,9 +531,10 @@ const start = async (zcf) => {
       zcf.makeInvitation(unequip, 'removeFromInventory'),
     storeItemInMarket,
     removeItemFromMarket,
-    mintCharacterNFT: () =>
+    makeMintCharacterInvitation: () =>
       zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
-    mintItemNFT: () => zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
+    mekeMintItemInvitation: () =>
+      zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
     getPrivateState: () => privateState,
   });
 

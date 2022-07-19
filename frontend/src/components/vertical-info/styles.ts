@@ -17,29 +17,37 @@ export const Id = styled.h3<DirectionProps>`
   color: ${color.darkGrey};
   ${({ isRight, category }): string => {
     if (isRight) {
-      if (category === "air resevoir" || category === "front mask") {
-        return `
-        transform: rotate(90deg);
-        line-height: 125px;
+      switch (category) {
+        case "styline":
+          return `
+            transform: rotate(90deg);
+            line-height: 100px;
         `;
+        case "add-ons":
+          return `
+            transform: rotate(90deg);
+            line-height: 90px;
+          `;
+        case "filter II":
+          return `
+            transform: rotate(90deg);
+            line-height: 75px;
+          `;
+        case "filter I":
+          return `
+            transform: rotate(90deg);
+            line-height: 70px;
+          `;
+        default:
+          return `
+            transform: rotate(90deg);
+            line-height: 60px;
+          `;
       }
-      else if (category === "noseline") {
-        return `
-        transform: rotate(90deg);
-        line-height: 95px;
-        `;
-      }
-      else {
-        return `
-        transform: rotate(90deg);
-        line-height: 65px;
-        `;
-      }
-
     } else {
       return `
-      margin-right: 8px;
-      transform: rotate(-90deg);
+        margin-right: 8px;
+        transform: rotate(-90deg);
       `;
     }
   }}
@@ -49,9 +57,4 @@ export const Id = styled.h3<DirectionProps>`
 export const InfoContainer = styled.div`
   width: 15px;
   cursor: pointer;
-  // &:hover {
-  //   ${Id} {
-  //     color: ${color.black};
-  //   }
-  // }
 `;

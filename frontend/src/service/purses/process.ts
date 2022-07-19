@@ -8,7 +8,7 @@ export const processPurses = (
   characterDispatch: CharacterDispatch,
   itemDispatch: ItemDispatch,
   agoricDispatch: AgoricDispatch,
-  brandsToCheck: { money: string; character: string; item: string; inventoryKey: string }
+  brandsToCheck: { money: string; character: string; item: string }
 ) => {
   const newTokenPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.money);
   const newCharacterPurses = purses.filter(
@@ -17,13 +17,10 @@ export const processPurses = (
   const newItemPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.item // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
-  const newInventoryKeyPurses = purses.filter(
-    ({ brandBoardId }) => brandBoardId === brandsToCheck.inventoryKey // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
-  );
+
   agoricDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
   agoricDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
   agoricDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });
-  agoricDispatch({ type: "SET_INVENTORY_KEY_PURSES", payload: newInventoryKeyPurses });
 
   const ownedCharacters = newCharacterPurses.flatMap((purse) => {
     return purse.value;
