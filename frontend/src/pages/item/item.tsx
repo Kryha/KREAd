@@ -8,6 +8,13 @@ import { useMyItems, useMyCharacter } from "../../service";
 import { useParams } from "react-router-dom";
 import { Character } from "../../interfaces";
 
+/**
+ * TODO:
+ * * This page needs to have the context / service of:
+ *  * Selected Character
+ *  * Selected character equipped items
+ *  * Owned items
+ */
 export const Item: FC = () => {
   const { category } = useParams<"category">();
   const [items, isLoadingItems] = useMyItems();
@@ -19,9 +26,8 @@ export const Item: FC = () => {
   ] = useMyCharacter();
   const { height, width } = useViewport();
 
-  // const categoryItems = [character.items["mask"]];
+  // const categoryItems = [character.items[`${category}`]];
   const categoryItems = items.filter((item) => item.category === category);
-  console.log("🚀 ~ file: item.tsx ~ line 24 ~ categoryItems", categoryItems);
 
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage />;
 

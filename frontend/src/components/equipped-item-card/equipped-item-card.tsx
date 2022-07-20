@@ -69,7 +69,7 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`${routes.items}/${category}/${item?.id}`, { state: { category: category, itemId: item?.id } });
+    navigate(`${routes.items}/${category}`, { state: { category: category } });
   };
   return (
     <EquippedContainer onClick={() => handleClick()} isRight isSecond={code === "noseline" || code === "liquid"}>
