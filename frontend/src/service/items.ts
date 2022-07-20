@@ -37,22 +37,23 @@ export const useFilteredItems = (
   color: string
 ): { data: Item[]; isLoading: boolean } => {
   // TODO: Refactor so we can reuse filteredItems with different source (myItemx vs shopItems)
-  const [data, isLoading] = useMyItems();
+  const [{ owned, equipped }, isLoading] = useMyItems();
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
   const isInCategory = (item: Item, category: string) => (category ? item.category === category : true);
   const hasColor = (item: Item, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
   return useMemo(() => {
-    if (!data) return { data: [], isLoading };
-    if (!category && !sorting && !color && !changedRange) return { data, isLoading };
+    const allItems = [...owned, ...equipped];
+    if (!allItems) return { data: [], isLoading };
+    if (!category && !sorting && !color && !changedRange && allItems.length) return { data: allItems, isLoading };
 
-    const filteredItems = data.filter((item: Item) => isInCategory(item, category) && hasColor(item, color));
+    const filteredItems = allItems.filter((item: Item) => isInCategory(item, category) && hasColor(item, color));
     const filteredPrice = filteredItems.filter((item: Item) => item.price > price.min && item.price < price.max);
     const sortedItems = sortItems(sorting, filteredPrice);
 
     return { data: sortedItems, isLoading };
-  }, [category, color, data, isLoading, price, sorting, changedRange]);
+  }, [category, color, owned, equipped, isLoading, price, sorting, changedRange]);
 };
 
 export const useSellItem = () => {

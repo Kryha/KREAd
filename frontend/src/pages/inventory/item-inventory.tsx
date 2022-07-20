@@ -11,11 +11,11 @@ import { EmptyItemInventory } from "./empty-item-inventory";
 import { DetailWrapper } from "./styles";
 
 export const ItemsInventory: FC = () => {
-  const [items, isLoading] = useMyItems();
+  const [{ owned, equipped }, isLoading] = useMyItems();
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState<string>("");
 
-  const allItems = [...items.owned, ...items.equipped];
+  const allItems = [...owned, ...equipped];
 
   const item = allItems?.find((item) => item.id === selectedId);
 
