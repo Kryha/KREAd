@@ -4,6 +4,7 @@ export type CharacterState = {
   characters: Character[];
   owned: Character[];
   fetched: boolean;
+  selected: Character[];
 };
 
 interface SetCharacters {
@@ -22,6 +23,10 @@ interface AddOwnedCharacters {
   type: "ADD_OWNED_CHARACTERS";
   payload: Character[];
 }
+interface SetSelectedCharacter {
+  type: "SET_SELECTED_CHARACTER";
+  payload: Character;
+}
 interface SetFetched {
   type: "SET_FETCHED";
   payload: boolean;
@@ -30,6 +35,13 @@ interface Reset {
   type: "RESET";
 }
 
-export type CharacterStateActions = Reset | SetFetched | SetCharacters | AddCharacters | SetOwnedCharacters | AddOwnedCharacters;
+export type CharacterStateActions =
+  | Reset
+  | SetFetched
+  | SetCharacters
+  | AddCharacters
+  | SetOwnedCharacters
+  | AddOwnedCharacters
+  | SetSelectedCharacter;
 
 export type CharacterDispatch = React.Dispatch<CharacterStateActions>;

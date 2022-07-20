@@ -36,6 +36,11 @@ export const processPurses = async (
         items: { value: equippedItems },
       } = await E(contractPublicFacet).getCharacterInventory(character.name);
 
+      const itemsSetEqquiped = equippedItems.map((item: Item) => (item.equippedTo = character.id));
+      console.log("🚀 ~ file: process.ts ~ line 40 ~ ownedCharacters.map ~ itemsSetEqquiped", itemsSetEqquiped);
+
+      itemDispatch({ type: "ADD_OWNED_ITEMS", payload: itemsSetEqquiped });
+
       return {
         ...character,
         items: {
@@ -55,14 +60,17 @@ export const processPurses = async (
   );
   // const ownedCharactersWithItems = await Promise.all(characterPromises);
 
-  equippedCharacters && characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: equippedCharacters });
+  if (equippedCharacters.length) {
+    characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: equippedCharacters });
+    characterDispatch({ type: "SET_SELECTED_CHARACTER", payload: equippedCharacters[0] });
+  }
   characterDispatch({ type: "SET_FETCHED", payload: true });
 
   // Set Items state
   const ownedItems = newItemPurses.flatMap((purse) => {
     return purse.value;
   });
-  ownedItems && itemDispatch({ type: "SET_OWNED_ITEMS", payload: ownedItems });
+  ownedItems && itemDispatch({ type: "ADD_OWNED_ITEMS", payload: ownedItems });
   itemDispatch({ type: "SET_FETCHED", payload: true });
 
   console.info(`👤 Found ${ownedCharacters.length} characters.`);
