@@ -28,12 +28,9 @@ export const useCharacter = (id: string): UseQueryResult<Character> => {
 };
 
 // TODO: provide id as param and as query key
-export const useMyCharacter = (): UseQueryResult<Character> => {
-  return useQuery(["character"], async () => {
-    //  TODO: intergrate me
-
-    return FakeCharcters[0];
-  });
+export const useMyCharacter = (): [{ selected: Character[]; isLoading: boolean }, CharacterDispatch] => {
+  const [{ selected, fetched }, characterDispatch] = useCharacterContext();
+  return [{ selected, isLoading: !fetched }, characterDispatch];
 };
 
 export const useMyCharacters = (): [{ owned: Character[]; isLoading: boolean }, CharacterDispatch] => {
