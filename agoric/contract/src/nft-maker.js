@@ -25,7 +25,7 @@ import { mulberry32 } from './prng';
  *   completed?: boolean
  *   moneyIssuer: Issuer
  *   moneyBrand: Brand
- *   sellItemsInstallation: Installation
+ *   sellAssetsInstallation: Installation
  * }} Config
  *
  * @typedef {{
@@ -154,7 +154,7 @@ const start = async (zcf) => {
    *   seed: number
    *   moneyIssuer: Issuer
    *   moneyBrand: Brand
-   *   sellItemsInstallation: Installation
+   *   sellAssetsInstallation: Installation
    * }} config
    * @returns {string}
    */
@@ -164,7 +164,7 @@ const start = async (zcf) => {
     seed,
     moneyIssuer,
     moneyBrand,
-    sellItemsInstallation,
+    sellAssetsInstallation,
   }) => {
     state.config = {
       baseCharacters,
@@ -172,7 +172,7 @@ const start = async (zcf) => {
       completed: true,
       moneyIssuer,
       moneyBrand,
-      sellItemsInstallation,
+      sellAssetsInstallation,
     };
     assert(!Number.isNaN(seed), X`Seed must be a number`);
     PRNG = mulberry32(seed);

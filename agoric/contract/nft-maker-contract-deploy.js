@@ -61,14 +61,14 @@ export default async function deployContract(
   const bundle = await bundleSource(pathResolve(`./src/nft-maker.js`));
   const installation = await E(zoe).install(bundle);
 
-  // We also need to bundle and install the sell-items contract
-  const sellItemsBundleUrl = await resolve(
+  // We also need to bundle and install the sellItems contract
+  const sellAssetsBundleUrl = await resolve(
     '@agoric/zoe/src/contracts/sellItems.js',
     import.meta.url,
   );
-  const sellItemsBundlePath = new URL(sellItemsBundleUrl).pathname;
-  const sellItemsBundle = await bundleSource(sellItemsBundlePath);
-  const sellItemsInstallation = await E(zoe).install(sellItemsBundle);
+  const sellAssetsBundlePath = new URL(sellAssetsBundleUrl).pathname;
+  const sellAssetsBundle = await bundleSource(sellAssetsBundlePath);
+  const sellAssetsInstallation = await E(zoe).install(sellAssetsBundle);
 
   // Let's share this installation with other people, so that
   // they can run our contract code by making a contract
@@ -81,22 +81,22 @@ export default async function deployContract(
   // strings to objects.
   const CONTRACT_NAME = 'CHARACTER';
   const INSTALLATION_BOARD_ID = await E(board).getId(installation);
-  const SELL_ITEMS_INSTALLATION_BOARD_ID = await E(board).getId(
-    sellItemsInstallation,
+  const SELL_ASSETS_INSTALLATION_BOARD_ID = await E(board).getId(
+    sellAssetsInstallation,
   );
 
   console.log('- SUCCESS! contract code installed on Zoe');
   console.log(`-- Contract Name: ${CONTRACT_NAME}`);
   console.log(`-- Installation Board Id: ${INSTALLATION_BOARD_ID}`);
   console.log(
-    `-- Sell Items Installation Board Id: ${SELL_ITEMS_INSTALLATION_BOARD_ID}`,
+    `-- Sell Assets Installation Board Id: ${SELL_ASSETS_INSTALLATION_BOARD_ID}`,
   );
 
   // Save the constants somewhere where the UI and api can find it.
   const dappConstants = {
     CONTRACT_NAME,
     INSTALLATION_BOARD_ID,
-    SELL_ITEMS_INSTALLATION_BOARD_ID,
+    SELL_ASSETS_INSTALLATION_BOARD_ID,
   };
   const defaultsFolder = pathResolve(`../../frontend/src/service/conf`);
   const defaultsFile = pathResolve(

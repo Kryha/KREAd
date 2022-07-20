@@ -80,7 +80,7 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
 
   if (!characterPurse || !moneyPurse) return;
 
-  const sellItemsInstallation = await E(board).getValue(dappConstants.SELL_ITEMS_INSTALLATION_BOARD_ID);
+  const sellAssetsInstallation = await E(board).getValue(dappConstants.SELL_ASSETS_INSTALLATION_BOARD_ID);
   const characterIssuer = await E(publicFacet).getCharacterIssuer();
   const { moneyIssuer } = await E(publicFacet).getConfig();
 
@@ -94,7 +94,7 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
     Money: moneyPurse.brand,
   });
 
-  const sellItemsTerms = harden({
+  const sellAssetsTerms = harden({
     pricePerItem: { value: price, brand: moneyPurse.brand },
     issuers: issuerKeywordRecord,
     brands: brandKeywordRecord,
@@ -103,8 +103,8 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
   const {
     creatorInvitation,
     instance,
-    publicFacet: sellItemsPublicFacet,
-  } = await E(zoe).startInstance(sellItemsInstallation, issuerKeywordRecord, sellItemsTerms);
+    publicFacet: sellAssetsPublicFacet,
+  } = await E(zoe).startInstance(sellAssetsInstallation, issuerKeywordRecord, sellAssetsTerms);
 
   await E(walletP).addOffer(
     harden({
@@ -130,7 +130,7 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
 
   const characterInMarket = {
     ...character,
-    sell: { instance, publicFacet: sellItemsPublicFacet, price },
+    sell: { instance, publicFacet: sellAssetsPublicFacet, price },
   };
 
   // TODO: store in market after offer is accepted and processed

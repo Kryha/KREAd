@@ -16,7 +16,7 @@ import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/a
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
-  SELL_ITEMS_INSTALLATION_BOARD_ID,
+  SELL_ASSETS_INSTALLATION_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
   issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
@@ -172,7 +172,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestInstallation("Installation Sell", SELL_ITEMS_INSTALLATION_BOARD_ID),
+        E(walletP).suggestInstallation("Installation Sell Assets", SELL_ASSETS_INSTALLATION_BOARD_ID),
         E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
       ]);
