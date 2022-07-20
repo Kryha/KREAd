@@ -1,6 +1,7 @@
 import "./App.css";
 import { QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import { AppRoutes } from "./navigation";
 import { queryClient } from "./service";
@@ -10,17 +11,23 @@ import { ItemStateProvider } from "./context/items";
 
 function App() {
   return (
-    <ItemStateProvider>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>KREAd</title>
+      </Helmet>
       <CharacterStateProvider>
-        <AgoricStateProvider>
-          <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-              <AppRoutes />
-            </BrowserRouter>
-          </QueryClientProvider>
-        </AgoricStateProvider>
+        <ItemStateProvider>
+          <AgoricStateProvider>
+            <QueryClientProvider client={queryClient}>
+              <BrowserRouter>
+                <AppRoutes />
+              </BrowserRouter>
+            </QueryClientProvider>
+          </AgoricStateProvider>
+        </ItemStateProvider>
       </CharacterStateProvider>
-    </ItemStateProvider>
+    </>
   );
 }
 
