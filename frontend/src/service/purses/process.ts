@@ -4,7 +4,7 @@ import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
 
-// This fetches assets data from Wallet purses and updates the local context state for characters & items
+// This fetches assets data from purses in the wallet and updates the local context state for characters & items
 export const processPurses = async (
   purses: any[],
   contractPublicFacet: any,
@@ -13,6 +13,7 @@ export const processPurses = async (
   agoricDispatch: AgoricDispatch,
   brandsToCheck: { money: string; character: string; item: string }
 ) => {
+  // Load Purses
   const newTokenPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.money);
   const newCharacterPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.character // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
@@ -25,11 +26,12 @@ export const processPurses = async (
   agoricDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
   agoricDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });
 
+  // Load Characters
   const ownedCharacters = newCharacterPurses.flatMap((purse) => {
     return purse.value;
   });
-  console.log("🚀 ~ file: process.ts ~ line 31 ~ ownedCharacters ~ ownedCharacters", ownedCharacters);
 
+  const equippedCharacterItems: Item[] = [];
   // Map characters to the corresponding inventory in the contract
   const charactersWithItems = await Promise.all(
     ownedCharacters.map(async (character: Character) => {
@@ -37,6 +39,7 @@ export const processPurses = async (
         items: { value: equippedItems },
       } = await E(contractPublicFacet).getCharacterInventory(character.name);
 
+      equippedCharacterItems.push(...equippedItems);
       return {
         ...character,
         items: {
@@ -56,26 +59,17 @@ export const processPurses = async (
   );
 
   if (charactersWithItems.length) {
-    console.log("🚀 ~ file: process.ts ~ line 59 ~ charactersWithItems", charactersWithItems);
     characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: charactersWithItems });
     characterDispatch({ type: "SET_SELECTED_CHARACTER", payload: charactersWithItems[0] });
   }
+  // Finish loading Characters
   characterDispatch({ type: "SET_FETCHED", payload: true });
 
-  // TODO: ADD owned items based on characters inventory
-  // const itemsSetEqquiped = equippedItems.map((item: Item) => (item.equippedTo = character.id));
-  // console.log("🚀 ~ file: process.ts ~ line 40 ~ ownedCharacters.map ~ itemsSetEqquiped", itemsSetEqquiped);
-
-  // itemDispatch({ type: "ADD_OWNED_ITEMS", payload: itemsSetEqquiped });
-
-  // Set Items state
-  const ownedItems = newItemPurses.flatMap((purse) => {
-    return purse.value;
-  });
-  ownedItems && itemDispatch({ type: "ADD_OWNED_ITEMS", payload: ownedItems });
+  // Load owned Items from wallet and character inventories
+  const ownedItems = newItemPurses.flatMap((purse) => purse.value);
+  ownedItems && itemDispatch({ type: "SET_OWNED_ITEMS", payload: ownedItems });
+  equippedCharacterItems && itemDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
   itemDispatch({ type: "SET_FETCHED", payload: true });
-
-  // TODO: Add global isLoading and set it to false here
 
   console.info(`👤 Found ${ownedCharacters.length} characters.`);
   console.info(`📦 Found ${ownedItems.length} Items.`);
