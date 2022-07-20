@@ -22,3 +22,10 @@ export interface Item {
   slots: Slots[];
   activity: ActivityEvent[];
 }
+
+export interface ItemInMarket extends Item {
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
+}

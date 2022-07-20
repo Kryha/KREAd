@@ -1,9 +1,11 @@
 import React, { createContext, useReducer, useContext } from "react";
+
 import { CharacterDispatch, CharacterState, CharacterStateActions } from "../interfaces/character-actions.interfaces";
 
 const initialState: CharacterState = {
   characters: [],
   owned: [],
+  market: [],
   fetched: false,
 };
 
@@ -20,6 +22,12 @@ const Reducer = (state: CharacterState, action: CharacterStateActions): Characte
 
     case "SET_OWNED_CHARACTERS":
       return { ...state, owned: action.payload };
+
+    case "SET_CHARACTERS_MARKET":
+      return { ...state, market: action.payload };
+
+    case "ADD_CHARACTERS_MARKET":
+      return { ...state, market: [...state.market, ...action.payload] };
 
     case "ADD_OWNED_CHARACTERS":
       return { ...state, fetched: true, owned: [...state.owned, ...action.payload] };

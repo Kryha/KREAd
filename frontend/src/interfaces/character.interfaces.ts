@@ -44,3 +44,10 @@ export interface Character {
 export interface CharacterCreation {
   name: string;
 }
+
+export interface CharacterInMarket extends Character {
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
+}

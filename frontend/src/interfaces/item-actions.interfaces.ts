@@ -1,11 +1,10 @@
-import { Item } from "./item.interfaces";
+import { Item, ItemInMarket } from "./item.interfaces";
 
 export type ItemState = {
   items: Item[];
   owned: Item[];
   equipped: Item[];
-  // TODO: use Item type enriched with instance and publicFacet instead of any
-  market: any[];
+  market: ItemInMarket[];
   fetched: boolean;
 };
 
@@ -30,12 +29,12 @@ interface AddOwnedItems {
 
 interface SetItemsMarket {
   type: "SET_ITEMS_MARKET";
-  payload: any[];
+  payload: ItemInMarket[];
 }
 
 interface AddItemsMarket {
   type: "ADD_ITEMS_MARKET";
-  payload: any[];
+  payload: ItemInMarket[];
 }
 
 interface SetFetched {
