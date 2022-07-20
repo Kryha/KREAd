@@ -11,20 +11,20 @@ export const mintItem = async (service: AgoricState, item?: any) => {
     },
     purses,
   } = service;
+
   if (!publicFacet || !walletP || !purses.item[0].pursePetname) {
     console.error("undefined parameter");
     return;
   }
 
-  const characterBrand = await E(publicFacet).getItemBrand();
-  console.log(characterBrand);
   const config = await E(publicFacet).getConfig();
-  console.log(config);
   const defaultItems = Object.values(config.defaultItems);
-  const itemsToMint = item || defaultItems;
+  const itemsToMint = [item] || defaultItems;
 
-  const uniqueItems = itemsToMint.map((item: any) => ({ ...item, id: new Date().toUTCString() }));
-  console.log(uniqueItems);
+  const uniqueItems = itemsToMint.map((item: any) => ({
+    ...item,
+    id: new Date().toUTCString(), // TODO Implement Date Service
+  }));
 
   const invitation = await E(publicFacet).makeMintItemInvitation();
 
