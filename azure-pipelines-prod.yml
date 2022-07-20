@@ -1,3 +1,6 @@
+trigger:
+ - production
+
 pool:
   vmImage: "ubuntu-latest"
 
