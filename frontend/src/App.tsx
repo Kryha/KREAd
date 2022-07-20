@@ -6,7 +6,6 @@ import { Helmet } from "react-helmet";
 import { AppRoutes } from "./navigation";
 import { queryClient } from "./service";
 import { AgoricStateProvider } from "./context/agoric";
-// import { TestServiceUI } from "./service/test-service-ui";
 import { CharacterStateProvider } from "./context/characters";
 import { ItemStateProvider } from "./context/items";
 
@@ -23,7 +22,6 @@ function App() {
             <QueryClientProvider client={queryClient}>
               <BrowserRouter>
                 <AppRoutes />
-                {/* <TestServiceUI /> */}
               </BrowserRouter>
             </QueryClientProvider>
           </AgoricStateProvider>

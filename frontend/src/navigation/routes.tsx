@@ -8,6 +8,9 @@ import { MainContainer, ErrorFallback } from "../components";
 
 export const AppRoutes: FC = () => {
   const navigate = useNavigate();
+  // const [service] = useAgoricContext();
+
+  // if (service.isLoading) return <LoadingPage />;
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>

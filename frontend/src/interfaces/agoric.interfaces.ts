@@ -66,26 +66,22 @@ interface SetItemPurses {
   type: "SET_ITEM_PURSES";
   payload: any[];
 }
-interface SetInventoryKeyPurses {
-  type: "SET_INVENTORY_KEY_PURSES";
-  payload: any[];
-}
+
 interface SetAgoric {
   type: "SET_AGORIC";
   payload: Omit<AgoricService, "apiSend">;
 }
+
 interface SetCharacterContract {
   type: "SET_CHARACTER_CONTRACT";
   payload: Contract;
 }
-interface SetAuctionContract {
-  type: "ADD_AUCTION_CONTRACT";
-  payload: Contract;
-}
+
 interface SetApiSend {
   type: "SET_APISEND";
   payload: any;
 }
+
 interface SetLoading {
   type: "SET_LOADING";
   payload: boolean;
@@ -109,6 +105,5 @@ export type AgoricStateActions =
   | SetAgoric
   | SetCharacterContract
   | SetItemPurses
-  | SetAuctionContract
   | SetApiSend
   | SetLoading;
