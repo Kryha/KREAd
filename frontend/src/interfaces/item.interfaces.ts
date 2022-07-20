@@ -20,4 +20,5 @@ export interface Item {
   details: Detail;
   date: string;
   activity: ActivityEvent[];
+  equippedTo?: string;
 }
