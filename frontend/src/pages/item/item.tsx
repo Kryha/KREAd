@@ -22,7 +22,7 @@ export const Item: FC = () => {
   return (
     <ItemWrapper height={height} position={category} width={width}>
       <BaseCharacter items={character.items} size="extraLarge" isZoomed />
-      <MenuCard title={category} items={categoryItems} amount={categoryItems.length} />
+      <MenuCard title={category} items={categoryItems} />
     </ItemWrapper>
   );
 };
