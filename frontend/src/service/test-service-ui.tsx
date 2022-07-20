@@ -1,15 +1,11 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
+
 import { mintNfts } from "./character-actions";
 import { addToInventory, buyItem, mintItem, removeFromInventory, sellItem } from "./item-actions";
-
-// import { mintCharacter, mintCharacterZCF, mintNextCharacterZCF, mintNFT, makeBidOfferForCard } from "./mint";
 import { useCharacterContext } from "../context/characters";
-// import { send } from "process";
-// import { FakeCharctersNoItems } from "./fake-characters";
 import { useAgoricContext } from "../context/agoric";
-import { AgoricState } from "../interfaces/agoric.interfaces";
 
 export const TestServiceUI = () => {
   // service referse to agoricContext
@@ -22,124 +18,124 @@ export const TestServiceUI = () => {
     console.log("CHARACTERS: ", characters);
   }, [service, characters]);
 
-  const getTimer = () => {
-    if (!service.agoric.apiSend) {
-      console.log("NO API", service);
-      return;
-    }
-    service.agoric.apiSend({
-      type: "nft/getTimerService",
-    });
-    console.log("SENT GET TIMER");
-  };
+  // const getTimer = () => {
+  //   if (!service.agoric.apiSend) {
+  //     console.log("NO API", service);
+  //     return;
+  //   }
+  //   service.agoric.apiSend({
+  //     type: "nft/getTimerService",
+  //   });
+  //   console.log("SENT GET TIMER");
+  // };
 
   // const mintItem = (agoric: AgoricState) => {
   //   console.log(agoric);
   // };
 
-  const mintCharacter = async () => {
-    if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
-      console.log("NO API / INVITATION", service);
-      return;
-    }
-    console.log("CALLIN MINT CHARACTER...");
-    // console.log(service.agoric.zoeInvitationDepositFacetId, service.purses.money[0].brand, service.purses.character[0].brandPetname);
-    const offer = {
-      // JSONable ID for this offer.  This is scoped to the origin.
-      id: Date.now(),
+  // const mintCharacter = async () => {
+  //   if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
+  //     console.log("NO API / INVITATION", service);
+  //     return;
+  //   }
+  //   console.log("CALLIN MINT CHARACTER...");
+  //   // console.log(service.agoric.zoeInvitationDepositFacetId, service.purses.money[0].brand, service.purses.character[0].brandPetname);
+  //   const offer = {
+  //     // JSONable ID for this offer.  This is scoped to the origin.
+  //     id: Date.now(),
 
-      proposalTemplate: {
-        want: {
-          Token: {
-            pursePetname: ["CHARACTER", "CB"],
-            value: 1,
-          },
-        },
-      },
+  //     proposalTemplate: {
+  //       want: {
+  //         Token: {
+  //           pursePetname: ["CHARACTER", "CB"],
+  //           value: 1,
+  //         },
+  //       },
+  //     },
 
-      // Tell the wallet that we're handling the offer result.
-      dappContext: true,
-    };
-    service.agoric.apiSend({
-      type: "character/mint",
-      data: {
-        depositFacetId: service.agoric.zoeInvitationDepositFacetId,
-        offer,
-      },
-    });
-  };
+  //     // Tell the wallet that we're handling the offer result.
+  //     dappContext: true,
+  //   };
+  //   service.agoric.apiSend({
+  //     type: "character/mint",
+  //     data: {
+  //       depositFacetId: service.agoric.zoeInvitationDepositFacetId,
+  //       offer,
+  //     },
+  //   });
+  // };
 
-  const callMintApi = async () => {
-    if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
-      console.log("NO API / INVITATION", service);
-      return;
-    }
-    console.log("CALLIN MINT ...");
-    // console.log(service.agoric.zoeInvitationDepositFacetId, service.purses.money[0].brand, service.purses.character.brand);
-    const moneyBrand = service.purses.money[0].brandPetname;
-    const pricePerNFT = {
-      brand: moneyBrand,
-      value: 1 + 1,
-    };
-    const nftAmount = {
-      brand: service.purses.character[1].brandPetname[1],
-      value: [{ id: 1 }],
-    };
+  // const callMintApi = async () => {
+  //   if (!service.agoric.apiSend || !service.agoric.zoeInvitationDepositFacetId) {
+  //     console.log("NO API / INVITATION", service);
+  //     return;
+  //   }
+  //   console.log("CALLIN MINT ...");
+  //   // console.log(service.agoric.zoeInvitationDepositFacetId, service.purses.money[0].brand, service.purses.character.brand);
+  //   const moneyBrand = service.purses.money[0].brandPetname;
+  //   const pricePerNFT = {
+  //     brand: moneyBrand,
+  //     value: 1 + 1,
+  //   };
+  //   const nftAmount = {
+  //     brand: service.purses.character[1].brandPetname[1],
+  //     value: [{ id: 1 }],
+  //   };
 
-    // const nftAmount = AmountMath.make(service.purses.character.brand, harden([{ id: 1n }]));
+  //   // const nftAmount = AmountMath.make(service.purses.character.brand, harden([{ id: 1n }]));
 
-    const proposal = harden({
-      give: {
-        Money: pricePerNFT,
-      },
-      want: {
-        NFTs: nftAmount,
-      },
-    });
+  //   const proposal = harden({
+  //     give: {
+  //       Money: pricePerNFT,
+  //     },
+  //     want: {
+  //       NFTs: nftAmount,
+  //     },
+  //   });
 
-    /*
-    const offer = {
-      // JSONable ID for this offer.  This is scoped to the origin.
-      id: Date.now(),
+  //   /*
+  //   const offer = {
+  //     // JSONable ID for this offer.  This is scoped to the origin.
+  //     id: Date.now(),
 
-      proposalTemplate: {
-        want: {
-          Token: {
-            pursePetname: tokenPursePetname,
-            value: 1000,
-          },
-        },
-      },
+  //     proposalTemplate: {
+  //       want: {
+  //         Token: {
+  //           pursePetname: tokenPursePetname,
+  //           value: 1000,
+  //         },
+  //       },
+  //     },
 
-      // Tell the wallet that we're handling the offer result.
-      dappContext: true,
-    };
-    */
-    const payload = {
-      type: "nftFaucet/sendInvitation",
-      data: {
-        depositFacetId: service.agoric.zoeInvitationDepositFacetId,
-        offer: proposal,
-      },
-    };
+  //     // Tell the wallet that we're handling the offer result.
+  //     dappContext: true,
+  //   };
+  //   */
+  //   const payload = {
+  //     type: "nftFaucet/sendInvitation",
+  //     data: {
+  //       depositFacetId: service.agoric.zoeInvitationDepositFacetId,
+  //       offer: proposal,
+  //     },
+  //   };
 
-    service.agoric.apiSend({
-      type: "character/mint",
-      data: {
-        depositFacetId: service.agoric.zoeInvitationDepositFacetId,
-        offer: proposal,
-      },
-    });
-    console.log("SENT");
-  };
+  //   service.agoric.apiSend({
+  //     type: "character/mint",
+  //     data: {
+  //       depositFacetId: service.agoric.zoeInvitationDepositFacetId,
+  //       offer: proposal,
+  //     },
+  //   });
+  //   console.log("SENT");
+  // };
 
-  const checkOwned = () => {
-    const ownedCharacters = service.purses.character.map((purse: any) => {
-      return purse.value;
-    });
-    console.log(service.purses.character, ownedCharacters);
-    charactersDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
-  };
+  // const checkOwned = () => {
+  //   const ownedCharacters = service.purses.character.map((purse: any) => {
+  //     return purse.value;
+  //   });
+  //   console.log(service.purses.character, ownedCharacters);
+  //   charactersDispatch({ type: "SET_OWNED_CHARACTERS", payload: ownedCharacters });
+  // };
 
   const mintItemNFT = async () => {
     console.log(await mintItem(service));

@@ -121,7 +121,7 @@ export const buyItem = async (service: AgoricState, itemInMarket: any) => {
   );
 
   // TODO: remove item from market after offer is accepted and processed
-  await E(publicFacet).removeFromInventory(itemInMarket.id);
+  await E(publicFacet).removeItemFromMarket(itemInMarket.id);
 };
 
 // TODO: Add price for minting // price?: bigint
