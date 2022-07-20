@@ -18,7 +18,7 @@ export const Id = styled.h3<DirectionProps>`
   ${({ isRight, category }): string => {
     if (isRight) {
       switch (category) {
-        case "styline":
+        case "noseline":
           return `
             transform: rotate(90deg);
             line-height: 100px;
@@ -28,12 +28,12 @@ export const Id = styled.h3<DirectionProps>`
             transform: rotate(90deg);
             line-height: 90px;
           `;
-        case "filter II":
+        case "liquid":
           return `
             transform: rotate(90deg);
             line-height: 75px;
           `;
-        case "filter I":
+        case "airReservoir":
           return `
             transform: rotate(90deg);
             line-height: 70px;
