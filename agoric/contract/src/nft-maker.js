@@ -514,7 +514,7 @@ const start = async (zcf) => {
 
   const getCharactersMarket = () => {
     return harden({
-      items: state.charactersMarket,
+      characters: state.charactersMarket,
     });
   };
 
