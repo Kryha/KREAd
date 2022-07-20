@@ -6,7 +6,7 @@ import { BaseCharacter, ErrorView, LoadingPage, MenuCard } from "../../component
 import { ItemWrapper } from "./styles";
 import { useMyItems, useMyCharacter } from "../../service";
 import { useParams } from "react-router-dom";
-import { Character } from "../../interfaces";
+import { Character, Item } from "../../interfaces";
 
 /**
  * TODO:
@@ -15,9 +15,9 @@ import { Character } from "../../interfaces";
  *  * Selected character equipped items
  *  * Owned items
  */
-export const Item: FC = () => {
+export const ItemPage: FC = () => {
   const { category } = useParams<"category">();
-  const [items, isLoadingItems] = useMyItems();
+  const [{ owned }, isLoadingItems] = useMyItems();
   const [
     {
       selected: [character],
@@ -27,7 +27,7 @@ export const Item: FC = () => {
   const { height, width } = useViewport();
 
   // const categoryItems = [character.items[`${category}`]];
-  const categoryItems = items.filter((item) => item.category === category);
+  const categoryItems = owned.filter((item: Item) => item.category === category);
 
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage />;
 

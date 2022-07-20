@@ -28,7 +28,6 @@ export const Inventory: FC = () => {
   );
 
   const showItemsInventory = selectedPage === Page.Items;
-  // TODO: switch between items and characters
   return (
     <BaseRoute
       sideNavigation={

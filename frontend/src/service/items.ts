@@ -23,9 +23,9 @@ export const useItem = (id: string): UseQueryResult<Item> => {
   });
 };
 
-export const useMyItems = (): [Item[], boolean] => {
-  const [{ owned, fetched }] = useItemContext();
-  const myItems = owned;
+export const useMyItems = (): [any, boolean] => {
+  const [{ owned, equipped, fetched }] = useItemContext();
+  const myItems = { owned, equipped };
   const isLoading = !fetched;
   return [myItems, isLoading];
 };
@@ -47,8 +47,8 @@ export const useFilteredItems = (
     if (!data) return { data: [], isLoading };
     if (!category && !sorting && !color && !changedRange) return { data, isLoading };
 
-    const filteredItems = data.filter((item) => isInCategory(item, category) && hasColor(item, color));
-    const filteredPrice = filteredItems.filter((item) => item.price > price.min && item.price < price.max);
+    const filteredItems = data.filter((item: Item) => isInCategory(item, category) && hasColor(item, color));
+    const filteredPrice = filteredItems.filter((item: Item) => item.price > price.min && item.price < price.max);
     const sortedItems = sortItems(sorting, filteredPrice);
 
     return { data: sortedItems, isLoading };

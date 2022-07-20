@@ -15,7 +15,9 @@ export const ItemsInventory: FC = () => {
   const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState<string>("");
 
-  const item = useMemo(() => items?.find((item) => item.id === selectedId), [items, selectedId]);
+  const allItems = [...items.owned, ...items.equipped];
+
+  const item = allItems?.find((item) => item.id === selectedId);
 
   // TODO: move to Item service
   const equip = () => {
@@ -32,7 +34,7 @@ export const ItemsInventory: FC = () => {
   // TODO: Implement error handling at servive level
   // if (isError) return <ErrorView />;
 
-  const isEmpty = !items || !items.length;
+  const isEmpty = !allItems || !allItems.length;
 
   return isEmpty ? (
     <EmptyItemInventory />
@@ -41,7 +43,7 @@ export const ItemsInventory: FC = () => {
       <FadeInOut show={true} exiting={false}>
         <DetailWrapper>
           <ItemDetailSection
-            item={item || items[0]}
+            item={item || allItems[0]}
             actions={{ primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } }}
           />
         </DetailWrapper>
