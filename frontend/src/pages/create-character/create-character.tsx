@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
-import { ContentLoader, ErrorView, FormHeader } from "../../components";
+import { ContentLoader, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
@@ -18,7 +18,7 @@ export const CreateCharacter: FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [mintedCharacter, setMintedCharacter] = useState<Character>();
   const [characterdata, setCharacterData] = useState<CharacterCreation>({ name: "" });
-  const [{ owned: myCharacters, isLoading: isLoadingCharacters }] = useMyCharacters();
+  const [myCharacters, isLoadingCharacters] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
 
@@ -62,6 +62,8 @@ export const CreateCharacter: FC = () => {
         return <Information setData={setData} disabled={createCharacter.isLoading} />;
     }
   };
+
+  if (isLoadingCharacters) return <LoadingPage />;
 
   return (
     <PageContainer

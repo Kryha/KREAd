@@ -13,15 +13,18 @@ import { useViewport } from "../../hooks";
 import { CharacterDetailSection } from "../../containers/detail-section/character-detail-section";
 import { EmptyCard } from "../empty-card";
 import { FadeInOut } from "../fade-in-out";
+import { useMyCharacters } from "../../service";
 
-interface CharacterCardProps {
+interface Props {
   id: string;
-  characters: Character[];
   showCard?: boolean;
 }
 
-export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard = false }) => {
+export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
   const navigate = useNavigate();
+
+  const [characters] = useMyCharacters();
+
   const [character, setCharacter] = useState<Character>();
   const [close, setClose] = useState(false);
 

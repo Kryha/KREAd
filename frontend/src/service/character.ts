@@ -1,15 +1,14 @@
 // TODO: Remove this, use ations + context instead
-import { Character, CharacterCreation } from "../interfaces";
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 
+import { Character, CharacterCreation } from "../interfaces";
 import { FakeCharcters } from "./fake-characters";
 import { useCharacterContext } from "../context/characters";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { sortCharacters } from "../util";
 import { mintNfts } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
-import { CharacterDispatch } from "../interfaces/character-actions.interfaces";
 
 export const useCharacters = (): UseQueryResult<Character[]> => {
   return useQuery(["characters", "all"], async () => {
@@ -27,31 +26,45 @@ export const useCharacter = (id: string): UseQueryResult<Character> => {
   });
 };
 
-// TODO: provide id as param and as query key
-export const useMyCharacter = (): [{ selected: Character[]; isLoading: boolean }, CharacterDispatch] => {
-  const [{ selected, fetched }, characterDispatch] = useCharacterContext();
-  return [{ selected, isLoading: !fetched }, characterDispatch];
+export const useSelectedCharacter = (): [Character | undefined, boolean] => {
+  const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
+
+  useEffect(() => {
+    if (!selected) {
+      owned[0] && dispatch({ type: "SET_SELECTED_CHARACTER", payload: owned[0] });
+    }
+  }, [dispatch, owned, selected]);
+
+  return [selected, !fetched];
 };
 
-export const useMyCharacters = (): [{ owned: Character[]; isLoading: boolean }, CharacterDispatch] => {
-  const [{ owned, fetched }, characterDispatch] = useCharacterContext();
-  return [{ owned, isLoading: !fetched }, characterDispatch];
+export const useMyCharacter = (id?: string): [Character | undefined, boolean] => {
+  const [owned, fetched] = useMyCharacters();
+
+  const found = useMemo(() => owned.find((c) => c.id === id), [id, owned]);
+
+  return [found, !fetched];
 };
 
-// TODO: actually implement filtering
+export const useMyCharacters = (): [Character[], boolean] => {
+  const [{ owned, fetched }] = useCharacterContext();
+
+  return [owned, !fetched];
+};
+
 export const useMyFilteredCharacters = (category: string, sorting: string): [Character[], boolean] => {
-  const [{ owned, isLoading }] = useMyCharacters();
+  const [characters, isLoading] = useMyCharacters();
 
   const isInCategory = (character: Character, category: string) => (category ? character.type === category : true);
 
   return useMemo(() => {
-    if (!owned) return [[], isLoading];
-    if (!category && !sorting) return [owned, isLoading];
+    if (!characters) return [[], isLoading];
+    if (!category && !sorting) return [characters, isLoading];
 
-    const filteredCharacters = owned.filter((character) => isInCategory(character, category));
+    const filteredCharacters = characters.filter((character) => isInCategory(character, category));
     const sortedCharacters = sortCharacters(sorting, filteredCharacters);
     return [sortedCharacters, isLoading];
-  }, [category, owned, isLoading, sorting]);
+  }, [category, characters, isLoading, sorting]);
 };
 
 // TODO: Add error management

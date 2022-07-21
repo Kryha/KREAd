@@ -11,7 +11,7 @@ export const margins = {
 };
 
 export const zIndex = {
-  forground: 10,
+  foreground: 10,
   mid: 20,
   inFront: 30,
   onTop: 40,

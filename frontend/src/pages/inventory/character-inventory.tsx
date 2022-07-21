@@ -1,21 +1,19 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { CharactersList } from "../../containers/characters-list";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { Character } from "../../interfaces";
 import { routes } from "../../navigation";
-import { useMyCharacters } from "../../service";
+import { useMyCharacter } from "../../service";
 import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
-  const [{ owned: myCharacters, isLoading: isLoadingCharacters }] = useMyCharacters();
   const [selectedId, setSelectedId] = useState<string>("");
-
-  const character = useMemo(() => myCharacters?.find((character: Character) => character.id === selectedId), [myCharacters, selectedId]);
+  const [character, isLoadingCharacters] = useMyCharacter(selectedId);
 
   const choose = () => {
     // TODO: implement character choose
@@ -30,14 +28,14 @@ export const CharactersInventory: FC = () => {
 
   if (isLoadingCharacters) return <LoadingPage />;
 
-  if (!myCharacters || !myCharacters.length) return <ErrorView />;
+  if (!character) return <ErrorView />;
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
-      <FadeInOut show={true} exiting={false}>
+      <FadeInOut show>
         <DetailWrapper>
           <CharacterDetailSection
-            character={character || myCharacters[0]}
+            character={character}
             actions={{
               primary: { text: text.character.choose, onClick: choose },
               secondary: { text: text.character.sell, onClick: sell },

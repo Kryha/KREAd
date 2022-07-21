@@ -4,7 +4,7 @@ export type CharacterState = {
   characters: Character[];
   owned: Character[];
   fetched: boolean;
-  selected: Character[];
+  selected?: Character;
 };
 
 interface SetCharacters {

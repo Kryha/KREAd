@@ -142,7 +142,7 @@ export const mintItem = async (service: AgoricState, item?: any) => {
 
   const config = await E(publicFacet).getConfig();
   const defaultItems = Object.values(config.defaultItems);
-  const itemsToMint = [item] || defaultItems;
+  const itemsToMint = item ? [item] : defaultItems;
 
   const uniqueItems = itemsToMint.map((item: any) => ({
     ...item,

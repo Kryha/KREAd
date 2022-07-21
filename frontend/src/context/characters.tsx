@@ -5,7 +5,7 @@ const initialState: CharacterState = {
   characters: [],
   owned: [],
   fetched: false,
-  selected: [],
+  selected: undefined,
 };
 
 const Context = createContext<CharacterState | undefined>(undefined);
@@ -26,7 +26,7 @@ const Reducer = (state: CharacterState, action: CharacterStateActions): Characte
       return { ...state, fetched: true, owned: [...state.owned, ...action.payload] };
 
     case "SET_SELECTED_CHARACTER":
-      return { ...state, fetched: true, selected: [action.payload] };
+      return { ...state, fetched: true, selected: action.payload };
 
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };

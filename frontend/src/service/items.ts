@@ -23,11 +23,10 @@ export const useItem = (id: string): UseQueryResult<Item> => {
   });
 };
 
-export const useMyItems = (): [any, boolean] => {
+export const useMyItems = (): [{ owned: Item[]; equipped: Item[] }, boolean] => {
   const [{ owned, equipped, fetched }] = useItemContext();
-  const myItems = { owned, equipped };
-  const isLoading = !fetched;
-  return [myItems, isLoading];
+
+  return [{ owned, equipped }, !fetched];
 };
 
 export const useFilteredItems = (

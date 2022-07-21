@@ -15,7 +15,7 @@ interface ViewProps {
   width: number;
 }
 
-export const ExpandButton = styled(SecondaryButton) <ViewProps>`
+export const ExpandButton = styled(SecondaryButton)<ViewProps>`
   position: absolute;
   z-index: 300;
   ${({ width }): string => {
@@ -30,8 +30,7 @@ export const ExpandButton = styled(SecondaryButton) <ViewProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "left: 47%;";
-    }
-    else {
+    } else {
       return "left: 48%;";
     }
   }};
@@ -45,7 +44,7 @@ export const ExpandButton = styled(SecondaryButton) <ViewProps>`
 export const CharacterIcon = styled.img<ImageProps>`
   position: absolute;
   top: 0;
-  ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.forground};`};
+  ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.character};`};
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
@@ -59,8 +58,7 @@ export const CharacterIcon = styled.img<ImageProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "width: 1018px; ";
-    }
-    else {
+    } else {
       return "width: 742px; ";
     }
   }};
@@ -97,8 +95,7 @@ export const FirstIcon = styled.img<ImageProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "width: 1018px; ";
-    }
-    else {
+    } else {
       return "width: 742px; ";
     }
   }};

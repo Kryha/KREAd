@@ -28,6 +28,7 @@ export const item = {
   details: "details",
   itemActivity: "item activity",
   equip: "equip",
+  unequip: "unequip",
   sell: "sell",
   zero: 0,
   noItemEquipped: "no item equipped",
