@@ -14,7 +14,7 @@ export const ItemSell = () => {
   const sellItem = useSellItem();
 
   const submitForm = (price: number) => {
-    sellItem.mutate({ price });
+    // sellItem.mutate({ price });
   };
 
   if (sellItem.isError) return <ErrorView />;
@@ -26,8 +26,8 @@ export const ItemSell = () => {
   if (!data || isError) return <ErrorView />;
 
   return (
-    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={{ ...data, image: data.thumbnail }}  >
-      <FadeInOut show exiting={false} >
+    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={{ ...data, image: data.thumbnail }}>
+      <FadeInOut show exiting={false}>
         <ItemDetailSection item={data} />
       </FadeInOut>
     </Sell>

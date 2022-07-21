@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 
 import { Item } from "../interfaces";
@@ -6,6 +6,8 @@ import { Items } from "./fake-item-data";
 import { sortItems } from "../util";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
 import { useItemContext } from "../context/items";
+import { useAgoricContext } from "../context/agoric";
+import { sellItem } from "./item-actions";
 
 export const useItems = (): UseQueryResult<Item[]> => {
   return useQuery(["items", "all"], async () => {
@@ -56,9 +58,15 @@ export const useFilteredItems = (
 };
 
 export const useSellItem = () => {
-  // TODO: invalidate queries
-  return useMutation(async (body: { price: number }) => {
-    if (!body.price) throw new Error("Id not specified");
-    // TODO: intergrate
+  const [service] = useAgoricContext();
+
+  return useMutation(async (body: { item: any; price: number }) => {
+    const { item, price } = body;
+    await sellItem(service, item, BigInt(price));
   });
+};
+
+export const useItemsMarket = () => {
+  const [state] = useItemContext();
+  return state.market;
 };

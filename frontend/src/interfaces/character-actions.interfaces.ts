@@ -1,5 +1,6 @@
 import { Character, CharacterInMarket } from "./character.interfaces";
 
+// TODO: add fetched flag for each array
 export type CharacterState = {
   characters: Character[];
   owned: Character[];

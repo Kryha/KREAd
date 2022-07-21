@@ -42,3 +42,12 @@ export const processPurses = (
   console.info("👛 Item Purse Info: ", newItemPurses[0].displayInfo);
   console.info("👛 Item Purse Petname: ", newItemPurses[0].brandPetname);
 };
+
+export const processOffers = (
+  offers: any[],
+  characterDispatch: CharacterDispatch,
+  itemDispatch: ItemDispatch,
+  agoricDispatch: AgoricDispatch
+) => {
+  console.log("🚀 ~ file: process.ts ~ line 52 ~ offers", offers);
+};

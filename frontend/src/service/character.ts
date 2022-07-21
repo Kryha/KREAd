@@ -5,9 +5,9 @@ import { useMutation, useQuery, UseQueryResult } from "react-query";
 import { FakeCharcters } from "./fake-characters";
 import { useCharacterContext } from "../context/characters";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { sortCharacters } from "../util";
-import { mintNfts } from "./character-actions";
+import { mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 
 export const useCharacters = (): UseQueryResult<Character[]> => {
@@ -88,4 +88,18 @@ export const useFilteredCharacters = (category: string, sorting: string, price: 
 
     return [sortedCharacters, isLoading];
   }, [category, data, isLoading, price, sorting, changedRange]);
+};
+
+export const useSellCharacter = () => {
+  const [service] = useAgoricContext();
+
+  return useMutation(async (body: { item: any; price: number }) => {
+    const { item, price } = body;
+    await sellCharacter(service, item, BigInt(price));
+  });
+};
+
+export const useCharactersMarket = () => {
+  const [state] = useCharacterContext();
+  return state.market;
 };

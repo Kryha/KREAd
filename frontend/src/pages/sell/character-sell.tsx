@@ -14,7 +14,7 @@ export const CharacterSell = () => {
   const sellItem = useSellItem();
 
   const submitForm = (price: number) => {
-    sellItem.mutate({ price });
+    // sellItem.mutate({ price });
   };
 
   if (sellItem.isError) return <ErrorView />;
@@ -31,7 +31,7 @@ export const CharacterSell = () => {
       text={{ sell: text.store.sellCharacter }}
       data={{ ...data, image: data.items, category: data.type, id: data.characterId }}
     >
-      <FadeInOut show exiting={false} >
+      <FadeInOut show exiting={false}>
         <CharacterDetailSection character={data} />
       </FadeInOut>
     </Sell>
