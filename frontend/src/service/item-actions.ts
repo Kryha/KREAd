@@ -1,6 +1,129 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
-import { Character, AgoricState } from "../interfaces";
+
+import dappConstants from "../service/conf/defaults";
+import { AgoricState } from "../interfaces/agoric.interfaces";
+import { inter } from "../util";
+import { Character } from "../interfaces";
+
+export const sellItem = async (service: AgoricState, item: any, price: bigint) => {
+  const {
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    agoric: { walletP, board, zoe },
+    purses,
+  } = service;
+
+  if (!publicFacet) return;
+
+  const itemPurse = purses.item[purses.item.length - 1];
+  const moneyPurse = purses.money[purses.money.length - 1];
+
+  if (!itemPurse || !moneyPurse) return;
+
+  const sellAssetsInstallation = await E(board).getValue(dappConstants.SELL_ASSETS_INSTALLATION_BOARD_ID);
+  const itemIssuer = await E(publicFacet).getItemIssuer();
+  const { moneyIssuer } = await E(publicFacet).getConfig();
+
+  const issuerKeywordRecord = harden({
+    Items: itemIssuer,
+    Money: moneyIssuer,
+  });
+
+  const brandKeywordRecord = harden({
+    Items: itemPurse.brand,
+    Money: moneyPurse.brand,
+  });
+
+  const sellAssetsTerms = harden({
+    pricePerItem: { value: price, brand: moneyPurse.brand },
+    issuers: issuerKeywordRecord,
+    brands: brandKeywordRecord,
+  });
+
+  const {
+    creatorInvitation,
+    instance,
+    publicFacet: sellAssetsPublicFacet,
+  } = await E(zoe).startInstance(sellAssetsInstallation, issuerKeywordRecord, sellAssetsTerms);
+
+  await E(walletP).addOffer(
+    harden({
+      id: Date.now().toString(),
+      invitation: creatorInvitation,
+      proposalTemplate: {
+        want: {
+          Money: {
+            pursePetname: moneyPurse.pursePetname,
+            value: inter(price),
+          },
+        },
+        give: {
+          Items: {
+            pursePetname: itemPurse.pursePetname,
+            value: [item],
+          },
+        },
+      },
+      dappContext: true,
+    })
+  );
+
+  const itemInMarket = {
+    ...item,
+    sell: { instance, publicFacet: sellAssetsPublicFacet, price },
+  };
+
+  // TODO: store in market after offer is accepted and processed
+  await E(publicFacet).storeItemInMarket(itemInMarket);
+};
+
+export const buyItem = async (service: AgoricState, itemInMarket: any) => {
+  const {
+    agoric: { walletP },
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    purses,
+  } = service;
+
+  if (!publicFacet || !walletP) return;
+
+  const itemPurse = purses.item[purses.item.length - 1];
+  const moneyPurse = purses.money[purses.money.length - 1];
+
+  if (!itemPurse || !moneyPurse) return;
+
+  const { sell, ...item } = itemInMarket;
+
+  const invitation = await E(sell.publicFacet).makeBuyerInvitation();
+
+  await E(walletP).addOffer(
+    harden({
+      id: Date.now().toString(),
+      invitation,
+      proposalTemplate: {
+        want: {
+          Items: {
+            pursePetname: itemPurse.pursePetname,
+            value: [item],
+          },
+        },
+        give: {
+          Money: {
+            pursePetname: moneyPurse.pursePetname,
+            value: inter(sell.price),
+          },
+        },
+      },
+      dappContext: true,
+    })
+  );
+
+  // TODO: remove item from market after offer is accepted and processed
+  await E(publicFacet).removeItemFromMarket(itemInMarket.id);
+};
 
 // TODO: Add price for minting // price?: bigint
 export const mintItem = async (service: AgoricState, item?: any) => {

@@ -2,7 +2,7 @@ export const general = {
   notFound: "this screen doesn't exist.",
   dataNotFound: "data not found",
   goHome: "go to home screen",
-  appName: "Agoric Character Builder",
+  appName: "KREAd",
   character: "character",
   characters: "characters",
   shop: "shop",
@@ -27,7 +27,7 @@ export const general = {
   theMinimiumAmountIs: "the minimum amount is IST 1",
   moreInfo: "more info",
   thereAreNoAssetsAvailable: "there are no assets available",
-  logo: "logo",
+  logo: "KREAd",
   launchingTheFirst: "launching the first character builder dApp",
   aCharcterBuilderApp:
     "a character builder dApp where all the items are NFTs and are represented by art assets. You have the freedom to build your own character and the ownership of all the equipment attached to it, so feel free to sell them, trade them or even burn them!",
@@ -35,16 +35,15 @@ export const general = {
   connectWallet: "connect wallet",
   whoWeAre: "who we are",
   ourLeadership: "our leadership includes some of the most inventive and experienced executives in the technology industry.",
-  // TODO: add actual name of app
   isPartOfAgoric:
-    "'Name of dApp' is part of Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by Kryha.",
+    "KREAd is part of Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by Kryha.",
   contactUs: "contact us",
   questionsBug: "questions, bug reports, feedback... we are here for it all.",
   sendEmailTo: "send an email to",
-  // TODO: add actual email
-  contactEmail: "x@kryha.io",
+  contactEmail: "kreadapp@kryha.io",
   forSale: "for sale",
   createCharacter: "create character",
   thereIsNoActity: "there is no activity currently.",
   buy: "buy",
+  comingSoon: "coming soon!",
 };

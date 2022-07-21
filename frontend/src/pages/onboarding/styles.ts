@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
-import { ArrowUpRightIcon } from "../../assets";
-import { PrimaryButton, TitleText } from "../../components";
+import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
+import { bounce, PrimaryButton, TitleText } from "../../components";
+import { KreadIcon } from "../../components/logo/styles";
 import { SMALL_SCREEN_WIDTH } from "../../constants";
 import { color, fontWeight, zIndex } from "../../design";
 
@@ -18,7 +19,7 @@ export const OnboardingWrapper = styled.div`
 `;
 
 export const InfoText = styled.div<HeightProps>`
-  margin-top: 40px;
+  margin-top: 8px;
   ${TitleText} {
     margin-top: 8px;
   }
@@ -57,7 +58,13 @@ export const ArrowUpRight = styled(ArrowUpRightIcon)`
   margin: 0px 0px 0px 13px !important;
 `;
 
-
+export const EndContent = styled.div<HeightProps>`
+  ${({ height }): string => `height: ${height - 100}px; min-height: ${height - 100}px;`};
+  ${TitleText} {
+    margin-top: 16px;
+  }
+  scroll-snap-align: start;
+`;
 
 export const MiddleContent = styled.div<HeightProps>`
   ${({ height }): string => `height: ${height}px; min-height: ${height}px;`};
@@ -124,4 +131,28 @@ export const EmailContainer = styled.span`
   display: inline-block;
   color: ${color.darkGrey};
   margin-top: 8px;
+`;
+export const KreadContainer = styled.div<ViewProps>`
+  ${KreadIcon} {
+    position: absolute;
+    left: 45%;
+    transform: translate(-45%, 0);
+    top: 40px;
+    width: 100px;
+    height: 24px;
+  }
+`;
+
+export const ArrowDown = styled(ArrowDownIcon)`
+  position: absolute;
+  left: 16.2%;
+  bottom: 53px;
+  -webkit-animation: ${bounce} 2s;
+  animation: ${bounce} 2s;
+  -webkit-animation-iteration-count: 2;
+  animation-iteration-count: 2;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+  animation-delay: 0.5s;
+  -webkit-animation-delay: 0.5s;
 `;
