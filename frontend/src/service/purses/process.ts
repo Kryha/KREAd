@@ -1,8 +1,9 @@
 import { E } from "@endo/eventual-send";
-import { Character, Item } from "../../interfaces";
+import { CharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
+import { mediate } from "../../util";
 
 // This fetches assets data from purses in the wallet and updates the local context state for characters & items
 export const processPurses = async (
@@ -33,42 +34,46 @@ export const processPurses = async (
 
   const equippedCharacterItems: Item[] = [];
   // Map characters to the corresponding inventory in the contract
-  const charactersWithItems = await Promise.all(
-    ownedCharacters.map(async (character: Character) => {
+  const charactersWithItems: CharacterBackend[] = await Promise.all(
+    ownedCharacters.map(async (character: CharacterBackend) => {
       const {
         items: { value: equippedItems },
       } = await E(contractPublicFacet).getCharacterInventory(character.name);
 
-      equippedCharacterItems.push(...equippedItems);
+      const frontendEquippedItems = mediate.items.toFront(equippedItems);
+
+      equippedCharacterItems.push(...frontendEquippedItems);
       return {
         ...character,
         items: {
-          hair: equippedItems.filter((item: Item) => item.category === "hair")[0],
-          headPiece: equippedItems.filter((item: Item) => item.category === "headPiece")[0],
-          noseline: equippedItems.filter((item: Item) => item.category === "noseline")[0],
-          background: equippedItems.filter((item: Item) => item.category === "background")[0],
-          midBackground: equippedItems.filter((item: Item) => item.category === "midBackground")[0],
-          mask: equippedItems.filter((item: Item) => item.category === "mask")[0],
-          airReservoir: equippedItems.filter((item: Item) => item.category === "airReservoir")[0],
-          liquid: equippedItems.filter((item: Item) => item.category === "liquid")[0],
-          clothing: equippedItems.filter((item: Item) => item.category === "clothing")[0],
-          frontMask: equippedItems.filter((item: Item) => item.category === "frontMask")[0],
+          hair: frontendEquippedItems.find((item: Item) => item.category === "hair"),
+          headPiece: frontendEquippedItems.find((item: Item) => item.category === "headPiece"),
+          noseline: frontendEquippedItems.find((item: Item) => item.category === "noseline"),
+          background: frontendEquippedItems.find((item: Item) => item.category === "background"),
+          midBackground: frontendEquippedItems.find((item: Item) => item.category === "midBackground"),
+          mask: frontendEquippedItems.find((item: Item) => item.category === "mask"),
+          airReservoir: frontendEquippedItems.find((item: Item) => item.category === "airReservoir"),
+          liquid: frontendEquippedItems.find((item: Item) => item.category === "liquid"),
+          clothing: frontendEquippedItems.find((item: Item) => item.category === "clothing"),
+          frontMask: frontendEquippedItems.find((item: Item) => item.category === "frontMask"),
         },
       };
     })
   );
 
   if (charactersWithItems.length) {
-    characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: charactersWithItems });
-    characterDispatch({ type: "SET_SELECTED_CHARACTER", payload: charactersWithItems[0] });
+    const frontendCharacters = mediate.characters.toFront(charactersWithItems);
+    characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: frontendCharacters });
+    characterDispatch({ type: "SET_SELECTED_CHARACTER", payload: frontendCharacters[0] });
   }
   // Finish loading Characters
   characterDispatch({ type: "SET_FETCHED", payload: true });
 
   // Load owned Items from wallet and character inventories
   const ownedItems = newItemPurses.flatMap((purse) => purse.value);
-  ownedItems && itemDispatch({ type: "SET_OWNED_ITEMS", payload: ownedItems });
-  equippedCharacterItems && itemDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
+  const ownedItemsFrontend = mediate.items.toFront(ownedItems);
+  itemDispatch({ type: "SET_OWNED_ITEMS", payload: ownedItemsFrontend });
+  itemDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
   itemDispatch({ type: "SET_FETCHED", payload: true });
 
   console.info(`👤 Found ${ownedCharacters.length} characters.`);

@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 
-import { Item } from "../interfaces";
+import { Item, ItemEquip } from "../interfaces";
 import { Items } from "./fake-item-data";
-import { sortItems } from "../util";
-import { MAX_PRICE, MIN_PRICE } from "../constants";
+import { filterItems, ItemFilters } from "../util";
 import { useItemContext } from "../context/items";
+import { useAgoricContext } from "../context/agoric";
+import { equipItem, unequipItem } from "./item-actions";
+import { useSelectedCharacter } from "./character";
 
 export const useItems = (): UseQueryResult<Item[]> => {
   return useQuery(["items", "all"], async () => {
@@ -23,36 +25,26 @@ export const useItem = (id: string): UseQueryResult<Item> => {
   });
 };
 
-export const useMyItems = (): [{ owned: Item[]; equipped: Item[] }, boolean] => {
+export const useMyItems = (): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean] => {
   const [{ owned, equipped, fetched }] = useItemContext();
 
-  return [{ owned, equipped }, !fetched];
+  const all = useMemo(
+    () => [...equipped.map((item) => ({ ...item, isEquipped: true })), ...owned.map((item) => ({ ...item, isEquipped: false }))],
+    [equipped, owned]
+  );
+
+  return [{ owned, equipped, all }, !fetched];
 };
 
-export const useFilteredItems = (
-  category: string,
-  sorting: string,
-  price: { min: number; max: number },
-  color: string
-): { data: Item[]; isLoading: boolean } => {
-  // TODO: Refactor so we can reuse filteredItems with different source (myItemx vs shopItems)
-  const [{ owned, equipped }, isLoading] = useMyItems();
-  const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
+export const useMyFilteredItems = (filters: ItemFilters): [ItemEquip[], boolean] => {
+  const [{ all: allItems }, isLoading] = useMyItems();
 
-  const isInCategory = (item: Item, category: string) => (category ? item.category === category : true);
-  const hasColor = (item: Item, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
+  return useMemo(() => [filterItems(allItems, filters), isLoading], [allItems, filters, isLoading]);
+};
 
-  return useMemo(() => {
-    const allItems = [...owned, ...equipped];
-    if (!allItems) return { data: [], isLoading };
-    if (!category && !sorting && !color && !changedRange && allItems.length) return { data: allItems, isLoading };
-
-    const filteredItems = allItems.filter((item: Item) => isInCategory(item, category) && hasColor(item, color));
-    const filteredPrice = filteredItems.filter((item: Item) => item.price > price.min && item.price < price.max);
-    const sortedItems = sortItems(sorting, filteredPrice);
-
-    return { data: sortedItems, isLoading };
-  }, [category, color, owned, equipped, isLoading, price, sorting, changedRange]);
+// TODO: implement
+export const useMarketFilteredItems = (filters: ItemFilters): [ItemEquip[], boolean] => {
+  return [[], true];
 };
 
 export const useSellItem = () => {
@@ -60,5 +52,39 @@ export const useSellItem = () => {
   return useMutation(async (body: { price: number }) => {
     if (!body.price) throw new Error("Id not specified");
     // TODO: intergrate
+  });
+};
+
+export const useEquipItem = () => {
+  const [service] = useAgoricContext();
+  const [{ owned }] = useMyItems();
+  const [character] = useSelectedCharacter();
+
+  return useMutation(async (body: { itemId: string }) => {
+    if (!character) return;
+
+    const item = owned.find((item) => item.id === body.itemId);
+
+    if (!item) return;
+
+    // TODO: check if unequip gets performed before
+    await equipItem(service, item, character);
+  });
+};
+
+export const useUnequipItem = () => {
+  const [service] = useAgoricContext();
+  const [{ equipped }] = useMyItems();
+  const [character] = useSelectedCharacter();
+
+  // TODO: check why tx offer gets rejected
+  return useMutation(async (body: { itemId: string }) => {
+    if (!character) return;
+
+    const item = equipped.find((item) => item.id === body.itemId);
+
+    if (!item) return;
+
+    await unequipItem(service, item, character);
   });
 };

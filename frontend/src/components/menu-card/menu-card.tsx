@@ -24,6 +24,7 @@ import { GO_BACK } from "../../constants";
 import { useViewport } from "../../hooks";
 import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
 import { EmptyCard } from "../empty-card";
+import { useEquipItem, useUnequipItem } from "../../service";
 
 interface MenuCardProps {
   title: string;
@@ -37,6 +38,9 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
   const { width: viewWidth, height: viewHeight } = useViewport();
   const [selectedId, setSelectedId] = useState<string>("");
 
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
+
   const allItems = useMemo(() => {
     if (equippedItem) return [equippedItem, ...unequippedItems];
     return unequippedItems;
@@ -44,20 +48,19 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
 
   const selectedItem = useMemo(() => allItems?.find((item) => item.id === selectedId), [allItems, selectedId]);
 
-  const equip = () => {
-    // TODO: implement item equip
-    console.log("TODO: implement item equip");
+  const equip = (id: string) => {
+    equipItem.mutate({ itemId: id });
   };
 
-  const unequip = () => {
-    console.log("TODO: implement item unequip");
+  const unequip = (id: string) => {
+    unequipItem.mutate({ itemId: id });
   };
 
   const primaryActions = () => {
     if (selectedItem?.id === equippedItem?.id) {
-      return { text: text.item.unequip, onClick: unequip };
+      return { text: text.item.unequip, onClick: () => unequip(selectedId) };
     } else {
-      return { text: text.item.equip, onClick: equip };
+      return { text: text.item.equip, onClick: () => equip(selectedId) };
     }
   };
 
@@ -92,6 +95,8 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 imageProps={imageProps}
                 onClick={() => setSelectedId(equippedItem.id)}
                 key={equippedItem.id}
+                isEquipped
+                onButtonClick={() => unequip(equippedItem.id)}
               />
             ) : (
               <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
@@ -105,6 +110,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 imageProps={imageProps}
                 onClick={() => setSelectedId(item.id)}
                 key={item.id}
+                onButtonClick={() => equip(item.id)}
               />
             ))}
           </MenuContent>

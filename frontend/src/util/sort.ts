@@ -1,7 +1,6 @@
-import { Character, Item } from "../interfaces";
+import { Character, ItemEquip } from "../interfaces";
 
-
-export const sortItems = (sorting: string, items: Item[]): Item[] => {
+export const sortItems = (sorting: string, items: ItemEquip[]): ItemEquip[] => {
   switch (sorting) {
     case "atoz":
       return items.sort((a, b) => a.name.localeCompare(b.name));

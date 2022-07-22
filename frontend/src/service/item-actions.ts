@@ -4,7 +4,7 @@ import { E } from "@endo/eventual-send";
 import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
-import { Character } from "../interfaces";
+import { Character, Item } from "../interfaces";
 
 export const sellItem = async (service: AgoricState, item: any, price: bigint) => {
   const {
@@ -144,10 +144,11 @@ export const mintItem = async (service: AgoricState, item?: any) => {
   const defaultItems = Object.values(config.defaultItems);
   const itemsToMint = item ? [item] : defaultItems;
 
-  const uniqueItems = itemsToMint.map((item: any) => ({
-    ...item,
-    id: new Date().toUTCString(), // TODO Implement Date Service
-  }));
+  const uniqueItems = itemsToMint.map((item: any) => {
+    const date = Date.now().toString(); // TODO Implement Date Service
+
+    return { ...item, date };
+  });
 
   const invitation = await E(publicFacet).makeMintItemInvitation();
 
@@ -171,7 +172,7 @@ export const mintItem = async (service: AgoricState, item?: any) => {
 
 // TODO: Add check for slot already in use
 // If slot not empty first call removeFromInventory
-export const addToInventory = async (service: AgoricState, item: any, character: Character) => {
+export const equipItem = async (service: AgoricState, item: Item, character: Character) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -219,7 +220,7 @@ export const addToInventory = async (service: AgoricState, item: any, character:
 };
 
 // TODO: pass character as parameter to construct the proposal
-export const removeFromInventory = async (service: AgoricState, item: any, character: Character) => {
+export const unequipItem = async (service: AgoricState, item: Item, character: Character) => {
   const {
     agoric: { walletP },
     contracts: {

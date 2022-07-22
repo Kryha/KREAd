@@ -21,3 +21,11 @@ export interface Item {
   date: string;
   activity: ActivityEvent[];
 }
+
+export interface ItemBackend extends Omit<Item, "id"> {
+  id: bigint;
+}
+
+export interface ItemEquip extends Item {
+  isEquipped: boolean;
+}

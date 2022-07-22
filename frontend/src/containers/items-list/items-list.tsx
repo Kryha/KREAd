@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import { ButtonText, ColorSelector, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { BaseFilterContainer, ColorContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useFilteredItems } from "../../service";
+import { useMyFilteredItems } from "../../service";
 
 import { text } from "../../assets";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
@@ -14,7 +14,6 @@ interface Props {
   onItemClick: (id: string) => void;
 }
 
-// TODO: Add filter & sortyng Hooks and components
 export const ItemsList: FC<Props> = ({ onItemClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
@@ -22,20 +21,14 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const { data: items, isLoading } = useFilteredItems(selectedCategory, selectedSorting, { min: 0, max: 10000 }, selectedColor);
-
-
-  useEffect(() => {
-    if(items) {
-      onItemClick(items[0].id);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [items, isLoading] = useMyFilteredItems({
+    category: selectedCategory,
+    sorting: selectedSorting,
+    price: { min: 0, max: 10000 },
+    color: selectedColor,
+  });
 
   if (isLoading) return <LoadingPage />;
-
-  // TODO: get an empty section view
-  if (!items || !items.length) return <></>;
 
   const handleCategoryChange = (selected: string) => {
     setSelectedCategory(selected);
@@ -79,12 +72,27 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
       </ListHeader>
       <ButtonText customColor={color.darkGrey}>{text.param.amountOfItems(items.length)}</ButtonText>
       <HorizontalDivider />
-      <ListContainer>
-        <MenuItem data={{ ...items[0], image: items[0].thumbnail }}  key={items[0].id} onClick={() => onItemClick(items[0].id)} isInitial={intitial} removeInitial={removeInitial} />
-        {items.slice(1).map((item) => (
-          <MenuItem data={{ ...item, image: item.thumbnail }}  key={item.id} onClick={() => onItemClick(item.id)} removeInitial={removeInitial} />
-        ))}
-      </ListContainer>
+      {!!items && !!items.length && (
+        <ListContainer>
+          <MenuItem
+            data={{ ...items[0], image: items[0].thumbnail }}
+            key={items[0].id}
+            onClick={() => onItemClick(items[0].id)}
+            isInitial={intitial}
+            removeInitial={removeInitial}
+            isEquipped={items[0].isEquipped}
+          />
+          {items.slice(1).map((item) => (
+            <MenuItem
+              data={{ ...item, image: item.thumbnail }}
+              key={item.id}
+              onClick={() => onItemClick(item.id)}
+              removeInitial={removeInitial}
+              isEquipped={item.isEquipped}
+            />
+          ))}
+        </ListContainer>
+      )}
     </SortableListWrap>
   );
 };

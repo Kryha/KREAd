@@ -43,6 +43,10 @@ export interface Character {
   date: number;
 }
 
+export interface CharacterBackend extends Omit<Character, "id"> {
+  id: bigint;
+}
+
 export interface CharacterCreation {
   name: string;
 }

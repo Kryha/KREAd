@@ -7,7 +7,6 @@ import { assert, details as X } from '@agoric/assert';
 
 import { errors } from './errors';
 import { mulberry32 } from './prng';
-import { makeHashId } from './utils';
 
 /**
  * @typedef {{
@@ -17,6 +16,8 @@ import { makeHashId } from './utils';
  *   itemsMarket: ItemInMarket[]
  *   items: ItemRecord[]
  *   config?: Config
+ *   itemId: bigint
+ *   characterId: bigint
  * }} State
  *
  * @typedef {{
@@ -132,6 +133,9 @@ const start = async (zcf) => {
     charactersMarket: [],
     items: [],
     itemsMarket: [],
+
+    itemId: 0n,
+    characterId: 0n,
   };
   /**
    * Private state
@@ -214,7 +218,18 @@ const start = async (zcf) => {
       want: { Item: null },
     });
     const { want } = seat.getProposal();
-    itemMint.mintGains(want, seat);
+
+    // @ts-ignore
+    const items = want.Item.value.map((item) => {
+      const id = state.itemId;
+      state.itemId += 1n;
+
+      return { ...item, id };
+    });
+
+    const newItemAmount = AmountMath.make(itemBrand, harden(items));
+
+    itemMint.mintGains({ Asset: newItemAmount }, seat);
     seat.exit();
     return 'You minted an Item NFT!';
   };
@@ -244,7 +259,9 @@ const start = async (zcf) => {
       name: newCharacterName,
     };
 
-    const newCharacterId = makeHashId(JSON.stringify(newCharacter));
+    const newCharacterId = state.characterId;
+
+    state.characterId += 1n;
 
     const newCharacterAmount1 = AmountMath.make(
       characterBrand,
@@ -271,8 +288,11 @@ const start = async (zcf) => {
       const newItem = { ...item, date: Date.now() };
       const newItemWithId = {
         ...newItem,
-        id: makeHashId(JSON.stringify(newItem)),
+        id: state.itemId,
       };
+
+      state.itemId += 1n;
+
       return newItemWithId;
     });
 
