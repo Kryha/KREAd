@@ -25,6 +25,14 @@ export const useItem = (id: string): UseQueryResult<Item> => {
   });
 };
 
+export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
+  const [{ all }, isLoading] = useMyItems();
+
+  const found = useMemo(() => all.find((item) => item.id === id), [all, id]);
+
+  return [found, isLoading];
+};
+
 export const useMyItems = (): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean] => {
   const [{ owned, equipped, fetched }] = useItemContext();
 

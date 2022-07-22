@@ -1,10 +1,10 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { routes } from "../../navigation";
-import { useEquipItem, useMyItems, useUnequipItem } from "../../service";
+import { useEquipItem, useMyItem, useMyItems, useUnequipItem } from "../../service";
 import { text } from "../../assets/text";
 import { ItemsList } from "../../containers/items-list";
 import { ItemDetailSection } from "../../containers/detail-section";
@@ -17,15 +17,18 @@ export const ItemsInventory: FC = () => {
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
 
-  const [{ all: allItems }, isLoading] = useMyItems();
   const [selectedId, setSelectedId] = useState<string>("");
-
-  const item = useMemo(() => allItems?.find((item) => item.id === selectedId), [allItems, selectedId]);
+  const [{ all: allItems }, isLoadingItems] = useMyItems();
+  const [isLoading, setIsLoading] = useState(true);
+  const [item] = useMyItem(selectedId);
 
   useEffect(() => {
-    if (isLoading || !!selectedId || !allItems.length) return;
-    setSelectedId(allItems[0].id.toString());
-  }, [allItems, isLoading, selectedId]);
+    if (isLoadingItems || selectedId) return;
+    if (allItems.length) {
+      setSelectedId(allItems[0].id.toString());
+    }
+    setIsLoading(false);
+  }, [allItems, isLoadingItems, selectedId]);
 
   const equip = () => {
     if (!item) return;
@@ -42,7 +45,7 @@ export const ItemsInventory: FC = () => {
     navigate(`${routes.sellItem}/${selectedId}`);
   };
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoadingItems || isLoading) return <LoadingPage />;
 
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
 

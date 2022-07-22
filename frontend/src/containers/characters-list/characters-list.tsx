@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import { ButtonText, ErrorView, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
@@ -19,13 +19,6 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [intitial, setInitial] = useState(true);
 
   const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
-
-  useEffect(() => {
-    if (myCharacters) {
-      onCharacterClick(myCharacters[0].id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (isLoading) return <LoadingPage />;
 

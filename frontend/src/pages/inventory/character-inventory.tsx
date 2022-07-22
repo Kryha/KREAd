@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
@@ -7,26 +7,37 @@ import { PageContainer } from "../../components/page-container";
 import { CharactersList } from "../../containers/characters-list";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
-import { useMyCharacter } from "../../service";
+import { useMyCharacter, useMyCharacters } from "../../service";
 import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
+
   const [selectedId, setSelectedId] = useState<string>("");
-  const [character, isLoadingCharacters] = useMyCharacter(selectedId);
+  const [characters, isLoadingCharacters] = useMyCharacters();
+  const [character] = useMyCharacter(selectedId);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (isLoadingCharacters || !!selectedId) return;
+    if (characters.length) {
+      setSelectedId(characters[0].id.toString());
+    }
+    setIsLoading(false);
+  }, [characters, isLoadingCharacters, selectedId]);
 
   const choose = () => {
     // TODO: implement character choose
     console.log("TODO: implement character choose");
   };
 
-  // TODO: Move to Character service
   const sell = () => {
     if (!selectedId) return;
     navigate(`${routes.sellCharacter}/${selectedId}`);
   };
 
-  if (isLoadingCharacters) return <LoadingPage />;
+  if (isLoadingCharacters || isLoading) return <LoadingPage />;
 
   if (!character) return <ErrorView />;
 

@@ -39,11 +39,11 @@ export const useSelectedCharacter = (): [Character | undefined, boolean] => {
 };
 
 export const useMyCharacter = (id?: string): [Character | undefined, boolean] => {
-  const [owned, fetched] = useMyCharacters();
+  const [owned, isLoading] = useMyCharacters();
 
   const found = useMemo(() => owned.find((c) => c.id === id), [id, owned]);
 
-  return [found, !fetched];
+  return [found, isLoading];
 };
 
 export const useMyCharacters = (): [Character[], boolean] => {
@@ -54,6 +54,7 @@ export const useMyCharacters = (): [Character[], boolean] => {
 
 export const useMyFilteredCharacters = (category: string, sorting: string): [Character[], boolean] => {
   const [characters, isLoading] = useMyCharacters();
+  console.log("🚀 ~ file: character.ts ~ line 57 ~ characters", characters);
 
   const isInCategory = (character: Character, category: string) => (category ? character.type === category : true);
 
