@@ -1,6 +1,6 @@
 import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { ItemEquip } from "../interfaces";
-import { sortItems } from "./sort";
+import { CharacterEquip, ItemEquip } from "../interfaces";
+import { sortCharacters, sortItems } from "./sort";
 
 export interface ItemFilters {
   category: string;
@@ -8,8 +8,12 @@ export interface ItemFilters {
   price: { min: number; max: number };
   color: string;
 }
+export interface CharacterFilters {
+  category: string;
+  sorting: string;
+}
 
-export const filterItems = (items: ItemEquip[], { category, sorting, price, color }: ItemFilters) => {
+export const filterItems = (items: ItemEquip[], { category, sorting, price, color }: ItemFilters): ItemEquip[] => {
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
   if (!category && !sorting && !color && !changedRange && items.length) return [];
@@ -22,4 +26,15 @@ export const filterItems = (items: ItemEquip[], { category, sorting, price, colo
   const sortedItems = sortItems(sorting, filteredPrice);
 
   return sortedItems;
+};
+
+export const filterCharacters = (characters: CharacterEquip[], { category, sorting }: CharacterFilters): CharacterEquip[] => {
+  const isInCategory = (character: CharacterEquip, category: string) => (category ? character.type === category : true);
+
+  if (!category && !sorting) return characters;
+
+  const filteredCharacters = characters.filter((character) => isInCategory(character, category));
+  const sortedCharacters = sortCharacters(sorting, filteredCharacters);
+
+  return sortedCharacters;
 };

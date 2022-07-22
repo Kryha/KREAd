@@ -6,12 +6,15 @@ import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { CharactersList } from "../../containers/characters-list";
 import { CharacterDetailSection } from "../../containers/detail-section";
+import { useCharacterStateDispatch } from "../../context/characters";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
 import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
+
+  const dispatch = useCharacterStateDispatch();
 
   const [selectedId, setSelectedId] = useState<string>("");
   const [characters, isLoadingCharacters] = useMyCharacters();
@@ -27,9 +30,10 @@ export const CharactersInventory: FC = () => {
     setIsLoading(false);
   }, [characters, isLoadingCharacters, selectedId]);
 
-  const choose = () => {
-    // TODO: implement character choose
-    console.log("TODO: implement character choose");
+  const select = () => {
+    if (!character) return;
+    const { isEquipped: _, ...rest } = character;
+    dispatch({ type: "SET_SELECTED_CHARACTER", payload: rest });
   };
 
   const sell = () => {
@@ -41,17 +45,24 @@ export const CharactersInventory: FC = () => {
 
   if (!character) return <ErrorView />;
 
+  const detailActions = () => {
+    if (character.isEquipped) {
+      return {
+        secondary: { text: text.character.sell, onClick: sell },
+      };
+    } else {
+      return {
+        primary: { text: text.character.select, onClick: select },
+        secondary: { text: text.character.sell, onClick: sell },
+      };
+    }
+  };
+
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
       <FadeInOut show>
         <DetailWrapper>
-          <CharacterDetailSection
-            character={character}
-            actions={{
-              primary: { text: text.character.choose, onClick: choose },
-              secondary: { text: text.character.sell, onClick: sell },
-            }}
-          />
+          <CharacterDetailSection character={character} actions={detailActions()} />
         </DetailWrapper>
       </FadeInOut>
     </PageContainer>

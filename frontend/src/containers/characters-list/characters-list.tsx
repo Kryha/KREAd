@@ -18,7 +18,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
+  const [myCharacters, isLoading] = useMyFilteredCharacters({ category: selectedCategory, sorting: selectedSorting });
 
   if (isLoading) return <LoadingPage />;
 
@@ -63,6 +63,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
           onClick={onCharacterClick}
           removeInitial={removeInitial}
           isInitial={intitial}
+          isEquipped={myCharacters[0].isEquipped}
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
@@ -70,6 +71,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
             key={character.id}
             onClick={onCharacterClick}
             removeInitial={removeInitial}
+            isEquipped={character.isEquipped}
           />
         ))}
       </ListContainer>

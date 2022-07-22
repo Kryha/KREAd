@@ -47,6 +47,10 @@ export interface CharacterBackend extends Omit<Character, "id"> {
   id: bigint;
 }
 
+export interface CharacterEquip extends Character {
+  isEquipped: boolean;
+}
+
 export interface CharacterCreation {
   name: string;
 }
