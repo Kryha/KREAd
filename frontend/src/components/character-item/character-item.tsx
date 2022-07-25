@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, SyntheticEvent, useState } from "react";
 
 import {
   ImageCard,
@@ -19,13 +19,19 @@ import { Character } from "../../interfaces";
 
 interface CharacterItemProps {
   character: Character;
-  onClick?: (character: Character) => void;
+  onClick: (character: Character) => void;
+  onButtonClick: (character: Character) => void;
   id: string;
 }
 
-export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }) => {
+export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onButtonClick, id }) => {
   const [selected, setSelected] = useState(false);
-  const isCharacterEquipped = character.characterId === id;
+  const isCharacterEquipped = character.id === id;
+
+  const handleButtonClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
+    onButtonClick(character);
+  };
 
   return (
     <Info
@@ -44,9 +50,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
         <InfoContainer>
           <TitleContainer>
             <MenuItemName>{character.name}</MenuItemName>
-            {isCharacterEquipped && (
-              <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>
-            )}
+            {isCharacterEquipped && <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>}
           </TitleContainer>
           <SubTitleContainer>
             <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
@@ -60,7 +64,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
               <ButtonText customColor={color.white}>{text.character.selected}</ButtonText>
             </PrimaryButton>
           ) : (
-            <SecondaryButton>
+            <SecondaryButton onClick={handleButtonClick}>
               <ButtonText>{text.character.select}</ButtonText>
             </SecondaryButton>
           )}

@@ -27,7 +27,7 @@ export const ItemSell = () => {
 
   return (
     <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={{ ...data, image: data.thumbnail }}>
-      <FadeInOut show exiting={false}>
+      <FadeInOut show>
         <ItemDetailSection item={data} />
       </FadeInOut>
     </Sell>

@@ -7,7 +7,7 @@ export const character = {
   frontMask: "front mask",
   liquid: "liquid",
   background: "background",
-  airResevoir: "air resevoir",
+  airReservoir: "air reservoir",
   clothing: "clothing",
   equip: "equip",
   sell: "sell",
@@ -47,4 +47,7 @@ export const character = {
   filter2: "filter 2",
   background2: "background 2",
   addOns: "add-ons",
+  youDoNotHave: "you do not own any characters",
+  createANewCharacter: "create a new character",
+  youDoNotOwnACharacter: "you do not own a character. Mint a character to continue.",
 };

@@ -5,6 +5,7 @@ import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
 import {color as designColors } from "../../design";
 
 import { ButtonContainer, ColorBox, ColorContainer, ColorWrapper } from "./styles";
+import { useViewport } from "../../hooks";
 // TODO: get actual colors for app
 
 interface ColorSelectorProps {
@@ -15,8 +16,10 @@ interface ColorSelectorProps {
 export const ColorSelector: FC<ColorSelectorProps> = ({ handleChange, colors }) => {
   const [selected, setSelected] = useState(-1);
   const [color, setColor] = useState("");
+  const { height } = useViewport();
+
   return (
-    <ColorBox>
+    <ColorBox height={height}>
       <ColorContainer>
         {colors.map((color, index) => (
           <ColorWrapper key={index} onClick={() => { setSelected(index); setColor(color); }} selected={selected === index}>

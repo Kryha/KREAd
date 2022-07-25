@@ -1,12 +1,12 @@
 // TODO: Remove this, use ations + context instead
-import { Character, CharacterCreation } from "../interfaces";
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 
+import { Character, CharacterCreation, CharacterEquip } from "../interfaces";
 import { FakeCharcters } from "./fake-characters";
 import { useCharacterContext } from "../context/characters";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { useCallback, useMemo } from "react";
-import { sortCharacters } from "../util";
+import { useEffect, useMemo } from "react";
+import { CharacterFilters, filterCharacters, sortCharacters } from "../util";
 import { mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 
@@ -22,40 +22,51 @@ export const useCharacter = (id: string): UseQueryResult<Character> => {
   return useQuery(["characters", id], async () => {
     //  TODO: intergrate me
 
-    return FakeCharcters.find((c) => c.characterId === id);
+    return FakeCharcters.find((c) => c.id === id);
   });
 };
 
-// TODO: provide id as param and as query key
-export const useMyCharacter = (): UseQueryResult<Character> => {
-  return useQuery(["character"], async () => {
-    //  TODO: intergrate me
+export const useSelectedCharacter = (): [Character | undefined, boolean] => {
+  const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
 
-    return FakeCharcters[0];
-  });
+  useEffect(() => {
+    if (!selected) {
+      owned[0] && dispatch({ type: "SET_SELECTED_CHARACTER", payload: owned[0] });
+    }
+  }, [dispatch, owned, selected]);
+
+  return [selected, !fetched];
 };
 
-export const useMyCharacters = (): [Character[], boolean] => {
-  const [{ owned, fetched }] = useCharacterContext();
-  const myCharacters = owned;
-  const isLoading = !fetched;
-  return [myCharacters, isLoading];
+export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolean] => {
+  const [owned, isLoading] = useMyCharacters();
+
+  const found = useMemo(() => owned.find((c) => c.id === id), [id, owned]);
+
+  return [found, isLoading];
 };
 
-// TODO: actually implement filtering
-export const useMyFilteredCharacters = (category: string, sorting: string): [Character[], boolean] => {
-  const [data, isLoading] = useMyCharacters();
+export const useMyCharacters = (): [CharacterEquip[], boolean] => {
+  const [{ owned, selected, fetched }] = useCharacterContext();
 
-  const isInCategory = (character: Character, category: string) => (category ? character.type === category : true);
+  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
+    return owned.map((character) => {
+      if (character.id === selected?.id) return { ...character, isEquipped: true };
+      return { ...character, isEquipped: false };
+    });
+  }, [owned, selected?.id]);
+
+  return [charactersWithEquip, !fetched];
+};
+
+export const useMyFilteredCharacters = (filters: CharacterFilters): [CharacterEquip[], boolean] => {
+  const [characters, isLoading] = useMyCharacters();
 
   return useMemo(() => {
-    if (!data) return [[], isLoading];
-    if (!category && !sorting) return [data, isLoading];
+    if (!filters.category && !filters.sorting) return [characters, isLoading];
 
-    const filteredCharacters = data.filter((character) => isInCategory(character, category));
-    const sortedCharacters = sortCharacters(sorting, filteredCharacters);
-    return [sortedCharacters, isLoading];
-  }, [category, data, isLoading, sorting]);
+    return [filterCharacters(characters, filters), isLoading];
+  }, [characters, filters, isLoading]);
 };
 
 // TODO: Add error management
@@ -74,6 +85,7 @@ export const useEquipCharacter = () => {
   });
 };
 
+// TODO: make this hook for market only and define filter in util
 export const useFilteredCharacters = (category: string, sorting: string, price: { min: number; max: number }): [Character[], boolean] => {
   const { data, isLoading } = useCharacters();
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
@@ -82,7 +94,10 @@ export const useFilteredCharacters = (category: string, sorting: string, price: 
   return useMemo(() => {
     if (!data) return [[], isLoading];
     if (!category && !sorting && !changedRange) return [data, isLoading];
-    const filteredCharacters = data.filter((character) => isInCategory(character, category));
+
+    const characters = data.map((character) => ({ ...character, isEquipped: false }));
+
+    const filteredCharacters = characters.filter((character) => isInCategory(character, category));
     const filteredPrice = filteredCharacters.filter((character) => character.price > price.min && character.price < price.max);
     const sortedCharacters = sortCharacters(sorting, filteredPrice);
 
@@ -93,9 +108,9 @@ export const useFilteredCharacters = (category: string, sorting: string, price: 
 export const useSellCharacter = () => {
   const [service] = useAgoricContext();
 
-  return useMutation(async (body: { item: any; price: number }) => {
-    const { item, price } = body;
-    await sellCharacter(service, item, BigInt(price));
+  return useMutation(async (body: { character: any; price: number }) => {
+    const { character, price } = body;
+    await sellCharacter(service, character, BigInt(price));
   });
 };
 

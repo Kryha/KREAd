@@ -6,6 +6,7 @@ export type CharacterState = {
   owned: Character[];
   market: CharacterInMarket[];
   fetched: boolean;
+  selected?: Character;
 };
 
 interface SetCharacters {
@@ -38,6 +39,11 @@ interface AddCharactersMarket {
   payload: CharacterInMarket[];
 }
 
+interface SetSelectedCharacter {
+  type: "SET_SELECTED_CHARACTER";
+  payload: Character;
+}
+
 interface SetFetched {
   type: "SET_FETCHED";
   payload: boolean;
@@ -55,6 +61,7 @@ export type CharacterStateActions =
   | SetOwnedCharacters
   | AddOwnedCharacters
   | SetCharactersMarket
-  | AddCharactersMarket;
+  | AddCharactersMarket
+  | SetSelectedCharacter;
 
 export type CharacterDispatch = React.Dispatch<CharacterStateActions>;

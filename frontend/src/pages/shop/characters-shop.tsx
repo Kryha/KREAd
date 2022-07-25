@@ -19,15 +19,7 @@ import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { useFilteredCharacters } from "../../service";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
-import {
-  DetailContainer,
-  FilterContainer,
-  FilterWrapper,
-  ItemContainer,
-  ItemWrapper,
-  SelectorContainer,
-  SortByContainer,
-} from "./styles";
+import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, SelectorContainer, SortByContainer } from "./styles";
 import { Character } from "../../interfaces";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +50,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   const buy = () => {
     if (!selectedCharacter) return;
-    navigate(`${routes.buyCharacter}/${selectedCharacter.characterId}`);
+    navigate(`${routes.buyCharacter}/${selectedCharacter.id}`);
   };
 
   const openFilter = (id: string) => {
@@ -127,7 +119,13 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
               <DetailContainer>
                 <CharacterDetailSection
                   character={selectedCharacter}
-                  actions={{ onClose: () => { setSelectedCharacter(undefined); setClose(true);}, primary: { text: text.item.buy, onClick: buy } }}
+                  actions={{
+                    onClose: () => {
+                      setSelectedCharacter(undefined);
+                      setClose(true);
+                    },
+                    primary: { text: text.item.buy, onClick: buy },
+                  }}
                 />
               </DetailContainer>
             )}

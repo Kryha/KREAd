@@ -3,10 +3,11 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
+import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemSell, CharacterSell, Onboarding, Privacy } from "../pages";
 import { MainContainer, ErrorFallback, LoadingPage } from "../components";
-import { useAgoricContext } from "../context/agoric";
-import { CharacterBuy, CharacterSell, CreateCharacter, Inventory, Item, ItemBuy, ItemSell, Landing, Privacy, Shop } from "../pages";
+import { ItemPage } from "../pages/item";
 import { TestServiceUI } from "../service/test-service-ui";
+import { useAgoricContext } from "../context/agoric";
 
 export const AppRoutes: FC = () => {
   const navigate = useNavigate();
@@ -18,9 +19,10 @@ export const AppRoutes: FC = () => {
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
       <MainContainer>
         <Routes>
-          {/* <Route path={routes.root} element={<Onboarding />} /> */}
+          <Route path={routes.root} element={<Onboarding />} />
+
           <Route path={routes.character} element={<Landing />} />
-          <Route path={`${routes.items}/:category`} element={<Item />} />
+          <Route path={`${routes.items}/:category`} element={<ItemPage />} />
           <Route path={routes.shop} element={<Shop />} />
           <Route path={routes.inventory} element={<Inventory />} />
           <Route path={routes.createCharacter} element={<CreateCharacter />} />

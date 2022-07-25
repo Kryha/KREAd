@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import { BellIcon, CloseIcon, DownArrowIcon } from "../../assets";
-import { SecondaryButton } from "../../components";
+import { CloseIcon, DownArrowIcon } from "../../assets";
 import { disappear, fadeIn } from "../../components/atoms/animations";
 import { CharacterWrapper } from "../../components/base-character/styles";
 import { color, margins } from "../../design";
@@ -27,43 +26,6 @@ export const Close = styled(CloseIcon)`
 
 export const BaseWrapper = styled.div``;
 
-interface NotificationProps {
-  open: boolean;
-}
-
-export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
-  padding: ${margins.mini};
-  position: relative;
-  z-index: 1000;
-  ${Close} {
-    margin: 0px 6px !important;
-    width: 15px;
-    height: 15px;
-  }
-  ${({ open }): string => {
-    return open
-      ? `
-        border-color: ${color.black} !important;
-        `
-      : `
-
-      `;
-  }};
-`;
-
-export const NotificationWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px;
-  gap: ${margins.small};
-`;
-
-export const Notification = styled(BellIcon)`
-  width: 15px;
-  height: 15px;
-`;
-
 export const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -89,10 +51,6 @@ export const CharacterCardWrapper = styled.div`
   z-index: 10000;
   bottom: ${margins.big};
   left: 30px;
-`;
-
-export const NotificationContainer = styled.div`
-  position: relative;
 `;
 
 export const Tag = styled.div`

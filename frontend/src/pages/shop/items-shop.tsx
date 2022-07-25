@@ -18,18 +18,10 @@ import {
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useFilteredItems } from "../../service";
+import { useMarketFilteredItems } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
-import {
-  DetailContainer,
-  FilterContainer,
-  FilterWrapper,
-  ItemContainer,
-  ItemWrapper,
-  SelectorContainer,
-  SortByContainer,
-} from "./styles";
+import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, SelectorContainer, SortByContainer } from "./styles";
 import { Item } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
@@ -50,10 +42,15 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
 
-  const { data: items, isLoading: isLoading } = useFilteredItems(selectedCategory, selectedSorting, selectedPrice, selectedColor);
+  const [items, isLoading] = useMarketFilteredItems({
+    category: selectedCategory,
+    sorting: selectedSorting,
+    price: selectedPrice,
+    color: selectedColor,
+  });
 
   const noFilteredItems =
-    (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice)  && (!items || !items.length);
+    (!selectedCategory.length || !selectedSorting.length || !selectedColor.length || !selectedPrice) && (!items || !items.length);
 
   const handlePriceChange = (min: number, max: number) => {
     setSelectedPrice({ min: min, max: max });

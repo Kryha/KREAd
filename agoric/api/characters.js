@@ -3,7 +3,7 @@ export const defaultCharacters = [
     title: 'character 1',
     name: 'character 1',
     type: 'Tempet Scavenger',
-    characterId: '7899',
+    id: '7899',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
@@ -24,13 +24,12 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
   {
     title: 'character 2',
     name: 'character 2',
     type: 'Tempet Scavenger',
-    characterId: '78992',
+    id: '78992',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
@@ -51,14 +50,13 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
   {
     title: 'character 3',
     url: 'https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png',
     name: 'character 3',
     type: 'Tempet Scavenger',
-    characterId: '78991',
+    id: '78991',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
@@ -79,14 +77,13 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
   {
     title: 'character 4',
     url: 'https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png',
     name: 'character 4',
     type: 'Tempet Scavenger',
-    characterId: '78991',
+    id: '78991',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
@@ -107,6 +104,5 @@ export const defaultCharacters = [
       date: '1235667272',
     },
     price: 123123,
-    slots: [],
   },
 ];

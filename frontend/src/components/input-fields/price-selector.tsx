@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react
 
 import { text } from "../../assets/text";
 import { color } from "../../design";
+import { useViewport } from "../../hooks";
 import { BoldLabel, ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
 import {
   ButtonContainer,
@@ -32,6 +33,7 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
   const [widthRange, setWidthRange] = useState(0);
   const minValRef = useRef(min);
   const maxValRef = useRef(max);
+  const { height } = useViewport();
 
   const getPercent = useCallback((value: number) =>
     Math.round(((value - min) / (max - min)) * 100), [min, max]);
@@ -66,7 +68,7 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
   };
 
   return (
-    <ColorBox>
+    <ColorBox height={height}>
       <RangeContainer>
         <InputWrapper>
           <InputContainer>

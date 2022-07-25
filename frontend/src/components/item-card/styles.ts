@@ -24,6 +24,7 @@ export const ElementWrapper = styled.div`
   position: relative;
   width: 120px;
   height: 120px;
+  min-width: 120px;
   overflow: hidden;
   cursor: pointer;
 

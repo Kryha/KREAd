@@ -1,28 +1,34 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { useViewport } from "../../hooks";
-
 import { BaseCharacter, ErrorView, LoadingPage, MenuCard } from "../../components";
 import { ItemWrapper } from "./styles";
-import { useMyItems, useMyCharacter } from "../../service";
+import { useMyItems, useSelectedCharacter } from "../../service";
 import { useParams } from "react-router-dom";
+import { isItemCategory, Item } from "../../interfaces";
+import { text } from "../../assets";
 
-export const Item: FC = () => {
-  const { category } = useParams<"category">();
-  const [items, isLoadingItems] = useMyItems();
-  const { data: character, isLoading: isLoadingCharacter, isError: isErrorCharacters } = useMyCharacter();
+export const ItemPage: FC = () => {
   const { height, width } = useViewport();
+  const { category } = useParams<"category">();
+
+  const [{ owned }, isLoadingItems] = useMyItems();
+  const [character, isLoadingCharacter] = useSelectedCharacter();
+
+  const [equippedItem, unequippedItems]: [Item | undefined, Item[]] = useMemo(() => {
+    if (!isItemCategory(category)) return [undefined, []];
+
+    return [character?.items[category], owned.filter((item) => item.category === category)];
+  }, [category, character?.items, owned]);
 
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage />;
 
-  if (!items || !character || !items.length || !category || isErrorCharacters) return <ErrorView />;
-
-  const categoryItems = items.filter((item) => item.category === category);
+  if (!category || !character || !isItemCategory(category)) return <ErrorView />;
 
   return (
     <ItemWrapper height={height} position={category} width={width}>
       <BaseCharacter items={character.items} size="extraLarge" isZoomed />
-      <MenuCard title={category} items={categoryItems} amount={categoryItems.length} />
+      <MenuCard title={text.param.categories[category]} equippedItem={equippedItem} unequippedItems={unequippedItems} />
     </ItemWrapper>
   );
 };

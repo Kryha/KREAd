@@ -23,8 +23,6 @@ const {
   brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
 } = dappConstants;
 
-console.info(`DAPP CONSTANTS: ${dappConstants}`);
-
 const initialState: AgoricState = {
   status: {
     walletConnected: false,
@@ -123,29 +121,43 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     let walletDispatch: (arg0: any) => any;
 
     const onConnect = async () => {
+      // Set up wallet through socket
       console.info("Connecting to wallet...");
 
       const rawApiSend = await connect("/api/nft-maker", apiRecv, { characterDispatch });
       dispatch({ type: "SET_APISEND", payload: rawApiSend });
 
       const socket = getActiveSocket();
+
       const {
         abort: ctpAbort,
         dispatch: ctpDispatch,
         getBootstrap,
       } = makeCapTP("CB", (obj: any) => socket.send(JSON.stringify(obj)), otherSide);
+
       walletAbort = ctpAbort;
       walletDispatch = ctpDispatch;
       const walletP = getBootstrap();
       walletPRef.current = walletP;
       dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
 
+      // Initialize agoric service based on constants
+      const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
+      const zoe = E(walletP).getZoe();
+      const board = E(walletP).getBoard();
+      const instanceNft = await E(board).getValue(INSTANCE_NFT_MAKER_BOARD_ID);
+      const nftPublicFacet = await E(zoe).getPublicFacet(instanceNft);
+      const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
+
+      dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
+      dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
+
       async function watchPurses() {
         const pn = E(walletP).getPursesNotifier();
         // TODO: check iterateNotifier race condition on first run (when purses are not yet created in the wallet)
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
-          processPurses(purses, characterDispatch, itemDispatch, dispatch, {
+          processPurses(purses, nftPublicFacet, characterDispatch, itemDispatch, dispatch, {
             money: MONEY_BRAND_BOARD_ID,
             character: CHARACTER_BRAND_BOARD_ID,
             item: ITEM_BRAND_BOARD_ID,
@@ -169,6 +181,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         console.error("got watchOffers err", err);
       });
 
+      // TODO: Check if purses already exist before suggesting installation
       // Suggest installation and brands to wallet
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
@@ -178,23 +191,25 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
       ]);
 
-      // Initialize agoric service based on constants
-      const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
-      const zoe = E(walletP).getZoe();
-      const board = E(walletP).getBoard();
-      const instanceNft = await E(board).getValue(INSTANCE_NFT_MAKER_BOARD_ID);
-      const nftPublicFacet = await E(zoe).getPublicFacet(instanceNft);
-      const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
-      dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
-      dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
+      // TODO: Fetch owned Characters from the wallet character purse
+      // This currently returns every Minted Character
+      // {name, character: Character, inventory: inventorySeat}
+      // Fetch Characters from Wallet
+      // const characterNFTs = await E(nftPublicFacet).getCharacters();
+      // const characterNFTs = await E()
 
-      // Fetch Characters from Chain
-      const characterNFTs = await E(nftPublicFacet).getCharacters();
-      characterDispatch({ type: "SET_CHARACTERS", payload: characterNFTs.characters });
+      // TODO: Loop through own characters and fetch corresponding item list from itemsRepo in the contract
+      // OR update getCharacters to enrich characters with the corresponding items before returning them?
+
+      // characterDispatch({ type: "SET_CHARACTERS", payload: characterNFTs.characters });
+
+      // TODO: creaate a "SET_CHARACTER_INVENTORIES" action
+      // set up am item or character state to hold the inventory seats (we'll need to get the values from the seats )
 
       // Fetch Items from Chain
-      const itemNFTs = await E(nftPublicFacet).getItems();
-      itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
+      // TODO: Add getMyItems() instead of global getItems
+      // const itemNFTs = await E(nftPublicFacet).getItems();
+      // itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
       dispatch({ type: "SET_LOADING", payload: false });
 
       // TODO: set up chain notifiers

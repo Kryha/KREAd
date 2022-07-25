@@ -1,5 +1,5 @@
 import { ActivityEvent } from "./activity.interfaces";
-import { Detail, Slots } from "./character.interfaces";
+import { Detail } from "./character.interfaces";
 
 export interface Item {
   name: string;
@@ -19,7 +19,6 @@ export interface Item {
   price: number;
   details: Detail;
   date: string;
-  slots: Slots[];
   activity: ActivityEvent[];
 }
 
@@ -28,4 +27,12 @@ export interface ItemInMarket extends Item {
     publicFacet: any;
     price: bigint;
   };
+}
+
+export interface ItemBackend extends Omit<Item, "id"> {
+  id: bigint;
+}
+
+export interface ItemEquip extends Item {
+  isEquipped: boolean;
 }

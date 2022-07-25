@@ -20,13 +20,13 @@ import {
   TempetMask,
   TempetMaskThumbnail,
   TempetStyleline,
-  TempetStylelineThumbnail
+  TempetStylelineThumbnail,
 } from "../assets";
 
 export const FakeCharacterItems: CharacterItems = {
-  styleline: {
+  noseline: {
     name: "AirTox: Fairy Dust Elite",
-    category: "styleline",
+    category: "noseline",
     id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -49,7 +49,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://yourmetadata.com",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -88,9 +87,9 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  background1: {
+  background: {
     name: "AirTox: Fairy Dust Elite",
-    category: "background1",
+    category: "background",
     id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -113,7 +112,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -177,7 +175,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -241,7 +238,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -305,7 +301,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -344,9 +339,9 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  addOns: {
+  frontMask: {
     name: "AirTox: Fairy Dust Elite",
-    category: "add-ons",
+    category: "frontMask",
     id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -369,7 +364,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -408,9 +402,9 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  filter1: {
+  airReservoir: {
     name: "AirTox: Fairy Dust Elite",
-    category: "filter1",
+    category: "airReservoir",
     id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -433,7 +427,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -472,7 +465,7 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  background2: {
+  midBackground: {
     name: "AirTox: Fairy Dust Elite",
     category: "background2",
     id: "9",
@@ -497,7 +490,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -536,9 +528,9 @@ export const FakeCharacterItems: CharacterItems = {
       },
     ],
   },
-  filter2: {
+  liquid: {
     name: "AirTox: Fairy Dust Elite",
-    category: "airresevoir",
+    category: "airReservoir",
     id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -561,7 +553,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -625,7 +616,6 @@ export const FakeCharacterItems: CharacterItems = {
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -669,7 +659,7 @@ export const FakeCharacterItems: CharacterItems = {
 export const Items: Item[] = [
   {
     name: "NoseLine: Fairy Dust Elite",
-    category: "styleline",
+    category: "noseline",
     id: "1",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -692,7 +682,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -756,7 +745,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -820,7 +808,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -884,7 +871,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -948,7 +934,6 @@ export const Items: Item[] = [
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -989,7 +974,7 @@ export const Items: Item[] = [
   },
   {
     name: "Front Mask: Fairy Dust Elite",
-    category: " add-ons",
+    category: "frontMask",
     id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1012,7 +997,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1053,7 +1037,7 @@ export const Items: Item[] = [
   },
   {
     name: "Liquid: Fairy Dust Elite",
-    category: "filter1",
+    category: "airReservoir",
     id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1076,7 +1060,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1140,7 +1123,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1181,7 +1163,7 @@ export const Items: Item[] = [
   },
   {
     name: "Air Reservoir: Fairy Dust Elite",
-    category: "filter1",
+    category: "airReservoir",
     id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1204,7 +1186,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1268,7 +1249,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
@@ -1309,7 +1289,7 @@ export const Items: Item[] = [
   },
   {
     name: "Air reservoir 2: Fairy Dust Elite",
-    category: "filter2",
+    category: "liquid",
     id: "12339",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1332,7 +1312,6 @@ export const Items: Item[] = [
       metadata: "",
     },
     date: "23213123",
-    slots: [],
     activity: [
       {
         name: "transfer",
