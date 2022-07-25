@@ -1,10 +1,13 @@
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import { AnimatedLogo, BoldLabel, Footer, MenuText, OnboardingCharacter, TitleText } from "../../components";
+import { AnimatedLogo, BoldLabel, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowDown,
+  ArrowUp,
+  ButtonContainer,
   Email,
   EmailContainer,
   EndContent,
@@ -17,17 +20,16 @@ import {
   SectionContainer,
 } from "./styles";
 import { useViewport } from "../../hooks";
+import { routes } from "../../navigation";
 
 export const Onboarding: FC = () => {
-  // TODO: uncomment
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { width, height } = useViewport();
 
-  // TODO: uncomment
-  // const connectWallet = () => {
-  //   // TODO: check if you have any assets in your wallet & connect to wallet
-  //   navigate(routes.createCharacter);
-  // };
+  const connectWallet = () => {
+    // TODO: check if you have any assets in your wallet & connect to wallet
+    navigate(routes.createCharacter);
+  };
 
   return (
     <OnboardingContainer height={height} width={width}>
@@ -37,14 +39,12 @@ export const Onboarding: FC = () => {
             <BoldLabel customColor={color.black}>{text.general.comingSoon}</BoldLabel>
             <MenuText>{text.general.launchingTheFirst}</MenuText>
             <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-            {/* TODO: uncomment */}
-            {/* <ButtonContainer>
-            <PrimaryButton onClick={() => connectWallet()}>
-              <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-              <ArrowUp />
-            </PrimaryButton>
-          </ButtonContainer>
-          */}
+            <ButtonContainer>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ButtonContainer>
           </SectionContainer>
         </InfoText>
         <MiddleContent height={height}>
@@ -58,8 +58,7 @@ export const Onboarding: FC = () => {
           <SectionContainer>
             <MenuText>{text.general.contactUs}</MenuText>
             <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-            <EmailContainer>
-              {text.general.sendEmailTo} </EmailContainer>
+            <EmailContainer>{text.general.sendEmailTo} </EmailContainer>
             <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
           </SectionContainer>
         </EndContent>

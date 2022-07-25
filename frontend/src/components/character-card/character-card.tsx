@@ -1,14 +1,7 @@
 import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
-import {
-  CardActionsContainer,
-  CharacterWrapper,
-  CharacterContent,
-  ArrowUp,
-  CharacterCardWrapper,
-  EmptyViewContainer,
-} from "./styles";
+import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper, EmptyViewContainer } from "./styles";
 import { ButtonText, Overlay, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
@@ -20,81 +13,103 @@ import { useViewport } from "../../hooks";
 import { CharacterDetailSection } from "../../containers/detail-section/character-detail-section";
 import { EmptyCard } from "../empty-card";
 import { FadeInOut } from "../fade-in-out";
+import { useMyCharacters, useSelectedCharacter } from "../../service";
+import { useCharacterStateDispatch } from "../../context/characters";
 
-interface CharacterCardProps {
+interface Props {
   id: string;
-  characters: Character[];
   showCard?: boolean;
 }
 
-export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard = false }) => {
+export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
   const navigate = useNavigate();
+
+  const [characters] = useMyCharacters();
+  const [selectedCharacter] = useSelectedCharacter();
+  const dispatch = useCharacterStateDispatch();
+
   const [character, setCharacter] = useState<Character>();
   const [close, setClose] = useState(false);
 
   const { width, height } = useViewport();
 
-  const sortedCharacters = useMemo(
-    () => {
-      const allItems = [...characters];
-      const fromIndex = characters.findIndex((character) => character.characterId === id);
-      allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
-      return allItems;
-    }, [characters, id]);
+  const sortedCharacters = useMemo(() => {
+    const allItems = [...characters];
+    const fromIndex = characters.findIndex((character) => character.id === id);
+    allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
+    return allItems;
+  }, [characters, id]);
 
   const showInfo = (values: Character) => {
     setCharacter(values);
   };
 
-  const choose = () => {
-    // TODO: implement character choose
-    console.log("TODO: implement character choose");
+  const select = (character: Character) => {
+    if (!character) return;
+    dispatch({ type: "SET_SELECTED_CHARACTER", payload: character });
+  };
+
+  const selectFromState = () => {
+    if (!character) return;
+    dispatch({ type: "SET_SELECTED_CHARACTER", payload: character });
   };
 
   const sell = () => {
     if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.characterId}`);
+    navigate(`${routes.sellCharacter}/${character.id}`);
+  };
+
+  const detailActions = () => {
+    if (!character) return {};
+    if (character.id === selectedCharacter?.id) {
+      return {
+        secondary: { text: text.character.sell, onClick: sell },
+        onClose: () => {
+          setCharacter(undefined);
+          setClose(true);
+        },
+      };
+    } else {
+      return {
+        primary: { text: text.character.select, onClick: selectFromState },
+        secondary: { text: text.character.sell, onClick: sell },
+        onClose: () => {
+          setCharacter(undefined);
+          setClose(true);
+        },
+      };
+    }
   };
 
   return (
     <>
       <FadeInOut show={showCard} exiting={close}>
         <CharacterWrapper width={width} height={height} showCard={showCard}>
-          <>
-            <EmptyViewContainer>
-              {!sortedCharacters.length && (
-                <EmptyCard
-                  title={text.character.thereAreNoCharactersAvailable}
-                  description={text.character.minANewCharcater}
-                />
-              )}
-            </EmptyViewContainer>
-            <CharacterContent>
-              {sortedCharacters.map((character, index) => (
-                <CharacterItem character={character} key={index} onClick={showInfo} id={id} />
-              ))}
-            </CharacterContent>
+          <EmptyViewContainer>
+            {!sortedCharacters.length && (
+              <EmptyCard title={text.character.thereAreNoCharactersAvailable} description={text.character.minANewCharcater} />
+            )}
+          </EmptyViewContainer>
 
-            <CardActionsContainer>
-              <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
-              <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
-                <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
-                <ArrowUp />
-              </PrimaryButton>
-            </CardActionsContainer>
-          </>
+          <CharacterContent>
+            {sortedCharacters.map((character, index) => (
+              <CharacterItem character={character} key={index} onClick={showInfo} onButtonClick={select} id={id} />
+            ))}
+          </CharacterContent>
+
+          <CardActionsContainer>
+            <ButtonInfo title={text.general.toolTipTitle} info={text.general.toolTipInfo} />
+            <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
+              <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
+              <ArrowUp />
+            </PrimaryButton>
+          </CardActionsContainer>
         </CharacterWrapper>
       </FadeInOut>
+
       {character && (
         <CharacterCardWrapper>
-          <CharacterDetailSection
-            character={character}
-            actions={{
-              primary: { text: text.character.choose, onClick: choose },
-              secondary: { text: text.character.sell, onClick: sell },
-              onClose: () => {setCharacter(undefined); setClose(true); } ,
-            }}
-          />
+          <CharacterDetailSection character={character} actions={detailActions()} />
         </CharacterCardWrapper>
       )}
       <FadeInOut show={!!character} exiting={!character}>

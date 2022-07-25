@@ -26,8 +26,8 @@ export const ItemSell = () => {
   if (!data || isError) return <ErrorView />;
 
   return (
-    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={{ ...data, image: data.thumbnail }}  >
-      <FadeInOut show exiting={false} >
+    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={{ ...data, image: data.thumbnail }}>
+      <FadeInOut show>
         <ItemDetailSection item={data} />
       </FadeInOut>
     </Sell>

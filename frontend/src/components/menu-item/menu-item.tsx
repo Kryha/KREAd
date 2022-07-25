@@ -14,34 +14,39 @@ export interface Data {
   level: number;
   category: string;
   id: string;
-  equipped?: boolean;
 }
 
 interface MenuItemProps {
   data: Data;
   onClick?: (id: string) => void;
+  onButtonClick?: () => void;
+  isEquipped?: boolean;
+  isForSale?: boolean;
   imageProps?: ImageProps;
   isInitial?: boolean;
   removeInitial?: () => void;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isInitial = false, removeInitial }) => {
+export const MenuItem: FC<MenuItemProps> = ({
+  data,
+  imageProps,
+  onClick,
+  onButtonClick,
+  isInitial = false,
+  removeInitial,
+  isEquipped,
+  isForSale,
+}) => {
   const [selected, setSelected] = useState(false);
-  // TODO: find if item is equipped
-  const isEquipped = false;
-  const isForSale = false;
+
+  const handleClick = () => {
+    onClick && onClick(data.id);
+    removeInitial && removeInitial();
+    setSelected(true);
+  };
 
   return (
-    <Info
-      tabIndex={0}
-      selected={selected || isInitial}
-      onClick={() => {
-        onClick && onClick(data.id);
-        removeInitial && removeInitial();
-        setSelected(true);
-      }}
-      onBlur={() => setSelected(false)}
-    >
+    <Info tabIndex={0} selected={selected || isInitial} onClick={handleClick} onBlur={() => setSelected(false)}>
       {isString(data.image) ? (
         <ItemThumbnail {...imageProps} category={data.category} src={data.image} />
       ) : (
@@ -49,6 +54,7 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isIniti
           <BaseCharacter items={data.image} size="mini" />
         </ImageContainer>
       )}
+
       <InfoWrapper>
         <InfoContainer>
           <TitleContainer>
@@ -72,17 +78,20 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isIniti
             )}
           </InlineDetails>
         </InfoContainer>
-        <ButtonContainer>
-          {isEquipped ? (
-            <SecondaryButton>
-              <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
-            </SecondaryButton>
-          ) : (
-            <PrimaryButton>
-              <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
-            </PrimaryButton>
-          )}
-        </ButtonContainer>
+
+        {!!onButtonClick && (
+          <ButtonContainer>
+            {isEquipped ? (
+              <SecondaryButton onClick={() => onButtonClick()}>
+                <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
+              </SecondaryButton>
+            ) : (
+              <PrimaryButton onClick={() => onButtonClick()}>
+                <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
+              </PrimaryButton>
+            )}
+          </ButtonContainer>
+        )}
       </InfoWrapper>
     </Info>
   );

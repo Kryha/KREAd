@@ -1,4 +1,3 @@
-
 import { FC } from "react";
 
 import { CharacterItems as Items } from "../../interfaces";
@@ -16,77 +15,27 @@ export const CharacterItems: FC<CharacterItemsProps> = ({ items, showItems = tru
   return (
     <>
       <LeftItemContainer showItems={showItems}>
-        <LeftEquippedItemCard
-          item={items.hair}
-          code={text.itemSlots.hair}
-          category={text.itemSlots.hair}
-          area="top"
-        />
+        <LeftEquippedItemCard item={items.hair} code={text.itemSlots.hair} category="hair" area="top" />
         <Row>
-          <LeftEquippedItemCard
-            area="middle"
-            item={items.headPiece}
-            code={text.itemSlots.headPiece}
-            category={text.itemSlots.headPiece}
-          />
-          <LeftEquippedItemCard
-            area="middle"
-            item={items.clothing}
-            code={text.itemSlots.clothing}
-            category={text.itemSlots.clothing}
-          />
+          <LeftEquippedItemCard area="middle" item={items.headPiece} code={text.itemSlots.headPiece} category="headPiece" />
+          <LeftEquippedItemCard area="middle" item={items.clothing} code={text.itemSlots.clothing} category="clothing" />
         </Row>
         <Row>
-          <LeftEquippedItemCard
-            area="bottom"
-            item={items.background1}
-            code={text.itemSlots.background}
-            category={text.itemSlots.background}
-          />
-          <LeftEquippedItemCard
-            area="bottom"
-            item={items.background2}
-            code={text.itemSlots.background2}
-            category={text.itemSlots.background2}
-          />
+          <LeftEquippedItemCard area="bottom" item={items.background} code={text.itemSlots.background} category="background" />
+          <LeftEquippedItemCard area="bottom" item={items.midBackground} code={text.itemSlots.midBackground} category="midBackground" />
         </Row>
       </LeftItemContainer>
       <RightItemContainer showItems={showItems}>
         <RightItems>
-          <RightEquippedItemCard
-            area="top"
-            item={items.mask}
-            code={text.itemSlots.mask}
-            category={text.itemSlots.mask}
-          />
+          <RightEquippedItemCard area="top" item={items.mask} code={text.itemSlots.mask} category="mask" />
         </RightItems>
         <Row>
-          <RightEquippedItemCard
-            area="middle"
-            item={items.styleline}
-            code={text.itemSlots.styleline}
-            category={text.itemSlots.styleline}
-          />
-          <RightEquippedItemCard
-            area="middle"
-            item={items.filter1}
-            code={text.itemSlots.filter}
-            category={text.itemSlots.filter}
-          />
+          <RightEquippedItemCard area="middle" item={items.noseline} code={text.itemSlots.noseline} category="noseline" />
+          <RightEquippedItemCard area="middle" item={items.airReservoir} code={text.itemSlots.airReservoir} category="airReservoir" />
         </Row>
         <Row>
-          <RightEquippedItemCard
-            area="bottom"
-            item={items.filter2}
-            code={text.itemSlots.filter2}
-            category={text.itemSlots.filter2}
-          />
-          <RightEquippedItemCard
-            area="bottom"
-            item={items.addOns}
-            code={text.itemSlots.addOns}
-            category={text.itemSlots.addOns}
-          />
+          <RightEquippedItemCard area="bottom" item={items.liquid} code={text.itemSlots.liquid} category="liquid" />
+          <RightEquippedItemCard area="bottom" item={items.frontMask} code={text.itemSlots.frontMask} category="frontMask" />
         </Row>
       </RightItemContainer>
     </>

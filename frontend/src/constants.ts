@@ -30,3 +30,16 @@ export const EXITED = "exited";
 export const ENTERED = "entered";
 export const EXITING = "exiting";
 export const MILLISECONDS = 1000;
+
+export const ITEM_CATEGORIES = [
+  "noseline",
+  "midBackground",
+  "mask",
+  "headPiece",
+  "hair",
+  "airReservoir",
+  "liquid",
+  "background",
+  "frontMask",
+  "clothing",
+];

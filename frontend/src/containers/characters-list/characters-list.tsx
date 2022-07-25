@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import { ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
@@ -19,14 +19,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const [myCharacters, isLoading] = useMyFilteredCharacters(selectedCategory, selectedSorting);
-
-  useEffect(() => {
-    if(myCharacters) {
-      onCharacterClick(myCharacters[0].characterId);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [myCharacters, isLoading] = useMyFilteredCharacters({ category: selectedCategory, sorting: selectedSorting });
 
   if (isLoading) return <LoadingPage />;
 
@@ -67,18 +60,20 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
       <HorizontalDivider />
       <ListContainer>
         <MenuItem
-          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].characterId }}
-          key={myCharacters[0].characterId}
+          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].id }}
+          key={myCharacters[0].id}
           onClick={onCharacterClick}
           removeInitial={removeInitial}
           isInitial={intitial}
+          isEquipped={myCharacters[0].isEquipped}
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
-            data={{ ...character, image: character.items, category: character.type, id: character.characterId }}
-            key={character.characterId}
+            data={{ ...character, image: character.items, category: character.type, id: character.id }}
+            key={character.id}
             onClick={onCharacterClick}
             removeInitial={removeInitial}
+            isEquipped={character.isEquipped}
           />
         ))}
       </ListContainer>

@@ -23,8 +23,14 @@ interface SetOwnedItems {
   type: "SET_OWNED_ITEMS";
   payload: Item[];
 }
+
 interface AddOwnedItems {
   type: "ADD_OWNED_ITEMS";
+  payload: Item[];
+}
+
+interface SetEquippedItems {
+  type: "SET_EQUIPPED_ITEMS";
   payload: Item[];
 }
 
@@ -47,6 +53,15 @@ interface Reset {
   type: "RESET";
 }
 
-export type ItemStateActions = Reset | SetFetched | SetItems | AddItems | SetOwnedItems | AddOwnedItems | SetItemsMarket | AddItemsMarket;
+export type ItemStateActions =
+  | Reset
+  | SetFetched
+  | SetItems
+  | AddItems
+  | SetOwnedItems
+  | AddOwnedItems
+  | SetItemsMarket
+  | AddItemsMarket
+  | SetEquippedItems;
 
 export type ItemDispatch = React.Dispatch<ItemStateActions>;
