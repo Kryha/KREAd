@@ -27,7 +27,7 @@ export const general = {
   theMinimiumAmountIs: "the minimum amount is IST 1",
   moreInfo: "more info",
   thereAreNoAssetsAvailable: "there are no assets available",
-  logo: "KREADd",
+  logo: "KREAd",
   launchingTheFirst: "launching the first character builder dApp",
   aCharcterBuilderApp:
     "a character builder dApp where all the items are NFTs and are represented by art assets. You have the freedom to build your own character and the ownership of all the equipment attached to it, so feel free to sell them, trade them or even burn them!",
@@ -36,7 +36,7 @@ export const general = {
   whoWeAre: "who we are",
   ourLeadership: "our leadership includes some of the most inventive and experienced executives in the technology industry.",
   isPartOfAgoric:
-    "KREADd is part of Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by Kryha.",
+    "KREAd is part of Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by Kryha.",
   contactUs: "contact us",
   questionsBug: "questions, bug reports, feedback... we are here for it all.",
   sendEmailTo: "send an email to",
