@@ -16,8 +16,8 @@ import { mulberry32 } from './prng';
  *   itemsMarket: ItemInMarket[]
  *   items: ItemRecord[]
  *   config?: Config
- *   itemId: bigint
- *   characterId: bigint
+ *   itemCount: bigint
+ *   characterCount: bigint
  * }} State
  *
  * @typedef {{
@@ -37,7 +37,7 @@ import { mulberry32 } from './prng';
  * }} CharacterRecord
  *
  * @typedef {{
- *   name: string
+ *   id: bigint
  *   character: object
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
@@ -134,8 +134,8 @@ const start = async (zcf) => {
     items: [],
     itemsMarket: [],
 
-    itemId: 0n,
-    characterId: 0n,
+    itemCount: 0n,
+    characterCount: 0n,
   };
   /**
    * Private state
@@ -221,8 +221,8 @@ const start = async (zcf) => {
 
     // @ts-ignore
     const items = want.Item.value.map((item) => {
-      const id = state.itemId;
-      state.itemId += 1n;
+      const id = state.itemCount;
+      state.itemCount += 1n;
 
       return { ...item, id };
     });
@@ -259,9 +259,9 @@ const start = async (zcf) => {
       name: newCharacterName,
     };
 
-    const newCharacterId = state.characterId;
+    const newCharacterId = state.characterCount;
 
-    state.characterId += 1n;
+    state.characterCount += 1n;
 
     const newCharacterAmount1 = AmountMath.make(
       characterBrand,
@@ -288,10 +288,10 @@ const start = async (zcf) => {
       const newItem = { ...item, date: Date.now() };
       const newItemWithId = {
         ...newItem,
-        id: state.itemId,
+        id: state.itemCount,
       };
 
-      state.itemId += 1n;
+      state.itemCount += 1n;
 
       return newItemWithId;
     });
@@ -371,12 +371,12 @@ const start = async (zcf) => {
   /**
    * This function has to be called after completing the buy offer
    *
-   * @param {string} name
+   * @param {bigint} characterId
    */
-  const removeCharacterFromMarket = (name) => {
+  const removeCharacterFromMarket = (characterId) => {
     // TODO: eventually use a more efficient data structure
     const newMarket = state.charactersMarket.reduce((market, character) => {
-      if (name !== character.name) return [...market, character];
+      if (characterId !== character.id) return [...market, character];
       return market;
     }, []);
     state.charactersMarket = newMarket;
