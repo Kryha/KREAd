@@ -19,7 +19,7 @@ export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }
   const hideTip = () => setActive(false);
 
   return (
-    <TooltipWrap onClick={showTip} onBlur={hideTip}>
+    <TooltipWrap onMouseEnter={showTip} onMouseLeave={hideTip} onBlur={hideTip}>
       {children}
       {active && (
         <TooltipContent className={position || "left"}>

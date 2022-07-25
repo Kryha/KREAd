@@ -56,7 +56,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, id }
         </InfoContainer>
         <ButtonContainer>
           {isCharacterEquipped ? (
-            <PrimaryButton>
+            <PrimaryButton onClick={()=> { console.log("only select"); }}>
               <ButtonText customColor={color.white}>{text.character.selected}</ButtonText>
             </PrimaryButton>
           ) : (

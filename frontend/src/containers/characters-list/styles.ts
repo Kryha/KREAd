@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { HorizontalDivider, Label } from "../../components";
 import { disappear, fadeIn } from "../../components/atoms/animations";
 import { FiltersContainer } from "../../components/filters/styles";
+import { Info } from "../../components/menu-item/styles";
 import { color, margins } from "../../design";
 
 export const SortableListWrap = styled.section`
@@ -45,6 +46,10 @@ export const ListContainer = styled.div`
   padding-top: ${margins.medium};
   gap: ${margins.small};
   padding-bottom: 260px;
+  ${Info} {
+    position: relative;
+    z-index: -1;
+  }
 `;
 
 export const CategoryContainer = styled.div`
