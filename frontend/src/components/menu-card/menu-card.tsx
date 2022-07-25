@@ -24,28 +24,52 @@ import { GO_BACK } from "../../constants";
 import { useViewport } from "../../hooks";
 import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
 import { EmptyCard } from "../empty-card";
+import { useEquipItem, useUnequipItem } from "../../service";
 
-interface MenuCardProps extends ImageProps {
+interface MenuCardProps {
   title: string;
-  items: Item[];
-  amount: number;
+  equippedItem?: Item;
+  unequippedItems: Item[];
+  imageProps?: ImageProps;
 }
 
-export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, height, marginTop, marginLeft }) => {
+export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedItems, imageProps }) => {
   const navigate = useNavigate();
   const { width: viewWidth, height: viewHeight } = useViewport();
   const [selectedId, setSelectedId] = useState<string>("");
-  const item = useMemo(() => items?.find((item) => item.id === selectedId), [items, selectedId]);
 
-  const equip = () => {
-    // TODO: implement item equip
-    console.log("TODO: implement item equip");
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
+
+  const allItems = useMemo(() => {
+    if (equippedItem) return [equippedItem, ...unequippedItems];
+    return unequippedItems;
+  }, [equippedItem, unequippedItems]);
+
+  const selectedItem = useMemo(() => allItems?.find((item) => item.id === selectedId), [allItems, selectedId]);
+
+  const equip = (id: string) => {
+    equipItem.mutate({ itemId: id });
+  };
+
+  const unequip = (id: string) => {
+    unequipItem.mutate({ itemId: id });
+  };
+
+  const primaryActions = () => {
+    if (selectedItem?.id === equippedItem?.id) {
+      return { text: text.item.unequip, onClick: () => unequip(selectedId) };
+    } else {
+      return { text: text.item.equip, onClick: () => equip(selectedId) };
+    }
   };
 
   const sell = () => {
     if (!selectedId) return;
     navigate(`${routes.sellItem}/${selectedId}`);
   };
+
+  const isDividerShown = !!equippedItem && !!unequippedItems.length;
 
   return (
     <MenuCardWrapper>
@@ -54,7 +78,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
           <MenuContainer>
             <MenuText>{title}</MenuText>
             <InfoContainer>
-              <Label>{text.param.amountOfItems(amount)}</Label>
+              <Label>{text.param.amountOfItems(allItems.length)}</Label>
               <Divider />
               <ArrowContainer>
                 <Close onClick={() => navigate(GO_BACK)} />
@@ -62,27 +86,36 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
             </InfoContainer>
           </MenuContainer>
         </MenuHeader>
+
         <Content>
           <MenuContent>
-            {!items.length ? (
-              <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
+            {equippedItem ? (
+              <MenuItem
+                data={{ ...equippedItem, image: equippedItem.thumbnail }}
+                imageProps={imageProps}
+                onClick={() => setSelectedId(equippedItem.id)}
+                key={equippedItem.id}
+                isEquipped
+                onButtonClick={() => unequip(equippedItem.id)}
+              />
             ) : (
-              <>
-                {items.map((item, index) => (
-                  <>
-                    <MenuItem
-                      data={{ ...item, image: item.thumbnail }}
-                      imageProps={{ width, height, marginTop, marginLeft }}
-                      onClick={() => setSelectedId(item.id)}
-                      key={index}
-                    />
-                    {item === items[0] && <HorizontalDivider />}
-                  </>
-                ))}
-              </>
+              <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
             )}
+
+            {isDividerShown && <HorizontalDivider />}
+
+            {unequippedItems.map((item) => (
+              <MenuItem
+                data={{ ...item, image: item.thumbnail }}
+                imageProps={imageProps}
+                onClick={() => setSelectedId(item.id)}
+                key={item.id}
+                onButtonClick={() => equip(item.id)}
+              />
+            ))}
           </MenuContent>
         </Content>
+
         <CardActionsContainer>
           <SecondaryButton type="submit" onClick={() => navigate(routes.shop)}>
             <ButtonText>{text.store.buyMoreAtStore}</ButtonText>
@@ -90,17 +123,18 @@ export const MenuCard: FC<MenuCardProps> = ({ title, items, amount, width, heigh
           </SecondaryButton>
         </CardActionsContainer>
       </Menu>
-      {item && (
+
+      {selectedItem && (
         <ItemDetailSection
-          item={item}
+          item={selectedItem}
           actions={{
-            primary: { text: text.item.equip, onClick: equip },
+            primary: primaryActions(),
             secondary: { text: text.item.sell, onClick: sell },
             onClose: () => setSelectedId(""),
           }}
         />
       )}
-      {item && <Overlay />}
+      {selectedItem && <Overlay />}
     </MenuCardWrapper>
   );
 };

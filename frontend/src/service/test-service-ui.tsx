@@ -3,7 +3,7 @@ import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 
 import { mintNfts } from "./character-actions";
-import { addToInventory, buyItem, mintItem, removeFromInventory, sellItem } from "./item-actions";
+import { equipItem, buyItem, mintItem, unequipItem, sellItem } from "./item-actions";
 import { useCharacterContext } from "../context/characters";
 import { useAgoricContext } from "../context/agoric";
 
@@ -161,8 +161,10 @@ export const TestServiceUI = () => {
 
   const addItemToInventory = async () => {
     const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
+    const character = service.purses.character[service.purses.character.length - 1].currentAmount.value[0];
     console.log(item);
-    await addToInventory(service, item);
+    console.log(character);
+    await equipItem(service, item, character);
     console.log("done");
   };
 
@@ -172,8 +174,10 @@ export const TestServiceUI = () => {
     } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
 
     const item = equippedItems[0];
+    const character = characters.owned[0];
     console.log(item);
-    await removeFromInventory(service, item);
+    console.log(character);
+    await unequipItem(service, item, character);
     console.log("done");
   };
 

@@ -29,9 +29,9 @@ export const CharacterSell = () => {
     <Sell
       onSubmit={submitForm}
       text={{ sell: text.store.sellCharacter }}
-      data={{ ...data, image: data.items, category: data.type, id: data.characterId }}
+      data={{ ...data, image: data.items, category: data.type, id: data.id }}
     >
-      <FadeInOut show exiting={false} >
+      <FadeInOut show exiting={false}>
         <CharacterDetailSection character={data} />
       </FadeInOut>
     </Sell>

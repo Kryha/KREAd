@@ -16,7 +16,8 @@ import { mulberry32 } from './prng';
  *   itemsMarket: ItemInMarket[]
  *   items: ItemRecord[]
  *   config?: Config
- *   mintNext: string
+ *   itemCount: bigint
+ *   characterCount: bigint
  * }} State
  *
  * @typedef {{
@@ -36,7 +37,7 @@ import { mulberry32 } from './prng';
  * }} CharacterRecord
  *
  * @typedef {{
- *   name: string
+ *   id: bigint
  *   character: object
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
@@ -54,7 +55,7 @@ import { mulberry32 } from './prng';
  *
  * @typedef {{
  *   id: bigint
- *   item: object
+ *   item: Item
  *   sell: {
  *     instance: Instance
  *     publicFacet: any
@@ -71,7 +72,7 @@ import { mulberry32 } from './prng';
  *   frontMask?: Item;
  *   liquid?: Item;
  *   background?: Item;
- *   airResevoir?: Item;
+ *   airReservoir?: Item;
  *   clothing?: Item;
  * }}
  *
@@ -92,7 +93,6 @@ import { mulberry32 } from './prng';
  *   price: number;
  *   details: any;
  *   date: string;
- *   slots?: any[];
  *   activity: any[];
  * }} Item
  */
@@ -133,7 +133,9 @@ const start = async (zcf) => {
     charactersMarket: [],
     items: [],
     itemsMarket: [],
-    mintNext: 'PABLO',
+
+    itemCount: 0n,
+    characterCount: 0n,
   };
   /**
    * Private state
@@ -216,7 +218,18 @@ const start = async (zcf) => {
       want: { Item: null },
     });
     const { want } = seat.getProposal();
-    itemMint.mintGains(want, seat);
+
+    // @ts-ignore
+    const items = want.Item.value.map((item) => {
+      const id = state.itemCount;
+      state.itemCount += 1n;
+
+      return { ...item, id };
+    });
+
+    const newItemAmount = AmountMath.make(itemBrand, harden(items));
+
+    itemMint.mintGains({ Asset: newItemAmount }, seat);
     seat.exit();
     return 'You minted an Item NFT!';
   };
@@ -239,20 +252,27 @@ const start = async (zcf) => {
     assert(nameIsUnique(newCharacterName), X`${errors.nameTaken}`);
 
     // Get random base character and merge with name input
+    // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter = {
       ...getRandomBaseCharacter(),
+      date: Date.now(),
       name: newCharacterName,
     };
-    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
+
+    const newCharacterId = state.characterCount;
+
+    state.characterCount += 1n;
 
     const newCharacterAmount1 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, id: 1 }]),
+      harden([{ ...newCharacter, keyId: 1, id: newCharacterId }]),
     );
     const newCharacterAmount2 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, id: 2 }]),
+      harden([{ ...newCharacter, keyId: 2, id: newCharacterId }]),
     );
+
+    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
     // Mint character to user seat & inventorySeat
     characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
@@ -262,11 +282,20 @@ const start = async (zcf) => {
     );
 
     // Mint items to inventory seat
+    // TODO: Replace Date by a valid time generator now it returns NaN
     const allDefaultItems = Object.values(state.config.defaultItems);
-    const uniqueItems = allDefaultItems.map((item) => ({
-      ...item,
-      id: state.characterNames.length,
-    }));
+    const uniqueItems = allDefaultItems.map((item) => {
+      const newItem = { ...item, date: Date.now() };
+      const newItemWithId = {
+        ...newItem,
+        id: state.itemCount,
+      };
+
+      state.itemCount += 1n;
+
+      return newItemWithId;
+    });
+
     const itemsAmount = AmountMath.make(itemBrand, harden(uniqueItems));
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
 
@@ -342,12 +371,12 @@ const start = async (zcf) => {
   /**
    * This function has to be called after completing the buy offer
    *
-   * @param {string} name
+   * @param {bigint} characterId
    */
-  const removeCharacterFromMarket = (name) => {
+  const removeCharacterFromMarket = (characterId) => {
     // TODO: eventually use a more efficient data structure
     const newMarket = state.charactersMarket.reduce((market, character) => {
-      if (name !== character.name) return [...market, character];
+      if (characterId !== character.id) return [...market, character];
       return market;
     }, []);
     state.charactersMarket = newMarket;
@@ -595,7 +624,7 @@ const start = async (zcf) => {
       zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
 
     // private state
-    getPrivateState: () => privateState,
+    getPrivateState: () => privateState, // TODO: do we really want to expose the privateState?
   });
 
   return harden({ creatorFacet, publicFacet });

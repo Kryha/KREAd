@@ -1,4 +1,4 @@
-import { Item } from "../../interfaces";
+import { CharacterItems, Item } from "../../interfaces";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -16,21 +16,30 @@ interface EquippedItemCardProps {
   marginLeft?: string;
   marginRight?: string;
   marginBottom?: string;
-  category: string;
+  category: keyof CharacterItems;
   area: "top" | "middle" | "bottom";
 }
 
-export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category, area }) => {
+export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({
+  item,
+  code,
+  width,
+  height,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  category,
+  area,
+}) => {
   const navigate = useNavigate();
+
   const handleClick = () => {
-    navigate(`${routes.items}/${category}`, { state: { category: category} });
+    navigate(`${routes.items}/${category}`);
   };
+
   return (
-    <EquippedContainer
-      onClick={() => handleClick()}
-      isRight={false}
-    >
+    <EquippedContainer onClick={() => handleClick()} isRight={false}>
       <VerticalInfo code={code} />
       <ItemCard
         position="left"
@@ -48,18 +57,26 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> =
   );
 };
 
-export const RightEquippedItemCard: FC<EquippedItemCardProps> =
-({ item, code, width, height, marginTop, marginBottom, marginLeft, marginRight, category, area }) => {
+export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({
+  item,
+  code,
+  width,
+  height,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  category,
+  area,
+}) => {
   const navigate = useNavigate();
+
   const handleClick = () => {
-    navigate(`${routes.items}/${category}`, { state: { category: category } });
+    navigate(`${routes.items}/${category}`);
   };
+
   return (
-    <EquippedContainer
-      onClick={() => handleClick()}
-      isRight
-      isSecond={code === "noseline" || code === "liquid"}
-    >
+    <EquippedContainer onClick={() => handleClick()} isRight isSecond={code === "noseline" || code === "liquid"}>
       <ItemCard
         position="right"
         area={area}
@@ -70,7 +87,8 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> =
         marginTop={marginTop}
         marginBottom={marginBottom}
         marginLeft={marginLeft}
-        marginRight={marginRight} />
+        marginRight={marginRight}
+      />
       <VerticalInfo code={code} isRight />
     </EquippedContainer>
   );

@@ -1,21 +1,22 @@
+import { ITEM_CATEGORIES } from "../constants";
 import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
 
-// TODO: Define proper type for Slots items;
-export interface Slots {
-  items: Item[];
-}
+export const isItemCategory = (category: unknown): category is keyof CharacterItems => {
+  if (typeof category !== "string") return false;
+  return ITEM_CATEGORIES.includes(category);
+};
 
 export interface CharacterItems {
-  styleline?: Item;
-  background2?: Item;
+  noseline?: Item;
+  midBackground?: Item;
   mask?: Item;
   headPiece?: Item;
   hair?: Item;
-  filter1?: Item;
-  filter2?: Item;
-  background1?: Item;
-  addOns?: Item;
+  airReservoir?: Item;
+  liquid?: Item;
+  background?: Item;
+  frontMask?: Item;
   clothing?: Item;
 }
 
@@ -27,10 +28,11 @@ export interface Detail {
 }
 
 export interface Character {
+  id: string;
+  keyId: number;
   title: string;
   name: string;
   type: string;
-  characterId: string;
   description: string;
   level: number;
   items: CharacterItems;
@@ -38,7 +40,15 @@ export interface Character {
   projectDescription: string;
   itemActivity: ActivityEvent[];
   price: number;
-  slots: Slots[];
+  date: number;
+}
+
+export interface CharacterBackend extends Omit<Character, "id"> {
+  id: bigint;
+}
+
+export interface CharacterEquip extends Character {
+  isEquipped: boolean;
 }
 
 export interface CharacterCreation {

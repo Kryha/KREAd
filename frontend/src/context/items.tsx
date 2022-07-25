@@ -30,7 +30,10 @@ const Reducer = (state: ItemState, action: ItemStateActions): ItemState => {
       return { ...state, owned: action.payload };
 
     case "ADD_OWNED_ITEMS":
-      return { ...state, fetched: true, owned: [...state.owned, ...action.payload] };
+      return { ...state, owned: [...state.owned, ...action.payload] };
+
+    case "SET_EQUIPPED_ITEMS":
+      return { ...state, equipped: action.payload };
 
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };
