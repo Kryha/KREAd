@@ -55,7 +55,7 @@ import { mulberry32 } from './prng';
  *
  * @typedef {{
  *   id: bigint
- *   item: object
+ *   item: Item
  *   sell: {
  *     instance: Instance
  *     publicFacet: any
