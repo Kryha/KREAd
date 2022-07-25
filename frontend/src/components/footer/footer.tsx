@@ -21,7 +21,6 @@ export const Footer: FC = () => {
             <AboutText customColor={color.darkGrey}>{text.navigation.about}</AboutText>
           </Link>
         )}
-        {/* TODO: UNCOMENT */}
         <Link to={routes.privacy}>
           <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
         </Link>

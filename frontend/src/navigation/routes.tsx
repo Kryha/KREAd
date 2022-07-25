@@ -34,6 +34,7 @@ export const AppRoutes: FC = () => {
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
 
           <Route path={"/test"} element={<TestServiceUI />} />
+
           <Route path={routes.privacy} element={<Privacy />} />
         </Routes>
       </MainContainer>
