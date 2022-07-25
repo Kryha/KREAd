@@ -8,26 +8,20 @@ import {
   ButtonText,
   CharacterCard,
   CharacterItems,
-  ErrorView,
   FadeInOut,
   LoadingPage,
   MenuText,
-  NotificationCard,
   Overlay,
+  OverviewEmpty,
   SecondaryButton
 } from "../../components";
 import {
   Close,
   LandingContainer,
   Menu,
-  NotificationButton,
-  NotificationWrapper,
-  Notification,
   DetailContainer,
   ButtonContainer,
   CharacterCardWrapper,
-  NotificationContainer,
-  Tag,
 } from "./styles";
 import { useMyCharacter, useMyCharacters } from "../../service";
 import { CharacterDetailSection } from "../../containers/detail-section";
@@ -38,7 +32,6 @@ export const Landing: FC = () => {
   const [myCharacters, isLoading] = useMyCharacters();
   const { data: character, isLoading: isLoadingCharacter } = useMyCharacter();
   const [openTab, setOpenTab] = useState(false);
-  const [openNotification, setOpenNotifications] = useState(false);
   const [_selectedCharacter, setSelectedCharacter] = useState(character);
   const [showDetail, setShowDetail] = useState(false);
   const navigate = useNavigate();
@@ -49,8 +42,14 @@ export const Landing: FC = () => {
     myCharacters[0] && setSelectedCharacter(myCharacters[0]);
   }, [myCharacters]);
 
-  // TODO: get an empty page
-  if (!character) return <ErrorView />;
+  if (!character) return (
+    <OverviewEmpty
+      headingText={text.character.youDoNotHave}
+      descriptionText={text.character.youDoNotOwnACharacter}
+      buttonText={text.character.createANewCharacter}
+      redirectRoute={routes.createCharacter}
+    />
+  );
 
   const sell = () => {
     if (!character) return;
@@ -61,32 +60,20 @@ export const Landing: FC = () => {
     <BaseRoute
       isLanding
       sideNavigation={
-        <NotificationWrapper>
-          <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
-            <ButtonText>{text.navigation.myCharacters}</ButtonText>
-            {openTab ? <Close /> : <Menu />}
-          </SecondaryButton>
-          <NotificationContainer>
-            <NotificationButton
-              open={openNotification}
-              onClick={() => setOpenNotifications(!openNotification)}
-              backgroundColor={openNotification ? color.lightGrey : color.white}
-            >
-              {openNotification ? <Close /> : <Notification />}
-            </NotificationButton>
-            <Tag />
-          </NotificationContainer>
-        </NotificationWrapper>
+        <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
+          <ButtonText>{text.navigation.myCharacters}</ButtonText>
+          {openTab ? <Close /> : <Menu />}
+        </SecondaryButton>
       }
     >
       {isLoadingCharacter || isLoading ? (
         <LoadingPage />
       ) : (
         <>
-          <LandingContainer isZoomed={!openTab && !openNotification}>
+          <LandingContainer isZoomed={!openTab}>
             <BaseCharacter items={myCharacters[0].items || character.items} isZoomed={openTab} size="normal" />
           </LandingContainer>
-          <CharacterItems items={myCharacters[0].items || character.items} showItems={!openTab && !openNotification} />
+          <CharacterItems items={myCharacters[0].items || character.items} showItems={!openTab} />
           <DetailContainer>
             <MenuText>{myCharacters[0].name || character.name}</MenuText>
             <ButtonContainer>
@@ -110,12 +97,6 @@ export const Landing: FC = () => {
               />;
             </FadeInOut>
           </CharacterCardWrapper>
-          {openNotification && (
-            <>
-              <NotificationCard />
-              <Overlay />
-            </>
-          )}
           <FadeInOut show={showDetail} exiting={closeDetail}>
             <Overlay />
           </FadeInOut>

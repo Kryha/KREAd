@@ -11,7 +11,6 @@ export const MainContainer: FC<MainContainerProps> = ({ children }) => {
   const { height } = useViewport();
   return (
     <MainWrap height={height}>
-      {/* TODO: Addd navigation */}
       <MainPageContainer>{children}</MainPageContainer>
     </MainWrap>
   );

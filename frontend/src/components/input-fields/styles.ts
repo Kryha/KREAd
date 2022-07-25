@@ -34,7 +34,11 @@ export const StyledSelect = styled.div<SelectProps>`
   }};
 `;
 
-export const SelectBox = styled.div`
+interface ViewProps {
+  height: number;
+}
+
+export const SelectBox = styled.div<ViewProps>`
   width: 180px;
   border: 1px solid ${color.grey};
   border-radius: ${margins.small};
@@ -43,6 +47,8 @@ export const SelectBox = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${margins.medium};
+  ${({ height }): string => `max-height: ${height - 200}px;`};
+  overflow-y: scroll;
 `;
 
 export const ColorBox = styled(SelectBox)`
