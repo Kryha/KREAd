@@ -25,7 +25,6 @@ export const Footer: FC = () => {
         <Link to={routes.privacy}>
           <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
         </Link>
-        {/* TODO: link somewhere */}
         <AgoricText customColor={color.darkGrey}>{text.navigation.agoric2022}</AgoricText>
       </FooterContainer>
     </FooterWrapper>

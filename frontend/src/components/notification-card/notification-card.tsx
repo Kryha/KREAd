@@ -16,6 +16,7 @@ import { useNotifications } from "../../service";
 import { LoadingPage } from "../content-loader";
 import { NotificationDetail } from "../notification-detail";
 import { NotificationInfo } from "../notification-info";
+import { OverviewEmpty } from "../overview-empty";
 
 export const NotificationCard: FC = () => {
   const { data: notifications, isLoading: isLoadingNotifications } = useNotifications();
@@ -24,8 +25,7 @@ export const NotificationCard: FC = () => {
   const [title, setTitle] = useState("");
   const { width, height } = useViewport();
 
-  // TODO: add empty view
-  if (!notifications || !notifications.length) return <></>;
+  if (!notifications || !notifications.length) return <OverviewEmpty />;
 
   if (isLoadingNotifications) return <LoadingPage />;
 

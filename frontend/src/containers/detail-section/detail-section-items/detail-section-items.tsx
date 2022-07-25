@@ -1,9 +1,11 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { EmptyItemCard, ItemThumbnail, Label, MenuItemName } from "../../../components";
+import { ButtonText, EmptyItemCard, ItemThumbnail, Label, MenuItemName } from "../../../components";
+import { color } from "../../../design";
 import { Item } from "../../../interfaces";
-import { CategoryButton } from "../detail-section-header/styles";
+import { findItemCategory } from "../../../util/category";
+
 import {
   Divider,
   EmptyInfo,
@@ -38,7 +40,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
         <InfoContainer>
           <MenuItemName>{item.name}</MenuItemName>
           <InlineDetails>
-            <CategoryButton>{item.category}</CategoryButton>
+            <ButtonText customColor={color.darkGrey}>{findItemCategory(item.category)}</ButtonText>
             <Divider />
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>

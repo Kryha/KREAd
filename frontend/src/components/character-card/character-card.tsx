@@ -9,7 +9,7 @@ import {
   CharacterCardWrapper,
   EmptyViewContainer,
 } from "./styles";
-import { ButtonText, PrimaryButton } from "../atoms";
+import { ButtonText, Overlay, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -97,6 +97,9 @@ export const CharacterCard: FC<CharacterCardProps> = ({ id, characters, showCard
           />
         </CharacterCardWrapper>
       )}
+      <FadeInOut show={!!character} exiting={!character}>
+        <Overlay />
+      </FadeInOut>
     </>
   );
 };
