@@ -19,7 +19,6 @@ interface ImageProps {
   category?: string;
 }
 
-// TODO: use square images for slot thumbnails
 export const ItemImage = styled(Img) <ImageProps>`
   object-fit: cover;
   width: 100%;

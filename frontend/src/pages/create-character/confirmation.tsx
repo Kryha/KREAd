@@ -23,7 +23,6 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
     equipCharacter.mutate({ id: character.id });
   };
 
-  // TODO: add noticifaction
   if (equipCharacter.isSuccess) return <Navigate to={routes.character} />;
 
   if (equipCharacter.isError) return <ErrorView />;

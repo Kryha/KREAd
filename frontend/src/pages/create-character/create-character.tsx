@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
-import { ContentLoader, FormHeader, LoadingPage } from "../../components";
+import { FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
@@ -55,7 +55,7 @@ export const CreateCharacter: FC = () => {
       case 0:
         return <Information setData={setData} disabled={createCharacter.isLoading} />;
       case 1:
-        return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} />;
+        return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
       case 2:
         return <Confirmation character={mintedCharacter} />;
       default:
@@ -71,7 +71,6 @@ export const CreateCharacter: FC = () => {
         <FormCard height={height} width={width}>
           <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.character} />
           {perStepDisplay()}
-          <ContentLoader loading={isLoading} />
         </FormCard>
       }
     >

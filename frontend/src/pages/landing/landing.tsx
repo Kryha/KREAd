@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
 import { color } from "../../design";
@@ -9,27 +9,14 @@ import {
   ButtonText,
   CharacterCard,
   CharacterItems,
-  ErrorView,
   FadeInOut,
   LoadingPage,
   MenuText,
-  NotificationCard,
   Overlay,
   SecondaryButton,
+  OverviewEmpty,
 } from "../../components";
-import {
-  Close,
-  LandingContainer,
-  Menu,
-  NotificationButton,
-  NotificationWrapper,
-  Notification,
-  DetailContainer,
-  ButtonContainer,
-  CharacterCardWrapper,
-  NotificationContainer,
-  Tag,
-} from "./styles";
+import { Close, LandingContainer, Menu, DetailContainer, ButtonContainer, CharacterCardWrapper } from "./styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useSelectedCharacter } from "../../service";
 import { routes } from "../../navigation";
@@ -38,13 +25,9 @@ export const Landing: FC = () => {
   const navigate = useNavigate();
 
   const [openTab, setOpenTab] = useState(false);
-  const [openNotification, setOpenNotifications] = useState(false);
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const [showDetail, setShowDetail] = useState(false);
   const [closeDetail, setCloseDetail] = useState(false);
-
-  // TODO: get an empty page
-  if (!selectedCharacter) return <ErrorView />;
 
   const sell = (characterId: string) => {
     navigate(`${routes.sellCharacter}/${characterId}`);
@@ -54,38 +37,31 @@ export const Landing: FC = () => {
     <BaseRoute
       isLanding
       sideNavigation={
-        <NotificationWrapper>
-          <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
-            <ButtonText>{text.navigation.myCharacters}</ButtonText>
-            {openTab ? <Close /> : <Menu />}
-          </SecondaryButton>
-          <NotificationContainer>
-            <NotificationButton
-              open={openNotification}
-              onClick={() => setOpenNotifications(!openNotification)}
-              backgroundColor={openNotification ? color.lightGrey : color.white}
-            >
-              {openNotification ? <Close /> : <Notification />}
-            </NotificationButton>
-            <Tag />
-          </NotificationContainer>
-        </NotificationWrapper>
+        <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
+          <ButtonText>{text.navigation.myCharacters}</ButtonText>
+          {openTab ? <Close /> : <Menu />}
+        </SecondaryButton>
       }
     >
       {isLoading ? (
         <LoadingPage />
       ) : !selectedCharacter ? (
         // TODO: abstract internal component so we don't end up in this conditional madness
-        <Navigate to={routes.root} />
+        <OverviewEmpty
+          headingText={text.character.youDoNotHave}
+          descriptionText={text.character.youDoNotOwnACharacter}
+          buttonText={text.character.createANewCharacter}
+          redirectRoute={routes.createCharacter}
+        />
       ) : (
         <>
           {/* character big picture */}
-          <LandingContainer isZoomed={!openTab && !openNotification}>
+          <LandingContainer isZoomed={!openTab}>
             <BaseCharacter items={selectedCharacter.items} isZoomed={openTab} size="normal" />
           </LandingContainer>
 
           {/* equipped items under character */}
-          <CharacterItems items={selectedCharacter.items} showItems={!openTab && !openNotification} />
+          <CharacterItems items={selectedCharacter.items} showItems={!openTab} />
 
           {/* character info */}
           <DetailContainer>
@@ -112,13 +88,6 @@ export const Landing: FC = () => {
             </FadeInOut>
           </CharacterCardWrapper>
 
-          {/* notifications */}
-          {openNotification && (
-            <>
-              <NotificationCard />
-              <Overlay />
-            </>
-          )}
           <FadeInOut show={showDetail} exiting={closeDetail}>
             <Overlay />
           </FadeInOut>

@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { text } from "../../assets";
 
-import { Badge, ButtonText, FormText, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
+import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
 import {
@@ -23,12 +23,14 @@ interface PaymentProps {
   submit: (step: number) => void;
   sendOfferHandler: () => Promise<void>;
   isOfferAccepted: boolean;
+  isLoading: boolean;
 }
 
-export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAccepted }) => {
+export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAccepted, isLoading }) => {
   const [sendOffer, setSendOffer] = useState(false);
-
+  const [disable, setDisable] = useState(false);
   const sendOfferToWallet = async () => {
+    setDisable(true);
     console.info("SENDING OFFER TO WALLET");
     await sendOfferHandler();
     setSendOffer(true);
@@ -45,7 +47,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
             {!sendOffer && (
               <>
                 <PriceInIst price={MINTING_COST} />
-                <PrimaryButton onClick={sendOfferToWallet}>
+                <PrimaryButton onClick={sendOfferToWallet} disabled={disable}>
                   <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
                 </PrimaryButton>
               </>
@@ -73,7 +75,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
       <ButtonContainer>
         <PrimaryButton onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          <ArrowUp />
+          {isLoading? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
     </ContentWrapper>
