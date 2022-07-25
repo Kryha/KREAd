@@ -1,29 +1,12 @@
 import { useMemo } from "react";
-import { useMutation, useQuery, UseQueryResult } from "react-query";
+import { useMutation } from "react-query";
 
-import { Item, ItemEquip } from "../interfaces";
-import { Items } from "./fake-item-data";
-import { filterItems, ItemFilters } from "../util";
+import { Item, ItemEquip, ItemInMarket } from "../interfaces";
+import { filterItems, filterItemsMarket, ItemFilters } from "../util";
 import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
 import { equipItem, unequipItem, sellItem } from "./item-actions";
 import { useSelectedCharacter } from "./character";
-
-export const useItems = (): UseQueryResult<Item[]> => {
-  return useQuery(["items", "all"], async () => {
-    //  TODO: intergrate me
-
-    return Items;
-  });
-};
-
-export const useItem = (id: string): UseQueryResult<Item> => {
-  return useQuery(["item", id], async () => {
-    //  TODO: intergrate me
-    const item = Items.find((item) => item.id === id);
-    return item;
-  });
-};
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   const [{ all }, isLoading] = useMyItems();
@@ -44,20 +27,30 @@ export const useMyItems = (): [{ owned: Item[]; equipped: Item[]; all: ItemEquip
   return [{ owned, equipped, all }, !fetched];
 };
 
-export const useMyFilteredItems = (filters: ItemFilters): [ItemEquip[], boolean] => {
+export const useMyItemsFiltered = (filters: ItemFilters): [ItemEquip[], boolean] => {
   const [{ all: allItems }, isLoading] = useMyItems();
 
   return useMemo(() => [filterItems(allItems, filters), isLoading], [allItems, filters, isLoading]);
 };
 
-// TODO: implement
-export const useMarketFilteredItems = (filters: ItemFilters): [ItemEquip[], boolean] => {
-  return [[], true];
+export const useItemFromMarket = (id: string): [ItemInMarket | undefined, boolean] => {
+  const [items, isLoading] = useItemsMarket();
+
+  const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
+
+  return [found, isLoading];
 };
 
-export const useItemsMarket = () => {
-  const [state] = useItemContext();
-  return state.market;
+export const useItemsMarket = (): [ItemInMarket[], boolean] => {
+  const [{ market, marketFetched }] = useItemContext();
+
+  return [market, !marketFetched];
+};
+
+export const useItemsMarketFiltered = (filters: ItemFilters): [ItemInMarket[], boolean] => {
+  const [items, isLoading] = useItemsMarket();
+
+  return useMemo(() => [filterItemsMarket(items, filters), isLoading], [filters, isLoading, items]);
 };
 
 export const useSellItem = () => {

@@ -6,7 +6,9 @@ export type ItemState = {
   owned: Item[];
   equipped: Item[];
   market: ItemInMarket[];
+
   fetched: boolean;
+  marketFetched: boolean;
 };
 
 interface SetItems {
@@ -49,6 +51,11 @@ interface SetFetched {
   payload: boolean;
 }
 
+interface SetMarketFetched {
+  type: "SET_MARKET_FETCHED";
+  payload: boolean;
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -62,6 +69,7 @@ export type ItemStateActions =
   | AddOwnedItems
   | SetItemsMarket
   | AddItemsMarket
-  | SetEquippedItems;
+  | SetEquippedItems
+  | SetMarketFetched;
 
 export type ItemDispatch = React.Dispatch<ItemStateActions>;

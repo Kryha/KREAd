@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import { ButtonText, ColorSelector, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { BaseFilterContainer, ColorContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useMyFilteredItems } from "../../service";
+import { useMyItemsFiltered } from "../../service";
 
 import { text } from "../../assets";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
@@ -21,7 +21,7 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const [items, isLoading] = useMyFilteredItems({
+  const [items, isLoading] = useMyItemsFiltered({
     category: selectedCategory,
     sorting: selectedSorting,
     price: { min: 0, max: 10000 },

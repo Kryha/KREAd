@@ -2,11 +2,14 @@ import { Character, CharacterInMarket } from "./character.interfaces";
 
 // TODO: add fetched flag for each array
 export type CharacterState = {
+  selected?: Character;
+
   characters: Character[];
   owned: Character[];
   market: CharacterInMarket[];
+
   fetched: boolean;
-  selected?: Character;
+  marketFetched: boolean;
 };
 
 interface SetCharacters {
@@ -49,6 +52,11 @@ interface SetFetched {
   payload: boolean;
 }
 
+interface SetMarketFetched {
+  type: "SET_MARKET_FETCHED";
+  payload: boolean;
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -62,6 +70,7 @@ export type CharacterStateActions =
   | AddOwnedCharacters
   | SetCharactersMarket
   | AddCharactersMarket
-  | SetSelectedCharacter;
+  | SetSelectedCharacter
+  | SetMarketFetched;
 
 export type CharacterDispatch = React.Dispatch<CharacterStateActions>;

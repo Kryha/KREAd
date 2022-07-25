@@ -1,4 +1,13 @@
-import { Character, CharacterBackend, Item, ItemBackend } from "../interfaces";
+import {
+  Character,
+  CharacterBackend,
+  CharacterInMarket,
+  CharacterInMarketBackend,
+  Item,
+  ItemBackend,
+  ItemInMarket,
+  ItemInMarketBackend,
+} from "../interfaces";
 
 export const mediate = {
   items: {
@@ -7,9 +16,21 @@ export const mediate = {
         return { ...backendItem, id: String(backendItem.id) };
       });
     },
-    toback: (frontendItems: Item[]): ItemBackend[] => {
+    toBack: (frontendItems: Item[]): ItemBackend[] => {
       return frontendItems.map((frontendItem) => {
         return { ...frontendItem, id: BigInt(frontendItem.id) };
+      });
+    },
+  },
+  itemsMarket: {
+    toFront: (backendItems: ItemInMarketBackend[]): ItemInMarket[] => {
+      return backendItems.map((backendItem) => {
+        return { ...backendItem, id: String(backendItem.id), item: mediate.items.toFront([backendItem.item])[0] };
+      });
+    },
+    toBack: (frontendItems: ItemInMarket[]): ItemInMarketBackend[] => {
+      return frontendItems.map((frontendItem) => {
+        return { ...frontendItem, id: BigInt(frontendItem.id), item: mediate.items.toBack([frontendItem.item])[0] };
       });
     },
   },
@@ -19,9 +40,29 @@ export const mediate = {
         return { ...backendCharacter, id: String(backendCharacter.id) };
       });
     },
-    toback: (frontendCharacters: Character[]): CharacterBackend[] => {
+    toBack: (frontendCharacters: Character[]): CharacterBackend[] => {
       return frontendCharacters.map((frontendCharacter) => {
         return { ...frontendCharacter, id: BigInt(frontendCharacter.id) };
+      });
+    },
+  },
+  charactersMarket: {
+    toFront: (backendCharacters: CharacterInMarketBackend[]): CharacterInMarket[] => {
+      return backendCharacters.map((backendCharacter) => {
+        return {
+          ...backendCharacter,
+          id: String(backendCharacter.id),
+          character: mediate.characters.toFront([backendCharacter.character])[0],
+        };
+      });
+    },
+    toBack: (frontendCharacters: CharacterInMarket[]): CharacterInMarketBackend[] => {
+      return frontendCharacters.map((frontendCharacter) => {
+        return {
+          ...frontendCharacter,
+          id: BigInt(frontendCharacter.id),
+          character: mediate.characters.toBack([frontendCharacter.character])[0],
+        };
       });
     },
   },

@@ -18,7 +18,7 @@ import {
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useMarketFilteredItems } from "../../service";
+import { useItemsMarketFiltered } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, SelectorContainer, SortByContainer } from "./styles";
@@ -42,7 +42,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
 
-  const [items, isLoading] = useMarketFilteredItems({
+  const [items, isLoading] = useItemsMarketFiltered({
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,
@@ -109,7 +109,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             <ItemWrapper height={height}>
               <ItemContainer>
                 {items.map((item, index) => (
-                  <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
+                  <ItemShopCard item={item.item} key={index} onClick={setSelectedItem} />
                 ))}
               </ItemContainer>
             </ItemWrapper>

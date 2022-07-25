@@ -17,13 +17,13 @@ import {
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useFilteredCharacters } from "../../service";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
 import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, SelectorContainer, SortByContainer } from "./styles";
 import { Character } from "../../interfaces";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
+import { useCharactersMarketFiltered } from "../../service";
 
 interface Props {
   pageSelector: ReactNode;
@@ -39,7 +39,11 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
 
-  const [characters, isLoading] = useFilteredCharacters(selectedCategory, selectedSorting, selectedPrice);
+  const [characters, isLoading] = useCharactersMarketFiltered({
+    category: selectedCategory,
+    sorting: selectedSorting,
+    price: selectedPrice,
+  });
 
   const noFilteredCharacters =
     (!selectedCategory.length || !selectedSorting.length || !selectedPrice) && (!characters || !characters.length);
@@ -98,7 +102,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                 <ItemWrapper height={height}>
                   <ItemContainer>
                     {characters.map((character, index) => (
-                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                      <CharacterShopCard character={character.character} key={index} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
                 </ItemWrapper>
@@ -107,7 +111,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                 <ItemWrapper height={height}>
                   <ItemContainer>
                     {characters.map((character, index) => (
-                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                      <CharacterShopCard character={character.character} key={index} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
                 </ItemWrapper>

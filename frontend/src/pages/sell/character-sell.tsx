@@ -4,13 +4,13 @@ import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
-import { useCharacter, useSellItem } from "../../service";
+import { useMyCharacter, useSellItem } from "../../service";
 import { Sell } from "./sell";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
 
-  const { data, isLoading, isError } = useCharacter(String(id));
+  const [data, isLoading] = useMyCharacter(String(id));
   const sellItem = useSellItem();
 
   const submitForm = (price: number) => {
@@ -23,7 +23,7 @@ export const CharacterSell = () => {
 
   if (isLoading) return <LoadingPage />;
 
-  if (!data || isError) return <ErrorView />;
+  if (!data) return <ErrorView />;
 
   return (
     <Sell
@@ -31,7 +31,7 @@ export const CharacterSell = () => {
       text={{ sell: text.store.sellCharacter }}
       data={{ ...data, image: data.items, category: data.type, id: data.id }}
     >
-      <FadeInOut show exiting={false}>
+      <FadeInOut show>
         <CharacterDetailSection character={data} />
       </FadeInOut>
     </Sell>

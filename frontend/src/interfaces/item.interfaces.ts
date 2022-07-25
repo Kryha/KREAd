@@ -22,7 +22,18 @@ export interface Item {
   activity: ActivityEvent[];
 }
 
-export interface ItemInMarket extends Item {
+export interface ItemInMarket {
+  id: string;
+  item: Item;
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
+}
+
+export interface ItemInMarketBackend {
+  id: bigint;
+  item: ItemBackend;
   sell: {
     publicFacet: any;
     price: bigint;

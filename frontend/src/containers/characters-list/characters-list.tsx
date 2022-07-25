@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import { ButtonText, ErrorView, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useMyFilteredCharacters } from "../../service";
+import { useMyCharactersFiltered } from "../../service";
 
 import { text } from "../../assets";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
@@ -18,7 +18,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const [myCharacters, isLoading] = useMyFilteredCharacters({ category: selectedCategory, sorting: selectedSorting });
+  const [myCharacters, isLoading] = useMyCharactersFiltered({ category: selectedCategory, sorting: selectedSorting });
 
   if (isLoading) return <LoadingPage />;
 

@@ -6,7 +6,9 @@ const initialState: ItemState = {
   owned: [],
   equipped: [],
   market: [],
+
   fetched: false,
+  marketFetched: false,
 };
 
 const Context = createContext<ItemState | undefined>(undefined);
@@ -38,11 +40,11 @@ const Reducer = (state: ItemState, action: ItemStateActions): ItemState => {
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };
 
+    case "SET_MARKET_FETCHED":
+      return { ...state, marketFetched: action.payload };
+
     case "RESET":
       return initialState;
-
-    default:
-      throw new Error("Only defined action types can be handled;");
   }
 };
 

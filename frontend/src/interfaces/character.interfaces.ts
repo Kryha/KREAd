@@ -43,6 +43,24 @@ export interface Character {
   date: number;
 }
 
+export interface CharacterInMarket {
+  id: string;
+  character: Character;
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
+}
+
+export interface CharacterInMarketBackend {
+  id: bigint;
+  character: CharacterBackend;
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
+}
+
 export interface CharacterBackend extends Omit<Character, "id"> {
   id: bigint;
 }
@@ -53,11 +71,4 @@ export interface CharacterEquip extends Character {
 
 export interface CharacterCreation {
   name: string;
-}
-
-export interface CharacterInMarket extends Character {
-  sell: {
-    publicFacet: any;
-    price: bigint;
-  };
 }

@@ -3,20 +3,20 @@ import { text } from "../../assets";
 
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useCharacter } from "../../service";
+import { useCharacterFromMarket } from "../../service";
 import { Buy } from "./buy";
 
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
-  const { data, isLoading, isError } = useCharacter(String(id));
+  const [data, isLoading] = useCharacterFromMarket(String(id));
 
   if (isLoading) return <LoadingPage />;
 
-  if (!data || isError) return <ErrorView />;
+  if (!data) return <ErrorView />;
 
   return (
     <Buy
-      data={data}
+      data={data.character}
       text={{
         buy: text.store.buyCharacter,
         success: text.store.characterSuccessfullyBought,
@@ -24,8 +24,8 @@ export const CharacterBuy = () => {
         check: text.store.checkCharacter,
       }}
     >
-      <FadeInOut show exiting={false}>
-        <CharacterDetailSection character={data} />
+      <FadeInOut show>
+        <CharacterDetailSection character={data.character} />
       </FadeInOut>
     </Buy>
   );
