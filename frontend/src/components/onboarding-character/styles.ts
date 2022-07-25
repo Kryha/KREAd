@@ -71,6 +71,7 @@ export const CharacterWrapper = styled.div`
   right: 15%;
   top: 0;
   margin: 0;
+  pointer-events: none;
 `;
 
 export const CharacterContainer = styled.div<ImageProps>`

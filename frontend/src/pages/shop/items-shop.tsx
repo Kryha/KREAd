@@ -27,6 +27,7 @@ import {
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
+  OverviewContainer,
   SelectorContainer,
   SortByContainer,
 } from "./styles";
@@ -101,12 +102,15 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         <>
           {!items ||
             (!items.length && (
-              <OverviewEmpty
-                headingText={text.store.thereAreNoItemsInTheShop}
-                descriptionText={text.store.thereAreNoItemsAvailable}
-                buttonText={text.navigation.goHome}
-                redirectRoute={routes.character}
-              />
+              <OverviewContainer>
+                <OverviewEmpty
+                  headingText={text.store.thereAreNoItemsInTheShop}
+                  descriptionText={text.store.thereAreNoItemsAvailable}
+                  buttonText={text.navigation.goHome}
+                  redirectRoute={routes.character}
+                  secondary
+                />
+              </OverviewContainer>
             ))}
           {!noFilteredItems && (
             <ItemWrapper height={height}>
