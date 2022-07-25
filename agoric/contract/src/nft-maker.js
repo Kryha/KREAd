@@ -4,6 +4,7 @@ import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
+
 import { errors } from './errors';
 import { mulberry32 } from './prng';
 
@@ -11,6 +12,8 @@ import { mulberry32 } from './prng';
  * @typedef {{
  *   characterNames: string[]
  *   characters: CharacterRecord[]
+ *   charactersMarket: CharacterInMarket[]
+ *   itemsMarket: ItemInMarket[]
  *   items: ItemRecord[]
  *   config?: Config
  *   mintNext: string
@@ -20,6 +23,9 @@ import { mulberry32 } from './prng';
  *   baseCharacters: object[]
  *   defaultItems: object[]
  *   completed?: boolean
+ *   moneyIssuer: Issuer
+ *   moneyBrand: Brand
+ *   sellAssetsInstallation: Installation
  * }} Config
  *
  * @typedef {{
@@ -27,16 +33,34 @@ import { mulberry32 } from './prng';
  *   character: object
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
- *   auction?: {
- *     instance: Instance,
- *     publicFacet: any,
- *   },
  * }} CharacterRecord
+ *
+ * @typedef {{
+ *   name: string
+ *   character: object
+ *   inventory: ZCFSeat
+ *   seat?: ZCFSeat
+ *   sell: {
+ *     instance: Instance
+ *     publicFacet: any
+ *     price: bigint
+ *   }
+ * }} CharacterInMarket
  *
  * @typedef {{
  *   id: bigint
  *   item: object
  * }} ItemRecord
+ *
+ * @typedef {{
+ *   id: bigint
+ *   item: object
+ *   sell: {
+ *     instance: Instance
+ *     publicFacet: any
+ *     price: bigint
+ *  }
+ * }} ItemInMarket
  *
  * @typedef {{
  *   noseline?: Item;
@@ -106,7 +130,9 @@ const start = async (zcf) => {
     config: undefined, // Holds list of base characters and default items
     characterNames: [], // Holds a list of minted character names, used to check for uniqueness
     characters: [], // Holds each character's inventory + copy of its data
+    charactersMarket: [],
     items: [],
+    itemsMarket: [],
     mintNext: 'PABLO',
   };
   /**
@@ -123,17 +149,30 @@ const start = async (zcf) => {
    * seed is used to init the PRNG
    *
    * @param {{
-   * baseCharacters: any[],
-   * defaultItems: any[],
-   * seed: number
+   *   baseCharacters: any[],
+   *   defaultItems: any[],
+   *   seed: number
+   *   moneyIssuer: Issuer
+   *   moneyBrand: Brand
+   *   sellAssetsInstallation: Installation
    * }} config
    * @returns {string}
    */
-  const initConfig = ({ baseCharacters, defaultItems, seed }) => {
+  const initConfig = ({
+    baseCharacters,
+    defaultItems,
+    seed,
+    moneyIssuer,
+    moneyBrand,
+    sellAssetsInstallation,
+  }) => {
     state.config = {
       baseCharacters,
       defaultItems,
       completed: true,
+      moneyIssuer,
+      moneyBrand,
+      sellAssetsInstallation,
     };
     assert(!Number.isNaN(seed), X`Seed must be a number`);
     PRNG = mulberry32(seed);
@@ -263,6 +302,58 @@ const start = async (zcf) => {
   };
 
   /**
+   * This function has to be called after creating the sell offer
+   *
+   * @param {ItemInMarket} itemInMarket
+   * @returns {ItemInMarket}
+   */
+  const storeItemInMarket = (itemInMarket) => {
+    state.itemsMarket = [...state.itemsMarket, itemInMarket];
+
+    return itemInMarket;
+  };
+
+  /**
+   * This function has to be called after completing the buy offer
+   *
+   * @param {bigint} itemId
+   */
+  const removeItemFromMarket = (itemId) => {
+    // TODO: eventually use a more efficient data structure
+    const newMarket = state.itemsMarket.reduce((market, item) => {
+      if (itemId !== item.id) return [...market, item];
+      return market;
+    }, []);
+    state.itemsMarket = newMarket;
+  };
+
+  /**
+   * This function has to be called after completing the sell offer
+   *
+   * @param {CharacterInMarket} characterInMarket
+   * @returns {CharacterInMarket}
+   */
+  const storeCharacterInMarket = (characterInMarket) => {
+    state.charactersMarket = [...state.charactersMarket, characterInMarket];
+
+    return characterInMarket;
+  };
+
+  /**
+   * This function has to be called after completing the buy offer
+   *
+   * @param {string} name
+   */
+  const removeCharacterFromMarket = (name) => {
+    // TODO: eventually use a more efficient data structure
+    const newMarket = state.charactersMarket.reduce((market, character) => {
+      if (name !== character.name) return [...market, character];
+      return market;
+    }, []);
+    state.charactersMarket = newMarket;
+  };
+
+  /**
    * Adds item to inventory
    *
    * @param {ZCFSeat} seat
@@ -334,6 +425,7 @@ const start = async (zcf) => {
       history: [
         {
           id: 0,
+          // @ts-ignore
           add: [providedItemAmount.value.map((i) => i.name)],
         },
       ],
@@ -405,6 +497,7 @@ const start = async (zcf) => {
       history: [
         {
           id: 0,
+          // @ts-ignore
           remove: [wantedItems.value.map((i) => i.title)],
         },
       ],
@@ -419,9 +512,21 @@ const start = async (zcf) => {
     });
   };
 
+  const getCharactersMarket = () => {
+    return harden({
+      characters: state.charactersMarket,
+    });
+  };
+
   const getItems = () => {
     return harden({
       items: state.items,
+    });
+  };
+
+  const getItemsMarket = () => {
+    return harden({
+      items: state.itemsMarket,
     });
   };
 
@@ -450,25 +555,46 @@ const start = async (zcf) => {
   });
 
   const publicFacet = Far('Chracter store public', {
+    // config
     getConfig: () => state.config,
+
+    // characters
     getCharacterBase: () => state.config?.baseCharacters[0],
     getCharacters,
+    getCharactersMarket,
     getCharacterInventory,
     getCharacterCount: () => state.characterNames.length,
     getCharacterIssuer: () => characterIssuer,
     getCharacterBrand: () => characterBrand,
+
+    // items
+    getItems,
+    getItemsMarket,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
+
+    // random
     getRandomBaseCharacter,
     getRandomItem,
-    getItems,
+
+    // equip/unequip
     makeEquipInvitation: () => zcf.makeInvitation(equip, 'addToInventory'),
     makeUnequipInvitation: () =>
       zcf.makeInvitation(unequip, 'removeFromInventory'),
+
+    // market
+    storeItemInMarket,
+    removeItemFromMarket,
+    storeCharacterInMarket,
+    removeCharacterFromMarket,
+
+    // mint
     makeMintCharacterInvitation: () =>
       zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
-    mekeMintItemInvitation: () =>
+    makeMintItemInvitation: () =>
       zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
+
+    // private state
     getPrivateState: () => privateState,
   });
 

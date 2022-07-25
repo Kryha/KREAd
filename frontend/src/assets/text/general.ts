@@ -2,7 +2,7 @@ export const general = {
   notFound: "this screen doesn't exist.",
   dataNotFound: "data not found",
   goHome: "go to home screen",
-  appName: "Agoric Character Builder",
+  appName: "KREAd",
   character: "character",
   characters: "characters",
   shop: "shop",
@@ -40,10 +40,10 @@ export const general = {
   contactUs: "contact us",
   questionsBug: "questions, bug reports, feedback... we are here for it all.",
   sendEmailTo: "send an email to",
-  // TODO: add actual email
-  contactEmail: "x@kryha.io",
+  contactEmail: "kreadapp@kryha.io",
   forSale: "for sale",
   createCharacter: "create character",
   thereIsNoActity: "there is no activity currently.",
   buy: "buy",
+  comingSoon: "coming soon!",
 };

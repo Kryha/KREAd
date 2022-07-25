@@ -5,6 +5,7 @@ const initialState: ItemState = {
   items: [],
   owned: [],
   equipped: [],
+  market: [],
   fetched: false,
 };
 
@@ -18,6 +19,12 @@ const Reducer = (state: ItemState, action: ItemStateActions): ItemState => {
 
     case "ADD_ITEMS":
       return { ...state, fetched: true, items: [...state.items, ...action.payload] };
+
+    case "SET_ITEMS_MARKET":
+      return { ...state, market: action.payload };
+
+    case "ADD_ITEMS_MARKET":
+      return { ...state, fetched: true, market: [...state.market, ...action.payload] };
 
     case "SET_OWNED_ITEMS":
       return { ...state, owned: action.payload };

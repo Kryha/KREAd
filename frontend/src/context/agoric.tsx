@@ -3,8 +3,8 @@ import React, { createContext, useReducer, useContext, useEffect, useRef } from 
 import { Far } from "@endo/marshal";
 import { makeCapTP, E } from "@endo/captp";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import dappConstants from "../service/conf/defaults";
 
+import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
 import { apiRecv } from "../service/api/receive";
@@ -13,10 +13,10 @@ import { useCharacterStateDispatch } from "./characters";
 import { useItemStateDispatch } from "./items";
 
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
-// import { NotificationWrapper } from "../components/notification-card/styles";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
+  SELL_ASSETS_INSTALLATION_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
   issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
@@ -50,7 +50,7 @@ const initialState: AgoricState = {
       publicFacet: undefined,
     },
   },
-  isLoading: false,
+  isLoading: true,
 };
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
@@ -142,6 +142,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       async function watchPurses() {
         const pn = E(walletP).getPursesNotifier();
+        // TODO: check iterateNotifier race condition on first run (when purses are not yet created in the wallet)
         for await (const purses of iterateNotifier(pn)) {
           console.info("🧐 CHECKING PURSES");
           processPurses(purses, characterDispatch, itemDispatch, dispatch, {
@@ -171,6 +172,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
+        E(walletP).suggestInstallation("Installation Sell Assets", SELL_ASSETS_INSTALLATION_BOARD_ID),
         E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
       ]);
@@ -192,6 +194,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       // Fetch Items from Chain
       const itemNFTs = await E(nftPublicFacet).getItems();
       itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
+      dispatch({ type: "SET_LOADING", payload: false });
 
       // TODO: set up chain notifiers
       // const availableItemsNotifier = E(
