@@ -10,12 +10,12 @@ interface HeightProps {
 }
 
 export const OnboardingWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 40px;
-  overflow-y: scroll;
-  width: 460px;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  scroll-behavior: smooth;
+  overflow: auto;
+  scroll-snap-type: y mandatory;
 `;
 
 export const InfoText = styled.div<HeightProps>`
@@ -25,6 +25,9 @@ export const InfoText = styled.div<HeightProps>`
   }
   ${({ height }): string => `height: ${height}px; min-height: ${height}px;`};
   margin-bottom: 200px;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
   scroll-snap-align: start;
   transition: all 0.4s;
 `;
@@ -63,6 +66,9 @@ export const EndContent = styled.div<HeightProps>`
   ${TitleText} {
     margin-top: 16px;
   }
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
   scroll-snap-align: start;
 `;
 
@@ -71,6 +77,9 @@ export const MiddleContent = styled.div<HeightProps>`
   ${TitleText} {
     margin-top: 16px;
   }
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
   scroll-snap-align: start;
 `;
 
@@ -108,7 +117,7 @@ export const DefaultImage = styled.img<ViewProps>`
 `;
 
 export const Email = styled.a`
-  text-decoration: none;
+  text-decoration: underline;
   font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
@@ -155,4 +164,10 @@ export const ArrowDown = styled(ArrowDownIcon)`
   -webkit-animation-fill-mode: forwards;
   animation-delay: 0.5s;
   -webkit-animation-delay: 0.5s;
+`;
+
+export const SectionContainer = styled.div`
+  padding-left: 40px;
+  padding-top: 40px;
+  width: 460px;
 `;

@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper, EmptyViewContainer } from "./styles";
-import { ButtonText, PrimaryButton } from "../atoms";
+import { ButtonText, Overlay, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -112,6 +112,9 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           <CharacterDetailSection character={character} actions={detailActions()} />
         </CharacterCardWrapper>
       )}
+      <FadeInOut show={!!character} exiting={!character}>
+        <Overlay />
+      </FadeInOut>
     </>
   );
 };
