@@ -90,3 +90,16 @@ export const bounce = keyframes`
 		transform: translateY(-10px);
 	}
 `;
+
+export const sequentialFadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+
+  50%{
+    opacity:1
+  }
+  100% {
+    opacity:0;
+  }
+  `;

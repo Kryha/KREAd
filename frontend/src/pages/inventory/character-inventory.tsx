@@ -2,14 +2,15 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
-import { ErrorView, FadeInOut, LoadingPage } from "../../components";
+import { AnimatedLogo, ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { CharactersList } from "../../containers/characters-list";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useCharacterStateDispatch } from "../../context/characters";
+import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
-import { DetailWrapper } from "./styles";
+import { DetailWrapper, KreadContainer } from "./styles";
 
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ export const CharactersInventory: FC = () => {
   const [character] = useMyCharacter(selectedId);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const { width, height } = useViewport();
 
   useEffect(() => {
     if (isLoadingCharacters || !!selectedId) return;
@@ -65,6 +68,9 @@ export const CharactersInventory: FC = () => {
           <CharacterDetailSection character={character} actions={detailActions()} />
         </DetailWrapper>
       </FadeInOut>
+      <KreadContainer height={height} width={width}>
+        <AnimatedLogo iteration={1} />
+      </KreadContainer>
     </PageContainer>
   );
 };
