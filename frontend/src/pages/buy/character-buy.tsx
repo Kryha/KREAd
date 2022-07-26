@@ -1,26 +1,42 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
+import { CharacterInMarket } from "../../interfaces";
 import { useBuyCharacter, useCharacterFromMarket, useMyCharacter } from "../../service";
 import { Buy } from "./buy";
 
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
 
-  const [data, isLoading] = useCharacterFromMarket(String(id));
+  const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(String(id));
   const [boughtCharacter] = useMyCharacter(String(id));
 
   const buyCharacter = useBuyCharacter();
 
+  const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
+  const [data, setData] = useState<CharacterInMarket>();
+
+  useEffect(() => {
+    // without this, the view will error out after purchase, since the character won't be on the market anymore
+    if (characterInMarket) setData(characterInMarket);
+  }, [characterInMarket]);
+
+  useEffect(() => {
+    // TODO: handle declining character and error
+    if (boughtCharacter) setIsAwaitingApproval(false);
+  }, [boughtCharacter]);
+
   // TODO: handle offer denied and error
   const handleSubmit = () => {
     if (!id) return;
+    setIsAwaitingApproval(true);
     buyCharacter.mutate({ characterId: id });
   };
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoadingCharacter) return <LoadingPage />;
 
   if (!data) return <ErrorView />;
 
@@ -28,7 +44,7 @@ export const CharacterBuy = () => {
     <Buy
       data={{ ...data.character, price: Number(data.sell.price) }}
       onSubmit={handleSubmit}
-      isLoading={buyCharacter.isLoading}
+      isLoading={isAwaitingApproval}
       isOfferAccepted={!!boughtCharacter}
       text={{
         buy: text.store.buyCharacter,

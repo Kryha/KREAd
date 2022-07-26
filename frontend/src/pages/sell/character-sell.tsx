@@ -4,22 +4,24 @@ import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
-import { useMyCharacter, useSellItem } from "../../service";
+import { useMyCharacter, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
 
   const [data, isLoading] = useMyCharacter(String(id));
-  const sellItem = useSellItem();
+  const sellCharacter = useSellCharacter();
 
   const submitForm = (price: number) => {
-    // sellItem.mutate({ price });
+    if (!id) return;
+    // TODO: show progress
+    sellCharacter.mutate({ characterId: id, price });
   };
 
-  if (sellItem.isError) return <ErrorView />;
+  if (sellCharacter.isError) return <ErrorView />;
 
-  if (sellItem.isSuccess) return <Navigate to={routes.shop} />;
+  if (sellCharacter.isSuccess) return <Navigate to={routes.shop} />;
 
   if (isLoading) return <LoadingPage />;
 

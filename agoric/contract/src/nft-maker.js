@@ -559,11 +559,11 @@ const start = async (zcf) => {
   /**
    * Gets the inventory of a given character
    *
-   * @param {string} characterName
+   * @param {bigint} characterId
    */
-  const getCharacterInventory = (characterName) => {
+  const getCharacterInventory = (characterId) => {
     const characterRecord = state.characters.find(
-      ({ character }) => character.name === characterName,
+      ({ character }) => character.id === characterId,
     );
     assert(characterRecord, X`${errors.character404}`);
     const { inventory } = characterRecord;

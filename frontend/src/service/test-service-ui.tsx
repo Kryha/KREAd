@@ -251,7 +251,7 @@ export const TestServiceUI = () => {
       console.log("no characters owned");
       return;
     }
-    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name));
+    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].id));
   };
 
   return (

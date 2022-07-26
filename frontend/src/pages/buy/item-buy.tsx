@@ -17,7 +17,6 @@ export const ItemBuy = () => {
   const buyItem = useBuyItem();
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
-
   const [data, setData] = useState<ItemInMarket>();
 
   useEffect(() => {
@@ -30,10 +29,10 @@ export const ItemBuy = () => {
     if (boughtItem) setIsAwaitingApproval(false);
   }, [boughtItem]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    await buyItem.mutateAsync({ itemId: id });
+    buyItem.mutate({ itemId: id });
   };
 
   if (isLoadingItem) return <LoadingPage />;

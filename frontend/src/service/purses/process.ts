@@ -57,7 +57,7 @@ export const processPurses = async (
     ownedCharacters.map(async (character: CharacterBackend) => {
       const {
         items: { value: equippedItems },
-      } = await E(contractPublicFacet).getCharacterInventory(character.name);
+      } = await E(contractPublicFacet).getCharacterInventory(character.id);
 
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
 
