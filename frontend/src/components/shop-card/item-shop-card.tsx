@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Item } from "../../interfaces";
+import { ItemInMarket } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
@@ -9,15 +9,18 @@ import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, ItemImage,
 import { useViewport } from "../../hooks";
 
 interface ShopCardProps {
-  item: Item;
-  onClick?: (item: Item) => void;
+  itemInMarket: ItemInMarket;
+  onClick?: (item: ItemInMarket) => void;
 }
 
-export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
+export const ItemShopCard: FC<ShopCardProps> = ({ itemInMarket, onClick }) => {
+  const { item, sell } = itemInMarket;
+
   const { width, height } = useViewport();
+
   const handleClick = () => {
     if (!onClick) return;
-    onClick(item);
+    onClick(itemInMarket);
   };
 
   return (
@@ -36,7 +39,7 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
               <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
             </Tag>
             <PriceContainer>
-              <PriceInIst price={item.price} />
+              <PriceInIst price={Number(sell.price)} />
               <PrimaryButton>
                 <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
               </PrimaryButton>

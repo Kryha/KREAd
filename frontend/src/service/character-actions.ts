@@ -5,6 +5,7 @@ import { AmountMath } from "@agoric/ertp";
 import dappConstants from "../service/conf/defaults";
 import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
+import { CharacterBackend, CharacterInMarketBackend } from "../interfaces";
 
 export const formOfferForCharacter = (purses: Purses, character: any) => ({
   want: {
@@ -64,7 +65,7 @@ export const mintNfts = async (service: AgoricState, name: string) => {
   return E(walletP).addOffer(offerConfig);
 };
 
-export const sellCharacter = async (service: AgoricState, character: any, price: bigint) => {
+export const sellCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -129,7 +130,8 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
   );
 
   const characterInMarket = {
-    ...character,
+    id: character.id,
+    character,
     sell: { instance, publicFacet: sellAssetsPublicFacet, price },
   };
 
@@ -137,7 +139,7 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
   await E(publicFacet).storeCharacterInMarket(characterInMarket);
 };
 
-export const buyCharacter = async (service: AgoricState, characterInMarket: any) => {
+export const buyCharacter = async (service: AgoricState, characterInMarket: CharacterInMarketBackend) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -153,7 +155,7 @@ export const buyCharacter = async (service: AgoricState, characterInMarket: any)
 
   if (!characterPurse || !moneyPurse) return;
 
-  const { sell, ...character } = characterInMarket;
+  const { sell, character } = characterInMarket;
 
   const invitation = await E(sell.publicFacet).makeBuyerInvitation();
 

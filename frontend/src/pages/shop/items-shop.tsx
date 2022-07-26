@@ -22,7 +22,7 @@ import { useItemsMarketFiltered } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, SelectorContainer, SortByContainer } from "./styles";
-import { Item } from "../../interfaces";
+import { ItemInMarket } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -35,7 +35,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
   const [filterId, setFilterId] = useState("");
-  const [selectedItem, setSelectedItem] = useState<Item>();
+  const [selectedItem, setSelectedItem] = useState<ItemInMarket>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -109,7 +109,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             <ItemWrapper height={height}>
               <ItemContainer>
                 {items.map((item, index) => (
-                  <ItemShopCard item={item.item} key={index} onClick={setSelectedItem} />
+                  <ItemShopCard itemInMarket={item} key={index} onClick={setSelectedItem} />
                 ))}
               </ItemContainer>
             </ItemWrapper>
@@ -118,13 +118,13 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             {!!selectedItem && (
               <DetailContainer>
                 <ItemDetailSection
-                  item={selectedItem}
+                  item={selectedItem.item}
                   actions={{
                     onClose: () => {
                       setSelectedItem(undefined);
                       setClose(true);
                     },
-                    price: selectedItem.price,
+                    price: Number(selectedItem.sell.price),
                     primary: { text: text.item.buy, onClick: buy },
                   }}
                 />

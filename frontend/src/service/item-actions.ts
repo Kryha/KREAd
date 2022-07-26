@@ -4,9 +4,9 @@ import { E } from "@endo/eventual-send";
 import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
-import { Character, Item } from "../interfaces";
+import { Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
 
-export const sellItem = async (service: AgoricState, item: any, price: bigint) => {
+export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -71,7 +71,8 @@ export const sellItem = async (service: AgoricState, item: any, price: bigint) =
   );
 
   const itemInMarket = {
-    ...item,
+    id: item.id,
+    item,
     sell: { instance, publicFacet: sellAssetsPublicFacet, price },
   };
 
@@ -79,7 +80,7 @@ export const sellItem = async (service: AgoricState, item: any, price: bigint) =
   await E(publicFacet).storeItemInMarket(itemInMarket);
 };
 
-export const buyItem = async (service: AgoricState, itemInMarket: any) => {
+export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBackend) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -95,7 +96,7 @@ export const buyItem = async (service: AgoricState, itemInMarket: any) => {
 
   if (!itemPurse || !moneyPurse) return;
 
-  const { sell, ...item } = itemInMarket;
+  const { sell, item } = itemInMarket;
 
   const invitation = await E(sell.publicFacet).makeBuyerInvitation();
 

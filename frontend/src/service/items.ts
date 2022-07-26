@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { useMutation } from "react-query";
 
 import { Item, ItemEquip, ItemInMarket } from "../interfaces";
-import { filterItems, filterItemsMarket, ItemFilters } from "../util";
+import { filterItems, filterItemsMarket, ItemFilters, mediate } from "../util";
 import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
-import { equipItem, unequipItem, sellItem } from "./item-actions";
+import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
 import { useSelectedCharacter } from "./character";
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
@@ -55,10 +55,28 @@ export const useItemsMarketFiltered = (filters: ItemFilters): [ItemInMarket[], b
 
 export const useSellItem = () => {
   const [service] = useAgoricContext();
+  const [{ owned }] = useMyItems();
 
-  return useMutation(async (body: { item: any; price: number }) => {
-    const { item, price } = body;
-    await sellItem(service, item, BigInt(price));
+  return useMutation(async (body: { itemId: string; price: number }) => {
+    const { itemId, price } = body;
+    const found = owned.find((item) => item.id === itemId);
+    if (!found) return;
+
+    const mediated = mediate.items.toBack([found])[0];
+    await sellItem(service, mediated, BigInt(price));
+  });
+};
+
+export const useBuyItem = () => {
+  const [service] = useAgoricContext();
+  const [items] = useItemsMarket();
+
+  return useMutation(async (body: { itemId: string }) => {
+    const found = items.find((item) => item.id === body.itemId);
+    if (!found) return;
+
+    const mediated = mediate.itemsMarket.toBack([found])[0];
+    await buyItem(service, mediated);
   });
 };
 

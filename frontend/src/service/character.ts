@@ -4,8 +4,8 @@ import { useMutation } from "react-query";
 import { Character, CharacterCreation, CharacterEquip, CharacterInMarket } from "../interfaces";
 import { useCharacterContext } from "../context/characters";
 import { useEffect, useMemo } from "react";
-import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket } from "../util";
-import { mintNfts, sellCharacter } from "./character-actions";
+import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
+import { buyCharacter, mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 
 export const useSelectedCharacter = (): [Character | undefined, boolean] => {
@@ -90,9 +90,29 @@ export const useEquipCharacter = () => {
 
 export const useSellCharacter = () => {
   const [service] = useAgoricContext();
+  const [characters] = useMyCharacters();
 
-  return useMutation(async (body: { character: any; price: number }) => {
-    const { character, price } = body;
-    await sellCharacter(service, character, BigInt(price));
+  return useMutation(async (body: { characterId: string; price: number }) => {
+    const { characterId, price } = body;
+    const found = characters.find((character) => character.id === characterId);
+    if (!found) return;
+
+    const { isEquipped: _, ...rest } = found;
+    const backendCharacter = mediate.characters.toBack([rest])[0];
+
+    await sellCharacter(service, backendCharacter, BigInt(price));
+  });
+};
+
+export const useBuyCharacter = () => {
+  const [service] = useAgoricContext();
+  const [characters] = useCharactersMarket();
+
+  return useMutation(async (body: { characterId: string }) => {
+    const found = characters.find((character) => character.id === body.characterId);
+    if (!found) return;
+
+    const mediated = mediate.charactersMarket.toBack([found])[0];
+    await buyCharacter(service, mediated);
   });
 };

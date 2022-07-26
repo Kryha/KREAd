@@ -3,12 +3,22 @@ import { text } from "../../assets";
 
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useCharacterFromMarket } from "../../service";
+import { useBuyCharacter, useCharacterFromMarket, useMyCharacter } from "../../service";
 import { Buy } from "./buy";
 
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
+
   const [data, isLoading] = useCharacterFromMarket(String(id));
+  const [boughtCharacter] = useMyCharacter(String(id));
+
+  const buyCharacter = useBuyCharacter();
+
+  // TODO: handle offer denied and error
+  const handleSubmit = () => {
+    if (!id) return;
+    buyCharacter.mutate({ characterId: id });
+  };
 
   if (isLoading) return <LoadingPage />;
 
@@ -16,7 +26,10 @@ export const CharacterBuy = () => {
 
   return (
     <Buy
-      data={data.character}
+      data={{ ...data.character, price: Number(data.sell.price) }}
+      onSubmit={handleSubmit}
+      isLoading={buyCharacter.isLoading}
+      isOfferAccepted={!!boughtCharacter}
       text={{
         buy: text.store.buyCharacter,
         success: text.store.characterSuccessfullyBought,

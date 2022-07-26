@@ -23,13 +23,11 @@ export const FakeCharcters: Character[] = [
     itemActivity: [
       {
         name: "transfer",
-        price: 1234,
         to: "0x0177812bsjs7998",
         from: "0x0177812bsjs7998",
         date: 1235667272,
       },
     ],
-    price: 123123,
   },
   {
     title: "character 2",
@@ -52,13 +50,11 @@ export const FakeCharcters: Character[] = [
     itemActivity: [
       {
         name: "transfer",
-        price: 1234,
         to: "0x0177812bsjs7998",
         from: "0x0177812bsjs7998",
         date: 1235667272,
       },
     ],
-    price: 123123,
   },
   {
     title: "character 3",
@@ -81,13 +77,11 @@ export const FakeCharcters: Character[] = [
     itemActivity: [
       {
         name: "transfer",
-        price: 1234,
         to: "0x0177812bsjs7998",
         from: "0x0177812bsjs7998",
         date: 1235667272,
       },
     ],
-    price: 123123,
   },
   {
     title: "character 4",
@@ -110,13 +104,11 @@ export const FakeCharcters: Character[] = [
     itemActivity: [
       {
         name: "transfer",
-        price: 1234,
         to: "0x0177812bsjs7998",
         from: "0x0177812bsjs7998",
         date: 1235667272,
       },
     ],
-    price: 123123,
   },
 ];
 
@@ -140,12 +132,10 @@ export const FakeCharctersNoItems: any[] = [
     projectDescription: "this is a project",
     itemActivity: {
       event: "0x0177812bsjs7998",
-      price: 1234,
       to: "0x0177812bsjs7998",
       from: "0x0177812bsjs7998",
       date: "1235667272",
     },
-    price: 123123,
   },
   {
     title: "RAMIRO",
@@ -166,12 +156,10 @@ export const FakeCharctersNoItems: any[] = [
     projectDescription: "this is a project",
     itemActivity: {
       event: "0x0177812bsjs7998",
-      price: 1234,
       to: "0x0177812bsjs7998",
       from: "0x0177812bsjs7998",
       date: "1235667272",
     },
-    price: 123123,
   },
   {
     title: "character 2",
@@ -192,12 +180,10 @@ export const FakeCharctersNoItems: any[] = [
     projectDescription: "this is a project",
     itemActivity: {
       event: "0x0177812bsjs7998",
-      price: 1234,
       to: "0x0177812bsjs7998",
       from: "0x0177812bsjs7998",
       date: "1235667272",
     },
-    price: 123123,
   },
   {
     title: "character 3",
@@ -219,12 +205,10 @@ export const FakeCharctersNoItems: any[] = [
     projectDescription: "this is a project",
     itemActivity: {
       event: "0x0177812bsjs7998",
-      price: 1234,
       to: "0x0177812bsjs7998",
       from: "0x0177812bsjs7998",
       date: "1235667272",
     },
-    price: 123123,
   },
   {
     title: "character 4",
@@ -246,11 +230,9 @@ export const FakeCharctersNoItems: any[] = [
     projectDescription: "this is a project",
     itemActivity: {
       event: "0x0177812bsjs7998",
-      price: 1234,
       to: "0x0177812bsjs7998",
       from: "0x0177812bsjs7998",
       date: "1235667272",
     },
-    price: 123123,
   },
 ];

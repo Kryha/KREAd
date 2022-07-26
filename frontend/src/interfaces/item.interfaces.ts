@@ -16,7 +16,6 @@ export interface Item {
   baseMaterial: string;
   colors: string[];
   projectDescription: string;
-  price: number;
   details: Detail;
   date: string;
   activity: ActivityEvent[];

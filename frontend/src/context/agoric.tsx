@@ -8,7 +8,7 @@ import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
 import { apiRecv } from "../service/api/receive";
-import { processOffers, processPurses } from "../service/purses/process";
+import { processPurses } from "../service/purses/process";
 import { useCharacterStateDispatch } from "./characters";
 import { useItemStateDispatch } from "./items";
 
@@ -171,7 +171,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       async function watchOffers() {
         const on = E(walletP).getOffersNotifier();
         for await (const offers of iterateNotifier(on)) {
-          processOffers(offers, characterDispatch, itemDispatch, dispatch);
           console.info("📡 OFFER UPDATE");
           const last3 = offers.slice(-3);
           console.info(last3);

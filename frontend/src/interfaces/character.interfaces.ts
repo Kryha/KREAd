@@ -39,7 +39,6 @@ export interface Character {
   detail: Detail;
   projectDescription: string;
   itemActivity: ActivityEvent[];
-  price: number;
   date: number;
 }
 

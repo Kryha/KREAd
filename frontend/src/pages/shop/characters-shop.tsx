@@ -102,7 +102,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                 <ItemWrapper height={height}>
                   <ItemContainer>
                     {characters.map((character, index) => (
-                      <CharacterShopCard character={character.character} key={index} onClick={setSelectedCharacter} />
+                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
                 </ItemWrapper>
@@ -111,7 +111,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                 <ItemWrapper height={height}>
                   <ItemContainer>
                     {characters.map((character, index) => (
-                      <CharacterShopCard character={character.character} key={index} onClick={setSelectedCharacter} />
+                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
                 </ItemWrapper>

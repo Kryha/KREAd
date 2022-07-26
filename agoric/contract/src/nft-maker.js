@@ -39,8 +39,6 @@ import { mulberry32 } from './prng';
  * @typedef {{
  *   id: bigint
  *   character: object
- *   inventory: ZCFSeat
- *   seat?: ZCFSeat
  *   sell: {
  *     instance: Instance
  *     publicFacet: any
@@ -90,7 +88,6 @@ import { mulberry32 } from './prng';
  *   baseMaterial: string;
  *   colors: string[];
  *   projectDescription: string;
- *   price: number;
  *   details: any;
  *   date: string;
  *   activity: any[];

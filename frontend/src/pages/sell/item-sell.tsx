@@ -14,7 +14,9 @@ export const ItemSell = () => {
   const sellItem = useSellItem();
 
   const submitForm = (price: number) => {
-    // sellItem.mutate({ price });
+    if (!id) return;
+    // TODO: show progress
+    sellItem.mutate({ itemId: id, price });
   };
 
   if (sellItem.isError) return <ErrorView />;

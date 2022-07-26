@@ -23,14 +23,15 @@ export interface CharactersMarketFilters {
 export const filterItems = (items: ItemEquip[], { category, sorting, price, color }: ItemFilters): ItemEquip[] => {
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
-  if (!category && !sorting && !color && !changedRange && items.length) return [];
+  if (!category && !sorting && !color && !changedRange && items.length) return items;
 
   const isInCategory = (item: ItemEquip, category: string) => (category ? item.category === category : true);
   const hasColor = (item: ItemEquip, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
   const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
-  const filteredPrice = filteredItems.filter((item) => item.price > price.min && item.price < price.max);
-  const sortedItems = sortItems(sorting, filteredPrice);
+  // TODO: remove price filter in inventory?
+  // const filteredPrice = filteredItems.filter((item) => item.price > price.min && item.price < price.max);
+  const sortedItems = sortItems(sorting, filteredItems);
 
   return sortedItems;
 };
@@ -38,13 +39,13 @@ export const filterItems = (items: ItemEquip[], { category, sorting, price, colo
 export const filterItemsMarket = (items: ItemInMarket[], { category, sorting, price, color }: ItemFilters): ItemInMarket[] => {
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
-  if (!category && !sorting && !color && !changedRange && items.length) return [];
+  if (!category && !sorting && !color && !changedRange && items.length) return items;
 
   const isInCategory = ({ item }: ItemInMarket, category: string) => (category ? item.category === category : true);
   const hasColor = ({ item }: ItemInMarket, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
   const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
-  const filteredPrice = filteredItems.filter(({ item }) => item.price > price.min && item.price < price.max);
+  const filteredPrice = filteredItems.filter(({ sell }) => Number(sell.price) > price.min && Number(sell.price) < price.max);
   const sortedItems = sortItemsMarket(sorting, filteredPrice);
 
   return sortedItems;
@@ -72,7 +73,7 @@ export const filterCharactersMarket = (
   if (!category && !sorting && !changedRange) return characters;
 
   const filteredCharacters = characters.filter((character) => isInCategory(character, category));
-  const filteredPrice = filteredCharacters.filter(({ character }) => character.price > price.min && character.price < price.max);
+  const filteredPrice = filteredCharacters.filter(({ sell }) => Number(sell.price) > price.min && Number(sell.price) < price.max);
   const sortedCharacters = sortCharactersMarket(sorting, filteredPrice);
 
   return sortedCharacters;
