@@ -54,7 +54,7 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
     <SortableListWrap>
       <ListHeader>
         <BaseFilterContainer>
-          <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
+          <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId}>
             <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={itemCategories} />
           </Filters>
           <ColorContainer>
@@ -65,7 +65,7 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
         </BaseFilterContainer>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
-          <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
+          <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
             <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
           </Filters>
         </SortContainer>

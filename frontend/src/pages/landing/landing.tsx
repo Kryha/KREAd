@@ -64,15 +64,17 @@ export const Landing: FC = () => {
           <CharacterItems items={selectedCharacter.items} showItems={!openTab} />
 
           {/* character info */}
-          <DetailContainer>
-            <MenuText>{selectedCharacter?.name}</MenuText>
-            <ButtonContainer>
-              <SecondaryButton onClick={() => setShowDetail(true)}>
-                <ButtonText>{text.general.moreInfo}</ButtonText>
-              </SecondaryButton>
-              <ButtonText>{text.param.level(selectedCharacter?.level)}</ButtonText>
-            </ButtonContainer>
-          </DetailContainer>
+          {!openTab && (
+            <DetailContainer>
+              <MenuText>{selectedCharacter?.name}</MenuText>
+              <ButtonContainer>
+                <SecondaryButton onClick={() => setShowDetail(true)}>
+                  <ButtonText>{text.general.moreInfo}</ButtonText>
+                </SecondaryButton>
+                <ButtonText>{text.param.level(selectedCharacter?.level)}</ButtonText>
+              </ButtonContainer>
+            </DetailContainer>
+          )}
           <CharacterCardWrapper>
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection

@@ -4,6 +4,7 @@ import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { disappear, fadeIn, slideInUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
 import { KreadIcon } from "../../components/logo/styles";
+import { OverviewWrapper } from "../../components/overview-empty/styles";
 import { PriceContainer } from "../../components/price-in-ist/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
@@ -222,5 +223,12 @@ export const KreadContainer = styled.div<ViewProps>`
     top: 40px;
     width: 100px;
     height: 24px;
+  }
+`;
+
+export const OverviewContainer = styled.div`
+  ${OverviewWrapper} {
+    padding-top: 97px;
+    padding-left: 0px;
   }
 `;

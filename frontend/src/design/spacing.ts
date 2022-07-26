@@ -14,7 +14,7 @@ export const zIndex = {
   foreground: 10,
   mid: 20,
   inFront: 30,
-  onTop: 40,
+  onTop: 101,
   overCharacter: 41,
   background: 0,
   midBackground: 1,

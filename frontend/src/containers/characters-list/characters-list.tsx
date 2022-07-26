@@ -1,12 +1,13 @@
 import { FC, useState } from "react";
 
-import { ButtonText, ErrorView, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useMyFilteredCharacters } from "../../service";
 
 import { text } from "../../assets";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
+import { color } from "../../design";
 
 interface Props {
   onCharacterClick: (id: string) => void;
@@ -44,18 +45,19 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
     <SortableListWrap>
       <ListHeader>
         <CategoryContainer>
-          <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
+          <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId}>
             <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
           </Filters>
         </CategoryContainer>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
-          <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
+          <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
             <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
           </Filters>
         </SortContainer>
       </ListHeader>
-      <ButtonText>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
+      <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
+      <HorizontalDivider />
       <ListContainer>
         <MenuItem
           data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].id }}

@@ -21,27 +21,22 @@ export const Id = styled.h3<DirectionProps>`
         case "noseline":
           return `
             transform: rotate(90deg);
-            line-height: 100px;
+            line-height: 95px;
         `;
-        case "frontMask":
+        case "front mask":
           return `
             transform: rotate(90deg);
-            line-height: 90px;
+            line-height: 125px;
           `;
-        case "liquid":
+        case "air reservoir":
           return `
             transform: rotate(90deg);
-            line-height: 75px;
-          `;
-        case "airReservoir":
-          return `
-            transform: rotate(90deg);
-            line-height: 70px;
+            line-height: 125px;
           `;
         default:
           return `
             transform: rotate(90deg);
-            line-height: 60px;
+            line-height: 65px;
           `;
       }
     } else {
