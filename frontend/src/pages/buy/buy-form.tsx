@@ -30,29 +30,32 @@ interface BuyFormProps {
 }
 
 export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
+  const isOnFirstStep = !isLoading && !isOfferAccepted;
+  const isOnSecondStep = isLoading && !isOfferAccepted;
+
   return (
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <GeneralInfo active={isLoading}>
+        <GeneralInfo active={!isOnFirstStep}>
           <PricingContainer>
-            <NumberContainer active>{isLoading ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
+            <NumberContainer active>{!isOnFirstStep ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
             <StepText>{text.mint.sendOfferToWallet}</StepText>
-            {!isLoading && <PriceInIst price={data.price} />}
+            {isOnFirstStep && <PriceInIst price={data.price} />}
           </PricingContainer>
-          {!isLoading && (
+          {isOnFirstStep && (
             <PrimaryButton onClick={() => onSubmit()}>
               <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
             </PrimaryButton>
           )}
         </GeneralInfo>
         <Line />
-        <Step active={!isLoading}>
-          <NumberContainer active={!!isLoading}>
+        <Step active={!isOnSecondStep}>
+          <NumberContainer active={!isOnSecondStep}>
             {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
-          {!isOfferAccepted && !!isLoading && (
+          {isOnSecondStep && (
             <Badge>
               <ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText>
             </Badge>
