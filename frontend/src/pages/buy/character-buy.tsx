@@ -14,7 +14,7 @@ export const CharacterBuy = () => {
   const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(String(id));
   const [boughtCharacter] = useMyCharacter(String(id));
 
-  const buyCharacter = useBuyCharacter();
+  const buyCharacter = useBuyCharacter(String(id));
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
   const [data, setData] = useState<CharacterInMarket>();
@@ -26,14 +26,14 @@ export const CharacterBuy = () => {
 
   useEffect(() => {
     // TODO: handle declining character and error
-    if (boughtCharacter) setIsAwaitingApproval(false);
-  }, [boughtCharacter]);
+    if (boughtCharacter || !buyCharacter.isLoading) setIsAwaitingApproval(false);
+  }, [boughtCharacter, buyCharacter.isLoading]);
 
   // TODO: handle offer denied and error
   const handleSubmit = () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    buyCharacter.mutate({ characterId: id });
+    buyCharacter.callback();
   };
 
   if (isLoadingCharacter) return <LoadingPage />;

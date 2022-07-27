@@ -135,8 +135,7 @@ export const sellCharacter = async (service: AgoricState, character: CharacterBa
     sell: { instance, publicFacet: sellAssetsPublicFacet, price },
   };
 
-  // TODO: store in market after offer is accepted and processed
-  await E(publicFacet).storeCharacterInMarket(characterInMarket);
+  return characterInMarket;
 };
 
 export const buyCharacter = async (service: AgoricState, characterInMarket: CharacterInMarketBackend) => {
@@ -180,7 +179,4 @@ export const buyCharacter = async (service: AgoricState, characterInMarket: Char
       dappContext: true,
     })
   );
-
-  // TODO: remove character from market after offer is accepted and processed
-  await E(publicFacet).removeCharacterFromMarket(characterInMarket.id);
 };

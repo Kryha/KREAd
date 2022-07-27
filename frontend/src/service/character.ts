@@ -1,12 +1,13 @@
 // TODO: Remove this, use ations + context instead
 import { useMutation } from "react-query";
 
-import { Character, CharacterCreation, CharacterEquip, CharacterInMarket } from "../interfaces";
+import { Character, CharacterCreation, CharacterEquip, CharacterInMarket, CharacterInMarketBackend } from "../interfaces";
 import { useCharacterContext } from "../context/characters";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
 import { buyCharacter, mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
+import { E } from "@endo/eventual-send";
 
 export const useSelectedCharacter = (): [Character | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
@@ -88,31 +89,99 @@ export const useEquipCharacter = () => {
   });
 };
 
-export const useSellCharacter = () => {
+// TODO: test after merge with equip/unequip fix
+export const useSellCharacter = (characterId: string) => {
   const [service] = useAgoricContext();
   const [characters] = useMyCharacters();
 
-  return useMutation(async (body: { characterId: string; price: number }) => {
-    const { characterId, price } = body;
-    const found = characters.find((character) => character.id === characterId);
-    if (!found) return;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-    const { isEquipped: _, ...rest } = found;
-    const backendCharacter = mediate.characters.toBack([rest])[0];
+  const [characterInMarket, setCharacterInMarket] = useState<CharacterInMarketBackend>();
 
-    await sellCharacter(service, backendCharacter, BigInt(price));
-  });
+  useEffect(() => {
+    const addToMarket = async () => {
+      try {
+        if (!characterInMarket || !service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "seller") return;
+        if (!latestOffer.status || latestOffer.status !== "pending") return;
+
+        const characterFromProposal = latestOffer.proposalTemplate.give.Items.value[0];
+        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).storeCharacterInMarket(characterInMarket);
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    addToMarket();
+  }, [characterId, characterInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(
+    async (price: number) => {
+      const found = characters.find((character) => character.id === characterId);
+      if (!found) return;
+
+      const { isEquipped: _, ...rest } = found;
+      const backendCharacter = mediate.characters.toBack([rest])[0];
+
+      setIsLoading(true);
+
+      const toStore = await sellCharacter(service, backendCharacter, BigInt(price));
+      setCharacterInMarket(toStore);
+    },
+    [characterId, characters, service]
+  );
+
+  return { callback, isLoading, isError, isSuccess };
 };
 
-export const useBuyCharacter = () => {
+// TODO: test after merge with equip/unequip fix
+export const useBuyCharacter = (characterId: string) => {
   const [service] = useAgoricContext();
   const [characters] = useCharactersMarket();
 
-  return useMutation(async (body: { characterId: string }) => {
-    const found = characters.find((character) => character.id === body.characterId);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    const removeFromMarket = async () => {
+      try {
+        if (!service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "buyer") return;
+        if (!latestOffer.status || latestOffer.status !== "accept") return;
+
+        const characterFromProposal = latestOffer.proposalTemplate.want.Items.value[0];
+        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).removeCharacterFromMarket(BigInt(characterId));
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    removeFromMarket();
+  }, [characterId, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(async () => {
+    const found = characters.find((character) => character.id === characterId);
     if (!found) return;
 
     const mediated = mediate.charactersMarket.toBack([found])[0];
+    setIsLoading(true);
     await buyCharacter(service, mediated);
-  });
+  }, [characterId, characters, service]);
+
+  return { callback, isLoading, isError, isSuccess };
 };

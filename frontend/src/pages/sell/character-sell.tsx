@@ -11,12 +11,12 @@ export const CharacterSell = () => {
   const { id } = useParams<"id">();
 
   const [data, isLoading] = useMyCharacter(String(id));
-  const sellCharacter = useSellCharacter();
+  const sellCharacter = useSellCharacter(String(id));
 
   const submitForm = (price: number) => {
     if (!id) return;
     // TODO: show progress
-    sellCharacter.mutate({ characterId: id, price });
+    sellCharacter.callback(price);
   };
 
   if (sellCharacter.isError) return <ErrorView />;

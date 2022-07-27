@@ -117,7 +117,7 @@ export const useBuyItem = (itemId: string) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    const addToMarket = async () => {
+    const removeFromMarket = async () => {
       try {
         if (!service.offers.length) return;
 
@@ -136,7 +136,7 @@ export const useBuyItem = (itemId: string) => {
       }
       setIsLoading(false);
     };
-    addToMarket();
+    removeFromMarket();
   }, [itemId, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(async () => {
