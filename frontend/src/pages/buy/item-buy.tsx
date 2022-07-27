@@ -14,7 +14,7 @@ export const ItemBuy = () => {
   const [itemInMarket, isLoadingItem] = useItemFromMarket(String(id));
   const [boughtItem] = useMyItem(String(id));
 
-  const buyItem = useBuyItem();
+  const buyItem = useBuyItem(String(id));
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
   const [data, setData] = useState<ItemInMarket>();
@@ -26,13 +26,13 @@ export const ItemBuy = () => {
 
   useEffect(() => {
     // TODO: handle declining item and error
-    if (boughtItem) setIsAwaitingApproval(false);
-  }, [boughtItem]);
+    if (boughtItem && !buyItem.isLoading) setIsAwaitingApproval(false);
+  }, [boughtItem, buyItem.isLoading]);
 
   const handleSubmit = () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    buyItem.mutate({ itemId: id });
+    buyItem.callback();
   };
 
   if (isLoadingItem) return <LoadingPage />;

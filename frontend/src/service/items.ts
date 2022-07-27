@@ -1,12 +1,13 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 
-import { Item, ItemEquip, ItemInMarket } from "../interfaces";
+import { Item, ItemEquip, ItemInMarket, ItemInMarketBackend } from "../interfaces";
 import { filterItems, filterItemsMarket, ItemFilters, mediate } from "../util";
 import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
 import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
 import { useSelectedCharacter } from "./character";
+import { E } from "@endo/eventual-send";
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   const [{ all }, isLoading] = useMyItems();
@@ -53,31 +54,106 @@ export const useItemsMarketFiltered = (filters: ItemFilters): [ItemInMarket[], b
   return useMemo(() => [filterItemsMarket(items, filters), isLoading], [filters, isLoading, items]);
 };
 
-export const useSellItem = () => {
+export const useSellItem = (itemId: string) => {
   const [service] = useAgoricContext();
   const [{ owned }] = useMyItems();
 
-  return useMutation(async (body: { itemId: string; price: number }) => {
-    const { itemId, price } = body;
-    const found = owned.find((item) => item.id === itemId);
-    if (!found) return;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-    const mediated = mediate.items.toBack([found])[0];
-    await sellItem(service, mediated, BigInt(price));
-  });
+  const [itemInMarket, setItemInMarket] = useState<ItemInMarketBackend>();
+
+  useEffect(() => {
+    const addToMarket = async () => {
+      try {
+        if (!itemInMarket || !service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "seller") return;
+        if (!latestOffer.status || latestOffer.status !== "pending") return;
+
+        const itemFromProposal = latestOffer.proposalTemplate.give.Items.value[0];
+        if (!itemFromProposal || String(itemFromProposal.id) !== itemId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).storeItemInMarket(itemInMarket);
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    addToMarket();
+  }, [itemId, itemInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(
+    async (price: number) => {
+      try {
+        const found = owned.find((item) => item.id === itemId);
+        if (!found) return;
+
+        const mediated = mediate.items.toBack([found])[0];
+        setIsLoading(true);
+        const toStore = await sellItem(service, mediated, BigInt(price));
+        setItemInMarket(toStore);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+    },
+    [itemId, owned, service]
+  );
+
+  return { callback, isLoading, isError, isSuccess };
 };
 
-export const useBuyItem = () => {
+export const useBuyItem = (itemId: string) => {
   const [service] = useAgoricContext();
   const [items] = useItemsMarket();
 
-  return useMutation(async (body: { itemId: string }) => {
-    const found = items.find((item) => item.id === body.itemId);
-    if (!found) return;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-    const mediated = mediate.itemsMarket.toBack([found])[0];
-    await buyItem(service, mediated);
-  });
+  useEffect(() => {
+    const addToMarket = async () => {
+      try {
+        if (!service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "buyer") return;
+        if (!latestOffer.status || latestOffer.status !== "accept") return;
+
+        const itemFromProposal = latestOffer.proposalTemplate.want.Items.value[0];
+        if (!itemFromProposal || String(itemFromProposal.id) !== itemId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).removeItemFromMarket(BigInt(itemId));
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    addToMarket();
+  }, [itemId, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(async () => {
+    try {
+      const found = items.find((item) => item.id === itemId);
+      if (!found) return;
+
+      const mediated = mediate.itemsMarket.toBack([found])[0];
+      setIsLoading(true);
+      await buyItem(service, mediated);
+    } catch (error) {
+      console.warn(error);
+      setIsError(true);
+    }
+  }, [itemId, items, service]);
+
+  return { callback, isLoading, isError, isSuccess };
 };
 
 export const useEquipItem = () => {

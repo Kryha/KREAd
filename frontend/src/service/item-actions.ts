@@ -76,8 +76,7 @@ export const sellItem = async (service: AgoricState, item: ItemBackend, price: b
     sell: { instance, publicFacet: sellAssetsPublicFacet, price },
   };
 
-  // TODO: store in market after offer is accepted and processed
-  await E(publicFacet).storeItemInMarket(itemInMarket);
+  return itemInMarket;
 };
 
 export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBackend) => {
@@ -121,9 +120,6 @@ export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBa
       dappContext: true,
     })
   );
-
-  // TODO: remove item from market after offer is accepted and processed
-  await E(publicFacet).removeItemFromMarket(itemInMarket.id);
 };
 
 // TODO: Add price for minting // price?: bigint

@@ -248,25 +248,26 @@ const start = async (zcf) => {
     const newCharacterName = want.Asset.value[0].name;
     assert(nameIsUnique(newCharacterName), X`${errors.nameTaken}`);
 
+    const newCharacterId = state.characterCount;
+
+    state.characterCount += 1n;
+
     // Get random base character and merge with name input
     // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter = {
       ...getRandomBaseCharacter(),
       date: Date.now(),
       name: newCharacterName,
+      id: newCharacterId,
     };
-
-    const newCharacterId = state.characterCount;
-
-    state.characterCount += 1n;
 
     const newCharacterAmount1 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, keyId: 1, id: newCharacterId }]),
+      harden([{ ...newCharacter, keyId: 1 }]),
     );
     const newCharacterAmount2 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, keyId: 2, id: newCharacterId }]),
+      harden([{ ...newCharacter, keyId: 2 }]),
     );
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
@@ -334,6 +335,11 @@ const start = async (zcf) => {
    * @returns {ItemInMarket}
    */
   const storeItemInMarket = (itemInMarket) => {
+    const isInMarket = state.itemsMarket.find(
+      (item) => item.id === itemInMarket.id,
+    );
+    assert(!isInMarket, X`Item is already present on the marketplace`);
+
     state.itemsMarket = [...state.itemsMarket, itemInMarket];
 
     return itemInMarket;
@@ -360,6 +366,11 @@ const start = async (zcf) => {
    * @returns {CharacterInMarket}
    */
   const storeCharacterInMarket = (characterInMarket) => {
+    const isInMarket = state.charactersMarket.find(
+      (character) => character.id === characterInMarket.id,
+    );
+    assert(!isInMarket, X`Character is already present on the marketplace`);
+
     state.charactersMarket = [...state.charactersMarket, characterInMarket];
 
     return characterInMarket;
@@ -559,11 +570,11 @@ const start = async (zcf) => {
   /**
    * Gets the inventory of a given character
    *
-   * @param {bigint} characterId
+   * @param {string} characterName
    */
-  const getCharacterInventory = (characterId) => {
+  const getCharacterInventory = (characterName) => {
     const characterRecord = state.characters.find(
-      ({ character }) => character.id === characterId,
+      ({ character }) => character.name === characterName,
     );
     assert(characterRecord, X`${errors.character404}`);
     const { inventory } = characterRecord;

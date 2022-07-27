@@ -8,7 +8,7 @@ import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { connect } from "../service/lib/connect";
 import { apiRecv } from "../service/api/receive";
-import { processPurses } from "../service/purses/process";
+import { processOffers, processPurses } from "../service/purses/process";
 import { useCharacterStateDispatch } from "./characters";
 import { useItemStateDispatch } from "./items";
 
@@ -34,6 +34,7 @@ const initialState: AgoricState = {
     character: [],
     item: [],
   },
+  offers: [],
   agoric: {
     zoe: undefined,
     board: undefined,
@@ -70,6 +71,9 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
     case "SET_TOKEN_PURSES":
       return { ...state, purses: { ...state.purses, money: action.payload } };
+
+    case "SET_OFFERS":
+      return { ...state, offers: action.payload };
 
     case "SET_CHARACTER_PURSES":
       return { ...state, purses: { ...state.purses, character: action.payload } };
@@ -171,9 +175,10 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       async function watchOffers() {
         const on = E(walletP).getOffersNotifier();
         for await (const offers of iterateNotifier(on)) {
-          console.info("📡 OFFER UPDATE");
+          console.info("📡 CHECKING OFFERS");
           const last3 = offers.slice(-3);
           console.info(last3);
+          processOffers(offers, dispatch);
         }
       }
       watchOffers().catch((err) => {

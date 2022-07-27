@@ -57,7 +57,7 @@ export const processPurses = async (
     ownedCharacters.map(async (character: CharacterBackend) => {
       const {
         items: { value: equippedItems },
-      } = await E(contractPublicFacet).getCharacterInventory(character.id);
+      } = await E(contractPublicFacet).getCharacterInventory(character.name);
 
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
 
@@ -106,4 +106,9 @@ export const processPurses = async (
   console.info("👛 Character Purse Petname: ", newCharacterPurses[0].brandPetname);
   console.info("👛 Item Purse Info: ", newItemPurses[0].displayInfo);
   console.info("👛 Item Purse Petname: ", newItemPurses[0].brandPetname);
+};
+
+export const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
+  if (!offers.length) return;
+  agoricDispatch({ type: "SET_OFFERS", payload: offers });
 };

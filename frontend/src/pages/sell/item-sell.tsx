@@ -11,12 +11,12 @@ export const ItemSell = () => {
   const { id } = useParams<"id">();
 
   const [data, isLoading] = useMyItem(String(id));
-  const sellItem = useSellItem();
+  const sellItem = useSellItem(String(id));
 
   const submitForm = (price: number) => {
     if (!id) return;
     // TODO: show progress
-    sellItem.mutate({ itemId: id, price });
+    sellItem.callback(price);
   };
 
   if (sellItem.isError) return <ErrorView />;
@@ -28,7 +28,12 @@ export const ItemSell = () => {
   if (!data) return <ErrorView />;
 
   return (
-    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={{ ...data, image: data.thumbnail }}>
+    <Sell
+      isLoading={sellItem.isLoading}
+      onSubmit={submitForm}
+      text={{ sell: text.store.sellItem }}
+      data={{ ...data, image: data.thumbnail }}
+    >
       <FadeInOut show>
         <ItemDetailSection item={data} />
       </FadeInOut>
