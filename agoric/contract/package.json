@@ -14,7 +14,6 @@
     "lint-check-jessie": "eslint -c '.eslintrc-jessie.js' '**/*.{js,jsx}'"
   },
   "devDependencies": {
-    "agoric": "@endo/bundle-source",
     "ava": "^3.13.0",
     "eslint": "^7.23.0",
     "eslint-config-airbnb-base": "^14.2.1 ",
@@ -25,18 +24,16 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "@agoric/assert": "@endo/bundle-source",
     "@agoric/babel-parser": "^7.6.4",
     "@endo/bundle-source": "^2.0.5",
-    "@agoric/ertp": "@endo/bundle-source",
     "@agoric/nat": "dev",
     "@endo/eventual-send": "^0.14.4",
     "@endo/init": "^0.5.33",
     "@endo/marshal": "^0.5.4",
-    "@agoric/notifier": "@endo/bundle-source",
-    "@agoric/store": "@endo/bundle-source",
-    "@agoric/zoe": "@endo/bundle-source",
-    "import-meta-resolve": "^1.1.1"
+    "import-meta-resolve": "^1.1.1",
+    "@agoric/ertp": "^0.14.2",
+    "@agoric/zoe": "^0.24.0",
+    "@agoric/assert": "^0.4.0"
   },
   "ava": {
     "files": [

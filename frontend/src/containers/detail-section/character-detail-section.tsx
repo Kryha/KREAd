@@ -31,7 +31,9 @@ export const CharacterDetailSection: FC<ItemDetailSectionProps> = ({ character, 
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>
         {/* TODO: fetch actual creator image */}
-        <DetailSectionSegmentStory data={{ ...character, creatorImage: UnnamedCreator, image: character.items }} />
+        <DetailSectionSegmentStory
+          data={{ ...character, creatorImage: UnnamedCreator, image: character.items, characterImage: character.image }}
+        />
       </DetailSectionSegment>
 
       {/* stats */}

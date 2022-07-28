@@ -27,7 +27,7 @@ export const ItemPage: FC = () => {
 
   return (
     <ItemWrapper height={height} position={category} width={width}>
-      <BaseCharacter items={character.items} size="extraLarge" isZoomed />
+      <BaseCharacter characterImage={character.image} items={character.items} size="extraLarge" isZoomed />
       <MenuCard title={text.param.categories[category]} equippedItem={equippedItem} unequippedItems={unequippedItems} />
     </ItemWrapper>
   );

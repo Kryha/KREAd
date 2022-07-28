@@ -57,7 +57,7 @@ export const Landing: FC = () => {
         <>
           {/* character big picture */}
           <LandingContainer isZoomed={!openTab}>
-            <BaseCharacter items={selectedCharacter.items} isZoomed={openTab} size="normal" />
+            <BaseCharacter characterImage={selectedCharacter.image} items={selectedCharacter.items} isZoomed={openTab} size="normal" />
           </LandingContainer>
 
           {/* equipped items under character */}

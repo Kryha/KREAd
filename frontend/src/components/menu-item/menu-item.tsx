@@ -8,7 +8,9 @@ import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
 import { ItemThumbnail } from "../item-thumbnail";
 
+// TODO: handle props differently in order to fix confusion between characterImage and image
 export interface Data {
+  characterImage?: string;
   image: string | CharacterItems;
   name: string;
   level: number;
@@ -51,7 +53,7 @@ export const MenuItem: FC<MenuItemProps> = ({
         <ItemThumbnail {...imageProps} category={data.category} src={data.image} />
       ) : (
         <ImageContainer>
-          <BaseCharacter items={data.image} size="mini" />
+          <BaseCharacter characterImage={data.characterImage} items={data.image} size="mini" />
         </ImageContainer>
       )}
 

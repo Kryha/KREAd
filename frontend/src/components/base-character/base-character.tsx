@@ -7,17 +7,19 @@ import { TempetCharacter, Empty, text } from "../../assets";
 import { zIndex } from "../../design";
 
 interface BaseCharacterProps {
+  characterImage?: string;
   items: CharacterItems;
   isZoomed?: boolean;
   size?: "mini" | "medium" | "half" | "normal" | "large" | "extraLarge";
 }
 
-export const BaseCharacter: FC<BaseCharacterProps> = ({ items, isZoomed = false, size = "normal" }) => {
+export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, isZoomed = false, size = "normal" }) => {
   const { width, height } = useViewport();
+
   return (
     <CharacterWrapper>
       <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size}>
-        <CharacterIcon width={width} height={height} src={TempetCharacter} />
+        <CharacterIcon width={width} height={height} src={characterImage || TempetCharacter} />
         <ItemIcon
           src={items.hair?.image || Empty}
           alt={items.hair?.name || text.character.hair}

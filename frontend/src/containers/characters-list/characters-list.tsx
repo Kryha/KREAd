@@ -60,7 +60,13 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
       <HorizontalDivider />
       <ListContainer>
         <MenuItem
-          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].id }}
+          data={{
+            ...myCharacters[0],
+            image: myCharacters[0].items,
+            category: myCharacters[0].type,
+            id: myCharacters[0].id,
+            characterImage: myCharacters[0].image,
+          }}
           key={myCharacters[0].id}
           onClick={onCharacterClick}
           removeInitial={removeInitial}
@@ -69,7 +75,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
-            data={{ ...character, image: character.items, category: character.type, id: character.id }}
+            data={{ ...character, image: character.items, category: character.type, id: character.id, characterImage: character.image }}
             key={character.id}
             onClick={onCharacterClick}
             removeInitial={removeInitial}
