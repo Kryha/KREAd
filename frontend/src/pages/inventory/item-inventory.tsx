@@ -22,7 +22,6 @@ export const ItemsInventory: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [item] = useMyItem(selectedId);
 
-
   useEffect(() => {
     if (isLoadingItems || selectedId) return;
     if (allItems.length) {
