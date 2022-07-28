@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import { CharacterItems, isItemCategory, isString } from "../../interfaces";
+import { CharacterItems, isCharacterCategory, isItemCategory, isString } from "../../interfaces";
 import { ButtonContainer, Dash, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
 import { BoldLabel, ButtonText, ImageProps, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
@@ -45,7 +45,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     setSelected(true);
   };
 
-  if (!isItemCategory(data.category)) return <></>;
+  if (!isItemCategory(data.category) || !isCharacterCategory(data.category)) return <></>;
 
   return (
     <Info tabIndex={0} selected={selected || isInitial} onClick={handleClick} onBlur={() => setSelected(false)}>

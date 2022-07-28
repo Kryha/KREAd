@@ -28,5 +28,6 @@ export const param = {
     background: "background",
     frontMask: "front mask",
     clothing: "clothing",
+    tempetScavenger: "tempet scavenger"
   },
 };
