@@ -39,7 +39,6 @@ export const ElementWrapper = styled.div`
       }
       fill: ${color.lightGrey};
     }
-
   }
 `;
 

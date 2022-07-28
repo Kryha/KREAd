@@ -14,6 +14,7 @@ import {
   PlusContainer,
   ItemCardWrapper,
 } from "./styles";
+
 interface ItemCardProps extends ImageProps {
   image?: string;
   item?: Item;

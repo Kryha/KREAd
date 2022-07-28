@@ -20,7 +20,7 @@ import TempetMaskThumbnail from "./tempet_mask_thumbnail.png";
 import TempetStyleline from "./tempet_styleline_05.png";
 import TempetStylelineThumbnail from "./tempet_styleline_thumbnail.png";
 import TempetHair2 from "./tempet_hair_02_03.png";
-import TempetAddons2 from "./tempet_add_ons_02_07.png";
+import TempetFrontMask2 from "./tempet_front_mask_02_07.png";
 import TempetClothing2 from "./tempet_clothing_02_09.png";
 import TempetHeadpiece2 from "./tempet_headpiece_02_10.png";
 import TempetMask2 from "./tempet_mask_02_04.png";
@@ -49,7 +49,7 @@ export {
   TempetStyleline,
   TempetStylelineThumbnail,
   TempetHair2,
-  TempetAddons2,
+  TempetFrontMask2,
   TempetClothing2,
   TempetHeadpiece2,
   TempetMask2,

@@ -102,4 +102,4 @@ export const sequentialFadeIn = keyframes`
   100% {
     opacity:0;
   }
-  `;
+`;

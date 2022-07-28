@@ -21,7 +21,7 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
     onClick(item);
   };
 
-  if (!item.category || !isItemCategory(item.category)) return <ErrorView />;
+  if (!isItemCategory(item.category)) return <ErrorView />;
 
   return (
     <Product onClick={() => handleClick()} width={width} height={height}>

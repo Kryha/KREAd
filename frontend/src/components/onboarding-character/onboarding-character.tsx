@@ -2,13 +2,13 @@ import { FC, useEffect, useState } from "react";
 
 import { CharacterContainer, CharacterIcon, CharacterWrapper, FirstIcon, SecondIcon, ThirdIcon, FourthIcon, FifthIcon } from "./styles";
 import { useViewport } from "../../hooks";
-import { Empty, TempetAddons, TempetAddons2, TempetCharacter, TempetClothing, TempetClothing2, TempetHair, TempetHair2, TempetHeadpiece, TempetHeadpiece2, TempetMask, TempetMask2, text } from "../../assets";
+import { Empty, TempetAddons, TempetFrontMask2, TempetCharacter, TempetClothing, TempetClothing2, TempetHair, TempetHair2, TempetHeadpiece, TempetHeadpiece2, TempetMask, TempetMask2, text } from "../../assets";
 import { zIndex } from "../../design";
 
 const hairImages = [TempetHair, TempetHair2];
 const headPieceImages = [TempetHeadpiece, TempetHeadpiece2];
 const maskImages = [TempetMask, TempetMask2];
-const addOnsImages = [TempetAddons, TempetAddons2];
+const addOnsImages = [TempetAddons, TempetFrontMask2];
 const clothingImages = [TempetClothing, TempetClothing2];
 
 export const OnboardingCharacter: FC = () => {
