@@ -2,10 +2,16 @@ import styled from "@emotion/styled";
 import { CloseIcon, BellIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
 import { disappear, fadeIn, slideUpOpacity } from "../../components/atoms/animations";
+import { KreadIcon } from "../../components/logo/styles";
 
 import { Group } from "../../components/switch-selector/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins } from "../../design";
+
+interface ViewProps {
+  width: number;
+  height: number;
+}
 
 export const InventoryWrapper = styled.div`
   ${Group} {
@@ -121,5 +127,16 @@ export const DetailContainer = styled.div`
   width: 60%;
   ${DetailSectionWrap}{
     max-width: 100%;
+  }
+`;
+
+export const KreadContainer = styled.div<ViewProps>`
+  ${KreadIcon} {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 40px;
+    width: 100px;
+    height: 24px;
   }
 `;

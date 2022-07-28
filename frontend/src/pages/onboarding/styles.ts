@@ -127,6 +127,7 @@ export const Email = styled.a`
   }
   color: ${color.darkGrey};
   display: inline;
+  margin-left: 5px;
 `;
 
 export const EmailContainer = styled.span`

@@ -3,6 +3,7 @@ import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { disappear, fadeIn, slideInUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
+import { KreadIcon } from "../../components/logo/styles";
 import { OverviewWrapper } from "../../components/overview-empty/styles";
 import { PriceContainer } from "../../components/price-in-ist/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
@@ -202,7 +203,7 @@ export const Card = styled.div<ViewProps>`
       return "flex: 1 0 500px;";
     }
   }
-}
+  }
 `;
 
 export const DetailContainer = styled.div`
@@ -211,6 +212,17 @@ export const DetailContainer = styled.div`
   }
   ${PriceContainer} {
     margin-top: 8px;
+  }
+`;
+
+export const KreadContainer = styled.div<ViewProps>`
+  ${KreadIcon} {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 40px;
+    width: 100px;
+    height: 24px;
   }
 `;
 

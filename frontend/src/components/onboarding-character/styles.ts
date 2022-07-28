@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { margins } from "../../design";
-import { disappear, fadeIn, SecondaryButton } from "../atoms";
+import { sequentialFadeIn, SecondaryButton } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 
@@ -15,7 +15,7 @@ interface ViewProps {
   width: number;
 }
 
-export const ExpandButton = styled(SecondaryButton)<ViewProps>`
+export const ExpandButton = styled(SecondaryButton) <ViewProps>`
   position: absolute;
   z-index: 300;
   ${({ width }): string => {
@@ -100,31 +100,37 @@ export const FirstIcon = styled.img<ImageProps>`
       return "width: 742px; ";
     }
   }};
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.3s, 0.2s;
-  animation-delay: 0s, 0.3s;
+
+  opacity: 0;
+  animation: ${sequentialFadeIn} 5s ease;
+  animation-iteration-count: infinite;
+  animation-delay: 500ms;
 `;
 
 export const SecondIcon = styled(FirstIcon)`
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.6s, 0.2s;
-  animation-delay: 0s, 0.6s;
+  opacity: 0;
+  animation: ${sequentialFadeIn} 5s ease;
+  animation-iteration-count: infinite;
+  animation-delay: 1s;
 `;
 
 export const ThirdIcon = styled(FirstIcon)`
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 1.1s, 0.2s;
-  animation-delay: 0s, 1.1s;
+  opacity: 0;
+  animation: ${sequentialFadeIn} 5s ease;
+  animation-iteration-count: infinite;
+  animation-delay: 1.5s;
 `;
 
 export const FourthIcon = styled(FirstIcon)`
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 1.4s, 0.2s;
-  animation-delay: 0s, 1.4s;
+  opacity: 0;
+  animation: ${sequentialFadeIn} 5s ease;
+  animation-iteration-count: infinite;
+  animation-delay: 2s;
 `;
 
 export const FifthIcon = styled(FirstIcon)`
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 1.7s, 0.2s;
-  animation-delay: 0s, 1.7s;
+  opacity: 0;
+  animation: ${sequentialFadeIn} 5s ease;
+  animation-iteration-count: infinite;
+  animation-delay: 2.5s;
 `;

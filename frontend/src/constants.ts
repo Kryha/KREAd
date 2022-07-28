@@ -43,3 +43,7 @@ export const ITEM_CATEGORIES = [
   "frontMask",
   "clothing",
 ];
+
+export const CHARACTER_CATEGORIES = [
+  "tempetscavenger",
+];

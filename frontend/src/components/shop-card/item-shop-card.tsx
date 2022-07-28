@@ -1,12 +1,13 @@
 import { FC } from "react";
 
-import { Item } from "../../interfaces";
+import { isItemCategory, Item } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, ItemImage, InfoContainer, PriceContainer } from "./styles";
 import { useViewport } from "../../hooks";
+import { ErrorView } from "../error-view";
 
 interface ShopCardProps {
   item: Item;
@@ -20,6 +21,8 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
     onClick(item);
   };
 
+  if (!isItemCategory(item.category)) return <ErrorView />;
+
   return (
     <Product onClick={() => handleClick()} width={width} height={height}>
       <Content>
@@ -29,7 +32,7 @@ export const ItemShopCard: FC<ShopCardProps> = ({ item, onClick }) => {
         <InfoContainer>
           <TitleWrapper>
             <TitleText>{item.name}</TitleText>
-            <BoldLabel>{item.category}</BoldLabel>
+            <BoldLabel>{text.param.categories[item.category]}</BoldLabel>
           </TitleWrapper>
           <Footer>
             <Tag>

@@ -1,4 +1,4 @@
-import { ITEM_CATEGORIES } from "../constants";
+import { ITEM_CATEGORIES, CHARACTER_CATEGORIES } from "../constants";
 import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
 
@@ -6,6 +6,15 @@ export const isItemCategory = (category: unknown): category is keyof CharacterIt
   if (typeof category !== "string") return false;
   return ITEM_CATEGORIES.includes(category);
 };
+
+export const isCharacterCategory = (category: unknown): category is keyof CharacterCategories => {
+  if (typeof category !== "string") return false;
+  return CHARACTER_CATEGORIES.includes(category);
+};
+
+export interface CharacterCategories {
+  tempetScavenger: string;
+}
 
 export interface CharacterItems {
   noseline?: Item;
