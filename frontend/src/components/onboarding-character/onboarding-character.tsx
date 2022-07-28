@@ -18,7 +18,7 @@ export const OnboardingCharacter: FC = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentIndex(Math.floor(Math.random() * (2)) + 0);
-    }, 4500);
+    }, 5000);
 
     return () => clearInterval(intervalId);
   // eslint-disable-next-line react-hooks/exhaustive-deps

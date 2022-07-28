@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { color } from "../../design";
 import { CardElementIcon, PlusIcon } from "../../assets";
+import { StatsWrapper } from "../item-stats/styles";
 
 export const Card = styled(CardElementIcon)`
   position: absolute;
@@ -38,6 +39,7 @@ export const ElementWrapper = styled.div`
       }
       fill: ${color.lightGrey};
     }
+
   }
 `;
 
@@ -86,4 +88,12 @@ export const Plus = styled(PlusIcon)`
   margin: 0px 0px 10px 0px;
   width: 14px;
   height: 14px;
+`;
+
+export const ItemCardWrapper = styled.div`
+  &:not(:hover) {
+    ${StatsWrapper} {
+      display: none;
+    }
+  }
 `;

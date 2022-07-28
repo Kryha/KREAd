@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AnimatedLogo, ErrorView, FadeInOut, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { routes } from "../../navigation";
 import { useEquipItem, useMyItem, useMyItems, useUnequipItem } from "../../service";
@@ -9,8 +9,7 @@ import { text } from "../../assets/text";
 import { ItemsList } from "../../containers/items-list";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { EmptyItemInventory } from "./empty-item-inventory";
-import { DetailWrapper, KreadContainer } from "./styles";
-import { useViewport } from "../../hooks";
+import { DetailWrapper } from "./styles";
 
 export const ItemsInventory: FC = () => {
   const navigate = useNavigate();
@@ -23,7 +22,6 @@ export const ItemsInventory: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [item] = useMyItem(selectedId);
 
-  const { width, height } = useViewport();
 
   useEffect(() => {
     if (isLoadingItems || selectedId) return;
@@ -69,9 +67,6 @@ export const ItemsInventory: FC = () => {
           <ItemDetailSection item={item} actions={detailActions()} />
         </DetailWrapper>
       </FadeInOut>
-      <KreadContainer height={height} width={width}>
-        <AnimatedLogo iteration={1} />
-      </KreadContainer>
     </PageContainer>
   );
 };

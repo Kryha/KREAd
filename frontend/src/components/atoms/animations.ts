@@ -82,12 +82,12 @@ export const bounce = keyframes`
 		transform: translateY(0);
 	}
 	40% {
-		-webkit-transform: translateY(-20px);
-		transform: translateY(-20px);
+		-webkit-transform: translateY(-60px);
+		transform: translateY(-60px);
 	}
 	60% {
-		-webkit-transform: translateY(-10px);
-		transform: translateY(-10px);
+		-webkit-transform: translateY(-50px);
+		transform: translateY(-50px);
 	}
 `;
 
