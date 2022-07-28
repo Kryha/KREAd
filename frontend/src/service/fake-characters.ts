@@ -4,6 +4,7 @@ import { FakeCharacterItems } from "./fake-item-data";
 export const FakeCharcters: Character[] = [
   {
     title: "character 1",
+    image: "",
     keyId: 1,
     date: 1657803039,
     name: "character 1",
@@ -33,6 +34,7 @@ export const FakeCharcters: Character[] = [
   },
   {
     title: "character 2",
+    image: "",
     keyId: 1,
     date: 1657803039,
     name: "character 2",
@@ -62,6 +64,7 @@ export const FakeCharcters: Character[] = [
   },
   {
     title: "character 3",
+    image: "",
     keyId: 1,
     date: 1657803039,
     name: "character 3",
@@ -91,6 +94,7 @@ export const FakeCharcters: Character[] = [
   },
   {
     title: "character 4",
+    image: "",
     keyId: 1,
     date: 1657803039,
     name: "character 4",
@@ -123,6 +127,7 @@ export const FakeCharcters: Character[] = [
 export const FakeCharctersNoItems: any[] = [
   {
     title: "character 1",
+    image: "",
     name: "character 1",
     type: "Tempet Scavenger",
     id: "7899",
@@ -149,6 +154,7 @@ export const FakeCharctersNoItems: any[] = [
   },
   {
     title: "RAMIRO",
+    image: "",
     name: "RAMIRO",
     type: "Tempet Scavenger",
     id: "7899",
@@ -175,6 +181,7 @@ export const FakeCharctersNoItems: any[] = [
   },
   {
     title: "character 2",
+    image: "",
     name: "character 2",
     type: "Tempet Scavenger",
     id: "78992",
@@ -201,6 +208,7 @@ export const FakeCharctersNoItems: any[] = [
   },
   {
     title: "character 3",
+    image: "",
     url: "https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png",
     name: "character 3",
     type: "Tempet Scavenger",
@@ -228,6 +236,7 @@ export const FakeCharctersNoItems: any[] = [
   },
   {
     title: "character 4",
+    image: "",
     url: "https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png",
     name: "character 4",
     type: "Tempet Scavenger",

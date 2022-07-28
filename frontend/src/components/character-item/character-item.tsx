@@ -44,7 +44,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
       onBlur={() => setSelected(false)}
     >
       <ImageCard>
-        <BaseCharacter items={character.items} isZoomed={false} size="mini" />
+        <BaseCharacter characterImage={character.image} items={character.items} isZoomed={false} size="mini" />
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>

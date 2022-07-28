@@ -3,19 +3,10 @@ import { FC } from "react";
 import { Character } from "../../interfaces";
 import { text } from "../../assets";
 import { color } from "../../design";
-import {  BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
+import { BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { BaseCharacter } from "../base-character";
-import {
-  Content,
-  ImageContainer,
-  Product,
-  Element,
-  TitleWrapper,
-  Footer,
-  Tag,
-  PriceContainer,
-} from "./styles";
+import { Content, ImageContainer, Product, Element, TitleWrapper, Footer, Tag, PriceContainer } from "./styles";
 import { useViewport } from "../../hooks";
 
 interface CharacterShopCardProps {
@@ -25,12 +16,13 @@ interface CharacterShopCardProps {
 
 export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onClick }) => {
   const { width, height } = useViewport();
+
   return (
     <Product onClick={() => onClick && onClick(character)} width={width} height={height}>
       <Content>
         <ImageContainer>
           <Element />
-          <BaseCharacter items={character.items} isZoomed={false} size="medium" />
+          <BaseCharacter characterImage={character.image} items={character.items} isZoomed={false} size="medium" />
         </ImageContainer>
         <TitleWrapper>
           <TitleText>{character.name}</TitleText>

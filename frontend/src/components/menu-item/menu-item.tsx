@@ -9,6 +9,7 @@ import { BaseCharacter } from "../base-character";
 import { ItemThumbnail } from "../item-thumbnail";
 
 export interface Data {
+  characterImage?: string;
   image: string | CharacterItems;
   name: string;
   level: number;
@@ -51,7 +52,7 @@ export const MenuItem: FC<MenuItemProps> = ({
         <ItemThumbnail {...imageProps} category={data.category} src={data.image} />
       ) : (
         <ImageContainer>
-          <BaseCharacter items={data.image} size="mini" />
+          <BaseCharacter characterImage={data.characterImage} items={data.image} size="mini" />
         </ImageContainer>
       )}
 

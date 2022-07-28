@@ -34,6 +34,7 @@ export interface Character {
   name: string;
   type: string;
   description: string;
+  image: string;
   level: number;
   items: CharacterItems;
   detail: Detail;
