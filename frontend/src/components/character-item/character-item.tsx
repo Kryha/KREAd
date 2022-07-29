@@ -15,7 +15,7 @@ import { ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../ato
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
-import { Character, ExtendedCharacter } from "../../interfaces";
+import { ExtendedCharacter } from "../../interfaces";
 
 interface CharacterItemProps {
   character: ExtendedCharacter;
@@ -44,7 +44,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
       onBlur={() => setSelected(false)}
     >
       <ImageCard>
-        <BaseCharacter items={character.equippedItems} isZoomed={false} size="mini" />
+        <BaseCharacter characterImage={character.nft.image} items={character.equippedItems} isZoomed={false} size="mini" />
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>

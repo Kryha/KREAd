@@ -4,7 +4,7 @@ import { ONE_HUNDRED_PERCENT } from "../../constants";
 import { DetailSectionProgress } from "../../containers/detail-section/detail-section-progress-bar/styles";
 import { color } from "../../design";
 
-import { Item } from "../../interfaces";
+import { isItemCategory, Item } from "../../interfaces";
 import { Badge, ButtonText, HorizontalDivider, MenuText } from "../atoms";
 import { Footer, Header, LevelContainer, ProgressContainer, StatsContainer, StatsWrapper, Title } from "./styles";
 
@@ -15,7 +15,7 @@ interface ItemStatsProps {
 }
 
 export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
-  if (!item) return <></>;
+  if (!item || !isItemCategory(item.category)) return <></>;
 
   return (
     <StatsWrapper position={position} area={area}>
@@ -23,7 +23,7 @@ export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
         <Title>{item.name}</Title>
         <Footer>
           <Badge>
-            <ButtonText customColor={color.darkGrey}>{item.category}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>{text.param.categories[item.category]}</ButtonText>
           </Badge>
           <ButtonText>{text.param.id(item.id)}</ButtonText>
         </Footer>

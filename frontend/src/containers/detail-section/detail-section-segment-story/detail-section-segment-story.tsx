@@ -15,6 +15,7 @@ import {
 } from "./styles";
 
 interface Data {
+  characterImage?: string;
   name: string;
   description: string;
   image: string | CharacterItems;
@@ -43,7 +44,7 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
       ) : (
         // TODO: fix image z-index issue
         <ImageContainer>
-          <BaseCharacter items={data.image} size="half" />
+          <BaseCharacter characterImage={data.characterImage} items={data.image} size="half" />
         </ImageContainer>
       )}
     </>

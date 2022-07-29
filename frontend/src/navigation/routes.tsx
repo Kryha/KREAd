@@ -4,7 +4,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
 import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemSell, CharacterSell, Onboarding, Privacy } from "../pages";
-import { MainContainer, ErrorFallback, LoadingPage } from "../components";
+import { MainContainer, ErrorFallback, LoadingPage, ErrorView } from "../components";
 import { ItemPage } from "../pages/item";
 import { TestServiceUI } from "../service/test-service-ui";
 import { useAgoricContext } from "../context/agoric";
@@ -36,6 +36,7 @@ export const AppRoutes: FC = () => {
           <Route path={"/test"} element={<TestServiceUI />} />
 
           <Route path={routes.privacy} element={<Privacy />} />
+          <Route path="*" element={<ErrorView />} />
         </Routes>
       </MainContainer>
     </ErrorBoundary>

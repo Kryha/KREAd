@@ -6,11 +6,16 @@
 import fs from 'fs';
 import { E } from '@endo/eventual-send';
 import '@agoric/zoe/exported.js';
+import FormData from 'form-data';
+import axios from 'axios';
+import dotenv from 'dotenv';
 
 import installationConstants from '../../frontend/src/service/conf/installation-constants-nft-maker.js';
 
 import { defaultCharacters } from './characters.js';
 import { defaultItems } from './items.js';
+
+dotenv.config();
 
 // deploy.js runs in an ephemeral Node.js outside of swingset. The
 // spawner runs within ag-solo, so is persistent.  Once the deploy.js
@@ -106,10 +111,181 @@ export default async function deployApi(homePromise, { pathResolve }) {
     E(moneyBrandP).getDisplayInfo(),
   ]);
 
+  const itemReadStreams = [
+    {
+      key: 'airReservoir',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_air_reservoir.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_air_reservoir_thumbnail.png'),
+        ),
+      ],
+    },
+
+    {
+      key: 'background',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_background.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_background_thumbnail.png'),
+        ),
+      ],
+    },
+
+    {
+      key: 'midBackground',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_mid_background.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_mid_background_thumbnail.png'),
+        ),
+      ],
+    },
+
+    {
+      key: 'clothing',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_clothing.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_clothing_thumbnail.png'),
+        ),
+      ],
+    },
+
+    {
+      key: 'frontMask',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_front_mask.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_front_mask_thumbnail.png'),
+        ),
+      ],
+    },
+
+    {
+      key: 'liquid',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_liquid.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_liquid_thumbnail.png'),
+        ),
+      ],
+    },
+
+    {
+      key: 'hair',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_hair.png')),
+        fs.createReadStream(pathResolve('./images/tempet_hair_thumbnail.png')),
+      ],
+    },
+
+    {
+      key: 'headPiece',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_head_piece.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_head_piece_thumbnail.png'),
+        ),
+      ],
+    },
+
+    {
+      key: 'mask',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_mask.png')),
+        fs.createReadStream(pathResolve('./images/tempet_mask_thumbnail.png')),
+      ],
+    },
+
+    {
+      key: 'noseline',
+      streams: [
+        fs.createReadStream(pathResolve('./images/tempet_noseline.png')),
+        fs.createReadStream(
+          pathResolve('./images/tempet_noseline_thumbnail.png'),
+        ),
+      ],
+    },
+  ];
+
+  const characterReadStream = fs.createReadStream(
+    pathResolve('./images/tempet_layer.png'),
+  );
+
+  const IPFS_BASE_URL = 'https://ipfs.io/ipfs/';
+
+  const PINATA_JWT = process.env.PINATA_JWT;
+
+  const itemUrls = await Promise.all(
+    itemReadStreams.map(async ({ key, streams }) => {
+      const formData0 = new FormData();
+      formData0.append('file', streams[0]);
+
+      const formData1 = new FormData();
+      formData1.append('file', streams[1]);
+
+      const res0 = await axios.post(
+        'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        formData0,
+        {
+          headers: {
+            Authorization: `Bearer ${PINATA_JWT}`,
+          },
+        },
+      );
+
+      const res1 = await axios.post(
+        'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        formData1,
+        {
+          headers: {
+            Authorization: `Bearer ${PINATA_JWT}`,
+          },
+        },
+      );
+
+      return {
+        key,
+        urls: [
+          IPFS_BASE_URL + res0.data.IpfsHash,
+          IPFS_BASE_URL + res1.data.IpfsHash,
+        ],
+      };
+    }),
+  );
+
+  const formData = new FormData();
+  formData.append('file', characterReadStream);
+
+  const characterResponse = await axios.post(
+    'https://api.pinata.cloud/pinning/pinFileToIPFS',
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${PINATA_JWT}`,
+      },
+    },
+  );
+
+  const characterUrl = IPFS_BASE_URL + characterResponse.data.IpfsHash;
+
+  const updatedDefaultCharacters = defaultCharacters.map((character) => ({
+    ...character,
+    image: characterUrl,
+  }));
+
+  const updatedDefaultItems = itemUrls.reduce((updated, { key, urls }) => {
+    return {
+      ...updated,
+      [key]: { ...updated[key], image: urls[0], thumbnail: urls[1] },
+    };
+  }, defaultItems);
+
   console.log(
     await E(nftMakerSellerFacet).initConfig({
-      baseCharacters: defaultCharacters,
-      defaultItems,
+      baseCharacters: updatedDefaultCharacters,
+      defaultItems: updatedDefaultItems,
       sellAssetsInstallation,
       moneyIssuer,
       moneyBrand,

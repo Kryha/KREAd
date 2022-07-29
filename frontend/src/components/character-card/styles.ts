@@ -33,7 +33,7 @@ export const CharacterWrapper = styled.div<CharacterProps>`
   right: ${margins.big};
   top: 101px;
   position: absolute;
-  z-index: 100;
+  z-index: ${zIndex.onTop};
   ${({ width, height }): string =>
     `
       min-width: ${width * 0.375}px;
@@ -117,7 +117,7 @@ export const CardActionsContainer = styled.div`
 export const CharacterCardWrapper = styled.div`
   ${DetailSectionWrap} {
     position: relative;
-    z-index: ${zIndex.overCharacter};
+    z-index: ${zIndex.onTop};
     bottom: ${margins.big};
     left: ${margins.big};
   }

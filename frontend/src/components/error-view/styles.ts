@@ -3,10 +3,11 @@ import { ArrowUpRightIcon } from "../../assets";
 
 import { color, margins } from "../../design";
 import { Img, PrimaryButton } from "../atoms";
+import { KreadIcon } from "../logo/styles";
 
 export const ErrorContainer = styled.div`
   margin-left: 40px;
-  margin-top: 40px;
+  margin-top: 102px;
 `;
 
 export const InformationContainer = styled.div`
@@ -14,7 +15,6 @@ export const InformationContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 28px;
   width: 680px;
 `;
 
@@ -29,7 +29,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0px;
+  padding-top: 40px;
   gap: ${margins.small};
   ${PrimaryButton} {
     &:hover {
@@ -62,6 +62,7 @@ export const DescriptionTitle = styled.h2`
   :first-letter {
     text-transform: capitalize;
   }
+  padding-top: 28px;
 `;
 
 export const ImageConatiner = styled.div`
@@ -77,4 +78,13 @@ export const ErrorIcon = styled(Img)`
 
 export const ArrowBack = styled(ArrowUpRightIcon)`
   padding-left: 13px;
+`;
+
+export const KreadContainer = styled.div`
+  ${KreadIcon} {
+    padding-top: 40px;
+    padding-left: 40px;
+    width: 100px;
+    height: 24px;
+  }
 `;

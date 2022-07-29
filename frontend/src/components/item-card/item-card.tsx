@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { imageSize } from "../../design";
 import { Item } from "../../interfaces";
 import { ImageProps, Img } from "../atoms";
@@ -12,7 +12,9 @@ import {
   Card,
   Plus,
   PlusContainer,
+  ItemCardWrapper,
 } from "./styles";
+
 interface ItemCardProps extends ImageProps {
   image?: string;
   item?: Item;
@@ -43,15 +45,10 @@ export const ItemCard: FC<ItemCardProps> = ({
   position = "left",
   area = "middle",
 }) => {
-  const [showStats, setShowStats] = useState(false);
   return (
-    <>
-      {showStats && !!item && <ItemStats item={item} position={position} area={area} />}
-      <ElementWrapper
-        onMouseEnter={() => setShowStats(!showStats)}
-        onMouseLeave={() => setShowStats(!showStats)}
-        onBlur={() => setShowStats(false)}
-      >
+    <ItemCardWrapper>
+      <ItemStats item={item} position={position} area={area} />
+      <ElementWrapper>
         <Card />
         <ElementContainer>
           <ItemWrapper>
@@ -72,6 +69,6 @@ export const ItemCard: FC<ItemCardProps> = ({
           </ItemWrapper>
         </ElementContainer>
       </ElementWrapper>
-    </>
+    </ItemCardWrapper >
   );
 };

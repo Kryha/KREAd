@@ -17,6 +17,7 @@ import {
   MiddleContent,
   OnboardingContainer,
   OnboardingWrapper,
+  SectionContainer,
 } from "./styles";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
@@ -33,27 +34,33 @@ export const Onboarding: FC = () => {
   return (
     <OnboardingContainer height={height} width={width}>
       <OnboardingWrapper>
-        <BoldLabel customColor={color.black}>{text.general.comingSoon}</BoldLabel>
         <InfoText height={height}>
-          <MenuText>{text.general.launchingTheFirst}</MenuText>
-          <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-          <ButtonContainer>
-            <PrimaryButton onClick={() => connectWallet()}>
-              <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-              <ArrowUp />
-            </PrimaryButton>
-          </ButtonContainer>
+          <SectionContainer>
+            <BoldLabel customColor={color.black}>{text.general.comingSoon}</BoldLabel>
+            <MenuText>{text.general.launchingTheFirst}</MenuText>
+            <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
+            <ButtonContainer>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ButtonContainer>
+          </SectionContainer>
         </InfoText>
         <MiddleContent height={height}>
-          <MenuText>{text.general.whoWeAre}</MenuText>
-          <TitleText customColor={color.darkGrey}>{text.general.isPartOfAgoric}</TitleText>
-          <TitleText customColor={color.darkGrey}>{text.general.ourLeadership}</TitleText>
+          <SectionContainer>
+            <MenuText>{text.general.whoWeAre}</MenuText>
+            <TitleText customColor={color.darkGrey}>{text.general.isPartOfAgoric}</TitleText>
+            <TitleText customColor={color.darkGrey}>{text.general.ourLeadership}</TitleText>
+          </SectionContainer>
         </MiddleContent>
         <EndContent height={height}>
-          <MenuText>{text.general.contactUs}</MenuText>
-          <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-          <EmailContainer>{text.general.sendEmailTo} </EmailContainer>
-          <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
+          <SectionContainer>
+            <MenuText>{text.general.contactUs}</MenuText>
+            <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
+            <EmailContainer>{text.general.sendEmailTo} </EmailContainer>
+            <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
+          </SectionContainer>
         </EndContent>
       </OnboardingWrapper>
       <OnboardingCharacter />
@@ -61,7 +68,7 @@ export const Onboarding: FC = () => {
         <Footer />
       </FooterContainer>
       <KreadContainer height={height} width={width}>
-        <AnimatedLogo />
+        <AnimatedLogo iteration={1}/>
       </KreadContainer>
       <ArrowDown />
     </OnboardingContainer>

@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 
-import { CharacterItems, isString } from "../../interfaces";
+import { CharacterItems, isCharacterCategory, isItemCategory, isString } from "../../interfaces";
 import { ButtonContainer, Dash, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
 import { BoldLabel, ButtonText, ImageProps, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
 import { text } from "../../assets/text";
@@ -8,7 +8,9 @@ import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
 import { ItemThumbnail } from "../item-thumbnail";
 
+// TODO: handle props differently in order to fix confusion between characterImage and image
 export interface Data {
+  characterImage?: string;
   image: string | CharacterItems;
   name: string;
   level: number;
@@ -45,13 +47,15 @@ export const MenuItem: FC<MenuItemProps> = ({
     setSelected(true);
   };
 
+  if (!isItemCategory(data.category) || !isCharacterCategory(data.category)) return <></>;
+
   return (
     <Info tabIndex={0} selected={selected || isInitial} onClick={handleClick} onBlur={() => setSelected(false)}>
       {isString(data.image) ? (
         <ItemThumbnail {...imageProps} category={data.category} src={data.image} />
       ) : (
         <ImageContainer>
-          <BaseCharacter items={data.image} size="mini" />
+          <BaseCharacter characterImage={data.characterImage} items={data.image} size="mini" />
         </ImageContainer>
       )}
 
@@ -61,7 +65,7 @@ export const MenuItem: FC<MenuItemProps> = ({
             <MenuItemName>{data.name}</MenuItemName>
           </TitleContainer>
           <InlineDetails>
-            <ButtonText customColor={color.darkGrey}>{data.category}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>{text.param.categories[data.category]}</ButtonText>
             <Dash />
             <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
             {isEquipped && (
