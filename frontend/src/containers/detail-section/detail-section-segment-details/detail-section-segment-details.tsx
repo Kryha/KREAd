@@ -6,8 +6,6 @@ import { DetailSectionElement } from "../detail-section-element";
 import { DetailSectionBody } from "../detail-section-segment/styles";
 import { DetailSectionSegmentDetailsWrap, DetailSectionSegmentDetailsLink, ArrowUpRight } from "./styles";
 
-import { truncateAddress } from "../../../util";
-
 interface Data {
   brand: string;
   boardId: string;

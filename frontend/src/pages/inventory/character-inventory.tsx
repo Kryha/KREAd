@@ -25,7 +25,7 @@ export const CharactersInventory: FC = () => {
   useEffect(() => {
     if (isLoadingCharacters || !!selectedId) return;
     if (characters.length) {
-      setSelectedId(characters[0].nft.id.toString());
+      setSelectedId(characters[0].nft.id);
     }
     setIsLoading(false);
   }, [characters, isLoadingCharacters, selectedId]);

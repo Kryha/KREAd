@@ -238,10 +238,6 @@ const start = async (zcf) => {
     // TODO: Replace Date by a valid time generator now it returns NaN
     const allDefaultItems = Object.values(state.config.defaultItems);
     const uniqueItems = allDefaultItems.map((item) => {
-      // const newItem = {
-      //   ...item,
-      //   // date: Date.now()
-      // };
       const newItemWithId = {
         ...item,
         id: state.itemCount,
@@ -267,6 +263,7 @@ const start = async (zcf) => {
     state.characters = [...state.characters, character];
     state.characterNames = [...state.characterNames, character.name];
 
+    // TODO: make private state useful
     // Add to private state
     privateState = [
       ...privateState,

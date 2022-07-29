@@ -1,5 +1,5 @@
 import { E } from "@endo/eventual-send";
-import { Character, CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item } from "../../interfaces";
+import { CharacterBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";

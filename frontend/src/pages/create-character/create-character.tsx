@@ -4,7 +4,7 @@ import { FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
-import { Character, CharacterCreation, ExtendedCharacter } from "../../interfaces";
+import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter, useMyCharacters } from "../../service";
 import { Confirmation } from "./confirmation";

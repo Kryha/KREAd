@@ -1,4 +1,4 @@
-import { Character, CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
+import { ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
 
 export const mediate = {
   items: {

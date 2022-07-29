@@ -1,4 +1,4 @@
-import { Character, ExtendedCharacter } from "./character.interfaces";
+import { ExtendedCharacter } from "./character.interfaces";
 
 export type CharacterState = {
   characters: ExtendedCharacter[];

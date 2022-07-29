@@ -18,7 +18,7 @@ export const filterItems = (items: ItemEquip[], { category, sorting, price, colo
 
   if (!category && !sorting && !color && !changedRange && items.length) return [];
 
-  const isInCategory = (item: ItemEquip, category: string) => (category ? item.category === category : true);
+  const isInCategory = (item: ItemEquip, category: string) => (item.category === category);
   const hasColor = (item: ItemEquip, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
   const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
@@ -29,7 +29,7 @@ export const filterItems = (items: ItemEquip[], { category, sorting, price, colo
 };
 
 export const filterCharacters = (characters: CharacterEquip[], { category, sorting }: CharacterFilters): CharacterEquip[] => {
-  const isInCategory = (character: CharacterEquip, category: string) => (category ? character.nft.type === category : true);
+  const isInCategory = (character: CharacterEquip, category: string) => (character.nft.type === category);
 
   if (!category && !sorting) return characters;
 

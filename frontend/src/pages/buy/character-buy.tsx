@@ -16,7 +16,7 @@ export const CharacterBuy = () => {
 
   return (
     <Buy
-      data={{ price: 4 }}//data}
+      data={{ price: 4 }}//data} FIXME: use proper data
       text={{
         buy: text.store.buyCharacter,
         success: text.store.characterSuccessfullyBought,
