@@ -37,7 +37,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
   const navigate = useNavigate();
   const { width: viewWidth, height: viewHeight } = useViewport();
   const [selectedId, setSelectedId] = useState<string>("");
-
+  const [intitial, setInitial] = useState(true);
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
 
@@ -69,6 +69,10 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
     navigate(`${routes.sellItem}/${selectedId}`);
   };
 
+  const removeInitial = () => {
+    setInitial(false);
+  };
+
   const isDividerShown = !!equippedItem && !!unequippedItems.length;
 
   return (
@@ -97,6 +101,8 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 key={equippedItem.id}
                 isEquipped
                 onButtonClick={() => unequip(equippedItem.id)}
+                isInitial={intitial}
+                removeInitial={removeInitial}
               />
             ) : (
               <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
@@ -111,6 +117,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 onClick={() => setSelectedId(item.id)}
                 key={item.id}
                 onButtonClick={() => equip(item.id)}
+                removeInitial={removeInitial}
               />
             ))}
           </MenuContent>

@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
 
 import { margins } from "../../design";
-import { SecondaryButton } from "../atoms";
+import { SecondaryButton, zoomIn } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
+import { css } from "@emotion/react";
 
 interface ImageProps {
   width: number;
@@ -51,7 +52,7 @@ export const CharacterIcon = styled.img<ImageProps>`
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
-      return "width: 542.82px;";
+      return "width: 600px;";
     }
     if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
       return "width: 742px; ";
@@ -143,7 +144,8 @@ ${({ size, width, height }): string => {
       `;
     }
     else if (size === "extraLarge") {
-      return `zoom: 1.8;
+      return `
+      zoom: 1.8;
       -moz-transform: scale(1.8);
       -moz-transform-origin: 0 0;
       `;
@@ -152,6 +154,13 @@ ${({ size, width, height }): string => {
       return `width: ${width * 0.4}px; height: ${height}px;`;
     }
   }};
+  ${({ size }) => (size === "extraLarge" ?
+    css`
+    animation: ${zoomIn} 5s ease-out 1 forwards;
+    `
+    :
+    css``
+  )};
 `;
 
 export const ItemIcon = styled.img<ImageProps>`
@@ -162,7 +171,7 @@ export const ItemIcon = styled.img<ImageProps>`
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
-      return "width: 542.82px;";
+      return "width: 600px;";
     }
     if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
       return "width: 742px; ";

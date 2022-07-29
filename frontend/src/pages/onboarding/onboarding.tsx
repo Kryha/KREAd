@@ -3,24 +3,29 @@ import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import { AnimatedLogo, BoldLabel, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
+import { AnimatedLogo, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowDown,
   ArrowUp,
   ButtonContainer,
-  Email,
-  EmailContainer,
+  ConnectContainer,
+  Link,
+  TextContainer,
   EndContent,
   FooterContainer,
+  GeneralSectionContainer,
   InfoText,
   KreadContainer,
   MiddleContent,
   OnboardingContainer,
   OnboardingWrapper,
+  ScrollContainer,
   SectionContainer,
+  KryhaLink,
 } from "./styles";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
+import { AGORIC_LINK, KRYHA_LINK } from "../../constants";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
@@ -36,7 +41,6 @@ export const Onboarding: FC = () => {
       <OnboardingWrapper>
         <InfoText height={height}>
           <SectionContainer>
-            <BoldLabel customColor={color.black}>{text.general.comingSoon}</BoldLabel>
             <MenuText>{text.general.launchingTheFirst}</MenuText>
             <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
             <ButtonContainer>
@@ -46,21 +50,40 @@ export const Onboarding: FC = () => {
               </PrimaryButton>
             </ButtonContainer>
           </SectionContainer>
+          <ScrollContainer>
+            <ButtonText>{text.general.scroll}</ButtonText>
+            <ArrowDown />
+          </ScrollContainer>
         </InfoText>
         <MiddleContent height={height}>
-          <SectionContainer>
+          <GeneralSectionContainer>
+            <ConnectContainer>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ConnectContainer>
             <MenuText>{text.general.whoWeAre}</MenuText>
-            <TitleText customColor={color.darkGrey}>{text.general.isPartOfAgoric}</TitleText>
-            <TitleText customColor={color.darkGrey}>{text.general.ourLeadership}</TitleText>
-          </SectionContainer>
+            <TextContainer>{text.general.isPartOfAgoric}</TextContainer>
+            <Link href={AGORIC_LINK}>{text.general.agoric}</Link>
+            <TextContainer>{text.general.anOpenSource}</TextContainer>
+            <KryhaLink href={KRYHA_LINK}>{text.general.kryha}</KryhaLink>
+            <TextContainer>{text.general.ourLeadership}</TextContainer>
+          </GeneralSectionContainer>
         </MiddleContent>
         <EndContent height={height}>
-          <SectionContainer>
+          <GeneralSectionContainer>
+            <ConnectContainer>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ConnectContainer>
             <MenuText>{text.general.contactUs}</MenuText>
             <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-            <EmailContainer>{text.general.sendEmailTo} </EmailContainer>
-            <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
-          </SectionContainer>
+            <TextContainer>{text.general.sendEmailTo} </TextContainer>
+            <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
+          </GeneralSectionContainer>
         </EndContent>
       </OnboardingWrapper>
       <OnboardingCharacter />
@@ -70,7 +93,6 @@ export const Onboarding: FC = () => {
       <KreadContainer height={height} width={width}>
         <AnimatedLogo iteration={1}/>
       </KreadContainer>
-      <ArrowDown />
     </OnboardingContainer>
   );
 };

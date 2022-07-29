@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
 import { bounce, PrimaryButton, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
-import { SMALL_SCREEN_WIDTH } from "../../constants";
+import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 import { color, fontWeight, zIndex } from "../../design";
 
 interface HeightProps {
@@ -112,11 +112,27 @@ export const DefaultImage = styled.img<ViewProps>`
   position: absolute;
   right: 358px;
   top: 0;
-  ${({ width, height }): string =>
-    `min-width: ${width * SMALL_SCREEN_WIDTH}px; max-width: ${width * SMALL_SCREEN_WIDTH}px; width: ${width * SMALL_SCREEN_WIDTH}px; height: ${height}px;`};
+  ${({ height }): string => `height: ${height}px;`};
+  ${({ width }): string => {
+    if (width <= SMALL_SCREEN_SIZE) {
+      return "width: 600px;";
+    }
+    if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
+      return "width: 742px; ";
+    }
+    if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
+      return "width: 764px; ";
+    }
+    if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
+      return "width: 1018px; ";
+    }
+    else {
+      return "width: 742px; ";
+    }
+  }};
 `;
 
-export const Email = styled.a`
+export const Link = styled.a`
   text-decoration: underline;
   font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
@@ -130,7 +146,11 @@ export const Email = styled.a`
   margin-left: 5px;
 `;
 
-export const EmailContainer = styled.span`
+export const KryhaLink = styled(Link)`
+  margin-left: 0px;
+`;
+
+export const TextContainer = styled.span`
   font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
@@ -155,20 +175,54 @@ export const KreadContainer = styled.div<ViewProps>`
 
 export const ArrowDown = styled(ArrowDownIcon)`
   position: absolute;
-  left: 16.2%;
-  bottom: 53px;
+  left: 40px;
+  bottom: -2px;
   -webkit-animation: ${bounce} 2s;
   animation: ${bounce} 2s;
   -webkit-animation-iteration-count: 2;
   animation-iteration-count: 2;
-  animation-fill-mode: forwards;
-  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: backwords;
+  -webkit-animation-fill-mode: backwords;
   animation-delay: 0.5s;
   -webkit-animation-delay: 0.5s;
+  path {
+    stroke: ${color.black};
+  }
+  width: 24px;
+  height: 24px;
 `;
 
 export const SectionContainer = styled.div`
   padding-left: 40px;
-  padding-top: 40px;
+  padding-top: 120px;
   width: 460px;
+`;
+
+export const ScrollContainer = styled.div`
+  position: absolute;
+  left: 40px;
+  bottom: 53px;
+`;
+
+export const GeneralSectionContainer = styled.div`
+  padding-left: 40px;
+  width: 460px;
+`;
+
+export const ConnectContainer = styled.div`
+  background: rgba(255, 255, 255, 0.46);
+  backdrop-filter: blur(4px);
+  width: 460px;
+  height: 120px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  ${PrimaryButton} {
+    &:hover {
+      ${ArrowUp} {
+        path {
+          stroke: ${color.black};
+        }
+      }
+    }
+  }
 `;

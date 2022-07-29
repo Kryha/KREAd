@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { margins } from "../../design";
-import { sequentialFadeIn, SecondaryButton } from "../atoms";
+import { disappear, fadeIn, SecondaryButton } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 
@@ -48,7 +48,7 @@ export const CharacterIcon = styled.img<ImageProps>`
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
-      return "width: 542.82px;";
+      return "width: 600px;";
     }
     if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
       return "width: 742px; ";
@@ -58,7 +58,8 @@ export const CharacterIcon = styled.img<ImageProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "width: 1018px; ";
-    } else {
+    }
+    else {
       return "width: 742px; ";
     }
   }};
@@ -73,8 +74,22 @@ export const CharacterWrapper = styled.div`
 `;
 
 export const CharacterContainer = styled.div<ImageProps>`
-  ${({ width, height }): string => {
-    return `width: ${width * 0.4}px; height: ${height}px;`;
+${({ width }): string => {
+    if (width <= SMALL_SCREEN_SIZE) {
+      return "width: 600px;";
+    }
+    if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
+      return "width: 742px; ";
+    }
+    if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
+      return "width: 764px; ";
+    }
+    if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
+      return "width: 1018px; ";
+    }
+    else {
+      return "width: 742px;";
+    }
   }};
 `;
 
@@ -86,7 +101,7 @@ export const FirstIcon = styled.img<ImageProps>`
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
-      return "width: 542.82px;";
+      return "width: 600px;";
     }
     if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
       return "width: 742px; ";
@@ -96,41 +111,36 @@ export const FirstIcon = styled.img<ImageProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "width: 1018px; ";
-    } else {
+    }
+    else {
       return "width: 742px; ";
     }
   }};
-
-  opacity: 0;
-  animation: ${sequentialFadeIn} 5s ease;
-  animation-iteration-count: infinite;
-  animation-delay: 500ms;
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.3s, 0.2s;
+  animation-delay: 0s, 0.3s;
 `;
 
 export const SecondIcon = styled(FirstIcon)`
-  opacity: 0;
-  animation: ${sequentialFadeIn} 5s ease;
-  animation-iteration-count: infinite;
-  animation-delay: 1s;
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.6s, 0.2s;
+  animation-delay: 0s, 0.6s;
 `;
 
 export const ThirdIcon = styled(FirstIcon)`
-  opacity: 0;
-  animation: ${sequentialFadeIn} 5s ease;
-  animation-iteration-count: infinite;
-  animation-delay: 1.5s;
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 1.1s, 0.2s;
+  animation-delay: 0s, 1.1s;
 `;
 
 export const FourthIcon = styled(FirstIcon)`
-  opacity: 0;
-  animation: ${sequentialFadeIn} 5s ease;
-  animation-iteration-count: infinite;
-  animation-delay: 2s;
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 1.4s, 0.2s;
+  animation-delay: 0s, 1.4s;
 `;
 
 export const FifthIcon = styled(FirstIcon)`
-  opacity: 0;
-  animation: ${sequentialFadeIn} 5s ease;
-  animation-iteration-count: infinite;
-  animation-delay: 2.5s;
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 1.7s, 0.2s;
+  animation-delay: 0s, 1.7s;
 `;

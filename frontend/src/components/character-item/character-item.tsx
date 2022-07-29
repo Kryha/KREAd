@@ -22,9 +22,11 @@ interface CharacterItemProps {
   onClick: (character: Character) => void;
   onButtonClick: (character: Character) => void;
   id: string;
+  removeInitial?: () => void;
+  isInitial?: boolean;
 }
 
-export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onButtonClick, id }) => {
+export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onButtonClick, id, isInitial = false, removeInitial }) => {
   const [selected, setSelected] = useState(false);
   const isCharacterEquipped = character.id === id;
 
@@ -36,10 +38,11 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
   return (
     <Info
       tabIndex={0}
-      selected={selected}
+      selected={selected || isInitial}
       onClick={() => {
         onClick && onClick(character);
         setSelected(true);
+        removeInitial && removeInitial();
       }}
       onBlur={() => setSelected(false)}
     >

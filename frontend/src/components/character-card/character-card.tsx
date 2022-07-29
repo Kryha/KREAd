@@ -30,6 +30,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const [character, setCharacter] = useState<Character>();
   const [close, setClose] = useState(false);
+  const [intitial, setInitial] = useState(true);
 
   const { width, height } = useViewport();
 
@@ -42,6 +43,10 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const showInfo = (values: Character) => {
     setCharacter(values);
+  };
+
+  const removeInitial = () => {
+    setInitial(false);
   };
 
   const select = (character: Character) => {
@@ -92,8 +97,29 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           </EmptyViewContainer>
 
           <CharacterContent>
-            {sortedCharacters.map((character, index) => (
-              <CharacterItem character={character} key={index} onClick={showInfo} onButtonClick={select} id={id} />
+            {sortedCharacters.map((character) => (
+              <>
+                {character.isEquipped ? (
+                  <CharacterItem
+                    character={character}
+                    key={character.id}
+                    onClick={showInfo}
+                    onButtonClick={select}
+                    id={id}
+                    removeInitial={removeInitial}
+                    isInitial={intitial}
+                  />
+                ) : (
+                  <CharacterItem
+                    character={character}
+                    key={character.id}
+                    onClick={showInfo}
+                    onButtonClick={select}
+                    id={id}
+                    removeInitial={removeInitial}
+                  />
+                )}
+              </>
             ))}
           </CharacterContent>
 

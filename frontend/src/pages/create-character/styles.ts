@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
 import { Badge, ButtonText, Input, MenuItemName, PrimaryButton } from "../../components";
 import { Spinner } from "../../components/content-loader/styles";
+import { SMALL_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, LARGE_SCREEN_SIZE, EXTRA_LARGE_SCREEN_SIZE } from "../../constants";
 
 import { color, margins } from "../../design";
 
@@ -13,8 +14,24 @@ interface ViewProps {
 export const DefaultImage = styled.img<ViewProps>`
   margin-left: 140px;
   top: 0;
-  ${({ width, height }): string =>
-    `min-width: ${width * 0.4}px; max-width: ${width * 0.4}px; width: ${width * 0.4}px; height: ${height}px;`};
+  ${({ height }): string => `height: ${height}px;`};
+  ${({ width }): string => {
+    if (width <= SMALL_SCREEN_SIZE) {
+      return "width: 600px;";
+    }
+    if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
+      return "width: 742px; ";
+    }
+    if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
+      return "width: 764px; ";
+    }
+    if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
+      return "width: 1018px; ";
+    }
+    else {
+      return "width: 742px; ";
+    }
+  }};
 `;
 
 export const Exclamation = styled(ExclamationIcon)`

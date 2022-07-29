@@ -47,3 +47,8 @@ export const ITEM_CATEGORIES = [
 export const CHARACTER_CATEGORIES = [
   "tempetscavenger",
 ];
+
+export const AGORIC_LINK = "https://agoric.com/";
+export const KRYHA_LINK = "https://kryha.io/";
+
+export const MAX_CHARACTER_LENGTH = 16;
