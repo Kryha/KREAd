@@ -45,7 +45,7 @@ export const ITEM_CATEGORIES = [
 ];
 
 export const CHARACTER_CATEGORIES = [
-  "tempetscavenger",
+  "tempetScavenger",
 ];
 
 export const AGORIC_LINK = "https://agoric.com/";

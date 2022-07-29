@@ -14,7 +14,7 @@ export const itemCategories: Options[] = [
 ];
 
 // TODO: add real categories
-export const characterCategories: Options[] = [{ label: "Tempet Scavengers", value: "tempetscavenger" }];
+export const characterCategories: Options[] = [{ label: "Tempet Scavengers", value: "tempetScavenger" }];
 
 export const sorting: Options[] = [
   { label: "A to Z", value: "atoz" },

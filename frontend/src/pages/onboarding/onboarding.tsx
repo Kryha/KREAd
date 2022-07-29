@@ -65,9 +65,9 @@ export const Onboarding: FC = () => {
             </ConnectContainer>
             <MenuText>{text.general.whoWeAre}</MenuText>
             <TextContainer>{text.general.isPartOfAgoric}</TextContainer>
-            <Link href={AGORIC_LINK}>{text.general.agoric}</Link>
+            <Link href={AGORIC_LINK}>{text.param.comma(text.general.agoric)}</Link>
             <TextContainer>{text.general.anOpenSource}</TextContainer>
-            <KryhaLink href={KRYHA_LINK}>{text.general.kryha}</KryhaLink>
+            <KryhaLink href={KRYHA_LINK}>{text.param.fullstop(text.general.kryha)}</KryhaLink>
             <TextContainer>{text.general.ourLeadership}</TextContainer>
           </GeneralSectionContainer>
         </MiddleContent>
@@ -81,7 +81,7 @@ export const Onboarding: FC = () => {
             </ConnectContainer>
             <MenuText>{text.general.contactUs}</MenuText>
             <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-            <TextContainer>{text.general.sendEmailTo} </TextContainer>
+            <TextContainer>{text.general.sendEmailTo}</TextContainer>
             <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
           </GeneralSectionContainer>
         </EndContent>
@@ -91,7 +91,7 @@ export const Onboarding: FC = () => {
         <Footer />
       </FooterContainer>
       <KreadContainer height={height} width={width}>
-        <AnimatedLogo iteration={1}/>
+        <AnimatedLogo iteration={1} />
       </KreadContainer>
     </OnboardingContainer>
   );

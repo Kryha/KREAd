@@ -8,7 +8,7 @@ export const FakeCharcters: Character[] = [
     keyId: 1,
     date: 1657803039,
     name: "character 1",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "7999",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -38,7 +38,7 @@ export const FakeCharcters: Character[] = [
     keyId: 1,
     date: 1657803039,
     name: "character 2",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -68,7 +68,7 @@ export const FakeCharcters: Character[] = [
     keyId: 1,
     date: 1657803039,
     name: "character 3",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "78993",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -98,7 +98,7 @@ export const FakeCharcters: Character[] = [
     keyId: 1,
     date: 1657803039,
     name: "character 4",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -129,7 +129,7 @@ export const FakeCharctersNoItems: any[] = [
     title: "character 1",
     image: "",
     name: "character 1",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "7899",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -156,7 +156,7 @@ export const FakeCharctersNoItems: any[] = [
     title: "RAMIRO",
     image: "",
     name: "RAMIRO",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "7899",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -183,7 +183,7 @@ export const FakeCharctersNoItems: any[] = [
     title: "character 2",
     image: "",
     name: "character 2",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "78992",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -211,7 +211,7 @@ export const FakeCharctersNoItems: any[] = [
     image: "",
     url: "https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png",
     name: "character 3",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -239,7 +239,7 @@ export const FakeCharctersNoItems: any[] = [
     image: "",
     url: "https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png",
     name: "character 4",
-    type: "tempetscavenger",
+    type: "tempetScavenger",
     id: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
