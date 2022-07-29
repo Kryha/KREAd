@@ -39,15 +39,22 @@ export interface Character {
   detail: Detail;
   projectDescription: string;
   itemActivity: ActivityEvent[];
-  price: number;
-  date: number;
+  // price: number;
+  // date: number;
 }
 
+export interface ExtendedCharacter {
+  nft: Character;
+  equippedItems: CharacterItems;
+  price?: number;
+}
 export interface CharacterBackend extends Omit<Character, "id"> {
   id: bigint;
 }
-
-export interface CharacterEquip extends Character {
+export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft"> {
+  nft: CharacterBackend;
+}
+export interface CharacterEquip extends ExtendedCharacter {
   isEquipped: boolean;
 }
 

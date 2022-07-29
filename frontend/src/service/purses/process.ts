@@ -1,5 +1,5 @@
 import { E } from "@endo/eventual-send";
-import { CharacterBackend, Item } from "../../interfaces";
+import { Character, CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
@@ -34,18 +34,18 @@ export const processPurses = async (
 
   const equippedCharacterItems: Item[] = [];
   // Map characters to the corresponding inventory in the contract
-  const charactersWithItems: CharacterBackend[] = await Promise.all(
+  const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
     ownedCharacters.map(async (character: CharacterBackend) => {
       const {
-        items: { value: equippedItems },
+        items: equippedItems,
       } = await E(contractPublicFacet).getCharacterInventory(character.name);
 
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
 
       equippedCharacterItems.push(...frontendEquippedItems);
       return {
-        ...character,
-        items: {
+        nft: character,
+        equippedItems: {
           hair: frontendEquippedItems.find((item: Item) => item.category === "hair"),
           headPiece: frontendEquippedItems.find((item: Item) => item.category === "headPiece"),
           noseline: frontendEquippedItems.find((item: Item) => item.category === "noseline"),

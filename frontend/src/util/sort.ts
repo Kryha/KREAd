@@ -17,19 +17,20 @@ export const sortItems = (sorting: string, items: ItemEquip[]): ItemEquip[] => {
   }
 };
 
-export const sortCharacters = (sorting: string, items: CharacterEquip[]): CharacterEquip[] => {
+// TODO: check character sorting
+export const sortCharacters = (sorting: string, characters: CharacterEquip[]): CharacterEquip[] => {
   switch (sorting) {
     case "atoz":
-      return items.sort((a, b) => a.name.localeCompare(b.name));
-    case "lowestPrice":
-      return items.sort((a, b) => a.price - b.price);
-    case "highestPrice":
-      return items.sort((a, b) => b.price - a.price);
+      return characters.sort((a, b) => a.nft.name.localeCompare(b.nft.name));
+    // case "lowestPrice":
+    //   return items.sort((a, b) => a.price - b.price);
+    // case "highestPrice":
+    //   return items.sort((a, b) => b.price - a.price);
     case "rarity":
-      return items.sort((a, b) => b.level - a.level);
+      return characters.sort((a, b) => b.nft.level - a.nft.level);
     case "latest":
-      return items;
+      return characters;
     default:
-      return items;
+      return characters;
   }
 };

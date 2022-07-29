@@ -9,95 +9,6 @@ import { errors } from './errors';
 import { mulberry32 } from './prng';
 
 /**
- * @typedef {{
- *   characterNames: string[]
- *   characters: CharacterRecord[]
- *   charactersMarket: CharacterInMarket[]
- *   itemsMarket: ItemInMarket[]
- *   items: ItemRecord[]
- *   config?: Config
- *   itemCount: bigint
- *   characterCount: bigint
- * }} State
- *
- * @typedef {{
- *   baseCharacters: object[]
- *   defaultItems: object[]
- *   completed?: boolean
- *   moneyIssuer: Issuer
- *   moneyBrand: Brand
- *   sellAssetsInstallation: Installation
- * }} Config
- *
- * @typedef {{
- *   name: string
- *   character: object
- *   inventory: ZCFSeat
- *   seat?: ZCFSeat
- * }} CharacterRecord
- *
- * @typedef {{
- *   id: bigint
- *   character: object
- *   inventory: ZCFSeat
- *   seat?: ZCFSeat
- *   sell: {
- *     instance: Instance
- *     publicFacet: any
- *     price: bigint
- *   }
- * }} CharacterInMarket
- *
- * @typedef {{
- *   id: bigint
- *   item: object
- * }} ItemRecord
- *
- * @typedef {{
- *   id: bigint
- *   item: Item
- *   sell: {
- *     instance: Instance
- *     publicFacet: any
- *     price: bigint
- *  }
- * }} ItemInMarket
- *
- * @typedef {{
- *   noseline?: Item;
- *   midBackground?: Item;
- *   mask?: Item;
- *   headPiece?: Item;
- *   hair?: Item;
- *   frontMask?: Item;
- *   liquid?: Item;
- *   background?: Item;
- *   airReservoir?: Item;
- *   clothing?: Item;
- * }}
- *
- * @typedef {{
- *   name: string;
- *   category: string;
- *   id: string;
- *   description: string;
- *   image: string;
- *   level: number;
- *   rarity: number;
- *   effectiveness?: number;
- *   layerComplexity?: number;
- *   forged: string;
- *   baseMaterial: string;
- *   colors: string[];
- *   projectDescription: string;
- *   price: number;
- *   details: any;
- *   date: string;
- *   activity: any[];
- * }} Item
- */
-
-/**
  * This contract handles the mint of KREAd characters,
  * along with its corresponding item inventories and keys.
  * It also allows for equiping and unequiping items to
@@ -133,7 +44,6 @@ const start = async (zcf) => {
     charactersMarket: [],
     items: [],
     itemsMarket: [],
-
     itemCount: 0n,
     characterCount: 0n,
   };
@@ -208,6 +118,39 @@ const start = async (zcf) => {
   };
 
   /**
+   * Gets the inventory of a given character
+   *
+   * @param {string} characterName
+   * @returns {{items: Item[]}}
+   */
+  const getCharacterInventory = (characterName) => {
+    const characterRecord = state.characters.find(
+      ({ character }) => character.name === characterName,
+    );
+    assert(characterRecord, X`${errors.character404}`);
+    const { inventory } = characterRecord;
+    const items = inventory.getAmountAllocated('Item', itemBrand).value;
+    // @ts-ignore
+    return { items };
+  };
+
+  /**
+   * Gets the characacter key of a given character
+   *
+   * @param {string} characterName
+   * @returns {{ key: Amount}}
+   */
+  const getCharacterKey = (characterName) => {
+    const characterRecord = state.characters.find(
+      ({ character }) => character.name === characterName,
+    );
+    assert(characterRecord, X`${errors.character404}`);
+    const { inventory } = characterRecord;
+    const key = inventory.getAmountAllocated('CharacterKey', characterBrand);
+    return { key };
+  };
+
+  /**
    * Mints Item NFTs via mintGains
    *
    * @param {ZCFSeat} seat
@@ -222,7 +165,7 @@ const start = async (zcf) => {
     // @ts-ignore
     const items = want.Item.value.map((item) => {
       const id = state.itemCount;
-      state.itemCount += 1n;
+      state.itemCount = 1n + state.itemCount;
 
       return { ...item, id };
     });
@@ -251,25 +194,33 @@ const start = async (zcf) => {
     const newCharacterName = want.Asset.value[0].name;
     assert(nameIsUnique(newCharacterName), X`${errors.nameTaken}`);
 
-    // Get random base character and merge with name input
-    // TODO: Replace Date by a valid time generator now it returns NaN
-    const newCharacter = {
-      ...getRandomBaseCharacter(),
-      date: Date.now(),
-      name: newCharacterName,
-    };
-
+    state.characterCount = 1n + state.characterCount;
     const newCharacterId = state.characterCount;
 
-    state.characterCount += 1n;
+    // Get random base character and merge with name input, id, and keyId
+    // TODO: Replace Date by a valid time generator now it returns NaN
+    const newCharacter1 = {
+      ...getRandomBaseCharacter(),
+      // date: Date.now(),
+      id: newCharacterId,
+      name: newCharacterName,
+      keyId: 1,
+    };
+    const newCharacter2 = {
+      ...getRandomBaseCharacter(),
+      // date: Date.now(),
+      id: newCharacterId,
+      name: newCharacterName,
+      keyId: 2,
+    };
 
     const newCharacterAmount1 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, keyId: 1, id: newCharacterId }]),
+      harden([newCharacter1]),
     );
     const newCharacterAmount2 = AmountMath.make(
       characterBrand,
-      harden([{ ...newCharacter, keyId: 2, id: newCharacterId }]),
+      harden([newCharacter2]),
     );
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
@@ -285,13 +236,16 @@ const start = async (zcf) => {
     // TODO: Replace Date by a valid time generator now it returns NaN
     const allDefaultItems = Object.values(state.config.defaultItems);
     const uniqueItems = allDefaultItems.map((item) => {
-      const newItem = { ...item, date: Date.now() };
+      // const newItem = {
+      //   ...item,
+      //   // date: Date.now()
+      // };
       const newItemWithId = {
-        ...newItem,
+        ...item,
         id: state.itemCount,
       };
 
-      state.itemCount += 1n;
+      state.itemCount = 1n + state.itemCount;
 
       return newItemWithId;
     });
@@ -304,21 +258,21 @@ const start = async (zcf) => {
      * @type {CharacterRecord}
      */
     const character = {
-      name: newCharacter.name,
-      character: newCharacter,
+      name: newCharacter1.name,
+      character: newCharacter1,
       inventory: inventorySeat,
     };
     state.characters = [...state.characters, character];
+    state.characterNames = [...state.characterNames, character.name];
 
     // Add to private state
-    // TODO: Increment privateState history element id
     privateState = [
       ...privateState,
       {
         name: character.name,
         history: [
           {
-            id: 0,
+            id: state.characterCount,
             add: uniqueItems.map((i) => i.title),
           },
         ],
@@ -423,9 +377,21 @@ const start = async (zcf) => {
     const inventorySeat = characterRecord.inventory;
     assert(inventorySeat, X`${errors.inventory404}`);
 
+    const { want } = seat.getProposal();
+    const { CharacterKey2: wantedCharacter } = want;
+
     // Get current Character Key from inventorySeat
-    const currentCharacterKey =
+    const inventoryCharacterKey =
       inventorySeat.getAmountAllocated('CharacterKey');
+    assert(inventoryCharacterKey, X`Could not find character key in inventory`);
+    assert(
+      AmountMath.isEqual(
+        wantedCharacter,
+        inventoryCharacterKey,
+        characterBrand,
+      ),
+      X`Wanted Key and Inventory Key do not match`,
+    );
 
     // Widthdraw Item and Key from user seat
     seat.decrementBy(harden({ Item: providedItemAmount }));
@@ -438,8 +404,8 @@ const start = async (zcf) => {
     );
 
     // Widthdraw Key from character seat and Deposit into user seat
-    inventorySeat.decrementBy(harden({ CharacterKey: currentCharacterKey }));
-    seat.incrementBy(harden({ CharacterKey2: currentCharacterKey }));
+    inventorySeat.decrementBy(harden({ CharacterKey: inventoryCharacterKey }));
+    seat.incrementBy(harden({ CharacterKey2: inventoryCharacterKey }));
 
     zcf.reallocate(seat, inventorySeat);
 
@@ -453,7 +419,7 @@ const start = async (zcf) => {
       name: characterRecord.name,
       history: [
         {
-          id: 0,
+          id: BigInt(privateState[characterIndex].history.length + 1),
           // @ts-ignore
           add: [providedItemAmount.value.map((i) => i.name)],
         },
@@ -480,6 +446,85 @@ const start = async (zcf) => {
       },
     });
 
+    // Retrieve Character key from user seat and find matching inventory record
+    const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
+    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const characterName = providedCharacterKey.name;
+    const characterRecord = state.characters.find(
+      (c) => c.name === characterName,
+    );
+    assert(characterRecord, X`${errors.inventory404}`);
+    const inventorySeat = characterRecord.inventory;
+    assert(inventorySeat, X`${errors.inventory404}`);
+    assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
+
+    // Get reference to the wanted items and key
+    const { want } = seat.getProposal();
+    const { Item: requestedItems, CharacterKey2: wantedCharacter } = want;
+    assert(requestedItems, X`${errors.noItemsRequested}`);
+
+    // Get reference to the Character Key in inventorySeat
+    const inventoryCharacterKey =
+      inventorySeat.getAmountAllocated('CharacterKey');
+    assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
+    assert(
+      AmountMath.isEqual(
+        wantedCharacter,
+        inventoryCharacterKey,
+        characterBrand,
+      ),
+      X`${errors.inventoryKeyMismatch}`,
+    );
+
+    // Widthdraw Key from user seat
+    seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
+    // Widthdraw Character Key from inventory seat
+    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
+    // Deposit Character Key in user seat
+    seat.incrementBy({ CharacterKey2: wantedCharacter });
+    // Deposit Character key in inventory seat
+    inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
+
+    // Move item from inventory to user seat
+    seat.incrementBy(inventorySeat.decrementBy({ Item: requestedItems }));
+
+    zcf.reallocate(seat, inventorySeat);
+
+    // Add to private state
+    const characterIndex = privateState.findIndex(
+      (c) => c.name === characterName,
+    );
+    assert(characterIndex >= 0, X`no character private state found`);
+    privateState[characterIndex] = {
+      name: characterRecord.name,
+      history: [
+        {
+          id: BigInt(privateState[characterIndex].history.length + 1),
+          // @ts-ignore
+          remove: [requestedItems],
+        },
+      ],
+    };
+    seat.exit();
+  };
+
+  /**
+   * Remove items from inventory
+   *
+   * @param {ZCFSeat} seat
+   */
+  const unequipAll = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      give: {
+        CharacterKey1: null,
+      },
+      want: {
+        Item: null,
+        CharacterKey2: null,
+      },
+    });
+
     // Retrieve Character key from user seat
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
     const providedCharacterKey = providedCharacterKeyAmount.value[0];
@@ -493,44 +538,38 @@ const start = async (zcf) => {
     assert(inventorySeat, X`${errors.inventory404}`);
     assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 
-    // Get reference of the wanted item
+    // Get reference to the wanted item
     const { want } = seat.getProposal();
-    const { Item: wantedItems } = want;
+    const { CharacterKey2: wantedCharacter } = want;
 
-    // Get current Character Key from inventorySeat
-    const currentCharacterKey =
+    // Get Character Key from inventorySeat
+    const inventoryCharacterKey =
       inventorySeat.getAmountAllocated('CharacterKey');
+    assert(inventoryCharacterKey, X`Could not find character key in inventory`);
+
+    const items = inventorySeat.getAmountAllocated('Item', itemBrand);
+    assert(
+      AmountMath.isEqual(
+        wantedCharacter,
+        inventoryCharacterKey,
+        characterBrand,
+      ),
+      X`Wanted Key and Inventory Key do not match`,
+    );
 
     // Widthdraw Key from user seat
     seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-    // Deposit Wanted Item & Character Key in user seat
-    seat.incrementBy({ Item: wantedItems });
-    seat.incrementBy({ CharacterKey2: currentCharacterKey });
-
-    // Widthdraw wanted Item & Character Key from inventory seat
-    inventorySeat.decrementBy({ Item: wantedItems });
-    inventorySeat.decrementBy({ CharacterKey: currentCharacterKey });
-
+    // Widthdraw Character Key from inventory seat
+    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
+    // Deposit Character Key in user seat
+    seat.incrementBy({ CharacterKey2: wantedCharacter });
     // Deposit Character key in inventory seat
     inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
-    zcf.reallocate(seat, inventorySeat);
+    // Move items from inventory to user set
+    seat.incrementBy(inventorySeat.decrementBy({ Item: items }));
 
-    // Add to private state
-    const characterIndex = privateState.findIndex(
-      (c) => c.name === characterName,
-    );
-    assert(characterIndex >= 0, X`no character private state found`);
-    privateState[characterIndex] = {
-      name: characterRecord.name,
-      history: [
-        {
-          id: 0,
-          // @ts-ignore
-          remove: [wantedItems.value.map((i) => i.title)],
-        },
-      ],
-    };
+    zcf.reallocate(seat, inventorySeat);
     seat.exit();
   };
 
@@ -559,21 +598,6 @@ const start = async (zcf) => {
     });
   };
 
-  /**
-   * Gets the inventory of a given character
-   *
-   * @param {string} characterName
-   */
-  const getCharacterInventory = (characterName) => {
-    const characterRecord = state.characters.find(
-      ({ character }) => character.name === characterName,
-    );
-    assert(characterRecord, X`${errors.character404}`);
-    const { inventory } = characterRecord;
-    const items = inventory.getAmountAllocated('Item', itemBrand);
-    return { items };
-  };
-
   const creatorFacet = Far('Character store creator', {
     initConfig,
     getCharacterIssuer: () => characterIssuer,
@@ -592,6 +616,7 @@ const start = async (zcf) => {
     getCharacters,
     getCharactersMarket,
     getCharacterInventory,
+    getCharacterKey,
     getCharacterCount: () => state.characterNames.length,
     getCharacterIssuer: () => characterIssuer,
     getCharacterBrand: () => characterBrand,
@@ -610,6 +635,8 @@ const start = async (zcf) => {
     makeEquipInvitation: () => zcf.makeInvitation(equip, 'addToInventory'),
     makeUnequipInvitation: () =>
       zcf.makeInvitation(unequip, 'removeFromInventory'),
+    makeUnequipAllInvitation: () =>
+      zcf.makeInvitation(unequipAll, 'removeAllItemsFromInventory'),
 
     // market
     storeItemInMarket,

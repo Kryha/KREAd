@@ -29,7 +29,7 @@ export const filterItems = (items: ItemEquip[], { category, sorting, price, colo
 };
 
 export const filterCharacters = (characters: CharacterEquip[], { category, sorting }: CharacterFilters): CharacterEquip[] => {
-  const isInCategory = (character: CharacterEquip, category: string) => (category ? character.type === category : true);
+  const isInCategory = (character: CharacterEquip, category: string) => (category ? character.nft.type === category : true);
 
   if (!category && !sorting) return characters;
 

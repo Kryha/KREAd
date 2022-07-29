@@ -58,8 +58,8 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
       <ButtonText>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
       <ListContainer>
         <MenuItem
-          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].id }}
-          key={myCharacters[0].id}
+          data={{ ...myCharacters[0].nft, image: myCharacters[0].equippedItems, category: myCharacters[0].nft.type, id: myCharacters[0].nft.id }}
+          key={myCharacters[0].nft.id}
           onClick={onCharacterClick}
           removeInitial={removeInitial}
           isInitial={intitial}
@@ -67,8 +67,8 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
-            data={{ ...character, image: character.items, category: character.type, id: character.id }}
-            key={character.id}
+            data={{ ...character.nft, image: character.equippedItems, category: character.nft.type, id: character.nft.id }}
+            key={character.nft.id}
             onClick={onCharacterClick}
             removeInitial={removeInitial}
             isEquipped={character.isEquipped}

@@ -25,7 +25,7 @@ export const CharactersInventory: FC = () => {
   useEffect(() => {
     if (isLoadingCharacters || !!selectedId) return;
     if (characters.length) {
-      setSelectedId(characters[0].id.toString());
+      setSelectedId(characters[0].nft.id.toString());
     }
     setIsLoading(false);
   }, [characters, isLoadingCharacters, selectedId]);
@@ -62,7 +62,7 @@ export const CharactersInventory: FC = () => {
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
       <FadeInOut show>
         <DetailWrapper>
-          <CharacterDetailSection character={character} actions={detailActions()} />
+          <CharacterDetailSection character={character.nft} actions={detailActions()} />
         </DetailWrapper>
       </FadeInOut>
     </PageContainer>

@@ -4,7 +4,7 @@ import { FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { PAYMENT_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
-import { Character, CharacterCreation } from "../../interfaces";
+import { Character, CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter, useMyCharacters } from "../../service";
 import { Confirmation } from "./confirmation";
@@ -16,7 +16,7 @@ export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [mintedCharacter, setMintedCharacter] = useState<Character>();
+  const [mintedCharacter, setMintedCharacter] = useState<ExtendedCharacter>();
   const [characterdata, setCharacterData] = useState<CharacterCreation>({ name: "" });
   const [myCharacters, isLoadingCharacters] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,9 +26,9 @@ export const CreateCharacter: FC = () => {
   // const [isWalletError, setIsWalletError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (myCharacters.map((c) => c.name).includes(characterdata.name)) {
+    if (myCharacters.map((c) => c.nft.name).includes(characterdata.name)) {
       setIsOfferAccepted(true);
-      const [newCharacter] = myCharacters.filter((character) => character.name === characterdata.name);
+      const [newCharacter] = myCharacters.filter((character) => character.nft.name === characterdata.name);
       setMintedCharacter(newCharacter);
       setIsLoading(false);
     }
@@ -57,7 +57,7 @@ export const CreateCharacter: FC = () => {
       case 1:
         return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
       case 2:
-        return <Confirmation character={mintedCharacter} />;
+        return <Confirmation character={mintedCharacter?.nft} />;
       default:
         return <Information setData={setData} disabled={createCharacter.isLoading} />;
     }

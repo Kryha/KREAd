@@ -1,4 +1,4 @@
-import { Character, CharacterBackend, Item, ItemBackend } from "../interfaces";
+import { Character, CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
 
 export const mediate = {
   items: {
@@ -14,14 +14,14 @@ export const mediate = {
     },
   },
   characters: {
-    toFront: (backendCharacters: CharacterBackend[]): Character[] => {
+    toFront: (backendCharacters: ExtendedCharacterBackend[]): ExtendedCharacter[] => {
       return backendCharacters.map((backendCharacter) => {
-        return { ...backendCharacter, id: String(backendCharacter.id) };
+        return { ...backendCharacter, nft: { ...backendCharacter.nft, id: String(backendCharacter.nft.id) } };
       });
     },
-    toback: (frontendCharacters: Character[]): CharacterBackend[] => {
+    toback: (frontendCharacters: ExtendedCharacter[]): ExtendedCharacterBackend[] => {
       return frontendCharacters.map((frontendCharacter) => {
-        return { ...frontendCharacter, id: BigInt(frontendCharacter.id) };
+        return { ...frontendCharacter, nft: { ...frontendCharacter.nft, id: BigInt(frontendCharacter.nft.id) } };
       });
     },
   },

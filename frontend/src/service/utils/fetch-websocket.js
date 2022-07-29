@@ -54,7 +54,6 @@ function createSocket({ onConnect, onDisconnect, onMessage }, endpoint) {
       ifr.setAttribute('style', 'display: none');
       document.body.appendChild(ifr);
       window.addEventListener('message', ev => {
-        // console.log('dapp ui got', ev);
         logMsg(ev.data, 'recv');
         if (ev.data && ev.data.type === 'walletBridgeLoaded') {
           walletLoaded = true;

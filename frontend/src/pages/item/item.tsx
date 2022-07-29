@@ -18,8 +18,8 @@ export const ItemPage: FC = () => {
   const [equippedItem, unequippedItems]: [Item | undefined, Item[]] = useMemo(() => {
     if (!isItemCategory(category)) return [undefined, []];
 
-    return [character?.items[category], owned.filter((item) => item.category === category)];
-  }, [category, character?.items, owned]);
+    return [character?.equippedItems[category], owned.filter((item) => item.category === category)];
+  }, [category, character?.equippedItems, owned]);
 
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage />;
 
@@ -27,7 +27,7 @@ export const ItemPage: FC = () => {
 
   return (
     <ItemWrapper height={height} position={category} width={width}>
-      <BaseCharacter items={character.items} size="extraLarge" isZoomed />
+      <BaseCharacter items={character.equippedItems} size="extraLarge" isZoomed />
       <MenuCard title={text.param.categories[category]} equippedItem={equippedItem} unequippedItems={unequippedItems} />
     </ItemWrapper>
   );

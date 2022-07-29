@@ -41,7 +41,8 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
             <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
           </Tag>
           <PriceContainer>
-            <PriceInIst price={character.price} />
+            {/* TODO: add price*/}
+            <PriceInIst price={4/*character.price*/} />
             <PrimaryButton>
               <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
             </PrimaryButton>

@@ -1,35 +1,35 @@
-import { Character } from "./character.interfaces";
+import { Character, ExtendedCharacter } from "./character.interfaces";
 
 export type CharacterState = {
-  characters: Character[];
-  owned: Character[];
+  characters: ExtendedCharacter[];
+  owned: ExtendedCharacter[];
   fetched: boolean;
-  selected?: Character;
+  selected?: ExtendedCharacter;
 };
 
 interface SetCharacters {
   type: "SET_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface AddCharacters {
   type: "ADD_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface SetOwnedCharacters {
   type: "SET_OWNED_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface AddOwnedCharacters {
   type: "ADD_OWNED_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface SetSelectedCharacter {
   type: "SET_SELECTED_CHARACTER";
-  payload: Character;
+  payload: ExtendedCharacter;
 }
 
 interface SetFetched {

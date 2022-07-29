@@ -172,8 +172,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         const on = E(walletP).getOffersNotifier();
         for await (const offer of iterateNotifier(on)) {
           console.info("📡 OFFER UPDATE");
-          const last3 = offer.slice(-3);
-          console.info(last3);
+          const last5 = offer.slice(-5);
+          console.info(last5);
         }
       }
       watchOffers().catch((err) => {

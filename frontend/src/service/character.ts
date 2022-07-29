@@ -1,7 +1,7 @@
 // TODO: Remove this, use ations + context instead
 import { useMutation, useQuery, UseQueryResult } from "react-query";
 
-import { Character, CharacterCreation, CharacterEquip } from "../interfaces";
+import { Character, CharacterCreation, CharacterEquip, ExtendedCharacter } from "../interfaces";
 import { FakeCharcters } from "./fake-characters";
 import { useCharacterContext } from "../context/characters";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
@@ -26,7 +26,7 @@ export const useCharacter = (id: string): UseQueryResult<Character> => {
   });
 };
 
-export const useSelectedCharacter = (): [Character | undefined, boolean] => {
+export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export const useSelectedCharacter = (): [Character | undefined, boolean] => {
 export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolean] => {
   const [owned, isLoading] = useMyCharacters();
 
-  const found = useMemo(() => owned.find((c) => c.id === id), [id, owned]);
+  const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
 
   return [found, isLoading];
 };
@@ -51,10 +51,10 @@ export const useMyCharacters = (): [CharacterEquip[], boolean] => {
 
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
     return owned.map((character) => {
-      if (character.id === selected?.id) return { ...character, isEquipped: true };
+      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true };
       return { ...character, isEquipped: false };
     });
-  }, [owned, selected?.id]);
+  }, [owned, selected?.nft.id]);
 
   return [charactersWithEquip, !fetched];
 };
@@ -98,9 +98,9 @@ export const useFilteredCharacters = (category: string, sorting: string, price: 
     const characters = data.map((character) => ({ ...character, isEquipped: false }));
 
     const filteredCharacters = characters.filter((character) => isInCategory(character, category));
-    const filteredPrice = filteredCharacters.filter((character) => character.price > price.min && character.price < price.max);
-    const sortedCharacters = sortCharacters(sorting, filteredPrice);
+    // const filteredPrice = filteredCharacters.filter((character) => character.price > price.min && character.price < price.max);
+    // const sortedCharacters = sortCharacters(sorting, filteredPrice);
 
-    return [sortedCharacters, isLoading];
-  }, [category, data, isLoading, price, sorting, changedRange]);
+    return [/*sortedCharacters*/filteredCharacters, isLoading];
+  }, [category, data, isLoading,/* price, */sorting, changedRange]);
 };

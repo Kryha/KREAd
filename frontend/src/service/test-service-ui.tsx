@@ -3,15 +3,15 @@ import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 
 import { mintNfts } from "./character-actions";
-import { equipItem, buyItem, mintItem, unequipItem, sellItem } from "./item-actions";
 import { useCharacterContext } from "../context/characters";
 import { useAgoricContext } from "../context/agoric";
+import { equipItem, buyItem, mintItem, unequipItem, sellItem } from "./item-actions";
 
 export const TestServiceUI = () => {
   // service referse to agoricContext
   const [service, agoricDispatch] = useAgoricContext();
   const [characters, charactersDispatch] = useCharacterContext();
-
+  equipItem;
   const CBPublicFacet = service.contracts.characterBuilder.publicFacet;
   useEffect(() => {
     console.log("SERVICE:", service);
@@ -170,14 +170,14 @@ export const TestServiceUI = () => {
 
   const removeItemFromInventory = async () => {
     const {
-      items: { value: equippedItems },
-    } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name);
+      items: equippedItems,
+    } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].nft.name);
 
     const item = equippedItems[0];
     const character = characters.owned[0];
     console.log(item);
     console.log(character);
-    await unequipItem(service, item, character);
+    await unequipItem(service, item, character.nft);
     console.log("done");
   };
 
@@ -219,8 +219,8 @@ export const TestServiceUI = () => {
     );
 
     console.log("🦐 ", results); */
-
-    console.log(await mintNfts(service, "PABLO"));
+    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterKey("PABLO"));
+    // console.log(await mintNfts(service, "PABLO"));
     // const nfts = await E(CBPublicFacet).getCharacters();
     // const rand = await E(CBPublicFacet).testPRNG();
     // const config = await E(CBPublicFacet).getConfig();
@@ -247,11 +247,11 @@ export const TestServiceUI = () => {
   const getCharacterInventory = async () => {
     // const auctionPublicFacet = await E(service.agoric.zoe).getPublicFacet(auctionInstance);
     console.log("🥵>>>>> GETTING INVENTORY");
-    if (!characters.owned[0].name) {
+    if (!characters.owned[0].nft.name) {
       console.log("no characters owned");
       return;
     }
-    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].name));
+    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].nft.name));
   };
 
   return (

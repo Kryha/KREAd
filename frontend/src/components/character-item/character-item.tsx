@@ -15,18 +15,18 @@ import { ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../ato
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
-import { Character } from "../../interfaces";
+import { Character, ExtendedCharacter } from "../../interfaces";
 
 interface CharacterItemProps {
-  character: Character;
-  onClick: (character: Character) => void;
-  onButtonClick: (character: Character) => void;
+  character: ExtendedCharacter;
+  onClick: (character: ExtendedCharacter) => void;
+  onButtonClick: (character: ExtendedCharacter) => void;
   id: string;
 }
 
 export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onButtonClick, id }) => {
   const [selected, setSelected] = useState(false);
-  const isCharacterEquipped = character.id === id;
+  const isCharacterEquipped = character.nft.id === id;
 
   const handleButtonClick = (e: SyntheticEvent) => {
     e.stopPropagation();
@@ -44,18 +44,18 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
       onBlur={() => setSelected(false)}
     >
       <ImageCard>
-        <BaseCharacter items={character.items} isZoomed={false} size="mini" />
+        <BaseCharacter items={character.equippedItems} isZoomed={false} size="mini" />
       </ImageCard>
       <InfoWrapper>
         <InfoContainer>
           <TitleContainer>
-            <MenuItemName>{character.name}</MenuItemName>
+            <MenuItemName>{character.nft.name}</MenuItemName>
             {isCharacterEquipped && <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>}
           </TitleContainer>
           <SubTitleContainer>
-            <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>{character.nft.type}</ButtonText>
             <Line />
-            <ButtonText>{text.param.level(character.level)}</ButtonText>
+            <ButtonText>{text.param.level(character.nft.level)}</ButtonText>
           </SubTitleContainer>
         </InfoContainer>
         <ButtonContainer>

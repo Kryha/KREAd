@@ -16,7 +16,7 @@ export const CharacterBuy = () => {
 
   return (
     <Buy
-      data={data}
+      data={{ price: 4 }}//data}
       text={{
         buy: text.store.buyCharacter,
         success: text.store.characterSuccessfullyBought,
