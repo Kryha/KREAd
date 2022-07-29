@@ -7,6 +7,7 @@ import { assert, details as X } from '@agoric/assert';
 
 import { errors } from './errors';
 import { mulberry32 } from './prng';
+import { messages } from './messages';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -196,18 +197,19 @@ const start = async (zcf) => {
 
     state.characterCount = 1n + state.characterCount;
     const newCharacterId = state.characterCount;
+    const randomCharacterBase = getRandomBaseCharacter();
 
-    // Get random base character and merge with name input, id, and keyId
+    // Merge random base character with name input, id, and keyId
     // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter1 = {
-      ...getRandomBaseCharacter(),
+      ...randomCharacterBase,
       // date: Date.now(),
       id: newCharacterId,
       name: newCharacterName,
       keyId: 1,
     };
     const newCharacter2 = {
-      ...getRandomBaseCharacter(),
+      ...randomCharacterBase,
       // date: Date.now(),
       id: newCharacterId,
       name: newCharacterName,
@@ -281,7 +283,7 @@ const start = async (zcf) => {
 
     seat.exit();
 
-    return 'You minted an NFT!';
+    return messages.mintReturn;
   };
 
   /**
@@ -383,14 +385,14 @@ const start = async (zcf) => {
     // Get current Character Key from inventorySeat
     const inventoryCharacterKey =
       inventorySeat.getAmountAllocated('CharacterKey');
-    assert(inventoryCharacterKey, X`Could not find character key in inventory`);
+    assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
     assert(
       AmountMath.isEqual(
         wantedCharacter,
         inventoryCharacterKey,
         characterBrand,
       ),
-      X`Wanted Key and Inventory Key do not match`,
+      X`${errors.inventoryKeyMismatch}`,
     );
 
     // Widthdraw Item and Key from user seat
@@ -413,7 +415,7 @@ const start = async (zcf) => {
     const characterIndex = privateState.findIndex(
       (c) => c.name === characterName,
     );
-    assert(characterIndex >= 0, X`no character private state found`);
+    assert(characterIndex >= 0, X`${errors.privateState404}`);
 
     privateState[characterIndex] = {
       name: characterRecord.name,
@@ -494,7 +496,7 @@ const start = async (zcf) => {
     const characterIndex = privateState.findIndex(
       (c) => c.name === characterName,
     );
-    assert(characterIndex >= 0, X`no character private state found`);
+    assert(characterIndex >= 0, X`${errors.privateState404}`);
     privateState[characterIndex] = {
       name: characterRecord.name,
       history: [
@@ -545,7 +547,7 @@ const start = async (zcf) => {
     // Get Character Key from inventorySeat
     const inventoryCharacterKey =
       inventorySeat.getAmountAllocated('CharacterKey');
-    assert(inventoryCharacterKey, X`Could not find character key in inventory`);
+    assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
 
     const items = inventorySeat.getAmountAllocated('Item', itemBrand);
     assert(
@@ -554,7 +556,7 @@ const start = async (zcf) => {
         inventoryCharacterKey,
         characterBrand,
       ),
-      X`Wanted Key and Inventory Key do not match`,
+      X`${errors.inventoryKeyMismatch}`,
     );
 
     // Widthdraw Key from user seat
