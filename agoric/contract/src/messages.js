@@ -1,3 +1,4 @@
 export const messages = {
-  mintReturn: `Character NFT minted successfully!`,
+  mintCharacterReturn: `Character NFT minted successfully!`,
+  mintItemReturn: `Item NFT(s) minted successfully!`,
 };

@@ -175,7 +175,7 @@ const start = async (zcf) => {
 
     itemMint.mintGains({ Asset: newItemAmount }, seat);
     seat.exit();
-    return 'You minted an Item NFT!';
+    return messages.mintItemReturn;
   };
 
   /**
@@ -283,7 +283,7 @@ const start = async (zcf) => {
 
     seat.exit();
 
-    return messages.mintReturn;
+    return messages.mintCharacterReturn;
   };
 
   /**
