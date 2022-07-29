@@ -46,7 +46,7 @@
  *
  * @typedef {{
  *   id: bigint
- *   character: object
+ *   character: CharacterRecord
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
  *   sell: {
