@@ -76,6 +76,7 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoadi
           </FormFields>
           <FormText>{text.store.sellDescription}</FormText>
           <ButtonContainer>
+            {/* TODO: add spinner on loading */}
             <PrimaryButton type="submit" disabled={!isValid || isLoading}>
               <ButtonText customColor={color.white}>{text.store.placeInShop}</ButtonText>
               <ArrowUp />

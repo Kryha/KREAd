@@ -14,8 +14,6 @@ export const ItemSell = () => {
   const sellItem = useSellItem(String(id));
 
   const submitForm = (price: number) => {
-    if (!id) return;
-    // TODO: show progress
     sellItem.callback(price);
   };
 

@@ -14,8 +14,6 @@ export const CharacterSell = () => {
   const sellCharacter = useSellCharacter(String(id));
 
   const submitForm = (price: number) => {
-    if (!id) return;
-    // TODO: show progress
     sellCharacter.callback(price);
   };
 
@@ -31,6 +29,7 @@ export const CharacterSell = () => {
 
   return (
     <Sell
+      isLoading={sellCharacter.isLoading}
       onSubmit={submitForm}
       text={{ sell: text.store.sellCharacter }}
       data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}

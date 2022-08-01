@@ -120,8 +120,8 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           {!noFilteredItems && (
             <ItemWrapper height={height} onBlur={() => setFilterId("")}>
               <ItemContainer>
-                {items.map((item, index) => (
-                  <ItemShopCard itemInMarket={item} key={index} onClick={setSelectedItem} />
+                {items.map((item) => (
+                  <ItemShopCard itemInMarket={item} key={item.id} onClick={setSelectedItem} />
                 ))}
               </ItemContainer>
             </ItemWrapper>
