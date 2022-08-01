@@ -48,7 +48,6 @@ const start = async (zcf) => {
     itemsMarket: [],
     itemCount: 0n,
     characterCount: 0n,
-    chainTimerService: undefined,
   };
 
   /**
@@ -189,7 +188,7 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintCharacterNFT = (seat) => {
+  const mintCharacterNFT = async (seat) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
     // TODO add Give statement with Money
     assertProposalShape(seat, {
@@ -205,24 +204,22 @@ const start = async (zcf) => {
     const newCharacterId = state.characterCount;
     const randomCharacterBase = getRandomBaseCharacter();
 
-    // assert(
-    //   typeof state.config.chainTimerService?.getCurrentTimestamp() === 'bigint',
-    //   "getCurrentTimestap didn't return a bigint",
-    // );
-
-    const currentTime = E(state.config.chainTimerService).getCurrentTimestamp();
+    // @ts-ignore
+    const currentTime = await E(
+      state.config.chainTimerService,
+    ).getCurrentTimestamp();
     // Merge random base character with name input, id, and keyId
     // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter1 = {
       ...randomCharacterBase,
-      date: currentTime,
+      date: Number(currentTime),
       id: newCharacterId,
       name: newCharacterName,
       keyId: 1,
     };
     const newCharacter2 = {
       ...randomCharacterBase,
-      date: currentTime,
+      date: Number(currentTime),
       id: newCharacterId,
       name: newCharacterName,
       keyId: 2,
