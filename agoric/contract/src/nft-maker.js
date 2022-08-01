@@ -209,7 +209,6 @@ const start = async (zcf) => {
       state.config.chainTimerService,
     ).getCurrentTimestamp();
     // Merge random base character with name input, id, and keyId
-    // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter1 = {
       ...randomCharacterBase,
       date: Number(currentTime),
@@ -244,7 +243,6 @@ const start = async (zcf) => {
     );
 
     // Mint items to inventory seat
-    // TODO: Replace Date by a valid time generator now it returns NaN
     const allDefaultItems = Object.values(state.config.defaultItems);
     const uniqueItems = allDefaultItems.map((item) => {
       const newItemWithId = {
