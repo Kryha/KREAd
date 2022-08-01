@@ -40,6 +40,7 @@ const start = async (zcf) => {
    */
   const state = {
     config: undefined, // Holds list of base characters and default items
+    characterNames: [], // Holds a list of minted character names, used to check for uniqueness
     characters: [], // Holds each character's inventory + copy of its data
     charactersMarket: [],
     items: [],
@@ -114,8 +115,7 @@ const start = async (zcf) => {
    * @returns {boolean}
    */
   const nameIsUnique = (name) => {
-    const usedNames = state.characters.map((character) => character.name);
-    return !usedNames.includes(name);
+    return !state.characterNames.includes(name);
   };
 
   /**
@@ -261,6 +261,7 @@ const start = async (zcf) => {
       inventory: inventorySeat,
     };
     state.characters = [...state.characters, character];
+    state.characterNames = [...state.characterNames, character.name];
 
     // TODO: make private state useful
     // Add to private state
@@ -335,6 +336,19 @@ const start = async (zcf) => {
   };
 
   /**
+   * This function validates an inventory update
+   *
+   * @param {Item[]} inventory
+   */
+  const validateInventoryState = (inventory) => {
+    const itemTypes = inventory.map((item) => item.category);
+    assert(
+      itemTypes.length === new Set(itemTypes).size,
+      X`${errors.duplicateCategoryInInventory}`,
+    );
+  };
+
+  /**
    * Adds item to inventory
    *
    * @param {ZCFSeat} seat
@@ -351,21 +365,11 @@ const start = async (zcf) => {
       },
     });
 
-    /**
-     * TODO:
-     * Verify that the item slot is empty before equipping.
-     * If not empty unequip present item
-     * Or construct the proposal so that we "want" the currently equipped item back
-     */
-
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item');
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
     const providedCharacterKey = providedCharacterKeyAmount.value[0];
     const characterName = providedCharacterKey.name;
-
-    // TODO: Validate Issuer
-    // Make sure that a token with a correct key value  but minted from a different issuer is not allowed
 
     // Find characterRecord entry based on provided key
     const characterRecord = state.characters.find(
@@ -390,6 +394,14 @@ const start = async (zcf) => {
       ),
       X`${errors.inventoryKeyMismatch}`,
     );
+
+    const { value: currentInventoryItems } =
+      inventorySeat.getAmountAllocated('Item');
+    validateInventoryState([
+      // @ts-ignore
+      ...currentInventoryItems,
+      ...providedItemAmount.value,
+    ]);
 
     // Widthdraw Item and Key from user seat
     seat.decrementBy(harden({ Item: providedItemAmount }));
@@ -507,7 +519,102 @@ const start = async (zcf) => {
   };
 
   /**
-   * Remove items from inventory
+   * Swap items from inventory,
+   * will replace current items if category already equipped
+   * no items will be returned if categoy was empty
+   *
+   * @param {ZCFSeat} seat
+   */
+  const swapItems = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      give: {
+        Item1: null,
+        CharacterKey1: null,
+      },
+      want: {
+        Item2: null,
+        CharacterKey2: null,
+      },
+    });
+
+    // Retrieve Items and Inventory key from user seat
+    const providedItemAmount = seat.getAmountAllocated('Item1');
+    const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
+    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const characterName = providedCharacterKey.name;
+
+    // Find characterRecord entry based on provided key
+    const characterRecord = state.characters.find(
+      (c) => c.name === characterName,
+    );
+    assert(characterRecord, X`${errors.inventory404}`);
+    const inventorySeat = characterRecord.inventory;
+    assert(inventorySeat, X`${errors.inventory404}`);
+
+    const { want } = seat.getProposal();
+    const { CharacterKey2: wantedCharacter, Item2: wantedItemsAmount } = want;
+
+    // Get current Character Key from inventorySeat
+    const inventoryCharacterKey =
+      inventorySeat.getAmountAllocated('CharacterKey');
+    assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
+    assert(
+      AmountMath.isEqual(
+        wantedCharacter,
+        inventoryCharacterKey,
+        characterBrand,
+      ),
+      X`${errors.inventoryKeyMismatch}`,
+    );
+
+    // Widthdraw Item and Key from user seat
+    seat.decrementBy(harden({ Item1: providedItemAmount }));
+    seat.decrementBy(harden({ CharacterKey1: providedCharacterKeyAmount }));
+    inventorySeat.decrementBy(harden({ Item: wantedItemsAmount }));
+
+    // Deposit Item and Key to inventory seat
+    inventorySeat.incrementBy(harden({ Item2: providedItemAmount }));
+    inventorySeat.incrementBy(
+      harden({ CharacterKey: providedCharacterKeyAmount }),
+    );
+    seat.incrementBy(harden({ Item2: wantedItemsAmount }));
+
+    // TODO: validate resulting inventory
+    // Widthdraw Key and items from inventory seat and Deposit into user seat
+    // seat.incrementBy(
+    //   inventorySeat.decrementBy(
+    //     harden({
+    //       CharacterKey: inventoryCharacterKey,
+    //       Item: itemsToReplaceAmount,
+    //     }),
+    //   ),
+    // );
+
+    zcf.reallocate(seat, inventorySeat);
+
+    // Add to private state
+    const characterIndex = privateState.findIndex(
+      (c) => c.name === characterName,
+    );
+    assert(characterIndex >= 0, X`${errors.privateState404}`);
+
+    privateState[characterIndex] = {
+      name: characterRecord.name,
+      history: [
+        {
+          id: BigInt(privateState[characterIndex].history.length + 1),
+          // @ts-ignore
+          add: [providedItemAmount.value.map((i) => i.name)],
+        },
+      ],
+    };
+
+    seat.exit();
+  };
+
+  /**
+   * Remove all items from inventory
    *
    * @param {ZCFSeat} seat
    */
@@ -635,6 +742,8 @@ const start = async (zcf) => {
       zcf.makeInvitation(unequip, 'removeFromInventory'),
     makeUnequipAllInvitation: () =>
       zcf.makeInvitation(unequipAll, 'removeAllItemsFromInventory'),
+    makeItemSwapInvitation: () =>
+      zcf.makeInvitation(swapItems, 'ItemInventorySwap'),
 
     // market
     storeItemInMarket,

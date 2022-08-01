@@ -1,9 +1,10 @@
 import { E } from "@endo/eventual-send";
-import { CharacterBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
+import { CharacterBackend, ExtendedCharacterBackend, Item, ItemCategory } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
 import { mediate } from "../../util";
+import { itemCategories } from "../util";
 
 // This fetches assets data from purses in the wallet and updates the local context state for characters & items
 export const processPurses = async (
@@ -43,6 +44,11 @@ export const processPurses = async (
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
 
       equippedCharacterItems.push(...frontendEquippedItems);
+      const equipped: {[key: string]: Item | undefined} = {};
+      itemCategories.forEach((category) => {
+        equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
+      });
+      console.log(equipped);
       return {
         nft: character,
         equippedItems: {

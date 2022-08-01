@@ -1,7 +1,6 @@
 // ts-check
 /**
  * @typedef {{
- *   characterNames: string[]
  *   characters: CharacterRecord[]
  *   charactersMarket: CharacterInMarket[]
  *   itemsMarket: ItemInMarket[]

@@ -5,7 +5,9 @@ import { useEffect } from "react";
 import { mintNfts } from "./character-actions";
 import { useCharacterContext } from "../context/characters";
 import { useAgoricContext } from "../context/agoric";
-import { equipItem, buyItem, mintItem, unequipItem, sellItem } from "./item-actions";
+import { equipItem, buyItem, mintItem, unequipItem, sellItem, itemSwap } from "./item-actions";
+import { Item } from "../interfaces";
+import { itemCategories } from "./util";
 
 export const TestServiceUI = () => {
   // service referse to agoricContext
@@ -177,7 +179,7 @@ export const TestServiceUI = () => {
     const character = characters.owned[0];
     console.log(item);
     console.log(character);
-    await unequipItem(service, item, character.nft);
+    await unequipItem(service, item, character.nft.name);
     console.log("done");
   };
 
@@ -219,7 +221,12 @@ export const TestServiceUI = () => {
     );
 
     console.log("🦐 ", results); */
-    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterKey("PABLO"));
+    // console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterKey("PABLO"));
+    // const { items: currentInventoryItems }: {items: Item[]} = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory("CRISI");
+    console.log(await itemSwap(service, characters.owned[0].nft));
+    // const equippedCategories = currentInventoryItems.map((i: Item) => i.category);
+    // const emptyCategories = itemCategories.filter((category) => equippedCategories.includes(category));
+    // console.log(emptyCategories);
     // console.log(await mintNfts(service, "PABLO"));
     // const nfts = await E(CBPublicFacet).getCharacters();
     // const rand = await E(CBPublicFacet).testPRNG();
