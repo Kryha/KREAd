@@ -30,4 +30,6 @@ export const param = {
     clothing: "clothing",
     tempetScavenger: "tempet scavenger"
   },
+  fullstop: (word: string) => `${word}.`,
+  comma: (word: string) => `${word},`,
 };

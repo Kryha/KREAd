@@ -25,6 +25,7 @@ import { useViewport } from "../../hooks";
 import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
 import { EmptyCard } from "../empty-card";
 import { useEquipItem, useUnequipItem } from "../../service";
+import { FadeInOut } from "../fade-in-out";
 
 interface MenuCardProps {
   title: string;
@@ -37,7 +38,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
   const navigate = useNavigate();
   const { width: viewWidth, height: viewHeight } = useViewport();
   const [selectedId, setSelectedId] = useState<string>("");
-
+  const [intitial, setInitial] = useState(true);
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
 
@@ -69,6 +70,10 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
     navigate(`${routes.sellItem}/${selectedId}`);
   };
 
+  const removeInitial = () => {
+    setInitial(false);
+  };
+
   const isDividerShown = !!equippedItem && !!unequippedItems.length;
 
   return (
@@ -97,6 +102,8 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 key={equippedItem.id}
                 isEquipped
                 onButtonClick={() => unequip(equippedItem.id)}
+                isInitial={intitial}
+                removeInitial={removeInitial}
               />
             ) : (
               <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
@@ -111,6 +118,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 onClick={() => setSelectedId(item.id)}
                 key={item.id}
                 onButtonClick={() => equip(item.id)}
+                removeInitial={removeInitial}
               />
             ))}
           </MenuContent>
@@ -123,18 +131,20 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
           </SecondaryButton>
         </CardActionsContainer>
       </Menu>
+      <FadeInOut show={!!selectedId} exiting={!selectedId}>
+        {selectedItem && (
+          <ItemDetailSection
+            item={selectedItem}
+            actions={{
+              primary: primaryActions(),
+              secondary: { text: text.item.sell, onClick: sell },
+              onClose: () => setSelectedId(""),
+            }}
+          />
+        )}
 
-      {selectedItem && (
-        <ItemDetailSection
-          item={selectedItem}
-          actions={{
-            primary: primaryActions(),
-            secondary: { text: text.item.sell, onClick: sell },
-            onClose: () => setSelectedId(""),
-          }}
-        />
-      )}
-      {selectedItem && <Overlay />}
+        {selectedItem && <Overlay />}
+      </FadeInOut>
     </MenuCardWrapper>
   );
 };
