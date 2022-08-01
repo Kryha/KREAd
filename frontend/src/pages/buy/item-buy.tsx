@@ -11,10 +11,12 @@ import { Buy } from "./buy";
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
 
-  const [itemInMarket, isLoadingItem] = useItemFromMarket(String(id));
-  const [boughtItem] = useMyItem(String(id));
+  const idString = String(id);
 
-  const buyItem = useBuyItem(String(id));
+  const [itemInMarket, isLoadingItem] = useItemFromMarket(idString);
+  const [boughtItem] = useMyItem(idString);
+
+  const buyItem = useBuyItem(idString);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
   const [data, setData] = useState<ItemInMarket>();

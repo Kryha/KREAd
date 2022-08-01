@@ -10,8 +10,10 @@ import { Sell } from "./sell";
 export const ItemSell = () => {
   const { id } = useParams<"id">();
 
-  const [data, isLoading] = useMyItem(String(id));
-  const sellItem = useSellItem(String(id));
+  const idString = String(id);
+
+  const [data, isLoading] = useMyItem(idString);
+  const sellItem = useSellItem(idString);
 
   const submitForm = (price: number) => {
     sellItem.callback(price);

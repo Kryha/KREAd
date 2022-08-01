@@ -11,10 +11,12 @@ import { Buy } from "./buy";
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
 
-  const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(String(id));
-  const [boughtCharacter] = useMyCharacter(String(id));
+  const idString = String(id);
 
-  const buyCharacter = useBuyCharacter(String(id));
+  const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(idString);
+  const [boughtCharacter] = useMyCharacter(idString);
+
+  const buyCharacter = useBuyCharacter(idString);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
   const [data, setData] = useState<CharacterInMarket>();
