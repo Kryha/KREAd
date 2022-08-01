@@ -50,7 +50,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   // Unpack the references.
   const {
     // *** ON-CHAIN REFERENCES ***
-    // chainTimerService: chainTimerServiceP,
+    chainTimerService: chainTimerServiceP,
 
     // The spawner persistently runs scripts within ag-solo, off-chain.
     // spawner,
@@ -111,6 +111,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
     E(moneyBrandP).getDisplayInfo(),
   ]);
 
+  // Deploy Images to IPFS
   const itemReadStreams = [
     {
       key: 'airReservoir',
@@ -282,6 +283,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
     };
   }, defaultItems);
 
+  const chainTimerService = await chainTimerServiceP;
   console.log(
     await E(nftMakerSellerFacet).initConfig({
       baseCharacters: updatedDefaultCharacters,
@@ -289,6 +291,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
       sellAssetsInstallation,
       moneyIssuer,
       moneyBrand,
+      chainTimerService,
     }),
   );
 

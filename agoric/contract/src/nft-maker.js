@@ -47,7 +47,9 @@ const start = async (zcf) => {
     itemsMarket: [],
     itemCount: 0n,
     characterCount: 0n,
+    chainTimerService: undefined,
   };
+
   /**
    * Private state
    *
@@ -68,6 +70,7 @@ const start = async (zcf) => {
    *   moneyIssuer: Issuer
    *   moneyBrand: Brand
    *   sellAssetsInstallation: Installation
+   *   chainTimerService: TimerService
    * }} config
    * @returns {string}
    */
@@ -78,6 +81,7 @@ const start = async (zcf) => {
     moneyIssuer,
     moneyBrand,
     sellAssetsInstallation,
+    chainTimerService,
   }) => {
     state.config = {
       baseCharacters,
@@ -86,6 +90,7 @@ const start = async (zcf) => {
       moneyIssuer,
       moneyBrand,
       sellAssetsInstallation,
+      chainTimerService,
     };
     assert(!Number.isNaN(seed), X`Seed must be a number`);
     PRNG = mulberry32(seed);
@@ -203,14 +208,14 @@ const start = async (zcf) => {
     // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter1 = {
       ...randomCharacterBase,
-      // date: Date.now(),
+      date: state.config.chainTimerService?.getCurrentTimestamp(),
       id: newCharacterId,
       name: newCharacterName,
       keyId: 1,
     };
     const newCharacter2 = {
       ...randomCharacterBase,
-      // date: Date.now(),
+      date: state.config.chainTimerService?.getCurrentTimestamp(),
       id: newCharacterId,
       name: newCharacterName,
       keyId: 2,
