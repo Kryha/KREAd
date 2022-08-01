@@ -3,11 +3,11 @@ import { FakeCharacterItems } from "./fake-item-data";
 
 export const FakeCharcters: Character[] = [
   {
-    title: "character 1",
+    title: "character 1 tot tjdnsjs sjs ss  jaja",
     image: "",
     keyId: 1,
     name: "character 1",
-    type: "Tempet Scavenger",
+    type: "tempetScavenger",
     id: "7999",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -35,7 +35,7 @@ export const FakeCharcters: Character[] = [
     image: "",
     keyId: 1,
     name: "character 2",
-    type: "Tempet Scavenger",
+    type: "tempetScavenger",
     id: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -63,7 +63,7 @@ export const FakeCharcters: Character[] = [
     image: "",
     keyId: 1,
     name: "character 3",
-    type: "Tempet Scavenger",
+    type: "tempetScavenger",
     id: "78993",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
@@ -91,7 +91,7 @@ export const FakeCharcters: Character[] = [
     image: "",
     keyId: 1,
     name: "character 4",
-    type: "Tempet Scavenger",
+    type: "tempetScavenger",
     id: "78991",
     description:
       "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",

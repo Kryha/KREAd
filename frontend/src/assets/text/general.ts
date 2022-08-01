@@ -35,8 +35,10 @@ export const general = {
   connectWallet: "connect wallet",
   whoWeAre: "who we are",
   ourLeadership: "our leadership includes some of the most inventive and experienced executives in the technology industry.",
-  isPartOfAgoric:
-    "KREAd is part of Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by Kryha.",
+  isPartOfAgoric: "KREAd is part of",
+  agoric: "Agoric",
+  anOpenSource: ", an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by ",
+  kryha: "Kryha",
   contactUs: "contact us",
   questionsBug: "questions, bug reports, feedback... we are here for it all.",
   sendEmailTo: "send an email to",
@@ -46,4 +48,6 @@ export const general = {
   thereIsNoActity: "there is no activity currently.",
   buy: "buy",
   comingSoon: "coming soon!",
+  scroll: "scroll",
+  maxCharacterLength: "the character name cannot be longer than 16 characters",
 };

@@ -66,7 +66,7 @@ export const Footer = styled.div`
   display: flex;
   align-items: space-between;
   justify-content: space-between;
-  height: 32px;
+  min-height: 32px;
 `;
 
 export const Tag = styled.div`
@@ -93,7 +93,7 @@ export const Element = styled.div`
 `;
 
 export const InfoContainer = styled.div`
-  bottom: ${margins.big};
+  bottom: ${margins.small};
   position: absolute;
   width: 90%;
 `;
@@ -127,18 +127,18 @@ export const Product = styled.div<ViewProps>`
       position: absolute;
       -webkit-animation: linear 1;
       -webkit-animation-name: ${slideLeft};
-      -webkit-animation-duration: 1s;
+      -webkit-animation-duration: 0.5s;
       -webkit-animation-fill-mode: forwards;
       animation: linear 1;
       animation-name: ${slideLeft};
-      animation-duration: 1s;
+      animation-duration: 0.5s;
       animation-fill-mode: forwards;
       align-items: center;
     }
     ${PrimaryButton} {
       animation: ${disappear}, ${fadeIn};
-      animation-duration: 0.5s, 0.5s;
-      animation-delay: 0s, 0.5s;
+      animation-duration: 0.3s, 0.3s;
+      animation-delay: 0s, 0.3s;
     }
   }
   flex: 1 0 500px;
@@ -147,11 +147,11 @@ export const Product = styled.div<ViewProps>`
     if (width <= 1300) {
       return "flex: 0 1 calc(49.6% - 1em);";
     }
-    else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
+    else if (width >= 1366 && width <= LARGE_SCREEN_SIZE) {
       return "flex: 0 1 calc(32.4% - 1em);";
     }
     else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
-      return "flex: 0 1 calc(24.41% - 1em);";
+      return "flex: 0 1 calc(24.2% - 1em);";
     }
     else {
       return "flex: 1 0 500px;";

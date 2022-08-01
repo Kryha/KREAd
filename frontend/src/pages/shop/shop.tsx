@@ -1,7 +1,7 @@
 import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
-import { AnimatedLogo, BaseRoute, SwitchSelector, Title } from "../../components";
+import { AnimatedLogo, BaseRoute, SwitchSelector } from "../../components";
 import { KreadContainer, ShopWrapper } from "./styles";
 import { ItemsShop } from "./items-shop";
 import { CharactersShop } from "./characters-shop";
@@ -28,7 +28,7 @@ export const Shop: FC = () => {
   );
 
   return (
-    <BaseRoute sideNavigation={<Title title={text.navigation.shop} />}>
+    <BaseRoute sideNavigation={<></>}>
       <ShopWrapper>
         {selectedPage === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
       </ShopWrapper>

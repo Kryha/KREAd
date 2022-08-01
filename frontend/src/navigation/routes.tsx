@@ -7,9 +7,23 @@ import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemS
 import { MainContainer, ErrorFallback, LoadingPage, ErrorView } from "../components";
 import { ItemPage } from "../pages/item";
 import { TestServiceUI } from "../service/test-service-ui";
-import { useAgoricContext } from "../context/agoric";
+import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
+import { CharacterStateProvider } from "../context/characters";
+import { ItemStateProvider } from "../context/items";
 
-export const AppRoutes: FC = () => {
+export const InternalAppWrapper = () => {
+  return (
+    <CharacterStateProvider>
+      <ItemStateProvider>
+        <AgoricStateProvider>
+          <InternalAppRoutes />
+        </AgoricStateProvider>
+      </ItemStateProvider>
+    </CharacterStateProvider>
+  );
+};
+
+export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
   const [service] = useAgoricContext();
 
@@ -37,6 +51,21 @@ export const AppRoutes: FC = () => {
 
           <Route path={routes.privacy} element={<Privacy />} />
           <Route path="*" element={<ErrorView />} />
+        </Routes>
+      </MainContainer>
+    </ErrorBoundary>
+  );
+};
+
+export const ExternalAppRoutes: FC = () => {
+  const navigate = useNavigate();
+
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
+      <MainContainer>
+        <Routes>
+          <Route path={routes.root} element={<Onboarding />} />
+          <Route path="*" element={<InternalAppWrapper />} />
         </Routes>
       </MainContainer>
     </ErrorBoundary>

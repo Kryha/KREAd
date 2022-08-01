@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { CharacterWrapper, ExpandButton } from "../../components/base-character/styles";
 import { Menu } from "../../components/menu-card/styles";
-import { SMALL_SCREEN_SIZE, EXTRA_LARGE_SCREEN_SIZE } from "../../constants";
 import { margins } from "../../design";
 
 interface ViewProps {
@@ -16,30 +15,14 @@ export const ItemWrapper = styled.div<ViewProps>`
   ${({ height }): string => `max-height: ${height}px;`};
   ${CharacterWrapper} {
     left: 10%;
-  ${({ position, width }): string => {
+  ${({ position }): string => {
     switch (position) {
       case "hair":
         return "top: 0px;";
       case "clothing":
-        if (width <= SMALL_SCREEN_SIZE) {
-          return "top: -550px;";
-        }
-        if (width >= EXTRA_LARGE_SCREEN_SIZE) {
-          return "top: -1100px;";
-        }
-        else {
-          return "top: -800px;";
-        }
+        return "top: -120%;";
       default:
-        if (width <= SMALL_SCREEN_SIZE) {
-          return "top: -550px;";
-        }
-        if (width >= EXTRA_LARGE_SCREEN_SIZE) {
-          return "top: -800px;";
-        }
-        else {
-          return "top: -600px;";
-        }
+        return "top: -75%;";
     }
   }};
   }

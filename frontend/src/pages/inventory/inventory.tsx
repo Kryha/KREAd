@@ -2,7 +2,6 @@ import { FC, useMemo, useState } from "react";
 
 import { AnimatedLogo, BaseRoute, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
-import { Title } from "../../components/title";
 import { Page } from "../shop";
 import { InventoryWrapper, KreadContainer } from "./styles";
 import { ItemsInventory } from "./item-inventory";
@@ -26,7 +25,7 @@ export const Inventory: FC = () => {
 
   const showItemsInventory = selectedPage === Page.Items;
   return (
-    <BaseRoute sideNavigation={<Title title={text.navigation.inventory} />}>
+    <BaseRoute sideNavigation={<></>}>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
       {showItemsInventory ? <ItemsInventory /> : <CharactersInventory />}
       <KreadContainer height={height} width={width}>

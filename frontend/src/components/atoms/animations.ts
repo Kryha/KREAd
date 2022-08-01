@@ -82,12 +82,12 @@ export const bounce = keyframes`
 		transform: translateY(0);
 	}
 	40% {
-		-webkit-transform: translateY(-60px);
-		transform: translateY(-60px);
+		-webkit-transform: translateY(-20px);
+		transform: translateY(-20px);
 	}
 	60% {
-		-webkit-transform: translateY(-50px);
-		transform: translateY(-50px);
+		-webkit-transform: translateY(-10px);
+		transform: translateY(-10px);
 	}
 `;
 
@@ -101,5 +101,17 @@ export const sequentialFadeIn = keyframes`
   }
   100% {
     opacity:0;
+  }
+`;
+
+export const zoomIn = keyframes`
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.5, 1.5);
+  }
+  100% {
+    transform: scale(1.5, 1.5);
   }
 `;

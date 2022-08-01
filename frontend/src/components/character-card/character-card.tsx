@@ -6,7 +6,7 @@ import { ButtonText, Overlay, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
-import { Character, ExtendedCharacter } from "../../interfaces";
+import { ExtendedCharacter } from "../../interfaces";
 import { ButtonInfo } from "../button-info";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
@@ -30,6 +30,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const [character, setCharacter] = useState<ExtendedCharacter>();
   const [close, setClose] = useState(false);
+  const [intitial, setInitial] = useState(true);
 
   const { width, height } = useViewport();
 
@@ -92,8 +93,29 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           </EmptyViewContainer>
 
           <CharacterContent>
-            {sortedCharacters.map((character, index) => (
-              <CharacterItem character={character} key={index} onClick={showInfo} onButtonClick={select} id={id} />
+            {sortedCharacters.map((character) => (
+              <>
+                {character.isEquipped ? (
+                  <CharacterItem
+                    character={character}
+                    key={character.nft.id}
+                    onClick={showInfo}
+                    onButtonClick={select}
+                    id={id}
+                    removeInitial={() => setInitial(false)}
+                    isInitial={intitial}
+                  />
+                ) : (
+                  <CharacterItem
+                    character={character}
+                    key={character.nft.id}
+                    onClick={showInfo}
+                    onButtonClick={select}
+                    id={id}
+                    removeInitial={() => setInitial(false)}
+                  />
+                )}
+              </>
             ))}
           </CharacterContent>
 
@@ -106,12 +128,13 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           </CardActionsContainer>
         </CharacterWrapper>
       </FadeInOut>
-
-      {character && (
-        <CharacterCardWrapper>
-          <CharacterDetailSection character={character.nft} actions={detailActions()} />
-        </CharacterCardWrapper>
-      )}
+      <FadeInOut show={!!character} exiting={!character?.nft}>
+        {character && (
+          <CharacterCardWrapper>
+            <CharacterDetailSection character={character.nft} actions={detailActions()} />
+          </CharacterCardWrapper>
+        )}
+      </FadeInOut>
       <FadeInOut show={!!character} exiting={!character}>
         <Overlay />
       </FadeInOut>

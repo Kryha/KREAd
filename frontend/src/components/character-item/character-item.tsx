@@ -15,16 +15,18 @@ import { ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../ato
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
-import { ExtendedCharacter } from "../../interfaces";
+import { ExtendedCharacter, isCharacterCategory } from "../../interfaces";
 
 interface CharacterItemProps {
   character: ExtendedCharacter;
   onClick: (character: ExtendedCharacter) => void;
   onButtonClick: (character: ExtendedCharacter) => void;
   id: string;
+  removeInitial?: () => void;
+  isInitial?: boolean;
 }
 
-export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onButtonClick, id }) => {
+export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onButtonClick, id, isInitial = false, removeInitial }) => {
   const [selected, setSelected] = useState(false);
   const isCharacterEquipped = character.nft.id === id;
 
@@ -32,14 +34,15 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
     e.stopPropagation();
     onButtonClick(character);
   };
-
+  if (!isCharacterCategory(character.nft.type)) return <></>;
   return (
     <Info
       tabIndex={0}
-      selected={selected}
+      selected={selected || isInitial}
       onClick={() => {
         onClick && onClick(character);
         setSelected(true);
+        removeInitial && removeInitial();
       }}
       onBlur={() => setSelected(false)}
     >
@@ -53,7 +56,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
             {isCharacterEquipped && <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>}
           </TitleContainer>
           <SubTitleContainer>
-            <ButtonText customColor={color.darkGrey}>{character.nft.type}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>{text.param.categories[character.nft.type]}</ButtonText>
             <Line />
             <ButtonText>{text.param.level(character.nft.level)}</ButtonText>
           </SubTitleContainer>

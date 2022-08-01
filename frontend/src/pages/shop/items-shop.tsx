@@ -21,7 +21,16 @@ import { useViewport } from "../../hooks";
 import { useMarketFilteredItems } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
-import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, OverviewContainer, SelectorContainer, SortByContainer } from "./styles";
+import {
+  DetailContainer,
+  FilterContainer,
+  FilterWrapper,
+  ItemContainer,
+  ItemWrapper,
+  OverviewContainer,
+  SelectorContainer,
+  SortByContainer,
+} from "./styles";
 import { Item } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
@@ -71,7 +80,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId}>
+            <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId} hasValue={!!selectedCategory}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={itemCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
@@ -84,7 +93,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           </SelectorContainer>
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
+            <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId} hasValue={!!selectedSorting}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>
@@ -109,7 +118,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
               </OverviewContainer>
             ))}
           {!noFilteredItems && (
-            <ItemWrapper height={height}>
+            <ItemWrapper height={height} onBlur={() => setFilterId("")}>
               <ItemContainer>
                 {items.map((item, index) => (
                   <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
