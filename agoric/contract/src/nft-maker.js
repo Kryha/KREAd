@@ -1,5 +1,6 @@
 // @ts-check
 import '@agoric/zoe/exported';
+import { E } from '@endo/eventual-send';
 import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
@@ -204,18 +205,24 @@ const start = async (zcf) => {
     const newCharacterId = state.characterCount;
     const randomCharacterBase = getRandomBaseCharacter();
 
+    // assert(
+    //   typeof state.config.chainTimerService?.getCurrentTimestamp() === 'bigint',
+    //   "getCurrentTimestap didn't return a bigint",
+    // );
+
+    const currentTime = E(state.config.chainTimerService).getCurrentTimestamp();
     // Merge random base character with name input, id, and keyId
     // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter1 = {
       ...randomCharacterBase,
-      date: state.config.chainTimerService?.getCurrentTimestamp(),
+      date: currentTime,
       id: newCharacterId,
       name: newCharacterName,
       keyId: 1,
     };
     const newCharacter2 = {
       ...randomCharacterBase,
-      date: state.config.chainTimerService?.getCurrentTimestamp(),
+      date: currentTime,
       id: newCharacterId,
       name: newCharacterName,
       keyId: 2,
