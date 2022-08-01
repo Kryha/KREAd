@@ -132,12 +132,13 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           </CardActionsContainer>
         </CharacterWrapper>
       </FadeInOut>
-
-      {character && (
-        <CharacterCardWrapper>
-          <CharacterDetailSection character={character} actions={detailActions()} />
-        </CharacterCardWrapper>
-      )}
+      <FadeInOut show={!!character} exiting={!character}>
+        {character && (
+          <CharacterCardWrapper>
+            <CharacterDetailSection character={character} actions={detailActions()} />
+          </CharacterCardWrapper>
+        )}
+      </FadeInOut>
       <FadeInOut show={!!character} exiting={!character}>
         <Overlay />
       </FadeInOut>

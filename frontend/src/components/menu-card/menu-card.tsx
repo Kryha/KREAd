@@ -25,6 +25,7 @@ import { useViewport } from "../../hooks";
 import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
 import { EmptyCard } from "../empty-card";
 import { useEquipItem, useUnequipItem } from "../../service";
+import { FadeInOut } from "../fade-in-out";
 
 interface MenuCardProps {
   title: string;
@@ -130,18 +131,20 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
           </SecondaryButton>
         </CardActionsContainer>
       </Menu>
+      <FadeInOut show={!!selectedId} exiting={!selectedId}>
+        {selectedItem && (
+          <ItemDetailSection
+            item={selectedItem}
+            actions={{
+              primary: primaryActions(),
+              secondary: { text: text.item.sell, onClick: sell },
+              onClose: () => setSelectedId(""),
+            }}
+          />
+        )}
 
-      {selectedItem && (
-        <ItemDetailSection
-          item={selectedItem}
-          actions={{
-            primary: primaryActions(),
-            secondary: { text: text.item.sell, onClick: sell },
-            onClose: () => setSelectedId(""),
-          }}
-        />
-      )}
-      {selectedItem && <Overlay />}
+        {selectedItem && <Overlay />}
+      </FadeInOut>
     </MenuCardWrapper>
   );
 };

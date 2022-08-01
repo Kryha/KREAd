@@ -15,7 +15,7 @@ import { ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../ato
 import { text } from "../../assets/text";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
-import { Character } from "../../interfaces";
+import { Character, isCharacterCategory } from "../../interfaces";
 
 interface CharacterItemProps {
   character: Character;
@@ -34,7 +34,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
     e.stopPropagation();
     onButtonClick(character);
   };
-
+  if (!isCharacterCategory(character.type)) return <></>;
   return (
     <Info
       tabIndex={0}
@@ -56,7 +56,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
             {isCharacterEquipped && <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>}
           </TitleContainer>
           <SubTitleContainer>
-            <ButtonText customColor={color.darkGrey}>{character.type}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>{text.param.categories[character.type]}</ButtonText>
             <Line />
             <ButtonText>{text.param.level(character.level)}</ButtonText>
           </SubTitleContainer>

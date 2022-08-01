@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, PrimaryButton, TitleText } from "../../components";
+import { bounce, CharacterImgs, PrimaryButton, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
-import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 import { color, fontWeight, zIndex } from "../../design";
 
 interface HeightProps {
@@ -108,28 +107,10 @@ interface ViewProps {
   width: number;
 }
 
-export const DefaultImage = styled.img<ViewProps>`
+export const DefaultImage = styled(CharacterImgs) <ViewProps>`
   position: absolute;
   right: 358px;
   top: 0;
-  ${({ height }): string => `height: ${height}px;`};
-  ${({ width }): string => {
-    if (width <= SMALL_SCREEN_SIZE) {
-      return "width: 600px;";
-    }
-    if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
-      return "width: 742px; ";
-    }
-    if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
-      return "width: 764px; ";
-    }
-    if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
-      return "width: 1018px; ";
-    }
-    else {
-      return "width: 742px; ";
-    }
-  }};
 `;
 
 export const Link = styled.a`

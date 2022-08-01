@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { margins } from "../../design";
-import { disappear, fadeIn, SecondaryButton } from "../atoms";
+import { CharacterImgs, disappear, fadeIn, SecondaryButton } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 
@@ -41,28 +41,10 @@ export const ExpandButton = styled(SecondaryButton) <ViewProps>`
   }
 `;
 
-export const CharacterIcon = styled.img<ImageProps>`
+export const CharacterIcon = styled(CharacterImgs)`
   position: absolute;
   top: 0;
   ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.character};`};
-  ${({ height }): string => `height: ${height}px;`};
-  ${({ width }): string => {
-    if (width <= SMALL_SCREEN_SIZE) {
-      return "width: 600px;";
-    }
-    if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
-      return "width: 742px; ";
-    }
-    if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
-      return "width: 764px; ";
-    }
-    if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
-      return "width: 1018px; ";
-    }
-    else {
-      return "width: 742px; ";
-    }
-  }};
 `;
 
 export const CharacterWrapper = styled.div`
@@ -93,29 +75,11 @@ ${({ width }): string => {
   }};
 `;
 
-export const FirstIcon = styled.img<ImageProps>`
+export const FirstIcon = styled(CharacterImgs)`
   position: absolute;
   top: 0;
   left: 0;
   ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.mid};`};
-  ${({ height }): string => `height: ${height}px;`};
-  ${({ width }): string => {
-    if (width <= SMALL_SCREEN_SIZE) {
-      return "width: 600px;";
-    }
-    if (width <= MEDIUM_SCREEN_SIZE && width >= SMALL_SCREEN_SIZE) {
-      return "width: 742px; ";
-    }
-    if (width <= LARGE_SCREEN_SIZE && width >= MEDIUM_SCREEN_SIZE) {
-      return "width: 764px; ";
-    }
-    if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
-      return "width: 1018px; ";
-    }
-    else {
-      return "width: 742px; ";
-    }
-  }};
   animation: ${disappear}, ${fadeIn};
   animation-duration: 0.3s, 0.2s;
   animation-delay: 0s, 0.3s;

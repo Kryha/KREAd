@@ -9,13 +9,13 @@ interface FiltersProps {
   value?: string;
   openFilter: (id: string) => void;
   id: string;
+  hasValue?: boolean;
 }
 
-export const Filters: FC<FiltersProps> = ({ children, label, value, openFilter, id }) => {
-
+export const Filters: FC<FiltersProps> = ({ children, label, value, openFilter, id, hasValue }) => {
   return (
     <FiltersWrapper>
-      <FiltersContainer isOpen={id === label} onClick={() => openFilter(label)}>
+      <FiltersContainer isOpen={id === label} onClick={() => openFilter(label)} hasValue={hasValue}>
         <ButtonText>{value ? value : label}</ButtonText>
         <Triangle />
       </FiltersContainer>

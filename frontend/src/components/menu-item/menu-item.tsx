@@ -47,7 +47,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     setSelected(true);
   };
 
-  if (!isItemCategory(data.category) || !isCharacterCategory(data.category)) return <></>;
+  if (!isItemCategory(data.category) && !isCharacterCategory(data.category)) return <></>;
 
   return (
     <Info tabIndex={0} selected={selected || isInitial} onClick={handleClick} onBlur={() => setSelected(false)}>
