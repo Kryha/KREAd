@@ -249,6 +249,7 @@ const start = async (zcf) => {
     const uniqueItems = allDefaultItems.map((item) => {
       const newItemWithId = {
         ...item,
+        date: Number(currentTime),
         id: state.itemCount,
       };
 
