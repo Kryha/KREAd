@@ -29,8 +29,6 @@ export const filterItems = (items: ItemEquip[], { category, sorting, price, colo
   const hasColor = (item: ItemEquip, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
   const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
-  // TODO: remove price filter in inventory?
-  // const filteredPrice = filteredItems.filter((item) => item.price > price.min && item.price < price.max);
   const sortedItems = sortItems(sorting, filteredItems);
 
   return sortedItems;
@@ -52,7 +50,7 @@ export const filterItemsMarket = (items: ItemInMarket[], { category, sorting, pr
 };
 
 export const filterCharacters = (characters: CharacterEquip[], { category, sorting }: CharacterFilters): CharacterEquip[] => {
-  const isInCategory = (character: CharacterEquip, category: string) => (category ? character.type === category : true);
+  const isInCategory = (character: CharacterEquip, category: string) => character.nft.type === category;
 
   if (!category && !sorting) return characters;
 

@@ -16,7 +16,7 @@ export const param = {
   level: (level: number) => `lvl. ${level}`,
   amountOfCharacters: (amount: number | string) => `${amount} characters`,
   forSale: (price: number) => `for sale ${price}`,
-
+  // TODO: add character categories
   categories: {
     noseline: "noseline",
     midBackground: "mid background",
@@ -28,5 +28,8 @@ export const param = {
     background: "background",
     frontMask: "front mask",
     clothing: "clothing",
+    tempetScavenger: "tempet scavenger"
   },
+  fullstop: (word: string) => `${word}.`,
+  comma: (word: string) => `${word},`,
 };

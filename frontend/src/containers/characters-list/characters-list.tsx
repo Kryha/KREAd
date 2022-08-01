@@ -1,12 +1,13 @@
 import { FC, useState } from "react";
 
-import { ButtonText, ErrorView, Filters, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
 import { useMyCharactersFiltered } from "../../service";
 
 import { text } from "../../assets";
-import { characterCategories, sorting } from "../../assets/text/filter-options";
+import { characterCategories, sortingInventory } from "../../assets/text/filter-options";
+import { color } from "../../design";
 
 interface Props {
   onCharacterClick: (id: string) => void;
@@ -44,22 +45,29 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
     <SortableListWrap>
       <ListHeader>
         <CategoryContainer>
-          <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
+          <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId}>
             <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
           </Filters>
         </CategoryContainer>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
-          <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
-            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
+          <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
+            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sortingInventory} />
           </Filters>
         </SortContainer>
       </ListHeader>
-      <ButtonText>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
+      <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(myCharacters.length)}</ButtonText>
+      <HorizontalDivider />
       <ListContainer>
         <MenuItem
-          data={{ ...myCharacters[0], image: myCharacters[0].items, category: myCharacters[0].type, id: myCharacters[0].id }}
-          key={myCharacters[0].id}
+          data={{
+            ...myCharacters[0].nft,
+            image: myCharacters[0].equippedItems,
+            category: myCharacters[0].nft.type,
+            id: myCharacters[0].nft.id,
+            characterImage: myCharacters[0].nft.image,
+          }}
+          key={myCharacters[0].nft.id}
           onClick={onCharacterClick}
           removeInitial={removeInitial}
           isInitial={intitial}
@@ -67,8 +75,14 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
-            data={{ ...character, image: character.items, category: character.type, id: character.id }}
-            key={character.id}
+            data={{
+              ...character.nft,
+              image: character.equippedItems,
+              category: character.nft.type,
+              id: character.nft.id,
+              characterImage: character.nft.image,
+            }}
+            key={character.nft.id}
             onClick={onCharacterClick}
             removeInitial={removeInitial}
             isEquipped={character.isEquipped}

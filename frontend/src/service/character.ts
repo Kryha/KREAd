@@ -1,7 +1,7 @@
 // TODO: Remove this, use ations + context instead
 import { useMutation } from "react-query";
 
-import { Character, CharacterCreation, CharacterEquip, CharacterInMarket, CharacterInMarketBackend } from "../interfaces";
+import { CharacterCreation, CharacterEquip, CharacterInMarket, CharacterInMarketBackend, ExtendedCharacter } from "../interfaces";
 import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
@@ -9,7 +9,7 @@ import { buyCharacter, mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 import { E } from "@endo/eventual-send";
 
-export const useSelectedCharacter = (): [Character | undefined, boolean] => {
+export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const useSelectedCharacter = (): [Character | undefined, boolean] => {
 export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolean] => {
   const [owned, isLoading] = useMyCharacters();
 
-  const found = useMemo(() => owned.find((c) => c.id === id), [id, owned]);
+  const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
 
   return [found, isLoading];
 };
@@ -34,10 +34,10 @@ export const useMyCharacters = (): [CharacterEquip[], boolean] => {
 
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
     return owned.map((character) => {
-      if (character.id === selected?.id) return { ...character, isEquipped: true };
+      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true };
       return { ...character, isEquipped: false };
     });
-  }, [owned, selected?.id]);
+  }, [owned, selected?.nft.id]);
 
   return [charactersWithEquip, !fetched];
 };
@@ -125,15 +125,14 @@ export const useSellCharacter = (characterId: string) => {
 
   const callback = useCallback(
     async (price: number) => {
-      const found = characters.find((character) => character.id === characterId);
+      const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
 
-      const { isEquipped: _, ...rest } = found;
-      const backendCharacter = mediate.characters.toBack([rest])[0];
+      const backendCharacter = mediate.characters.toBack([found])[0];
 
       setIsLoading(true);
 
-      const toStore = await sellCharacter(service, backendCharacter, BigInt(price));
+      const toStore = await sellCharacter(service, backendCharacter.nft, BigInt(price));
       setCharacterInMarket(toStore);
     },
     [characterId, characters, service]

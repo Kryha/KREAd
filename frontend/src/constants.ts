@@ -43,3 +43,12 @@ export const ITEM_CATEGORIES = [
   "frontMask",
   "clothing",
 ];
+
+export const CHARACTER_CATEGORIES = [
+  "tempetScavenger",
+];
+
+export const AGORIC_LINK = "https://agoric.com/";
+export const KRYHA_LINK = "https://kryha.io/";
+
+export const MAX_CHARACTER_LENGTH = 16;

@@ -4,7 +4,6 @@ import { text } from "../../../assets";
 import { ButtonText, EmptyItemCard, ItemThumbnail, Label, MenuItemName } from "../../../components";
 import { color } from "../../../design";
 import { Item } from "../../../interfaces";
-import { findItemCategory } from "../../../util/category";
 
 import {
   Divider,
@@ -40,7 +39,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
         <InfoContainer>
           <MenuItemName>{item.name}</MenuItemName>
           <InlineDetails>
-            <ButtonText customColor={color.darkGrey}>{findItemCategory(item.category)}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>{item.category}</ButtonText>
             <Divider />
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>

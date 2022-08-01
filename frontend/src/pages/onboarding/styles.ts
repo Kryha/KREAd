@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, PrimaryButton, TitleText } from "../../components";
+import { bounce, CharacterImgs, PrimaryButton, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
-import { SMALL_SCREEN_WIDTH } from "../../constants";
 import { color, fontWeight, zIndex } from "../../design";
 
 interface HeightProps {
@@ -10,12 +9,12 @@ interface HeightProps {
 }
 
 export const OnboardingWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 40px;
-  overflow-y: scroll;
-  width: 460px;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  scroll-behavior: smooth;
+  overflow: auto;
+  scroll-snap-type: y mandatory;
 `;
 
 export const InfoText = styled.div<HeightProps>`
@@ -25,6 +24,9 @@ export const InfoText = styled.div<HeightProps>`
   }
   ${({ height }): string => `height: ${height}px; min-height: ${height}px;`};
   margin-bottom: 200px;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
   scroll-snap-align: start;
   transition: all 0.4s;
 `;
@@ -63,6 +65,9 @@ export const EndContent = styled.div<HeightProps>`
   ${TitleText} {
     margin-top: 16px;
   }
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
   scroll-snap-align: start;
 `;
 
@@ -71,6 +76,9 @@ export const MiddleContent = styled.div<HeightProps>`
   ${TitleText} {
     margin-top: 16px;
   }
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
   scroll-snap-align: start;
 `;
 
@@ -99,16 +107,14 @@ interface ViewProps {
   width: number;
 }
 
-export const DefaultImage = styled.img<ViewProps>`
+export const DefaultImage = styled(CharacterImgs) <ViewProps>`
   position: absolute;
   right: 358px;
   top: 0;
-  ${({ width, height }): string =>
-    `min-width: ${width * SMALL_SCREEN_WIDTH}px; max-width: ${width * SMALL_SCREEN_WIDTH}px; width: ${width * SMALL_SCREEN_WIDTH}px; height: ${height}px;`};
 `;
 
-export const Email = styled.a`
-  text-decoration: none;
+export const Link = styled.a`
+  text-decoration: underline;
   font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
@@ -118,9 +124,14 @@ export const Email = styled.a`
   }
   color: ${color.darkGrey};
   display: inline;
+  margin-left: 5px;
 `;
 
-export const EmailContainer = styled.span`
+export const KryhaLink = styled(Link)`
+  margin-left: 0px;
+`;
+
+export const TextContainer = styled.span`
   font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
@@ -145,14 +156,54 @@ export const KreadContainer = styled.div<ViewProps>`
 
 export const ArrowDown = styled(ArrowDownIcon)`
   position: absolute;
-  left: 16.2%;
-  bottom: 53px;
+  left: 40px;
+  bottom: -2px;
   -webkit-animation: ${bounce} 2s;
   animation: ${bounce} 2s;
   -webkit-animation-iteration-count: 2;
   animation-iteration-count: 2;
-  animation-fill-mode: forwards;
-  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: backwords;
+  -webkit-animation-fill-mode: backwords;
   animation-delay: 0.5s;
   -webkit-animation-delay: 0.5s;
+  path {
+    stroke: ${color.black};
+  }
+  width: 24px;
+  height: 24px;
+`;
+
+export const SectionContainer = styled.div`
+  padding-left: 40px;
+  padding-top: 120px;
+  width: 460px;
+`;
+
+export const ScrollContainer = styled.div`
+  position: absolute;
+  left: 40px;
+  bottom: 53px;
+`;
+
+export const GeneralSectionContainer = styled.div`
+  padding-left: 40px;
+  width: 460px;
+`;
+
+export const ConnectContainer = styled.div`
+  background: rgba(255, 255, 255, 0.46);
+  backdrop-filter: blur(4px);
+  width: 460px;
+  height: 120px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  ${PrimaryButton} {
+    &:hover {
+      ${ArrowUp} {
+        path {
+          stroke: ${color.black};
+        }
+      }
+    }
+  }
 `;

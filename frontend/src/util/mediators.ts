@@ -1,8 +1,9 @@
 import {
-  Character,
-  CharacterBackend,
   CharacterInMarket,
   CharacterInMarketBackend,
+  CharacterItems,
+  ExtendedCharacter,
+  ExtendedCharacterBackend,
   Item,
   ItemBackend,
   ItemInMarket,
@@ -35,33 +36,36 @@ export const mediate = {
     },
   },
   characters: {
-    toFront: (backendCharacters: CharacterBackend[]): Character[] => {
+    toFront: (backendCharacters: ExtendedCharacterBackend[]): ExtendedCharacter[] => {
       return backendCharacters.map((backendCharacter) => {
-        return { ...backendCharacter, id: String(backendCharacter.id) };
+        return { ...backendCharacter, nft: { ...backendCharacter.nft, id: String(backendCharacter.nft.id) } };
       });
     },
-    toBack: (frontendCharacters: Character[]): CharacterBackend[] => {
+    toBack: (frontendCharacters: ExtendedCharacter[]): ExtendedCharacterBackend[] => {
       return frontendCharacters.map((frontendCharacter) => {
-        return { ...frontendCharacter, id: BigInt(frontendCharacter.id) };
+        return { ...frontendCharacter, nft: { ...frontendCharacter.nft, id: BigInt(frontendCharacter.nft.id) } };
       });
     },
   },
   charactersMarket: {
-    toFront: (backendCharacters: CharacterInMarketBackend[]): CharacterInMarket[] => {
-      return backendCharacters.map((backendCharacter) => {
+    toFront: (backendCharacters: { character: CharacterInMarketBackend; equippedItems: CharacterItems }[]): CharacterInMarket[] => {
+      return backendCharacters.map(({ character, equippedItems }) => {
         return {
-          ...backendCharacter,
-          id: String(backendCharacter.id),
-          character: mediate.characters.toFront([backendCharacter.character])[0],
+          ...character,
+          id: String(character.id),
+          character: { ...character.character, id: String(character.id) },
+          equippedItems,
         };
       });
     },
     toBack: (frontendCharacters: CharacterInMarket[]): CharacterInMarketBackend[] => {
       return frontendCharacters.map((frontendCharacter) => {
+        const { equippedItems: _, ...rest } = frontendCharacter;
+
         return {
-          ...frontendCharacter,
-          id: BigInt(frontendCharacter.id),
-          character: mediate.characters.toBack([frontendCharacter.character])[0],
+          ...rest,
+          id: BigInt(rest.id),
+          character: { ...rest.character, id: BigInt(rest.id) },
         };
       });
     },

@@ -1,9 +1,13 @@
 import { FC } from "react";
 import { KreadIcon, LogoWrap } from "./styles";
 
-export const AnimatedLogo: FC = () => {
+interface LogoProps {
+  iteration?: number;
+}
+
+export const AnimatedLogo: FC<LogoProps> = ({ iteration }) => {
   return (
-    <LogoWrap>
+    <LogoWrap iteration={iteration}>
       <KreadIcon />
     </LogoWrap>
   );

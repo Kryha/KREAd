@@ -1,4 +1,4 @@
-import { ITEM_CATEGORIES } from "../constants";
+import { ITEM_CATEGORIES, CHARACTER_CATEGORIES } from "../constants";
 import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
 
@@ -6,6 +6,15 @@ export const isItemCategory = (category: unknown): category is keyof CharacterIt
   if (typeof category !== "string") return false;
   return ITEM_CATEGORIES.includes(category);
 };
+
+export const isCharacterCategory = (category: unknown): category is keyof CharacterCategories => {
+  if (typeof category !== "string") return false;
+  return CHARACTER_CATEGORIES.includes(category);
+};
+
+export interface CharacterCategories {
+  tempetScavenger: string;
+}
 
 export interface CharacterItems {
   noseline?: Item;
@@ -34,17 +43,22 @@ export interface Character {
   name: string;
   type: string;
   description: string;
+  image: string;
   level: number;
-  items: CharacterItems;
   detail: Detail;
   projectDescription: string;
   itemActivity: ActivityEvent[];
-  date: number;
+}
+
+export interface ExtendedCharacter {
+  nft: Character;
+  equippedItems: CharacterItems;
 }
 
 export interface CharacterInMarket {
   id: string;
   character: Character;
+  equippedItems: CharacterItems;
   sell: {
     publicFacet: any;
     price: bigint;
@@ -64,7 +78,11 @@ export interface CharacterBackend extends Omit<Character, "id"> {
   id: bigint;
 }
 
-export interface CharacterEquip extends Character {
+export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft"> {
+  nft: CharacterBackend;
+}
+
+export interface CharacterEquip extends ExtendedCharacter {
   isEquipped: boolean;
 }
 

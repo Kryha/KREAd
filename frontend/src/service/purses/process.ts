@@ -1,6 +1,6 @@
 import { E } from "@endo/eventual-send";
 
-import { CharacterBackend, Item } from "../../interfaces";
+import { CharacterBackend, CharacterInMarketBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
@@ -18,7 +18,14 @@ const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
 const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispatch) => {
   const { characters: charactersMarket } = await E(publicFacet).getCharactersMarket();
 
-  const mediatedCharactersMarket = mediate.charactersMarket.toFront(charactersMarket);
+  const marketWithItems = await Promise.all(
+    charactersMarket.map(async (character: CharacterInMarketBackend) => {
+      const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.character.name);
+      return { character, equippedItems };
+    })
+  );
+
+  const mediatedCharactersMarket = mediate.charactersMarket.toFront(marketWithItems);
 
   dispatch({ type: "SET_CHARACTERS_MARKET", payload: mediatedCharactersMarket });
   dispatch({ type: "SET_MARKET_FETCHED", payload: true });
@@ -53,18 +60,16 @@ export const processPurses = async (
 
   const equippedCharacterItems: Item[] = [];
   // Map characters to the corresponding inventory in the contract
-  const charactersWithItems: CharacterBackend[] = await Promise.all(
+  const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
     ownedCharacters.map(async (character: CharacterBackend) => {
-      const {
-        items: { value: equippedItems },
-      } = await E(contractPublicFacet).getCharacterInventory(character.name);
+      const { items: equippedItems } = await E(contractPublicFacet).getCharacterInventory(character.name);
 
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
 
       equippedCharacterItems.push(...frontendEquippedItems);
       return {
-        ...character,
-        items: {
+        nft: character,
+        equippedItems: {
           hair: frontendEquippedItems.find((item: Item) => item.category === "hair"),
           headPiece: frontendEquippedItems.find((item: Item) => item.category === "headPiece"),
           noseline: frontendEquippedItems.find((item: Item) => item.category === "noseline"),

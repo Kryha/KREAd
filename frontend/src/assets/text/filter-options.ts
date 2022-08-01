@@ -14,11 +14,16 @@ export const itemCategories: Options[] = [
 ];
 
 // TODO: add real categories
-export const characterCategories: Options[] = [{ label: "Tempet Scavengers", value: "Tempet Scavenger" }];
+export const characterCategories: Options[] = [{ label: "Tempet Scavengers", value: "tempetScavenger" }];
 
 export const sorting: Options[] = [
   { label: "A to Z", value: "atoz" },
   { label: "lowest price", value: "lowestPrice" },
   { label: "highest price", value: "highestPrice" },
+  { label: "rarity", value: "rarity" },
+];
+
+export const sortingInventory: Options[] = [
+  { label: "A to Z", value: "atoz" },
   { label: "rarity", value: "rarity" },
 ];

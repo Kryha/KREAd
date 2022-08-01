@@ -2,7 +2,6 @@ export const defaultItems = {
   noseline: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'noseline',
-    id: '11332',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -18,56 +17,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06149',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://yourmetadata.com',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491977000,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491987090,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 1653491987080,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 1653491987070,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177000,
-      },
-    ],
   },
   midBackground: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'midBackground',
-    id: '12334',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -83,56 +42,16 @@ export const defaultItems = {
     colors: ['#7B5B7B'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06119',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491987060,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491987050,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 1653491987040,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 1653491987400,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177000,
-      },
-    ],
   },
   mask: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'mask',
-    id: '12335',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -148,56 +67,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06139',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491977001,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491977002,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 1653491977003,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 1653491977004,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
   headPiece: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'headPiece',
-    id: '13330',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -213,56 +92,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06118',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491977005,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491977006,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 1653491977007,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 1653491977008,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
   hair: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'hair',
-    id: '12336',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -278,56 +117,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06117',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 1653491977009,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770109,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 16534919770209,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 16534919770309,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
   frontMask: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'frontMask',
-    id: '12335',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -343,56 +142,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 14,
     details: {
       boardId: '06116',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770409,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770509,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 16534919770609,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 16534919770709,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
   liquid: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'liquid',
-    id: '12338',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -408,56 +167,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06115',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770809,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770899,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 16534919770889,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 16534919770879,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
   background: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'background',
-    id: '12340',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -473,56 +192,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06114',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770859,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770869,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 16534919770849,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 16534919770839,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
   airReservoir: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'airReservoir',
-    id: '12341',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -538,56 +217,16 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06113',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770829,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770819,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 16534919770818,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 16534919770817,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
   clothing: {
     name: 'AirTox: Fairy Dust Elite',
     category: 'clothing',
-    id: '12343',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -603,50 +242,11 @@ export const defaultItems = {
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: '06112',
       brand: '0x0177812bsjs7998',
       artist: 'emily',
       metadata: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     },
-    date: '23213123',
-    activity: [
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770816,
-      },
-      {
-        name: 'sale',
-        price: 9,
-        from: 'totoro',
-        to: 'hayao',
-        date: 16534919770815,
-      },
-      {
-        name: 'transfer',
-        price: undefined,
-        from: 'goku',
-        to: 'shinji',
-        date: 16534919770814,
-      },
-      {
-        name: 'sale',
-        price: 100,
-        from: 'batman',
-        to: 'hayao',
-        date: 16534919770813,
-      },
-      {
-        name: 'mint',
-        price: undefined,
-        from: undefined,
-        to: 'nakamoto',
-        date: 1652168177,
-      },
-    ],
   },
 };

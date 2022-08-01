@@ -57,28 +57,36 @@ export const Landing: FC = () => {
         <>
           {/* character big picture */}
           <LandingContainer isZoomed={!openTab}>
-            <BaseCharacter items={selectedCharacter.items} isZoomed={openTab} size="normal" />
+            <BaseCharacter
+              characterImage={selectedCharacter.nft.image}
+              items={selectedCharacter.equippedItems}
+              isZoomed={openTab}
+              size="normal"
+            />
           </LandingContainer>
 
           {/* equipped items under character */}
-          <CharacterItems items={selectedCharacter.items} showItems={!openTab} />
+          <CharacterItems items={selectedCharacter.equippedItems} showItems={!openTab} />
 
           {/* character info */}
-          <DetailContainer>
-            <MenuText>{selectedCharacter?.name}</MenuText>
-            <ButtonContainer>
-              <SecondaryButton onClick={() => setShowDetail(true)}>
-                <ButtonText>{text.general.moreInfo}</ButtonText>
-              </SecondaryButton>
-              <ButtonText>{text.param.level(selectedCharacter?.level)}</ButtonText>
-            </ButtonContainer>
-          </DetailContainer>
+          {!openTab && (
+            <DetailContainer>
+              <MenuText>{selectedCharacter?.nft.name}</MenuText>
+              <ButtonContainer>
+                <SecondaryButton onClick={() => setShowDetail(true)}>
+                  <ButtonText>{text.general.moreInfo}</ButtonText>
+                </SecondaryButton>
+                <ButtonText>{text.param.level(selectedCharacter?.nft.level)}</ButtonText>
+              </ButtonContainer>
+            </DetailContainer>
+          )}
           <CharacterCardWrapper>
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection
-                character={selectedCharacter}
+                nft={selectedCharacter.nft}
+                equippedItems={selectedCharacter.equippedItems}
                 actions={{
-                  secondary: { text: text.character.sell, onClick: () => sell(selectedCharacter.id) },
+                  secondary: { text: text.character.sell, onClick: () => sell(selectedCharacter.nft.id) },
                   onClose: () => {
                     setShowDetail(false);
                     setCloseDetail(true);
@@ -93,7 +101,7 @@ export const Landing: FC = () => {
           </FadeInOut>
 
           {/* my characters list */}
-          <CharacterCard id={selectedCharacter.id} showCard={openTab} />
+          <CharacterCard id={selectedCharacter.nft.id} showCard={openTab} />
         </>
       )}
     </BaseRoute>

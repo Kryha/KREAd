@@ -4,13 +4,6 @@ export const sortItems = (sorting: string, items: ItemEquip[]): ItemEquip[] => {
   switch (sorting) {
     case "atoz":
       return items.sort((a, b) => a.name.localeCompare(b.name));
-    case "lowestPrice":
-      // TODO: remove price filters inventory?
-      return items;
-    // return items.sort((a, b) => a.price - b.price);
-    case "highestPrice":
-      return items;
-    // return items.sort((a, b) => b.price - a.price);
     case "rarity":
       return items.sort((a, b) => b.rarity - a.rarity);
     case "latest":
@@ -40,16 +33,9 @@ export const sortItemsMarket = (sorting: string, items: ItemInMarket[]): ItemInM
 export const sortCharacters = (sorting: string, characters: CharacterEquip[]): CharacterEquip[] => {
   switch (sorting) {
     case "atoz":
-      return characters.sort((a, b) => a.name.localeCompare(b.name));
-    case "lowestPrice":
-      // TODO: remove price filters in inventory ?
-      return characters;
-    // return characters.sort((a, b) => a.price - b.price);
-    case "highestPrice":
-      return characters;
-    // return characters.sort((a, b) => b.price - a.price);
+      return characters.sort((a, b) => a.nft.name.localeCompare(b.nft.name));
     case "rarity":
-      return characters.sort((a, b) => b.level - a.level);
+      return characters.sort((a, b) => b.nft.level - a.nft.level);
     case "latest":
       return characters;
     default:

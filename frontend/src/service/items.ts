@@ -169,7 +169,7 @@ export const useEquipItem = () => {
     if (!item) return;
 
     // TODO: check if unequip gets performed before
-    await equipItem(service, item, character);
+    await equipItem(service, item, character.nft);
   });
 };
 
@@ -186,6 +186,6 @@ export const useUnequipItem = () => {
 
     if (!item) return;
 
-    await unequipItem(service, item, character);
+    await unequipItem(service, item, character.nft);
   });
 };

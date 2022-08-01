@@ -20,7 +20,7 @@ export const SortableListWrap = styled.section`
 `;
 
 export const ListHeader = styled.header`
-  z-index: 1;
+  z-index: 41;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;

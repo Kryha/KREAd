@@ -3,23 +3,29 @@ import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import { AnimatedLogo, BoldLabel, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
+import { AnimatedLogo, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowDown,
   ArrowUp,
   ButtonContainer,
-  Email,
-  EmailContainer,
+  ConnectContainer,
+  Link,
+  TextContainer,
   EndContent,
   FooterContainer,
+  GeneralSectionContainer,
   InfoText,
   KreadContainer,
   MiddleContent,
   OnboardingContainer,
   OnboardingWrapper,
+  ScrollContainer,
+  SectionContainer,
+  KryhaLink,
 } from "./styles";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
+import { AGORIC_LINK, KRYHA_LINK } from "../../constants";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
@@ -33,27 +39,51 @@ export const Onboarding: FC = () => {
   return (
     <OnboardingContainer height={height} width={width}>
       <OnboardingWrapper>
-        <BoldLabel customColor={color.black}>{text.general.comingSoon}</BoldLabel>
         <InfoText height={height}>
-          <MenuText>{text.general.launchingTheFirst}</MenuText>
-          <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-          <ButtonContainer>
-            <PrimaryButton onClick={() => connectWallet()}>
-              <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-              <ArrowUp />
-            </PrimaryButton>
-          </ButtonContainer>
+          <SectionContainer>
+            <MenuText>{text.general.launchingTheFirst}</MenuText>
+            <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
+            <ButtonContainer>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ButtonContainer>
+          </SectionContainer>
+          <ScrollContainer>
+            <ButtonText>{text.general.scroll}</ButtonText>
+            <ArrowDown />
+          </ScrollContainer>
         </InfoText>
         <MiddleContent height={height}>
-          <MenuText>{text.general.whoWeAre}</MenuText>
-          <TitleText customColor={color.darkGrey}>{text.general.isPartOfAgoric}</TitleText>
-          <TitleText customColor={color.darkGrey}>{text.general.ourLeadership}</TitleText>
+          <GeneralSectionContainer>
+            <ConnectContainer>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ConnectContainer>
+            <MenuText>{text.general.whoWeAre}</MenuText>
+            <TextContainer>{text.general.isPartOfAgoric}</TextContainer>
+            <Link href={AGORIC_LINK}>{text.param.comma(text.general.agoric)}</Link>
+            <TextContainer>{text.general.anOpenSource}</TextContainer>
+            <KryhaLink href={KRYHA_LINK}>{text.param.fullstop(text.general.kryha)}</KryhaLink>
+            <TextContainer>{text.general.ourLeadership}</TextContainer>
+          </GeneralSectionContainer>
         </MiddleContent>
         <EndContent height={height}>
-          <MenuText>{text.general.contactUs}</MenuText>
-          <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-          <EmailContainer>{text.general.sendEmailTo} </EmailContainer>
-          <Email href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Email>
+          <GeneralSectionContainer>
+            <ConnectContainer>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ConnectContainer>
+            <MenuText>{text.general.contactUs}</MenuText>
+            <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
+            <TextContainer>{text.general.sendEmailTo}</TextContainer>
+            <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
+          </GeneralSectionContainer>
         </EndContent>
       </OnboardingWrapper>
       <OnboardingCharacter />
@@ -61,9 +91,8 @@ export const Onboarding: FC = () => {
         <Footer />
       </FooterContainer>
       <KreadContainer height={height} width={width}>
-        <AnimatedLogo />
+        <AnimatedLogo iteration={1} />
       </KreadContainer>
-      <ArrowDown />
     </OnboardingContainer>
   );
 };

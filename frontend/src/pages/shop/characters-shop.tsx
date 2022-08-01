@@ -19,7 +19,7 @@ import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
 import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, SelectorContainer, SortByContainer } from "./styles";
-import { Character } from "../../interfaces";
+import { CharacterInMarket } from "../../interfaces";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -33,7 +33,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
   const [filterId, setFilterId] = useState("");
-  const [selectedCharacter, setSelectedCharacter] = useState<Character>();
+  const [selectedCharacter, setSelectedCharacter] = useState<CharacterInMarket>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
@@ -67,7 +67,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         <FilterContainer>
           <SelectorContainer>
             {pageSelector}
-            <Filters label={text.filters.category} openFilter={openFilter} id={filterId}>
+            <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId} hasValue={!!selectedCategory}>
               <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
             </Filters>
             {/* TODO: get actual min and max values */}
@@ -77,7 +77,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           </SelectorContainer>
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={text.filters.latest} openFilter={openFilter} id={filterId}>
+            <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId} hasValue={!!selectedSorting}>
               <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
             </Filters>
           </SortByContainer>
@@ -101,8 +101,8 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
               {noFilteredCharacters && (
                 <ItemWrapper height={height}>
                   <ItemContainer>
-                    {characters.map((character, index) => (
-                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                    {characters.map((character) => (
+                      <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
                 </ItemWrapper>
@@ -110,8 +110,8 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
               {!noFilteredCharacters && (
                 <ItemWrapper height={height}>
                   <ItemContainer>
-                    {characters.map((character, index) => (
-                      <CharacterShopCard character={character} key={index} onClick={setSelectedCharacter} />
+                    {characters.map((character) => (
+                      <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
                 </ItemWrapper>
@@ -122,7 +122,8 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
             {!!selectedCharacter && (
               <DetailContainer>
                 <CharacterDetailSection
-                  character={selectedCharacter}
+                  nft={selectedCharacter.character}
+                  equippedItems={selectedCharacter.equippedItems}
                   actions={{
                     onClose: () => {
                       setSelectedCharacter(undefined);

@@ -5,6 +5,7 @@ import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
 import { Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
+import { formatIdAsNumber } from "./util";
 
 export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
@@ -179,8 +180,8 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const wantedCharacter = { ...character, keyId: character.keyId === 1 ? 2 : 1 };
-
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const wantedCharacter = inventoryCharacter.key.value[0];
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
     console.error("undefined parameter");
     return;
@@ -197,22 +198,23 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
       give: {
         Item: {
           pursePetname: itemPurse.brandPetname,
-          value: [item],
+          value: [formatIdAsNumber(item)],
         },
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
-          value: [character],
+          value: [formatIdAsNumber(character)],
         },
       },
       want: {
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
-          value: [wantedCharacter],
+          value: [formatIdAsNumber(wantedCharacter)],
         },
       },
     },
     dappContext: true,
   });
+
   return E(walletP).addOffer(offerConfig);
 };
 
@@ -227,7 +229,8 @@ export const unequipItem = async (service: AgoricState, item: Item, character: C
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const wantedCharacter = { ...character, keyId: character.keyId === 1 ? 2 : 1 };
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const wantedCharacter = inventoryCharacter.key.value[0];
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacter) {
     console.error("undefined parameter");
@@ -245,21 +248,23 @@ export const unequipItem = async (service: AgoricState, item: Item, character: C
       give: {
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
-          value: [character],
+          value: [formatIdAsNumber(character)],
         },
       },
       want: {
         Item: {
           pursePetname: itemPurse.brandPetname,
-          value: [item],
+          value: [formatIdAsNumber(item)],
+          // value: [harden({category: item.category})],
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
-          value: [wantedCharacter],
+          value: [formatIdAsNumber(wantedCharacter)],
         },
       },
     },
     dappContext: true,
   });
+
   return E(walletP).addOffer(offerConfig);
 };

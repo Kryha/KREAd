@@ -1,12 +1,12 @@
-import { FC, useMemo, useState } from "react";
+import { FC, Fragment, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper, EmptyViewContainer } from "./styles";
-import { ButtonText, PrimaryButton } from "../atoms";
+import { ButtonText, Overlay, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
-import { Character } from "../../interfaces";
+import { ExtendedCharacter } from "../../interfaces";
 import { ButtonInfo } from "../button-info";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
@@ -28,23 +28,24 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
   const [selectedCharacter] = useSelectedCharacter();
   const dispatch = useCharacterStateDispatch();
 
-  const [character, setCharacter] = useState<Character>();
+  const [character, setCharacter] = useState<ExtendedCharacter>();
   const [close, setClose] = useState(false);
+  const [initial, setInitial] = useState(true);
 
   const { width, height } = useViewport();
 
   const sortedCharacters = useMemo(() => {
     const allItems = [...characters];
-    const fromIndex = characters.findIndex((character) => character.id === id);
+    const fromIndex = characters.findIndex((character) => character.nft.id === id);
     allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
     return allItems;
   }, [characters, id]);
 
-  const showInfo = (values: Character) => {
+  const showInfo = (values: ExtendedCharacter) => {
     setCharacter(values);
   };
 
-  const select = (character: Character) => {
+  const select = (character: ExtendedCharacter) => {
     if (!character) return;
     dispatch({ type: "SET_SELECTED_CHARACTER", payload: character });
   };
@@ -56,12 +57,12 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const sell = () => {
     if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.id}`);
+    navigate(`${routes.sellCharacter}/${character.nft.id}`);
   };
 
   const detailActions = () => {
     if (!character) return {};
-    if (character.id === selectedCharacter?.id) {
+    if (character.nft.id === selectedCharacter?.nft.id) {
       return {
         secondary: { text: text.character.sell, onClick: sell },
         onClose: () => {
@@ -92,8 +93,27 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           </EmptyViewContainer>
 
           <CharacterContent>
-            {sortedCharacters.map((character, index) => (
-              <CharacterItem character={character} key={index} onClick={showInfo} onButtonClick={select} id={id} />
+            {sortedCharacters.map((character) => (
+              <Fragment key={character.nft.id}>
+                {character.isEquipped ? (
+                  <CharacterItem
+                    character={character}
+                    onClick={showInfo}
+                    onButtonClick={select}
+                    id={id}
+                    removeInitial={() => setInitial(false)}
+                    isInitial={initial}
+                  />
+                ) : (
+                  <CharacterItem
+                    character={character}
+                    onClick={showInfo}
+                    onButtonClick={select}
+                    id={id}
+                    removeInitial={() => setInitial(false)}
+                  />
+                )}
+              </Fragment>
             ))}
           </CharacterContent>
 
@@ -106,12 +126,16 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           </CardActionsContainer>
         </CharacterWrapper>
       </FadeInOut>
-
-      {character && (
-        <CharacterCardWrapper>
-          <CharacterDetailSection character={character} actions={detailActions()} />
-        </CharacterCardWrapper>
-      )}
+      <FadeInOut show={!!character} exiting={!character?.nft}>
+        {character && (
+          <CharacterCardWrapper>
+            <CharacterDetailSection nft={character.nft} equippedItems={character.equippedItems} actions={detailActions()} />
+          </CharacterCardWrapper>
+        )}
+      </FadeInOut>
+      <FadeInOut show={!!character} exiting={!character}>
+        <Overlay />
+      </FadeInOut>
     </>
   );
 };

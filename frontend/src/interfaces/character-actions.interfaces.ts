@@ -1,35 +1,33 @@
-import { Character, CharacterInMarket } from "./character.interfaces";
+import { CharacterInMarket, ExtendedCharacter } from "./character.interfaces";
 
 // TODO: add fetched flag for each array
 export type CharacterState = {
-  selected?: Character;
-
-  characters: Character[];
-  owned: Character[];
-  market: CharacterInMarket[];
-
+  characters: ExtendedCharacter[];
+  owned: ExtendedCharacter[];
   fetched: boolean;
+  selected?: ExtendedCharacter;
+  market: CharacterInMarket[];
   marketFetched: boolean;
 };
 
 interface SetCharacters {
   type: "SET_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface AddCharacters {
   type: "ADD_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface SetOwnedCharacters {
   type: "SET_OWNED_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface AddOwnedCharacters {
   type: "ADD_OWNED_CHARACTERS";
-  payload: Character[];
+  payload: ExtendedCharacter[];
 }
 
 interface SetCharactersMarket {
@@ -44,7 +42,7 @@ interface AddCharactersMarket {
 
 interface SetSelectedCharacter {
   type: "SET_SELECTED_CHARACTER";
-  payload: Character;
+  payload: ExtendedCharacter;
 }
 
 interface SetFetched {

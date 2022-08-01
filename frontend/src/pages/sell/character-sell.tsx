@@ -27,14 +27,16 @@ export const CharacterSell = () => {
 
   if (!data) return <ErrorView />;
 
+  const { nft, equippedItems } = data;
+
   return (
     <Sell
       onSubmit={submitForm}
       text={{ sell: text.store.sellCharacter }}
-      data={{ ...data, image: data.items, category: data.type, id: data.id }}
+      data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={data} />
+        <CharacterDetailSection nft={data.nft} equippedItems={equippedItems} />
       </FadeInOut>
     </Sell>
   );

@@ -54,7 +54,7 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={data.character} />
+        <CharacterDetailSection nft={data.character} equippedItems={data.equippedItems} />
       </FadeInOut>
     </Buy>
   );

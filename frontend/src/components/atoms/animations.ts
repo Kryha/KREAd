@@ -90,3 +90,28 @@ export const bounce = keyframes`
 		transform: translateY(-10px);
 	}
 `;
+
+export const sequentialFadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+
+  50%{
+    opacity:1
+  }
+  100% {
+    opacity:0;
+  }
+`;
+
+export const zoomIn = keyframes`
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.5, 1.5);
+  }
+  100% {
+    transform: scale(1.5, 1.5);
+  }
+`;
