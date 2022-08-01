@@ -45,10 +45,6 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
     setCharacter(values);
   };
 
-  const removeInitial = () => {
-    setInitial(false);
-  };
-
   const select = (character: Character) => {
     if (!character) return;
     dispatch({ type: "SET_SELECTED_CHARACTER", payload: character });
@@ -106,7 +102,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
                     onClick={showInfo}
                     onButtonClick={select}
                     id={id}
-                    removeInitial={removeInitial}
+                    removeInitial={() => setInitial(false)}
                     isInitial={intitial}
                   />
                 ) : (
@@ -116,7 +112,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
                     onClick={showInfo}
                     onButtonClick={select}
                     id={id}
-                    removeInitial={removeInitial}
+                    removeInitial={() => setInitial(false)}
                   />
                 )}
               </>

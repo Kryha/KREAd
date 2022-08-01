@@ -8,6 +8,7 @@ import { disappear, fadeIn, fadeOut } from "../atoms/animations";
 interface FilterProps {
   isOpen: boolean;
   disabled?: boolean;
+  hasValue?: boolean;
 }
 
 export const FiltersWrapper = styled.div`
@@ -71,9 +72,16 @@ export const FiltersContainer = styled.div<FilterProps>`
       }
 
         `
-      : `
-
-      `;
+      : "";
+  }};
+  ${({ hasValue }): string => {
+    return hasValue
+      ? `
+      ${ButtonText} {
+        color: ${color.black};
+      }
+        `
+      : "";
   }};
 `;
 
