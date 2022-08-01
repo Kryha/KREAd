@@ -5,6 +5,12 @@ import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from
 export interface ItemFilters {
   category: string;
   sorting: string;
+  color: string;
+}
+
+export interface ItemsMarketFilters {
+  category: string;
+  sorting: string;
   price: { min: number; max: number };
   color: string;
 }
@@ -20,10 +26,8 @@ export interface CharactersMarketFilters {
   price: { min: number; max: number };
 }
 
-export const filterItems = (items: ItemEquip[], { category, sorting, price, color }: ItemFilters): ItemEquip[] => {
-  const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
-
-  if (!category && !sorting && !color && !changedRange && items.length) return items;
+export const filterItems = (items: ItemEquip[], { category, sorting, color }: ItemFilters): ItemEquip[] => {
+  if (!category && !sorting && !color && items.length) return items;
 
   const isInCategory = (item: ItemEquip, category: string) => (category ? item.category === category : true);
   const hasColor = (item: ItemEquip, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
@@ -34,7 +38,7 @@ export const filterItems = (items: ItemEquip[], { category, sorting, price, colo
   return sortedItems;
 };
 
-export const filterItemsMarket = (items: ItemInMarket[], { category, sorting, price, color }: ItemFilters): ItemInMarket[] => {
+export const filterItemsMarket = (items: ItemInMarket[], { category, sorting, price, color }: ItemsMarketFilters): ItemInMarket[] => {
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
   if (!category && !sorting && !color && !changedRange && items.length) return items;

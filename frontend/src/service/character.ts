@@ -29,7 +29,7 @@ export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolea
   return [found, isLoading];
 };
 
-export const useMyCharacters = (): [CharacterEquip[], boolean] => {
+export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
   const [{ owned, selected, fetched }] = useCharacterContext();
 
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
@@ -39,17 +39,12 @@ export const useMyCharacters = (): [CharacterEquip[], boolean] => {
     });
   }, [owned, selected?.nft.id]);
 
-  return [charactersWithEquip, !fetched];
-};
+  const filtered = useMemo(() => {
+    if (!filters) return charactersWithEquip;
+    return filterCharacters(charactersWithEquip, filters);
+  }, [charactersWithEquip, filters]);
 
-export const useMyCharactersFiltered = (filters: CharacterFilters): [CharacterEquip[], boolean] => {
-  const [characters, isLoading] = useMyCharacters();
-
-  return useMemo(() => {
-    if (!filters.category && !filters.sorting) return [characters, isLoading];
-
-    return [filterCharacters(characters, filters), isLoading];
-  }, [characters, filters, isLoading]);
+  return [filtered, !fetched];
 };
 
 export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefined, boolean] => {
@@ -60,17 +55,15 @@ export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefin
   return [found, isLoading];
 };
 
-export const useCharactersMarket = (): [CharacterInMarket[], boolean] => {
+export const useCharactersMarket = (filters?: CharactersMarketFilters): [CharacterInMarket[], boolean] => {
   const [{ market, marketFetched }] = useCharacterContext();
-  return [market, !marketFetched];
-};
 
-export const useCharactersMarketFiltered = (filters: CharactersMarketFilters): [CharacterInMarket[], boolean] => {
-  const [characters, isLoading] = useCharactersMarket();
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterCharactersMarket(market, filters);
+  }, [filters, market]);
 
-  return useMemo(() => {
-    return [filterCharactersMarket(characters, filters), isLoading];
-  }, [characters, filters, isLoading]);
+  return [filtered, !marketFetched];
 };
 
 // TODO: Add error management

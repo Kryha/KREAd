@@ -23,7 +23,7 @@ import { CharacterInMarket } from "../../interfaces";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
-import { useCharactersMarketFiltered } from "../../service";
+import { useCharactersMarket } from "../../service";
 
 interface Props {
   pageSelector: ReactNode;
@@ -39,7 +39,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
 
-  const [characters, isLoading] = useCharactersMarketFiltered({
+  const [characters, isLoading] = useCharactersMarket({
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,

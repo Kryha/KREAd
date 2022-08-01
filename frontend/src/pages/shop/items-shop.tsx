@@ -18,7 +18,7 @@ import {
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useItemsMarketFiltered } from "../../service";
+import { useItemsMarket } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import {
@@ -51,7 +51,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
 
-  const [items, isLoading] = useItemsMarketFiltered({
+  const [items, isLoading] = useItemsMarket({
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,
