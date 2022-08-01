@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
-import { disappear, fadeIn, slideInUp } from "../../components/atoms/animations";
+import { fadeUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
 import { KreadIcon } from "../../components/logo/styles";
 import { OverviewWrapper } from "../../components/overview-empty/styles";
@@ -36,9 +36,9 @@ export const FilterWrapper = styled.div`
   ${HorizontalDivider} {
     margin-top: 4px;
   }
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.3s, 1s;
-  animation-delay: 0s, 0.3s;
+  animation: ${fadeUp} 1.2s ease-out 0s forwards;
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
 `;
 
 export const FilterContainer = styled.div`
@@ -80,12 +80,9 @@ export const ItemContainer = styled.div`
   gap: ${margins.big};
   padding-top: 40px;
   padding-bottom: 140px;
-  -webkit-animation-name: ${slideInUp};
-  animation-name: ${slideInUp};
-  -webkit-animation-duration: 1.3s;
-  animation-duration: 1.3s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+  animation: ${fadeUp} 1.2s ease-out 0s forwards;
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
 `;
 
 export const LoadMore = styled.div`
@@ -203,7 +200,7 @@ export const Card = styled.div<ViewProps>`
       return "flex: 1 0 500px;";
     }
   }
-  }
+}
 `;
 
 export const DetailContainer = styled.div`

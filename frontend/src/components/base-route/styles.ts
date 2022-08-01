@@ -13,9 +13,6 @@ export const TopbarContainer = styled.header<AnimationProps>`
   justify-content: space-between;
   align-items: flex-end;
   padding: ${margins.big};
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.8s, 2s;
-  animation-delay: 0s, 0.8s;
   ${({ isLanding }) => (isLanding === true ?
     css`
     animation: ${disappear}, ${fadeIn};
@@ -23,11 +20,7 @@ export const TopbarContainer = styled.header<AnimationProps>`
     animation-delay: 0s, 0.8s;
     `
     :
-    css`
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.2s, 0.5s;
-    animation-delay: 0s, 0.2s;
-  `)};
+    css``)};
 `;
 
 export const Box = styled.div`

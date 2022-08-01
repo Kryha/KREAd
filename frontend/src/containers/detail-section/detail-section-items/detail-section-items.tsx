@@ -1,21 +1,21 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { ButtonText, EmptyItemCard, ItemThumbnail, Label, MenuItemName } from "../../../components";
+import { ButtonText, EmptyItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
 import { color } from "../../../design";
 import { Item } from "../../../interfaces";
 
 import {
   Divider,
   EmptyInfo,
-  IdLabel,
+  EquippedLabel,
   Info,
   InfoContainer,
+  InfoTextContainer,
   InfoWrapper,
   InlineDetails,
   LevelLabel,
   ListContainer,
-  RedirectArrow,
 } from "./styles";
 
 interface ListItemProps {
@@ -37,15 +37,19 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
       <ItemThumbnail src={item.image} category={item.category} />
       <InfoWrapper>
         <InfoContainer>
-          <MenuItemName>{item.name}</MenuItemName>
+          <InfoTextContainer>
+            <MenuItemName>{item.name}</MenuItemName>
+            <EquippedLabel>{text.general.equipped}</EquippedLabel>
+          </InfoTextContainer>
           <InlineDetails>
             <ButtonText customColor={color.darkGrey}>{item.category}</ButtonText>
             <Divider />
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>
-        <IdLabel>{text.param.id(item.id)}</IdLabel>
-        <RedirectArrow />
+        <PrimaryButton>
+          <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
+        </PrimaryButton>
       </InfoWrapper>
     </Info>
   );

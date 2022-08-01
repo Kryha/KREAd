@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { HorizontalDivider, Label } from "../../components";
-import { disappear, fadeIn } from "../../components/atoms/animations";
+import { fadeUp } from "../../components/atoms/animations";
 import { FiltersContainer } from "../../components/filters/styles";
 import { color, margins } from "../../design";
 
@@ -14,9 +14,9 @@ export const SortableListWrap = styled.section`
   ${HorizontalDivider} {
     margin-top: ${margins.nano};
   }
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.6s, 1s;
-  animation-delay: 0s, 0.6s;
+  animation: ${fadeUp} 1.2s ease-out 0s forwards;
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
 `;
 
 export const ListHeader = styled.header`
