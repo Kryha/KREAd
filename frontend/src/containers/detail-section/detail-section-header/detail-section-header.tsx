@@ -10,7 +10,7 @@ import {
 } from "./styles";
 
 import { text } from "../../../assets";
-import { SectionHeader } from "../../../components";
+import { ErrorView, SectionHeader } from "../../../components";
 import { DetailSectionActions } from "../types";
 import { isCharacterCategory, isItemCategory } from "../../../interfaces";
 
@@ -26,7 +26,7 @@ interface DetailSectionHeaderProps {
 }
 
 export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, actions }) => {
-  if (!isItemCategory(data.category) && !isCharacterCategory(data.category)) return <></>;
+  if (!isItemCategory(data.category) && !isCharacterCategory(data.category)) return <ErrorView />;
   return (
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>

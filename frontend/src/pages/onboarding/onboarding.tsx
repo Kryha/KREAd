@@ -31,7 +31,7 @@ export const Onboarding: FC = () => {
   const { width, height } = useViewport();
 
   const ref = useRef<HTMLDivElement>(null);
-  const isVisible = useOnScreen(ref);
+  const isConnectButtonVisible = useOnScreen(ref);
 
   const connectWallet = () => {
     // TODO: check if you have any assets in your wallet & connect to wallet
@@ -40,7 +40,7 @@ export const Onboarding: FC = () => {
 
   return (
     <>
-      <ButtonContainer isVisible={isVisible}>
+      <ButtonContainer isVisible={isConnectButtonVisible}>
         <PrimaryButton onClick={() => connectWallet()}>
           <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
           <ArrowUp />
