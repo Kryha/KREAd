@@ -22,3 +22,8 @@ export const sorting: Options[] = [
   { label: "highest price", value: "highestPrice" },
   { label: "rarity", value: "rarity" },
 ];
+
+export const sortingInventory: Options[] = [
+  { label: "A to Z", value: "atoz" },
+  { label: "rarity", value: "rarity" },
+];

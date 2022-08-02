@@ -1,10 +1,36 @@
 import { E } from "@endo/eventual-send";
-import { CharacterBackend, ExtendedCharacterBackend, Item, ItemCategory } from "../../interfaces";
+
+import { CharacterBackend, CharacterInMarketBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
 import { mediate } from "../../util";
 import { itemCategories } from "../util";
+
+const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
+  const { items: itemsMarket } = await E(publicFacet).getItemsMarket();
+
+  const mediatedItemsMarket = mediate.itemsMarket.toFront(itemsMarket);
+
+  dispatch({ type: "SET_ITEMS_MARKET", payload: mediatedItemsMarket });
+  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
+};
+
+const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispatch) => {
+  const { characters: charactersMarket } = await E(publicFacet).getCharactersMarket();
+
+  const marketWithItems = await Promise.all(
+    charactersMarket.map(async (character: CharacterInMarketBackend) => {
+      const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.character.name);
+      return { character, equippedItems };
+    })
+  );
+
+  const mediatedCharactersMarket = mediate.charactersMarket.toFront(marketWithItems);
+
+  dispatch({ type: "SET_CHARACTERS_MARKET", payload: mediatedCharactersMarket });
+  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
+};
 
 // This fetches assets data from purses in the wallet and updates the local context state for characters & items
 export const processPurses = async (
@@ -37,9 +63,7 @@ export const processPurses = async (
   // Map characters to the corresponding inventory in the contract
   const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
     ownedCharacters.map(async (character: CharacterBackend) => {
-      const {
-        items: equippedItems,
-      } = await E(contractPublicFacet).getCharacterInventory(character.name);
+      const { items: equippedItems } = await E(contractPublicFacet).getCharacterInventory(character.name);
 
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
 
@@ -82,6 +106,9 @@ export const processPurses = async (
   itemDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
   itemDispatch({ type: "SET_FETCHED", payload: true });
 
+  await updateItemsMarket(contractPublicFacet, itemDispatch);
+  await updateCharactersMarket(contractPublicFacet, characterDispatch);
+
   console.info(`👤 Found ${ownedCharacters.length} characters.`);
   console.info(`📦 Found ${ownedItems.length} Items.`);
   console.info("👛 Money Purse Info: ", newTokenPurses[0].displayInfo);
@@ -90,4 +117,9 @@ export const processPurses = async (
   console.info("👛 Character Purse Petname: ", newCharacterPurses[0].brandPetname);
   console.info("👛 Item Purse Info: ", newItemPurses[0].displayInfo);
   console.info("👛 Item Purse Petname: ", newItemPurses[0].brandPetname);
+};
+
+export const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
+  if (!offers.length) return;
+  agoricDispatch({ type: "SET_OFFERS", payload: offers });
 };

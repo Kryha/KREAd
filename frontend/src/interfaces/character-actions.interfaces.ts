@@ -1,10 +1,13 @@
-import { ExtendedCharacter } from "./character.interfaces";
+import { CharacterInMarket, ExtendedCharacter } from "./character.interfaces";
 
+// TODO: add fetched flag for each array
 export type CharacterState = {
   characters: ExtendedCharacter[];
   owned: ExtendedCharacter[];
   fetched: boolean;
   selected?: ExtendedCharacter;
+  market: CharacterInMarket[];
+  marketFetched: boolean;
 };
 
 interface SetCharacters {
@@ -27,6 +30,16 @@ interface AddOwnedCharacters {
   payload: ExtendedCharacter[];
 }
 
+interface SetCharactersMarket {
+  type: "SET_CHARACTERS_MARKET";
+  payload: CharacterInMarket[];
+}
+
+interface AddCharactersMarket {
+  type: "ADD_CHARACTERS_MARKET";
+  payload: CharacterInMarket[];
+}
+
 interface SetSelectedCharacter {
   type: "SET_SELECTED_CHARACTER";
   payload: ExtendedCharacter;
@@ -34,6 +47,11 @@ interface SetSelectedCharacter {
 
 interface SetFetched {
   type: "SET_FETCHED";
+  payload: boolean;
+}
+
+interface SetMarketFetched {
+  type: "SET_MARKET_FETCHED";
   payload: boolean;
 }
 
@@ -48,6 +66,9 @@ export type CharacterStateActions =
   | AddCharacters
   | SetOwnedCharacters
   | AddOwnedCharacters
-  | SetSelectedCharacter;
+  | SetCharactersMarket
+  | AddCharactersMarket
+  | SetSelectedCharacter
+  | SetMarketFetched;
 
 export type CharacterDispatch = React.Dispatch<CharacterStateActions>;

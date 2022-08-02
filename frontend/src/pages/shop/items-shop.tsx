@@ -18,7 +18,7 @@ import {
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useMarketFilteredItems } from "../../service";
+import { useItemsMarket } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import {
@@ -31,7 +31,7 @@ import {
   SelectorContainer,
   SortByContainer,
 } from "./styles";
-import { Item } from "../../interfaces";
+import { ItemInMarket } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -44,14 +44,14 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
   const [filterId, setFilterId] = useState("");
-  const [selectedItem, setSelectedItem] = useState<Item>();
+  const [selectedItem, setSelectedItem] = useState<ItemInMarket>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
 
-  const [items, isLoading] = useMarketFilteredItems({
+  const [items, isLoading] = useItemsMarket({
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,
@@ -120,8 +120,8 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
           {!noFilteredItems && (
             <ItemWrapper height={height} onBlur={() => setFilterId("")}>
               <ItemContainer>
-                {items.map((item, index) => (
-                  <ItemShopCard item={item} key={index} onClick={setSelectedItem} />
+                {items.map((item) => (
+                  <ItemShopCard itemInMarket={item} key={item.id} onClick={setSelectedItem} />
                 ))}
               </ItemContainer>
             </ItemWrapper>
@@ -130,13 +130,13 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
             {!!selectedItem && (
               <DetailContainer>
                 <ItemDetailSection
-                  item={selectedItem}
+                  item={selectedItem.item}
                   actions={{
                     onClose: () => {
                       setSelectedItem(undefined);
                       setClose(true);
                     },
-                    price: selectedItem.price,
+                    price: Number(selectedItem.sell.price),
                     primary: { text: text.item.buy, onClick: buy },
                   }}
                 />

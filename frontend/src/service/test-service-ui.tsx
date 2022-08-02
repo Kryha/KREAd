@@ -50,9 +50,9 @@ export const TestServiceUI = () => {
   };
 
   const removeItemFromInventory = async () => {
-    const {
-      items: equippedItems,
-    } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters.owned[0].nft.name);
+    const { items: equippedItems } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(
+      characters.owned[0].nft.name
+    );
 
     const item = equippedItems[0];
     const character = characters.owned[0];

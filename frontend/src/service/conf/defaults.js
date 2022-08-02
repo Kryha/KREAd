@@ -1,4 +1,4 @@
-// GENERATED FROM /Users/carlostrigoseguin/Documents/KRYHA/agoric/REPO/agoric/api/deploy.js
+// GENERATED FROM /Users/marius/Projects/Kryha/Agoric/agoric/api/deploy.js
 export default {
   "INSTANCE_NFT_MAKER_BOARD_ID": "board02021",
   "INSTALLATION_BOARD_ID": "board04719",

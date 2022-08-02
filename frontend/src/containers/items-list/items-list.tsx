@@ -3,10 +3,10 @@ import { FC, useState } from "react";
 import { ButtonText, ColorSelector, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { BaseFilterContainer, ColorContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useMyFilteredItems } from "../../service";
+import { useMyItems } from "../../service";
 
 import { text } from "../../assets";
-import { itemCategories, sorting } from "../../assets/text/filter-options";
+import { itemCategories, sortingInventory } from "../../assets/text/filter-options";
 import { color } from "../../design";
 import { colors } from "../../service/fake-item-data";
 
@@ -21,10 +21,9 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const [items, isLoading] = useMyFilteredItems({
+  const [{ all: items }, isLoading] = useMyItems({
     category: selectedCategory,
     sorting: selectedSorting,
-    price: { min: 0, max: 10000 },
     color: selectedColor,
   });
 
@@ -66,7 +65,7 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
           <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId} hasValue={!!selectedSorting}>
-            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
+            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sortingInventory} />
           </Filters>
         </SortContainer>
       </ListHeader>

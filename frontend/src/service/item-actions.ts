@@ -4,10 +4,10 @@ import { E } from "@endo/eventual-send";
 import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
-import { Character, Item } from "../interfaces";
+import { Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
 import { formatIdAsNumber } from "./util";
 
-export const sellItem = async (service: AgoricState, item: any, price: bigint) => {
+export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -72,15 +72,15 @@ export const sellItem = async (service: AgoricState, item: any, price: bigint) =
   );
 
   const itemInMarket = {
-    ...item,
+    id: item.id,
+    item,
     sell: { instance, publicFacet: sellAssetsPublicFacet, price },
   };
 
-  // TODO: store in market after offer is accepted and processed
-  await E(publicFacet).storeItemInMarket(itemInMarket);
+  return itemInMarket;
 };
 
-export const buyItem = async (service: AgoricState, itemInMarket: any) => {
+export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBackend) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -96,7 +96,7 @@ export const buyItem = async (service: AgoricState, itemInMarket: any) => {
 
   if (!itemPurse || !moneyPurse) return;
 
-  const { sell, ...item } = itemInMarket;
+  const { sell, item } = itemInMarket;
 
   const invitation = await E(sell.publicFacet).makeBuyerInvitation();
 
@@ -121,9 +121,6 @@ export const buyItem = async (service: AgoricState, itemInMarket: any) => {
       dappContext: true,
     })
   );
-
-  // TODO: remove item from market after offer is accepted and processed
-  await E(publicFacet).removeItemFromMarket(itemInMarket.id);
 };
 
 // TODO: Add price for minting // price?: bigint
@@ -183,7 +180,7 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name);//{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
 
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
@@ -266,7 +263,7 @@ export const unequipItem = async (service: AgoricState, item: Item, characterNam
       want: {
         Item: {
           pursePetname: itemPurse.brandPetname,
-          value: [formatIdAsNumber(item)]
+          value: [formatIdAsNumber(item)],
           // value: [harden({category: item.category})],
         },
         CharacterKey2: {
