@@ -8,6 +8,17 @@
  *   config?: Config
  *   itemCount: bigint
  *   characterCount: bigint
+ *   token?: {
+ *     character: {
+ *       brand: Brand
+ *       issuer: Issuer
+ *     }
+ *     item: {
+ *       brand: Brand
+ *       issuer: Issuer
+ *     }
+ *   }
+ *   randomNumber?: Function
  * }} State
  *
  * @typedef {{

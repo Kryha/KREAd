@@ -1,0 +1,78 @@
+import { assert, details as X } from '@agoric/assert';
+import { errors } from './errors';
+
+/**
+ * @param {Function} contractConfigured
+ * @param {State} state
+ * @returns {object}
+ */
+export const getRandomBaseCharacter = (state) => {
+  assert(state.config?.completed, X`${errors.noConfig}`);
+  const number = Math.floor(
+    state.randomNumber() * state.config.baseCharacters.length,
+  );
+  return state.config.baseCharacters[number];
+};
+/**
+ * @param {Function} contractConfigured
+ * @param {State} state
+ * @returns {object}
+ */
+export const getRandomItem = (state) => {
+  assert(state.config?.completed, X`${errors.noConfig}`);
+  const number = Math.floor(
+    state.randomNumber() * state.config.defaultItems.length,
+  );
+  return state.config.defaultItems[number];
+};
+
+/**
+ * @param {string} name
+ * @param {State} state
+ * @returns {boolean}
+ */
+export const nameIsUnique = (name, state) => {
+  const usedNames = state.characters.map((character) => character.name);
+  return !usedNames.includes(name);
+};
+
+/**
+ * Gets the inventory of a given character
+ *
+ * @param {string} characterName
+ * @param {State} state
+ * @returns {{items: Item[]}}
+ */
+export const getCharacterInventory = (characterName, state) => {
+  const characterRecord = state.characters.find(
+    ({ character }) => character.name === characterName,
+  );
+  assert(characterRecord, X`${errors.character404}`);
+  const { inventory } = characterRecord;
+  const items = inventory.getAmountAllocated(
+    'Item',
+    state.token.item.brand,
+  ).value;
+  // @ts-ignore
+  return { items };
+};
+
+/**
+ * Gets the characacter key of a given character
+ *
+ * @param {string} characterName
+ * @param {State} state
+ * @returns {{ key: Amount}}
+ */
+export const getCharacterKey = (characterName, state) => {
+  const characterRecord = state.characters.find(
+    ({ character }) => character.name === characterName,
+  );
+  assert(characterRecord, X`${errors.character404}`);
+  const { inventory } = characterRecord;
+  const key = inventory.getAmountAllocated(
+    'CharacterKey',
+    state.token.character.brand,
+  );
+  return { key };
+};

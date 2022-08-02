@@ -615,7 +615,7 @@ const start = async (zcf) => {
     getCharactersMarket,
     getCharacterInventory,
     getCharacterKey,
-    getCharacterCount: () => state.characterNames.length,
+    getCharacterCount: () => state.characters.length,
     getCharacterIssuer: () => characterIssuer,
     getCharacterBrand: () => characterBrand,
 
