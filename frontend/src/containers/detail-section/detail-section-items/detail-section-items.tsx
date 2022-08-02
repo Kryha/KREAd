@@ -4,6 +4,7 @@ import { text } from "../../../assets";
 import { ButtonText, EmptyItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
 import { color } from "../../../design";
 import { Item } from "../../../interfaces";
+import { useUnequipItem } from "../../../service";
 
 import {
   Divider,
@@ -24,7 +25,11 @@ interface ListItemProps {
 
 const ListItem: FC<ListItemProps> = ({ item }) => {
   const [selected, setSelected] = useState(false);
-  const unEquip = () => {};
+  const unequipItem = useUnequipItem();
+
+  const unequip = (id: string) => {
+    unequipItem.mutate({ itemId: id });
+  };
 
   return (
     <Info
@@ -48,7 +53,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>
-        <PrimaryButton onClick={() => unEquip()}>
+        <PrimaryButton onClick={() => unequip(item.id)}>
           <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
         </PrimaryButton>
       </InfoWrapper>
