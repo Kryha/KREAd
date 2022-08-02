@@ -1,30 +1,13 @@
 // TODO: Remove this, use ations + context instead
-import { useMutation, useQuery, UseQueryResult } from "react-query";
+import { useMutation } from "react-query";
 
-import { Character, CharacterCreation, CharacterEquip, ExtendedCharacter } from "../interfaces";
-import { FakeCharcters } from "./fake-characters";
+import { CharacterCreation, CharacterEquip, CharacterInMarket, CharacterInMarketBackend, ExtendedCharacter } from "../interfaces";
 import { useCharacterContext } from "../context/characters";
-import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { useEffect, useMemo } from "react";
-import { CharacterFilters, filterCharacters, sortCharacters } from "../util";
-import { mintNfts } from "./character-actions";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
+import { buyCharacter, mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
-
-export const useCharacters = (): UseQueryResult<Character[]> => {
-  return useQuery(["characters", "all"], async () => {
-    //  TODO: intergrate me
-
-    return FakeCharcters;
-  });
-};
-
-export const useCharacter = (id: string): UseQueryResult<Character> => {
-  return useQuery(["characters", id], async () => {
-    //  TODO: intergrate me
-
-    return FakeCharcters.find((c) => c.id === id);
-  });
-};
+import { E } from "@endo/eventual-send";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
@@ -46,7 +29,7 @@ export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolea
   return [found, isLoading];
 };
 
-export const useMyCharacters = (): [CharacterEquip[], boolean] => {
+export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
   const [{ owned, selected, fetched }] = useCharacterContext();
 
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
@@ -56,17 +39,31 @@ export const useMyCharacters = (): [CharacterEquip[], boolean] => {
     });
   }, [owned, selected?.nft.id]);
 
-  return [charactersWithEquip, !fetched];
+  const filtered = useMemo(() => {
+    if (!filters) return charactersWithEquip;
+    return filterCharacters(charactersWithEquip, filters);
+  }, [charactersWithEquip, filters]);
+
+  return [filtered, !fetched];
 };
 
-export const useMyFilteredCharacters = (filters: CharacterFilters): [CharacterEquip[], boolean] => {
-  const [characters, isLoading] = useMyCharacters();
+export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefined, boolean] => {
+  const [characters, isLoading] = useCharactersMarket();
 
-  return useMemo(() => {
-    if (!filters.category && !filters.sorting) return [characters, isLoading];
+  const found = useMemo(() => characters.find((character) => character.id === id), [characters, id]);
 
-    return [filterCharacters(characters, filters), isLoading];
-  }, [characters, filters, isLoading]);
+  return [found, isLoading];
+};
+
+export const useCharactersMarket = (filters?: CharactersMarketFilters): [CharacterInMarket[], boolean] => {
+  const [{ market, marketFetched }] = useCharacterContext();
+
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterCharactersMarket(market, filters);
+  }, [filters, market]);
+
+  return [filtered, !marketFetched];
 };
 
 // TODO: Add error management
@@ -85,22 +82,98 @@ export const useEquipCharacter = () => {
   });
 };
 
-// TODO: make this hook for market only and define filter in util
-export const useFilteredCharacters = (category: string, sorting: string, price: { min: number; max: number }): [Character[], boolean] => {
-  const { data, isLoading } = useCharacters();
-  const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
+// TODO: test after merge with equip/unequip fix
+export const useSellCharacter = (characterId: string) => {
+  const [service] = useAgoricContext();
+  const [characters] = useMyCharacters();
 
-  const isInCategory = (character: Character, category: string) => (category ? character.type === category : true);
-  return useMemo(() => {
-    if (!data) return [[], isLoading];
-    if (!category && !sorting && !changedRange) return [data, isLoading];
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-    const characters = data.map((character) => ({ ...character, isEquipped: false }));
+  const [characterInMarket, setCharacterInMarket] = useState<CharacterInMarketBackend>();
 
-    const filteredCharacters = characters.filter((character) => isInCategory(character, category));
-    // const filteredPrice = filteredCharacters.filter((character) => character.price > price.min && character.price < price.max);
-    // const sortedCharacters = sortCharacters(sorting, filteredPrice);
+  useEffect(() => {
+    const addToMarket = async () => {
+      try {
+        if (!characterInMarket || !service.offers.length) return;
 
-    return [/*sortedCharacters*/filteredCharacters, isLoading];
-  }, [category, data, isLoading,/* price, */sorting, changedRange]);
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "seller") return;
+        if (!latestOffer.status || latestOffer.status !== "pending") return;
+
+        const characterFromProposal = latestOffer.proposalTemplate.give.Items.value[0];
+        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).storeCharacterInMarket(characterInMarket);
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    addToMarket();
+  }, [characterId, characterInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(
+    async (price: number) => {
+      const found = characters.find((character) => character.nft.id === characterId);
+      if (!found) return;
+
+      const backendCharacter = mediate.characters.toBack([found])[0];
+
+      setIsLoading(true);
+
+      const toStore = await sellCharacter(service, backendCharacter.nft, BigInt(price));
+      setCharacterInMarket(toStore);
+    },
+    [characterId, characters, service]
+  );
+
+  return { callback, isLoading, isError, isSuccess };
+};
+
+// TODO: test after merge with equip/unequip fix
+export const useBuyCharacter = (characterId: string) => {
+  const [service] = useAgoricContext();
+  const [characters] = useCharactersMarket();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    const removeFromMarket = async () => {
+      try {
+        if (!service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "buyer") return;
+        if (!latestOffer.status || latestOffer.status !== "accept") return;
+
+        const characterFromProposal = latestOffer.proposalTemplate.want.Items.value[0];
+        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).removeCharacterFromMarket(BigInt(characterId));
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    removeFromMarket();
+  }, [characterId, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(async () => {
+    const found = characters.find((character) => character.id === characterId);
+    if (!found) return;
+
+    const mediated = mediate.charactersMarket.toBack([found])[0];
+    setIsLoading(true);
+    await buyCharacter(service, mediated);
+  }, [characterId, characters, service]);
+
+  return { callback, isLoading, isError, isSuccess };
 };

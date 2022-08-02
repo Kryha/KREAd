@@ -21,32 +21,32 @@
  * }} Config
  *
  * @typedef {{
- * name: string
- * character: object
- * inventory: ZCFSeat
- * seat?: ZCFSeat
- * auction?: {
- *   instance: Instance,
- *   publicFacet: any,
- * },
+ *   name: string
+ *   character: object
+ *   inventory: ZCFSeat
+ *   seat?: ZCFSeat
+ *   auction?: {
+ *     instance: Instance,
+ *     publicFacet: any,
+ *   },
  * }} CharacterRecord
  *
  * @typedef {{
- * noseline?: Item;
- * midBackground?: Item;
- * mask?: Item;
- * headPiece?: Item;
- * hair?: Item;
- * frontMask?: Item;
- * liquid?: Item;
- * background?: Item;
- * airReservoir?: Item;
- * clothing?: Item;
+ *   noseline?: Item;
+ *   midBackground?: Item;
+ *   mask?: Item;
+ *   headPiece?: Item;
+ *   hair?: Item;
+ *   frontMask?: Item;
+ *   liquid?: Item;
+ *   background?: Item;
+ *   airReservoir?: Item;
+ *   clothing?: Item;
  * }} DefaultItems
  *
  * @typedef {{
  *   id: bigint
- *   character: CharacterRecord
+ *   character: object
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
  *   sell: {
@@ -57,23 +57,23 @@
  * }} CharacterInMarket
  *
  * @typedef {{
- * name: string;
- * category: string;
- * id: string;
- * description: string;
- * image: string;
- * level: number;
- * rarity: number;
- * effectiveness?: number;
- * layerComplexity?: number;
- * forged: string;
- * baseMaterial: string;
- * colors: string[];
- * projectDescription: string;
- * price: number;
- * details: any;
- * date: string;
- * activity: any[];
+ *   name: string;
+ *   category: string;
+ *   id: string;
+ *   description: string;
+ *   image: string;
+ *   level: number;
+ *   rarity: number;
+ *   effectiveness?: number;
+ *   layerComplexity?: number;
+ *   forged: string;
+ *   baseMaterial: string;
+ *   colors: string[];
+ *   projectDescription: string;
+ *   price: number;
+ *   details: any;
+ *   date: string;
+ *   activity: any[];
  * }} Item
  *
  * @typedef {{
@@ -93,15 +93,15 @@
  *
  * // PRIVATE STORAGE
  * @typedef {{
- * id: bigint;
- * add?: string[];
- * remove?: string[];
+ *   id: bigint;
+ *   add?: string[];
+ *   remove?: string[];
  * }} InventoryEvent
  *
  * @typedef {{
- * seat?: ZCFSeat;
- * name: string;
- * history: InventoryEvent[];
+ *   seat?: ZCFSeat;
+ *   name: string;
+ *   history: InventoryEvent[];
  * }} InventoryKeyRecord
  *
  * @typedef {InventoryKeyRecord[]} InventoryKeyStorage

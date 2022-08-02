@@ -42,7 +42,6 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
       {typeof data.image === "string" ? (
         <DetailSectionSegmentStoryImg src={data.image} />
       ) : (
-        // TODO: fix image z-index issue
         <ImageContainer>
           <BaseCharacter characterImage={data.characterImage} items={data.image} size="half" />
         </ImageContainer>

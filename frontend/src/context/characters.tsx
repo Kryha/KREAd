@@ -1,11 +1,16 @@
 import React, { createContext, useReducer, useContext } from "react";
+
 import { CharacterDispatch, CharacterState, CharacterStateActions } from "../interfaces/character-actions.interfaces";
 
 const initialState: CharacterState = {
+  selected: undefined,
+
   characters: [],
   owned: [],
+  market: [],
+
   fetched: false,
-  selected: undefined,
+  marketFetched: false,
 };
 
 const Context = createContext<CharacterState | undefined>(undefined);
@@ -22,6 +27,12 @@ const Reducer = (state: CharacterState, action: CharacterStateActions): Characte
     case "SET_OWNED_CHARACTERS":
       return { ...state, owned: action.payload };
 
+    case "SET_CHARACTERS_MARKET":
+      return { ...state, market: action.payload };
+
+    case "ADD_CHARACTERS_MARKET":
+      return { ...state, market: [...state.market, ...action.payload] };
+
     case "ADD_OWNED_CHARACTERS":
       return { ...state, fetched: true, owned: [...state.owned, ...action.payload] };
 
@@ -31,11 +42,11 @@ const Reducer = (state: CharacterState, action: CharacterStateActions): Characte
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };
 
+    case "SET_MARKET_FETCHED":
+      return { ...state, marketFetched: action.payload };
+
     case "RESET":
       return initialState;
-
-    default:
-      throw new Error("Only defined action types can be handled;");
   }
 };
 

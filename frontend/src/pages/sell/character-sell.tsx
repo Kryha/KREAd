@@ -4,35 +4,40 @@ import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
-import { useCharacter, useSellItem } from "../../service";
+import { useMyCharacter, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
 
-  const { data, isLoading, isError } = useCharacter(String(id));
-  const sellItem = useSellItem();
+  const idString = String(id);
+
+  const [data, isLoading] = useMyCharacter(idString);
+  const sellCharacter = useSellCharacter(idString);
 
   const submitForm = (price: number) => {
-    sellItem.mutate({ price });
+    sellCharacter.callback(price);
   };
 
-  if (sellItem.isError) return <ErrorView />;
+  if (sellCharacter.isError) return <ErrorView />;
 
-  if (sellItem.isSuccess) return <Navigate to={routes.shop} />;
+  if (sellCharacter.isSuccess) return <Navigate to={routes.shop} />;
 
   if (isLoading) return <LoadingPage />;
 
-  if (!data || isError) return <ErrorView />;
+  if (!data) return <ErrorView />;
+
+  const { nft, equippedItems } = data;
 
   return (
     <Sell
+      isLoading={sellCharacter.isLoading}
       onSubmit={submitForm}
       text={{ sell: text.store.sellCharacter }}
-      data={{ ...data, image: data.items, category: data.type, id: data.id, characterImage: data.image }}
+      data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
     >
-      <FadeInOut show exiting={false}>
-        <CharacterDetailSection character={data} />
+      <FadeInOut show>
+        <CharacterDetailSection nft={data.nft} equippedItems={equippedItems} />
       </FadeInOut>
     </Sell>
   );

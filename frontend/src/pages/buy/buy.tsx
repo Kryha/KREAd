@@ -8,26 +8,31 @@ import { FormCard } from "../create-character/styles";
 import { BuyForm } from "./buy-form";
 import { Confirmation } from "./confirmation";
 import { ContentWrapper } from "./styles";
-import { BuyData, BuyText } from "./types";
+import { BuyData, BuyStep, BuyText } from "./types";
 
 interface Props {
   children: ReactNode;
   data: BuyData;
   text: BuyText;
+
+  onSubmit: () => void;
+
+  isLoading: boolean;
+  isOfferAccepted: boolean;
 }
 
-export const Buy: FC<Props> = ({ children, data, text: pText }) => {
+export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoading, isOfferAccepted }) => {
   const { width, height } = useViewport();
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<BuyStep>(1);
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
       case 1:
-        return <BuyForm data={data} changeStep={setCurrentStep} />;
+        return (
+          <BuyForm onSubmit={onSubmit} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
+        );
       case 2:
         return <Confirmation text={pText} />;
-      default:
-        return <BuyForm data={data} changeStep={setCurrentStep} />;
     }
   };
 

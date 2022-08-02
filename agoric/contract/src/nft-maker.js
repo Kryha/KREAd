@@ -290,6 +290,11 @@ const start = async (zcf) => {
    * @returns {ItemInMarket}
    */
   const storeItemInMarket = (itemInMarket) => {
+    const isInMarket = state.itemsMarket.find(
+      (item) => item.id === itemInMarket.id,
+    );
+    assert(!isInMarket, X`Item is already present on the marketplace`);
+
     state.itemsMarket = [...state.itemsMarket, itemInMarket];
 
     return itemInMarket;
@@ -316,6 +321,11 @@ const start = async (zcf) => {
    * @returns {CharacterInMarket}
    */
   const storeCharacterInMarket = (characterInMarket) => {
+    const isInMarket = state.charactersMarket.find(
+      (character) => character.id === characterInMarket.id,
+    );
+    assert(!isInMarket, X`Character is already present on the marketplace`);
+
     state.charactersMarket = [...state.charactersMarket, characterInMarket];
 
     return characterInMarket;

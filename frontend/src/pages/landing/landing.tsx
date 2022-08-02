@@ -57,7 +57,12 @@ export const Landing: FC = () => {
         <>
           {/* character big picture */}
           <LandingContainer isZoomed={!openTab}>
-            <BaseCharacter characterImage={selectedCharacter.nft.image} items={selectedCharacter.equippedItems} isZoomed={openTab} size="normal" />
+            <BaseCharacter
+              characterImage={selectedCharacter.nft.image}
+              items={selectedCharacter.equippedItems}
+              isZoomed={openTab}
+              size="normal"
+            />
           </LandingContainer>
 
           {/* equipped items under character */}
@@ -78,7 +83,8 @@ export const Landing: FC = () => {
           <CharacterCardWrapper>
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection
-                character={selectedCharacter.nft}
+                nft={selectedCharacter.nft}
+                equippedItems={selectedCharacter.equippedItems}
                 actions={{
                   secondary: { text: text.character.sell, onClick: () => sell(selectedCharacter.nft.id) },
                   onClose: () => {

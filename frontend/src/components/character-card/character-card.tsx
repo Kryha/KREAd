@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, Fragment, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper, EmptyViewContainer } from "./styles";
@@ -30,7 +30,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const [character, setCharacter] = useState<ExtendedCharacter>();
   const [close, setClose] = useState(false);
-  const [intitial, setInitial] = useState(true);
+  const [initial, setInitial] = useState(true);
 
   const { width, height } = useViewport();
 
@@ -94,28 +94,26 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
           <CharacterContent>
             {sortedCharacters.map((character) => (
-              <>
+              <Fragment key={character.nft.id}>
                 {character.isEquipped ? (
                   <CharacterItem
                     character={character}
-                    key={character.nft.id}
                     onClick={showInfo}
                     onButtonClick={select}
                     id={id}
                     removeInitial={() => setInitial(false)}
-                    isInitial={intitial}
+                    isInitial={initial}
                   />
                 ) : (
                   <CharacterItem
                     character={character}
-                    key={character.nft.id}
                     onClick={showInfo}
                     onButtonClick={select}
                     id={id}
                     removeInitial={() => setInitial(false)}
                   />
                 )}
-              </>
+              </Fragment>
             ))}
           </CharacterContent>
 
@@ -131,7 +129,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
       <FadeInOut show={!!character} exiting={!character?.nft}>
         {character && (
           <CharacterCardWrapper>
-            <CharacterDetailSection character={character.nft} actions={detailActions()} />
+            <CharacterDetailSection nft={character.nft} equippedItems={character.equippedItems} actions={detailActions()} />
           </CharacterCardWrapper>
         )}
       </FadeInOut>

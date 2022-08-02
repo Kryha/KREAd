@@ -41,7 +41,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06149",
       brand: "0x0177812bsjs7998",
@@ -52,35 +51,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653491977000,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 1653491987090,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653491987080,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653491987070,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177000,
@@ -104,7 +98,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#7B5B7B"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06119",
       brand: "0x0177812bsjs7998",
@@ -115,35 +108,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653491987060,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 1653491987050,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653491987040,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653491987400,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177000,
@@ -167,7 +155,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06139",
       brand: "0x0177812bsjs7998",
@@ -178,35 +165,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653491977001,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 1653491977002,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653491977003,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653491977004,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -230,7 +212,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06118",
       brand: "0x0177812bsjs7998",
@@ -241,35 +222,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653491977005,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 1653491977006,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 1653491977007,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653491977008,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -293,7 +269,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06117",
       brand: "0x0177812bsjs7998",
@@ -304,35 +279,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653491977009,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770109,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16534919770209,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16534919770309,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -356,7 +326,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 14,
     details: {
       boardId: "06116",
       brand: "0x0177812bsjs7998",
@@ -367,35 +336,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16534919770409,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770509,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16534919770609,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16534919770709,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -419,7 +383,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06115",
       brand: "0x0177812bsjs7998",
@@ -430,35 +393,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16534919770809,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770899,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16534919770889,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16534919770879,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -482,7 +440,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06114",
       brand: "0x0177812bsjs7998",
@@ -493,35 +450,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16534919770859,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770869,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16534919770849,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16534919770839,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -545,7 +497,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06113",
       brand: "0x0177812bsjs7998",
@@ -556,35 +507,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16534919770829,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770819,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16534919770818,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16534919770817,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -608,7 +554,6 @@ export const FakeCharacterItems: CharacterItems = {
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06112",
       brand: "0x0177812bsjs7998",
@@ -619,35 +564,30 @@ export const FakeCharacterItems: CharacterItems = {
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16534919770816,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770815,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16534919770814,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16534919770813,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -675,7 +615,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#000006", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06111",
       brand: "0x0177812bsjs7998",
@@ -686,35 +625,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16534919770812,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770811,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770811,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770812,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -739,7 +673,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06110",
       brand: "0x0177812bsjs7998",
@@ -750,35 +683,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770813,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16524919770814,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770815,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770816,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -803,7 +731,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 134,
     details: {
       boardId: "06129",
       brand: "0x0177812bsjs7998",
@@ -814,35 +741,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770817,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16523919770817,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770818,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770819,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -867,7 +789,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#7B5B7B", "#0000006"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -878,35 +799,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653491997000,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 1653491937000,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770819,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653471987000,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -931,7 +847,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#0000006", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06128",
       brand: "0x0177812bsjs7998",
@@ -942,35 +857,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770819,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16524919770818,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16522919770817,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770815,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -995,7 +905,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#0000006", "#3063A5"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 12340,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1006,35 +915,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770816,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16524919770814,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770813,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770812,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1059,7 +963,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#0000006", "#7B5B7B", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 24,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1070,35 +973,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770811,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770811,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770812,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770813,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1123,7 +1021,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#3063A5"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 9000,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1134,35 +1031,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770814,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770815,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770816,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770817,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1187,7 +1079,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#0000006", "#3063A5", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1000,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1198,35 +1089,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770818,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770819,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770829,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770828,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1251,7 +1137,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#7B5B7B", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1200,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1262,35 +1147,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770827,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770826,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770825,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770824,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1315,7 +1195,6 @@ export const ItemsEquipped: ItemEquip[] = [
     colors: ["#0000006", "#3063A5", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 900,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1326,35 +1205,30 @@ export const ItemsEquipped: ItemEquip[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770823,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770822,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770821,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653491987000,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1381,7 +1255,6 @@ export const Items: Item[] = [
     colors: ["#000006", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06111",
       brand: "0x0177812bsjs7998",
@@ -1392,35 +1265,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16534919770812,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16534919770811,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770811,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770812,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1444,7 +1312,6 @@ export const Items: Item[] = [
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06110",
       brand: "0x0177812bsjs7998",
@@ -1455,35 +1322,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770813,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16524919770814,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770815,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770816,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1507,7 +1369,6 @@ export const Items: Item[] = [
     colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 134,
     details: {
       boardId: "06129",
       brand: "0x0177812bsjs7998",
@@ -1518,35 +1379,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770817,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16523919770817,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770818,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770819,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1570,7 +1426,6 @@ export const Items: Item[] = [
     colors: ["#7B5B7B", "#0000006"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1581,35 +1436,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 1653491997000,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 1653491937000,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770819,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653471987000,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1633,7 +1483,6 @@ export const Items: Item[] = [
     colors: ["#0000006", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1234,
     details: {
       boardId: "06128",
       brand: "0x0177812bsjs7998",
@@ -1644,35 +1493,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770819,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16524919770818,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16522919770817,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770815,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1696,7 +1540,6 @@ export const Items: Item[] = [
     colors: ["#0000006", "#3063A5"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 12340,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1707,35 +1550,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770816,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16524919770814,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16524919770813,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16524919770812,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1759,7 +1597,6 @@ export const Items: Item[] = [
     colors: ["#0000006", "#7B5B7B", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 24,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1770,35 +1607,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16524919770811,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770811,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770812,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770813,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1822,7 +1654,6 @@ export const Items: Item[] = [
     colors: ["#3063A5"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 9000,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1833,35 +1664,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770814,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770815,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770816,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770817,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1885,7 +1711,6 @@ export const Items: Item[] = [
     colors: ["#0000006", "#3063A5", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1000,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1896,35 +1721,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770818,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770819,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770829,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770828,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -1948,7 +1768,6 @@ export const Items: Item[] = [
     colors: ["#7B5B7B", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 1200,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -1959,35 +1778,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770827,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770826,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770825,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 16525919770824,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,
@@ -2011,7 +1825,6 @@ export const Items: Item[] = [
     colors: ["#0000006", "#3063A5", "#FFFFFF"],
     projectDescription:
       "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    price: 900,
     details: {
       boardId: "0x0177812bsjs7998",
       brand: "0x0177812bsjs7998",
@@ -2022,35 +1835,30 @@ export const Items: Item[] = [
     activity: [
       {
         name: "transfer",
-        price: undefined,
         from: "totoro",
         to: "hayao",
         date: 16525919770823,
       },
       {
         name: "sale",
-        price: 9,
         from: "totoro",
         to: "hayao",
         date: 16525919770822,
       },
       {
         name: "transfer",
-        price: undefined,
         from: "goku",
         to: "shinji",
         date: 16525919770821,
       },
       {
         name: "sale",
-        price: 100,
         from: "batman",
         to: "hayao",
         date: 1653491987000,
       },
       {
         name: "mint",
-        price: undefined,
         from: undefined,
         to: "nakamoto",
         date: 1652168177,

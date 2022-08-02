@@ -8,3 +8,5 @@ export interface BuyText {
 export interface BuyData {
   price: number;
 }
+
+export type BuyStep = 1 | 2;
