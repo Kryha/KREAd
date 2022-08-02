@@ -37,7 +37,7 @@ export const general = {
   ourLeadership: "our leadership includes some of the most inventive and experienced executives in the technology industry.",
   isPartOfAgoric: "KREAd is part of",
   agoric: "Agoric",
-  anOpenSource: ", an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by ",
+  anOpenSource: "an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by ",
   kryha: "Kryha",
   contactUs: "contact us",
   questionsBug: "questions, bug reports, feedback... we are here for it all.",

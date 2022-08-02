@@ -38,7 +38,11 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
   }
 `;
 
-export const ButtonContainer = styled.div`
+interface ButtonProps {
+  isVisible: boolean;
+}
+
+export const ButtonContainer = styled.div<ButtonProps>`
   margin-top: 46px;
   display: flex;
   flex-direction: row;
@@ -54,6 +58,35 @@ export const ButtonContainer = styled.div`
       }
     }
   }
+  ${({ isVisible }): string => {
+    return isVisible
+      ? `
+      ${PrimaryButton} {
+        -webkit-transition: 0.3s ease-out;
+        transition: 0.3s ease-out;
+        will-change: transform;
+        position: absolute;
+        left: 40px;
+        top: 40px;
+      };
+      background: rgba(255, 255, 255, 0.46);
+      backdrop-filter: blur(4px);
+      padding-top: 40px;
+      padding-bottom: 40px;
+      height: 120px;
+      width: 460px;
+        `
+      : `
+      ${PrimaryButton} {
+        -webkit-transition: 0.3s ease-out;
+        transition: 0.3s ease-out;
+        will-change: transform;
+        position: fixed;
+        left: 40px;
+        top: 464px;
+      }
+      `;
+  }};
 `;
 
 export const ArrowUpRight = styled(ArrowUpRightIcon)`
@@ -175,14 +208,14 @@ export const ArrowDown = styled(ArrowDownIcon)`
 
 export const SectionContainer = styled.div`
   padding-left: 40px;
-  padding-top: 120px;
+  padding-top: 50px;
   width: 460px;
 `;
 
 export const ScrollContainer = styled.div`
   position: absolute;
   left: 40px;
-  bottom: 53px;
+  bottom: 73px;
 `;
 
 export const GeneralSectionContainer = styled.div`
@@ -190,20 +223,18 @@ export const GeneralSectionContainer = styled.div`
   width: 460px;
 `;
 
-export const ConnectContainer = styled.div`
-  background: rgba(255, 255, 255, 0.46);
-  backdrop-filter: blur(4px);
-  width: 460px;
-  height: 120px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  ${PrimaryButton} {
-    &:hover {
-      ${ArrowUp} {
-        path {
-          stroke: ${color.black};
-        }
-      }
-    }
-  }
+export const ConnectContainer = styled.div<ButtonProps>`
+${({ isVisible }): string => {
+    return isVisible
+      ? `
+        background: rgba(255, 255, 255, 0.46);
+        backdrop-filter: blur(4px);
+        z-index: 100;
+        width: 460px;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        position: relative;
+      `
+      : "";
+  }};
 `;

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { margins } from "../../design";
-import { CharacterImgs, disappear, fadeIn, SecondaryButton, sequentialFadeIn } from "../atoms";
+import { CharacterImgs, SecondaryButton, sequentialFadeIn } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 
