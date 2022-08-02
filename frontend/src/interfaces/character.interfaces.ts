@@ -12,6 +12,7 @@ export const isCharacterCategory = (category: unknown): category is keyof Charac
   return CHARACTER_CATEGORIES.includes(category);
 };
 
+// TODO: decide if this is the best solution or if it's better if already in a readable format
 export interface CharacterCategories {
   tempetScavenger: string;
 }
