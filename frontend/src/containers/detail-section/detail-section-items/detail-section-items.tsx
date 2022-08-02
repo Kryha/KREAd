@@ -24,6 +24,7 @@ interface ListItemProps {
 
 const ListItem: FC<ListItemProps> = ({ item }) => {
   const [selected, setSelected] = useState(false);
+  const unEquip = () => {};
 
   return (
     <Info
@@ -47,7 +48,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>
-        <PrimaryButton>
+        <PrimaryButton onClick={() => unEquip()}>
           <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
         </PrimaryButton>
       </InfoWrapper>
