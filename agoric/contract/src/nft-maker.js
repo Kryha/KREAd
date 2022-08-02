@@ -161,7 +161,7 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintItemNFT = (seat) => {
+  const mintItemNFT = async (seat) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
     assertProposalShape(seat, {
       want: { Item: null },
@@ -169,11 +169,16 @@ const start = async (zcf) => {
     const { want } = seat.getProposal();
 
     // @ts-ignore
+    const currentTime = await E(
+      state.config.chainTimerService,
+    ).getCurrentTimestamp();
+
+    // @ts-ignore
     const items = want.Item.value.map((item) => {
       const id = state.itemCount;
       state.itemCount = 1n + state.itemCount;
 
-      return { ...item, id };
+      return { ...item, id, date: Number(currentTime) };
     });
 
     const newItemAmount = AmountMath.make(itemBrand, harden(items));
