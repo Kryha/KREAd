@@ -1,6 +1,7 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, CharacterImgs, PrimaryButton, TitleText } from "../../components";
+import { bounce, CharacterImgs, disappear, fadeIn, PrimaryButton, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { color, fontWeight, zIndex } from "../../design";
 
@@ -43,12 +44,12 @@ interface ButtonProps {
 }
 
 export const ButtonContainer = styled.div<ButtonProps>`
-  margin-top: 46px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
   gap: 16px;
+  z-index: 100;
   ${PrimaryButton} {
     &:hover {
       ${ArrowUp} {
@@ -75,18 +76,27 @@ export const ButtonContainer = styled.div<ButtonProps>`
       padding-bottom: 40px;
       height: 120px;
       width: 460px;
+      position: absolute;
         `
       : `
+      margin-top: 46px;
       ${PrimaryButton} {
-        -webkit-transition: 0.3s ease-out;
-        transition: 0.3s ease-out;
-        will-change: transform;
         position: fixed;
         left: 40px;
         top: 464px;
       }
       `;
   }};
+
+  ${({ isVisible }) => (isVisible === true ?
+    css` `
+    :
+    css`
+    animation: ${disappear}, ${fadeIn};
+    animation-duration: 0.5s, 0.5s;
+    animation-delay: 0s, 0.5s;
+
+  `)};
 `;
 
 export const ArrowUpRight = styled(ArrowUpRightIcon)`
@@ -102,6 +112,7 @@ export const EndContent = styled.div<HeightProps>`
   height: 100vh;
   background-size: cover;
   scroll-snap-align: start;
+  padding-top: 110px;
 `;
 
 export const MiddleContent = styled.div<HeightProps>`
@@ -113,6 +124,7 @@ export const MiddleContent = styled.div<HeightProps>`
   height: 100vh;
   background-size: cover;
   scroll-snap-align: start;
+  padding-top: 110px;
 `;
 
 export const FooterContainer = styled.div`
@@ -237,4 +249,13 @@ ${({ isVisible }): string => {
       `
       : "";
   }};
+  ${({ isVisible }) => (isVisible === true ?
+    css` `
+    :
+    css`
+    animation: ${disappear}, ${fadeIn};
+    animation-duration: 0.5s, 0.5s;
+    animation-delay: 0s, 0.5s;
+
+  `)};
 `;
