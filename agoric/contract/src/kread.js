@@ -121,7 +121,7 @@ const start = async (zcf) => {
     const { want } = seat.getProposal();
 
     // @ts-ignore
-    const currentTime = await state.getCurrentTime();
+    const currentTime = await state.getCurrentTime(STATE);
 
     // @ts-ignore
     const items = want.Item.value.map((item) => {
@@ -159,7 +159,7 @@ const start = async (zcf) => {
       newCharacterName,
       state.getRandomBaseCharacter(STATE),
       STATE.characterCount,
-      await state.getCurrentTime(),
+      await state.getCurrentTime(STATE),
     ).map((character) => AmountMath.make(characterBrand, harden([character])));
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();

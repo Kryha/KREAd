@@ -95,6 +95,11 @@ export const getCharacterRecord = (characterName, state) => {
 
   return characterRecord;
 };
-
+/**
+ * Gets the current time (epoch)
+ *
+ * @param {State} state
+ * @returns {Promise<bigint>}
+ */
 export const getCurrentTime = async (state) =>
   E(state.config.chainTimerService).getCurrentTimestamp();

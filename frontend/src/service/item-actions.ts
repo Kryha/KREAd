@@ -124,6 +124,7 @@ export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBa
 };
 
 // TODO: Add price for minting // price?: bigint
+// TODO: Ensure this fn does not work in prod
 export const mintItem = async (service: AgoricState, item?: any) => {
   const {
     agoric: { walletP },
@@ -143,8 +144,6 @@ export const mintItem = async (service: AgoricState, item?: any) => {
   const itemsToMint = item ? [item] : defaultItems;
 
   const uniqueItems = itemsToMint.map((item: any) => {
-    // const date = Date.now().toString(); // TODO Implement Date Service
-
     return { ...item, name: `${item.name} (ESPECIAL EDITION)` };
   });
 
@@ -292,7 +291,7 @@ export const itemSwap = async (service: AgoricState, item: Item, character: Char
   const wantedCharacter = inventoryCharacter.key.value[0];
   const { items: currentInventoryItems }: {items: Item[]} = await E(publicFacet).getCharacterInventory(character.name);
 
-  const availableItems: Item[] = itemPurse.value.map((item: Item)=>formatIdAsNumber(item));
+  const availableItems: Item[] = itemPurse.value.map((item: Item) => formatIdAsNumber(item));
   const itemToSwapGive = availableItems.find(i=>i.category === item.category);
   const itemToSwapWant = currentInventoryItems.find((item: Item) => itemToSwapGive?.category === item.category);
   
