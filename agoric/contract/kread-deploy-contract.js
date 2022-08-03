@@ -58,7 +58,7 @@ export default async function deployContract(
   // and install it on Zoe. This returns an installationHandle, an
   // opaque, unforgeable identifier for our contract code that we can
   // reuse again and again to create new, live contract instances.
-  const bundle = await bundleSource(pathResolve(`./src/kread.js`));
+  const bundle = await bundleSource(pathResolve(`./src/index.js`));
   const installation = await E(zoe).install(bundle);
 
   // We also need to bundle and install the sellItems contract

@@ -72,33 +72,10 @@ export const processPurses = async (
       itemCategories.forEach((category) => {
         equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
       });
-      console.log(equipped);
-      console.log({
-        hair: frontendEquippedItems.find((item: Item) => item.category === "hair"),
-        headPiece: frontendEquippedItems.find((item: Item) => item.category === "headPiece"),
-        noseline: frontendEquippedItems.find((item: Item) => item.category === "noseline"),
-        background: frontendEquippedItems.find((item: Item) => item.category === "background"),
-        midBackground: frontendEquippedItems.find((item: Item) => item.category === "midBackground"),
-        mask: frontendEquippedItems.find((item: Item) => item.category === "mask"),
-        airReservoir: frontendEquippedItems.find((item: Item) => item.category === "airReservoir"),
-        liquid: frontendEquippedItems.find((item: Item) => item.category === "liquid"),
-        clothing: frontendEquippedItems.find((item: Item) => item.category === "clothing"),
-        frontMask: frontendEquippedItems.find((item: Item) => item.category === "frontMask"),
-      },);
+      
       return {
         nft: character,
-        equippedItems: {
-          hair: frontendEquippedItems.find((item: Item) => item.category === "hair"),
-          headPiece: frontendEquippedItems.find((item: Item) => item.category === "headPiece"),
-          noseline: frontendEquippedItems.find((item: Item) => item.category === "noseline"),
-          background: frontendEquippedItems.find((item: Item) => item.category === "background"),
-          midBackground: frontendEquippedItems.find((item: Item) => item.category === "midBackground"),
-          mask: frontendEquippedItems.find((item: Item) => item.category === "mask"),
-          airReservoir: frontendEquippedItems.find((item: Item) => item.category === "airReservoir"),
-          liquid: frontendEquippedItems.find((item: Item) => item.category === "liquid"),
-          clothing: frontendEquippedItems.find((item: Item) => item.category === "clothing"),
-          frontMask: frontendEquippedItems.find((item: Item) => item.category === "frontMask"),
-        },
+        equippedItems: equipped,
       };
     })
   );
