@@ -89,7 +89,7 @@ export const getCharacterRecord = (characterName, state) => {
     ({ character }) => character.name === characterName,
   );
   assert(characterRecord, X`${errors.character404}`);
-  assert(characterRecord.inventorySeat, X`${errors.inventory404}`);
+  assert(characterRecord.inventory, X`${errors.inventory404}`);
 
   return characterRecord;
 };

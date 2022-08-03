@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
 import { AssetKind, AmountMath } from '@agoric/ertp';
@@ -320,15 +321,6 @@ const start = async (zcf) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    // Ensure proposed inventory is valid
-    const { value: currentInventoryItems } =
-      inventorySeat.getAmountAllocated('Item');
-    validateInventoryState([
-      // @ts-ignore
-      ...currentInventoryItems,
-      ...providedItemAmount.value,
-    ]);
-
     // Widthdraw Item and Key from user seat
     seat.decrementBy({ Item: providedItemAmount });
     seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
@@ -340,6 +332,10 @@ const start = async (zcf) => {
     // Widthdraw Key from character seat and Deposit into user seat
     inventorySeat.decrementBy({ CharacterKey: inventoryCharacterKey });
     seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
+
+    // Ensure staged inventory STATE is valid before reallocation
+    // @ts-ignore
+    validateInventoryState(inventorySeat.getStagedAllocation().Item.value);
 
     zcf.reallocate(seat, inventorySeat);
 
