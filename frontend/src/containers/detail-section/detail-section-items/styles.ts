@@ -1,8 +1,10 @@
 import styled from "@emotion/styled";
 
 import { ArrowUpRightIcon } from "../../../assets";
-import { HeaderHorizontalDivider, MenuItemName } from "../../../components";
+import { ButtonText, HeaderHorizontalDivider, MenuItemName, PrimaryButton } from "../../../components";
 import { color, fontWeight, margins } from "../../../design";
+
+export const EquippedLabel = styled(ButtonText)``;
 
 export const ListContainer = styled.div`
   display: flex;
@@ -40,6 +42,7 @@ export const InfoContainer = styled.div`
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }
+  width: 100%;
 `;
 
 export const EmptyInfo = styled.div`
@@ -71,9 +74,15 @@ export const Info = styled(EmptyInfo) <InfoProps>`
     ${IdLabel} {
       display: none;
     }
+    ${EquippedLabel} {
+      display: none;
+    }
   }
   :not(:hover) {
     ${RedirectArrow} {
+      display: none;
+    }
+    ${PrimaryButton} {
       display: none;
     }
   }
@@ -93,4 +102,12 @@ export const Divider = styled(HeaderHorizontalDivider)`
 export const LevelLabel = styled.p`
   font-size: 12px;
   font-weight: ${fontWeight.medium};
+`;
+
+export const InfoTextContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `;

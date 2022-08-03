@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { TickIcon } from "../../assets";
 
 import { color, margins } from "../../design";
-import { disappear, SecondaryButton, slideUpOpacity } from "../atoms";
+import { fadeUp, SecondaryButton } from "../atoms";
 import { HeaderHorizontalDivider } from "../atoms/lines";
 
 export const ArrowContainer = styled.div`
@@ -36,9 +36,9 @@ export const NotificationWrapper = styled.div<NotificationProps>`
       max-height: ${height - 140}px;
    `};
    overflow-y: scroll;
-   animation: ${disappear}, ${slideUpOpacity} cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-   animation-duration: 1s, 2s;
-   animation-delay: 0s, 1s;
+   animation: ${fadeUp} 1.2s ease-out 0s forwards;
+   opacity: 0;
+   transform: translate3d(0, 1rem, 0);
 `;
 
 export const NotificationHeader = styled.div`

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { CloseIcon, BellIcon } from "../../assets";
 import { SecondaryButton } from "../../components";
-import { disappear, fadeIn, slideUpOpacity } from "../../components/atoms/animations";
+import { disappear, fadeIn, fadeUp } from "../../components/atoms/animations";
 import { KreadIcon } from "../../components/logo/styles";
 
 import { Group } from "../../components/switch-selector/styles";
@@ -121,9 +121,9 @@ export const Tag = styled.div`
 `;
 
 export const DetailContainer = styled.div`
-  animation: ${disappear}, ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-  animation-duration: 1.6s, 2s;
-  animation-delay: 0s, 1.6s;
+  animation: ${fadeUp} 1.2s ease-out 0s forwards;
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
   width: 60%;
   ${DetailSectionWrap}{
     max-width: 100%;
