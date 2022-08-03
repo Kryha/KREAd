@@ -76,3 +76,20 @@ export const getCharacterKey = (characterName, state) => {
   );
   return { key };
 };
+
+/**
+ * Gets the characacter record given character name
+ *
+ * @param {string} characterName
+ * @param {State} state
+ * @returns {CharacterRecord}
+ */
+export const getCharacterRecord = (characterName, state) => {
+  const characterRecord = state.characters.find(
+    ({ character }) => character.name === characterName,
+  );
+  assert(characterRecord, X`${errors.character404}`);
+  assert(characterRecord.inventorySeat, X`${errors.inventory404}`);
+
+  return characterRecord;
+};

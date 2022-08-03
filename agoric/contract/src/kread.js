@@ -301,12 +301,8 @@ const start = async (zcf) => {
     const characterName = providedCharacterKey.name;
 
     // Find characterRecord entry based on provided key
-    const characterRecord = STATE.characters.find(
-      (c) => c.name === characterName,
-    );
-    assert(characterRecord, X`${errors.inventory404}`);
+    const characterRecord = state.getCharacterRecord(characterName, STATE);
     const inventorySeat = characterRecord.inventory;
-    assert(inventorySeat, X`${errors.inventory404}`);
 
     const { want } = seat.getProposal();
     const { CharacterKey2: wantedCharacter } = want;
@@ -324,6 +320,7 @@ const start = async (zcf) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
+    // Ensure proposed inventory is valid
     const { value: currentInventoryItems } =
       inventorySeat.getAmountAllocated('Item');
     validateInventoryState([
@@ -333,18 +330,16 @@ const start = async (zcf) => {
     ]);
 
     // Widthdraw Item and Key from user seat
-    seat.decrementBy(harden({ Item: providedItemAmount }));
-    seat.decrementBy(harden({ CharacterKey1: providedCharacterKeyAmount }));
+    seat.decrementBy({ Item: providedItemAmount });
+    seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
 
     // Deposit Item and Key to inventory seat
-    inventorySeat.incrementBy(harden({ Item: providedItemAmount }));
-    inventorySeat.incrementBy(
-      harden({ CharacterKey: providedCharacterKeyAmount }),
-    );
+    inventorySeat.incrementBy({ Item: providedItemAmount });
+    inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
     // Widthdraw Key from character seat and Deposit into user seat
-    inventorySeat.decrementBy(harden({ CharacterKey: inventoryCharacterKey }));
-    seat.incrementBy(harden({ CharacterKey2: inventoryCharacterKey }));
+    inventorySeat.decrementBy({ CharacterKey: inventoryCharacterKey });
+    seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
 
     zcf.reallocate(seat, inventorySeat);
 
@@ -385,27 +380,25 @@ const start = async (zcf) => {
       },
     });
 
-    // Retrieve Character key from user seat and find matching inventory record
+    // Retrieve Character key from user seat
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
     const providedCharacterKey = providedCharacterKeyAmount.value[0];
     const characterName = providedCharacterKey.name;
-    const characterRecord = STATE.characters.find(
-      (c) => c.name === characterName,
-    );
-    assert(characterRecord, X`${errors.inventory404}`);
+
+    // Find character record entry based on provided key
+    const characterRecord = state.getCharacterRecord(characterName, STATE);
     const inventorySeat = characterRecord.inventory;
-    assert(inventorySeat, X`${errors.inventory404}`);
     assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 
     // Get reference to the wanted items and key
     const { want } = seat.getProposal();
     const { Item: requestedItems, CharacterKey2: wantedCharacter } = want;
     assert(requestedItems, X`${errors.noItemsRequested}`);
-
-    // Get reference to the Character Key in inventorySeat
     const inventoryCharacterKey =
       inventorySeat.getAmountAllocated('CharacterKey');
     assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
+
+    // Ensure requested key and inventory key match
     assert(
       AmountMath.isEqual(
         wantedCharacter,
@@ -415,16 +408,13 @@ const start = async (zcf) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    // Widthdraw Key from user seat
+    // Inventory Key Swap
     seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-    // Widthdraw Character Key from inventory seat
-    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-    // Deposit Character Key in user seat
     seat.incrementBy({ CharacterKey2: wantedCharacter });
-    // Deposit Character key in inventory seat
+    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
     inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
-    // Move item from inventory to user seat
+    // Deposit item from inventory to user seat
     seat.incrementBy(inventorySeat.decrementBy({ Item: requestedItems }));
 
     zcf.reallocate(seat, inventorySeat);
@@ -474,19 +464,16 @@ const start = async (zcf) => {
     // const providedItems = providedItemAmount.value;
     const characterName = providedCharacterKey.name;
 
-    // Find characterRecord entry based on provided key
-    const characterRecord = STATE.characters.find(
-      (c) => c.name === characterName,
-    );
-    assert(characterRecord, X`${errors.inventory404}`);
+    // Find character record entry based on provided key
+    const characterRecord = state.getCharacterRecord(characterName, STATE);
     const inventorySeat = characterRecord.inventory;
-    assert(inventorySeat, X`${errors.inventory404}`);
+    assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 
     const { want } = seat.getProposal();
     const { CharacterKey2: wantedCharacterAmount, Item2: wantedItemsAmount } =
       want;
 
-    // Get current Character Key from inventorySeat
+    // Ensure requested key and inventory key match
     const inventoryCharacterKey =
       inventorySeat.getAmountAllocated('CharacterKey');
     assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
@@ -558,13 +545,10 @@ const start = async (zcf) => {
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
     const providedCharacterKey = providedCharacterKeyAmount.value[0];
     const characterName = providedCharacterKey.name;
-    const characterRecord = STATE.characters.find(
-      (c) => c.name === characterName,
-    );
 
-    assert(characterRecord, X`${errors.inventory404}`);
+    // Find character record entry based on provided key
+    const characterRecord = state.getCharacterRecord(characterName, STATE);
     const inventorySeat = characterRecord.inventory;
-    assert(inventorySeat, X`${errors.inventory404}`);
     assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 
     // Get reference to the wanted item
@@ -586,13 +570,10 @@ const start = async (zcf) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    // Widthdraw Key from user seat
+    // Swap Inventory Keys
     seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-    // Widthdraw Character Key from inventory seat
-    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-    // Deposit Character Key in user seat
     seat.incrementBy({ CharacterKey2: wantedCharacter });
-    // Deposit Character key in inventory seat
+    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
     inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
     // Move items from inventory to user set
