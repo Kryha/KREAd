@@ -34,7 +34,9 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
     e.stopPropagation();
     onButtonClick(character);
   };
+
   if (!isCharacterCategory(character.nft.type)) return <></>;
+
   return (
     <Info
       tabIndex={0}

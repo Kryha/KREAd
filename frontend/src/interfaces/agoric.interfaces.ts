@@ -34,6 +34,8 @@ export interface AgoricState {
   purses: Purses;
   contracts: Contracts;
   agoric: AgoricService;
+  offers: any[];
+
   isLoading: boolean;
 }
 
@@ -54,6 +56,11 @@ interface SetShowApproveDappModal {
 
 interface SetTokenPurses {
   type: "SET_TOKEN_PURSES";
+  payload: any[];
+}
+
+interface SetOffers {
+  type: "SET_OFFERS";
   payload: any[];
 }
 
@@ -106,4 +113,5 @@ export type AgoricStateActions =
   | SetCharacterContract
   | SetItemPurses
   | SetApiSend
-  | SetLoading;
+  | SetLoading
+  | SetOffers;

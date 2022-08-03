@@ -4,17 +4,19 @@ import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
-import { useItem, useSellItem } from "../../service";
+import { useMyItem, useSellItem } from "../../service";
 import { Sell } from "./sell";
 
 export const ItemSell = () => {
   const { id } = useParams<"id">();
 
-  const { data, isLoading, isError } = useItem(String(id));
-  const sellItem = useSellItem();
+  const idString = String(id);
+
+  const [data, isLoading] = useMyItem(idString);
+  const sellItem = useSellItem(idString);
 
   const submitForm = (price: number) => {
-    sellItem.mutate({ price });
+    sellItem.callback(price);
   };
 
   if (sellItem.isError) return <ErrorView />;
@@ -23,10 +25,15 @@ export const ItemSell = () => {
 
   if (isLoading) return <LoadingPage />;
 
-  if (!data || isError) return <ErrorView />;
+  if (!data) return <ErrorView />;
 
   return (
-    <Sell onSubmit={submitForm} text={{ sell: text.store.sellItem }} data={{ ...data, image: data.thumbnail }}>
+    <Sell
+      isLoading={sellItem.isLoading}
+      onSubmit={submitForm}
+      text={{ sell: text.store.sellItem }}
+      data={{ ...data, image: data.thumbnail }}
+    >
       <FadeInOut show>
         <ItemDetailSection item={data} />
       </FadeInOut>

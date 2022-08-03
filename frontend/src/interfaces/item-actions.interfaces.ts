@@ -1,12 +1,14 @@
-import { Item } from "./item.interfaces";
+import { Item, ItemInMarket } from "./item.interfaces";
 
+// TODO: add fetched flag for each array
 export type ItemState = {
   items: Item[];
   owned: Item[];
   equipped: Item[];
-  // TODO: use Item type enriched with instance and publicFacet instead of any
-  market: any[];
+  market: ItemInMarket[];
+
   fetched: boolean;
+  marketFetched: boolean;
 };
 
 interface SetItems {
@@ -36,16 +38,21 @@ interface SetEquippedItems {
 
 interface SetItemsMarket {
   type: "SET_ITEMS_MARKET";
-  payload: any[];
+  payload: ItemInMarket[];
 }
 
 interface AddItemsMarket {
   type: "ADD_ITEMS_MARKET";
-  payload: any[];
+  payload: ItemInMarket[];
 }
 
 interface SetFetched {
   type: "SET_FETCHED";
+  payload: boolean;
+}
+
+interface SetMarketFetched {
+  type: "SET_MARKET_FETCHED";
   payload: boolean;
 }
 
@@ -62,6 +69,7 @@ export type ItemStateActions =
   | AddOwnedItems
   | SetItemsMarket
   | AddItemsMarket
-  | SetEquippedItems;
+  | SetEquippedItems
+  | SetMarketFetched;
 
 export type ItemDispatch = React.Dispatch<ItemStateActions>;

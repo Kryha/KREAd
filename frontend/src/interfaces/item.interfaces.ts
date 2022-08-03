@@ -16,10 +16,27 @@ export interface Item {
   baseMaterial: string;
   colors: string[];
   projectDescription: string;
-  price: number;
   details: Detail;
   date: string;
   activity: ActivityEvent[];
+}
+
+export interface ItemInMarket {
+  id: string;
+  item: Item;
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
+}
+
+export interface ItemInMarketBackend {
+  id: bigint;
+  item: ItemBackend;
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
 }
 
 export interface ItemBackend extends Omit<Item, "id"> {

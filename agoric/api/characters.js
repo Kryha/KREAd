@@ -1,7 +1,7 @@
 export const defaultCharacters = [
   {
     title: 'character 1',
-    type: 'Tempet Scavenger',
+    type: 'tempetScavenger',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
@@ -16,7 +16,7 @@ export const defaultCharacters = [
   },
   {
     title: 'character 2',
-    type: 'Tempet Scavenger',
+    type: 'tempetScavenger',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
@@ -32,7 +32,7 @@ export const defaultCharacters = [
   {
     title: 'character 3',
     url: 'https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png',
-    type: 'Tempet Scavenger',
+    type: 'tempetScavenger',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
@@ -48,7 +48,7 @@ export const defaultCharacters = [
   {
     title: 'character 4',
     url: 'https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png',
-    type: 'Tempet Scavenger',
+    type: 'tempetScavenger',
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,

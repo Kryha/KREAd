@@ -21,6 +21,7 @@ interface ItemDetailSectionProps {
 // TODO: Make index dynamic
 export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions }) => {
   const { width } = useViewport();
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}

@@ -3,10 +3,10 @@ import { FC, useState } from "react";
 import { ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useMyFilteredCharacters } from "../../service";
+import { useMyCharacters } from "../../service";
 
 import { text } from "../../assets";
-import { characterCategories, sorting } from "../../assets/text/filter-options";
+import { characterCategories, sortingInventory } from "../../assets/text/filter-options";
 import { color } from "../../design";
 
 interface Props {
@@ -19,7 +19,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const [myCharacters, isLoading] = useMyFilteredCharacters({ category: selectedCategory, sorting: selectedSorting });
+  const [myCharacters, isLoading] = useMyCharacters({ category: selectedCategory, sorting: selectedSorting });
 
   if (isLoading) return <LoadingPage />;
 
@@ -52,7 +52,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
           <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
-            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sorting} />
+            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sortingInventory} />
           </Filters>
         </SortContainer>
       </ListHeader>
@@ -75,7 +75,13 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
-            data={{ ...character.nft, image: character.equippedItems, category: character.nft.type, id: character.nft.id, characterImage: character.nft.image }}
+            data={{
+              ...character.nft,
+              image: character.equippedItems,
+              category: character.nft.type,
+              id: character.nft.id,
+              characterImage: character.nft.image,
+            }}
             key={character.nft.id}
             onClick={onCharacterClick}
             removeInitial={removeInitial}

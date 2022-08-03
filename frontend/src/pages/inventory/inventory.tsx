@@ -24,6 +24,7 @@ export const Inventory: FC = () => {
   );
 
   const showItemsInventory = selectedPage === Page.Items;
+
   return (
     <BaseRoute sideNavigation={<></>}>
       <InventoryWrapper>{pageSelector}</InventoryWrapper>

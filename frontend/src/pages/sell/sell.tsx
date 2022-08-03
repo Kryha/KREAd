@@ -6,19 +6,34 @@ import { ButtonText, Data, FormHeaderClose, FormText, Input, Label, MenuItem, Pr
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { FormCard } from "../create-character/styles";
-import { ArrowUp, ButtonContainer, CardContainer, ContentWrapper, DetailContainer, ErrorContainer, FormFields, InputContainer, InputWrapper, TextLabel, Tick, Warning } from "./styles";
+import {
+  ArrowUp,
+  ButtonContainer,
+  CardContainer,
+  ContentWrapper,
+  DetailContainer,
+  ErrorContainer,
+  FormFields,
+  InputContainer,
+  InputWrapper,
+  TextLabel,
+  Tick,
+  Warning,
+} from "./styles";
 import { color } from "../../design";
 import { ButtonInfo } from "../../components/button-info";
 import { SellText } from "./types";
 
 interface Props {
   children: ReactNode;
-  onSubmit: (price: number) => void;
   text: SellText;
   data: Data;
+
+  isLoading?: boolean;
+  onSubmit: (price: number) => void;
 }
 
-export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data }) => {
+export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoading }) => {
   const { width, height } = useViewport();
 
   const {
@@ -61,7 +76,8 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data }) => {
           </FormFields>
           <FormText>{text.store.sellDescription}</FormText>
           <ButtonContainer>
-            <PrimaryButton type="submit" disabled={!isValid}>
+            {/* TODO: add spinner on loading */}
+            <PrimaryButton type="submit" disabled={!isValid || isLoading}>
               <ButtonText customColor={color.white}>{text.store.placeInShop}</ButtonText>
               <ArrowUp />
             </PrimaryButton>
