@@ -1,5 +1,6 @@
 // @ts-check
 import '@agoric/zoe/exported';
+import { E } from '@endo/eventual-send';
 import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
@@ -48,6 +49,7 @@ const start = async (zcf) => {
     itemCount: 0n,
     characterCount: 0n,
   };
+
   /**
    * Private state
    *
@@ -68,6 +70,7 @@ const start = async (zcf) => {
    *   moneyIssuer: Issuer
    *   moneyBrand: Brand
    *   sellAssetsInstallation: Installation
+   *   chainTimerService: TimerService
    * }} config
    * @returns {string}
    */
@@ -78,6 +81,7 @@ const start = async (zcf) => {
     moneyIssuer,
     moneyBrand,
     sellAssetsInstallation,
+    chainTimerService,
   }) => {
     state.config = {
       baseCharacters,
@@ -86,6 +90,7 @@ const start = async (zcf) => {
       moneyIssuer,
       moneyBrand,
       sellAssetsInstallation,
+      chainTimerService,
     };
     assert(!Number.isNaN(seed), X`Seed must be a number`);
     PRNG = mulberry32(seed);
@@ -156,7 +161,7 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintItemNFT = (seat) => {
+  const mintItemNFT = async (seat) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
     assertProposalShape(seat, {
       want: { Item: null },
@@ -164,11 +169,16 @@ const start = async (zcf) => {
     const { want } = seat.getProposal();
 
     // @ts-ignore
+    const currentTime = await E(
+      state.config.chainTimerService,
+    ).getCurrentTimestamp();
+
+    // @ts-ignore
     const items = want.Item.value.map((item) => {
       const id = state.itemCount;
       state.itemCount = 1n + state.itemCount;
 
-      return { ...item, id };
+      return { ...item, id, date: Number(currentTime) };
     });
 
     const newItemAmount = AmountMath.make(itemBrand, harden(items));
@@ -183,7 +193,7 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintCharacterNFT = (seat) => {
+  const mintCharacterNFT = async (seat) => {
     assert(state.config?.completed, X`${errors.noConfig}`);
     // TODO add Give statement with Money
     assertProposalShape(seat, {
@@ -199,18 +209,21 @@ const start = async (zcf) => {
     const newCharacterId = state.characterCount;
     const randomCharacterBase = getRandomBaseCharacter();
 
+    // @ts-ignore
+    const currentTime = await E(
+      state.config.chainTimerService,
+    ).getCurrentTimestamp();
     // Merge random base character with name input, id, and keyId
-    // TODO: Replace Date by a valid time generator now it returns NaN
     const newCharacter1 = {
       ...randomCharacterBase,
-      // date: Date.now(),
+      date: Number(currentTime),
       id: newCharacterId,
       name: newCharacterName,
       keyId: 1,
     };
     const newCharacter2 = {
       ...randomCharacterBase,
-      // date: Date.now(),
+      date: Number(currentTime),
       id: newCharacterId,
       name: newCharacterName,
       keyId: 2,
@@ -235,11 +248,11 @@ const start = async (zcf) => {
     );
 
     // Mint items to inventory seat
-    // TODO: Replace Date by a valid time generator now it returns NaN
     const allDefaultItems = Object.values(state.config.defaultItems);
     const uniqueItems = allDefaultItems.map((item) => {
       const newItemWithId = {
         ...item,
+        date: Number(currentTime),
         id: state.itemCount,
       };
 

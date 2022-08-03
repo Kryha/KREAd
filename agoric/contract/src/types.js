@@ -14,10 +14,11 @@
  * @typedef {{
  *   baseCharacters: object[]
  *   defaultItems: object[]
- *   completed?: boolean
+ *   completed: boolean
  *   moneyIssuer: Issuer
  *   moneyBrand: Brand
  *   sellAssetsInstallation: Installation
+ *   chainTimerService?: TimerService
  * }} Config
  *
  * @typedef {{
