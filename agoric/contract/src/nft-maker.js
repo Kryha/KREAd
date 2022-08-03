@@ -1,5 +1,6 @@
 // @ts-check
 import '@agoric/zoe/exported';
+import { E } from '@endo/eventual-send';
 import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
@@ -59,6 +60,7 @@ const start = async (zcf) => {
       },
     },
   };
+
   /**
    * Private STATE
    *
@@ -79,6 +81,7 @@ const start = async (zcf) => {
    *   moneyIssuer: Issuer
    *   moneyBrand: Brand
    *   sellAssetsInstallation: Installation
+   *   chainTimerService: TimerService
    * }} config
    * @returns {string}
    */
@@ -89,6 +92,7 @@ const start = async (zcf) => {
     moneyIssuer,
     moneyBrand,
     sellAssetsInstallation,
+    chainTimerService,
   }) => {
     STATE.config = {
       baseCharacters,
@@ -97,6 +101,7 @@ const start = async (zcf) => {
       moneyIssuer,
       moneyBrand,
       sellAssetsInstallation,
+      chainTimerService,
     };
     assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
     PRNG = mulberry32(seed);
@@ -109,19 +114,24 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintItemNFT = (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
+  const mintItemNFT = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
     assertProposalShape(seat, {
       want: { Item: null },
     });
     const { want } = seat.getProposal();
 
     // @ts-ignore
+    const currentTime = await E(
+      state.config.chainTimerService,
+    ).getCurrentTimestamp();
+
+    // @ts-ignore
     const items = want.Item.value.map((item) => {
       const id = STATE.itemCount;
       STATE.itemCount = 1n + STATE.itemCount;
 
-      return { ...item, id };
+      return { ...item, id, date: Number(currentTime) };
     });
 
     const newItemAmount = AmountMath.make(itemBrand, harden(items));
@@ -136,8 +146,8 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintCharacterNFT = (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
+  const mintCharacterNFT = async (seat) => {
+    assert(state.config?.completed, X`${errors.noConfig}`);
     // TODO add Give statement with Money
     assertProposalShape(seat, {
       want: {
@@ -148,12 +158,38 @@ const start = async (zcf) => {
     const newCharacterName = want.Asset.value[0].name;
     assert(state.nameIsUnique(newCharacterName, STATE), X`${errors.nameTaken}`);
 
-    STATE.characterCount = 1n + STATE.characterCount;
-    const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
-      newCharacterName,
-      state.getRandomBaseCharacter(STATE),
-      STATE,
-    ).map((character) => AmountMath.make(characterBrand, harden([character])));
+    state.characterCount = 1n + state.characterCount;
+    const newCharacterId = state.characterCount;
+    const randomCharacterBase = getRandomBaseCharacter();
+
+    // @ts-ignore
+    const currentTime = await E(
+      state.config.chainTimerService,
+    ).getCurrentTimestamp();
+    // Merge random base character with name input, id, and keyId
+    const newCharacter1 = {
+      ...randomCharacterBase,
+      date: Number(currentTime),
+      id: newCharacterId,
+      name: newCharacterName,
+      keyId: 1,
+    };
+    const newCharacter2 = {
+      ...randomCharacterBase,
+      date: Number(currentTime),
+      id: newCharacterId,
+      name: newCharacterName,
+      keyId: 2,
+    };
+
+    const newCharacterAmount1 = AmountMath.make(
+      characterBrand,
+      harden([newCharacter1]),
+    );
+    const newCharacterAmount2 = AmountMath.make(
+      characterBrand,
+      harden([newCharacter2]),
+    );
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
@@ -165,12 +201,12 @@ const start = async (zcf) => {
     );
 
     // Mint items to inventory seat
-    // TODO: Replace Date by a valid time generator now it returns NaN
-    const allDefaultItems = Object.values(STATE.config.defaultItems);
+    const allDefaultItems = Object.values(state.config.defaultItems);
     const uniqueItems = allDefaultItems.map((item) => {
       const newItemWithId = {
         ...item,
-        id: STATE.itemCount,
+        date: Number(currentTime),
+        id: state.itemCount,
       };
 
       STATE.itemCount = 1n + STATE.itemCount;

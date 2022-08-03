@@ -80,6 +80,7 @@ const start = async (zcf) => {
    *   moneyIssuer: Issuer
    *   moneyBrand: Brand
    *   sellAssetsInstallation: Installation
+   *   chainTimerService: TimerService
    * }} config
    * @returns {string}
    */
@@ -90,6 +91,7 @@ const start = async (zcf) => {
     moneyIssuer,
     moneyBrand,
     sellAssetsInstallation,
+    chainTimerService,
   }) => {
     STATE.config = {
       baseCharacters,
@@ -98,6 +100,7 @@ const start = async (zcf) => {
       moneyIssuer,
       moneyBrand,
       sellAssetsInstallation,
+      chainTimerService,
     };
     assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
     PRNG = mulberry32(seed);
@@ -110,7 +113,7 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintItemNFT = (seat) => {
+  const mintItemNFT = async (seat) => {
     assert(STATE.config?.completed, X`${errors.noConfig}`);
     assertProposalShape(seat, {
       want: { Item: null },
@@ -118,11 +121,13 @@ const start = async (zcf) => {
     const { want } = seat.getProposal();
 
     // @ts-ignore
+    const currentTime = await state.getCurrentTime();
+
+    // @ts-ignore
     const items = want.Item.value.map((item) => {
       const id = STATE.itemCount;
       STATE.itemCount = 1n + STATE.itemCount;
-
-      return { ...item, id };
+      return { ...item, id, date: currentTime };
     });
 
     const newItemAmount = AmountMath.make(itemBrand, harden(items));
@@ -137,7 +142,7 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const mintCharacterNFT = (seat) => {
+  const mintCharacterNFT = async (seat) => {
     assert(STATE.config?.completed, X`${errors.noConfig}`);
     // TODO add Give statement with Money
     assertProposalShape(seat, {
@@ -153,7 +158,8 @@ const start = async (zcf) => {
     const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
       newCharacterName,
       state.getRandomBaseCharacter(STATE),
-      STATE,
+      STATE.characterCount,
+      await state.getCurrentTime(),
     ).map((character) => AmountMath.make(characterBrand, harden([character])));
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();

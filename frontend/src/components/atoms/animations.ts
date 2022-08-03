@@ -47,19 +47,6 @@ export const disappear = keyframes`
   }
 `;
 
-export const slideInUp = keyframes`
-  0% {
-    -webkit-transform: translate3d(0,5%,0);
-    opacity: 0;
-    transform: translate3d(0,5%, 0);
-  }
-  100% {
-    -webkit-transform: none;
-    transform: none;
-    opacity: 1;
-  }
-`;
-
 export const slideLeft = keyframes`
   0% {
     right: 0;
@@ -113,5 +100,20 @@ export const zoomIn = keyframes`
   }
   100% {
     transform: scale(1.5, 1.5);
+  }
+`;
+
+export const fadeUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
+  }
+  75% {
+    opacity: 0.75;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 `;

@@ -1,4 +1,5 @@
 import { assert, details as X } from '@agoric/assert';
+import { E } from '@endo/eventual-send';
 import { errors } from './errors';
 
 /**
@@ -13,6 +14,7 @@ export const getRandomBaseCharacter = (state) => {
   );
   return state.config.baseCharacters[number];
 };
+
 /**
  * @param {Function} contractConfigured
  * @param {State} state
@@ -93,3 +95,6 @@ export const getCharacterRecord = (characterName, state) => {
 
   return characterRecord;
 };
+
+export const getCurrentTime = async (state) =>
+  E(state.config.chainTimerService).getCurrentTimestamp();

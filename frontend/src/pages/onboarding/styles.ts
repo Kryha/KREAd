@@ -1,6 +1,7 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, CharacterImgs, PrimaryButton, TitleText } from "../../components";
+import { bounce, CharacterImgs, disappear, fadeIn, PrimaryButton, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { color, fontWeight, zIndex } from "../../design";
 
@@ -38,13 +39,17 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
   }
 `;
 
-export const ButtonContainer = styled.div`
-  margin-top: 46px;
+interface ButtonProps {
+  isVisible: boolean;
+}
+
+export const ButtonContainer = styled.div<ButtonProps>`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   padding: 0px;
   gap: 16px;
+  z-index: 100;
   ${PrimaryButton} {
     &:hover {
       ${ArrowUp} {
@@ -54,6 +59,44 @@ export const ButtonContainer = styled.div`
       }
     }
   }
+  ${({ isVisible }): string => {
+    return isVisible
+      ? `
+      ${PrimaryButton} {
+        -webkit-transition: 0.3s ease-out;
+        transition: 0.3s ease-out;
+        will-change: transform;
+        position: absolute;
+        left: 40px;
+        top: 40px;
+      };
+      background: rgba(255, 255, 255, 0.46);
+      backdrop-filter: blur(4px);
+      padding-top: 40px;
+      padding-bottom: 40px;
+      height: 120px;
+      width: 460px;
+      position: absolute;
+        `
+      : `
+      margin-top: 46px;
+      ${PrimaryButton} {
+        position: fixed;
+        left: 40px;
+        top: 464px;
+      }
+      `;
+  }};
+
+  ${({ isVisible }) => (isVisible === true ?
+    css` `
+    :
+    css`
+    animation: ${disappear}, ${fadeIn};
+    animation-duration: 0.5s, 0.5s;
+    animation-delay: 0s, 0.5s;
+
+  `)};
 `;
 
 export const ArrowUpRight = styled(ArrowUpRightIcon)`
@@ -69,6 +112,7 @@ export const EndContent = styled.div<HeightProps>`
   height: 100vh;
   background-size: cover;
   scroll-snap-align: start;
+  padding-top: 110px;
 `;
 
 export const MiddleContent = styled.div<HeightProps>`
@@ -80,6 +124,7 @@ export const MiddleContent = styled.div<HeightProps>`
   height: 100vh;
   background-size: cover;
   scroll-snap-align: start;
+  padding-top: 110px;
 `;
 
 export const FooterContainer = styled.div`
@@ -175,14 +220,14 @@ export const ArrowDown = styled(ArrowDownIcon)`
 
 export const SectionContainer = styled.div`
   padding-left: 40px;
-  padding-top: 120px;
+  padding-top: 50px;
   width: 460px;
 `;
 
 export const ScrollContainer = styled.div`
   position: absolute;
   left: 40px;
-  bottom: 53px;
+  bottom: 73px;
 `;
 
 export const GeneralSectionContainer = styled.div`
@@ -190,20 +235,27 @@ export const GeneralSectionContainer = styled.div`
   width: 460px;
 `;
 
-export const ConnectContainer = styled.div`
-  background: rgba(255, 255, 255, 0.46);
-  backdrop-filter: blur(4px);
-  width: 460px;
-  height: 120px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  ${PrimaryButton} {
-    &:hover {
-      ${ArrowUp} {
-        path {
-          stroke: ${color.black};
-        }
-      }
-    }
-  }
+export const ConnectContainer = styled.div<ButtonProps>`
+${({ isVisible }): string => {
+    return isVisible
+      ? `
+        background: rgba(255, 255, 255, 0.46);
+        backdrop-filter: blur(4px);
+        z-index: 100;
+        width: 460px;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        position: relative;
+      `
+      : "";
+  }};
+  ${({ isVisible }) => (isVisible === true ?
+    css` `
+    :
+    css`
+    animation: ${disappear}, ${fadeIn};
+    animation-duration: 0.5s, 0.5s;
+    animation-delay: 0s, 0.5s;
+
+  `)};
 `;

@@ -16,8 +16,7 @@ export const Input = styled.input`
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
-  ::placeholder {
-    opacity: 0.4;
+  &::placeholder {
     color: ${color.darkGrey};
     :first-letter {
       text-transform: capitalize;

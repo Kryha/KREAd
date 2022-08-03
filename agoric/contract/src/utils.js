@@ -33,23 +33,28 @@ export const makeHashId = (str, seed = 42) => {
  * @param {string} name
  * @param {Object} randomCharacterBase
  * @param {State} state
+ * @param currentTime
+ * @param newCharacterId
  * @returns {Object[]}
  */
-export const makeCharacterNftObjs = (name, randomCharacterBase, state) => {
-  const newCharacterId = state.characterCount;
-
+export const makeCharacterNftObjs = (
+  name,
+  randomCharacterBase,
+  currentTime,
+  newCharacterId,
+) => {
   // Merge random base character with name input, id, and keyId
   // TODO: Replace Date by a valid time generator now it returns NaN
   const newCharacter1 = {
     ...randomCharacterBase,
-    // date: Date.now(),
+    date: currentTime,
     id: newCharacterId,
     name,
     keyId: 1,
   };
   const newCharacter2 = {
     ...randomCharacterBase,
-    // date: Date.now(),
+    date: currentTime,
     id: newCharacterId,
     name,
     keyId: 2,

@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { OverviewContainer } from "../../pages/inventory/styles";
 import { Overlay } from "../atoms";
-import { disappear, fadeOut, slideUpOpacity } from "../atoms/animations";
+import { fadeOut, fadeUp } from "../atoms/animations";
 import { CharacterWrapper } from "../character-card/styles";
 import { EmptyCardWrapper } from "../empty-card/styles";
 
@@ -18,9 +18,9 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering)
       return css`
-          animation: ${disappear}, ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-          animation-duration: 0.6s, 0.9s;
-          animation-delay: 0s, 0.6s;
+        animation: ${fadeUp} 1.2s ease-out 0s forwards;
+        opacity: 0;
+        transform: translate3d(0, 1rem, 0);
         `;
     if (exiting)
       return css`
@@ -33,9 +33,9 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering === true)
       return css`
-          animation: ${disappear}, ${slideUpOpacity} 1.5s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-          animation-duration: 0.4s, 0.8s;
-          animation-delay: 0s, 0.4s;
+          animation: ${fadeUp} 1.2s ease-out 0s forwards;
+          opacity: 0;
+          transform: translate3d(0, 1rem, 0);
         `;
     if (exiting === true)
       return css`
@@ -53,9 +53,9 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering === true)
       return css`
-          animation: ${disappear}, ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-          animation-duration: 0.4s, 0.6s;
-          animation-delay: 0s, 0.4s;
+        animation: ${fadeUp} 1.2s ease-out 0s forwards;
+        opacity: 0;
+        transform: translate3d(0, 1rem, 0);
         `;
     if (exiting === true)
       return css`
@@ -68,9 +68,9 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering === true)
       return css`
-          animation: ${disappear}, ${slideUpOpacity} 2s cubic-bezier(0.4, 0.9, 0.2, 1) 500ms forwards;
-          animation-duration: 0.4s, 0.6s;
-          animation-delay: 0s, 0.4s;
+      animation: ${fadeUp} 1.2s ease-out 0s forwards;
+      opacity: 0;
+      transform: translate3d(0, 1rem, 0);
         `;
     if (exiting === true)
       return css`
