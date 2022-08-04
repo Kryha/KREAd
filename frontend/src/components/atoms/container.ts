@@ -50,14 +50,12 @@ export const Overlay = styled.div<OverlayProps>`
   height: 100vh;
   background: rgba(255, 255, 255, 0.46);
   backdrop-filter: blur(4px);
-  ${({ isOnTop }): string => {
-    return isOnTop
+  ${({ isOnTop }): string =>
+    isOnTop
       ? `
-      z-index: 1001;
-        `
+    z-index: 1001;
+      `
       : `
-      z-index: 100;
-      `;
-  }};
-
+    z-index: 100;
+   `};
 `;

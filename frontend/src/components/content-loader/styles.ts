@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { color, margins } from "../../design";
-import { Logo } from "../../assets";
+import { Loading } from "../../assets";
 
 const spin = keyframes`
   0% {
@@ -36,325 +36,336 @@ interface AnimationProps {
 
 export const LogoWrap = styled.div<AnimationProps>`
 ${({ iteration }): string => `
-    #efxcHCR325l5 {
-      animation: efxcHCR325l5_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+  #eB1kvmsL79H3 {
+    animation: eB1kvmsL79H3_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H3_c_o {
+    0% {
+      opacity: 1;
     }
-    @keyframes efxcHCR325l5_c_o {
-      0% {
-        opacity: 1;
-      }
-      9.803922% {
-        opacity: 1;
-      }
-      23.529412% {
-        opacity: 1;
-      }
-      33.333333% {
-        opacity: 1;
-      }
-      35.294118% {
-        opacity: 0;
-      }
-      47.058824% {
-        opacity: 0;
-      }
-      49.019608% {
-        opacity: 1;
-      }
-      60.784314% {
-        opacity: 1;
-      }
-      62.745098% {
-        opacity: 0;
-      }
-      72.54902% {
-        opacity: 0;
-      }
-      74.509804% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 1;
-      }
+    50% {
+      opacity: 1;
     }
-    #efxcHCR325l6 {
-      animation: efxcHCR325l6_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+    52.941176% {
+      opacity: 0;
     }
-    @keyframes efxcHCR325l6_c_o {
-      0% {
-        opacity: 1;
-      }
-      9.803922% {
-        opacity: 1;
-      }
-      11.764706% {
-        opacity: 0;
-      }
-      21.568627% {
-        opacity: 0;
-      }
-      23.529412% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 1;
-      }
+    82.352941% {
+      opacity: 0;
     }
-    #efxcHCR325l7 {
-      animation: efxcHCR325l7_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+    85.294118% {
+      opacity: 1;
     }
-    @keyframes efxcHCR325l7_c_o {
-      0% {
-        opacity: 1;
-      }
-      33.333333% {
-        opacity: 1;
-      }
-      35.294118% {
-        opacity: 1;
-      }
-      60.784314% {
-        opacity: 1;
-      }
-      72.54902% {
-        opacity: 1;
-      }
-      74.509804% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 0;
-      }
+    100% {
+      opacity: 1;
     }
-    #efxcHCR325l9 {
-      animation: efxcHCR325l9_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+  }
+  #eB1kvmsL79H5 {
+    animation: eB1kvmsL79H5_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H5_c_o {
+    0% {
+      opacity: 0;
     }
-    @keyframes efxcHCR325l9_c_o {
-      0% {
-        opacity: 1;
-      }
-      72.54902% {
-        opacity: 1;
-      }
-      74.509804% {
-        opacity: 0;
-      }
-      84.313725% {
-        opacity: 0;
-      }
-      86.27451% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 1;
-      }
+    14.705882% {
+      opacity: 0;
     }
-    #efxcHCR325l10 {
-      animation: efxcHCR325l10_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+    17.647059% {
+      opacity: 1;
     }
-    @keyframes efxcHCR325l10_c_o {
-      0% {
-        opacity: 1;
-      }
-      21.568627% {
-        opacity: 1;
-      }
-      23.529412% {
-        opacity: 0;
-      }
-      33.333333% {
-        opacity: 0;
-      }
-      35.294118% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 1;
-      }
+    100% {
+      opacity: 1;
     }
-    #efxcHCR325l11 {
-      animation: efxcHCR325l11_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+  }
+  #eB1kvmsL79H6 {
+    animation: eB1kvmsL79H6_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H6_c_o {
+    0% {
+      opacity: 1;
     }
-    @keyframes efxcHCR325l11_c_o {
-      0% {
-        opacity: 1;
-      }
-      9.803922% {
-        opacity: 1;
-      }
-      11.764706% {
-        opacity: 0;
-      }
-      21.568627% {
-        opacity: 0;
-      }
-      23.529412% {
-        opacity: 1;
-      }
-      33.333333% {
-        opacity: 1;
-      }
-      35.294118% {
-        opacity: 0;
-      }
-      60.784314% {
-        opacity: 0;
-      }
-      62.745098% {
-        opacity: 1;
-      }
-      84.313725% {
-        opacity: 1;
-      }
-      86.27451% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 0;
-      }
+    14.705882% {
+      opacity: 1;
     }
-    #efxcHCR325l13 {
-      animation: efxcHCR325l13_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+    17.647059% {
+      opacity: 0;
     }
-    @keyframes efxcHCR325l13_c_o {
-      0% {
-        opacity: 1;
-      }
-      33.333333% {
-        opacity: 1;
-      }
-      35.294118% {
-        opacity: 0;
-      }
-      47.058824% {
-        opacity: 0;
-      }
-      49.019608% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 1;
-      }
+    50% {
+      opacity: 0;
     }
-    #efxcHCR325l15 {
-      animation: efxcHCR325l15_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+    52.941176% {
+      opacity: 1;
     }
-    @keyframes efxcHCR325l15_c_o {
-      0% {
-        opacity: 1;
-      }
-      9.803922% {
-        opacity: 1;
-      }
-      11.764706% {
-        opacity: 0;
-      }
-      21.568627% {
-        opacity: 0;
-      }
-      23.529412% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 1;
-      }
+    82.352941% {
+      opacity: 1;
     }
-    #efxcHCR325l16 {
-      animation: efxcHCR325l16_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+    85.294118% {
+      opacity: 0;
     }
-    @keyframes efxcHCR325l16_c_o {
-      0% {
-        opacity: 1;
-      }
-      9.803922% {
-        opacity: 1;
-      }
-      21.568627% {
-        opacity: 1;
-      }
-      23.529412% {
-        opacity: 1;
-      }
-      60.784314% {
-        opacity: 1;
-      }
-      72.54902% {
-        opacity: 1;
-      }
-      74.509804% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 0;
-      }
+    100% {
+      opacity: 0;
     }
-    #efxcHCR325l18 {
-      animation: efxcHCR325l18_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+  }
+  #eB1kvmsL79H8 {
+    animation: eB1kvmsL79H8_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H8_c_o {
+    0% {
+      opacity: 0;
     }
-    @keyframes efxcHCR325l18_c_o {
-      0% {
-        opacity: 1;
-      }
-      33.333333% {
-        opacity: 1;
-      }
-      47.058824% {
-        opacity: 1;
-      }
-      49.019608% {
-        opacity: 0;
-      }
-      60.784314% {
-        opacity: 0;
-      }
-      62.745098% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 1;
-      }
+    14.705882% {
+      opacity: 0;
     }
-    #efxcHCR325l19 {
-      animation: efxcHCR325l19_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+    17.647059% {
+      opacity: 1;
     }
-    @keyframes efxcHCR325l19_c_o {
-      0% {
-        opacity: 1;
-      }
-      9.803922% {
-        opacity: 1;
-      }
-      21.568627% {
-        opacity: 1;
-      }
-      23.529412% {
-        opacity: 0;
-      }
-      33.333333% {
-        opacity: 0;
-      }
-      35.294118% {
-        opacity: 1;
-      }
-      47.058824% {
-        opacity: 1;
-      }
-      49.019608% {
-        opacity: 1;
-      }
-      84.313725% {
-        opacity: 1;
-      }
-      86.27451% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 0;
-      }
+    82.352941% {
+      opacity: 1;
     }
+    85.294118% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  #eB1kvmsL79H9 {
+    animation: eB1kvmsL79H9_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H9_c_o {
+    0% {
+      opacity: 1;
+    }
+    32.352941% {
+      opacity: 1;
+    }
+    35.294118% {
+      opacity: 0;
+    }
+    64.705882% {
+      opacity: 0;
+    }
+    67.647059% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #eB1kvmsL79H10 {
+    animation: eB1kvmsL79H10_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H10_c_o {
+    0% {
+      opacity: 1;
+    }
+    14.705882% {
+      opacity: 1;
+    }
+    17.647059% {
+      opacity: 0;
+    }
+    32.352941% {
+      opacity: 0;
+    }
+    35.294118% {
+      opacity: 1;
+    }
+    64.705882% {
+      opacity: 1;
+    }
+    67.647059% {
+      opacity: 0;
+    }
+    82.352941% {
+      opacity: 0;
+    }
+    85.294118% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #eB1kvmsL79H12 {
+    animation: eB1kvmsL79H12_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H12_c_o {
+    0% {
+      opacity: 1;
+    }
+    64.705882% {
+      opacity: 1;
+    }
+    67.647059% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  #eB1kvmsL79H13 {
+    animation: eB1kvmsL79H13_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H13_c_o {
+    0% {
+      opacity: 0;
+    }
+    14.705882% {
+      opacity: 0;
+    }
+    17.647059% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #eB1kvmsL79H14 {
+    animation: eB1kvmsL79H14_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H14_c_o {
+    0% {
+      opacity: 1;
+    }
+    32.352941% {
+      opacity: 1;
+    }
+    35.294118% {
+      opacity: 0;
+    }
+    64.705882% {
+      opacity: 0;
+    }
+    67.647059% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #eB1kvmsL79H16 {
+    animation: eB1kvmsL79H16_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H16_c_o {
+    0% {
+      opacity: 0;
+    }
+    32.352941% {
+      opacity: 0;
+    }
+    35.294118% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #eB1kvmsL79H17 {
+    animation: eB1kvmsL79H17_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H17_c_o {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    52.941176% {
+      opacity: 0;
+    }
+    82.352941% {
+      opacity: 0;
+    }
+    85.294118% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  #eB1kvmsL79H19 {
+    animation: eB1kvmsL79H19_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H19_c_o {
+    0% {
+      opacity: 1;
+    }
+    14.705882% {
+      opacity: 1;
+    }
+    17.647059% {
+      opacity: 0;
+    }
+    64.705882% {
+      opacity: 0;
+    }
+    67.647059% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #eB1kvmsL79H20 {
+    animation: eB1kvmsL79H20_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H20_c_o {
+    0% {
+      opacity: 1;
+    }
+    82.352941% {
+      opacity: 1;
+    }
+    85.294118% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  #eB1kvmsL79H22 {
+    animation: eB1kvmsL79H22_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H22_c_o {
+    0% {
+      opacity: 1;
+    }
+    32.352941% {
+      opacity: 1;
+    }
+    35.294118% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0;
+    }
+    52.941176% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #eB1kvmsL79H23 {
+    animation: eB1kvmsL79H23_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
+  }
+  @keyframes eB1kvmsL79H23_c_o {
+    0% {
+      opacity: 0;
+    }
+    14.705882% {
+      opacity: 0;
+    }
+    17.647059% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
   `};
 `;
-// TODO: use loading icon
-export const LoadingIcon = styled(Logo)`
+
+export const LoadingIcon = styled(Loading)`
     height: 24px;
 `;

@@ -118,7 +118,7 @@ export const fadeUp = keyframes`
   }
 `;
 
-export const SlideUp = keyframes`
+export const slideUp = keyframes`
   0% {
     -webkit-transform: translateY(-50vh);
     transform: translateY(-50vh);

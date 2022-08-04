@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, CharacterImgs, disappear, fadeIn, PrimaryButton, SlideUp, TitleText } from "../../components";
+import { bounce, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { color, fontWeight, zIndex } from "../../design";
 
@@ -203,9 +203,9 @@ export const KreadContainer = styled.div<ViewProps>`
     width: 1000px;
     height: 240px;
   }
-  ${({ showSlider }) => (showSlider === true ?
+  $${({ showSlider }) => (showSlider &&
     css`
-    animation: ${SlideUp};
+    animation: ${slideUp};
     animation-duration: 0.5s;
     animation-delay: 0s;
     animation-fill-mode: forwards;
@@ -218,12 +218,7 @@ export const KreadContainer = styled.div<ViewProps>`
       width: 100px;
       height: 24px;
     }
-    `
-    :
-    css`
-
-
-  `)};
+    `)};
 `;
 
 export const ArrowDown = styled(ArrowDownIcon)`

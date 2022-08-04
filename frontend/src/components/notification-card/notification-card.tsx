@@ -24,6 +24,7 @@ export const NotificationCard: FC = () => {
   const closeToast = () => {
     setShowDetail(!showDetail);
   };
+
   const setInfomation = (showNotification: boolean, information: string, heading: string) => {
     setInfo(information);
     setTitle(heading);
