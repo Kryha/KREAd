@@ -1,5 +1,5 @@
 import { AmountMath } from "@agoric/ertp";
-import { Character, Item } from "../interfaces";
+import { Character, Item, ItemCategory } from "../interfaces";
 import { Purses } from "../interfaces/agoric.interfaces";
 
 export const formOfferForItem = (purses: Purses, item: any) => ({
@@ -26,3 +26,5 @@ export const formOfferForCharacter = (characterBrand: any, character: any, money
 });
 
 export const formatIdAsNumber = (obj: Character | Item) => ({ ...obj, id: BigInt(obj.id) });
+
+export const itemCategories: ItemCategory[] = ["noseline", "midBackground", "mask", "headPiece", "hair", "frontMask", "liquid", "background", "airReservoir", "clothing"];

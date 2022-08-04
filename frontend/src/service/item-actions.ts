@@ -124,6 +124,7 @@ export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBa
 };
 
 // TODO: Add price for minting // price?: bigint
+// TODO: Ensure this fn does not work in prod
 export const mintItem = async (service: AgoricState, item?: any) => {
   const {
     agoric: { walletP },
@@ -143,9 +144,7 @@ export const mintItem = async (service: AgoricState, item?: any) => {
   const itemsToMint = item ? [item] : defaultItems;
 
   const uniqueItems = itemsToMint.map((item: any) => {
-    const date = Date.now().toString(); // TODO Implement Date Service
-
-    return { ...item, date };
+    return { ...item, name: `${item.name} (ESPECIAL EDITION)` };
   });
 
   const invitation = await E(publicFacet).makeMintItemInvitation();
@@ -182,11 +181,20 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
   const characterPurse = service.purses.character[service.purses.character.length - 1];
   const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
+
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
     console.error("undefined parameter");
     return;
   }
 
+  const { items: currentInventoryItems }: {items: Item[]} = await E(publicFacet).getCharacterInventory(character.name);
+  const filledCategories = currentInventoryItems.map(i => i.category);
+  
+  if (filledCategories.includes(item.category)) {
+    console.info("Existing item in seleted category, performing swap");
+    itemSwap(service, item, character);
+    return;
+  }
   const invitation = await E(publicFacet).makeEquipInvitation();
 
   console.info("Invitation successful, sending to wallet for approval");
@@ -218,8 +226,7 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
   return E(walletP).addOffer(offerConfig);
 };
 
-// TODO: pass character as parameter to construct the proposal
-export const unequipItem = async (service: AgoricState, item: Item, character: Character) => {
+export const unequipItem = async (service: AgoricState, item: Item, characterName: string) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -229,7 +236,8 @@ export const unequipItem = async (service: AgoricState, item: Item, character: C
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const characterInPurse = characterPurse.value.find((character: Character)=>character.name===characterName);
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(characterName);//{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacter) {
@@ -248,7 +256,7 @@ export const unequipItem = async (service: AgoricState, item: Item, character: C
       give: {
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
-          value: [formatIdAsNumber(character)],
+          value: [formatIdAsNumber(characterInPurse)],
         },
       },
       want: {
@@ -256,6 +264,64 @@ export const unequipItem = async (service: AgoricState, item: Item, character: C
           pursePetname: itemPurse.brandPetname,
           value: [formatIdAsNumber(item)],
           // value: [harden({category: item.category})],
+        },
+        CharacterKey2: {
+          pursePetname: characterPurse.brandPetname,
+          value: [formatIdAsNumber(wantedCharacter)],
+        },
+      },
+    },
+    dappContext: true,
+  });
+
+  return E(walletP).addOffer(offerConfig);
+};
+
+export const itemSwap = async (service: AgoricState, item: Item, character: Character) => {
+  const {
+    agoric: { walletP },
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+  } = service;
+
+  const itemPurse = service.purses.item[service.purses.item.length - 1];
+  const characterPurse = service.purses.character[service.purses.character.length - 1];
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name);//{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const wantedCharacter = inventoryCharacter.key.value[0];
+  const { items: currentInventoryItems }: {items: Item[]} = await E(publicFacet).getCharacterInventory(character.name);
+
+  const availableItems: Item[] = itemPurse.value.map((item: Item) => formatIdAsNumber(item));
+  const itemToSwapGive = availableItems.find(i=>i.category === item.category);
+  const itemToSwapWant = currentInventoryItems.find((item: Item) => itemToSwapGive?.category === item.category);
+  
+  if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
+    console.error("undefined parameter");
+    return;
+  }
+
+  const invitation = await E(publicFacet).makeItemSwapInvitation();
+
+  console.info("Invitation successful, sending to wallet for approval");
+
+  const offerConfig = harden({
+    id: `${Date.now()}`,
+    invitation: invitation,
+    proposalTemplate: {
+      give: {
+        Item1: {
+          pursePetname: itemPurse.brandPetname,
+          value: harden([itemToSwapGive]),
+        },
+        CharacterKey1: {
+          pursePetname: characterPurse.brandPetname,
+          value: [formatIdAsNumber(character)],
+        },
+      },
+      want: {
+        Item2: {
+          pursePetname: itemPurse.brandPetname,
+          value: harden([itemToSwapWant]),
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,

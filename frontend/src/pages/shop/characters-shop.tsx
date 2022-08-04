@@ -13,17 +13,28 @@ import {
   Select,
   ButtonText,
   FadeInOut,
+  NotificationDetail,
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
-import { DetailContainer, FilterContainer, FilterWrapper, ItemContainer, ItemWrapper, SelectorContainer, SortByContainer } from "./styles";
+import {
+  DetailContainer,
+  FilterContainer,
+  FilterWrapper,
+  ItemContainer,
+  ItemWrapper,
+  NotificationContainer,
+  SelectorContainer,
+  SortByContainer,
+} from "./styles";
 import { CharacterInMarket } from "../../interfaces";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { useCharactersMarket } from "../../service";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
 
 interface Props {
   pageSelector: ReactNode;
@@ -38,6 +49,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const [characters, isLoading] = useCharactersMarket({
     category: selectedCategory,
@@ -59,6 +71,10 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
+  };
+
+  const displayToast = () => {
+    setShowToast(true);
   };
 
   return (
@@ -86,7 +102,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         <HorizontalDivider />
       </FilterWrapper>
       {isLoading ? (
-        <LoadingPage />
+        <LoadingPage spinner={false} />
       ) : (
         <>
           {!characters || !characters.length ? (
@@ -131,6 +147,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                     },
                     primary: { text: text.item.buy, onClick: buy },
                   }}
+                  showToast={displayToast}
                 />
               </DetailContainer>
             )}
@@ -138,6 +155,19 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           </FadeInOut>
         </>
       )}
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationContainer>
+          <NotificationWrapper showNotification={showToast}>
+            <NotificationDetail
+              title={text.general.goToYourWallet}
+              info={text.general.yourActionIsPending}
+              closeToast={() => setShowToast(false)}
+              isError
+            />
+          </NotificationWrapper>
+        </NotificationContainer>
+      </FadeInOut>
     </>
   );
 };

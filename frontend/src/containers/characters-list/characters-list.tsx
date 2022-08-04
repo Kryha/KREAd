@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
@@ -11,9 +11,10 @@ import { color } from "../../design";
 
 interface Props {
   onCharacterClick: (id: string) => void;
+  onFilterClick: (items: boolean) => void;
 }
 
-export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
+export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [filterId, setFilterId] = useState("");
@@ -21,17 +22,17 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
 
   const [myCharacters, isLoading] = useMyCharacters({ category: selectedCategory, sorting: selectedSorting });
 
-  if (isLoading) return <LoadingPage />;
+  useEffect(() => {
+    if (!myCharacters || !myCharacters.length) {
+      onFilterClick(true);
+    } else {
+      onFilterClick(false);
+    }
+  }, [myCharacters, onFilterClick]);
+
+  if (isLoading) return <LoadingPage spinner={false} />;
 
   if (!myCharacters || !myCharacters.length) return <ErrorView />;
-
-  const handleCategoryChange = (selected: string) => {
-    setSelectedCategory(selected);
-  };
-
-  const handleSortingChange = (selected: string) => {
-    setSelectedSorting(selected);
-  };
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
@@ -46,13 +47,13 @@ export const CharactersList: FC<Props> = ({ onCharacterClick }) => {
       <ListHeader>
         <CategoryContainer>
           <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId}>
-            <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={characterCategories} />
+            <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
           </Filters>
         </CategoryContainer>
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
           <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
-            <Select label={text.filters.latest} handleChange={handleSortingChange} options={sortingInventory} />
+            <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sortingInventory} />
           </Filters>
         </SortContainer>
       </ListHeader>

@@ -28,3 +28,36 @@ export const makeHashId = (str, seed = 42) => {
     (h1 >>> 0).toString(16).padStart(8, 0)
   );
 };
+
+/**
+ * @param {string} name
+ * @param {Object} randomCharacterBase
+ * @param {State} state
+ * @param currentTime
+ * @param newCharacterId
+ * @returns {Object[]}
+ */
+export const makeCharacterNftObjs = (
+  name,
+  randomCharacterBase,
+  currentTime,
+  newCharacterId,
+) => {
+  // Merge random base character with name input, id, and keyId
+  // TODO: Replace Date by a valid time generator now it returns NaN
+  const newCharacter1 = {
+    ...randomCharacterBase,
+    date: currentTime,
+    id: newCharacterId,
+    name,
+    keyId: 1,
+  };
+  const newCharacter2 = {
+    ...randomCharacterBase,
+    date: currentTime,
+    id: newCharacterId,
+    name,
+    keyId: 2,
+  };
+  return [newCharacter1, newCharacter2];
+};

@@ -12,4 +12,6 @@ export const errors = {
   invalidInventoryKey: `Brand of Inventory Key does not match the correct Issuer`,
   inventoryKeyMismatch: `Wanted Key and Inventory Key do not match`,
   noItemsRequested: `Offer missing requested item`,
+  duplicateCategoryInInventory: `Inventory cannot contain multiple items of the same category`,
+  seedInvalid: `Seed must be a number`,
 };

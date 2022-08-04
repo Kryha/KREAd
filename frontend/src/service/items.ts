@@ -184,6 +184,6 @@ export const useUnequipItem = () => {
 
     if (!item) return;
 
-    await unequipItem(service, item, character.nft);
+    await unequipItem(service, item, character.nft.name);
   });
 };

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 
-import { ErrorView, FadeInOut, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { CharacterInMarket } from "../../interfaces";
 import { useBuyCharacter, useCharacterFromMarket, useMyCharacter } from "../../service";
@@ -10,7 +11,7 @@ import { Buy } from "./buy";
 
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
-
+  const [showToast, setShowToast] = useState(false);
   const idString = String(id);
 
   const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(idString);
@@ -38,9 +39,13 @@ export const CharacterBuy = () => {
     buyCharacter.callback();
   };
 
-  if (isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingCharacter) return <LoadingPage spinner={false} />;
 
   if (!data) return <ErrorView />;
+
+  const displayToast = () => {
+    setShowToast(true);
+  };
 
   return (
     <Buy
@@ -56,7 +61,18 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection nft={data.character} equippedItems={data.equippedItems} />
+        <CharacterDetailSection nft={data.character} equippedItems={data.equippedItems} showToast={displayToast} />
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
       </FadeInOut>
     </Buy>
   );

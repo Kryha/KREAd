@@ -1,9 +1,10 @@
 import { ActivityEvent } from "./activity.interfaces";
 import { Detail } from "./character.interfaces";
 
+export type ItemCategory = "noseline" | "midBackground" | "mask" | "headPiece" | "hair" | "frontMask" | "liquid" | "background" | "airReservoir" | "clothing";
 export interface Item {
   name: string;
-  category: string;
+  category: ItemCategory;
   id: string;
   description: string;
   image: string;

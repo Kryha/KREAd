@@ -197,7 +197,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   headPiece: {
     name: "AirTox: Fairy Dust Elite",
-    category: "headpiece",
+    category: "headPiece",
     id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -425,7 +425,7 @@ export const FakeCharacterItems: CharacterItems = {
   },
   midBackground: {
     name: "AirTox: Fairy Dust Elite",
-    category: "background2",
+    category: "midBackground",
     id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1297,7 +1297,7 @@ export const Items: Item[] = [
   },
   {
     name: "Mid Background: Fairy Dust Elite",
-    category: "backgound1",
+    category: "background",
     id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1411,7 +1411,7 @@ export const Items: Item[] = [
   },
   {
     name: "Head Piece: Fairy Dust Elite",
-    category: "headpiece",
+    category: "headPiece",
     id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
@@ -1639,7 +1639,7 @@ export const Items: Item[] = [
   },
   {
     name: "Background: Fairy Dust Elite",
-    category: "background2",
+    category: "midBackground",
     id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
