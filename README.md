@@ -44,7 +44,7 @@ If you want to learn more about creating good readme files then refer the follow
 
 ## Run multiuser
 
-To run the application for more than one user follow these steps:
+To run the application for more than one user follow these steps: 00. Install GO! 1. `brew install go` 0. Run Make in your local agoric-sdk directory 1. `cd <local-sdk-path>/packages/cosmic-swingset` 2. `make`
 
 1. Run the chain:
    1. Open a new terminal window
