@@ -37,7 +37,7 @@ export const ItemBuy = () => {
     buyItem.callback();
   };
 
-  if (isLoadingItem) return <LoadingPage spinner={false} />;
+  isLoadingItem && <LoadingPage />;
 
   if (!data) return <ErrorView />;
 
