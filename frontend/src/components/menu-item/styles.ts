@@ -18,7 +18,7 @@ export const InfoWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0px;
-  margin: 0px 0px 0px ${margins.medium};
+  margin: 0px 0px 0px ${margins.mini};
   width: 100%;
 `;
 
@@ -29,7 +29,7 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  margin-right: ${margins.medium};
+  margin-right: ${margins.mini};
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
   }

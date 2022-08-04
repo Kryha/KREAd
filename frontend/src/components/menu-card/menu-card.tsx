@@ -26,6 +26,8 @@ import { ItemDetailSection } from "../../containers/detail-section/item-detail-s
 import { EmptyCard } from "../empty-card";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { FadeInOut } from "../fade-in-out";
+import { NotificationDetail } from "../notification-detail";
+import { NotificationWrapper } from "../notification-detail/styles";
 
 interface MenuCardProps {
   title: string;
@@ -39,6 +41,8 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
   const { width: viewWidth, height: viewHeight } = useViewport();
   const [selectedId, setSelectedId] = useState<string>("");
   const [intitial, setInitial] = useState(true);
+  const [showToast, setShowToast] = useState(false);
+
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
 
@@ -49,19 +53,23 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
 
   const selectedItem = useMemo(() => allItems?.find((item) => item.id === selectedId), [allItems, selectedId]);
 
-  const equip = (id: string) => {
+  const equip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    event.stopPropagation();
+    setShowToast(!showToast);
     equipItem.mutate({ itemId: id });
   };
 
-  const unequip = (id: string) => {
+  const unequip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    event.stopPropagation();
+    setShowToast(!showToast);
     unequipItem.mutate({ itemId: id });
   };
 
   const primaryActions = () => {
     if (selectedItem?.id === equippedItem?.id) {
-      return { text: text.item.unequip, onClick: () => unequip(selectedId) };
+      return { text: text.item.unequip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event, selectedId) };
     } else {
-      return { text: text.item.equip, onClick: () => equip(selectedId) };
+      return { text: text.item.equip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event, selectedId) };
     }
   };
 
@@ -101,7 +109,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 onClick={() => setSelectedId(equippedItem.id)}
                 key={equippedItem.id}
                 isEquipped
-                onButtonClick={() => unequip(equippedItem.id)}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event, equippedItem.id)}
                 isInitial={intitial}
                 removeInitial={removeInitial}
               />
@@ -117,7 +125,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
                 imageProps={imageProps}
                 onClick={() => setSelectedId(item.id)}
                 key={item.id}
-                onButtonClick={() => equip(item.id)}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event, item.id)}
                 removeInitial={removeInitial}
               />
             ))}
@@ -144,6 +152,17 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
         )}
 
         {selectedItem && <Overlay />}
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
       </FadeInOut>
     </MenuCardWrapper>
   );

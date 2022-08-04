@@ -14,8 +14,7 @@ export const ToastContainer = styled.div`
   border-radius: ${margins.small};
   bottom: ${margins.big};
   z-index: 10000;
-  width: 45%;
-  top: 100px;
+  width: 720px;
   position: absolute;
   left: 40px;
   height: fit-content;
@@ -43,6 +42,7 @@ export const IconContainer = styled.div`
   width: 18px;
   height: 18px;
   border: 1px solid ${color.black};
+  min-width: 18px;
 `;
 
 export const ToastTitle = styled(NavigationTitle)``;
@@ -84,3 +84,27 @@ export const InfoContainer = styled.div`
 `;
 
 export const DividerContainer = styled.div``;
+
+
+interface NotificationProps {
+  showNotification: boolean;
+}
+
+export const NotificationWrapper = styled.div<NotificationProps>`
+ ${ToastContainer} {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  z-index: 1002;
+  bottom: 40px;
+ }
+  ${({ showNotification }): string => {
+    return showNotification
+      ? ""
+      : `
+        display: none;
+      `;
+  }};
+`;

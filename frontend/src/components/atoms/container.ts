@@ -38,7 +38,11 @@ export const FlexColumn = styled.div`
   width: 100%;
 `;
 
-export const Overlay = styled.div`
+interface OverlayProps {
+  isOnTop?: boolean;
+}
+
+export const Overlay = styled.div<OverlayProps>`
   position: fixed;
   top: 0;
   left: 0;
@@ -46,5 +50,14 @@ export const Overlay = styled.div`
   height: 100vh;
   background: rgba(255, 255, 255, 0.46);
   backdrop-filter: blur(4px);
-  z-index: 100;
+  ${({ isOnTop }): string => {
+    return isOnTop
+      ? `
+      z-index: 1001;
+        `
+      : `
+      z-index: 100;
+      `;
+  }};
+
 `;

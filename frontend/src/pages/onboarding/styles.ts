@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, CharacterImgs, disappear, fadeIn, PrimaryButton, TitleText } from "../../components";
+import { bounce, CharacterImgs, disappear, fadeIn, PrimaryButton, SlideUp, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { color, fontWeight, zIndex } from "../../design";
 
@@ -84,6 +84,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
         position: fixed;
         left: 40px;
         top: 464px;
+        z-index: 100;
       }
       `;
   }};
@@ -145,11 +146,15 @@ export const OnboardingContainer = styled.div<ViewProps>`
   max-height: 100vh;
   overflow-y: scroll;
   transition: all 0.4s;
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 5.0s, 0.5s;
+  animation-delay: 0s, 5.0s;
 `;
 
 interface ViewProps {
   height: number;
   width: number;
+  showSlider?: boolean;
 }
 
 export const DefaultImage = styled(CharacterImgs) <ViewProps>`
@@ -188,15 +193,37 @@ export const TextContainer = styled.span`
   color: ${color.darkGrey};
   margin-top: 8px;
 `;
+
 export const KreadContainer = styled.div<ViewProps>`
   ${KreadIcon} {
     position: absolute;
     left: 45%;
     transform: translate(-45%, 0);
-    top: 40px;
-    width: 100px;
-    height: 24px;
+    top: 35%;
+    width: 1000px;
+    height: 240px;
   }
+  ${({ showSlider }) => (showSlider === true ?
+    css`
+    animation: ${SlideUp};
+    animation-duration: 0.5s;
+    animation-delay: 0s;
+    animation-fill-mode: forwards;
+    ${KreadIcon} {
+      position: absolute;
+      left: 45%;
+      transform: translate(-45%, 0);
+      top: 50%;
+      bottom: 50%;
+      width: 100px;
+      height: 24px;
+    }
+    `
+    :
+    css`
+
+
+  `)};
 `;
 
 export const ArrowDown = styled(ArrowDownIcon)`
@@ -209,8 +236,8 @@ export const ArrowDown = styled(ArrowDownIcon)`
   animation-iteration-count: 2;
   animation-fill-mode: backwords;
   -webkit-animation-fill-mode: backwords;
-  animation-delay: 0.5s;
-  -webkit-animation-delay: 0.5s;
+  animation-delay: 6s;
+  -webkit-animation-delay: 6s;
   path {
     stroke: ${color.black};
   }
