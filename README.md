@@ -33,7 +33,7 @@ If you want to learn more about creating good readme files then refer the follow
 
 ### Terminal 2 - agoric
 
-1. `agoric deploy contract/nft-maker-contract-deploy.js api/nft-maker-deploy-api.js`
+1. `agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js`
 2. `agoric open --repl`
 
 ### Terminal 3 - frontend
