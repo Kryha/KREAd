@@ -1,13 +1,14 @@
 import { FC, useEffect, useState } from "react";
 
-import { ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ButtonText, ErrorView, Filters, HorizontalDivider, Label, LoadingPage, LoadMore, MenuItem, Select } from "../../components";
 import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useMyCharacters } from "../../service";
+import { useMyCharactersPage } from "../../service";
 
 import { text } from "../../assets";
 import { characterCategories, sortingInventory } from "../../assets/text/filter-options";
 import { color } from "../../design";
+import { PAGE_SIZE } from "../../constants";
 
 interface Props {
   onCharacterClick: (id: string) => void;
@@ -19,8 +20,9 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
+  const [page, setPage] = useState(1);
 
-  const [myCharacters, isLoading] = useMyCharacters({ category: selectedCategory, sorting: selectedSorting });
+  const [myCharacters, isLoading, totalPages] = useMyCharactersPage(page, { category: selectedCategory, sorting: selectedSorting });
 
   useEffect(() => {
     if (!myCharacters || !myCharacters.length) {
@@ -89,6 +91,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
             isEquipped={character.isEquipped}
           />
         ))}
+        {myCharacters.length > PAGE_SIZE && <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />}
       </ListContainer>
     </SortableListWrap>
   );

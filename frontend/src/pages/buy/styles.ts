@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, TickIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText } from "../../components";
-import { disappear, fadeIn } from "../../components/atoms/animations";
+import { fadeUp } from "../../components/atoms/animations";
 import { Spinner, SpinnerContainer } from "../../components/content-loader/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -34,9 +34,9 @@ export const ContentWrapper = styled.div`
     position: absolute;
     bottom: 40px;
     right: 40px;
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.6s, 1s;
-    animation-delay: 0s, 0.6s;
+    animation: ${fadeUp} 1.2s ease-out 0s forwards;
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
   }
   ${DetailSectionWrap} {
     margin-top: 40px;

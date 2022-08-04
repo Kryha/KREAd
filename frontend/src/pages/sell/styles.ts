@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
-import { disappear, fadeIn } from "../../components/atoms/animations";
+import { fadeUp } from "../../components/atoms/animations";
 import { EquippedLabel } from "../../components/character-item/styles";
 import { Spinner, SpinnerContainer } from "../../components/content-loader/styles";
 import { Info, ButtonContainer as Button, EquippedLabel as ItemLabel } from "../../components/menu-item/styles";
@@ -51,9 +51,9 @@ margin-left: 40px;
   ${FormCard} {
     width: 40%;
     min-width: 40%;
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.6s, 1s;
-    animation-delay: 0s, 0.6s;
+    animation: ${fadeUp} 1.2s ease-out 0s forwards;
+    opacity: 0;
+    transform: translate3d(0, 1rem, 0);
   }
   ${DetailSectionHeaderNavigationWrap} {
     display: none;

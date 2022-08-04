@@ -33,6 +33,24 @@ export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: I
   return [{ owned, equipped, all: filtered }, !fetched];
 };
 
+export const useMyItemsPage = (page: number, filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean, number] => {
+  const [{ owned, equipped, fetched }] = useItemContext();
+  // TODO: get total pages
+  const totalPages = 20;
+  const all = useMemo(
+    () => [...equipped.map((item) => ({ ...item, isEquipped: true })), ...owned.map((item) => ({ ...item, isEquipped: false }))],
+    [equipped, owned]
+  );
+
+  const filtered = useMemo(() => {
+    if (!filters) return all;
+    return filterItems(all, filters);
+  }, [all, filters]);
+
+  return [{ owned, equipped, all: filtered }, !fetched, totalPages];
+};
+
+
 export const useItemFromMarket = (id: string): [ItemInMarket | undefined, boolean] => {
   const [items, isLoading] = useItemsMarket();
 
@@ -50,6 +68,19 @@ export const useItemsMarket = (filters?: ItemsMarketFilters): [ItemInMarket[], b
   }, [filters, market]);
 
   return [filtered, !marketFetched];
+};
+
+export const useItemsMarketPage = (page: number, filters?: ItemsMarketFilters): [ItemInMarket[], boolean, number] => {
+  const [{ market, marketFetched }] = useItemContext();
+  // TODO: get total pages
+  const totalPages = 20;
+
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterItemsMarket(market, filters);
+  }, [filters, market]);
+
+  return [filtered, !marketFetched, totalPages];
 };
 
 export const useSellItem = (itemId: string) => {

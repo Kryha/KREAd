@@ -3,6 +3,7 @@ import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
 import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { fadeUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
+import { LoadMoreContainer } from "../../components/load-more/styles";
 import { KreadIcon } from "../../components/logo/styles";
 import { ToastContainer } from "../../components/notification-detail/styles";
 import { OverviewWrapper } from "../../components/overview-empty/styles";
@@ -80,18 +81,17 @@ export const ItemContainer = styled.div`
   flex-wrap: wrap;
   gap: ${margins.big};
   padding-top: 40px;
-  padding-bottom: 140px;
+  padding-bottom: 160px;
   animation: ${fadeUp} 1.2s ease-out 0s forwards;
   opacity: 0;
   transform: translate3d(0, 1rem, 0);
 `;
 
-export const LoadMore = styled.div`
-  margin-bottom: 150px;
-  margin-top: ${margins.big};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const LoadMoreWrapper = styled.div`
+  ${LoadMoreContainer} {
+    margin-top: -130px;
+    margin-left: 50%;
+  }
 `;
 
 export const Refresh = styled(RefreshIcon)`

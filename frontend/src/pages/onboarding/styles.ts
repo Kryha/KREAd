@@ -203,7 +203,7 @@ export const KreadContainer = styled.div<ViewProps>`
     width: 1000px;
     height: 240px;
   }
-  $${({ showSlider }) => (showSlider &&
+  ${({ showSlider }) => (showSlider &&
     css`
     animation: ${slideUp};
     animation-duration: 0.5s;

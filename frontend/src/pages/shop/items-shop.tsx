@@ -14,11 +14,12 @@ import {
   Overlay,
   ButtonText,
   FadeInOut,
+  LoadMore,
 } from "../../components";
-import { MAX_PRICE, MIN_PRICE } from "../../constants";
+import { MAX_PRICE, MIN_PRICE, PAGE_SIZE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { useItemsMarket } from "../../service";
+import { useItemsMarketPage } from "../../service";
 import { colors } from "../../service/fake-item-data";
 import { itemCategories, sorting } from "../../assets/text/filter-options";
 import {
@@ -27,6 +28,7 @@ import {
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
+  LoadMoreWrapper,
   OverviewContainer,
   SelectorContainer,
   SortByContainer,
@@ -50,8 +52,9 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
+  const [page, setPage] = useState(1);
 
-  const [items, isLoading] = useItemsMarket({
+  const [items, isLoading, totalPages] = useItemsMarketPage(page, {
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,
@@ -124,6 +127,9 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
                   <ItemShopCard itemInMarket={item} key={item.id} onClick={setSelectedItem} />
                 ))}
               </ItemContainer>
+              <LoadMoreWrapper>
+                {items.length > PAGE_SIZE && <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />}
+              </LoadMoreWrapper>
             </ItemWrapper>
           )}
           <FadeInOut show={!!selectedItem} exiting={close}>

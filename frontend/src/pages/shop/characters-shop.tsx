@@ -14,8 +14,9 @@ import {
   ButtonText,
   FadeInOut,
   NotificationDetail,
+  LoadMore,
 } from "../../components";
-import { MAX_PRICE, MIN_PRICE } from "../../constants";
+import { MAX_PRICE, MIN_PRICE, PAGE_SIZE } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
@@ -25,6 +26,7 @@ import {
   FilterWrapper,
   ItemContainer,
   ItemWrapper,
+  LoadMoreWrapper,
   NotificationContainer,
   SelectorContainer,
   SortByContainer,
@@ -33,7 +35,7 @@ import { CharacterInMarket } from "../../interfaces";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
-import { useCharactersMarket } from "../../service";
+import { useCharactersMarketPages } from "../../service";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 
 interface Props {
@@ -50,8 +52,9 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [page, setPage] = useState(1);
 
-  const [characters, isLoading] = useCharactersMarket({
+  const [characters, isLoading, totalPages] = useCharactersMarketPages(page, {
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,
@@ -121,6 +124,11 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                       <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
+                  <LoadMoreWrapper>
+                    {characters.length > PAGE_SIZE && (
+                      <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />
+                    )}
+                  </LoadMoreWrapper>
                 </ItemWrapper>
               )}
               {!noFilteredCharacters && (
@@ -130,6 +138,11 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
                       <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
                     ))}
                   </ItemContainer>
+                  <LoadMoreWrapper>
+                    {characters.length > PAGE_SIZE && (
+                      <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />
+                    )}
+                  </LoadMoreWrapper>
                 </ItemWrapper>
               )}
             </>

@@ -52,4 +52,5 @@ export const general = {
   maxCharacterLength: "the character name cannot be longer than 16 characters",
   goToYourWallet: "go to your wallet to accept the action!",
   yourActionIsPending: "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
+  loading: "loading...",
 };

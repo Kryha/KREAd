@@ -1,15 +1,16 @@
 import { FC, useEffect, useState } from "react";
 
-import { ButtonText, ColorSelector, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
+import { ButtonText, ColorSelector, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select, LoadMore } from "../../components";
 import { BaseFilterContainer, ColorContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useMyItems } from "../../service";
+import { useMyItemsPage } from "../../service";
 
 import { text } from "../../assets";
 import { itemCategories, sortingInventory } from "../../assets/text/filter-options";
 import { color } from "../../design";
 import { colors } from "../../service/fake-item-data";
 import { EmptyCard } from "../../components/empty-card";
+import { PAGE_SIZE } from "../../constants";
 
 interface Props {
   onItemClick: (id: string) => void;
@@ -22,8 +23,9 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
+  const [page, setPage] = useState(1);
 
-  const [{ all: items }, isLoading] = useMyItems({
+  const [{ all: items }, isLoading, totalPages] = useMyItemsPage(page, {
     category: selectedCategory,
     sorting: selectedSorting,
     color: selectedColor,
@@ -100,9 +102,10 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
               isEquipped={item.isEquipped}
             />
           ))}
+          {items.length > PAGE_SIZE && <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />}
         </ListContainer>
       )}
-      {!items || (!items.length && <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />)}
+      {(!items || !items.length) && <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />}
     </SortableListWrap>
   );
 };

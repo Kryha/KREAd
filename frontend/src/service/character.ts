@@ -47,6 +47,27 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
   return [filtered, !fetched];
 };
 
+export const useMyCharactersPage = (page: number, filters?: CharacterFilters): [CharacterEquip[], boolean, number] => {
+  const [{ owned, selected, fetched }] = useCharacterContext();
+
+  // TODO: get total pages
+  const totalPages = 20;
+
+  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
+    return owned.map((character) => {
+      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true };
+      return { ...character, isEquipped: false };
+    });
+  }, [owned, selected?.nft.id]);
+
+  const filtered = useMemo(() => {
+    if (!filters) return charactersWithEquip;
+    return filterCharacters(charactersWithEquip, filters);
+  }, [charactersWithEquip, filters]);
+
+  return [filtered, !fetched, totalPages];
+};
+
 export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefined, boolean] => {
   const [characters, isLoading] = useCharactersMarket();
 
@@ -64,6 +85,19 @@ export const useCharactersMarket = (filters?: CharactersMarketFilters): [Charact
   }, [filters, market]);
 
   return [filtered, !marketFetched];
+};
+
+export const useCharactersMarketPages = (page: number, filters?: CharactersMarketFilters): [CharacterInMarket[], boolean, number] => {
+  const [{ market, marketFetched }] = useCharacterContext();
+  // TODO: get total pages
+  const totalPages = 20;
+
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterCharactersMarket(market, filters);
+  }, [filters, market]);
+
+  return [filtered, !marketFetched, totalPages];
 };
 
 // TODO: Add error management
