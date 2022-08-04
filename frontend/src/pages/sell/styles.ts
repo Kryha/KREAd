@@ -3,6 +3,7 @@ import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
 import { disappear, fadeIn } from "../../components/atoms/animations";
 import { EquippedLabel } from "../../components/character-item/styles";
+import { Spinner, SpinnerContainer } from "../../components/content-loader/styles";
 import { Info, ButtonContainer as Button, EquippedLabel as ItemLabel } from "../../components/menu-item/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -90,6 +91,17 @@ export const ButtonContainer = styled.div`
         stroke: ${color.black};
       }
     }
+  }
+  ${SpinnerContainer}{
+    width: 35px;
+  }
+  ${Spinner} {
+    padding-left: 13px;
+    width: 12px;
+    height: 16px;
+    border: 2px solid ${color.white};
+    border-top: 2px solid ${color.grey};
+    margin-left: 3px;
   }
 `;
 

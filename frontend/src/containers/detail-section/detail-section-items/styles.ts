@@ -62,7 +62,6 @@ interface InfoProps {
 }
 
 export const Info = styled(EmptyInfo) <InfoProps>`
-  cursor: pointer;
   ${({ selected }) =>
     selected &&
     `

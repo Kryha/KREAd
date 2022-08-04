@@ -21,25 +21,20 @@ import {
 
 interface ListItemProps {
   item: Item;
+  showToast: () => void;
 }
 
-const ListItem: FC<ListItemProps> = ({ item }) => {
+const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
   const [selected, setSelected] = useState(false);
   const unequipItem = useUnequipItem();
 
   const unequip = (id: string) => {
+    showToast();
     unequipItem.mutate({ itemId: id });
   };
 
   return (
-    <Info
-      tabIndex={0}
-      selected={selected}
-      onClick={() => {
-        // TODO: handle click
-      }}
-      onBlur={() => setSelected(false)}
-    >
+    <Info tabIndex={0} selected={selected} onBlur={() => setSelected(false)}>
       <ItemThumbnail src={item.image} category={item.category} />
       <InfoWrapper>
         <InfoContainer>
@@ -77,9 +72,10 @@ const EmptyItem: FC = () => {
 
 interface SectionProps {
   items: Item[];
+  showToast: () => void;
 }
 
-export const DetailSectionItems: FC<SectionProps> = ({ items }) => {
+export const DetailSectionItems: FC<SectionProps> = ({ items, showToast }) => {
   if (!items.length)
     return (
       <ListContainer>
@@ -90,7 +86,7 @@ export const DetailSectionItems: FC<SectionProps> = ({ items }) => {
   return (
     <ListContainer>
       {items.map((item, i) => (
-        <ListItem item={item} key={i} />
+        <ListItem item={item} key={i} showToast={showToast} />
       ))}
     </ListContainer>
   );

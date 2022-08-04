@@ -2,7 +2,7 @@ import { FC, ReactNode } from "react";
 import { useForm } from "react-hook-form";
 
 import { text } from "../../assets";
-import { ButtonText, Data, FormHeaderClose, FormText, Input, Label, MenuItem, PrimaryButton } from "../../components";
+import { ButtonText, Data, FormHeaderClose, FormText, Input, Label, LoadingPage, MenuItem, PrimaryButton } from "../../components";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { FormCard } from "../create-character/styles";
@@ -76,10 +76,9 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoadi
           </FormFields>
           <FormText>{text.store.sellDescription}</FormText>
           <ButtonContainer>
-            {/* TODO: add spinner on loading */}
             <PrimaryButton type="submit" disabled={!isValid || isLoading}>
               <ButtonText customColor={color.white}>{text.store.placeInShop}</ButtonText>
-              <ArrowUp />
+              {isLoading ? <LoadingPage /> : <ArrowUp />}
             </PrimaryButton>
           </ButtonContainer>
         </form>

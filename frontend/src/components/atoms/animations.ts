@@ -117,3 +117,14 @@ export const fadeUp = keyframes`
     transform: translate3d(0, 0, 0);
   }
 `;
+
+export const slideUp = keyframes`
+  0% {
+    -webkit-transform: translateY(-50vh);
+    transform: translateY(-50vh);
+  }
+  100% {
+    -webkit-transform: translateY(-95vh);
+    transform: translateY(-95vh);
+  }
+`;

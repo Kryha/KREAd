@@ -47,7 +47,7 @@ export const SelectBox = styled.div<ViewProps>`
   display: flex;
   flex-direction: column;
   padding: ${margins.medium};
-  ${({ height }): string => `max-height: ${height - 200}px;`};
+  ${({ height }): string => `max-height: ${height - 250}px;`};
   overflow-y: scroll;
 `;
 

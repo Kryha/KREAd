@@ -21,7 +21,7 @@ export const ItemPage: FC = () => {
     return [character?.equippedItems[category], owned.filter((item) => item.category === category)];
   }, [category, character?.equippedItems, owned]);
 
-  if (isLoadingItems || isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingItems || isLoadingCharacter) return <LoadingPage spinner={false} />;
 
   if (!category || !character || !isItemCategory(category)) return <ErrorView />;
 

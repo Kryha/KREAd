@@ -3,7 +3,7 @@ export interface DetailSectionActions {
   onClose?: () => void;
   primary?: {
     text: string;
-    onClick: () => void;
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
   secondary?: {
     text: string;

@@ -63,7 +63,7 @@ export const CreateCharacter: FC = () => {
     }
   };
 
-  if (isLoadingCharacters) return <LoadingPage />;
+  if (isLoadingCharacters) return <LoadingPage spinner={false} />;
 
   return (
     <PageContainer

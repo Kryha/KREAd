@@ -18,10 +18,11 @@ interface CharacterDetailSectionProps {
   nft: Character;
   equippedItems: CharacterItems;
   actions?: DetailSectionActions;
+  showToast: () => void;
 }
 
 // TODO: Make index dynamic
-export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ nft, equippedItems, actions }) => {
+export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ nft, equippedItems, actions, showToast }) => {
   const { width } = useViewport();
 
   const itemsValues = useMemo(() => Object.values(equippedItems).filter((item) => item), [equippedItems]);
@@ -44,7 +45,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ nft, e
 
       {/* equipped items */}
       <DetailSectionSegment title={text.character.equippedItems} sectionIndex={3}>
-        <DetailSectionItems items={itemsValues} />
+        <DetailSectionItems items={itemsValues} showToast={showToast} />
       </DetailSectionSegment>
 
       {/* details */}

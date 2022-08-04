@@ -24,11 +24,13 @@ import {
 } from "./styles";
 import { useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
-import { AGORIC_LINK, KRYHA_LINK } from "../../constants";
+import { AGORIC_LINK, KRYHA_LINK, SLIDER_TIME } from "../../constants";
+import { useTimer } from "../../hooks/hooks";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
+  const [showSlider] = useTimer(SLIDER_TIME, true);
 
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
@@ -40,13 +42,13 @@ export const Onboarding: FC = () => {
 
   return (
     <>
-      <ButtonContainer isVisible={isConnectButtonVisible}>
-        <PrimaryButton onClick={() => connectWallet()}>
-          <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-          <ArrowUp />
-        </PrimaryButton>
-      </ButtonContainer>
       <OnboardingContainer height={height} width={width}>
+        <ButtonContainer isVisible={isConnectButtonVisible}>
+          <PrimaryButton onClick={() => connectWallet()}>
+            <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+            <ArrowUp />
+          </PrimaryButton>
+        </ButtonContainer>
         <OnboardingWrapper>
           <InfoText height={height}>
             <SectionContainer>
@@ -81,10 +83,10 @@ export const Onboarding: FC = () => {
         <FooterContainer>
           <Footer />
         </FooterContainer>
-        <KreadContainer height={height} width={width}>
-          <AnimatedLogo iteration={1} />
-        </KreadContainer>
       </OnboardingContainer>
+      <KreadContainer height={height} width={width} showSlider={showSlider}>
+        <AnimatedLogo iteration={1} />
+      </KreadContainer>
     </>
   );
 };

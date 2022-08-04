@@ -20,7 +20,7 @@ export const DetailSectionHeaderNavigation: FC<HeaderNavigationProps> = ({ actio
       {!!price && <PriceInIst price={price} />}
 
       {!!primary && (
-        <PrimaryButton onClick={() => primary.onClick()}>
+        <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => primary.onClick(event)}>
           <ButtonText customColor={color.white}>{primary.text}</ButtonText>
         </PrimaryButton>
       )}

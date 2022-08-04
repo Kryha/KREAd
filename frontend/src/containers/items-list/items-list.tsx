@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { ButtonText, ColorSelector, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select } from "../../components";
 import { BaseFilterContainer, ColorContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
@@ -9,12 +9,14 @@ import { text } from "../../assets";
 import { itemCategories, sortingInventory } from "../../assets/text/filter-options";
 import { color } from "../../design";
 import { colors } from "../../service/fake-item-data";
+import { EmptyCard } from "../../components/empty-card";
 
 interface Props {
   onItemClick: (id: string) => void;
+  onFilterClick: (items: boolean) => void;
 }
 
-export const ItemsList: FC<Props> = ({ onItemClick }) => {
+export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -27,7 +29,15 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
     color: selectedColor,
   });
 
-  if (isLoading) return <LoadingPage />;
+  useEffect(() => {
+    if (!items || !items.length) {
+      onFilterClick(true);
+    } else {
+      onFilterClick(false);
+    }
+  }, [items, onFilterClick]);
+
+  if (isLoading) return <LoadingPage spinner={false} />;
 
   const handleCategoryChange = (selected: string) => {
     setSelectedCategory(selected);
@@ -92,6 +102,7 @@ export const ItemsList: FC<Props> = ({ onItemClick }) => {
           ))}
         </ListContainer>
       )}
+      {!items || (!items.length && <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />)}
     </SortableListWrap>
   );
 };

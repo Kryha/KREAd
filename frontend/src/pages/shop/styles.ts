@@ -4,12 +4,13 @@ import { HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { fadeUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
 import { KreadIcon } from "../../components/logo/styles";
+import { ToastContainer } from "../../components/notification-detail/styles";
 import { OverviewWrapper } from "../../components/overview-empty/styles";
 import { PriceContainer } from "../../components/price-in-ist/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { color, margins, zIndex } from "../../design";
+import { color, margins } from "../../design";
 
 interface ShopProps {
   height: number;
@@ -23,7 +24,7 @@ export const ShopWrapper = styled.div`
     position: absolute;
     top: 0px;
     left: 0px;
-    z-index: 30000000;
+    z-index: 1000;
   }
 `;
 
@@ -97,14 +98,6 @@ export const Refresh = styled(RefreshIcon)`
   margin-left: ${margins.mini};
 `;
 
-export const NotificationWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0px;
-  gap: ${margins.small};
-`;
-
 export const Close = styled(CloseIcon)`
   margin: 0px 0px 0px 11px !important;
   width: 12px;
@@ -137,11 +130,6 @@ export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
 
       `;
   }};
-`;
-
-export const NotificationContainer = styled.div`
-  position: relative;
-  z-index: ${zIndex.overCharacter};
 `;
 
 export const Tag = styled.div`
@@ -227,5 +215,11 @@ export const OverviewContainer = styled.div`
   ${OverviewWrapper} {
     padding-top: 97px;
     padding-left: 0px;
+  }
+`;
+
+export const NotificationContainer = styled.div`
+  ${ToastContainer} {
+    bottom: 100px;
   }
 `;

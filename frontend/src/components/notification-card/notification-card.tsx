@@ -1,15 +1,7 @@
 import { FC, useState } from "react";
 
 import { text } from "../../assets";
-import {
-  NotificationWrapper,
-  NotificationContent,
-  NotificationContainer,
-  InfoWrapper,
-  InfoContainer,
-  TickContainer,
-  Tick,
-} from "./styles";
+import { NotificationWrapper, NotificationContent, NotificationContainer, InfoWrapper, InfoContainer, TickContainer, Tick } from "./styles";
 import { MenuText } from "../atoms";
 import { useViewport } from "../../hooks";
 import { useNotifications } from "../../service";
@@ -27,12 +19,13 @@ export const NotificationCard: FC = () => {
 
   if (!notifications || !notifications.length) return <OverviewEmpty />;
 
-  if (isLoadingNotifications) return <LoadingPage />;
+  if (isLoadingNotifications) return <LoadingPage spinner={false} />;
 
   const closeToast = () => {
     setShowDetail(!showDetail);
   };
-  const setInfomation = (showNotification: boolean, information: string, heading: string ) => {
+
+  const setInfomation = (showNotification: boolean, information: string, heading: string) => {
     setInfo(information);
     setTitle(heading);
     setShowDetail(showNotification);

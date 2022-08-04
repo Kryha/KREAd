@@ -14,7 +14,7 @@ import {
   ReturnContainer,
   Tick,
   ToastContainer,
-  ToastTitle
+  ToastTitle,
 } from "./styles";
 
 interface NotificationDetailProps {
@@ -28,18 +28,14 @@ interface NotificationDetailProps {
 export const NotificationDetail: FC<NotificationDetailProps> = ({ isError, title, info, closeToast, buttonTitle }) => {
   const navigate = useNavigate();
 
-  return(
+  return (
     <ToastContainer>
-      <IconContainer>
-        {isError ? <Exclamation /> : <Tick />}
-      </IconContainer>
+      <IconContainer>{isError ? <Exclamation /> : <Tick />}</IconContainer>
       <InfoContainer>
         <ToastTitle>{title}</ToastTitle>
         <ButtonText>{info}</ButtonText>
       </InfoContainer>
-      {buttonTitle && (
-        <SecondaryButton onClick={() => navigate(routes.shop)}>{buttonTitle}</SecondaryButton>
-      )}
+      {buttonTitle && <SecondaryButton onClick={() => navigate(routes.shop)}>{buttonTitle}</SecondaryButton>}
       <DividerContainer>
         <ReturnContainer>
           <Divider />
