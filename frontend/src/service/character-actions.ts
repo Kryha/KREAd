@@ -124,6 +124,7 @@ export const sellCharacter = async (service: AgoricState, character: CharacterBa
             value: [character],
           },
         },
+        exit: { waived: null },
       },
       dappContext: true,
     })
