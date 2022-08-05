@@ -45,6 +45,17 @@ export const CharacterSell = () => {
       <FadeInOut show>
         <CharacterDetailSection character={data} equippedItems={equippedItems} showToast={displayToast} />
       </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
+      </FadeInOut>
     </Sell>
   );
 };
