@@ -134,11 +134,13 @@ export const FooterContainer = styled.div`
   bottom: 0;
   z-index: ${zIndex.overCharacter};
 `;
+
 interface ViewProps {
   height: number;
   width: number;
+  showSlider?: boolean;
+  showAnimation?: boolean;
 }
-
 export const OnboardingContainer = styled.div<ViewProps>`
   overflow-y: scroll;
   ${({ height }): string => `height: ${height}px;`};
@@ -149,13 +151,17 @@ export const OnboardingContainer = styled.div<ViewProps>`
   animation: ${disappear}, ${fadeIn};
   animation-duration: 5.0s, 0.5s;
   animation-delay: 0s, 5.0s;
+  ${({ showAnimation }) => (showAnimation ?
+    css`
+    animation: ${disappear}, ${fadeIn};
+    animation-duration: 5.0s, 0.5s;
+    animation-delay: 0s, 5.0s;
+  `: `
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.8s, 0.5s;
+  animation-delay: 0s, 0.8s;
+  `)};
 `;
-
-interface ViewProps {
-  height: number;
-  width: number;
-  showSlider?: boolean;
-}
 
 export const DefaultImage = styled(CharacterImgs) <ViewProps>`
   position: absolute;
@@ -194,20 +200,43 @@ export const TextContainer = styled.span`
   margin-top: 8px;
 `;
 
-export const KreadContainer = styled.div<ViewProps>`
-  ${KreadIcon} {
-    top: 0;
-    bottom: 0;
-    margin: auto;
+export const KreadLogo = styled(KreadIcon)`
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.8s, 0.5s;
+  animation-delay: 0s, 0.8s;
+`;
+
+export const LogoContainer = styled.div`
+  ${KreadLogo} {
     position: absolute;
-    left: 0;
-    right: 0;
-    width: 500px;
-    height: 150px;
-    animation: ${changeSize} 4s 1;
-    animation-fill-mode: forwards;
-    animation-delay: 3.8s;
+    left: 50%;
+    transform: translate(-45%, 0);
+    top: 40px;
+    bottom: 50%;
+    width: 100px;
+    height: 24px;
+    right: 50%;
   }
+`;
+
+export const KreadContainer = styled.div<ViewProps>`
+${({ showAnimation }) => (showAnimation &&
+    css`
+      ${KreadIcon} {
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 500px;
+        height: 150px;
+        animation: ${changeSize} 4s 1;
+        animation-fill-mode: forwards;
+        animation-delay: 3.8s;
+      }
+  `)};
+
   ${({ showSlider }) => (showSlider &&
     css`
     animation: ${slideUp};

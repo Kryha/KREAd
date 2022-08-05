@@ -22,12 +22,12 @@ import {
   SectionContainer,
   KryhaLink,
   KreadLogo,
+  LogoContainer,
 } from "./styles";
 import { useLocalStorage, useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
 import { useTimer } from "../../hooks/hooks";
-import { KreadIcon } from "../../components/logo/styles";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
@@ -89,9 +89,14 @@ export const Onboarding: FC = () => {
           <Footer />
         </FooterContainer>
       </OnboardingContainer>
-      <KreadContainer height={height} width={width} showSlider={showSlider}>
-        {showAnimation ? <AnimatedLogo iteration={1} /> : <KreadLogo />}
-      </KreadContainer>
+      {showAnimation && (
+        <KreadContainer height={height} width={width} showSlider={showSlider}>
+          <AnimatedLogo iteration={1} />
+        </KreadContainer>
+      )}
+      <LogoContainer>
+        <KreadLogo />
+      </LogoContainer>
     </>
   );
 };
