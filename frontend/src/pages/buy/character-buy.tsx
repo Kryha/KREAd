@@ -4,18 +4,19 @@ import { text } from "../../assets";
 
 import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { CharacterDetailSection } from "../../containers/detail-section";
+import { useCharacterContext } from "../../context/characters";
 import { CharacterInMarket } from "../../interfaces";
 import { useBuyCharacter, useCharacterFromMarket, useMyCharacter } from "../../service";
+import { getExtendedCharacter } from "../../service/util";
 import { Buy } from "./buy";
 
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
-
   const idString = String(id);
 
+  const [{ owned }] = useCharacterContext();
   const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(idString);
   const [boughtCharacter] = useMyCharacter(idString);
-
   const buyCharacter = useBuyCharacter(idString);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
@@ -56,7 +57,7 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection nft={data.character} equippedItems={data.equippedItems} />
+        <CharacterDetailSection character={getExtendedCharacter(data.character.name, owned)} equippedItems={data.equippedItems} />
       </FadeInOut>
     </Buy>
   );

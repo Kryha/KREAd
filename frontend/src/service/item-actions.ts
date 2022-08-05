@@ -4,7 +4,7 @@ import { E } from "@endo/eventual-send";
 import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
-import { Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
+import { ActivityEvent, Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
 import { formatIdAsNumber } from "./util";
 
 export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
@@ -36,7 +36,7 @@ export const sellItem = async (service: AgoricState, item: ItemBackend, price: b
     Items: itemPurse.brand,
     Money: moneyPurse.brand,
   });
-
+  
   const sellAssetsTerms = harden({
     pricePerItem: { value: price, brand: moneyPurse.brand },
     issuers: issuerKeywordRecord,
@@ -333,4 +333,17 @@ export const itemSwap = async (service: AgoricState, item: Item, character: Char
   });
 
   return E(walletP).addOffer(offerConfig);
+};
+
+export const getItemActivity = async (itemId: string, agoric: AgoricState): Promise<ActivityEvent[]> => {
+  const fetchedActivity = await E(agoric.contracts.characterBuilder.publicFacet).getItemHistory(itemId);
+  
+  const itemActivity = fetchedActivity.map((event: {[key: string]: string | bigint}) => ({
+    type: event.type,
+    to: "unknown",
+    date: event.timestamp,
+  }));
+
+  console.log("itemActivity", itemActivity);
+  return itemActivity;
 };

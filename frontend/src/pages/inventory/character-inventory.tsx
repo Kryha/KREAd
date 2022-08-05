@@ -62,7 +62,7 @@ export const CharactersInventory: FC = () => {
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} />}>
       <FadeInOut show>
         <DetailWrapper>
-          <CharacterDetailSection nft={character.nft} equippedItems={character.equippedItems} actions={detailActions()} />
+          <CharacterDetailSection character={character} equippedItems={character.equippedItems} actions={detailActions()} />
         </DetailWrapper>
       </FadeInOut>
     </PageContainer>

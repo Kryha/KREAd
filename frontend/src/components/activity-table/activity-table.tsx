@@ -32,14 +32,14 @@ const Row: FC<RowProps> = ({ event }) => {
   return (
     <>
       <Cell>
-        <CategoryButton>{event.name}</CategoryButton>
+        <CategoryButton>{event.type}</CategoryButton>
       </Cell>
       <Cell>
         <BoldLabel customColor={color.black}>{!!event.price && text.param.istPrice(event.price)}</BoldLabel>
       </Cell>
       <Cell>{event.from}</Cell>
       <Cell>{event.to}</Cell>
-      <Cell>{getDatefromEpoch(event.date)}</Cell>
+      <Cell>{getDatefromEpoch(Number(event.date))}</Cell>
     </>
   );
 };
@@ -55,7 +55,7 @@ export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
       </HeaderWrap>
       <BodyWrap>
         {events.map((event) => (
-          <RowWrap key={event.date}>
+          <RowWrap key={Number(event.date)}>
             <Row event={event} />
           </RowWrap>
         ))}

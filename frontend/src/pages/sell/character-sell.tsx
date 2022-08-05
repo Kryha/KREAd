@@ -37,7 +37,7 @@ export const CharacterSell = () => {
       data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
     >
       <FadeInOut show>
-        <CharacterDetailSection nft={data.nft} equippedItems={equippedItems} />
+        <CharacterDetailSection character={data} equippedItems={equippedItems} />
       </FadeInOut>
     </Sell>
   );

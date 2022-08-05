@@ -54,6 +54,7 @@ export interface Character {
 export interface ExtendedCharacter {
   nft: Character;
   equippedItems: CharacterItems;
+  activity?: ActivityEvent[];
 }
 
 export interface CharacterInMarket {

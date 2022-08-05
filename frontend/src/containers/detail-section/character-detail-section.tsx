@@ -9,37 +9,40 @@ import { DetailSectionSegmentActivity } from "./detail-section-segment-activity"
 import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
-import { Character, CharacterItems } from "../../interfaces";
+import { CharacterItems, ExtendedCharacter } from "../../interfaces";
 import { DetailSectionItems } from "./detail-section-items";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 
 interface CharacterDetailSectionProps {
-  nft: Character;
+  character?: ExtendedCharacter;
   equippedItems: CharacterItems;
   actions?: DetailSectionActions;
 }
 
 // TODO: Make index dynamic
-export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ nft, equippedItems, actions }) => {
+export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, equippedItems, actions }) => {
   const { width } = useViewport();
 
   const itemsValues = useMemo(() => Object.values(equippedItems).filter((item) => item), [equippedItems]);
 
+  if (!character) {
+    return <></>;
+  }
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
-      <DetailSectionHeader data={{ ...nft, id: nft.id, category: nft.type }} actions={actions} />
+      <DetailSectionHeader data={{ ...character.nft, id: character.nft.id, category: character.nft.type }} actions={actions} />
 
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>
         {/* TODO: fetch actual creator image */}
-        <DetailSectionSegmentStory data={{ ...nft, creatorImage: UnnamedCreator, image: equippedItems, characterImage: nft.image }} />
+        <DetailSectionSegmentStory data={{ ...character.nft, creatorImage: UnnamedCreator, image: equippedItems, characterImage: character.nft.image }} />
       </DetailSectionSegment>
 
       {/* stats */}
       <DetailSectionSegment title={text.character.stats} sectionIndex={2}>
-        <CharacterDetailSectionSegmentStats character={nft} />
+        <CharacterDetailSectionSegmentStats character={character.nft} />
       </DetailSectionSegment>
 
       {/* equipped items */}
@@ -49,17 +52,17 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ nft, e
 
       {/* details */}
       <DetailSectionSegment title={text.character.details} sectionIndex={4}>
-        <DetailSectionSegmentDetails data={{ ...nft.detail, brand: nft.detail.brand }} />
+        <DetailSectionSegmentDetails data={{ ...character.nft.detail, brand: character.nft.detail.brand }} />
       </DetailSectionSegment>
 
       {/* project */}
       <DetailSectionSegment title={text.character.project} sectionIndex={5}>
-        {nft.description}
+        {character.nft.description}
       </DetailSectionSegment>
 
       {/* activity */}
       <DetailSectionSegment title={text.character.itemActivity} sectionIndex={6}>
-        <DetailSectionSegmentActivity events={nft.itemActivity} />
+        {character.activity && <DetailSectionSegmentActivity events={character.activity} />}
       </DetailSectionSegment>
     </DetailSectionWrap>
   );
