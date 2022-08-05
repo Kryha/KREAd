@@ -168,8 +168,6 @@ export const mintItem = async (service: AgoricState, item?: any) => {
   return E(walletP).addOffer(offerConfig);
 };
 
-// TODO: Add check for slot already in use
-// If slot not empty first call removeFromInventory
 export const equipItem = async (service: AgoricState, item: Item, character: Character) => {
   const {
     agoric: { walletP },
@@ -264,7 +262,6 @@ export const unequipItem = async (service: AgoricState, item: Item, characterNam
         Item: {
           pursePetname: itemPurse.brandPetname,
           value: [formatIdAsNumber(item)],
-          // value: [harden({category: item.category})],
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
@@ -345,6 +342,5 @@ export const getItemActivity = async (itemId: string, agoric: AgoricState): Prom
     date: event.timestamp,
   }));
 
-  console.log("itemActivity", itemActivity);
   return itemActivity;
 };

@@ -9,7 +9,7 @@ import { color } from "../../design";
 import { BoldLabel } from "../atoms";
 
 interface ActivityTableProps {
-  events?: ActivityEvent[];
+  events: ActivityEvent[];
 }
 
 interface RowProps {
@@ -44,10 +44,7 @@ const Row: FC<RowProps> = ({ event }) => {
   );
 };
 
-// TODO: Define how we'll construct the Events since they'll not be a property of the Character NFT directly
 export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
-  if (!events) return <></>;
-
   return (
     <ActivityTableWrap>
       <HeaderWrap>

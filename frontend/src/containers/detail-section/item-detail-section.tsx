@@ -26,10 +26,10 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
   const agoric = useAgoricState();
   const [activity, setActivity] = useState<ActivityEvent[]>();
 
+  // TODO: Make this a hook and set store accordingly
   useEffect(() => {
     const fetchActivity = async () => {
       const activity = await getItemActivity(item.id, agoric);
-      console.log(activity);
       setActivity(activity);
     };
     fetchActivity();

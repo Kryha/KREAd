@@ -13,6 +13,7 @@ import { CharacterItems, ExtendedCharacter } from "../../interfaces";
 import { DetailSectionItems } from "./detail-section-items";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
+import { ErrorView } from "../../components";
 
 interface CharacterDetailSectionProps {
   character?: ExtendedCharacter;
@@ -27,13 +28,12 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
   const itemsValues = useMemo(() => Object.values(equippedItems).filter((item) => item), [equippedItems]);
 
-  if (!character) {
-    return <></>;
-  }
+  if (!character) return <ErrorView />;
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
-      <DetailSectionHeader data={{ ...character.nft, id: character.nft.id, category: character.nft.type }} actions={actions} />
+      <DetailSectionHeader data={{ ...character.nft, category: character.nft.type }} actions={actions} />
 
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>

@@ -410,23 +410,6 @@ const start = async (zcf) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    // // Add to private STATE
-    // const characterIndex = privateState.findIndex(
-    //   (c) => c.name === characterName,
-    // );
-    // assert(characterIndex >= 0, X`${errors.privateState404}`);
-
-    // privateState[characterIndex] = {
-    //   name: characterRecord.name,
-    //   history: [
-    //     {
-    //       id: BigInt(privateState[characterIndex].history.length + 1),
-    //       // @ts-ignore
-    //       add: [providedItemAmount.value.map((i) => i.name)],
-    //     },
-    //   ],
-    // };
-
     seat.exit();
   };
 
@@ -486,21 +469,6 @@ const start = async (zcf) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    // Add to private STATE
-    // const characterIndex = privateState.findIndex(
-    //   (c) => c.name === characterName,
-    // );
-    // assert(characterIndex >= 0, X`${errors.privateState404}`);
-    // privateState[characterIndex] = {
-    //   name: characterRecord.name,
-    //   history: [
-    //     {
-    //       id: BigInt(privateState[characterIndex].history.length + 1),
-    //       // @ts-ignore
-    //       remove: [requestedItems],
-    //     },
-    //   ],
-    // };
     seat.exit();
   };
 
@@ -570,23 +538,6 @@ const start = async (zcf) => {
     validateInventoryState(inventorySeat.getStagedAllocation().Item.value);
 
     zcf.reallocate(seat, inventorySeat);
-
-    // Add to private STATE
-    // const characterIndex = privateState.findIndex(
-    //   (c) => c.name === characterName,
-    // );
-    // assert(characterIndex >= 0, X`${errors.privateState404}`);
-
-    // privateState[characterIndex] = {
-    //   name: characterRecord.name,
-    //   history: [
-    //     {
-    //       id: BigInt(privateState[characterIndex].history.length + 1),
-    //       // @ts-ignore
-    //       add: [providedItemAmount.value.map((i) => i.name)],
-    //     },
-    //   ],
-    // };
 
     seat.exit();
   };

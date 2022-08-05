@@ -18,8 +18,6 @@ interface ViewProps {
   height: number;
 }
 
-
-
 export const ImageContainer = styled.div`
   display: flex;
   flex-direction: row;

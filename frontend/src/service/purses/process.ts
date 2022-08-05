@@ -61,7 +61,7 @@ export const processPurses = async (
 
   const equippedCharacterItems: Item[] = [];
   // Map characters to the corresponding inventory in the contract
-  const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
+  const extendedCharacters: ExtendedCharacterBackend[] = await Promise.all(
     ownedCharacters.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
       const activityHistory = await E(contractPublicFacet).getCharacterHistory(character.name);
       const activity = activityHistory.map((event: any) => ({
@@ -69,7 +69,6 @@ export const processPurses = async (
         to: "unknown",
         date: event.timestamp,
       }));
-      console.log("⚡️ Activity", activity);
       const { items: equippedItems } = await E(contractPublicFacet).getCharacterInventory(character.name);
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
       equippedCharacterItems.push(...frontendEquippedItems);
@@ -86,8 +85,8 @@ export const processPurses = async (
     })
   );
 
-  if (charactersWithItems.length) {
-    const frontendCharacters = mediate.characters.toFront(charactersWithItems);
+  if (extendedCharacters.length) {
+    const frontendCharacters = mediate.characters.toFront(extendedCharacters);
     characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: frontendCharacters });
     characterDispatch({ type: "SET_SELECTED_CHARACTER", payload: frontendCharacters[0] });
   }
