@@ -25,7 +25,7 @@ interface SpinnerProps {
 }
 
 
-export const SpinnerContainer = styled.div<SpinnerProps>`
+export const LoadingPageContainer = styled.div<SpinnerProps>`
   width: 100%;
   display: flex;
   flex-direction: column;

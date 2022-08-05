@@ -39,7 +39,6 @@ export const Onboarding: FC = () => {
   const isConnectButtonVisible = useOnScreen(ref);
 
   const connectWallet = () => {
-    // TODO: check if you have any assets in your wallet & connect to wallet
     navigate(routes.createCharacter);
     setShowAnimation(false);
   };
