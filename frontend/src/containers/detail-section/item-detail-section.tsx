@@ -14,6 +14,7 @@ import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 import { getItemActivity } from "../../service/item-actions";
 import { useAgoricState } from "../../context/agoric";
+import { LoadingPage } from "../../components";
 
 interface ItemDetailSectionProps {
   item: Item;
@@ -34,7 +35,7 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
     };
     fetchActivity();
   }, [agoric, item.id]);
-  
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
@@ -63,10 +64,7 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
 
       {/* activity */}
       <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5} isActivity>
-        {activity
-          ? <DetailSectionSegmentActivity events={activity} />
-          : <DetailSectionSegmentActivity />
-        }
+        {activity ? <DetailSectionSegmentActivity events={activity} /> : <LoadingPage />}
       </DetailSectionSegment>
     </DetailSectionWrap>
   );
