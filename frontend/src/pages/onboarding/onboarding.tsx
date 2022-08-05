@@ -46,7 +46,7 @@ export const Onboarding: FC = () => {
 
   return (
     <>
-      <OnboardingContainer height={height} width={width}>
+      <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <PrimaryButton onClick={() => connectWallet()}>
             <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
@@ -88,14 +88,15 @@ export const Onboarding: FC = () => {
           <Footer />
         </FooterContainer>
       </OnboardingContainer>
-      {showAnimation && (
+      {showAnimation ? (
         <KreadContainer height={height} width={width} showSlider={showSlider}>
           <AnimatedLogo iteration={1} />
         </KreadContainer>
+      ) : (
+        <LogoContainer>
+          <KreadLogo />
+        </LogoContainer>
       )}
-      <LogoContainer>
-        <KreadLogo />
-      </LogoContainer>
     </>
   );
 };

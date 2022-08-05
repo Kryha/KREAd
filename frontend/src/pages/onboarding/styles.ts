@@ -156,7 +156,8 @@ export const OnboardingContainer = styled.div<ViewProps>`
       animation: ${disappear}, ${fadeIn};
       animation-duration: 5.0s, 0.5s;
       animation-delay: 0s, 5.0s;
-    ` : `
+    ` :
+    css`
       animation: ${disappear}, ${fadeIn};
       animation-duration: 0.8s, 0.5s;
       animation-delay: 0s, 0.8s;
@@ -220,22 +221,19 @@ export const LogoContainer = styled.div`
 `;
 
 export const KreadContainer = styled.div<ViewProps>`
-${({ showAnimation }) => (showAnimation &&
-    css`
-      ${KreadIcon} {
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        position: absolute;
-        left: 0;
-        right: 0;
-        width: 500px;
-        height: 150px;
-        animation: ${changeSize} 4s 1;
-        animation-fill-mode: forwards;
-        animation-delay: 3.8s;
-      }
-  `)};
+  ${KreadIcon} {
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 500px;
+    height: 150px;
+    animation: ${changeSize} 4s 1;
+    animation-fill-mode: forwards;
+    animation-delay: 3.8s;
+  }
 
   ${({ showSlider }) => (showSlider &&
     css`
