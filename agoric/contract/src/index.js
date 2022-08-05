@@ -135,11 +135,13 @@ const start = async (zcf) => {
     // Add to history
 
     items.forEach((item) => {
-      itemHistory.set(item.id.toString(), {
-        type: 'mint',
-        data: item,
-        timestamp: currentTime,
-      });
+      itemHistory.set(item.id.toString(), [
+        {
+          type: 'mint',
+          data: item,
+          timestamp: currentTime,
+        },
+      ]);
     });
 
     return messages.mintItemReturn;
@@ -240,8 +242,11 @@ const start = async (zcf) => {
   const storeItemInMarket = async (itemInMarket) => {
     assert(itemInMarket, X`${errors.invalidArg}`);
     STATE.itemsMarket = [...STATE.itemsMarket, itemInMarket];
+
+    // Add to history
+    const currentHistory = itemHistory.get(itemInMarket?.item.id);
     itemHistory.set(itemInMarket?.item.id, [
-      ...itemHistory.get(itemInMarket?.item.id),
+      ...currentHistory,
       {
         type: 'addToMarket',
         data: itemInMarket,
@@ -267,8 +272,9 @@ const start = async (zcf) => {
     STATE.itemsMarket = newMarket;
 
     // Add to history
+    const currentHistory = itemHistory.get(itemRecord?.item.id);
     itemHistory.set(itemRecord?.item.id, [
-      ...itemHistory.get(itemRecord?.item.id),
+      ...currentHistory,
       {
         type: 'removeFromMarket',
         data: itemRecord,
@@ -289,8 +295,9 @@ const start = async (zcf) => {
     STATE.charactersMarket = [...STATE.charactersMarket, characterInMarket];
 
     // Add to history
+    const currentHistory = itemHistory.get(characterInMarket.character.id);
     characterHistory.set(characterInMarket.character.id, [
-      ...itemHistory.get(characterInMarket.character.id),
+      ...currentHistory,
       {
         type: 'addToMarket',
         data: characterInMarket,
@@ -318,8 +325,9 @@ const start = async (zcf) => {
     STATE.charactersMarket = newMarket;
 
     // Add to history
+    const currentHistory = itemHistory.get(characterInMarket.character.id);
     characterHistory.set(characterInMarket.character.id, [
-      ...itemHistory.get(characterInMarket.character.id),
+      ...currentHistory,
       {
         type: 'removeFromMarket',
         data: characterInMarket,
