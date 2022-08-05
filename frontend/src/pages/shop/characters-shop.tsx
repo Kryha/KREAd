@@ -151,7 +151,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
             {!!selectedCharacter && (
               <DetailContainer>
                 <CharacterDetailSection
-                  nft={selectedCharacter.character}
+                  character={{ nft: selectedCharacter.character, equippedItems: selectedCharacter.equippedItems}}
                   equippedItems={selectedCharacter.equippedItems}
                   actions={{
                     onClose: () => {

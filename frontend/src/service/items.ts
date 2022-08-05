@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 
-import { Item, ItemEquip, ItemInMarket, ItemInMarketBackend } from "../interfaces";
+import { ActivityEvent, Item, ItemEquip, ItemInMarket, ItemInMarketBackend } from "../interfaces";
 import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";

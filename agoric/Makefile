@@ -24,4 +24,4 @@ wallet1:
 
 # TODO: add json attribute and remove
 deploy:
-	agoric deploy contract/nft-maker-contract-deploy.js api/nft-maker-deploy-api.js
+	agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js

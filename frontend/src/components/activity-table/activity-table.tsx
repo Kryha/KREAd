@@ -9,7 +9,7 @@ import { color } from "../../design";
 import { BoldLabel } from "../atoms";
 
 interface ActivityTableProps {
-  events?: ActivityEvent[];
+  events: ActivityEvent[];
 }
 
 interface RowProps {
@@ -32,22 +32,19 @@ const Row: FC<RowProps> = ({ event }) => {
   return (
     <>
       <Cell>
-        <CategoryButton>{event.name}</CategoryButton>
+        <CategoryButton>{event.type}</CategoryButton>
       </Cell>
       <Cell>
         <BoldLabel customColor={color.black}>{!!event.price && text.param.istPrice(event.price)}</BoldLabel>
       </Cell>
       <Cell>{event.from}</Cell>
       <Cell>{event.to}</Cell>
-      <Cell>{getDatefromEpoch(event.date)}</Cell>
+      <Cell>{getDatefromEpoch(Number(event.date))}</Cell>
     </>
   );
 };
 
-// TODO: Define how we'll construct the Events since they'll not be a property of the Character NFT directly
 export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
-  if (!events) return <></>;
-
   return (
     <ActivityTableWrap>
       <HeaderWrap>
@@ -55,7 +52,7 @@ export const ActivityTable: FC<ActivityTableProps> = ({ events }) => {
       </HeaderWrap>
       <BodyWrap>
         {events.map((event) => (
-          <RowWrap key={event.date}>
+          <RowWrap key={Number(event.date)}>
             <Row event={event} />
           </RowWrap>
         ))}

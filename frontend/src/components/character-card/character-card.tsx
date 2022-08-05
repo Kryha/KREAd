@@ -136,12 +136,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
       <FadeInOut show={!!character} exiting={!character?.nft}>
         {character && (
           <CharacterCardWrapper>
-            <CharacterDetailSection
-              nft={character.nft}
-              equippedItems={character.equippedItems}
-              actions={detailActions()}
-              showToast={displayToast}
-            />
+            <CharacterDetailSection showToast={displayToast} character={character} equippedItems={character.equippedItems} actions={detailActions()} />
           </CharacterCardWrapper>
         )}
       </FadeInOut>

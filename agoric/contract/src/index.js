@@ -60,12 +60,9 @@ const start = async (zcf) => {
       },
     },
   };
-  /**
-   * Private STATE
-   *
-   * @type {InventoryKeyStorage}
-   */
-  let privateState = [];
+
+  const characterHistory = new Map();
+  const itemHistory = new Map();
 
   /**
    * Set contract configuration, required for most contract features,
@@ -131,9 +128,22 @@ const start = async (zcf) => {
     });
 
     const newItemAmount = AmountMath.make(itemBrand, harden(items));
-
     itemMint.mintGains({ Asset: newItemAmount }, seat);
+
     seat.exit();
+
+    // Add to history
+
+    items.forEach((item) => {
+      itemHistory.set(item.id.toString(), [
+        {
+          type: 'mint',
+          data: item,
+          timestamp: currentTime,
+        },
+      ]);
+    });
+
     return messages.mintItemReturn;
   };
 
@@ -154,12 +164,13 @@ const start = async (zcf) => {
     const newCharacterName = want.Asset.value[0].name;
     assert(state.nameIsUnique(newCharacterName, STATE), X`${errors.nameTaken}`);
 
+    const currentTime = await state.getCurrentTime(STATE);
     STATE.characterCount = 1n + STATE.characterCount;
     const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
       newCharacterName,
       state.getRandomBaseCharacter(STATE),
       STATE.characterCount,
-      await state.getCurrentTime(STATE),
+      currentTime,
     ).map((character) => AmountMath.make(characterBrand, harden([character])));
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
@@ -199,20 +210,23 @@ const start = async (zcf) => {
     };
     STATE.characters = [...STATE.characters, character];
 
-    // TODO: make private STATE useful
-    // Add to private STATE
-    privateState = [
-      ...privateState,
+    // Add to history
+    characterHistory.set(character.name, [
       {
-        name: character.name,
-        history: [
-          {
-            id: STATE.characterCount,
-            add: uniqueItems.map((i) => i.title),
-          },
-        ],
+        type: 'mint',
+        data: character,
+        timestamp: currentTime,
       },
-    ];
+    ]);
+    uniqueItems.forEach((item) => {
+      itemHistory.set(item.id.toString(), [
+        {
+          type: 'mint',
+          data: item,
+          timestamp: currentTime,
+        },
+      ]);
+    });
 
     seat.exit();
 
@@ -223,11 +237,22 @@ const start = async (zcf) => {
    * This function has to be called after creating the sell offer
    *
    * @param {ItemInMarket} itemInMarket
-   * @returns {ItemInMarket}
+   * @returns {Promise<ItemInMarket>}
    */
-  const storeItemInMarket = (itemInMarket) => {
+  const storeItemInMarket = async (itemInMarket) => {
+    assert(itemInMarket, X`${errors.invalidArg}`);
     STATE.itemsMarket = [...STATE.itemsMarket, itemInMarket];
 
+    // Add to history
+    const currentHistory = itemHistory.get(itemInMarket?.item.id);
+    itemHistory.set(itemInMarket?.item.id, [
+      ...currentHistory,
+      {
+        type: 'addToMarket',
+        data: itemInMarket,
+        timestamp: await state.getCurrentTime(STATE),
+      },
+    ]);
     return itemInMarket;
   };
 
@@ -236,24 +261,49 @@ const start = async (zcf) => {
    *
    * @param {bigint} itemId
    */
-  const removeItemFromMarket = (itemId) => {
+  const removeItemFromMarket = async (itemId) => {
+    const itemRecord = STATE.itemsMarket.find((i) => i.id === itemId);
+    assert(itemRecord, X`${errors.itemNotInMarket}`);
     // TODO: eventually use a more efficient data structure
     const newMarket = STATE.itemsMarket.reduce((market, item) => {
       if (itemId !== item.id) return [...market, item];
       return market;
     }, []);
     STATE.itemsMarket = newMarket;
+
+    // Add to history
+    const currentHistory = itemHistory.get(itemRecord?.item.id);
+    itemHistory.set(itemRecord?.item.id, [
+      ...currentHistory,
+      {
+        type: 'removeFromMarket',
+        data: itemRecord,
+        timestamp: await state.getCurrentTime(STATE),
+      },
+    ]);
   };
 
   /**
    * This function has to be called after completing the sell offer
    *
    * @param {CharacterInMarket} characterInMarket
-   * @returns {CharacterInMarket}
+   * @returns {Promise<CharacterInMarket>}
    */
-  const storeCharacterInMarket = (characterInMarket) => {
+  const storeCharacterInMarket = async (characterInMarket) => {
+    assert(characterInMarket, X`${errors.invalidArg}`);
+
     STATE.charactersMarket = [...STATE.charactersMarket, characterInMarket];
 
+    // Add to history
+    const currentHistory = itemHistory.get(characterInMarket.character.id);
+    characterHistory.set(characterInMarket.character.id, [
+      ...currentHistory,
+      {
+        type: 'addToMarket',
+        data: characterInMarket,
+        timestamp: await state.getCurrentTime(STATE),
+      },
+    ]);
     return characterInMarket;
   };
 
@@ -262,13 +312,28 @@ const start = async (zcf) => {
    *
    * @param {bigint} characterId
    */
-  const removeCharacterFromMarket = (characterId) => {
+  const removeCharacterFromMarket = async (characterId) => {
+    const characterInMarket = STATE.charactersMarket.find(
+      (c) => c.id === characterId,
+    );
+    assert(characterInMarket, X`${errors.characterNotInMarket}`);
     // TODO: eventually use a more efficient data structure
     const newMarket = STATE.charactersMarket.reduce((market, character) => {
       if (characterId !== character.id) return [...market, character];
       return market;
     }, []);
     STATE.charactersMarket = newMarket;
+
+    // Add to history
+    const currentHistory = itemHistory.get(characterInMarket.character.id);
+    characterHistory.set(characterInMarket.character.id, [
+      ...currentHistory,
+      {
+        type: 'removeFromMarket',
+        data: characterInMarket,
+        timestamp: await state.getCurrentTime(STATE),
+      },
+    ]);
   };
 
   /**
@@ -345,23 +410,6 @@ const start = async (zcf) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    // Add to private STATE
-    const characterIndex = privateState.findIndex(
-      (c) => c.name === characterName,
-    );
-    assert(characterIndex >= 0, X`${errors.privateState404}`);
-
-    privateState[characterIndex] = {
-      name: characterRecord.name,
-      history: [
-        {
-          id: BigInt(privateState[characterIndex].history.length + 1),
-          // @ts-ignore
-          add: [providedItemAmount.value.map((i) => i.name)],
-        },
-      ],
-    };
-
     seat.exit();
   };
 
@@ -421,21 +469,6 @@ const start = async (zcf) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    // Add to private STATE
-    const characterIndex = privateState.findIndex(
-      (c) => c.name === characterName,
-    );
-    assert(characterIndex >= 0, X`${errors.privateState404}`);
-    privateState[characterIndex] = {
-      name: characterRecord.name,
-      history: [
-        {
-          id: BigInt(privateState[characterIndex].history.length + 1),
-          // @ts-ignore
-          remove: [requestedItems],
-        },
-      ],
-    };
     seat.exit();
   };
 
@@ -505,23 +538,6 @@ const start = async (zcf) => {
     validateInventoryState(inventorySeat.getStagedAllocation().Item.value);
 
     zcf.reallocate(seat, inventorySeat);
-
-    // Add to private STATE
-    const characterIndex = privateState.findIndex(
-      (c) => c.name === characterName,
-    );
-    assert(characterIndex >= 0, X`${errors.privateState404}`);
-
-    privateState[characterIndex] = {
-      name: characterRecord.name,
-      history: [
-        {
-          id: BigInt(privateState[characterIndex].history.length + 1),
-          // @ts-ignore
-          add: [providedItemAmount.value.map((i) => i.name)],
-        },
-      ],
-    };
 
     seat.exit();
   };
@@ -663,7 +679,10 @@ const start = async (zcf) => {
       zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
 
     // private STATE
-    getPrivateState: () => privateState, // TODO: do we really want to expose the privateState?
+    getCharacterHistory: (characterId) => characterHistory.get(characterId),
+    getItemHistory: (id) => itemHistory.get(id),
+    getAllCharacterHistory: () => characterHistory.entries(),
+    getAllItemHistory: () => itemHistory.entries(),
   });
 
   return harden({ creatorFacet, publicFacet });
