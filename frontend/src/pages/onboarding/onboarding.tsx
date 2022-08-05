@@ -21,16 +21,19 @@ import {
   ScrollContainer,
   SectionContainer,
   KryhaLink,
+  KreadLogo,
 } from "./styles";
-import { useOnScreen, useViewport } from "../../hooks";
+import { useLocalStorage, useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
-import { AGORIC_LINK, KRYHA_LINK, SLIDER_TIME } from "../../constants";
+import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
 import { useTimer } from "../../hooks/hooks";
+import { KreadIcon } from "../../components/logo/styles";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
+  const [showAnimation, setShowAnimation] = useLocalStorage(FIRST_TIME);
 
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
@@ -38,8 +41,10 @@ export const Onboarding: FC = () => {
   const connectWallet = () => {
     // TODO: check if you have any assets in your wallet & connect to wallet
     navigate(routes.createCharacter);
+    setShowAnimation(false);
   };
 
+  console.log(showAnimation);
   return (
     <>
       <OnboardingContainer height={height} width={width}>
@@ -85,7 +90,7 @@ export const Onboarding: FC = () => {
         </FooterContainer>
       </OnboardingContainer>
       <KreadContainer height={height} width={width} showSlider={showSlider}>
-        <AnimatedLogo iteration={1} />
+        {showAnimation ? <AnimatedLogo iteration={1} /> : <KreadLogo />}
       </KreadContainer>
     </>
   );
