@@ -153,13 +153,13 @@ export const OnboardingContainer = styled.div<ViewProps>`
   animation-delay: 0s, 5.0s;
   ${({ showAnimation }) => (showAnimation ?
     css`
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 5.0s, 0.5s;
-    animation-delay: 0s, 5.0s;
-  `: `
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.8s, 0.5s;
-  animation-delay: 0s, 0.8s;
+      animation: ${disappear}, ${fadeIn};
+      animation-duration: 5.0s, 0.5s;
+      animation-delay: 0s, 5.0s;
+    ` : `
+      animation: ${disappear}, ${fadeIn};
+      animation-duration: 0.8s, 0.5s;
+      animation-delay: 0s, 0.8s;
   `)};
 `;
 

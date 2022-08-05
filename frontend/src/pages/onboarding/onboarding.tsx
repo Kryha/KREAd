@@ -44,7 +44,6 @@ export const Onboarding: FC = () => {
     setShowAnimation(false);
   };
 
-  console.log(showAnimation);
   return (
     <>
       <OnboardingContainer height={height} width={width}>
