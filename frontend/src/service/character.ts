@@ -1,13 +1,21 @@
 // TODO: Remove this, use ations + context instead
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterEquip, CharacterInMarket, CharacterInMarketBackend, ExtendedCharacter } from "../interfaces";
+import {
+  CharacterBackend,
+  CharacterCreation,
+  CharacterEquip,
+  CharacterInMarket,
+  CharacterInMarketBackend,
+  ExtendedCharacter,
+} from "../interfaces";
 import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { buyCharacter, mintNfts, sellCharacter } from "./character-actions";
+import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 import { E } from "@endo/eventual-send";
+import { useOffers } from "./offers";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
@@ -30,19 +38,82 @@ export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolea
 };
 
 export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
+  const [
+    {
+      contracts: {
+        characterBuilder: { publicFacet },
+      },
+    },
+  ] = useAgoricContext();
   const [{ owned, selected, fetched }] = useCharacterContext();
+  const offers = useOffers({ description: "seller", status: "pending" });
+
+  // strigified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
+  const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
+  // const [offerCharacters, setOfferCharacters] = useState<ExtendedCharacterBackend[]>([]);
 
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
     return owned.map((character) => {
-      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true };
-      return { ...character, isEquipped: false };
+      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true, isForSale: false };
+      return { ...character, isEquipped: false, isForSale: false };
     });
   }, [owned, selected?.nft.id]);
 
+  // filtering character offers
+  const characterOffers = useMemo(
+    () =>
+      offers.filter((offer) => {
+        try {
+          // TODO: find a better way to discriminate between items and characters, maybe define type checkers in the future
+          return (
+            offer.proposalTemplate.give.Items.value[0].baseMaterial === undefined &&
+            offer.proposalTemplate.give.Items.value[0].keyId !== undefined
+          );
+        } catch (error) {
+          return false;
+        }
+      }),
+    [offers]
+  );
+
+  // retrieving characters from offers
+  const charactersFromOffers: CharacterBackend[] = useMemo(() => {
+    try {
+      const fromOffers: CharacterBackend[] = characterOffers.map((offer: any) => {
+        return offer.proposalTemplate.give.Items.value[0];
+      });
+      return fromOffers;
+    } catch (error) {
+      return [];
+    }
+  }, [characterOffers]);
+
+  // adding items to characters from offers
+  useEffect(() => {
+    const extend = async () => {
+      const { extendedCharacters } = await extendCharacters(publicFacet, charactersFromOffers);
+      setOfferCharacters(JSON.stringify(extendedCharacters));
+    };
+    extend();
+  }, [charactersFromOffers, publicFacet]);
+
+  // mixing characters from wallet with characters from offers
+  const charactersWithForSale: CharacterEquip[] = useMemo(() => {
+    try {
+      const offerCharactersFrontend: CharacterEquip[] = mediate.characters
+        .toFront(JSON.parse(offerCharacters))
+        .map((item) => ({ ...item, isEquipped: false, isForSale: true }));
+      return [...charactersWithEquip, ...offerCharactersFrontend];
+    } catch (error) {
+      return charactersWithEquip;
+    }
+  }, [offerCharacters, charactersWithEquip]);
+
+  // filtering all the characters
   const filtered = useMemo(() => {
-    if (!filters) return charactersWithEquip;
-    return filterCharacters(charactersWithEquip, filters);
-  }, [charactersWithEquip, filters]);
+    if (!filters) return charactersWithForSale;
+    return filterCharacters(charactersWithForSale, filters);
+  }, [charactersWithForSale, filters]);
 
   return [filtered, !fetched];
 };

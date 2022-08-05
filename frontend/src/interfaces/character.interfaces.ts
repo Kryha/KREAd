@@ -85,6 +85,7 @@ export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft">
 
 export interface CharacterEquip extends ExtendedCharacter {
   isEquipped: boolean;
+  isForSale: boolean;
 }
 
 export interface CharacterCreation {
