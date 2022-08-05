@@ -2,55 +2,34 @@ import { FC, ReactNode, useState } from "react";
 
 import { text } from "../../assets";
 import {
-  CharacterShopCard,
   Filters,
   HorizontalDivider,
   Label,
   LoadingPage,
-  OverviewEmpty,
   Overlay,
   PriceSelector,
   Select,
   ButtonText,
   FadeInOut,
   NotificationDetail,
-  LoadMore,
 } from "../../components";
-import { MAX_PRICE, MIN_PRICE, PAGE_SIZE } from "../../constants";
+import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
-import { useViewport } from "../../hooks";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
-import {
-  DetailContainer,
-  FilterContainer,
-  FilterWrapper,
-  ItemContainer,
-  ItemWrapper,
-  LoadMoreWrapper,
-  NotificationContainer,
-  SelectorContainer,
-  SortByContainer,
-} from "./styles";
-import { CharacterInMarket } from "../../interfaces";
-import { CharacterDetailSection } from "../../containers/detail-section";
-import { useNavigate } from "react-router-dom";
-import { routes } from "../../navigation";
+import { FilterContainer, FilterWrapper, NotificationContainer, SelectorContainer, SortByContainer } from "./styles";
 import { useCharactersMarketPages } from "../../service";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { CharactersShopDetail } from "./character-shop-detail";
 
 interface Props {
   pageSelector: ReactNode;
 }
 
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
-  const { height } = useViewport();
-  const navigate = useNavigate();
   const [filterId, setFilterId] = useState("");
-  const [selectedCharacter, setSelectedCharacter] = useState<CharacterInMarket>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
-  const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [page, setPage] = useState(1);
 
@@ -60,24 +39,12 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
     price: selectedPrice,
   });
 
-  const noFilteredCharacters =
-    (!selectedCategory.length || !selectedSorting.length || !selectedPrice) && (!characters || !characters.length);
-
   const handlePriceChange = (min: number, max: number) => {
     setSelectedPrice({ min: min, max: max });
   };
 
-  const buy = () => {
-    if (!selectedCharacter) return;
-    navigate(`${routes.buyCharacter}/${selectedCharacter.id}`);
-  };
-
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
-  };
-
-  const displayToast = () => {
-    setShowToast(true);
   };
 
   return (
@@ -107,66 +74,17 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
       {isLoading ? (
         <LoadingPage spinner={false} />
       ) : (
-        <>
-          {!characters || !characters.length ? (
-            <OverviewEmpty
-              headingText={text.store.thereAreNoCharactersInTheShop}
-              descriptionText={text.store.thereAreNoCharactersAvailable}
-              buttonText={text.navigation.goHome}
-              redirectRoute={routes.character}
-            />
-          ) : (
-            <>
-              {noFilteredCharacters && (
-                <ItemWrapper height={height}>
-                  <ItemContainer>
-                    {characters.map((character) => (
-                      <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
-                    ))}
-                  </ItemContainer>
-                  <LoadMoreWrapper>
-                    {characters.length > PAGE_SIZE && (
-                      <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />
-                    )}
-                  </LoadMoreWrapper>
-                </ItemWrapper>
-              )}
-              {!noFilteredCharacters && (
-                <ItemWrapper height={height}>
-                  <ItemContainer>
-                    {characters.map((character) => (
-                      <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
-                    ))}
-                  </ItemContainer>
-                  <LoadMoreWrapper>
-                    {characters.length > PAGE_SIZE && (
-                      <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />
-                    )}
-                  </LoadMoreWrapper>
-                </ItemWrapper>
-              )}
-            </>
-          )}
-          <FadeInOut show={!!selectedCharacter} exiting={close}>
-            {!!selectedCharacter && (
-              <DetailContainer>
-                <CharacterDetailSection
-                  character={{ nft: selectedCharacter.character, equippedItems: selectedCharacter.equippedItems}}
-                  equippedItems={selectedCharacter.equippedItems}
-                  actions={{
-                    onClose: () => {
-                      setSelectedCharacter(undefined);
-                      setClose(true);
-                    },
-                    primary: { text: text.item.buy, onClick: buy },
-                  }}
-                  showToast={displayToast}
-                />
-              </DetailContainer>
-            )}
-            <Overlay />
-          </FadeInOut>
-        </>
+        <CharactersShopDetail
+          characters={characters}
+          totalPages={totalPages}
+          isLoading={isLoading}
+          selectedCategory={selectedCategory}
+          selectedSorting={selectedSorting}
+          selectedPrice={selectedPrice}
+          setShowToast={setShowToast}
+          page={page}
+          setPage={setPage}
+        />
       )}
       <FadeInOut show={showToast} exiting={!showToast}>
         {showToast && <Overlay isOnTop={true} />}
