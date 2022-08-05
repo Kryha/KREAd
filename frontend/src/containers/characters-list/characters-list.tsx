@@ -73,6 +73,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
           removeInitial={removeInitial}
           isInitial={intitial}
           isEquipped={myCharacters[0].isEquipped}
+          isForSale={myCharacters[0].isForSale}
         />
         {myCharacters.slice(1).map((character) => (
           <MenuItem
@@ -87,6 +88,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
             onClick={onCharacterClick}
             removeInitial={removeInitial}
             isEquipped={character.isEquipped}
+            isForSale={character.isForSale}
           />
         ))}
       </ListContainer>
