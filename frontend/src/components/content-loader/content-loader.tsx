@@ -12,7 +12,7 @@ interface LoadingPageProps {
 }
 
 export const LoadingPage: FC<LoadingPageProps> = ({ spinner = true }) => (
-  <SpinnerContainer>{spinner ? <Spinner /> : <AnimatedLoading />}</SpinnerContainer>
+  <SpinnerContainer isSpinner={spinner}>{spinner ? <Spinner /> : <AnimatedLoading />}</SpinnerContainer>
 );
 
 export const ContentLoader: FC<ContentLoaderProps> = ({ loading, children, spinner }) => {

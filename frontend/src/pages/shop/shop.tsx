@@ -1,11 +1,12 @@
 import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
-import { AnimatedLogo, BaseRoute, SwitchSelector } from "../../components";
+import { BaseRoute, SwitchSelector } from "../../components";
 import { KreadContainer, ShopWrapper } from "./styles";
 import { ItemsShop } from "./items-shop";
 import { CharactersShop } from "./characters-shop";
 import { useViewport } from "../../hooks";
+import { KreadIcon } from "../../components/logo/styles";
 
 export enum Page {
   Items = 0,
@@ -33,7 +34,7 @@ export const Shop: FC = () => {
         {selectedPage === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
       </ShopWrapper>
       <KreadContainer height={height} width={width}>
-        <AnimatedLogo iteration={1} />
+        <KreadIcon />
       </KreadContainer>
     </BaseRoute>
   );

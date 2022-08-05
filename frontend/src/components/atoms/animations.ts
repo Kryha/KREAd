@@ -87,7 +87,7 @@ export const sequentialFadeIn = keyframes`
     opacity:1
   }
   100% {
-    opacity:0;
+    opacity:1;
   }
 `;
 
@@ -126,5 +126,12 @@ export const slideUp = keyframes`
   100% {
     -webkit-transform: translateY(-95vh);
     transform: translateY(-95vh);
+  }
+`;
+
+export const changeSize = keyframes`
+  50% {
+    width: 100px;
+    height: 24px;
   }
 `;
