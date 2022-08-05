@@ -3,8 +3,8 @@ export default {
   "INSTANCE_NFT_MAKER_BOARD_ID": "board05311",
   "INSTALLATION_BOARD_ID": "board0639",
   "SELL_ASSETS_INSTALLATION_BOARD_ID": "board02810",
-  "INVITE_BRAND_BOARD_ID": "board0074",
-  "INVITE_ISSUER_BOARD_ID": "board0074",
+  "INVITE_BRAND_BOARD_ID": "board0223",
+  "INVITE_ISSUER_BOARD_ID": "board0223",
   "BRIDGE_URL": "agoric-lookup:https://local.agoric.com?append=/bridge",
   "brandBoardIds": {
     "Character": "board04312",

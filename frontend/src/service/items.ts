@@ -18,17 +18,8 @@ export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   return [found, isLoading];
 };
 
-export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean] => {
-  const [{ owned, equipped, fetched }] = useItemContext();
+export const useMyItemsForSale = () => {
   const offers = useOffers({ description: "seller", status: "pending" });
-
-  const all = useMemo(
-    () => [
-      ...equipped.map((item) => ({ ...item, isEquipped: true, isForSale: false })),
-      ...owned.map((item) => ({ ...item, isEquipped: false, isForSale: false })),
-    ],
-    [equipped, owned]
-  );
 
   // filtering item offers
   const itemOffers = useMemo(
@@ -44,8 +35,8 @@ export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: I
     [offers]
   );
 
-  // mixing items from wallet to items from offers
-  const allWithForSale: ItemEquip[] = useMemo(() => {
+  // getting items from filtered offers
+  const itemsForSale: ItemEquip[] = useMemo(() => {
     try {
       const itemsFromOffers: ItemBackend[] = itemOffers.map((offer: any) => {
         return offer.proposalTemplate.give.Items.value[0];
@@ -53,11 +44,35 @@ export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: I
       const itemsFromOffersFrontend: ItemEquip[] = mediate.items
         .toFront(itemsFromOffers)
         .map((item) => ({ ...item, isEquipped: false, isForSale: true }));
-      return [...all, ...itemsFromOffersFrontend];
+      return itemsFromOffersFrontend;
+    } catch (error) {
+      return [];
+    }
+  }, [itemOffers]);
+
+  return itemsForSale;
+};
+
+export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean] => {
+  const [{ owned, equipped, fetched }] = useItemContext();
+  const itemsForSale = useMyItemsForSale();
+
+  const all = useMemo(
+    () => [
+      ...equipped.map((item) => ({ ...item, isEquipped: true, isForSale: false })),
+      ...owned.map((item) => ({ ...item, isEquipped: false, isForSale: false })),
+    ],
+    [equipped, owned]
+  );
+
+  // mixing items from wallet to items from offers
+  const allWithForSale: ItemEquip[] = useMemo(() => {
+    try {
+      return [...all, ...itemsForSale];
     } catch (error) {
       return all;
     }
-  }, [all, itemOffers]);
+  }, [all, itemsForSale]);
 
   // filtering all the items
   const filtered = useMemo(() => {

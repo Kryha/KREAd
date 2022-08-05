@@ -8,6 +8,7 @@ import {
   CharacterInMarket,
   CharacterInMarketBackend,
   ExtendedCharacter,
+  ExtendedCharacterBackend,
 } from "../interfaces";
 import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -29,15 +30,7 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
   return [selected, !fetched];
 };
 
-export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolean] => {
-  const [owned, isLoading] = useMyCharacters();
-
-  const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
-
-  return [found, isLoading];
-};
-
-export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
+export const useMyCharactersForSale = () => {
   const [
     {
       contracts: {
@@ -45,19 +38,11 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
       },
     },
   ] = useAgoricContext();
-  const [{ owned, selected, fetched }] = useCharacterContext();
   const offers = useOffers({ description: "seller", status: "pending" });
 
   // strigified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
   const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
   // const [offerCharacters, setOfferCharacters] = useState<ExtendedCharacterBackend[]>([]);
-
-  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
-    return owned.map((character) => {
-      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true, isForSale: false };
-      return { ...character, isEquipped: false, isForSale: false };
-    });
-  }, [owned, selected?.nft.id]);
 
   // filtering character offers
   const characterOffers = useMemo(
@@ -97,17 +82,41 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
     extend();
   }, [charactersFromOffers, publicFacet]);
 
+  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacterBackend[], [offerCharacters]);
+
+  return parsedCharacters;
+};
+
+export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolean] => {
+  const [owned, isLoading] = useMyCharacters();
+
+  const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
+
+  return [found, isLoading];
+};
+
+export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
+  const [{ owned, selected, fetched }] = useCharacterContext();
+  const charactersForSale = useMyCharactersForSale();
+
+  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
+    return owned.map((character) => {
+      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true, isForSale: false };
+      return { ...character, isEquipped: false, isForSale: false };
+    });
+  }, [owned, selected?.nft.id]);
+
   // mixing characters from wallet with characters from offers
   const charactersWithForSale: CharacterEquip[] = useMemo(() => {
     try {
       const offerCharactersFrontend: CharacterEquip[] = mediate.characters
-        .toFront(JSON.parse(offerCharacters))
+        .toFront(charactersForSale)
         .map((item) => ({ ...item, isEquipped: false, isForSale: true }));
       return [...charactersWithEquip, ...offerCharactersFrontend];
     } catch (error) {
       return charactersWithEquip;
     }
-  }, [offerCharacters, charactersWithEquip]);
+  }, [charactersForSale, charactersWithEquip]);
 
   // filtering all the characters
   const filtered = useMemo(() => {
