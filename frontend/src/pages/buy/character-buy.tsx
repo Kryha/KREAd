@@ -5,10 +5,8 @@ import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useCharacterContext } from "../../context/characters";
 import { CharacterInMarket } from "../../interfaces";
 import { useBuyCharacter, useCharacterFromMarket, useMyCharacter } from "../../service";
-import { getExtendedCharacter } from "../../service/util";
 import { Buy } from "./buy";
 
 export const CharacterBuy = () => {
@@ -16,7 +14,6 @@ export const CharacterBuy = () => {
   const [showToast, setShowToast] = useState(false);
   const idString = String(id);
 
-  const [{ owned }] = useCharacterContext();
   const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(idString);
   const [boughtCharacter] = useMyCharacter(idString);
   const buyCharacter = useBuyCharacter(idString);
@@ -63,7 +60,7 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={getExtendedCharacter(data.character.name, owned)} equippedItems={data.equippedItems} showToast={displayToast}/>
+        <CharacterDetailSection character={{ nft: data.character, equippedItems: data.equippedItems}} equippedItems={data.equippedItems} showToast={displayToast}/>
       </FadeInOut>
       <FadeInOut show={showToast} exiting={!showToast}>
         {showToast && <Overlay isOnTop={true} />}

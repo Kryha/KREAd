@@ -34,8 +34,6 @@ import { CharacterDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { useCharactersMarket } from "../../service";
-import { getExtendedCharacter } from "../../service/util";
-import { useCharacterContext } from "../../context/characters";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 
 interface Props {
@@ -45,7 +43,6 @@ interface Props {
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
-  const [{ owned }] = useCharacterContext();
   const [filterId, setFilterId] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterInMarket>();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -141,7 +138,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
             {!!selectedCharacter && (
               <DetailContainer>
                 <CharacterDetailSection
-                  character={getExtendedCharacter(selectedCharacter.character.name, owned )}
+                  character={{ nft: selectedCharacter.character, equippedItems: selectedCharacter.equippedItems}}
                   equippedItems={selectedCharacter.equippedItems}
                   actions={{
                     onClose: () => {

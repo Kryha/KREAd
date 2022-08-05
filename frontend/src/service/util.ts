@@ -30,5 +30,6 @@ export const formatIdAsNumber = (obj: Character | Item) => ({ ...obj, id: BigInt
 export const itemCategories: ItemCategory[] = ["noseline", "midBackground", "mask", "headPiece", "hair", "frontMask", "liquid", "background", "airReservoir", "clothing"];
 
 export const getExtendedCharacter = (name: string, characters: ExtendedCharacter[]): ExtendedCharacter | undefined => {
+  console.log(characters.find(c => c.nft.name === name));
   return characters.find(c => c.nft.name === name);
 };
