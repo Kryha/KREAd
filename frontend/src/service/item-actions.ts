@@ -66,6 +66,7 @@ export const sellItem = async (service: AgoricState, item: ItemBackend, price: b
             value: [item],
           },
         },
+        exit: { waived: null },
       },
       dappContext: true,
     })
@@ -187,9 +188,9 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
     return;
   }
 
-  const { items: currentInventoryItems }: {items: Item[]} = await E(publicFacet).getCharacterInventory(character.name);
-  const filledCategories = currentInventoryItems.map(i => i.category);
-  
+  const { items: currentInventoryItems }: { items: Item[] } = await E(publicFacet).getCharacterInventory(character.name);
+  const filledCategories = currentInventoryItems.map((i) => i.category);
+
   if (filledCategories.includes(item.category)) {
     console.info("Existing item in seleted category, performing swap");
     itemSwap(service, item, character);
@@ -236,8 +237,8 @@ export const unequipItem = async (service: AgoricState, item: Item, characterNam
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const characterInPurse = characterPurse.value.find((character: Character)=>character.name===characterName);
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(characterName);//{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const characterInPurse = characterPurse.value.find((character: Character) => character.name === characterName);
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(characterName); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacter) {
@@ -287,14 +288,14 @@ export const itemSwap = async (service: AgoricState, item: Item, character: Char
 
   const itemPurse = service.purses.item[service.purses.item.length - 1];
   const characterPurse = service.purses.character[service.purses.character.length - 1];
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name);//{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
-  const { items: currentInventoryItems }: {items: Item[]} = await E(publicFacet).getCharacterInventory(character.name);
+  const { items: currentInventoryItems }: { items: Item[] } = await E(publicFacet).getCharacterInventory(character.name);
 
   const availableItems: Item[] = itemPurse.value.map((item: Item) => formatIdAsNumber(item));
-  const itemToSwapGive = availableItems.find(i=>i.category === item.category);
+  const itemToSwapGive = availableItems.find((i) => i.category === item.category);
   const itemToSwapWant = currentInventoryItems.find((item: Item) => itemToSwapGive?.category === item.category);
-  
+
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
     console.error("undefined parameter");
     return;

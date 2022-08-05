@@ -15,11 +15,13 @@ import {
   Overlay,
   SecondaryButton,
   OverviewEmpty,
+  NotificationDetail,
 } from "../../components";
 import { Close, LandingContainer, Menu, DetailContainer, ButtonContainer, CharacterCardWrapper } from "./styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useSelectedCharacter } from "../../service";
 import { routes } from "../../navigation";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
@@ -28,9 +30,14 @@ export const Landing: FC = () => {
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const [showDetail, setShowDetail] = useState(false);
   const [closeDetail, setCloseDetail] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const sell = (characterId: string) => {
     navigate(`${routes.sellCharacter}/${characterId}`);
+  };
+
+  const displayToast = () => {
+    setShowToast(true);
   };
 
   return (
@@ -44,7 +51,7 @@ export const Landing: FC = () => {
       }
     >
       {isLoading ? (
-        <LoadingPage />
+        <LoadingPage spinner={false} />
       ) : !selectedCharacter ? (
         // TODO: abstract internal component so we don't end up in this conditional madness
         <OverviewEmpty
@@ -92,6 +99,7 @@ export const Landing: FC = () => {
                     setCloseDetail(true);
                   },
                 }}
+                showToast={displayToast}
               />
             </FadeInOut>
           </CharacterCardWrapper>
@@ -99,7 +107,17 @@ export const Landing: FC = () => {
           <FadeInOut show={showDetail} exiting={closeDetail}>
             <Overlay />
           </FadeInOut>
-
+          <FadeInOut show={showToast} exiting={!showToast}>
+            {showToast && <Overlay isOnTop={true} />}
+            <NotificationWrapper showNotification={showToast}>
+              <NotificationDetail
+                title={text.general.goToYourWallet}
+                info={text.general.yourActionIsPending}
+                closeToast={() => setShowToast(false)}
+                isError
+              />
+            </NotificationWrapper>
+          </FadeInOut>
           {/* my characters list */}
           <CharacterCard id={selectedCharacter.nft.id} showCard={openTab} />
         </>

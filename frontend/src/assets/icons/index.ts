@@ -28,6 +28,7 @@ import { ReactComponent as PlusIcon } from "./plus.svg";
 import { ReactComponent as WarningIcon } from "./warning-icon.svg";
 import { ReactComponent as Logo } from "./kread-logo.svg";
 import { ReactComponent as ArrowDownIcon } from "./arrow-down.svg";
+import { ReactComponent as Loading } from "./kread-loading.svg";
 
 export {
   ErrorIcon,
@@ -60,4 +61,5 @@ export {
   WarningIcon,
   Logo,
   ArrowDownIcon,
+  Loading,
 };

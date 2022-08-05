@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 
-import { ErrorView, FadeInOut, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useCharacterContext } from "../../context/characters";
 import { CharacterInMarket } from "../../interfaces";
@@ -12,6 +13,7 @@ import { Buy } from "./buy";
 
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
+  const [showToast, setShowToast] = useState(false);
   const idString = String(id);
 
   const [{ owned }] = useCharacterContext();
@@ -39,9 +41,13 @@ export const CharacterBuy = () => {
     buyCharacter.callback();
   };
 
-  if (isLoadingCharacter) return <LoadingPage />;
+  if (isLoadingCharacter) return <LoadingPage spinner={false} />;
 
   if (!data) return <ErrorView />;
+
+  const displayToast = () => {
+    setShowToast(true);
+  };
 
   return (
     <Buy
@@ -57,7 +63,18 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={getExtendedCharacter(data.character.name, owned)} equippedItems={data.equippedItems} />
+        <CharacterDetailSection character={getExtendedCharacter(data.character.name, owned)} equippedItems={data.equippedItems} showToast={displayToast}/>
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
       </FadeInOut>
     </Buy>
   );

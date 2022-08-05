@@ -1,15 +1,16 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ErrorView, FadeInOut, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { routes } from "../../navigation";
 import { useEquipItem, useMyItem, useMyItems, useUnequipItem } from "../../service";
 import { text } from "../../assets/text";
 import { ItemsList } from "../../containers/items-list";
 import { ItemDetailSection } from "../../containers/detail-section";
-import { EmptyItemInventory } from "./empty-item-inventory";
+import { EmptyDetail, EmptyItemInventory } from "./empty-item-inventory";
 import { DetailWrapper } from "./styles";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
 
 export const ItemsInventory: FC = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ export const ItemsInventory: FC = () => {
   const [{ all: allItems }, isLoadingItems] = useMyItems();
   const [isLoading, setIsLoading] = useState(true);
   const [item] = useMyItem(selectedId);
+  const [noItems, setNoItems] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (isLoadingItems || selectedId) return;
@@ -32,11 +35,13 @@ export const ItemsInventory: FC = () => {
 
   const equip = () => {
     if (!item) return;
+    setShowToast(!showToast);
     equipItem.mutate({ itemId: item.id });
   };
 
   const unequip = () => {
     if (!item) return;
+    setShowToast(!showToast);
     unequipItem.mutate({ itemId: item.id });
   };
 
@@ -59,12 +64,25 @@ export const ItemsInventory: FC = () => {
     }
   };
 
+  const onFilterChange = (items: boolean) => {
+    setNoItems(items);
+  };
+
   return (
-    <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} />}>
+    <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} onFilterClick={onFilterChange} />}>
       <FadeInOut show>
-        <DetailWrapper>
-          <ItemDetailSection item={item} actions={detailActions()} />
-        </DetailWrapper>
+        <DetailWrapper>{noItems ? <EmptyDetail /> : <ItemDetailSection item={item} actions={detailActions()} />}</DetailWrapper>
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
       </FadeInOut>
     </PageContainer>
   );

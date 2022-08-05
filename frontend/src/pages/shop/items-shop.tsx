@@ -102,7 +102,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         <HorizontalDivider />
       </FilterWrapper>
       {isLoading ? (
-        <LoadingPage />
+        <LoadingPage spinner={false} />
       ) : (
         <>
           {!items ||

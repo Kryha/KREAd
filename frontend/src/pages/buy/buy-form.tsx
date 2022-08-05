@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { text } from "../../assets";
-import { Badge, ButtonText, FormText, PriceInIst, PrimaryButton } from "../../components";
+import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton } from "../../components";
 import { CONFIRMATION_STEP } from "../../constants";
 import { color } from "../../design";
 import {
@@ -65,7 +65,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
       <ButtonContainer>
         <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          <ArrowUp />
+          {isLoading ? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
     </ContentWrapper>

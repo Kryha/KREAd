@@ -15,6 +15,8 @@ import { EmptyCard } from "../empty-card";
 import { FadeInOut } from "../fade-in-out";
 import { useMyCharacters, useSelectedCharacter } from "../../service";
 import { useCharacterStateDispatch } from "../../context/characters";
+import { NotificationWrapper } from "../notification-detail/styles";
+import { NotificationDetail } from "../notification-detail";
 
 interface Props {
   id: string;
@@ -31,6 +33,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
   const [character, setCharacter] = useState<ExtendedCharacter>();
   const [close, setClose] = useState(false);
   const [initial, setInitial] = useState(true);
+  const [showToast, setShowToast] = useState(false);
 
   const { width, height } = useViewport();
 
@@ -82,6 +85,10 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
     }
   };
 
+  const displayToast = () => {
+    setShowToast(true);
+  };
+
   return (
     <>
       <FadeInOut show={showCard} exiting={close}>
@@ -129,12 +136,23 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
       <FadeInOut show={!!character} exiting={!character?.nft}>
         {character && (
           <CharacterCardWrapper>
-            <CharacterDetailSection character={character} equippedItems={character.equippedItems} actions={detailActions()} />
+            <CharacterDetailSection showToast={displayToast} character={character} equippedItems={character.equippedItems} actions={detailActions()} />
           </CharacterCardWrapper>
         )}
       </FadeInOut>
       <FadeInOut show={!!character} exiting={!character}>
         <Overlay />
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
       </FadeInOut>
     </>
   );

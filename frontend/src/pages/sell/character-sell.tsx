@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { text } from "../../assets";
-import { ErrorView, FadeInOut, LoadingPage } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
 import { useMyCharacter, useSellCharacter } from "../../service";
@@ -11,7 +13,7 @@ export const CharacterSell = () => {
   const { id } = useParams<"id">();
 
   const idString = String(id);
-
+  const [showToast, setShowToast] = useState(false);
   const [data, isLoading] = useMyCharacter(idString);
   const sellCharacter = useSellCharacter(idString);
 
@@ -23,11 +25,15 @@ export const CharacterSell = () => {
 
   if (sellCharacter.isSuccess) return <Navigate to={routes.shop} />;
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoading) return <LoadingPage spinner={false} />;
 
   if (!data) return <ErrorView />;
 
   const { nft, equippedItems } = data;
+
+  const displayToast = () => {
+    setShowToast(true);
+  };
 
   return (
     <Sell
@@ -37,7 +43,7 @@ export const CharacterSell = () => {
       data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={data} equippedItems={equippedItems} />
+        <CharacterDetailSection character={data} equippedItems={equippedItems} showToast={displayToast} />
       </FadeInOut>
     </Sell>
   );

@@ -33,7 +33,7 @@ If you want to learn more about creating good readme files then refer the follow
 
 ### Terminal 2 - agoric
 
-1. `agoric deploy contract/nft-maker-contract-deploy.js api/nft-maker-deploy-api.js`
+1. `agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js`
 2. `agoric open --repl`
 
 ### Terminal 3 - frontend
@@ -46,32 +46,37 @@ If you want to learn more about creating good readme files then refer the follow
 
 To run the application for more than one user follow these steps:
 
-1. Run the chain:
+0. Install GO!
+   1. `brew install go`
+1. Run Make in your local agoric-sdk directory
+   1. `cd <local-sdk-path>/packages/cosmic-swingset`
+   2. `make`
+2. Run the chain:
    1. Open a new terminal window
    2. `cd agoric/`
    3. `make chain-reset` and wait until it starts validating blocks
-2. Run ag-solo for the first user:
+3. Run ag-solo for the first user:
    1. Open a new terminal window
    2. `cd agoric/`
    3. `make solo0-reset` and wait until it prints "Deployed wallet!"
-3. Run ag-solo for the second user:
+4. Run ag-solo for the second user:
    1. Open a new terminal window
    2. `cd agoric/`
    3. `make solo1-reset` and wait until it prints "Deployed wallet!"
-4. Configure wallet and localStorage for the first user:
+5. Configure wallet and localStorage for the first user:
    1. Open a new terminal window
    2. `cd agoric/`
    3. `make wallet0` and open the url in a new browser tab
-5. Configure wallet and localStorage for the second user:
+6. Configure wallet and localStorage for the second user:
    1. Open a new browser or a new session
    2. `make wallet1` and open the url in the new session or browser
-6. Deploy contract and api:
+7. Deploy contract and api:
    1. Open `frontend/package.json` and add `"type": "module"` to the configuration
    2. From `agoric/` directory run `make deploy`
    3. After everything is deployed, remove the line you added to `frontend/package.json`
-7. Run frontend:
+8. Run frontend:
    1. Open a new terminal window
    2. `cd frontend/`
    3. `yarn start`
    4. Navigate to `localhost:3000` on each session and approve the app in both wallets
-8. Enjoy!
+9. Enjoy!

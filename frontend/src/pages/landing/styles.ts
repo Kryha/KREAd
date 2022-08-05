@@ -48,7 +48,7 @@ export const ButtonContainer = styled.div`
 
 export const CharacterCardWrapper = styled.div`
   position: absolute;
-  z-index: 10000;
+  z-index: 1000;
   bottom: ${margins.big};
   left: 30px;
 `;

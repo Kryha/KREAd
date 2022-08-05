@@ -23,7 +23,7 @@ export const ItemSell = () => {
 
   if (sellItem.isSuccess) return <Navigate to={routes.shop} />;
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoading) return <LoadingPage spinner={false} />;
 
   if (!data) return <ErrorView />;
 

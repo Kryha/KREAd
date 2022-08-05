@@ -21,7 +21,7 @@ export interface Data {
 interface MenuItemProps {
   data: Data;
   onClick?: (id: string) => void;
-  onButtonClick?: () => void;
+  onButtonClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   isEquipped?: boolean;
   isForSale?: boolean;
   imageProps?: ImageProps;
@@ -86,11 +86,11 @@ export const MenuItem: FC<MenuItemProps> = ({
         {!!onButtonClick && (
           <ButtonContainer>
             {isEquipped ? (
-              <SecondaryButton onClick={() => onButtonClick()}>
+              <SecondaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => onButtonClick(event)}>
                 <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
               </SecondaryButton>
             ) : (
-              <PrimaryButton onClick={() => onButtonClick()}>
+              <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => onButtonClick(event)}>
                 <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
               </PrimaryButton>
             )}
