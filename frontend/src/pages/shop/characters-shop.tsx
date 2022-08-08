@@ -139,7 +139,6 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
               <DetailContainer>
                 <CharacterDetailSection
                   character={{ nft: selectedCharacter.character, equippedItems: selectedCharacter.equippedItems}}
-                  equippedItems={selectedCharacter.equippedItems}
                   actions={{
                     onClose: () => {
                       setSelectedCharacter(undefined);

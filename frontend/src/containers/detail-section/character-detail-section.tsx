@@ -9,23 +9,22 @@ import { DetailSectionSegmentActivity } from "./detail-section-segment-activity"
 import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
-import { CharacterItems, ExtendedCharacter } from "../../interfaces";
+import { ExtendedCharacter } from "../../interfaces";
 import { DetailSectionItems } from "./detail-section-items";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 import { ErrorView } from "../../components";
 
 interface CharacterDetailSectionProps {
-  character?: ExtendedCharacter;
-  equippedItems: CharacterItems;
+  character: ExtendedCharacter;
   actions?: DetailSectionActions;
   showToast: () => void;
 }
 
 // TODO: Make index dynamic
-export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, equippedItems, actions, showToast }) => {
+export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions, showToast }) => {
   const { width } = useViewport();
-
+  const equippedItems = character?.equippedItems;
   const itemsValues = useMemo(() => Object.values(equippedItems).filter((item) => item), [equippedItems]);
 
   if (!character) return <ErrorView />;

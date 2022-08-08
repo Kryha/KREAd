@@ -60,7 +60,7 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={{ nft: data.character, equippedItems: data.equippedItems}} equippedItems={data.equippedItems} showToast={displayToast}/>
+        <CharacterDetailSection character={{ nft: data.character, equippedItems: data.equippedItems}} showToast={displayToast}/>
       </FadeInOut>
       <FadeInOut show={showToast} exiting={!showToast}>
         {showToast && <Overlay isOnTop={true} />}
