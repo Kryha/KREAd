@@ -4,7 +4,7 @@ import { Item } from "./item.interfaces";
 
 export const isItemCategory = (category: unknown): category is keyof CharacterItems => {
   if (typeof category !== "string") return false;
-  return ITEM_CATEGORIES.includes(category);
+  return ITEM_CATEGORIES.all.includes(category);
 };
 
 export const isCharacterCategory = (category: unknown): category is keyof CharacterCategories => {

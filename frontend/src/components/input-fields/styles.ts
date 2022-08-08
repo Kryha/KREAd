@@ -4,6 +4,7 @@ import { TickIcon, RangeIcon } from "../../assets";
 import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
 import { color, fontWeight, margins } from "../../design";
 import { ButtonText, SecondaryButton, BodyText, Input } from "../atoms";
+import { Diamond } from "../price-in-ist/styles";
 
 interface SelectProps {
   selected: boolean;
@@ -22,16 +23,18 @@ export const StyledSelect = styled.div<SelectProps>`
     ${ButtonText} {
       color: ${color.black};
     }
+    ${Diamond} {
+      background: ${color.black};
+    }
   }
-  ${({ selected }): string => {
-    return selected
-      ? ""
-      : `
-      ${Tick} {
-        display: none;
-      }
-      `;
-  }};
+  ${Tick} {
+    ${({ selected }) => !selected && "display: none"}
+  }
+  ${Diamond} {
+    align-self: center;
+    margin-left: -25px;
+    background: ${({ selected }) => (selected ? color.black : color.grey)};
+  }
 `;
 
 interface ViewProps {
@@ -192,7 +195,7 @@ export const InputContainer = styled.div`
 
 export const ColorWrapper = styled.div<SelectProps>`
   cursor: pointer;
-  &: hover {
+  &:hover {
     ${DetailSectionColorPaletteWrap} {
       svg {
         border: 1px solid ${color.black};

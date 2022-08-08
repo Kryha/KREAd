@@ -31,20 +31,36 @@ export const ENTERED = "entered";
 export const EXITING = "exiting";
 export const MILLISECONDS = 1000;
 
-export const ITEM_CATEGORIES = [
-  "noseline",
-  "midBackground",
-  "mask",
-  "headPiece",
-  "hair",
-  "airReservoir",
-  "liquid",
-  "background",
-  "frontMask",
-  "clothing",
-];
+export const ITEM_CATEGORIES = {
+  all: [
+    "noseline",
+    "midBackground",
+    "mask",
+    "headPiece",
+    "hair",
+    "airReservoir",
+    "liquid",
+    "background",
+    "frontMask",
+    "clothing",
+    "forSale",
+    "equipped",
+  ],
+  noseline: "noseline",
+  midBackground: "midBackground",
+  mask: "mask",
+  headPiece: "headPiece",
+  hair: "hair",
+  airReservoir: "airReservoir",
+  liquid: "liquid",
+  background: "background",
+  frontMask: "frontMask",
+  clothing: "clothing",
+  forSale: "forSale",
+  equipped: "equipped",
+};
 
-export const CHARACTER_CATEGORIES = ["tempetScavenger"];
+export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"];
 
 export const AGORIC_LINK = "https://agoric.com/";
 export const KRYHA_LINK = "https://kryha.io/";

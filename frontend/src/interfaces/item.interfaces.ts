@@ -11,7 +11,9 @@ export type ItemCategory =
   | "liquid"
   | "background"
   | "airReservoir"
-  | "clothing";
+  | "clothing"
+  | "forSale"
+  | "equipped";
 
 export interface Item {
   name: string;

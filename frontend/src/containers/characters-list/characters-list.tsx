@@ -23,11 +23,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
   const [myCharacters, isLoading] = useMyCharacters({ category: selectedCategory, sorting: selectedSorting });
 
   useEffect(() => {
-    if (!myCharacters || !myCharacters.length) {
-      onFilterClick(true);
-    } else {
-      onFilterClick(false);
-    }
+    onFilterClick(!myCharacters || !myCharacters.length);
   }, [myCharacters, onFilterClick]);
 
   if (isLoading) return <LoadingPage spinner={false} />;
