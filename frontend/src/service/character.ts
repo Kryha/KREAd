@@ -40,7 +40,7 @@ export const useMyCharactersForSale = () => {
   ] = useAgoricContext();
   const offers = useOffers({ description: "seller", status: "pending" });
 
-  // strigified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
+  // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
   const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
   // const [offerCharacters, setOfferCharacters] = useState<ExtendedCharacterBackend[]>([]);
 
