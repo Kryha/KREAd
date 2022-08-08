@@ -50,7 +50,7 @@ export const CharactersInventory: FC = () => {
   if (!character) return <ErrorView />;
 
   const detailActions = () => {
-    if (character.isEquipped) {
+    if (character.isEquipped || character.isForSale) {
       return {
         secondary: { text: text.character.sell, onClick: sell },
       };
@@ -77,8 +77,7 @@ export const CharactersInventory: FC = () => {
           {noCharacters ? (
             <EmptyDetail />
           ) : (
-            <CharacterDetailSection character={character} actions={detailActions()} showToast={displayToast}/>
-
+            <CharacterDetailSection character={character} actions={detailActions()} showToast={displayToast} />
           )}
         </DetailWrapper>
       </FadeInOut>
