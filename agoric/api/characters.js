@@ -13,6 +13,8 @@ export const defaultCharacters = [
       metadata: 'https://yourmetadata.info',
     },
     projectDescription: 'this is a project',
+    image:
+      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
   },
   {
     title: 'character 2',
@@ -28,6 +30,8 @@ export const defaultCharacters = [
       metadata: 'https://yourmetadata.info',
     },
     projectDescription: 'this is a project',
+    image:
+      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
   },
   {
     title: 'character 3',
@@ -44,6 +48,8 @@ export const defaultCharacters = [
       metadata: 'https://yourmetadata.info',
     },
     projectDescription: 'this is a project',
+    image:
+      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
   },
   {
     title: 'character 4',
@@ -60,5 +66,7 @@ export const defaultCharacters = [
       metadata: 'https://yourmetadata.info',
     },
     projectDescription: 'this is a project',
+    image:
+      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
   },
 ];

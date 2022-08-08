@@ -599,6 +599,7 @@ export const FakeCharacterItems: CharacterItems = {
 export const ItemsEquipped: ItemEquip[] = [
   {
     isEquipped: false,
+    isForSale: false,
     name: "NoseLine: Fairy Dust Elite",
     category: "noseline",
     id: "1",
@@ -657,6 +658,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Mid Background: Fairy Dust Elite you know whgat it is",
     category: "midBackground",
     id: "2",
@@ -715,6 +717,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Mask: Fairy Dust Elite",
     category: "mask",
     id: "3",
@@ -773,6 +776,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Head Piece: Fairy Dust Elite",
     category: "headPiece",
     id: "4",
@@ -831,6 +835,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Hair: Fairy Dust Elite",
     category: "hair",
     id: "5",
@@ -889,6 +894,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Front Mask: Fairy Dust Elite",
     category: "frontMask",
     id: "6",
@@ -947,6 +953,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Liquid: Fairy Dust Elite",
     category: "airReservoir",
     id: "7",
@@ -1005,6 +1012,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Background: Fairy Dust Elite",
     category: "background",
     id: "8",
@@ -1063,6 +1071,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Air Reservoir: Fairy Dust Elite",
     category: "airReservoir",
     id: "9",
@@ -1121,6 +1130,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Clothing: Fairy Dust Elite",
     category: "clothing",
     id: "10",
@@ -1179,6 +1189,7 @@ export const ItemsEquipped: ItemEquip[] = [
   },
   {
     isEquipped: false,
+    isForSale: false,
     name: "Air reservoir 2: Fairy Dust Elite",
     category: "liquid",
     id: "12339",

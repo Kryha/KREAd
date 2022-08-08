@@ -1,3 +1,5 @@
+import { ItemInMarket } from "./item.interfaces";
+
 export interface ActivityEvent {
   name: string;
   type?: string;
@@ -5,4 +7,9 @@ export interface ActivityEvent {
   from?: string;
   to: string;
   date: EpochTimeStamp;
+}
+export interface ItemActivityEventBackend {
+  type: string;
+  data: ItemInMarket;
+  timestamp: EpochTimeStamp;
 }

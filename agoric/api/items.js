@@ -5,9 +5,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
+      'https://ipfs.io/ipfs/QmayqpgHTDQ8qQCWv8DPax2mfhtXey3kmzWqEBHdphyAZx',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
+      'https://ipfs.io/ipfs/QmeSU6u5jQgcjfTyQuhwjqaFgM5vZmZeoxYPBTeEev9ALs',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -30,9 +30,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/mid_background_01.1b4877e1786a55d07adb.png',
+      'https://ipfs.io/ipfs/QmTdg7MpcL3rKfLiBAfLkedBp74uPKx3CTGrYdwARspy4e',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/mid_background_01.1b4877e1786a55d07adb.png',
+      'https://ipfs.io/ipfs/QmS3fkmVaToE7imZn9jtMZMbSTTeeyGZBHLocUUw7u5z4T',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -55,9 +55,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/mask_01.7c37d3112ca6a4218be0.png',
+      'https://ipfs.io/ipfs/QmadebCRvkLSHdeSTnPJv58XHtjk5DwYbeUigNNcWPs2Vn',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
+      'https://ipfs.io/ipfs/QmYmyyNeoyeAQ8qPHkufum848mA1P5Q1KHZp7n6vhwGsgd',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -80,9 +80,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/head_piece_01.724cbb90afb6d2692ce3.png',
+      'https://ipfs.io/ipfs/Qmb1ZXVuJifqQ28fEqiSEB7kgXXRqKfwYA7CD4aeLUbrtR',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/head_piece_01.724cbb90afb6d2692ce3.png',
+      'https://ipfs.io/ipfs/QmciQkft6W2oZeGQuahosN5LaBawXYkJZTVq8VCEMLZVVG',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -105,9 +105,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/hair_07.6b786902faf18c06f899.png',
+      'https://ipfs.io/ipfs/QmdMyDHeudz3RJDFbrwgAvtC2Kx6rmcMbbF85hyqnnNcfE',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/hair_07.6b786902faf18c06f899.png',
+      'https://ipfs.io/ipfs/QmPQbf3NkPbSv6HABKPeEkbGdsoXVyVnpY5kXY3mS8Q4yR',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: 3,
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -130,9 +130,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
+      'https://ipfs.io/ipfs/QmS5TvnX9PMobuME6bLuuDWR4avhGGeuHg7eAFfZAiLLZ1',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/noseline_01.4f10d8ab4a2735290287.png',
+      'https://ipfs.io/ipfs/QmS1X4KRtcumk4PqjowgKsbMh2uN79wwUsYYKnakqr7FZn',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -155,9 +155,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/liquid_01.3c70d277d60196b58a61.png',
+      'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/liquid_01.3c70d277d60196b58a61.png',
+      'https://ipfs.io/ipfs/QmcVTwEMR8XzsF8hThYMpajTb6oL7TtvfuH3MEpwyvZUMi',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -180,9 +180,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/background_01.77fa5b9eaaf65acf826f.png',
+      'https://ipfs.io/ipfs/QmaYb31m9CRTKJQzVgi2NaHfPqdUTYuXQq5jLzTbTa2YVx',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/background_01.77fa5b9eaaf65acf826f.png',
+      'https://ipfs.io/ipfs/QmYRmByVnzK2D6akMDEfMj3LPLSJw15R9s9gdu9oGcEV7E',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -205,9 +205,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/air_resevoir_01.d3d981e7575cbaeafdab.png',
+      'https://ipfs.io/ipfs/QmdmgvWYz1bEdBH6eSTPCfkcjZQhZvbREYULGjJd4EQPZy',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/air_resevoir_01.d3d981e7575cbaeafdab.png',
+      'https://ipfs.io/ipfs/QmZMyeV2dvMs9i5kjj9gCvmkvMz5nTBapmyKARk7dkbRqX',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),
@@ -230,9 +230,9 @@ export const defaultItems = {
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
-      'https://builder.agoric.kryha.dev/static/media/clothing_01.a128a4c49bf79bb23310.png',
+      'https://ipfs.io/ipfs/QmShge9z81i5sRjgHUjH5EBwtKPvSRNap5JHbp4imLgJ4H',
     thumbnail:
-      'https://builder.agoric.kryha.dev/static/media/clothing_01.a128a4c49bf79bb23310.png',
+      'https://ipfs.io/ipfs/QmdVLuhUPRvpHzmERTSsChHBexAhc6TUK6SPHsGnqQ7QaM',
     level: Math.ceil(Math.random() * 200 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
     effectiveness: Math.ceil(Math.random() * 30 + 5),

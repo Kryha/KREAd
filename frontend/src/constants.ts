@@ -44,9 +44,7 @@ export const ITEM_CATEGORIES = [
   "clothing",
 ];
 
-export const CHARACTER_CATEGORIES = [
-  "tempetScavenger",
-];
+export const CHARACTER_CATEGORIES = ["tempetScavenger"];
 
 export const AGORIC_LINK = "https://agoric.com/";
 export const KRYHA_LINK = "https://kryha.io/";
@@ -54,3 +52,6 @@ export const KRYHA_LINK = "https://kryha.io/";
 export const MAX_CHARACTER_LENGTH = 16;
 export const SLIDER_TIME = 4.5;
 export const PAGE_SIZE = 20;
+
+export const CHARACTER_PURSE_NAME = "KREA";
+export const ITEM_PURSE_NAME = "KREAITEM";
