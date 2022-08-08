@@ -135,3 +135,16 @@ export const changeSize = keyframes`
     height: 24px;
   }
 `;
+
+export const zoomClothing = keyframes`
+  0% {
+    transform: scale(1, 1);
+    transform: translateY(30vh);
+  }
+  50% {
+    transform: scale(1.5, 1.5);
+  }
+  100% {
+    transform: scale(1.5, 1.5);
+  }
+`;

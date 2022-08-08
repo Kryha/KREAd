@@ -54,6 +54,7 @@ export interface Character {
 export interface ExtendedCharacter {
   nft: Character;
   equippedItems: CharacterItems;
+  activity?: ActivityEvent[];
 }
 
 export interface CharacterInMarket {
@@ -85,6 +86,7 @@ export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft">
 
 export interface CharacterEquip extends ExtendedCharacter {
   isEquipped: boolean;
+  isForSale: boolean;
 }
 
 export interface CharacterCreation {

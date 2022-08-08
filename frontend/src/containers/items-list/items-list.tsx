@@ -90,6 +90,7 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
             isInitial={intitial}
             removeInitial={removeInitial}
             isEquipped={items[0].isEquipped}
+            isForSale={items[0].isForSale}
           />
           {items.slice(1).map((item) => (
             <MenuItem
@@ -98,6 +99,7 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
               onClick={() => onItemClick(item.id)}
               removeInitial={removeInitial}
               isEquipped={item.isEquipped}
+              isForSale={item.isForSale}
             />
           ))}
         </ListContainer>

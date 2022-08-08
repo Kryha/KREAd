@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
@@ -9,9 +9,12 @@ import { DetailSectionSegmentActivity } from "./detail-section-segment-activity"
 import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
-import { Item } from "../../interfaces";
+import { ActivityEvent, Item } from "../../interfaces";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
+import { getItemActivity } from "../../service/item-actions";
+import { useAgoricState } from "../../context/agoric";
+import { LoadingPage } from "../../components";
 
 interface ItemDetailSectionProps {
   item: Item;
@@ -21,6 +24,18 @@ interface ItemDetailSectionProps {
 // TODO: Make index dynamic
 export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions }) => {
   const { width } = useViewport();
+  const agoric = useAgoricState();
+  const [activity, setActivity] = useState<ActivityEvent[]>();
+
+  // TODO: Make this a hook and set store accordingly
+  useEffect(() => {
+    const fetchActivity = async () => {
+      const activity = await getItemActivity(item.id, agoric);
+      console.log("ACTIVITY: ", activity);
+      setActivity(activity);
+    };
+    fetchActivity();
+  }, [agoric, item.id]);
 
   return (
     <DetailSectionWrap width={width}>
@@ -50,7 +65,7 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
 
       {/* activity */}
       <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5} isActivity>
-        <DetailSectionSegmentActivity events={item.activity} />
+        {activity ? <DetailSectionSegmentActivity events={activity} /> : <LoadingPage />}
       </DetailSectionSegment>
     </DetailSectionWrap>
   );

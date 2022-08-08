@@ -77,12 +77,8 @@ export const CharactersInventory: FC = () => {
           {noCharacters ? (
             <EmptyDetail />
           ) : (
-            <CharacterDetailSection
-              nft={character.nft}
-              equippedItems={character.equippedItems}
-              actions={detailActions()}
-              showToast={displayToast}
-            />
+            <CharacterDetailSection character={character} actions={detailActions()} showToast={displayToast}/>
+
           )}
         </DetailWrapper>
       </FadeInOut>

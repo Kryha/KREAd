@@ -16,7 +16,6 @@ export const CharacterBuy = () => {
 
   const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(idString);
   const [boughtCharacter] = useMyCharacter(idString);
-
   const buyCharacter = useBuyCharacter(idString);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
@@ -61,7 +60,7 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection nft={data.character} equippedItems={data.equippedItems} showToast={displayToast} />
+        <CharacterDetailSection character={{ nft: data.character, equippedItems: data.equippedItems}} showToast={displayToast}/>
       </FadeInOut>
       <FadeInOut show={showToast} exiting={!showToast}>
         {showToast && <Overlay isOnTop={true} />}

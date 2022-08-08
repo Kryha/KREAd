@@ -4,7 +4,7 @@ import { E } from "@endo/eventual-send";
 import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
-import { Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
+import { ActivityEvent, Character, CharacterInMarket, CharacterInMarketBackend, Item, ItemActivityEventBackend, ItemBackend, ItemInMarketBackend } from "../interfaces";
 import { formatIdAsNumber } from "./util";
 
 export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
@@ -36,7 +36,7 @@ export const sellItem = async (service: AgoricState, item: ItemBackend, price: b
     Items: itemPurse.brand,
     Money: moneyPurse.brand,
   });
-
+  
   const sellAssetsTerms = harden({
     pricePerItem: { value: price, brand: moneyPurse.brand },
     issuers: issuerKeywordRecord,
@@ -168,8 +168,6 @@ export const mintItem = async (service: AgoricState, item?: any) => {
   return E(walletP).addOffer(offerConfig);
 };
 
-// TODO: Add check for slot already in use
-// If slot not empty first call removeFromInventory
 export const equipItem = async (service: AgoricState, item: Item, character: Character) => {
   const {
     agoric: { walletP },
@@ -264,7 +262,6 @@ export const unequipItem = async (service: AgoricState, item: Item, characterNam
         Item: {
           pursePetname: itemPurse.brandPetname,
           value: [formatIdAsNumber(item)],
-          // value: [harden({category: item.category})],
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
@@ -334,4 +331,16 @@ export const itemSwap = async (service: AgoricState, item: Item, character: Char
   });
 
   return E(walletP).addOffer(offerConfig);
+};
+
+export const getItemActivity = async (itemId: string, agoric: AgoricState): Promise<ActivityEvent[]> => {
+  const fetchedActivity = await E(agoric.contracts.characterBuilder.publicFacet).getItemHistory(itemId);
+  
+  const itemActivity = fetchedActivity.map((event: any) => ({
+    type: event.type,
+    price: event.data.sell.price || null,
+    date: event.timestamp,
+  }));
+  console.log(itemActivity);
+  return itemActivity;
 };

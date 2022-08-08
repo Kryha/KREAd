@@ -14,4 +14,7 @@ export const errors = {
   noItemsRequested: `Offer missing requested item`,
   duplicateCategoryInInventory: `Inventory cannot contain multiple items of the same category`,
   seedInvalid: `Seed must be a number`,
+  itemNotInMarket: `Could not find Item in market`,
+  characterNotInMarket: `Could not find Character in market`,
+  invalidArg: `Invalid Argument`,
 };

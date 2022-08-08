@@ -11,14 +11,15 @@ interface BaseCharacterProps {
   items: CharacterItems;
   isZoomed?: boolean;
   size?: "mini" | "medium" | "half" | "normal" | "large" | "extraLarge";
+  isClothing?: boolean;
 }
 
-export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, isZoomed = false, size = "normal" }) => {
+export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, isZoomed = false, size = "normal", isClothing }) => {
   const { width, height } = useViewport();
 
   return (
     <CharacterWrapper>
-      <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size}>
+      <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size} isClothing={isClothing}>
         <CharacterIcon width={width} height={height} src={characterImage || TempetCharacter} />
         <ItemIcon
           src={items.hair?.image || Empty}
