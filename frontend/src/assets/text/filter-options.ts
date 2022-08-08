@@ -11,15 +11,15 @@ export const itemCategories: Options[] = [
   { label: "hair", value: "hair" },
   { label: "background", value: "background" },
   { label: "mid background", value: "midBackground" },
-  { label: "for sale", value: "forSale" },
   { label: "equipped", value: "equipped" },
+  { label: "for sale", value: "forSale" },
 ];
 
 // TODO: add real categories
 export const characterCategories: Options[] = [
   { label: "Tempet Scavengers", value: "tempetScavenger" },
-  { label: "for sale", value: "forSale" },
   { label: "equipped", value: "equipped" },
+  { label: "for sale", value: "forSale" },
 ];
 
 export const sorting: Options[] = [
