@@ -2,6 +2,11 @@ import { MAX_PRICE, MIN_PRICE } from "../constants";
 import { CharacterEquip, CharacterInMarket, ItemEquip, ItemInMarket } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 
+export interface OfferFilters {
+  description?: string;
+  status?: string;
+}
+
 export interface ItemFilters {
   category: string;
   sorting: string;

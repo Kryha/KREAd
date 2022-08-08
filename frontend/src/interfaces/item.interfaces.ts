@@ -1,7 +1,18 @@
 import { ActivityEvent } from "./activity.interfaces";
 import { Detail } from "./character.interfaces";
 
-export type ItemCategory = "noseline" | "midBackground" | "mask" | "headPiece" | "hair" | "frontMask" | "liquid" | "background" | "airReservoir" | "clothing";
+export type ItemCategory =
+  | "noseline"
+  | "midBackground"
+  | "mask"
+  | "headPiece"
+  | "hair"
+  | "frontMask"
+  | "liquid"
+  | "background"
+  | "airReservoir"
+  | "clothing";
+
 export interface Item {
   name: string;
   category: ItemCategory;
@@ -46,4 +57,5 @@ export interface ItemBackend extends Omit<Item, "id"> {
 
 export interface ItemEquip extends Item {
   isEquipped: boolean;
+  isForSale: boolean;
 }

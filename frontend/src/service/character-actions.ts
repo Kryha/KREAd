@@ -4,8 +4,9 @@ import { AmountMath } from "@agoric/ertp";
 
 import dappConstants from "../service/conf/defaults";
 import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
-import { inter } from "../util";
-import { CharacterBackend, CharacterInMarketBackend } from "../interfaces";
+import { inter, mediate } from "../util";
+import { CharacterBackend, CharacterInMarketBackend, ExtendedCharacterBackend, Item } from "../interfaces";
+import { itemCategories } from "./util";
 
 export const formOfferForCharacter = (purses: Purses, character: any) => ({
   want: {
@@ -30,6 +31,34 @@ export const formOfferForCharacterAmount = (characterBrand: any, character: any,
     Price: AmountMath.make(moneyBrand, price),
   },
 });
+
+export const extendCharacters = async (
+  publicFacet: any,
+  characters: CharacterBackend[]
+): Promise<{ extendedCharacters: ExtendedCharacterBackend[]; equippedItems: Item[] }> => {
+  const equippedCharacterItems: Item[] = [];
+
+  const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
+    characters.map(async (character) => {
+      const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.name);
+
+      const frontendEquippedItems = mediate.items.toFront(equippedItems);
+
+      equippedCharacterItems.push(...frontendEquippedItems);
+      const equipped: { [key: string]: Item | undefined } = {};
+      itemCategories.forEach((category) => {
+        equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
+      });
+
+      return {
+        nft: character,
+        equippedItems: equipped,
+      };
+    })
+  );
+
+  return { extendedCharacters: charactersWithItems, equippedItems: equippedCharacterItems };
+};
 
 export const mintNfts = async (service: AgoricState, name: string) => {
   const {

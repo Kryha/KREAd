@@ -1,11 +1,11 @@
 import { E } from "@endo/eventual-send";
 
-import { CharacterBackend, CharacterInMarketBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
+import { CharacterInMarketBackend } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
 import { mediate } from "../../util";
-import { itemCategories } from "../util";
+import { extendCharacters } from "../character-actions";
 
 const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
   const { items: itemsMarket } = await E(publicFacet).getItemsMarket();
@@ -59,25 +59,9 @@ export const processPurses = async (
     return purse.value;
   });
 
-  const equippedCharacterItems: Item[] = [];
-  // Map characters to the corresponding inventory in the contract
-  const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
-    ownedCharacters.map(async (character: CharacterBackend) => {
-      const { items: equippedItems } = await E(contractPublicFacet).getCharacterInventory(character.name);
-
-      const frontendEquippedItems = mediate.items.toFront(equippedItems);
-
-      equippedCharacterItems.push(...frontendEquippedItems);
-      const equipped: {[key: string]: Item | undefined} = {};
-      itemCategories.forEach((category) => {
-        equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
-      });
-      
-      return {
-        nft: character,
-        equippedItems: equipped,
-      };
-    })
+  const { extendedCharacters: charactersWithItems, equippedItems: equippedCharacterItems } = await extendCharacters(
+    contractPublicFacet,
+    ownedCharacters
   );
 
   if (charactersWithItems.length) {
