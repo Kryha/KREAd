@@ -5,6 +5,7 @@ import { ButtonText } from "../atoms";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { Diamond } from "../price-in-ist/styles";
+import { ITEM_CATEGORIES } from "../../constants";
 
 export interface Options {
   label: string;
@@ -42,7 +43,7 @@ export const Select: FC<SelectProps> = ({ label, options, handleChange }) => {
           }}
         >
           <ButtonText customColor={selected === index ? color.black : color.darkGrey}>{option.label}</ButtonText>
-          {option.value === "forSale" && <Diamond />}
+          {option.value === ITEM_CATEGORIES.forSale && <Diamond />}
           <Tick />
         </StyledSelect>
       ))}
