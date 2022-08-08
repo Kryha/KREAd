@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode } from "react";
 import { useForm } from "react-hook-form";
 
 import { text } from "../../assets";
@@ -35,7 +35,6 @@ interface Props {
 
 export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoading }) => {
   const { width, height } = useViewport();
-  const [price, setPrice] = useState(0);
 
   const {
     register,
@@ -55,12 +54,7 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoadi
             <InputContainer>
               <Label>{text.store.setPrice}</Label>
               <TextLabel>
-                <Input
-                  type="number"
-                  defaultValue=""
-                  {...register("price", { required: true, min: 1 })}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                />
+                <Input type="number" defaultValue="" {...register("price", { required: true, min: 1 })} />
               </TextLabel>
             </InputContainer>
             <InputWrapper>
@@ -80,7 +74,7 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoadi
               </ErrorContainer>
             )}
           </FormFields>
-          <FormText>{text.param.sellDescription(price)}</FormText>
+          <FormText>{text.store.sellDescription}</FormText>
           <ButtonContainer>
             <PrimaryButton type="submit" disabled={!isValid || isLoading}>
               <ButtonText customColor={color.white}>{text.store.placeInShop}</ButtonText>

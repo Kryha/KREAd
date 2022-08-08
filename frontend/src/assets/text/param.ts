@@ -32,5 +32,4 @@ export const param = {
   },
   fullstop: (word: string) => `${word}.`,
   comma: (word: string) => `${word},`,
-  sellDescription: (amount: number) => `you're listing your item for sale on the shop for ${amount} IST. To finish please go to your wallet to accept your action.`,
 };
