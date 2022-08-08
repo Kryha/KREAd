@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
+import { E } from "@endo/eventual-send";
 
 import { Item, ItemBackend, ItemEquip, ItemInMarket, ItemInMarketBackend } from "../interfaces";
 import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
@@ -7,8 +8,8 @@ import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
 import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
 import { useSelectedCharacter } from "./character";
-import { E } from "@endo/eventual-send";
 import { useOffers } from "./offers";
+import { ITEM_PURSE_NAME } from "../constants";
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   const [{ all }, isLoading] = useMyItems();
@@ -26,8 +27,7 @@ export const useMyItemsForSale = () => {
     () =>
       offers.filter((offer) => {
         try {
-          // TODO: find a better way to discriminate between items and characters
-          return offer.proposalTemplate.give.Items.value[0].baseMaterial !== undefined;
+          return offer.proposalTemplate.give.Items.pursePetname[1] === ITEM_PURSE_NAME;
         } catch (error) {
           return false;
         }

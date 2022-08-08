@@ -17,6 +17,7 @@ import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./chara
 import { useAgoricContext } from "../context/agoric";
 import { E } from "@endo/eventual-send";
 import { useOffers } from "./offers";
+import { CHARACTER_PURSE_NAME } from "../constants";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
@@ -49,11 +50,7 @@ export const useMyCharactersForSale = () => {
     () =>
       offers.filter((offer) => {
         try {
-          // TODO: find a better way to discriminate between items and characters, maybe define type checkers in the future
-          return (
-            offer.proposalTemplate.give.Items.value[0].baseMaterial === undefined &&
-            offer.proposalTemplate.give.Items.value[0].keyId !== undefined
-          );
+          return offer.proposalTemplate.give.Items.pursePetname[1] === CHARACTER_PURSE_NAME;
         } catch (error) {
           return false;
         }
