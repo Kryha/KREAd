@@ -49,7 +49,6 @@ export const InternalAppRoutes: FC = () => {
 
           <Route path={"/test"} element={<TestServiceUI />} />
 
-          <Route path={routes.privacy} element={<Privacy />} />
           <Route path="*" element={<ErrorView />} />
         </Routes>
       </MainContainer>
@@ -65,6 +64,7 @@ export const ExternalAppRoutes: FC = () => {
       <MainContainer>
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
+          <Route path={routes.privacy} element={<Privacy />} />
           <Route path="*" element={<InternalAppWrapper />} />
         </Routes>
       </MainContainer>

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { FormText, TitleText } from "../../components";
+import { KreadIcon } from "../../components/logo/styles";
 import { margins } from "../../design";
 
 export const ContentWrapper = styled.div`
@@ -34,4 +35,15 @@ export const FooterContainer = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
+`;
+
+export const KreadContainer = styled.div`
+  ${KreadIcon} {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 40px;
+    width: 100px;
+    height: 24px;
+  }
 `;

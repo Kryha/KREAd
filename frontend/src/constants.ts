@@ -52,5 +52,6 @@ export const KRYHA_LINK = "https://kryha.io/";
 export const MAX_CHARACTER_LENGTH = 16;
 export const SLIDER_TIME = 4.5;
 
+export const FIRST_TIME = "first_time";
 export const CHARACTER_PURSE_NAME = "KREA";
 export const ITEM_PURSE_NAME = "KREAITEM";

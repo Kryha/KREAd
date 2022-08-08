@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
+import { bounce, changeSize, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { color, fontWeight, zIndex } from "../../design";
 
@@ -134,11 +134,13 @@ export const FooterContainer = styled.div`
   bottom: 0;
   z-index: ${zIndex.overCharacter};
 `;
+
 interface ViewProps {
   height: number;
   width: number;
+  showSlider?: boolean;
+  showAnimation?: boolean;
 }
-
 export const OnboardingContainer = styled.div<ViewProps>`
   overflow-y: scroll;
   ${({ height }): string => `height: ${height}px;`};
@@ -149,13 +151,18 @@ export const OnboardingContainer = styled.div<ViewProps>`
   animation: ${disappear}, ${fadeIn};
   animation-duration: 5.0s, 0.5s;
   animation-delay: 0s, 5.0s;
+  ${({ showAnimation }) => (showAnimation ?
+    css`
+      animation: ${disappear}, ${fadeIn};
+      animation-duration: 5.0s, 0.5s;
+      animation-delay: 0s, 5.0s;
+    ` :
+    css`
+      animation: ${disappear}, ${fadeIn};
+      animation-duration: 0.8s, 0.5s;
+      animation-delay: 0s, 0.8s;
+  `)};
 `;
-
-interface ViewProps {
-  height: number;
-  width: number;
-  showSlider?: boolean;
-}
 
 export const DefaultImage = styled(CharacterImgs) <ViewProps>`
   position: absolute;
@@ -194,24 +201,49 @@ export const TextContainer = styled.span`
   margin-top: 8px;
 `;
 
+export const KreadLogo = styled(KreadIcon)`
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 0.8s, 0.5s;
+  animation-delay: 0s, 0.8s;
+`;
+
+export const LogoContainer = styled.div`
+  ${KreadLogo} {
+    position: absolute;
+    left: 50%;
+    transform: translate(-45%, 0);
+    top: 40px;
+    bottom: 50%;
+    width: 100px;
+    height: 24px;
+    right: 50%;
+  }
+`;
+
 export const KreadContainer = styled.div<ViewProps>`
   ${KreadIcon} {
+    top: 0;
+    bottom: 0;
+    margin: auto;
     position: absolute;
-    left: 45%;
-    transform: translate(-45%, 0);
-    top: 35%;
-    width: 1000px;
-    height: 240px;
+    left: 0;
+    right: 0;
+    width: 500px;
+    height: 150px;
+    animation: ${changeSize} 4s 1;
+    animation-fill-mode: forwards;
+    animation-delay: 3.8s;
   }
-  $${({ showSlider }) => (showSlider &&
+
+  ${({ showSlider }) => (showSlider &&
     css`
     animation: ${slideUp};
-    animation-duration: 0.5s;
+    animation-duration: 0.7s;
     animation-delay: 0s;
     animation-fill-mode: forwards;
     ${KreadIcon} {
       position: absolute;
-      left: 45%;
+      left: 0;
       transform: translate(-45%, 0);
       top: 50%;
       bottom: 50%;

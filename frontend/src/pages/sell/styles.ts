@@ -3,7 +3,7 @@ import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
 import { disappear, fadeIn } from "../../components/atoms/animations";
 import { EquippedLabel } from "../../components/character-item/styles";
-import { Spinner, SpinnerContainer } from "../../components/content-loader/styles";
+import { Spinner, LoadingPageContainer } from "../../components/content-loader/styles";
 import { Info, ButtonContainer as Button, EquippedLabel as ItemLabel } from "../../components/menu-item/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -92,7 +92,7 @@ export const ButtonContainer = styled.div`
       }
     }
   }
-  ${SpinnerContainer}{
+  ${LoadingPageContainer}{
     width: 35px;
   }
   ${Spinner} {
