@@ -34,7 +34,17 @@ export interface CharactersMarketFilters {
 export const filterItems = (items: ItemEquip[], { category, sorting, color }: ItemFilters): ItemEquip[] => {
   if (!category && !sorting && !color && items.length) return items;
 
-  const isInCategory = (item: ItemEquip, category: string) => (category ? item.category === category : true);
+  const isInCategory = (item: ItemEquip, category: string) => {
+    switch (category) {
+      case "forSale":
+        return item.isForSale;
+      case "equipped":
+        return item.isEquipped;
+      default:
+        return category ? item.category === category : true;
+    }
+  };
+
   const hasColor = (item: ItemEquip, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
   const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
@@ -59,7 +69,16 @@ export const filterItemsMarket = (items: ItemInMarket[], { category, sorting, pr
 };
 
 export const filterCharacters = (characters: CharacterEquip[], { category, sorting }: CharacterFilters): CharacterEquip[] => {
-  const isInCategory = (character: CharacterEquip, category: string) => character.nft.type === category;
+  const isInCategory = (character: CharacterEquip, category: string) => {
+    switch (category) {
+      case "forSale":
+        return character.isForSale;
+      case "equipped":
+        return character.isEquipped;
+      default:
+        return character.nft.type === category;
+    }
+  };
 
   if (!category && !sorting) return characters;
 
