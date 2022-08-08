@@ -91,7 +91,6 @@ export const Landing: FC = () => {
             <FadeInOut show={showDetail} exiting={closeDetail}>
               <CharacterDetailSection
                 character={selectedCharacter}
-                equippedItems={selectedCharacter.equippedItems}
                 actions={{
                   secondary: { text: text.character.sell, onClick: () => sell(selectedCharacter.nft.id) },
                   onClose: () => {

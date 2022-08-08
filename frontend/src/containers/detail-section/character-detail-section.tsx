@@ -9,25 +9,24 @@ import { DetailSectionSegmentActivity } from "./detail-section-segment-activity"
 import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
-import { CharacterItems, ExtendedCharacter } from "../../interfaces";
+import { ExtendedCharacter } from "../../interfaces";
 import { DetailSectionItems } from "./detail-section-items";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 import { ErrorView } from "../../components";
 
 interface CharacterDetailSectionProps {
-  character?: ExtendedCharacter;
-  equippedItems: CharacterItems;
+  character: ExtendedCharacter;
   actions?: DetailSectionActions;
   showToast: () => void;
 }
 
 // TODO: Make index dynamic
-export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, equippedItems, actions, showToast }) => {
+export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions, showToast }) => {
   const { width } = useViewport();
-
-  const itemsValues = useMemo(() => Object.values(equippedItems).filter((item) => item), [equippedItems]);
-
+  
+  const itemsValues = useMemo(() => Object.values(character?.equippedItems).filter((item) => item), [character.equippedItems]);
+  
   if (!character) return <ErrorView />;
 
   return (
@@ -38,7 +37,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>
         {/* TODO: fetch actual creator image */}
-        <DetailSectionSegmentStory data={{ ...character.nft, creatorImage: UnnamedCreator, image: equippedItems, characterImage: character.nft.image }} />
+        <DetailSectionSegmentStory data={{ ...character.nft, creatorImage: UnnamedCreator, image: character.equippedItems, characterImage: character.nft.image }} />
       </DetailSectionSegment>
 
       {/* stats */}

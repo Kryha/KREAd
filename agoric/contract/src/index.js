@@ -10,7 +10,7 @@ import { errors } from './errors';
 import { mulberry32 } from './prng';
 import { messages } from './messages';
 import * as state from './get';
-import { makeCharacterNftObjs } from './utils';
+import { getPage, makeCharacterNftObjs } from './utils';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -61,8 +61,8 @@ const start = async (zcf) => {
     },
   };
 
-  const characterHistory = new Map();
-  const itemHistory = new Map();
+  const characterHistory = {};
+  const itemHistory = {};
 
   /**
    * Set contract configuration, required for most contract features,
@@ -135,13 +135,13 @@ const start = async (zcf) => {
     // Add to history
 
     items.forEach((item) => {
-      itemHistory.set(item.id.toString(), [
+      itemHistory[item.id.toString()] = [
         {
           type: 'mint',
           data: item,
           timestamp: currentTime,
         },
-      ]);
+      ];
     });
 
     return messages.mintItemReturn;
@@ -211,21 +211,21 @@ const start = async (zcf) => {
     STATE.characters = [...STATE.characters, character];
 
     // Add to history
-    characterHistory.set(character.name, [
+    characterHistory[character.name] = [
       {
         type: 'mint',
         data: character,
         timestamp: currentTime,
       },
-    ]);
+    ];
     uniqueItems.forEach((item) => {
-      itemHistory.set(item.id.toString(), [
+      itemHistory[item.id.toString()] = [
         {
           type: 'mint',
           data: item,
           timestamp: currentTime,
         },
-      ]);
+      ];
     });
 
     seat.exit();
@@ -244,15 +244,16 @@ const start = async (zcf) => {
     STATE.itemsMarket = [...STATE.itemsMarket, itemInMarket];
 
     // Add to history
-    const currentHistory = itemHistory.get(itemInMarket?.item.id);
-    itemHistory.set(itemInMarket?.item.id, [
+    const currentHistory = itemHistory[itemInMarket.id];
+    assert(currentHistory, X`No history found`);
+    itemHistory[itemInMarket.id] = [
       ...currentHistory,
       {
         type: 'addToMarket',
         data: itemInMarket,
         timestamp: await state.getCurrentTime(STATE),
       },
-    ]);
+    ];
     return itemInMarket;
   };
 
@@ -272,15 +273,15 @@ const start = async (zcf) => {
     STATE.itemsMarket = newMarket;
 
     // Add to history
-    const currentHistory = itemHistory.get(itemRecord?.item.id);
-    itemHistory.set(itemRecord?.item.id, [
+    const currentHistory = itemHistory[itemRecord.id];
+    itemHistory[itemRecord.id] = [
       ...currentHistory,
       {
         type: 'removeFromMarket',
         data: itemRecord,
         timestamp: await state.getCurrentTime(STATE),
       },
-    ]);
+    ];
   };
 
   /**
@@ -295,15 +296,15 @@ const start = async (zcf) => {
     STATE.charactersMarket = [...STATE.charactersMarket, characterInMarket];
 
     // Add to history
-    const currentHistory = itemHistory.get(characterInMarket.character.id);
-    characterHistory.set(characterInMarket.character.id, [
+    const currentHistory = itemHistory[characterInMarket.id];
+    characterHistory[characterInMarket.id] = [
       ...currentHistory,
       {
         type: 'addToMarket',
         data: characterInMarket,
         timestamp: await state.getCurrentTime(STATE),
       },
-    ]);
+    ];
     return characterInMarket;
   };
 
@@ -325,15 +326,15 @@ const start = async (zcf) => {
     STATE.charactersMarket = newMarket;
 
     // Add to history
-    const currentHistory = itemHistory.get(characterInMarket.character.id);
-    characterHistory.set(characterInMarket.character.id, [
+    const currentHistory = itemHistory[characterInMarket.id];
+    characterHistory[characterInMarket.id] = [
       ...currentHistory,
       {
         type: 'removeFromMarket',
         data: characterInMarket,
         timestamp: await state.getCurrentTime(STATE),
       },
-    ]);
+    ];
   };
 
   /**
@@ -641,7 +642,10 @@ const start = async (zcf) => {
     // characters
     getCharacterBase: () => STATE.config?.baseCharacters[0],
     getCharacters,
+    getCharactersRange: (range, page) => getPage(STATE.characters, range, page),
     getCharactersMarket,
+    getCharactersMarketRange: (range, page) =>
+      getPage(STATE.charactersMarket, range, page),
     getCharacterInventory: (name) => state.getCharacterInventory(name, STATE),
     getCharacterKey: (name) => state.getCharacterKey(name, STATE),
     getCharacterCount: () => STATE.characters.length,
@@ -653,6 +657,8 @@ const start = async (zcf) => {
     // items
     getItems,
     getItemsMarket,
+    getItemsMarketRange: (range, page) =>
+      getPage(STATE.itemsMarket, range, page),
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
     randomItem: () => state.getRandomItem(STATE),
@@ -679,8 +685,8 @@ const start = async (zcf) => {
       zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
 
     // private STATE
-    getCharacterHistory: (characterId) => characterHistory.get(characterId),
-    getItemHistory: (id) => itemHistory.get(id),
+    getCharacterHistory: (characterId) => characterHistory[characterId],
+    getItemHistory: (id) => itemHistory[id],
     getAllCharacterHistory: () => characterHistory.entries(),
     getAllItemHistory: () => itemHistory.entries(),
   });

@@ -43,7 +43,7 @@ export const CharacterSell = () => {
       data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={data} equippedItems={equippedItems} showToast={displayToast} />
+        <CharacterDetailSection character={data} showToast={displayToast} />
       </FadeInOut>
       <FadeInOut show={showToast} exiting={!showToast}>
         {showToast && <Overlay isOnTop={true} />}

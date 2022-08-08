@@ -61,3 +61,13 @@ export const makeCharacterNftObjs = (
   };
   return [newCharacter1, newCharacter2];
 };
+/**
+ * @param {any[]} arr
+ * @param {number} interval
+ * @param {number} page
+ * @returns {any[]}
+ */
+export const getPage = (arr, interval, page) =>
+  [...Array(Math.ceil(arr.length / interval)).keys()].map((idx) =>
+    arr.slice(idx * interval, idx * interval + interval),
+  )[page - 1];
