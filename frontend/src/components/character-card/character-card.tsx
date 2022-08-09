@@ -125,7 +125,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           </CharacterContent>
 
           <CardActionsContainer>
-            <ButtonInfo title={text.general.characterCardTitle} info={text.general.characterCardInfo} />
+            <ButtonInfo info={text.general.characterCardInfo} />
             <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
               <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
               <ArrowUp />

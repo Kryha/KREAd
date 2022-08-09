@@ -59,7 +59,7 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoadi
             </InputContainer>
             <InputWrapper>
               {Boolean(!errors.price && dirtyFields.price) && <Tick />}
-              <ButtonInfo title={text.general.sellAssetTitle} info={text.general.sellAssetInfo} />
+              <ButtonInfo info={text.general.sellAssetInfo} />
             </InputWrapper>
             {Boolean(errors.price && errors.price.type === "required") && (
               <ErrorContainer>

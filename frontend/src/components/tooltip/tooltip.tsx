@@ -3,7 +3,7 @@ import { InfoPosition } from "../../interfaces/layout.types";
 import { TooltipContent, TooltipWrap } from "./styles";
 
 interface TooltipProps {
-  title: string;
+  title?: string;
   position?: InfoPosition;
   content: string;
   children: React.ReactNode;

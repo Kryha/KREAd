@@ -54,9 +54,9 @@ export const general = {
   yourActionIsPending: "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
   loading: "loading...",
   characterCardTitle: "mint a new character",
-  characterCardInfo: "a new character will appear in your purse once you have minted a new character.",
+  characterCardInfo: "by clicking the button you will mint a new character. The cost of it is only IST 2. Start now!",
   createACharacterTitle: "character name",
-  createACharacterInfo: "your character name must be max 16 characters.",
+  createACharacterInfo: "this is the name for your character. Think about something original since it needs to be unique; and keep in mind after setting it up you won't be able to change it! Your character name must be max 16 characters.",
   sellAssetTitle: "set price",
-  sellAssetInfo: "set the price that you would like to sell this asset.",
+  sellAssetInfo: "add a selling price to your character/item. Keep in mind the level that it is as a reference, since it can help you to set a fair price in comparison of the rest of the characters/items.",
 };
