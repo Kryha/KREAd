@@ -25,8 +25,8 @@ export const ItemBuy = () => {
     if (itemInMarket) setData(itemInMarket);
   }, [itemInMarket, buyItem]);
 
+  // TODO: handle declining item and error
   // useEffect(() => {
-  //   // TODO: handle declining item and error
   //   // if (boughtItem && !buyItem.isLoading) setIsAwaitingApproval(false);
   // }, [boughtItem, buyItem.isLoading]);
 
