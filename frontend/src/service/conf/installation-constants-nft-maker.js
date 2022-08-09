@@ -1,6 +1,6 @@
 // GENERATED FROM /Users/carlostrigoseguin/Documents/KRYHA/agoric/REPO/agoric/contract/deploy.js
 export default {
   "CONTRACT_NAME": "CHARACTER",
-  "INSTALLATION_BOARD_ID": "board04431",
-  "SELL_ASSETS_INSTALLATION_BOARD_ID": "board05432"
+  "INSTALLATION_BOARD_ID": "board0639",
+  "SELL_ASSETS_INSTALLATION_BOARD_ID": "board02810"
 };

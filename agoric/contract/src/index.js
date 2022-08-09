@@ -684,7 +684,7 @@ const start = async (zcf) => {
     makeMintItemInvitation: () =>
       zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
 
-    // private STATE
+    // activity
     getCharacterHistory: (characterId) => characterHistory[characterId],
     getItemHistory: (id) => itemHistory[id],
     getAllCharacterHistory: () => characterHistory.entries(),

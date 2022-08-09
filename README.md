@@ -74,9 +74,16 @@ To run the application for more than one user follow these steps:
    1. Open `frontend/package.json` and add `"type": "module"` to the configuration
    2. From `agoric/` directory run `make deploy`
    3. After everything is deployed, remove the line you added to `frontend/package.json`
-8. Run frontend:
+8. On the session with the wallet listening to port 8001:
+   1. Navigate to `local.agoric.com`
+   2. In the text field type `https://localhost:8001/#accessToken=<access_token_value>` where `access_token_value` is the value you get when executing `make wallet1`
+   3. Click `save`, then click `open`
+   4. Navigate to `local.agoric.com`
+   5. In the text field type `https://localhost:8001/`
+   6. Click `save`, then click `open`
+9. Run frontend:
    1. Open a new terminal window
    2. `cd frontend/`
    3. `yarn start`
    4. Navigate to `localhost:3000` on each session and approve the app in both wallets
-9. Enjoy!
+10. Enjoy!
