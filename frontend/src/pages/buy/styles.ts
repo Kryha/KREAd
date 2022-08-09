@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, TickIcon } from "../../assets";
-import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText } from "../../components";
+import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, fadeUp } from "../../components";
 import { Spinner, LoadingPageContainer } from "../../components/content-loader/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
