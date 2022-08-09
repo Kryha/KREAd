@@ -6,10 +6,11 @@ interface AnimationProps {
 }
 
 export const LogoWrap = styled.div<AnimationProps>`
-  box-sizing: content-box;
   ${({ iteration }): string => `
     #efxcHCR325l5 {
-      animation: efxcHCR325l5_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l5_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l5_c_o {
       0% {
@@ -50,7 +51,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l6 {
-      animation: efxcHCR325l6_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l6_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l6_c_o {
       0% {
@@ -73,7 +76,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l7 {
-      animation: efxcHCR325l7_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l7_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l7_c_o {
       0% {
@@ -99,7 +104,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l9 {
-      animation: efxcHCR325l9_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l9_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l9_c_o {
       0% {
@@ -122,7 +129,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l10 {
-      animation: efxcHCR325l10_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l10_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l10_c_o {
       0% {
@@ -145,7 +154,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l11 {
-      animation: efxcHCR325l11_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l11_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l11_c_o {
       0% {
@@ -186,7 +197,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l13 {
-      animation: efxcHCR325l13_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l13_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l13_c_o {
       0% {
@@ -209,7 +222,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l15 {
-      animation: efxcHCR325l15_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l15_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l15_c_o {
       0% {
@@ -232,7 +247,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l16 {
-      animation: efxcHCR325l16_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l16_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l16_c_o {
       0% {
@@ -261,7 +278,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l18 {
-      animation: efxcHCR325l18_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l18_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l18_c_o {
       0% {
@@ -287,7 +306,9 @@ export const LogoWrap = styled.div<AnimationProps>`
       }
     }
     #efxcHCR325l19 {
-      animation: efxcHCR325l19_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
+      animation: efxcHCR325l19_c_o 5100ms linear ${
+        iteration || "infinite"
+      } normal forwards;
     }
     @keyframes efxcHCR325l19_c_o {
       0% {

@@ -1,49 +1,34 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ButtonText, FormTable, FormTableRow, FormText, PrimaryButton, TitleText } from "../../components";
+import { ButtonText, FormText, PrimaryButton, TitleText } from "../../components";
 import { color } from "../../design";
-import { ArrowUp, ButtonContainer, InfoContainer, Tick, TickContainer } from "./styles";
-import { BuyData, BuyText } from "./types";
-import { ConfirmationContainer } from "../sell/confirmation";
-import { Header } from "../sell/styles";
+import { routes } from "../../navigation";
+import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer } from "./styles";
+import { BuyText } from "./types";
 
 interface Props {
   text: BuyText;
-  link: string;
-  data: BuyData;
 }
 
-export const Confirmation: FC<Props> = ({ text, link, data }) => {
+export const Confirmation: FC<Props> = ({ text }) => {
   const navigate = useNavigate();
 
   return (
-    <ConfirmationContainer>
-      <Header>
-        <TickContainer>
-          <Tick />
-        </TickContainer>
-        <TitleText>{text.success}</TitleText>
-      </Header>
-      <FormTable>
-        <FormTableRow>
-          <FormText>asset type</FormText>
-          <ButtonText>{data.type}</ButtonText>
-        </FormTableRow>
-        <FormTableRow>
-          <FormText>name</FormText>
-          <ButtonText>{data.name}</ButtonText>
-        </FormTableRow>
-      </FormTable>
+    <ContentWrapper>
+      <TickContainer>
+        <Tick />
+      </TickContainer>
+      <TitleText>{text.success}</TitleText>
       <InfoContainer>
         <FormText>{text.successLong}</FormText>
       </InfoContainer>
       <ButtonContainer>
-        <PrimaryButton onClick={() => navigate(link)}>
+        <PrimaryButton onClick={() => navigate(routes.inventory)}>
           <ButtonText customColor={color.white}>{text.check}</ButtonText>
           <ArrowUp />
         </PrimaryButton>
       </ButtonContainer>
-    </ConfirmationContainer>
+    </ContentWrapper>
   );
 };

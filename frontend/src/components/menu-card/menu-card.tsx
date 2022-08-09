@@ -1,27 +1,36 @@
 import { FC, useMemo, useState } from "react";
-import { Item, Category } from "../../interfaces";
+
+import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import {
   ArrowContainer,
-  ArrowUpRight,
   CardActionsContainer,
   Close,
-  Content,
   Divider,
   InfoContainer,
   Menu,
-  MenuCardWrapper,
   MenuContainer,
   MenuContent,
   MenuHeader,
+  Content,
+  ArrowUpRight,
+  MenuCardWrapper,
 } from "./styles";
-import { ButtonText, HorizontalDivider, ImageProps, Label, MenuText, Overlay, SecondaryButton } from "../atoms";
+import {
+  ButtonText,
+  HorizontalDivider,
+  ImageProps,
+  Label,
+  MenuText,
+  Overlay,
+  SecondaryButton,
+} from "../atoms";
 import { MenuItem } from "../menu-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { GO_BACK } from "../../constants";
 import { useViewport } from "../../hooks";
-import { ItemDetailSection } from "../../containers/detail-section";
+import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
 import { EmptyCard } from "../empty-card";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { FadeInOut } from "../fade-in-out";
@@ -30,61 +39,67 @@ import { NotificationWrapper } from "../notification-detail/styles";
 
 interface MenuCardProps {
   title: string;
-  equippedItemProp?: Item;
+  equippedItem?: Item;
   unequippedItems: Item[];
-  category: Category;
   imageProps?: ImageProps;
 }
 
-export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp, unequippedItems, imageProps }) => {
+export const MenuCard: FC<MenuCardProps> = ({
+  title,
+  equippedItem,
+  unequippedItems,
+  imageProps,
+}) => {
   const navigate = useNavigate();
   const { width: viewWidth, height: viewHeight } = useViewport();
-  const [selectedName, setSelectedName] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<string>("");
   const [intitial, setInitial] = useState(true);
   const [showToast, setShowToast] = useState(false);
-  const [equippedItem, setEquippedItem] = useState(equippedItemProp);
 
-  const equipItem = useEquipItem(setEquippedItem);
-  const unequipItem = useUnequipItem(() => setEquippedItem(undefined));
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
 
   const allItems = useMemo(() => {
     if (equippedItem) return [equippedItem, ...unequippedItems];
     return unequippedItems;
   }, [equippedItem, unequippedItems]);
 
-  const selectedItem = useMemo(() => allItems?.find((item) => item.name === selectedName), [allItems, selectedName]);
+  const selectedItem = useMemo(
+    () => allItems?.find((item) => item.id === selectedId),
+    [allItems, selectedId]
+  );
 
-  const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const equip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    if (!selectedItem) return;
-    equipItem.mutate({ item: selectedItem });
+    equipItem.mutate({ itemId: id });
   };
 
-  const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const unequip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    if (!equippedItem) return;
-    unequipItem.mutate({ item: equippedItem });
+    unequipItem.mutate({ itemId: id });
   };
 
   const primaryActions = () => {
-    if (selectedItem?.name === equippedItem?.name) {
+    if (selectedItem?.id === equippedItem?.id) {
       return {
         text: text.item.unequip,
-        onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event),
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
+          unequip(event, selectedId),
       };
     } else {
       return {
         text: text.item.equip,
-        onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event),
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
+          equip(event, selectedId),
       };
     }
   };
 
   const sell = () => {
-    if (!selectedName) return;
-    navigate(`${routes.sellItem}/${category}/${selectedName}`);
+    if (!selectedId) return;
+    navigate(`${routes.sellItem}/${selectedId}`);
   };
 
   const removeInitial = () => {
@@ -100,8 +115,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
           <MenuContainer>
             <MenuText>{title}</MenuText>
             <InfoContainer>
-              {/* FIXME: missinf fn */}
-              {/* <Label>{text.param.amountOfAssets(allItems.length)}</Label> */}
+              <Label>{text.param.amountOfItems(allItems.length)}</Label>
               <Divider />
               <ArrowContainer>
                 <Close onClick={() => navigate(GO_BACK)} />
@@ -116,15 +130,20 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
               <MenuItem
                 data={{ ...equippedItem, image: equippedItem.thumbnail }}
                 imageProps={imageProps}
-                onClick={() => setSelectedName(equippedItem.name)}
-                key={equippedItem.name}
+                onClick={() => setSelectedId(equippedItem.id)}
+                key={equippedItem.id}
                 isEquipped
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                  unequip(event, equippedItem.id)
+                }
                 isInitial={intitial}
                 removeInitial={removeInitial}
               />
             ) : (
-              <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
+              <EmptyCard
+                title={text.item.noItemEquipped}
+                description={text.item.selectAnItemFrom}
+              />
             )}
 
             {isDividerShown && <HorizontalDivider />}
@@ -133,9 +152,11 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
               <MenuItem
                 data={{ ...item, image: item.thumbnail }}
                 imageProps={imageProps}
-                onClick={() => setSelectedName(item.name)}
-                key={item.name}
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}
+                onClick={() => setSelectedId(item.id)}
+                key={item.id}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                  equip(event, item.id)
+                }
                 removeInitial={removeInitial}
               />
             ))}
@@ -149,14 +170,14 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
           </SecondaryButton>
         </CardActionsContainer>
       </Menu>
-      <FadeInOut show={!!selectedName} exiting={!selectedName}>
+      <FadeInOut show={!!selectedId} exiting={!selectedId}>
         {selectedItem && (
           <ItemDetailSection
             item={selectedItem}
             actions={{
               primary: primaryActions(),
               secondary: { text: text.item.sell, onClick: sell },
-              onClose: () => setSelectedName(""),
+              onClose: () => setSelectedId(""),
             }}
           />
         )}
@@ -170,6 +191,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
             title={text.general.goToYourWallet}
             info={text.general.yourActionIsPending}
             closeToast={() => setShowToast(false)}
+            isError
           />
         </NotificationWrapper>
       </FadeInOut>

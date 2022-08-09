@@ -1,50 +1,97 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { text } from "../../assets";
-import { HorizontalDivider, OverviewEmpty } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { PageContainer } from "../../components/page-container";
+import { CharactersList } from "../../containers/characters-list";
+import { CharacterDetailSection } from "../../containers/detail-section";
+import { useCharacterStateDispatch } from "../../context/characters";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
-import { OverviewContainer } from "../shop/styles";
-import { CharacterDetailsInventory } from "../../components/asset-details/character-details-inventory";
-import { CharacterCardsInventory } from "../../components/asset-cards/character-cards-inventory";
-import { AssetFilterCount, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
-import { color } from "../../design";
-import { SECTION } from "../../constants";
-import { AssetCharacterFilters } from "../../components/asset-character-filters/asset-character-filters";
+import { EmptyDetail } from "./empty-item-inventory";
+import { DetailWrapper } from "./styles";
 
 export const CharactersInventory: FC = () => {
-  const [selectedId, setSelectedId] = useState<number>();
+  const navigate = useNavigate();
 
+  const dispatch = useCharacterStateDispatch();
+
+  const [selectedId, setSelectedId] = useState<string>("");
   const [characters, isLoadingCharacters] = useMyCharacters();
   const [character] = useMyCharacter(selectedId);
+  const [noCharacters, setNoCharacters] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
   const [isLoading, setIsLoading] = useState(true);
 
-  const assetsCount = characters.length;
-
   useEffect(() => {
+    if (isLoadingCharacters || !!selectedId) return;
+    if (characters.length) {
+      setSelectedId(characters[0].nft.id);
+    }
     setIsLoading(false);
-  }, [isLoadingCharacters]);
+  }, [characters, isLoadingCharacters, selectedId]);
+
+  const select = () => {
+    if (!character) return;
+    const { isEquipped: _, ...rest } = character;
+    dispatch({ type: "SET_SELECTED_CHARACTER", payload: rest });
+  };
+
+  const sell = () => {
+    if (!selectedId) return;
+    navigate(`${routes.sellCharacter}/${selectedId}`);
+  };
+
+  if (isLoadingCharacters || isLoading) return <LoadingPage />;
+
+  if (!character) return <ErrorView />;
+
+  const detailActions = () => {
+    if (character.isEquipped || character.isForSale) {
+      return {
+        secondary: { text: text.character.sell, onClick: sell },
+      };
+    } else {
+      return {
+        primary: { text: text.character.select, onClick: select },
+        secondary: { text: text.character.sell, onClick: sell },
+      };
+    }
+  };
+
+  const onFilterChange = (items: boolean) => {
+    setNoCharacters(items);
+  };
+
+  const displayToast = () => {
+    setShowToast(true);
+  };
 
   return (
-    <>
-      <AssetHeaderContainer>
-        <AssetCharacterFilters section={SECTION.INVENTORY} />
-      </AssetHeaderContainer>
-      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
-      <HorizontalDivider />
-      {character && <CharacterDetailsInventory character={character} selectedId={(id: number | undefined) => setSelectedId(id)} />}
-      {characters.length > 0 ? (
-        <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: number) => setSelectedId(id)} />
-      ) : (
-        <OverviewContainer>
-          <OverviewEmpty
-            headingText={text.inventory.noCharactersTitle}
-            descriptionText={text.inventory.noCharactersDescription}
-            buttonText={text.character.buyCharactersFromStore}
-            redirectRoute={routes.character}
-            secondary
+    <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} onFilterClick={onFilterChange} />}>
+      <FadeInOut show>
+        <DetailWrapper>
+          {noCharacters ? (
+            <EmptyDetail />
+          ) : (
+            <CharacterDetailSection character={character} actions={detailActions()} showToast={displayToast} />
+          )}
+        </DetailWrapper>
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
           />
-        </OverviewContainer>
-      )}
-    </>
+        </NotificationWrapper>
+      </FadeInOut>
+    </PageContainer>
   );
 };

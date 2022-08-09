@@ -1,15 +1,14 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
-import { Badge, BodyText, ButtonText, fadeUp, Input, MenuItemName, PrimaryButton } from "../../components";
+import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, Input, BodyText } from "../../components";
+import { fadeUp } from "../../components/atoms/animations";
 import { EquippedLabel } from "../../components/character-item/styles";
-import { LoadingPageContainer, Spinner } from "../../components/content-loader/styles";
-import { EquippedLabel as ItemLabel, Info } from "../../components/menu-item/styles";
-import { color, margins } from "../../design";
+import { Spinner, LoadingPageContainer } from "../../components/content-loader/styles";
+import { Info, ButtonContainer as Button, EquippedLabel as ItemLabel } from "../../components/menu-item/styles";
+import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
+import { margins, color } from "../../design";
 import { FormCard } from "../create-character/styles";
-
-interface ActiveProps {
-  active: boolean;
-}
 
 export const Exclamation = styled(ExclamationIcon)`
   margin-right: 20px;
@@ -32,28 +31,49 @@ export const TickContainer = styled.div`
   height: 30px;
   border: 1px solid ${color.black};
   ${Tick} {
-    margin: 0;
+    margin: 0px;
   }
   margin-bottom: ${margins.small};
 `;
 
-export const ContentWrapper = styled.div`
-  margin-left: auto;
-  margin-right: auto;
+interface ViewProps {
+  height: number;
+  width: number;
+}
 
+export const ContentWrapper = styled.div<ViewProps>`
+margin-left: 40px;
+  ${DetailSectionWrap} {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+  }
   ${FormCard} {
+    width: 40%;
+    min-width: 40%;
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
-    width: 100%;
     transform: translate3d(0, 1rem, 0);
+  }
+  ${DetailSectionHeaderNavigationWrap} {
+    display: none;
+  }
+  ${FormText} {
+    margin-top: ${margins.big};
+  }
+  ${TickContainer} {
+    margin-top: ${margins.big};
+  }
+  ${Info} {
+    border: 1px solid ${color.darkGrey};
+    background-color: ${color.lightGrey};
+    margin-top: 40px;
+  }
+  ${Button} {
+    display: none;
   }
 `;
 
-export const Header = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-`;
 export const ArrowUp = styled(ArrowUpRightIcon)`
   padding-left: 13px;
   path {
@@ -62,10 +82,9 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
 `;
 
 export const ButtonContainer = styled.div`
-  display: flex;
-  margin-top: auto;
-  flex-direction: row;
-  justify-content: flex-end;
+  position: absolute;
+  bottom: ${margins.big};
+  right: ${margins.big};
   :hover {
     ${ArrowUp} {
       path {
@@ -73,7 +92,7 @@ export const ButtonContainer = styled.div`
       }
     }
   }
-  ${LoadingPageContainer} {
+  ${LoadingPageContainer}{
     width: 35px;
   }
   ${Spinner} {
@@ -87,14 +106,9 @@ export const ButtonContainer = styled.div`
 `;
 
 export const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  ${Tick} {
-    margin-top: 10px;
-    margin-bottom: 0;
-  }
+  position: absolute;
+  right: 0;
+  top: 20px;
 `;
 
 export const StepContainer = styled.div`
@@ -106,7 +120,7 @@ export const StepText = styled(ButtonText)`
   line-height: 20.5px;
 `;
 
-export const Step = styled.div<ActiveProps>`
+export const Step = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -115,13 +129,13 @@ export const Step = styled.div<ActiveProps>`
   position: static;
   width: 100%;
   height: 88px;
-  left: 0;
-  top: 0;
+  left: 0px;
+  top: 0px;
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: ${margins.medium};
   ${StepText} {
-    margin: 0 ${margins.small};
+    margin: 0px ${margins.small};
   }
   ${PrimaryButton} {
     margin-left: ${margins.small};
@@ -129,15 +143,6 @@ export const Step = styled.div<ActiveProps>`
   ${Badge} {
     background: transparent;
   }
-  ${({ active }): string => {
-    return active
-      ? `
-      background: ${color.white};
-        `
-      : `
-      background: ${color.lightGrey};
-      `;
-  }};
 `;
 
 export const Line = styled.div`
@@ -177,7 +182,7 @@ export const NumberContainer = styled.div<NumberProps>`
       `;
   }};
   ${Tick} {
-    margin: 0;
+    margin: 0px;
     path {
       stroke: ${color.white};
     }
@@ -210,15 +215,14 @@ export const FormFields = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
   margin-bottom: ${margins.big};
   position: relative;
 
   margin-top: ${margins.big};
   ${Input} {
-    width: 100%;
-    padding-right: 10px;
-    padding-bottom: 4px;
+    padding-right: 75px;
+    padding-left: 33px;
   }
   ${ButtonText} {
     margin-top: ${margins.mini};
@@ -231,27 +235,26 @@ export const FormFields = styled.div`
 export const TextLabel = styled(BodyText)`
   display: flex;
   width: 100%;
-  // ::before {
-  //   position: absolute;
-  //   content: "IST";
-  //   font-weight: 400;
-  //   font-size: 14px;
-  //   line-height: 18px;
-  //   padding-top: 3px;
-  //   color: ${color.black};
-  // }
+  ::before {
+    position: absolute;
+    content: "IST";
+    font-family: "aktiv-grotesk";
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    padding-top: 3px;
+    color: ${color.black};
+  }
 `;
 
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0;
-  gap: 8px;
+  padding: 0px;
   width: 100%;
   ${Input} {
     width: 100%;
-    font-size: 24px;
   }
 `;
 
@@ -259,7 +262,7 @@ export const ErrorContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0;
+  padding: 0px;
   gap: 4px;
 `;
 
@@ -276,46 +279,3 @@ export const CardContainer = styled.div`
 `;
 
 export const DetailContainer = styled.div``;
-
-export const GeneralInfo = styled.div<ActiveProps>`
-  display: flex;
-  justify-content: space-between;
-  box-sizing: border-box;
-  flex-direction: row;
-  align-items: center;
-  padding: ${margins.medium};
-  position: static;
-  width: 100%;
-  height: 88px;
-  left: 0;
-  top: 0;
-  background: ${color.white};
-  border: 1px solid ${color.darkGrey};
-  border-radius: 24px;
-  ${StepText} {
-    margin: 0 ${margins.small};
-  }
-  ${PrimaryButton} {
-    margin-left: ${margins.small};
-  }
-  ${Badge} {
-    background: transparent;
-  }
-  ${({ active }): string => {
-    return active
-      ? `
-      background: ${color.white};
-        `
-      : `
-      background: ${color.lightGrey};
-      `;
-  }};
-`;
-
-export const PricingContainer = styled.div`
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: row;
-  align-items: center;
-  position: static;
-`;

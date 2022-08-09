@@ -1,69 +1,114 @@
-import React, { FC, useState } from "react";
-import { METRICS_CHARACTER, SECTION } from "../../constants";
-import { useGetCharacterInShopById, useGetCharacterMarketMetrics, useGetCharactersInShop } from "../../service";
-import { routes } from "../../navigation";
-import { OverviewContainer } from "./styles";
-import { HorizontalDivider, OverviewEmpty } from "../../components";
+import { FC, ReactNode, useState } from "react";
+
 import { text } from "../../assets";
-import { CharacterDetailsMarket } from "../../components/asset-details/character-details-market";
-import { CharacterCardsMarket } from "../../components/asset-cards/character-cards-market";
-import { AssetCharacterFilters } from "../../components/asset-character-filters/asset-character-filters";
-import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
+import {
+  Filters,
+  HorizontalDivider,
+  Label,
+  LoadingPage,
+  Overlay,
+  PriceSelector,
+  Select,
+  ButtonText,
+  FadeInOut,
+  NotificationDetail,
+} from "../../components";
+import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
-import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
-import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
+import { characterCategories, sorting } from "../../assets/text/filter-options";
+import { FilterContainer, FilterWrapper, NotificationContainer, SelectorContainer, SortByContainer } from "./styles";
+import { useCharactersMarketPages } from "../../service";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { CharactersShopDetail } from "./character-shop-detail";
+import { loadCharactersMarket } from "../../service/purses/process";
+import { useCharacterStateDispatch } from "../../context/characters";
+import { useAgoricState } from "../../context/agoric";
 
-export const CharactersShop: FC = () => {
-  const [selectedId, setSelectedId] = useState<string>("");
+interface Props {
+  pageSelector: ReactNode;
+}
 
-  const [characters, isLoading] = useGetCharactersInShop();
-  const metrics = useGetCharacterMarketMetrics();
-  const [character] = useGetCharacterInShopById(selectedId);
-  const assetsCount = characters.length;
+export const CharactersShop: FC<Props> = ({ pageSelector }) => {
+  const [filterId, setFilterId] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedSorting, setSelectedSorting] = useState<string>("");
+  const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
+  const [showToast, setShowToast] = useState(false);
+  const [page, setPage] = useState(1);
+  const { contracts: { characterBuilder } } = useAgoricState();
+  const characterDispatch = useCharacterStateDispatch();
 
-  let metricsData: any = [];
+  const [characters, isLoading, totalPages] = useCharactersMarketPages(page, {
+    category: selectedCategory,
+    sorting: selectedSorting,
+    price: selectedPrice,
+  });
 
-  if (metrics) {
-    let charAverage = 0;
-    let charMinimum = 0;
+  const handlePriceChange = (min: number, max: number) => {
+    setSelectedPrice({ min: min, max: max });
+  };
 
-    if (characters.length != 0) {
-      charMinimum = findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
-      charAverage = findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
-    }
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
 
-    metricsData = [
-      metrics.amountSold,
-      metrics.collectionSize,
-      toTwoDecimals(charMinimum),
-      toTwoDecimals(charAverage),
-      toTwoDecimals(metrics.averageLevel),
-      toTwoDecimals(metrics.marketplaceAverageLevel),
-    ];
-  }
+  const loadMore = () => {
+    setPage(prevState => prevState + 1);
+    loadCharactersMarket(page, characterBuilder.publicFacet, characterDispatch);
+  };
 
   return (
     <>
-      <AssetHeaderContainer>
-        <AssetHeader>{metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_CHARACTER} /> : <></>}</AssetHeader>
-        <AssetCharacterFilters section={SECTION.SHOP} />
-      </AssetHeaderContainer>
-      <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
-      <HorizontalDivider />
-      {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
-      {characters.length > 0 ? (
-        <CharacterCardsMarket charactersInMarket={characters} isLoading={isLoading} selectCharacterId={(id: string) => setSelectedId(id)} />
+      <FilterWrapper>
+        <FilterContainer>
+          <SelectorContainer>
+            {pageSelector}
+            <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId} hasValue={!!selectedCategory}>
+              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
+            </Filters>
+            {/* TODO: get actual min and max values */}
+            <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
+              <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
+            </Filters>
+          </SelectorContainer>
+          <SortByContainer>
+            <Label customColor={color.black}>{text.filters.sortBy}</Label>
+            <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId} hasValue={!!selectedSorting}>
+              <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
+            </Filters>
+          </SortByContainer>
+        </FilterContainer>
+        <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(!characters ? 0 : characters.length)}</ButtonText>
+        <HorizontalDivider />
+      </FilterWrapper>
+      {isLoading ? (
+        <LoadingPage spinner={false} />
       ) : (
-        <OverviewContainer>
-          <OverviewEmpty
-            headingText={text.store.thereAreNoCharactersInTheShop}
-            descriptionText={text.store.thereAreNoCharactersAvailable}
-            buttonText={text.navigation.goHome}
-            redirectRoute={routes.character}
-            secondary
-          />
-        </OverviewContainer>
+        <CharactersShopDetail
+          characters={characters}
+          totalPages={totalPages}
+          isLoading={isLoading}
+          selectedCategory={selectedCategory}
+          selectedSorting={selectedSorting}
+          selectedPrice={selectedPrice}
+          setShowToast={setShowToast}
+          page={page}
+          loadMore={loadMore}
+        />
       )}
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationContainer>
+          <NotificationWrapper showNotification={showToast}>
+            <NotificationDetail
+              title={text.general.goToYourWallet}
+              info={text.general.yourActionIsPending}
+              closeToast={() => setShowToast(false)}
+              isError
+            />
+          </NotificationWrapper>
+        </NotificationContainer>
+      </FadeInOut>
     </>
   );
 };

@@ -1,9 +1,21 @@
-import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-import { text } from "../../assets";
+import { text } from "../../assets/text";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { BoldLabel, ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
+import {
+  BoldLabel,
+  ButtonText,
+  PrimaryButton,
+  SecondaryButton,
+} from "../atoms";
 import {
   ButtonContainer,
   ColorBox,
@@ -26,9 +38,11 @@ interface PriceSelectorProps {
   max: number;
 }
 
-// TODO: fix the min value slider
-
-export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }) => {
+export const PriceSelector: FC<PriceSelectorProps> = ({
+  handleChange,
+  min,
+  max,
+}) => {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
   const [leftRange, setLeftRange] = useState(min / max);
@@ -37,7 +51,10 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
   const maxValRef = useRef(max);
   const { height } = useViewport();
 
-  const getPercent = useCallback((value: number) => Math.round(((value - min) / (max - min)) * 100), [min, max]);
+  const getPercent = useCallback(
+    (value: number) => Math.round(((value - min) / (max - min)) * 100),
+    [min, max]
+  );
 
   useEffect(() => {
     const minPercent = getPercent(minVal);
@@ -72,18 +89,38 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
           <InputContainer>
             <BoldLabel>{text.store.min}</BoldLabel>
             <TextLabel>
-              <MinInput type="number" placeholder={`${minVal}`} onChange={setMinValue} />
+              <MinInput
+                type="number"
+                placeholder={`${minVal}`}
+                onChange={setMinValue}
+              />
             </TextLabel>
           </InputContainer>
           <InputContainer>
             <BoldLabel>{text.store.max}</BoldLabel>
             <TextLabel>
-              <MaxInput type="number" placeholder={`${maxVal}`} onChange={setMaxValue} />
+              <MaxInput
+                type="number"
+                placeholder={`${maxVal}`}
+                onChange={setMaxValue}
+              />
             </TextLabel>
           </InputContainer>
         </InputWrapper>
-        <ThumbLeft type="range" min={min} max={max} value={minVal} onChange={setMinValue} />
-        <ThumbRight type="range" min={min} max={max} value={maxVal} onChange={setMaxValue} />
+        <ThumbLeft
+          type="range"
+          min={min}
+          max={max}
+          value={minVal}
+          onChange={setMinValue}
+        />
+        <ThumbRight
+          type="range"
+          min={min}
+          max={max}
+          value={maxVal}
+          onChange={setMaxValue}
+        />
         <SliderContainer>
           <SliderTrack />
           <SliderRange width={widthRange} left={leftRange} />
@@ -106,7 +143,9 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
             handleChange(minVal, maxVal);
           }}
         >
-          <ButtonText customColor={color.white}>{text.filters.apply}</ButtonText>
+          <ButtonText customColor={color.white}>
+            {text.filters.apply}
+          </ButtonText>
         </PrimaryButton>
       </ButtonContainer>
     </ColorBox>

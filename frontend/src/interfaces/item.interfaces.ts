@@ -1,54 +1,63 @@
 import { ActivityEvent } from "./activity.interfaces";
-import { Origin } from "./character.interfaces";
-import { CATEGORY, RARITY } from "../constants";
+import { Detail } from "./character.interfaces";
 
-export type Category = (typeof CATEGORY)[keyof typeof CATEGORY];
-export type Rarity = (typeof RARITY)[keyof typeof RARITY];
-export interface Stats {
-  filtering: number;
-  weight: number;
-  sense: number;
-  reserves: number;
-  durability: number;
-}
+export type ItemCategory =
+  | "noseline"
+  | "midBackground"
+  | "mask"
+  | "headPiece"
+  | "hair"
+  | "frontMask"
+  | "liquid"
+  | "background"
+  | "airReservoir"
+  | "clothing"
+  | "forSale"
+  | "equipped";
 
 export interface Item {
   name: string;
-  category: Category;
-  origin: Origin;
-  functional: boolean;
+  category: ItemCategory;
+  id: string;
   description: string;
   image: string;
   thumbnail: string;
-  rarity: number;
   level: number;
-  filtering: number;
-  weight: number;
-  sense: number;
-  reserves: number;
-  durability: number;
+  rarity: number;
+  effectiveness?: number;
+  layerComplexity?: number;
+  forged: string;
+  baseMaterial: string;
   colors: string[];
-  artistMetadata?: string;
-  activity?: ActivityEvent[];
-  equippedTo?: string;
-  forSale?: boolean;
+  projectDescription: string;
+  details: Detail;
+  date: string;
+  activity: ActivityEvent[];
 }
 
 export interface ItemInMarket {
   id: string;
   item: Item;
   sell: {
+    publicFacet: any;
     price: bigint;
-    platformFee: bigint;
-    royalty: bigint;
   };
 }
 
-export interface MarketMetrics {
-  amountSold: number;
-  averageLevel: number;
-  collectionSize: number;
-  latestSalePrice: bigint;
-  marketplaceAverageLevel: number;
-  putForSaleCount: number;
+export interface ItemInMarketBackend {
+  id: bigint;
+  item: ItemBackend;
+  sell: {
+    publicFacet: any;
+    price: bigint;
+  };
+}
+
+export interface ItemBackend extends Omit<Item, "id"> {
+  id: bigint;
+}
+
+export interface ItemEquip extends Item {
+  isEquipped: boolean;
+  isForSale?: boolean;
 }

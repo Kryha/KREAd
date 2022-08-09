@@ -4,7 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { text, UnnamedCreator } from "../../assets";
 import { color, imageSize } from "../../design";
 import { routes } from "../../navigation";
-import { Badge, BodyText, BoldLabel, ButtonText, Heading, HorizontalDivider, Label, PrimaryButton, SecondaryButton } from "../atoms";
+import {
+  Badge,
+  BodyText,
+  BoldLabel,
+  ButtonText,
+  Heading,
+  HorizontalDivider,
+  Label,
+  PrimaryButton,
+  SecondaryButton,
+} from "../atoms";
 import { ItemCard } from "../item-card";
 import { SectionTitle } from "../section-titile";
 import {
@@ -31,7 +41,10 @@ interface EquippedItemCardProps {
   onClick: () => void;
 }
 
-export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick }) => {
+export const CharacterDetail: FC<EquippedItemCardProps> = ({
+  character,
+  onClick,
+}) => {
   const navigate = useNavigate();
 
   if (!character) return <></>;
@@ -45,13 +58,17 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
               <TitleContainer>
                 <Heading>{character.name}</Heading>
                 <SubTitleContainer>
-                  <Badge>{character.origin}</Badge>
-                  <BoldLabel customColor={color.black}>{text.param.id(character.id)}</BoldLabel>
+                  <Badge>{character.type}</Badge>
+                  <BoldLabel customColor={color.black}>
+                    {text.param.id(character.id)}
+                  </BoldLabel>
                 </SubTitleContainer>
               </TitleContainer>
               <InfoContainer>
                 <PrimaryButton>
-                  <ButtonText customColor={color.white}>{text.general.choose}</ButtonText>
+                  <ButtonText customColor={color.white}>
+                    {text.general.choose}
+                  </ButtonText>
                 </PrimaryButton>
                 <SecondaryButton>
                   <ButtonText>{text.general.sell}</ButtonText>
@@ -67,20 +84,28 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
         <Content>
           <DetailContent>
             <HorizontalDivider />
-            <SectionTitle title={text.character.story} index={text.character.zeroOne} />
+            <SectionTitle
+              title={text.character.story}
+              index={text.character.zeroOne}
+            />
             <StoryContainer>
               <SignContainer>
                 <Label>{text.character.creators}</Label>
-                <ItemCard image={UnnamedCreator} width={imageSize.minute} height={imageSize.tiny} />
+                <ItemCard
+                  image={UnnamedCreator}
+                  width={imageSize.minute}
+                  height={imageSize.tiny}
+                />
               </SignContainer>
-              <BodyText>{text.util.correctDescriptionString(character.description)}</BodyText>
+              <BodyText>{character.description}</BodyText>
             </StoryContainer>
           </DetailContent>
         </Content>
-        <HorizontalDivider />
         <CardActionsContainer>
           <PrimaryButton onClick={() => navigate(routes.shop)}>
-            <ButtonText customColor={color.white}>{text.character.deleteCharacter}</ButtonText>
+            <ButtonText customColor={color.white}>
+              {text.character.deleteCharacter}
+            </ButtonText>
           </PrimaryButton>
         </CardActionsContainer>
       </Detail>

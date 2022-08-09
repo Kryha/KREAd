@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useViewport } from "../../hooks";
 
-import { MainWrap } from "./styles";
+import { MainWrap, MainPageContainer } from "./styles";
 
 interface MainContainerProps {
   children: React.ReactNode;
@@ -9,5 +9,9 @@ interface MainContainerProps {
 
 export const MainContainer: FC<MainContainerProps> = ({ children }) => {
   const { height } = useViewport();
-  return <MainWrap height={height}>{children}</MainWrap>;
+  return (
+    <MainWrap height={height}>
+      <MainPageContainer>{children}</MainPageContainer>
+    </MainWrap>
+  );
 };

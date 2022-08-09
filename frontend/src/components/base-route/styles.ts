@@ -1,78 +1,53 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { breakpoints, color, margins, zIndex } from "../../design";
+import { margins, zIndex } from "../../design";
+import { disappear, fadeIn } from "../atoms/animations";
 
 interface AnimationProps {
   isLanding: boolean;
 }
-
-export const NavBarDivider = styled.div`
-  border: 0.5px solid ${color.grey};
-  transform: rotate(90deg);
-  width: 41px;
-`;
 
 export const TopbarContainer = styled.header<AnimationProps>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  z-index: 100;
-  margin-left: ${margins.medium};
-  margin-right: ${margins.medium};
-  padding-top: ${margins.medium};
-  padding-bottom: ${margins.medium};
-  background: transparent;
-  backdrop-filter: blur(5px);
-
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    padding: ${margins.mini};
-  }
+  padding: ${margins.big};
+  ${({ isLanding }) =>
+    isLanding === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.8s, 2s;
+          animation-delay: 0s, 0.8s;
+        `
+      : css``};
 `;
 
 export const Box = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0;
-  z-index: 1;
-  align-items: center;
+  padding: 0px;
 `;
 
-export const RightBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 0;
-  z-index: 1;
-  align-items: center;
-  gap: 12px;
-`;
-
-export const ChildrenContainer = styled.div<AnimationProps>`
-  display: flex;
-  align-items: stretch;
-  flex: 1 1 auto;
-  ${({ isLanding }) =>
-    isLanding === true
-      ? css`
-          margin-left: 0;
-          margin-right: 0;
-        `
-      : css`
-          margin-left: ${margins.medium};
-          margin-right: ${margins.medium};
-        `};
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    margin-left: 0;
-    margin-right: 0;
-  }
+export const ChildrenContainer = styled.div`
+  margin-bottom: 40px;
 `;
 
 export const FooterContainer = styled.div<AnimationProps>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-  background: transparent;
+  position: absolute;
+  bottom: 0;
+  right: 0;
   z-index: ${zIndex.overCharacter};
+  ${({ isLanding }) =>
+    isLanding === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.8s, 2s;
+          animation-delay: 0s, 0.8s;
+        `
+      : css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.3s, 0.5s;
+          animation-delay: 0s, 0.3s;
+        `};
 `;

@@ -1,8 +1,9 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { TriangleIcon } from "../../assets";
-import { breakpoints, color, margins } from "../../design";
-import { ButtonText, disappear, fadeIn, fadeOut } from "../atoms";
+import { color, margins } from "../../design";
+import { ButtonText } from "../atoms";
+import { disappear, fadeIn, fadeOut } from "../atoms/animations";
 
 interface FilterProps {
   isOpen: boolean;
@@ -26,12 +27,8 @@ export const FiltersContainer = styled.div<FilterProps>`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-width: 120px;
+  min-width: 160px;
   cursor: pointer;
-  @media (max-width: ${breakpoints.tablet}) {
-    min-width: 0;
-  }
-
   padding: ${margins.mini} ${margins.mini} ${margins.mini} ${margins.small};
   &:hover {
     border: 1px solid ${color.black};
@@ -54,19 +51,11 @@ export const FiltersContainer = styled.div<FilterProps>`
       ${ButtonText} {
         color: ${color.black};
       }
-      ${Triangle} {
-        transform: rotate(180deg);
-        transition: transform 0.2s ease 0.2s;
-        }
         `
       : `
-        ${ButtonText} {
-          color: ${color.darkGrey};
-        }
-       ${Triangle} {
-        transform: rotate(0);
-        transition: transform 0.1s ease 0.1s;
-        }
+      ${ButtonText} {
+        color: ${color.darkGrey};
+      }
       `;
   }};
   ${({ disabled }): string => {

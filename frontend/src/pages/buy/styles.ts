@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, TickIcon } from "../../assets";
-import { Badge, ButtonText, fadeUp, MenuItemName, PrimaryButton } from "../../components";
-import { LoadingPageContainer, Spinner } from "../../components/content-loader/styles";
-import { color, margins } from "../../design";
-import { ErrorContainer, FormCard } from "../create-character/styles";
+import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, fadeUp } from "../../components";
+import { Spinner, LoadingPageContainer } from "../../components/content-loader/styles";
+import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
+import { margins, color } from "../../design";
+import { FormCard } from "../create-character/styles";
 
 export const Tick = styled(TickIcon)`
   margin-right: 20px;
@@ -21,23 +23,35 @@ export const TickContainer = styled.div`
   height: 30px;
   border: 1px solid ${color.black};
   ${Tick} {
-    margin: 0;
+    margin: 0px;
   }
   margin-bottom: ${margins.small};
 `;
 
-interface ViewProps {
-  height: number;
-  width: number;
-}
-export const ContentWrapper = styled.div<ViewProps>`
-  margin: auto;
+export const ContentWrapper = styled.div`
   ${FormCard} {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
-    max-width: 500px;
-    height: ${({ height }): string => `${height - 200}px`};
     transform: translate3d(0, 1rem, 0);
+  }
+  ${DetailSectionWrap} {
+    margin-top: 40px;
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    height: 80vh;
+  }
+  ${DetailSectionHeaderNavigationWrap} {
+    display: none;
+  }
+  ${FormText} {
+    margin-top: ${margins.big};
+  }
+  ${TickContainer} {
+    margin-top: ${margins.big};
   }
 `;
 
@@ -46,12 +60,6 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
   path {
     stroke: ${color.white};
   }
-`;
-
-export const BuyFormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 24px;
 `;
 
 export const ButtonContainer = styled.div`
@@ -65,11 +73,12 @@ export const ButtonContainer = styled.div`
       }
     }
   }
-  ${LoadingPageContainer} {
+  ${LoadingPageContainer}{
     width: 35px;
   }
   ${Spinner} {
-    width: 16px;
+    padding-left: 13px;
+    width: 12px;
     height: 16px;
     border: 2px solid ${color.white};
     border-top: 2px solid ${color.grey};
@@ -105,13 +114,13 @@ export const Step = styled.div<ActiveProps>`
   position: static;
   width: 100%;
   height: 88px;
-  left: 0;
-  top: 0;
+  left: 0px;
+  top: 0px;
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: ${margins.medium};
   ${StepText} {
-    margin: 0 ${margins.small};
+    margin: 0px ${margins.small};
   }
   ${PrimaryButton} {
     margin-left: ${margins.small};
@@ -163,7 +172,7 @@ export const NumberContainer = styled.div<ActiveProps>`
       `;
   }};
   ${Tick} {
-    margin: 0;
+    margin: 0px;
     path {
       stroke: ${color.white};
     }
@@ -200,13 +209,13 @@ export const GeneralInfo = styled.div<ActiveProps>`
   position: static;
   width: 100%;
   height: 88px;
-  left: 0;
-  top: 0;
+  left: 0px;
+  top: 0px;
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: 24px;
   ${StepText} {
-    margin: 0 ${margins.small};
+    margin: 0px ${margins.small};
   }
   ${PrimaryButton} {
     margin-left: ${margins.small};
@@ -231,8 +240,4 @@ export const PricingContainer = styled.div`
   flex-direction: row;
   align-items: center;
   position: static;
-`;
-
-export const ErrorContainerMarginTop = styled(ErrorContainer)`
-  margin-top: 20px;
 `;

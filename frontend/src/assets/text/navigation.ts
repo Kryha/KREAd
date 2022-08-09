@@ -2,10 +2,10 @@ export const navigation = {
   goBack: "go back",
   goHome: "go home",
   character: "character",
-  shop: "market",
+  shop: "shop",
   inventory: "inventory",
-  myCharacters: "my Characters",
+  myCharacters: "my characters",
   about: "about",
-  agoricCopyright: (year: number) => `©${year} KREAd`,
+  agoric2022: "©2022 Agoric",
   privacyAndTerms: "privacy & terms",
 };

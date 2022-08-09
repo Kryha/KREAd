@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 
-import { RangeIcon, TickIcon } from "../../assets";
+import { TickIcon, RangeIcon } from "../../assets";
 import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
 import { color, fontWeight, margins } from "../../design";
-import { BodyText, ButtonText, Input, SecondaryButton } from "../atoms";
+import { ButtonText, SecondaryButton, BodyText, Input } from "../atoms";
 import { Diamond } from "../price-in-ist/styles";
 
 interface SelectProps {
@@ -16,7 +16,7 @@ export const StyledSelect = styled.div<SelectProps>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0;
+  padding: 0px;
   margin: ${margins.small} 0px;
   cursor: pointer;
   :hover {
@@ -41,29 +41,8 @@ interface ViewProps {
   height: number;
 }
 
-export const SelectDivider = styled.div`
-  border: 0.5px solid ${color.grey};
-  width: 100%;
-`;
-
-export const ClearButton = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-
-  :hover {
-    cursor: pointer;
-    ${ButtonText} {
-      color: ${color.black};
-    }
-  }
-`;
-
 export const SelectBox = styled.div<ViewProps>`
-  width: 220px;
+  width: 180px;
   border: 1px solid ${color.grey};
   border-radius: ${margins.small};
   background: ${color.lightGrey};
@@ -76,7 +55,7 @@ export const SelectBox = styled.div<ViewProps>`
 `;
 
 export const ColorBox = styled(SelectBox)`
-  width: 350px;
+  width: 326px;
   z-index: 10000000;
 `;
 
@@ -91,10 +70,9 @@ export const ColorContainer = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  gap: ${margins.small};
-  align-items: center;
-  justify-content: center;
-  padding: 0;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0px;
 `;
 
 export const RangeContainer = styled.div`
@@ -123,7 +101,7 @@ export const SliderTrack = styled.div`
 `;
 
 export const SliderRange = styled.div<RangeProps>`
-  border-radius: 0;
+  border-radius: 0px;
   height: 4px;
   width: ${(props): string => `${props.width}%;`};
   left: ${(props): string => `${props.left}%;`};
@@ -176,8 +154,9 @@ export const ThumbRight = styled(ThumbLeft)`
 
 export const MaxInput = styled(Input)`
   width: 119px;
-  padding: 3px 0 16px 33px;
+  padding: 3px 0px 16px 33px;
   position: relative;
+  font-family: aktiv-grotesk;
   font-weight: ${fontWeight.light};
 `;
 
@@ -189,7 +168,7 @@ export const InputWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0;
+  padding: 0px;
   margin-bottom: 38px;
 `;
 
@@ -211,7 +190,7 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
 `;
 
 export const ColorWrapper = styled.div<SelectProps>`

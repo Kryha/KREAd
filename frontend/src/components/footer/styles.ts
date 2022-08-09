@@ -38,7 +38,7 @@ export const FooterContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 10px 24px;
+  padding: 10px 40px;
   gap: 20px;
 `;
 

@@ -1,52 +1,32 @@
+// TODO: Remove this, use ations + context instead
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterInMarket, ExtendedCharacter, MarketMetrics } from "../interfaces";
+import {
+  CharacterBackend,
+  CharacterCreation,
+  CharacterEquip,
+  CharacterInMarket,
+  CharacterInMarketBackend,
+  ExtendedCharacter,
+  ExtendedCharacterBackend,
+} from "../interfaces";
+import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { extendCharacters } from "./transform-character";
-import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { ISTTouIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
-
-import { useUserState, useUserStateDispatch } from "../context/user";
-import { useWalletState } from "../context/wallet";
-import { mintCharacter } from "./character/mint";
-import { marketService } from "./character/market";
-import { useCharacterMarketState } from "../context/character-shop-context";
+import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
+import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
+import { useAgoricContext } from "../context/agoric";
+import { E } from "@endo/eventual-send";
+import { useOffers } from "./offers";
+import { CHARACTER_PURSE_NAME, PAGE_SIZE } from "../constants";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
-  const { characters, selected, fetched } = useUserState();
-  const userStateDispatch = useUserStateDispatch();
+  const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
 
   useEffect(() => {
-    const storedName = localStorage.getItem("selectedCharacter");
-
-    if (selected) {
-      if (selected.nft.name !== storedName) {
-        localStorage.setItem("selectedCharacter", selected.nft.name);
-      }
-      const selectedCharacter = characters.find((char) => char.nft.name === selected.nft.name);
-      if (selectedCharacter) {
-        userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter.nft.name });
-      }
-    } else if (characters.length > 0) {
-      if (storedName) {
-        const matchingCharacter = characters.find((char) => char.nft.name === storedName);
-        if (matchingCharacter) {
-          userStateDispatch({
-            type: "SET_SELECTED",
-            payload: matchingCharacter.nft.name,
-          });
-        } else {
-          const firstCharacter = characters[0];
-          localStorage.setItem("selectedCharacter", firstCharacter.nft.name);
-          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter.nft.name });
-        }
-      } else {
-        const firstCharacterName = characters[0].nft.name;
-        localStorage.setItem("selectedCharacter", firstCharacterName);
-        userStateDispatch({ type: "SET_SELECTED", payload: characters[0].nft.name });
-      }
+    if (!selected) {
+      owned[0] && dispatch({ type: "SET_SELECTED_CHARACTER", payload: owned[0] });
     }
-  }, [userStateDispatch, characters, selected]);
+  }, [dispatch, owned, selected]);
 
   return [selected, !fetched];
 };
@@ -55,32 +35,56 @@ export const useMyCharactersForSale = () => {
   const [
     {
       contracts: {
-        kread: { publicFacet },
+        characterBuilder: { publicFacet },
       },
-      chainStorageWatcher,
     },
   ] = useAgoricContext();
-  const wallet = useWalletState();
+  const offers = useOffers({ description: "seller", status: "pending" });
 
   // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
   const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
+  // const [offerCharacters, setOfferCharacters] = useState<ExtendedCharacterBackend[]>([]);
+
+  // filtering character offers
+  const characterOffers = useMemo(
+    () =>
+      offers.filter((offer) => {
+        try {
+          return offer.proposalTemplate.give.Items.pursePetname[1] === CHARACTER_PURSE_NAME;
+        } catch (error) {
+          return false;
+        }
+      }),
+    [offers]
+  );
+
+  // retrieving characters from offers
+  const charactersFromOffers: CharacterBackend[] = useMemo(() => {
+    try {
+      const fromOffers: CharacterBackend[] = characterOffers.map((offer: any) => {
+        return offer.proposalTemplate.give.Items.value[0];
+      });
+      return fromOffers;
+    } catch (error) {
+      return [];
+    }
+  }, [characterOffers]);
 
   // adding items to characters from offers
   useEffect(() => {
     const extend = async () => {
-      const myCharactersForSale = wallet.characterProposals.map((proposal: any) => proposal.give.Character.value.payload[0]);
-      const { extendedCharacters } = await extendCharacters(myCharactersForSale, chainStorageWatcher);
+      const { extendedCharacters } = await extendCharacters(publicFacet, charactersFromOffers);
       setOfferCharacters(JSON.stringify(extendedCharacters));
     };
     extend();
-  }, [wallet.characterProposals, publicFacet]);
+  }, [charactersFromOffers, publicFacet]);
 
-  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
+  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacterBackend[], [offerCharacters]);
 
   return parsedCharacters;
 };
 
-export const useMyCharacter = (id?: number): [ExtendedCharacter | undefined, boolean] => {
+export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolean] => {
   const [owned, isLoading] = useMyCharacters();
 
   const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
@@ -88,35 +92,57 @@ export const useMyCharacter = (id?: number): [ExtendedCharacter | undefined, boo
   return [found, isLoading];
 };
 
-export const useGetCharacterByName = (name: string | null): [ExtendedCharacter | undefined, boolean] => {
-  const [owned, isLoading] = useMyCharacters();
-
-  const found = useMemo(() => owned.find((c) => c.nft.name === name), [name, owned]);
-
-  return [found, isLoading];
-};
-
-export const useGetCharacterNames = (): [string[]] => {
-  const [owned] = useMyCharacters();
-  const names = useMemo(() => owned.map((c) => c.nft.name), [owned]);
-  return [names];
-};
-
-export const useGetCharacterMarketMetrics = (): MarketMetrics => {
-  const { metrics } = useCharacterMarketState();
-  return metrics;
-};
-
-export const useMyCharacters = (): [ExtendedCharacter[], boolean] => {
-  const { characters, fetched } = useUserState();
+export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
+  const [{ owned, selected, fetched }] = useCharacterContext();
   const charactersForSale = useMyCharactersForSale();
 
-  const allCharacters = [...characters, ...charactersForSale];
-  const filtered = useFilterCharacters(allCharacters);
+  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
+    return owned.map((character) => {
+      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true, isForSale: false };
+      return { ...character, isEquipped: false, isForSale: false };
+    });
+  }, [owned, selected?.nft.id]);
 
-  const isLoading = !fetched;
-  return [filtered, isLoading];
+  // mixing characters from wallet with characters from offers
+  const charactersWithForSale: CharacterEquip[] = useMemo(() => {
+    try {
+      const offerCharactersFrontend: CharacterEquip[] = mediate.characters
+        .toFront(charactersForSale)
+        .map((item) => ({ ...item, isEquipped: false, isForSale: true }));
+      return [...charactersWithEquip, ...offerCharactersFrontend];
+    } catch (error) {
+      return charactersWithEquip;
+    }
+  }, [charactersForSale, charactersWithEquip]);
+
+  // filtering all the characters
+  const filtered = useMemo(() => {
+    if (!filters) return charactersWithForSale;
+    return filterCharacters(charactersWithForSale, filters);
+  }, [charactersWithForSale, filters]);
+
+  return [filtered, !fetched];
 };
+
+// export const useMyCharactersPage = (page: number, filters?: CharacterFilters): [CharacterEquip[], boolean, number] => {
+//   const [{ owned, selected, fetched }] = useCharacterContext();
+
+//   const totalPages = Math.ceil(owned.length/PAGE_SIZE);
+
+//   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
+//     return owned.map((character) => {
+//       if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true };
+//       return { ...character, isEquipped: false };
+//     });
+//   }, [owned, selected?.nft.id]);
+
+//   const filtered = useMemo(() => {
+//     if (!filters) return charactersWithEquip;
+//     return filterCharacters(charactersWithEquip, filters);
+//   }, [charactersWithEquip, filters]);
+
+//   return [filtered, !fetched, totalPages];
+// };
 
 export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefined, boolean] => {
   const [characters, isLoading] = useCharactersMarket();
@@ -126,128 +152,138 @@ export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefin
   return [found, isLoading];
 };
 
-export const useCharactersMarket = (): [CharacterInMarket[], boolean] => {
-  const { characters, fetched } = useCharacterMarketState();
-  const filtered = useFilterCharactersMarket(characters);
+export const useCharactersMarket = (filters?: CharactersMarketFilters): [CharacterInMarket[], boolean] => {
+  const [{ market, marketFetched }] = useCharacterContext();
 
-  const isLoading = !fetched;
-  return [filtered, isLoading];
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterCharactersMarket(market, filters);
+  }, [filters, market]);
+
+  return [filtered, !marketFetched];
+};
+
+export const useCharactersMarketPages = (page: number, filters?: CharactersMarketFilters): [CharacterInMarket[], boolean, number] => {
+  const [{ market, marketFetched }] = useCharacterContext();
+  // TODO: get total pages
+  const totalPages = 20;
+
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterCharactersMarket(market, filters);
+  }, [filters, market]);
+
+  return [filtered, !marketFetched, totalPages];
 };
 
 // TODO: Add error management
 export const useCreateCharacter = () => {
-  const service = useAgoricState();
-  const instance = service.contracts.kread.instance;
-  const istBrand = service.tokenInfo.ist.brand;
-  return useMutation(async (body: CharacterCreation): Promise<void> => {
+  const [agoricState] = useAgoricContext();
+  return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
-    await mintCharacter({
-      name: body.name,
-      service: {
-        kreadInstance: instance,
-        istBrand: istBrand,
-        makeOffer: service.walletConnection.makeOffer,
-      },
-      callback: async () => {
-        console.info("MintCharacter call settled");
-      },
-      errorCallback: body.setError
-    });
+    await mintNfts(agoricState, body.name);
+  });
+};
+
+export const useEquipCharacter = () => {
+  return useMutation(async (body: { id: string }) => {
+    if (!body.id) throw new Error("Id not specified");
+    // TODO: intergrate
   });
 };
 
 // TODO: test after merge with equip/unequip fix
-export const useSellCharacter = (characterId: number) => {
+export const useSellCharacter = (characterId: string) => {
   const [service] = useAgoricContext();
-  const wallet = useWalletState();
   const [characters] = useMyCharacters();
-  const userDispatch = useUserStateDispatch();
+
   const [isLoading, setIsLoading] = useState(false);
-  const instance = service.contracts.kread.instance;
-  const charBrand = service.tokenInfo.character.brand;
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const callback = useCallback(
-    async (price: number, successCallback: () => void) => {
-      const found = characters.find((character) => character.nft.id === characterId);
-      if (!found) return;
-      const characterToSell = { ...found.nft, id: Number(found.nft.id) };
-      const uISTPrice = ISTTouIST(price);
-
-      setIsLoading(true);
-      await marketService.sellCharacter({
-        character: characterToSell,
-        price: BigInt(uISTPrice),
-        service: {
-          kreadInstance: instance,
-          characterBrand: charBrand,
-          makeOffer: service.walletConnection.makeOffer,
-          istBrand: service.tokenInfo.ist.brand,
-        },
-        callback: async () => {
-          console.info("SellCharacter call settled");
-          setIsLoading(false);
-          userDispatch({ type: "SET_SELECTED", payload: "" });
-        },
-      });
-      successCallback();
-    },
-    [characterId, characters, wallet, service, userDispatch],
-  );
-
-  return { callback, isLoading };
-};
-
-export const useBuyCharacter = (characterId: string) => {
-  const [service] = useAgoricContext();
-  const wallet = useWalletState();
-  const [characters] = useCharactersMarket();
-  const [isLoading, setIsLoading] = useState(false);
-  const instance = service.contracts.kread.instance;
-  const charBrand = service.tokenInfo.character.brand;
-  const istBrand = service.tokenInfo.ist.brand;
+  const [characterInMarket, setCharacterInMarket] = useState<CharacterInMarketBackend>();
 
   useEffect(() => {
-    setIsLoading(false);
-  }, [characterId, service.contracts.kread.publicFacet, service.offers]);
+    const addToMarket = async () => {
+      try {
+        if (!characterInMarket || !service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "seller") return;
+        if (!latestOffer.status || latestOffer.status !== "pending") return;
+
+        const characterFromProposal = latestOffer.proposalTemplate.give.Items.value[0];
+        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).storeCharacterInMarket(characterInMarket);
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    addToMarket();
+  }, [characterId, characterInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(
+    async (price: number) => {
+      const found = characters.find((character) => character.nft.id === characterId);
+      if (!found) return;
+
+      const backendCharacter = mediate.characters.toBack([found])[0];
+
+      setIsLoading(true);
+
+      const toStore = await sellCharacter(service, backendCharacter.nft, BigInt(price));
+      setCharacterInMarket(toStore);
+    },
+    [characterId, characters, service]
+  );
+
+  return { callback, isLoading, isError, isSuccess };
+};
+
+// TODO: test after merge with equip/unequip fix
+export const useBuyCharacter = (characterId: string) => {
+  const [service] = useAgoricContext();
+  const [characters] = useCharactersMarket();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    const removeFromMarket = async () => {
+      try {
+        if (!service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "buyer") return;
+        if (!latestOffer.status || latestOffer.status !== "accept") return;
+
+        const characterFromProposal = latestOffer.proposalTemplate.want.Items.value[0];
+        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).removeCharacterFromMarket(BigInt(characterId));
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    removeFromMarket();
+  }, [characterId, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(async () => {
     const found = characters.find((character) => character.id === characterId);
     if (!found) return;
-    const characterToBuy = {
-      ...found,
-      character: found.character,
-    };
 
+    const mediated = mediate.charactersMarket.toBack([found])[0];
     setIsLoading(true);
-    await marketService.buyCharacter({
-      character: characterToBuy.character,
-      price: BigInt(characterToBuy.sell.price + characterToBuy.sell.platformFee + characterToBuy.sell.royalty),
-      service: {
-        kreadInstance: instance,
-        characterBrand: charBrand,
-        makeOffer: service.walletConnection.makeOffer,
-        istBrand,
-      },
-      callback: async () => {
-        console.info("BuyCharacter call settled");
-        setIsLoading(false);
-      },
-    });
-  }, [characterId, characters, wallet, service]);
+    await buyCharacter(service, mediated);
+  }, [characterId, characters, service]);
 
-  return { callback, isLoading };
-};
-
-export const useGetCharacterInShopById = (id: string): [CharacterInMarket | undefined, boolean] => {
-  const [characters, isLoading] = useGetCharactersInShop();
-
-  const found = useMemo(() => characters.find((character) => character.id === id), [id, characters]);
-
-  return [found, isLoading];
-};
-
-export const useGetCharactersInShop = (): [CharacterInMarket[], boolean] => {
-  const { characters, fetched } = useCharacterMarketState();
-  const filtered = useFilterCharactersMarket(characters);
-  return [filtered, !fetched];
+  return { callback, isLoading, isError, isSuccess };
 };

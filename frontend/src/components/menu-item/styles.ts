@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { color, margins } from "../../design";
+import { margins, color } from "../../design";
 import { Badge, BoldLabel, MenuItemName } from "../atoms";
 import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 
@@ -85,6 +85,14 @@ export const ImageContainer = styled.div`
   ${ExpandButton} {
     display: none;
   }
+`;
+
+export const Dash = styled.div`
+  width: 16px;
+  height: 0px;
+  border: 0.5px solid ${color.darkGrey};
+  margin-right: 8px;
+  margin-left: 8px;
 `;
 
 export const InlineDetails = styled.div`

@@ -1,14 +1,17 @@
 import styled from "@emotion/styled";
 import { CloseIcon } from "../../assets";
 import { margins } from "../../design";
-import { HeaderHorizontalDivider } from "../atoms";
+import { HeaderHorizontalDivider, MenuText } from "../atoms";
 
 export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 0;
+  padding: 0px;
+  ${MenuText} {
+    margin-right: 60px;
+  }
 `;
 
 export const Divider = styled(HeaderHorizontalDivider)`
@@ -21,7 +24,7 @@ export const ReturnContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0;
+  padding: 0px;
 `;
 
 export const ArrowContainer = styled.div`

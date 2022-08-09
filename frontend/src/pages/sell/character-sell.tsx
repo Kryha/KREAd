@@ -1,45 +1,61 @@
-import { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
+
 import { text } from "../../assets";
-import { ErrorView } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { CharacterDetailSection } from "../../containers/detail-section";
+import { routes } from "../../navigation";
 import { useMyCharacter, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
-import { SellData } from "./types";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
+
   const idString = String(id);
+  const [showToast, setShowToast] = useState(false);
+  const [data, isLoading] = useMyCharacter(idString);
+  const sellCharacter = useSellCharacter(idString);
 
-  const sellCharacter = useSellCharacter(Number(idString));
-  const [character] = useMyCharacter(Number(idString));
-  const [characterCopy] = useState(character);
-
-  const [isPlacedInShop, setIsPlacedInShop] = useState(false);
-  const [data, setData] = useState<SellData>({ price: 0 });
-
-  const sendOfferHandler = async (data: SellData) => {
-    if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellCharacter.callback(data.price, () => setIsPlacedInShop(true));
+  const submitForm = (price: number) => {
+    sellCharacter.callback(price);
   };
 
-  const characterName = useMemo(() => character?.nft.name, [character]);
-  data.type = "character";
-  data.name = characterName;
+  if (sellCharacter.isError) return <ErrorView />;
 
-  if (!data || !characterCopy) return <ErrorView />;
+  if (sellCharacter.isSuccess) return <Navigate to={routes.shop} />;
+
+  if (isLoading) return <LoadingPage spinner={false} />;
+
+  if (!data) return <ErrorView />;
+
+  const { nft, equippedItems } = data;
+
+  const displayToast = () => {
+    setShowToast(true);
+  };
 
   return (
     <Sell
-      data={data}
-      setData={setData}
-      sendOfferHandler={sendOfferHandler}
-      isPlacedInShop={isPlacedInShop}
-      text={{
-        sell: text.store.sellCharacter,
-        success: text.store.characterPlacedInShop,
-        successLong: text.store.characterSuccessfullyPlacedInShop,
-        check: text.store.goToInventory,
-      }}
-    />
+      isLoading={sellCharacter.isLoading}
+      onSubmit={submitForm}
+      text={{ sell: text.store.sellCharacter }}
+      data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
+    >
+      <FadeInOut show>
+        <CharacterDetailSection character={data} showToast={displayToast} />
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
+      </FadeInOut>
+    </Sell>
   );
 };

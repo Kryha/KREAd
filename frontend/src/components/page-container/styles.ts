@@ -1,17 +1,19 @@
 import styled from "@emotion/styled";
-import { breakpoints, margins } from "../../design";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
+import { margins } from "../../design";
 
 export const PageWrap = styled.section`
   display: flex;
-  flex-direction: row;
+  flex-flow: row nowrap;
   justify-content: space-between;
+  width: 100%;
   height: 100vh;
   gap: ${margins.big};
+  box-sizing: border-box;
   padding: 0 40px;
   overflow: hidden;
-
-  @media screen and (max-width: ${breakpoints.mobile}) {
-    margin: 0;
-    padding: 0;
+  margin-bottom: 40px;
+  ${DetailSectionWrap} {
+    height: 70vh;
   }
 `;

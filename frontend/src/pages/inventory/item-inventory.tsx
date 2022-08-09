@@ -1,68 +1,78 @@
-import React, { FC, useState } from "react";
-import { FadeInOut, HorizontalDivider, LoadingPage, NotificationDetail, Overlay, OverviewEmpty } from "../../components";
+import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
+import { PageContainer } from "../../components/page-container";
 import { routes } from "../../navigation";
-import { useGetItemInInventoryByNameAndCategory, useGetItemsInInventory } from "../../service";
-import { text } from "../../assets";
-import { OverviewContainer } from "../shop/styles";
-import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
-import { ItemCardsInventory } from "../../components/asset-cards/item-cards-inventory";
-import { AssetFilterCount, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
-import { color } from "../../design";
-import { SECTION } from "../../constants";
-import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
+import { useEquipItem, useMyItem, useMyItems, useUnequipItem } from "../../service";
+import { text } from "../../assets/text";
+import { ItemsList } from "../../containers/items-list";
+import { ItemDetailSection } from "../../containers/detail-section";
+import { EmptyDetail, EmptyItemInventory } from "./empty-item-inventory";
+import { DetailWrapper } from "./styles";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
-import { useCharacterBuilder } from "../../context/character-builder-context";
 
 export const ItemsInventory: FC = () => {
-  const [selectedName, setSelectedName] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedCharacterName, setSelectedCharacterName] = useState<string>();
-  const { showToast, setShowToast } = useCharacterBuilder();
+  const navigate = useNavigate();
 
-  const selectItem = (itemName: string, category: string, characterName: string | undefined) => {
-    setSelectedName(itemName);
-    setSelectedCategory(category);
-    setSelectedCharacterName(characterName);
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
+
+  const [selectedId, setSelectedId] = useState<string>("");
+  const [{ all: allItems }, isLoadingItems] = useMyItems();
+  const [isLoading, setIsLoading] = useState(true);
+  const [item] = useMyItem(selectedId);
+  const [noItems, setNoItems] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    if (isLoadingItems || selectedId) return;
+    if (allItems.length) {
+      setSelectedId(allItems[0].id.toString());
+    }
+    setIsLoading(false);
+  }, [allItems, isLoadingItems, selectedId]);
+
+  const equip = () => {
+    if (!item) return;
+    setShowToast(!showToast);
+    equipItem.mutate({ itemId: item.id });
   };
 
-  const [items, isLoading] = useGetItemsInInventory();
+  const unequip = () => {
+    if (!item) return;
+    setShowToast(!showToast);
+    unequipItem.mutate({ itemId: item.id });
+  };
 
-  const [item] = useGetItemInInventoryByNameAndCategory(selectedName, selectedCategory, selectedCharacterName);
-  const assetsCount = items.length;
+  const sell = () => {
+    if (!selectedId) return;
+    navigate(`${routes.sellItem}/${selectedId}`);
+  };
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoadingItems || isLoading) return <LoadingPage />;
+
+  if (equipItem.isError || unequipItem.isError) return <ErrorView />;
+
+  if (!item) return <EmptyItemInventory />;
+
+  const detailActions = () => {
+    if (item.isEquipped || item.isForSale) {
+      return { primary: { text: text.item.unequip, onClick: unequip } };
+    } else {
+      return { primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } };
+    }
+  };
+
+  const onFilterChange = (items: boolean) => {
+    setNoItems(items);
+  };
 
   return (
-    <>
-      <AssetHeaderContainer>
-        <AssetItemFilters section={SECTION.INVENTORY} />
-      </AssetHeaderContainer>
-      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
-      <HorizontalDivider />
-      {item && (
-        <ItemDetailsInventory
-          item={item}
-          selectedItem={{
-            name: selectedName,
-            category: selectedCategory,
-            characterName: selectedCharacterName,
-          }}
-          selectItem={selectItem}
-        />
-      )}
-      {items.length > 0 ? (
-        <ItemCardsInventory items={items} isLoading={isLoading} selectItem={selectItem} />
-      ) : (
-        <OverviewContainer>
-          <OverviewEmpty
-            headingText={text.inventory.noItemsTitle}
-            descriptionText={text.item.buyItemsFromStore}
-            buttonText={text.item.buyItemsFromStore}
-            redirectRoute={routes.shop}
-            secondary
-          />
-        </OverviewContainer>
-      )}
+    <PageContainer sidebarContent={<ItemsList onItemClick={setSelectedId} onFilterClick={onFilterChange} />}>
+      <FadeInOut show>
+        <DetailWrapper>{noItems ? <EmptyDetail /> : <ItemDetailSection item={item} actions={detailActions()} />}</DetailWrapper>
+      </FadeInOut>
       <FadeInOut show={showToast} exiting={!showToast}>
         {showToast && <Overlay isOnTop={true} />}
         <NotificationWrapper showNotification={showToast}>
@@ -74,6 +84,6 @@ export const ItemsInventory: FC = () => {
           />
         </NotificationWrapper>
       </FadeInOut>
-    </>
+    </PageContainer>
   );
 };

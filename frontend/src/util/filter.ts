@@ -1,97 +1,106 @@
-import { CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Title } from "../interfaces";
+import { MAX_PRICE, MIN_PRICE } from "../constants";
+import { CharacterEquip, CharacterInMarket, ItemEquip, ItemInMarket } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
-import { getRarityString } from "../service";
-import { useFilters } from "../context/filter-context";
-import { uISTToIST } from "./math";
 
 export interface OfferFilters {
   description?: string;
   status?: string;
 }
 
-export const useFilterItems = (items: Item[]): Item[] => {
-  const { origin, categories, rarity, colors, sort, equippedTo, forSale } = useFilters();
-  if (items.length === 0) return [];
+export interface ItemFilters {
+  category: string;
+  sorting: string;
+  color: string;
+}
 
-  const filteredOrigins = origin.length > 0 ? items.filter((item) => item && origin.includes(<Origin>item.origin.toLowerCase())) : items;
-  const filteredCategories = categories.length > 0 ? items.filter((item) => item && categories.includes(item.category)) : items;
-  const filteredRarity = rarity.length > 0 ? items.filter((item) => item && rarity.includes(getRarityString(item.rarity))) : items;
-  const filteredColors = colors ? items.filter((item) => item && item.colors.includes(colors)) : items;
-  const equipped = equippedTo ? items.filter((item) => item && item.equippedTo === equippedTo) : items;
-  const itemsForSale = forSale ? items.filter((item) => item && item.forSale) : items;
+export interface ItemsMarketFilters {
+  category: string;
+  sorting: string;
+  price: { min: number; max: number };
+  color: string;
+}
 
-  const filteredItems = items.filter(
-    (item) =>
-      filteredOrigins.includes(item) &&
-      filteredCategories.includes(item) &&
-      filteredRarity.includes(item) &&
-      filteredColors.includes(item) &&
-      equipped.includes(item) &&
-      itemsForSale.includes(item),
-  );
+export interface CharacterFilters {
+  category: string;
+  sorting: string;
+}
 
-  // Sorting the filtered items
-  return sortItems(sort, filteredItems);
+export interface CharactersMarketFilters {
+  category: string;
+  sorting: string;
+  price: { min: number; max: number };
+}
+
+export const filterItems = (items: ItemEquip[], { category, sorting, color }: ItemFilters): ItemEquip[] => {
+  if (!category && !sorting && !color && items.length) return items;
+
+  const isInCategory = (item: ItemEquip, category: string) => {
+    switch (category) {
+      case "forSale":
+        return item.isForSale;
+      case "equipped":
+        return item.isEquipped;
+      default:
+        return category ? item.category === category : true;
+    }
+  };
+
+  const hasColor = (item: ItemEquip, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
+
+  const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
+  const sortedItems = sortItems(sorting, filteredItems);
+
+  return sortedItems;
 };
 
-export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
-  const { origin, categories, rarity, price, colors, sort } = useFilters();
-  if (items.length === 0) return [];
+export const filterItemsMarket = (items: ItemInMarket[], { category, sorting, price, color }: ItemsMarketFilters): ItemInMarket[] => {
+  const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
-  const filteredOrigins = origin.length > 0 ? items.filter((item) => origin.includes(<Origin>item.item.origin.toLowerCase())) : items;
-  const filteredCategories = categories.length > 0 ? items.filter((item) => categories.includes(item.item.category)) : items;
-  const filteredRarity = rarity.length > 0 ? items.filter((item) => rarity.includes(getRarityString(item.item.rarity))) : items;
-  const filteredColors = colors ? items.filter((item) => item.item.colors.includes(colors)) : items;
-  const filteredPrice = price
-    ? items.filter(({ sell }) => {
-        const priceValue = uISTToIST(Number(sell.price));
-        return priceValue > price.min && priceValue < price.max;
-      })
-    : items;
+  if (!category && !sorting && !color && !changedRange && items.length) return items;
 
-  const filteredItems = items.filter(
-    (item) =>
-      filteredOrigins.includes(item) &&
-      filteredCategories.includes(item) &&
-      filteredRarity.includes(item) &&
-      filteredPrice.includes(item) &&
-      filteredColors.includes(item),
-  );
+  const isInCategory = ({ item }: ItemInMarket, category: string) => (category ? item.category === category : true);
+  const hasColor = ({ item }: ItemInMarket, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
-  return sortItemsMarket(sort, filteredItems); // Make sure to define sortItemsMarket function
+  const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
+  const filteredPrice = filteredItems.filter(({ sell }) => Number(sell.price) > price.min && Number(sell.price) < price.max);
+  const sortedItems = sortItemsMarket(sorting, filteredPrice);
+
+  return sortedItems;
 };
 
-export const useFilterCharacters = (characters: ExtendedCharacter[]): ExtendedCharacter[] => {
-  const { origin, title, sort } = useFilters();
-  if (characters.length === 0) return []; // Return empty array if there are no items to filter
+export const filterCharacters = (characters: CharacterEquip[], { category, sorting }: CharacterFilters): CharacterEquip[] => {
+  const isInCategory = (character: CharacterEquip, category: string) => {
+    switch (category) {
+      case "forSale":
+        return character.isForSale;
+      case "equipped":
+        return character.isEquipped;
+      default:
+        return character.nft.type === category;
+    }
+  };
 
-  const filteredOrigins =
-    origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.nft.origin.toLowerCase())) : characters;
-  const filteredTitles =
-    title.length > 0 ? characters.filter((character) => title.includes(<Title>character.nft.title.toLowerCase())) : characters;
-  const filteredCharacters = characters.filter((character) => filteredOrigins.includes(character) && filteredTitles.includes(character));
+  if (!category && !sorting) return characters;
 
-  return sortCharacters(sort, filteredCharacters);
+  const filteredCharacters = characters.filter((character) => isInCategory(character, category));
+  const sortedCharacters = sortCharacters(sorting, filteredCharacters);
+
+  return sortedCharacters;
 };
 
-// TODO: to update
-export const useFilterCharactersMarket = (characters: CharacterInMarket[]): CharacterInMarket[] => {
-  const { origin, title, sort, price } = useFilters();
-  if (characters.length === 0) return [];
+export const filterCharactersMarket = (
+  characters: CharacterInMarket[],
+  { category, sorting, price }: CharactersMarketFilters
+): CharacterInMarket[] => {
+  const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
-  const filteredOrigins =
-    origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.character.origin.toLowerCase())) : characters;
-  const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.character.title)) : characters;
-  const filteredPrice = price
-    ? characters.filter(({ sell }) => {
-        const priceValue = uISTToIST(Number(sell.price));
-        return priceValue > price.min && priceValue < price.max;
-      })
-    : characters;
+  const isInCategory = ({ character }: CharacterInMarket, category: string) => (category ? character.type === category : true);
 
-  const filteredCharacters = characters.filter(
-    (character) => filteredOrigins.includes(character) && filteredTitles.includes(character) && filteredPrice.includes(character),
-  );
+  if (!category && !sorting && !changedRange) return characters;
 
-  return sortCharactersMarket(sort, filteredCharacters);
+  const filteredCharacters = characters.filter((character) => isInCategory(character, category));
+  const filteredPrice = filteredCharacters.filter(({ sell }) => Number(sell.price) > price.min && Number(sell.price) < price.max);
+  const sortedCharacters = sortCharactersMarket(sorting, filteredPrice);
+
+  return sortedCharacters;
 };

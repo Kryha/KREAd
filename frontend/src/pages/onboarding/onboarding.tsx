@@ -1,70 +1,45 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { DiscordIcon, KeplerIcon, text, TwitterIcon } from "../../assets";
-import { breakpoints, color } from "../../design";
-import {
-  AnimatedLogo,
-  ButtonText,
-  FadeInOut,
-  Footer,
-  Kado,
-  MenuText,
-  OnboardingCharacter,
-  Overlay,
-  PrimaryButton,
-  TitleText,
-} from "../../components";
+import { text } from "../../assets";
+import { color } from "../../design";
+import { AnimatedLogo, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowDown,
   ArrowUp,
   ButtonContainer,
-  ButtonRow,
+  Link,
+  TextContainer,
   EndContent,
   FooterContainer,
   GeneralSectionContainer,
   InfoText,
   KreadContainer,
-  KreadLogo,
-  KryhaLink,
-  Link,
-  LogoContainer,
   MiddleContent,
   OnboardingContainer,
   OnboardingWrapper,
   ScrollContainer,
   SectionContainer,
-  SocialsContainer,
-  TextContainer,
+  KryhaLink,
+  KreadLogo,
+  LogoContainer,
 } from "./styles";
-import { useIsMobile, useOnScreen, useTimer, useViewport } from "../../hooks";
+import { useLocalStorage, useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
-import { AGORIC_LINK, DISCORD_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME, TWITTER_LINK } from "../../constants";
+import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
+import { useTimer } from "../../hooks/hooks";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
-  const isMobile = useIsMobile(breakpoints.tablet);
+  const [showAnimation, setShowAnimation] = useLocalStorage(FIRST_TIME);
+
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
-  const [showAnimation, setShowAnimation] = useState(true);
-  const isFirstTime = localStorage.getItem(FIRST_TIME) === null;
-  const [showWidget, setShowWidget] = useState(false);
-
-  const toggleWidget = () => {
-    setShowWidget(!showWidget);
-  };
-
-  useEffect(() => {
-    if (!isFirstTime) {
-      setShowAnimation(false);
-    }
-  }, [isFirstTime]);
 
   const connectWallet = () => {
-    navigate(routes.connectWallet);
-    localStorage.setItem(FIRST_TIME, "false");
+    navigate(routes.character);
     setShowAnimation(false);
   };
 
@@ -72,23 +47,16 @@ export const Onboarding: FC = () => {
     <>
       <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
-          <ButtonRow>
-            <PrimaryButton onClick={() => connectWallet()}>
-              <KeplerIcon />
-              <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-              <ArrowUp />
-            </PrimaryButton>
-          </ButtonRow>
+          <PrimaryButton onClick={() => connectWallet()}>
+            <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+            <ArrowUp />
+          </PrimaryButton>
         </ButtonContainer>
         <OnboardingWrapper>
           <InfoText height={height}>
             <SectionContainer>
-              <MenuText>{text.general.logo}</MenuText>
+              <MenuText>{text.general.launchingTheFirst}</MenuText>
               <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-            </SectionContainer>
-            <SectionContainer>
-              <MenuText>{text.general.sagesBy}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.sagesIsTheFirst}</TitleText>
             </SectionContainer>
             <ScrollContainer>
               <ButtonText>{text.general.scroll}</ButtonText>
@@ -98,17 +66,10 @@ export const Onboarding: FC = () => {
           <MiddleContent height={height} ref={ref}>
             <GeneralSectionContainer>
               <MenuText>{text.general.whoWeAre}</MenuText>
-              <TextContainer>
-                {text.general.isPartOfAgoric}
-                <Link href={AGORIC_LINK} target="_blank">
-                  {text.general.agoric}
-                </Link>
-                {text.general.anOpenSource}
-                <KryhaLink href={KRYHA_LINK} target="_blank">
-                  {text.general.kryha}.
-                </KryhaLink>
-              </TextContainer>
-              <TextContainer>{text.general.theSagesArt}</TextContainer>
+              <TextContainer>{text.general.isPartOfAgoric}</TextContainer>
+              <Link href={AGORIC_LINK}>{text.param.comma(text.general.agoric)}</Link>
+              <TextContainer>{text.general.anOpenSource}</TextContainer>
+              <KryhaLink href={KRYHA_LINK}>{text.param.fullstop(text.general.kryha)}</KryhaLink>
               <TextContainer>{text.general.ourLeadership}</TextContainer>
             </GeneralSectionContainer>
           </MiddleContent>
@@ -116,27 +77,12 @@ export const Onboarding: FC = () => {
             <GeneralSectionContainer>
               <MenuText>{text.general.contactUs}</MenuText>
               <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-              <TextContainer>
-                {text.general.sendEmailTo}
-                <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
-              </TextContainer>
-            </GeneralSectionContainer>
-            <GeneralSectionContainer>
-              <MenuText>{text.general.followUs}</MenuText>
-              <SocialsContainer>
-                <Link href={DISCORD_LINK} target="_blank">
-                  <DiscordIcon />
-                  {text.general.discord}
-                </Link>
-                <Link href={TWITTER_LINK} target="_blank">
-                  <TwitterIcon />
-                  {text.general.twitter}
-                </Link>
-              </SocialsContainer>
+              <TextContainer>{text.general.sendEmailTo}</TextContainer>
+              <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
             </GeneralSectionContainer>
           </EndContent>
         </OnboardingWrapper>
-        {!isMobile && <OnboardingCharacter />}
+        <OnboardingCharacter />
         <FooterContainer>
           <Footer />
         </FooterContainer>
@@ -150,10 +96,6 @@ export const Onboarding: FC = () => {
           <KreadLogo />
         </LogoContainer>
       )}
-      <FadeInOut show={showWidget}>
-        <Kado show={showWidget} toggleWidget={toggleWidget} />
-        <Overlay />
-      </FadeInOut>
     </>
   );
 };

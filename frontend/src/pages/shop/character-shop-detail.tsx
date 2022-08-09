@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
 
 import { text } from "../../assets";
-import { CharacterShopCard, FadeInOut, LoadMore, Overlay, OverviewEmpty } from "../../components";
+import { CharacterShopCard, OverviewEmpty, Overlay, FadeInOut, LoadMore } from "../../components";
 import { useViewport } from "../../hooks";
 import { DetailContainer, ItemContainer, ItemWrapper, LoadMoreWrapper } from "./styles";
 import { CharacterInMarket } from "../../interfaces";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { PAGE_SIZE } from "../../constants";
 import { CharacterDetailSection } from "../../containers/detail-section";
@@ -34,16 +34,15 @@ export const CharactersShopDetail: FC<Props> = ({
 }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
-  const location = useLocation();
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterInMarket>();
   const [close, setClose] = useState(false);
-
+  
   const noFilteredCharacters =
     (!selectedCategory.length || !selectedSorting.length || !selectedPrice) && (!characters || !characters.length);
 
   const buy = () => {
     if (!selectedCharacter) return;
-    navigate(`${routes.buyCharacter}/${selectedCharacter.id}`, { state: location });
+    navigate(`${routes.buyCharacter}/${selectedCharacter.id}`);
   };
 
   const displayToast = () => {
@@ -68,7 +67,7 @@ export const CharactersShopDetail: FC<Props> = ({
               ))}
             </ItemContainer>
             <LoadMoreWrapper>
-              {characters.length >= PAGE_SIZE * page && <LoadMore isLoading={isLoading} loadMore={loadMore} />}
+              {characters.length >= (PAGE_SIZE*page) && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
             </LoadMoreWrapper>
           </ItemWrapper>
         )
@@ -77,10 +76,7 @@ export const CharactersShopDetail: FC<Props> = ({
         {!!selectedCharacter && (
           <DetailContainer>
             <CharacterDetailSection
-              character={{
-                nft: selectedCharacter.character,
-                equippedItems: selectedCharacter.equippedItems,
-              }}
+              character={{ nft: selectedCharacter.character, equippedItems: selectedCharacter.equippedItems }}
               actions={{
                 onClose: () => {
                   setSelectedCharacter(undefined);

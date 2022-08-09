@@ -1,7 +1,14 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { ButtonText, EmptyItemCard, ItemThumbnail, Label, MenuItemName, PrimaryButton } from "../../../components";
+import {
+  ButtonText,
+  EmptyItemCard,
+  ItemThumbnail,
+  Label,
+  MenuItemName,
+  PrimaryButton,
+} from "../../../components";
 import { color } from "../../../design";
 import { Item } from "../../../interfaces";
 import { useUnequipItem } from "../../../service";
@@ -20,7 +27,7 @@ import {
 } from "./styles";
 
 interface ListItemProps {
-  item: Item | undefined;
+  item: Item;
   showToast: () => void;
 }
 
@@ -28,11 +35,9 @@ const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
   const [selected, setSelected] = useState(false);
   const unequipItem = useUnequipItem();
 
-  if (!item) return null;
-
-  const unequip = () => {
+  const unequip = (id: string) => {
     showToast();
-    unequipItem.mutate({ item });
+    unequipItem.mutate({ itemId: id });
   };
 
   return (
@@ -45,13 +50,17 @@ const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
             <EquippedLabel>{text.general.equipped}</EquippedLabel>
           </InfoTextContainer>
           <InlineDetails>
-            <ButtonText customColor={color.darkGrey}>{item.category}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>
+              {item.category}
+            </ButtonText>
             <Divider />
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>
-        <PrimaryButton onClick={() => unequip()}>
-          <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
+        <PrimaryButton onClick={() => unequip(item.id)}>
+          <ButtonText customColor={color.white}>
+            {text.character.unequip}
+          </ButtonText>
         </PrimaryButton>
       </InfoWrapper>
     </Info>
@@ -73,7 +82,7 @@ const EmptyItem: FC = () => {
 };
 
 interface SectionProps {
-  items: (Item | undefined)[];
+  items: Item[];
   showToast: () => void;
 }
 

@@ -1,5 +1,12 @@
 import styled from "@emotion/styled";
-import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
+import {
+  SMALL_SCREEN_SIZE,
+  MEDIUM_SCREEN_SIZE,
+  LARGE_SCREEN_SIZE,
+  EXTRA_LARGE_SCREEN_SIZE,
+} from "../../constants";
+
+import { imageSize } from "../../design/image";
 
 export interface ImageProps {
   src?: string;
@@ -12,13 +19,13 @@ export interface ImageProps {
 }
 
 export const Img = styled.img<ImageProps>`
-  width: ${(props): string => props.width || "100%"};
-  height: ${(props): string => props.height || "100%"};
+  width: ${(props): string => props.width || imageSize.extraSmall};
+  height: ${(props): string => props.height || imageSize.extraSmall};
   margin-top: ${(props): string => props.marginTop || "0px"};
   margin-bottom: ${(props): string => props.marginBottom || "0px"};
   margin-right: ${(props): string => props.marginRight || "0px"};
   margin-left: ${(props): string => props.marginLeft || "0px"};
-  object-fit: contain;
+  object-fit: cover;
 `;
 
 export interface CharacterImageProps {

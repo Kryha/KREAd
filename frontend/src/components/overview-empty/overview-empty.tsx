@@ -2,7 +2,13 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { OverviewWrapper } from "./styles";
-import { ButtonText, MenuText, BodyText, SecondaryButton, PrimaryButton } from "../atoms";
+import {
+  ButtonText,
+  MenuText,
+  BodyText,
+  SecondaryButton,
+  PrimaryButton,
+} from "../atoms";
 import { text } from "../../assets/text";
 import { routes } from "../../navigation";
 import { color } from "../../design";
@@ -34,15 +40,21 @@ export const OverviewEmpty: FC<OverviewProps> = ({
   return (
     <OverviewWrapper>
       <MenuText>{headingText || text.general.dataNotFound}</MenuText>
-      <BodyText>{descriptionText || text.general.thereAreNoAssetsAvailable}</BodyText>
+      <BodyText>
+        {descriptionText || text.general.thereAreNoAssetsAvailable}
+      </BodyText>
       {buttonText && secondary && (
         <SecondaryButton onClick={() => handleButtonClick()}>
-          <ButtonText customColor={color.white}>{buttonText || text.general.goHome}</ButtonText>
+          <ButtonText customColor={color.white}>
+            {buttonText || text.general.goHome}
+          </ButtonText>
         </SecondaryButton>
       )}
       {buttonText && !secondary && (
         <PrimaryButton onClick={() => handleButtonClick()}>
-          <ButtonText customColor={color.white}>{buttonText || text.general.goHome}</ButtonText>
+          <ButtonText customColor={color.white}>
+            {buttonText || text.general.goHome}
+          </ButtonText>
         </PrimaryButton>
       )}
     </OverviewWrapper>

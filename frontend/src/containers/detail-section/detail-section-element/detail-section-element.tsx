@@ -1,8 +1,12 @@
 import React, { FC } from "react";
 
 import { ButtonInfo } from "../../../components/button-info";
-import { InfoPosition } from "../../../interfaces";
-import { DetailSectionElemenTitle, DetailSectionElementWrap, TitleFlexRow } from "./styles";
+import { InfoPosition } from "../../../interfaces/layout.types";
+import {
+  DetailSectionElemenTitle,
+  DetailSectionElementWrap,
+  TitleFlexRow,
+} from "./styles";
 
 interface DetailSectionElementProps {
   children?: React.ReactNode;
@@ -11,12 +15,19 @@ interface DetailSectionElementProps {
   infoPosition?: InfoPosition;
 }
 
-export const DetailSectionElement: FC<DetailSectionElementProps> = ({ title, children, info, infoPosition }) => {
+export const DetailSectionElement: FC<DetailSectionElementProps> = ({
+  title,
+  children,
+  info,
+  infoPosition,
+}) => {
   return (
     <DetailSectionElementWrap>
       <TitleFlexRow>
-        {!!info && <ButtonInfo title={title} info={info} infoPosition={infoPosition} />}
         <DetailSectionElemenTitle>{title}</DetailSectionElemenTitle>
+        {!!info && (
+          <ButtonInfo title={title} info={info} infoPosition={infoPosition} />
+        )}
       </TitleFlexRow>
       {children}
     </DetailSectionElementWrap>

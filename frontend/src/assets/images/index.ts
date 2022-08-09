@@ -1,43 +1,56 @@
-import ArmaCitizen from "./character/Arma-citizen.png";
-import ElephiaCitizen from "./character/Elephia-citizen.png";
-import ArmaFilter_I5 from "./items/Arma_Filter_I-5.png";
-import ArmaFilter_I6 from "./items/Arma_Filter_I-6.png";
-import ArmaPerk_II6 from "./items/Arma_Perk_II-6.png";
-import ArmaPerk_II7 from "./items/Arma_Perk_II-7.png";
-import ArmaPerk_I6 from "./items/Arma_Perk_l-6.png";
-import ArmaPerk_I7 from "./items/Arma_Perk_l-7.png";
-import Headpiece_Arma_3 from "./items/Headpiece_Arma-3.png";
-import Headpiece_Arma_4 from "./items/Headpiece_Arma-4.png";
-import Headpiece_Arma_5 from "./items/Headpiece_Arma-5.png";
-import Headpiece_Farma_3 from "./items/Headpiece_Farma-3.png";
-import Headpiece_Farma_4 from "./items/Headpiece_Farma-4.png";
-import Headpiece_Farma_5 from "./items/Headpiece_Farma-5.png";
-import Legendary_Garment_Arma_7 from "./items/Legendary_Garment_Arma-7.png";
-import Rare_Garment_Arma_2 from "./items/Rare_Garment_Arma-2.png";
-import Uncommon_Garment_Arma_1 from "./items/UnCommon_Garment_Arma-1.png";
-import Mask_Elephia_32 from "./items/Elephia_Mask_32.png";
-import Mask_Elephia_24 from "./items/Elephia_Mask_24.png";
-import Mask_Mount_3 from "./items/Mount_Mask_03.png";
+import TempetCharacter from "./tempet_layer.png";
+import TempetAddons from "./tempet_add_ons_07.png";
+import TempetAddonsThumbnail from "./tempet_add_ons_thumbnail.png";
+import TempetBackground1 from "./tempet_background1_00.png";
+import TempetBackground1Thumbnail from "./tempet_background1_thumbnail.png";
+import TempetBackground2 from "./tempet_background2_01.png";
+import TempetBackground2Thumbnail from "./tempet_background2_thumbnail.png";
+import TempetClothing from "./tempet_clothing_09.png";
+import TempetClothingThumbnail from "./tempet_clothing_thumbnail.png";
+import TempetFilter1 from "./tempet_filter1_08.png";
+import TempetFilter1Thumbnail from "./tempet_filter1_thumbnail.png";
+import TempetFilter2 from "./tempet_filter2_06.png";
+import TempetFilter2Thumbnail from "./tempet_filter2_thumbnail.png";
+import TempetHair from "./tempet_hair_03.png";
+import TempetHairThumbnail from "./tempet_hair_thumbnail.png";
+import TempetHeadpiece from "./tempet_headpiece_10.png";
+import TempetHeapieceThumbnail from "./tempet_headpiece_thumbnail.png";
+import TempetMask from "./tempet_mask_04.png";
+import TempetMaskThumbnail from "./tempet_mask_thumbnail.png";
+import TempetStyleline from "./tempet_styleline_05.png";
+import TempetStylelineThumbnail from "./tempet_styleline_thumbnail.png";
+import TempetHair2 from "./tempet_hair_02_03.png";
+import TempetFrontMask2 from "./tempet_front_mask_02_07.png";
+import TempetClothing2 from "./tempet_clothing_02_09.png";
+import TempetHeadpiece2 from "./tempet_headpiece_02_10.png";
+import TempetMask2 from "./tempet_mask_02_04.png";
 
 export {
-  Mask_Elephia_32,
-  Mask_Elephia_24,
-  Mask_Mount_3,
-  ArmaCitizen,
-  ElephiaCitizen,
-  ArmaFilter_I5,
-  ArmaFilter_I6,
-  ArmaPerk_II6,
-  ArmaPerk_II7,
-  ArmaPerk_I6,
-  ArmaPerk_I7,
-  Headpiece_Arma_3,
-  Headpiece_Arma_4,
-  Headpiece_Arma_5,
-  Headpiece_Farma_3,
-  Headpiece_Farma_4,
-  Headpiece_Farma_5,
-  Legendary_Garment_Arma_7,
-  Rare_Garment_Arma_2,
-  Uncommon_Garment_Arma_1,
+  // TODO: remove this once we use ipfs
+  TempetCharacter,
+  TempetAddons,
+  TempetAddonsThumbnail,
+  TempetBackground1,
+  TempetBackground1Thumbnail,
+  TempetBackground2,
+  TempetBackground2Thumbnail,
+  TempetClothing,
+  TempetClothingThumbnail,
+  TempetFilter1,
+  TempetFilter1Thumbnail,
+  TempetFilter2,
+  TempetFilter2Thumbnail,
+  TempetHair,
+  TempetHairThumbnail,
+  TempetHeadpiece,
+  TempetHeapieceThumbnail,
+  TempetMask,
+  TempetMaskThumbnail,
+  TempetStyleline,
+  TempetStylelineThumbnail,
+  TempetHair2,
+  TempetFrontMask2,
+  TempetClothing2,
+  TempetHeadpiece2,
+  TempetMask2,
 };

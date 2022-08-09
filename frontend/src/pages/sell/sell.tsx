@@ -1,82 +1,89 @@
-import React, { FC, useState } from "react";
+import { FC, ReactNode } from "react";
+import { useForm } from "react-hook-form";
 
-import { ErrorView, FadeInOut, FormHeader, NotificationDetail, Overlay } from "../../components";
-import { FormCard } from "../create-character/styles";
-import { SellData, SellStep, SellText } from "./types";
-import { SellForm } from "./sell-form";
-import { Confirmation } from "./confirmation";
-import { Information } from "./information";
-import { SELL_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
-import { useLocation } from "react-router-dom";
-import { routes } from "../../navigation";
-import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { text } from "../../assets";
-import { useCharacterBuilder } from "../../context/character-builder-context";
+import { ButtonText, Data, FormHeaderClose, FormText, Input, Label, LoadingPage, MenuItem, PrimaryButton } from "../../components";
+import { useViewport } from "../../hooks";
+import { routes } from "../../navigation";
+import { FormCard } from "../create-character/styles";
+import {
+  ArrowUp,
+  ButtonContainer,
+  CardContainer,
+  ContentWrapper,
+  DetailContainer,
+  ErrorContainer,
+  FormFields,
+  InputContainer,
+  InputWrapper,
+  TextLabel,
+  Tick,
+  Warning,
+} from "./styles";
+import { color } from "../../design";
+import { ButtonInfo } from "../../components/button-info";
+import { SellText } from "./types";
 
 interface Props {
-  data: SellData;
+  children: ReactNode;
   text: SellText;
-  setData: (data: SellData) => void;
-  sendOfferHandler: (data: SellData) => Promise<void>;
-  isPlacedInShop: boolean;
+  data: Data;
+
+  isLoading?: boolean;
+  onSubmit: (price: number) => void;
 }
 
-export const Sell: FC<Props> = ({ data, setData, text: pText, sendOfferHandler, isPlacedInShop }) => {
-  const location = useLocation();
-  const previousPath = location.state.pathname;
-  const [currentStep, setCurrentStep] = useState<SellStep>(0);
-  const { showToast, setShowToast } = useCharacterBuilder();
-  if (!data) return <ErrorView />;
+export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoading }) => {
+  const { width, height } = useViewport();
 
-  const setInformationData = async (price: number) => {
-    setData({ ...data, price });
-    setCurrentStep(WALLET_INTERACTION_STEP);
-  };
-
-  const onSellFormSubmit = async () => await sendOfferHandler(data);
-
-  if (!data) return <ErrorView />;
-
-  let confirmationPath: string = routes.character;
-  if (previousPath.includes("item")) {
-    if (previousPath.includes("sell")) confirmationPath = `${routes.shop}/items`;
-    if (previousPath.includes("buy")) confirmationPath = `${routes.inventory}/items`;
-  }
-  if (previousPath.includes("character")) {
-    if (previousPath.includes("sell")) confirmationPath = `${routes.shop}/characters`;
-    if (previousPath.includes("buy")) confirmationPath = `${routes.inventory}/characters`;
-  }
-
-  const perStepDisplay = (): React.ReactNode => {
-    switch (currentStep) {
-      case 0:
-        return <Information setData={setInformationData} data={data} />;
-      case 1:
-        return <SellForm onSubmit={onSellFormSubmit} data={data} changeStep={setCurrentStep} isPlacedInShop={isPlacedInShop} />;
-      case 2:
-        return <Confirmation text={pText} confirmationPath={confirmationPath} data={data} />;
-      default:
-        return <ErrorView />;
-    }
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, dirtyFields },
+  } = useForm<{ price: number }>({ mode: "onChange", reValidateMode: "onChange" });
 
   return (
-    <>
-      <FormCard>
-        <FormHeader currentStep={currentStep} stepAmount={SELL_FLOW_STEPS} title={pText.sell} link={previousPath} />
-        {perStepDisplay()}
+    <ContentWrapper width={width} height={height}>
+      <FormCard height={height} width={width}>
+        <FormHeaderClose title={pText.sell} link={routes.inventory} />
+        <CardContainer>
+          <MenuItem data={data} />
+        </CardContainer>
+        <form onSubmit={handleSubmit((data) => onSubmit(data.price))}>
+          <FormFields>
+            <InputContainer>
+              <Label>{text.store.setPrice}</Label>
+              <TextLabel>
+                <Input type="number" defaultValue="" {...register("price", { required: true, min: 1 })} />
+              </TextLabel>
+            </InputContainer>
+            <InputWrapper>
+              {Boolean(!errors.price && dirtyFields.price) && <Tick />}
+              <ButtonInfo info={text.general.sellAssetInfo} />
+            </InputWrapper>
+            {Boolean(errors.price && errors.price.type === "required") && (
+              <ErrorContainer>
+                <Warning />
+                <ButtonText>{text.general.thisFieldIsRequired}</ButtonText>
+              </ErrorContainer>
+            )}
+            {Boolean(errors.price && errors.price.type === "min") && (
+              <ErrorContainer>
+                <Warning />
+                <ButtonText>{text.general.theMinimiumAmountIs}</ButtonText>
+              </ErrorContainer>
+            )}
+          </FormFields>
+          <FormText>{text.store.sellDescription}</FormText>
+          <ButtonContainer>
+            <PrimaryButton type="submit" disabled={!isValid || isLoading}>
+              <ButtonText customColor={color.white}>{text.store.placeInShop}</ButtonText>
+              {isLoading ? <LoadingPage /> : <ArrowUp />}
+            </PrimaryButton>
+          </ButtonContainer>
+        </form>
       </FormCard>
-      <FadeInOut show={showToast} exiting={!showToast}>
-        {showToast && <Overlay isOnTop={true} />}
-        <NotificationWrapper showNotification={showToast}>
-          <NotificationDetail
-            title={text.general.goToYourWallet}
-            info={text.general.yourActionIsPending}
-            closeToast={() => setShowToast(false)}
-            isError
-          />
-        </NotificationWrapper>
-      </FadeInOut>
-    </>
+      <DetailContainer>{children}</DetailContainer>
+    </ContentWrapper>
   );
 };

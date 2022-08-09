@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from "react";
+import { FC } from "react";
 
 import { text } from "../../assets";
 import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton } from "../../components";
@@ -7,8 +7,7 @@ import { color } from "../../design";
 import {
   ArrowUp,
   ButtonContainer,
-  ErrorContainerMarginTop,
-  BuyFormContainer,
+  ContentWrapper,
   GeneralInfo,
   Line,
   NumberContainer,
@@ -19,46 +18,24 @@ import {
   Tick,
 } from "./styles";
 import { BuyData, BuyStep } from "./types";
-import { Warning } from "../create-character/styles";
-import { useCharacterBuilder } from "../../context/character-builder-context";
 
 interface BuyFormProps {
   data: BuyData;
 
   changeStep: (step: BuyStep) => void;
-  onSubmit: () => Promise<void>;
+  onSubmit: () => void;
 
   isLoading: boolean;
   isOfferAccepted: boolean;
-
-  notEnoughIST?: boolean;
-  ist: bigint;
 }
 
-export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted, notEnoughIST, ist }) => {
-  const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
-  const isOfferPending = !isOnFirstStep && !isOfferAccepted;
-  const [isDisabled, setIsDisabled] = useState(false);
-  const { showToast, setShowToast } = useCharacterBuilder();
-  const onSendOfferClickHandler = async () => {
-    setIsDisabled(true);
-    setShowToast(!showToast);
-    await onSubmit();
-    setIsOnFirstStep(false);
-  };
-
-  const changeStepDisabled = useMemo(
-    () => ({
-      step1: true,
-      step2: !isOfferAccepted,
-      step3: !isOfferAccepted,
-    }),
-    [isOfferAccepted],
-  );
+export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
+  const isOnFirstStep = !isLoading;
+  const isOnSecondStep = isLoading && !isOfferAccepted;
 
   return (
-    <BuyFormContainer>
-      <FormText>{text.store.marketplaceFees}</FormText>
+    <ContentWrapper>
+      <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
         <GeneralInfo active={!isOnFirstStep}>
           <PricingContainer>
@@ -67,18 +44,18 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
             {isOnFirstStep && <PriceInIst price={data.price} />}
           </PricingContainer>
           {isOnFirstStep && (
-            <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled || notEnoughIST}>
+            <PrimaryButton onClick={() => onSubmit()}>
               <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
             </PrimaryButton>
           )}
         </GeneralInfo>
         <Line />
-        <Step active={isOnFirstStep}>
-          <NumberContainer active={!isOnFirstStep}>
+        <Step active={!isOnSecondStep}>
+          <NumberContainer active={!isOnSecondStep}>
             {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
-          {isOfferPending && (
+          {isOnSecondStep && (
             <Badge>
               <ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText>
             </Badge>
@@ -86,23 +63,11 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
         </Step>
       </StepContainer>
       <ButtonContainer>
-        {isOnFirstStep ? (
-          <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled || notEnoughIST}>
-            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          </PrimaryButton>
-        ) : (
-          <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={changeStepDisabled.step2}>
-            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-            {isLoading ? <LoadingPage /> : <ArrowUp />}
-          </PrimaryButton>
-        )}
+        <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
+          <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+          {isLoading ? <LoadingPage /> : <ArrowUp />}
+        </PrimaryButton>
       </ButtonContainer>
-      {notEnoughIST && (
-        <ErrorContainerMarginTop>
-          <Warning />
-          <ButtonText customColor={color.red}>{text.error.mint.insufficientFunds(ist)}</ButtonText>
-        </ErrorContainerMarginTop>
-      )}
-    </BuyFormContainer>
+    </ContentWrapper>
   );
 };

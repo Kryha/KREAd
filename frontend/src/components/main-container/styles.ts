@@ -4,11 +4,12 @@ interface MainProps {
   height: number;
 }
 
+export const MainPageContainer = styled.div``;
+
 export const MainWrap = styled.div<MainProps>`
-  display: flex;
   width: 100%;
   height: 100%;
-  flex-direction: column;
+  flex-direction: row;
   overflow: hidden;
   position: relative;
   ${({ height }): string => `height: ${height}px;`};

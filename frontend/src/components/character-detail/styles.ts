@@ -2,8 +2,13 @@ import styled from "@emotion/styled";
 
 import { CardElementIcon, CloseIcon } from "../../assets";
 import { color, margins } from "../../design";
-import { Badge, HeaderHorizontalDivider, HorizontalDivider, Label, PrimaryButton } from "../atoms";
-import { Card as CardIcon, ElementContainer as Element, ElementWrapper } from "../item-card/styles";
+import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
+import { Badge, Label, PrimaryButton } from "../atoms";
+import {
+  Card as CardIcon,
+  ElementWrapper,
+  ElementContainer as Element,
+} from "../item-card/styles";
 
 export const DetailWrapper = styled.div`
   position: absolute;
@@ -22,21 +27,21 @@ export const ElementContainer = styled(CardElementIcon)`
 `;
 
 export const Content = styled.div`
-  padding: 0 ${margins.small};
+  padding: 0px ${margins.small};
 `;
 
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
 `;
 
 export const SubTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0;
+  padding: 0px;
   margin-top: ${margins.small};
   ${Badge} {
     margin-right: ${margins.mini};
@@ -91,7 +96,7 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
   ${PrimaryButton} {
     margin-right: ${margins.mini};
   }
@@ -103,7 +108,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const DetailContent = styled.div`
-  padding: ${margins.medium} ${margins.medium} 0 ${margins.medium};
+  padding: ${margins.medium} ${margins.medium} 0px ${margins.medium};
   ${HorizontalDivider} {
     margin-bottom: ${margins.medium};
   }
@@ -118,8 +123,7 @@ export const DetailItemContainer = styled.div`
 
 export const CardActionsContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-direction: row;
   align-items: flex-end;
   justify-content: center;
   margin-bottom: ${margins.large};
@@ -131,14 +135,14 @@ export const StoryContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
 `;
 
 export const SignContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
   margin-right: 80px;
   ${Label} {
     margin-bottom: ${margins.small};

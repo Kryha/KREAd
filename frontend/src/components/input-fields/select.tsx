@@ -1,9 +1,11 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
-import { ClearButton, SelectBox, StyledSelect, Tick } from "./styles";
-import { ButtonText, HorizontalDivider } from "../atoms";
+import { FC, useState } from "react";
+
+import { Tick, SelectBox, StyledSelect } from "./styles";
+import { ButtonText } from "../atoms";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { CloseIcon } from "../../assets";
+import { Diamond } from "../price-in-ist/styles";
+import { ITEM_CATEGORIES } from "../../constants";
 
 export interface Options {
   label: string;
@@ -12,90 +14,46 @@ export interface Options {
 
 interface SelectProps {
   label: string;
-  onArrayChange?: (selected: any[]) => void;
-  onChange?: (selected: string) => void;
+  handleChange: (selected: string) => void;
   options: Options[];
-  isMultiSelect?: boolean;
-  reset: boolean; // Add a reset prop to signal when to reset the component
 }
 
-export const Select: FC<SelectProps> = ({ options, onChange, onArrayChange, isMultiSelect = false, reset }) => {
+export const Select: FC<SelectProps> = ({ label, options, handleChange }) => {
+  const [selected, setSelected] = useState(-1);
   const { height } = useViewport();
-
-  const [selected, setSelected] = useState<string[]>(isMultiSelect ? [] : [options.length > 0 ? options[0].value : ""]);
-
-  // Function to reset the component's state to its initial state
-  const resetComponent = () => {
-    setSelected(isMultiSelect ? [] : [options.length > 0 ? options[0].value : ""]);
-    onArrayChange && onArrayChange([]);
-    onChange && onChange("");
-  };
-  useEffect(() => {
-    // Check if the reset prop is true and reset the component's state
-    if (reset) {
-      resetComponent();
-    }
-  }, [reset]);
-
-  const handleOptionClick = useCallback(
-    (index: number) => {
-      const selectedValue = options[index].value;
-      if (isMultiSelect) {
-        setSelected((prevSelected) => {
-          if (prevSelected.includes(selectedValue)) {
-            // Remove the selected option
-            const updatedSelected = prevSelected.filter((val) => val !== selectedValue);
-            if (onArrayChange) {
-              onArrayChange(updatedSelected);
-            }
-            return updatedSelected;
-          } else {
-            // Add the selected option
-            const updatedSelected = [...prevSelected, selectedValue];
-            if (onArrayChange) {
-              onArrayChange(updatedSelected);
-            }
-            return updatedSelected;
-          }
-        });
-      } else {
-        setSelected([selectedValue]);
-        if (onChange) {
-          onChange(selectedValue);
-        }
-      }
-    },
-    [isMultiSelect, onChange, onArrayChange, options],
-  );
-
-  const isOptionSelected = (optionValue: string) => {
-    if (isMultiSelect) {
-      return selected.includes(optionValue);
-    }
-    return selected[0] === optionValue;
-  };
-
   return (
     <SelectBox height={height}>
-      <ClearButton>
-        <ButtonText onClick={resetComponent} customColor={color.darkGrey}>
-          reset
+      <StyledSelect
+        selected={selected === -1}
+        onClick={() => {
+          handleChange("");
+          setSelected(-1);
+        }}
+      >
+        <ButtonText
+          customColor={selected === -1 ? color.black : color.darkGrey}
+        >
+          {label}
         </ButtonText>
-        <CloseIcon />
-      </ClearButton>
-      <HorizontalDivider />
+        <Tick />
+      </StyledSelect>
       {options.map((option, index) => (
-        <React.Fragment key={index}>
-          <StyledSelect
-            selected={isOptionSelected(option.value)}
-            onClick={() => {
-              handleOptionClick(index);
-            }}
+        <StyledSelect
+          selected={selected === index}
+          key={index}
+          onClick={() => {
+            handleChange(options[index].value);
+            setSelected(index);
+          }}
+        >
+          <ButtonText
+            customColor={selected === index ? color.black : color.darkGrey}
           >
-            <ButtonText customColor={isOptionSelected(option.value) ? color.black : color.darkGrey}>{option.label}</ButtonText>
-            <Tick />
-          </StyledSelect>
-        </React.Fragment>
+            {option.label}
+          </ButtonText>
+          {option.value === ITEM_CATEGORIES.forSale && <Diamond />}
+          <Tick />
+        </StyledSelect>
       ))}
     </SelectBox>
   );

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
-import { fadeUp, HorizontalDivider, Label, SecondaryButton } from "../../components";
+import { HorizontalDivider, Label, SecondaryButton } from "../../components";
+import { fadeUp } from "../../components/atoms/animations";
 import { FilterOption } from "../../components/filters/styles";
 import { LoadMoreContainer } from "../../components/load-more/styles";
 import { KreadIcon } from "../../components/logo/styles";
@@ -16,13 +17,13 @@ interface ShopProps {
 }
 
 export const ShopWrapper = styled.div`
+  margin: 0px ${margins.big} 120px ${margins.big};
   position: relative;
-  width: 100%;
 
   ${DetailSectionWrap} {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0px;
+    left: 0px;
     z-index: 1000;
   }
 `;
@@ -31,7 +32,7 @@ export const FilterWrapper = styled.div`
   position: sticky;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: 0px;
   z-index: 30;
   ${HorizontalDivider} {
     margin-top: 4px;
@@ -42,15 +43,13 @@ export const FilterWrapper = styled.div`
 `;
 
 export const FilterContainer = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0;
+  padding: 0px;
   gap: 16px;
-  margin-left: auto;
-  margin-right: auto;
 `;
 
 export const SelectorContainer = styled.div`
@@ -61,7 +60,7 @@ export const SelectorContainer = styled.div`
 export const SortByContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0;
+  padding: 0px;
   align-items: center;
   ${Label} {
     margin-right: 10px;
@@ -98,7 +97,7 @@ export const Refresh = styled(RefreshIcon)`
 `;
 
 export const Close = styled(CloseIcon)`
-  margin: 0 0 0 11px !important;
+  margin: 0px 0px 0px 11px !important;
   width: 12px;
 `;
 
@@ -111,12 +110,12 @@ interface NotificationProps {
   open: boolean;
 }
 
-export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
+export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
   padding: ${margins.mini};
   position: relative;
   z-index: 1000;
   ${Close} {
-    margin: 0 6px !important;
+    margin: 0px 6px !important;
     width: 15px;
     height: 15px;
   }
@@ -140,7 +139,7 @@ export const Tag = styled.div`
   gap: 10px;
 
   position: absolute;
-  width: ${margins.small};
+  width:  ${margins.small};
   height: ${margins.small};
   left: 27px;
   top: -3px;
@@ -176,14 +175,18 @@ export const Card = styled.div<ViewProps>`
   ${({ width }): string => {
     if (width <= 1300) {
       return "flex: 0 1 calc(49.6% - 1em);";
-    } else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
+    }
+    else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
       return "flex: 0 1 calc(32.4% - 1em);";
-    } else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
+    }
+    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
       return "flex: 0 1 calc(24.41% - 1em);";
-    } else {
+    }
+    else {
       return "flex: 1 0 500px;";
     }
-  }}
+  }
+  }
 `;
 
 export const DetailContainer = styled.div`
@@ -192,24 +195,21 @@ export const DetailContainer = styled.div`
   }
 `;
 
-export const KreadContainer = styled.div`
+export const KreadContainer = styled.div<ViewProps>`
   ${KreadIcon} {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    top: 24px;
+    top: 40px;
     width: 100px;
     height: 24px;
   }
 `;
 
 export const OverviewContainer = styled.div`
-  position: relative;
-  z-index: 0;
   ${OverviewWrapper} {
     padding-top: 97px;
-    padding-left: 0;
-    z-index: 0;
+    padding-left: 0px;
   }
 `;
 

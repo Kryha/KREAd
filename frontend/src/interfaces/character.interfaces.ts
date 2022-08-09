@@ -1,35 +1,36 @@
-import { CATEGORY, ORIGIN, TITLE } from "../constants";
+import { ITEM_CATEGORIES, CHARACTER_CATEGORIES } from "../constants";
 import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
 
-export type Origin = (typeof ORIGIN)[keyof typeof ORIGIN];
-export type Title = (typeof TITLE)[keyof typeof TITLE];
-
 export const isItemCategory = (category: unknown): category is keyof CharacterItems => {
   if (typeof category !== "string") return false;
-  return Object.prototype.hasOwnProperty.call(CATEGORY, category);
+  return ITEM_CATEGORIES.all.includes(category);
 };
 
-export const isCharacterCategory = (title: unknown): title is Title => {
-  if (typeof title !== "string") return false;
-  return (title as Title) in TITLE;
+export const isCharacterCategory = (category: unknown): category is keyof CharacterCategories => {
+  if (typeof category !== "string") return false;
+  return CHARACTER_CATEGORIES.includes(category);
 };
 
-export interface CharacterItems {
-  [key: string]: Item | undefined;
-  background?: Item;
-  patch?: Item;
-  hair?: Item;
-  headPiece?: Item;
-  mask?: Item;
-  perk1?: Item;
-  perk2?: Item;
-  filter1?: Item;
-  filter2?: Item;
-  garment?: Item;
+// TODO: decide if this is the best solution or if it's better if already in a readable format
+export interface CharacterCategories {
+  tempetScavenger: string;
 }
 
-export interface Details {
+export interface CharacterItems {
+  noseline?: Item;
+  midBackground?: Item;
+  mask?: Item;
+  headPiece?: Item;
+  hair?: Item;
+  airReservoir?: Item;
+  liquid?: Item;
+  background?: Item;
+  frontMask?: Item;
+  clothing?: Item;
+}
+
+export interface Detail {
   boardId: string;
   brand: string;
   artist: string;
@@ -37,17 +38,16 @@ export interface Details {
 }
 
 export interface Character {
-  id: number;
-  title: Title;
-  image: string;
+  id: string;
   keyId: number;
+  title: string;
   name: string;
-  origin: Origin;
+  type: string;
   description: string;
+  image: string;
   level: number;
-  artistMetadata: string;
-  characterTraits: string;
-  date: number;
+  detail: Detail;
+  projectDescription: string;
   itemActivity: ActivityEvent[];
 }
 
@@ -55,7 +55,6 @@ export interface ExtendedCharacter {
   nft: Character;
   equippedItems: CharacterItems;
   activity?: ActivityEvent[];
-  notifier?: any;
 }
 
 export interface CharacterInMarket {
@@ -63,41 +62,33 @@ export interface CharacterInMarket {
   character: Character;
   equippedItems: CharacterItems;
   sell: {
+    publicFacet: any;
     price: bigint;
-    platformFee: bigint;
-    royalty: bigint;
   };
-}
-
-export interface KreadCharacterInMarket {
-  id: number;
-  sellerSeat: any;
-  name: string;
-  askingPrice: {
-    value: bigint;
-    brand: any;
-  };
-  platformFee: {
-    value: bigint;
-    brand: any;
-  };
-  royalty: {
-    value: bigint;
-    brand: any;
-  };
-  asset: Character;
 }
 
 export interface CharacterInMarketBackend {
   id: bigint;
-  character: Character;
+  character: CharacterBackend;
   sell: {
-    publicFacet?: any;
+    publicFacet: any;
     price: bigint;
   };
 }
 
+export interface CharacterBackend extends Omit<Character, "id"> {
+  id: bigint;
+}
+
+export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft"> {
+  nft: CharacterBackend;
+}
+
+export interface CharacterEquip extends ExtendedCharacter {
+  isEquipped: boolean;
+  isForSale?: boolean;
+}
+
 export interface CharacterCreation {
   name: string;
-  setError?: (error: string) => void
 }

@@ -1,7 +1,12 @@
 import styled from "@emotion/styled";
 
 import { ArrowUpRightIcon } from "../../../assets";
-import { ButtonText, HeaderHorizontalDivider, MenuItemName, PrimaryButton } from "../../../components";
+import {
+  ButtonText,
+  HeaderHorizontalDivider,
+  MenuItemName,
+  PrimaryButton,
+} from "../../../components";
 import { color, fontWeight, margins } from "../../../design";
 
 export const EquippedLabel = styled(ButtonText)``;

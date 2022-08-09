@@ -3,7 +3,8 @@ import { ArrowUpRightIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 import { color, margins, zIndex } from "../../design";
-import { HeaderHorizontalDivider, PrimaryButton } from "../atoms";
+import { PrimaryButton } from "../atoms";
+import { HeaderHorizontalDivider } from "../atoms/lines";
 import { ButtonInfoWrap } from "../button-info/styles";
 import { PriceContainer } from "../price-in-ist/styles";
 
@@ -59,7 +60,7 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
 `;
 
 export const Divider = styled(HeaderHorizontalDivider)`
@@ -68,7 +69,7 @@ export const Divider = styled(HeaderHorizontalDivider)`
 `;
 
 export const CharacterContent = styled.div`
-  padding: 0 ${margins.big} 0px ${margins.medium};
+  padding: 0px ${margins.big} 0px ${margins.medium};
 `;
 
 export const CharacterItemContainer = styled.div`
@@ -89,9 +90,8 @@ export const CardActionsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0;
+  padding: 0px;
   justify-content: flex-end;
-  margin-top: 30px;
   margin-right: 30px;
   margin-bottom: 30px;
   box-shadow: none;
@@ -100,6 +100,7 @@ export const CardActionsContainer = styled.div`
     margin-right: ${margins.mini};
   }
   ${ButtonInfoWrap} {
+    margin-top: 30px;
     margin-right: ${margins.small};
   }
   ${PrimaryButton} {

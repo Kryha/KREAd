@@ -5,8 +5,9 @@ import { ReactComponent as MenuIcon } from "./menu.svg";
 import { ReactComponent as CloseIcon } from "./close.svg";
 import { ReactComponent as ExpandIcon } from "./expand.svg";
 import Empty from "./empty.png";
-import { ReactComponent as CardElementIcon, ReactComponent as NotificationIcon } from "./element.svg";
+import { ReactComponent as CardElementIcon } from "./element.svg";
 import { ReactComponent as SmallElementIcon } from "./element-small.svg";
+import { ReactComponent as NotificationIcon } from "./element.svg";
 import UnnamedCreator from "./unnamed-creator.png";
 import SmallEl from "./small-el.png";
 import { ReactComponent as InventoryItemIcon } from "./Inventoy-Item.svg";
@@ -28,32 +29,8 @@ import { ReactComponent as WarningIcon } from "./warning-icon.svg";
 import { ReactComponent as Logo } from "./kread-logo.svg";
 import { ReactComponent as ArrowDownIcon } from "./arrow-down.svg";
 import { ReactComponent as Loading } from "./kread-loading.svg";
-import { ReactComponent as ZoomInIcon } from "./zoom-in.svg";
-import { ReactComponent as ZoomOutIcon } from "./zoom-out.svg";
-import { ReactComponent as DownloadIcon } from "./download.svg";
-import { ReactComponent as DevIcon } from "./dev.svg";
-import { ReactComponent as HelpIcon } from "./help.svg";
-import { ReactComponent as NextIcon } from "./next.svg";
-import { ReactComponent as PreviousIcon } from "./previous.svg";
-import { ReactComponent as EquippedIcon } from "./equipped.svg";
-import { ReactComponent as DiagonalIcon } from "./diagonal.svg";
-import { ReactComponent as KeplerIcon } from "./kelpr.svg";
-import { ReactComponent as InstagramIcon } from "./instagram.svg";
-import { ReactComponent as DiscordIcon } from "./discord.svg";
-import { ReactComponent as TwitterIcon } from "./twitter.svg";
-import { ReactComponent as ISTIcon } from "./IST_black_icon.svg";
-import { ReactComponent as StoreIcon } from "./store.svg";
 
 export {
-  StoreIcon,
-  ISTIcon,
-  KeplerIcon,
-  DiagonalIcon,
-  NextIcon,
-  EquippedIcon,
-  PreviousIcon,
-  HelpIcon,
-  DevIcon,
   ErrorIcon,
   SelectArrowIcon,
   ArrowUpRightIcon,
@@ -85,10 +62,4 @@ export {
   Logo,
   ArrowDownIcon,
   Loading,
-  ZoomInIcon,
-  ZoomOutIcon,
-  DownloadIcon,
-  InstagramIcon,
-  DiscordIcon,
-  TwitterIcon,
 };

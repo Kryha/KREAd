@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { text } from "../../assets";
-import { InfoPosition } from "../../interfaces";
+import { InfoPosition } from "../../interfaces/layout.types";
 import { SecondaryButton } from "../atoms";
 import { Tooltip } from "../tooltip";
 import { ButtonInfoWrap } from "./styles";
@@ -11,11 +11,15 @@ interface ButtonInfoProps {
   infoPosition?: InfoPosition;
 }
 
-export const ButtonInfo: FC<ButtonInfoProps> = ({ title, info, infoPosition }) => {
+export const ButtonInfo: FC<ButtonInfoProps> = ({
+  title,
+  info,
+  infoPosition,
+}) => {
   return (
     <ButtonInfoWrap>
       <Tooltip title={title} content={info} position={infoPosition}>
-        <SecondaryButton disabled={true}>{text.general.info}</SecondaryButton>
+        <SecondaryButton>{text.general.info}</SecondaryButton>
       </Tooltip>
     </ButtonInfoWrap>
   );

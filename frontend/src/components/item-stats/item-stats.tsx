@@ -6,7 +6,15 @@ import { color } from "../../design";
 
 import { isItemCategory, Item } from "../../interfaces";
 import { Badge, ButtonText, HorizontalDivider, MenuText } from "../atoms";
-import { Footer, Header, LevelContainer, ProgressContainer, StatsContainer, StatsWrapper, Title } from "./styles";
+import {
+  Footer,
+  Header,
+  LevelContainer,
+  ProgressContainer,
+  StatsContainer,
+  StatsWrapper,
+  Title,
+} from "./styles";
 
 interface ItemStatsProps {
   item?: Item;
@@ -23,30 +31,40 @@ export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
         <Title>{item.name}</Title>
         <Footer>
           <Badge>
-            <ButtonText customColor={color.darkGrey}>{text.param.categories[item.category]}</ButtonText>
+            <ButtonText customColor={color.darkGrey}>
+              {text.param.categories[item.category]}
+            </ButtonText>
           </Badge>
-          <ButtonText>{text.param.id(item.name)}</ButtonText>
+          <ButtonText>{text.param.id(item.id)}</ButtonText>
         </Footer>
       </Header>
       <StatsContainer>
         <HorizontalDivider />
         <LevelContainer>
-          <ButtonText customColor={color.darkGrey}>{text.item.level}</ButtonText>
+          <ButtonText customColor={color.darkGrey}>
+            {text.item.level}
+          </ButtonText>
           <MenuText>{item.level}</MenuText>
         </LevelContainer>
         <ProgressContainer>
           <ButtonText>{text.item.effectiveness}</ButtonText>
-          {/* FIXME: wrong property */}
-          {/* <DetailSectionProgress id={text.item.effectiveness} value={item.effectiveness || 0} max={ONE_HUNDRED_PERCENT}>
+          <DetailSectionProgress
+            id={text.item.effectiveness}
+            value={item.effectiveness || 0}
+            max={ONE_HUNDRED_PERCENT}
+          >
             {item.effectiveness}
-          </DetailSectionProgress> */}
+          </DetailSectionProgress>
         </ProgressContainer>
         <ProgressContainer>
           <ButtonText>{text.item.layerComplexity}</ButtonText>
-          {/* FIXME: wrong property */}
-          {/* <DetailSectionProgress id={text.item.layerComplexity} value={item.layerComplexity || 0} max={ONE_HUNDRED_PERCENT}>
+          <DetailSectionProgress
+            id={text.item.layerComplexity}
+            value={item.layerComplexity || 0}
+            max={ONE_HUNDRED_PERCENT}
+          >
             {text.item.layerComplexity}
-          </DetailSectionProgress> */}
+          </DetailSectionProgress>
         </ProgressContainer>
       </StatsContainer>
     </StatsWrapper>

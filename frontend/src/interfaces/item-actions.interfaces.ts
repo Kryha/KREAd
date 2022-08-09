@@ -5,8 +5,10 @@ export type ItemState = {
   items: Item[];
   owned: Item[];
   equipped: Item[];
+  market: ItemInMarket[];
 
   fetched: boolean;
+  marketFetched: boolean;
 };
 
 interface SetItems {

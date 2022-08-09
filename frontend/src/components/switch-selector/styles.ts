@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { color, fontSize, margins } from "../../design";
+import { color, margins } from "../../design";
 import { SecondaryButton } from "../atoms";
 
 interface ButtonProps {
@@ -10,11 +10,7 @@ interface ButtonProps {
 export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
   border-radius: ${margins.medium} 0px 0px ${margins.medium};
   text-transform: capitalize;
-  justify-content: center;
-  padding: 8px 16px 8px 16px;
-  width: 120px;
-  font-size: ${fontSize.subTitle};
-
+  padding: 8px 35px;
   :hover {
     color: ${color.black};
   }
@@ -23,6 +19,7 @@ export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
       ? `
       background-color: ${color.black};
       color: ${color.white};
+      padding: 8px 35px;
       border: 1px solid ${color.black};
         `
       : `
@@ -31,11 +28,8 @@ export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
 `;
 
 export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
-  border-radius: 0 ${margins.medium} ${margins.medium} 0px;
-  padding: 8px 16px 8px 16px;
-  justify-content: center;
-  font-size: ${fontSize.subTitle};
-  width: 120px;
+  border-radius: 0px ${margins.medium} ${margins.medium} 0px;
+  padding: 8px 35px;
   text-transform: capitalize;
   :hover {
     color: ${color.black};
@@ -45,6 +39,7 @@ export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
       ? `
         background-color: ${color.black};
         color: ${color.white};
+        padding: 8px 35px;
         border: 1px solid ${color.black};
         `
       : `
@@ -56,6 +51,6 @@ export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
 export const Group = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  padding: 0;
+  align-items: flex-start;
+  padding: 0px;
 `;

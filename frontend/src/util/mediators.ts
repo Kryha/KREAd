@@ -1,112 +1,73 @@
-import { CharacterItems, ExtendedCharacter, Item, ItemInMarket } from "../interfaces";
-
-//TODO: ARE WE STILL USING THIS FOR ITEMS?
+import {
+  CharacterInMarket,
+  CharacterInMarketBackend,
+  CharacterItems,
+  ExtendedCharacter,
+  ExtendedCharacterBackend,
+  Item,
+  ItemBackend,
+  ItemInMarket,
+  ItemInMarketBackend,
+} from "../interfaces";
 
 export const mediate = {
   items: {
-    toFront: (backendItems: Item[]): Item[] => {
+    toFront: (backendItems: ItemBackend[]): Item[] => {
       return backendItems.map((backendItem) => {
-        return { ...backendItem, id: String(backendItem.name) };
+        return { ...backendItem, id: String(backendItem.id) };
       });
     },
-    toBack: (frontendItems: Item[]): Item[] => {
+    toBack: (frontendItems: Item[]): ItemBackend[] => {
       return frontendItems.map((frontendItem) => {
-        return { ...frontendItem, id: BigInt(frontendItem.name) };
+        return { ...frontendItem, id: BigInt(frontendItem.id) };
       });
     },
   },
   itemsMarket: {
-    toFront: (
-      backendItems: {
-        item: Item;
-        sell: { price: bigint };
-      }[],
-    ): ItemInMarket[] => {
-      return [];
-      // backendItems.map((backendItem) => {
-      //   return {
-      //     ...backendItem,
-      //     id: String(backendItem.name),
-      //     item: mediate.items.toFront([backendItem.item])[0],
-      //   };
-      // });
+    toFront: (backendItems: ItemInMarketBackend[]): ItemInMarket[] => {
+      return backendItems.map((backendItem) => {
+        return { ...backendItem, id: String(backendItem.id), item: mediate.items.toFront([backendItem.item])[0] };
+      });
     },
-    toBack: (frontendItems: ItemInMarket[]): ItemInMarket[] => {
-      return [];
-      // frontendItems.map((frontendItem) => {
-      //   return {
-      //     ...frontendItem,
-      //     id: BigInt(frontendItem.id),
-      //     item: mediate.items.toBack([frontendItem.item])[0],
-      //   };
-      // });
+    toBack: (frontendItems: ItemInMarket[]): ItemInMarketBackend[] => {
+      return frontendItems.map((frontendItem) => {
+        return { ...frontendItem, id: BigInt(frontendItem.id), item: mediate.items.toBack([frontendItem.item])[0] };
+      });
     },
   },
   characters: {
-    toFront: (backendCharacters: ExtendedCharacter[]): ExtendedCharacter[] => {
+    toFront: (backendCharacters: ExtendedCharacterBackend[]): ExtendedCharacter[] => {
       return backendCharacters.map((backendCharacter) => {
+        return { ...backendCharacter, nft: { ...backendCharacter.nft, id: String(backendCharacter.nft.id) } };
+      });
+    },
+    toBack: (frontendCharacters: ExtendedCharacter[]): ExtendedCharacterBackend[] => {
+      return frontendCharacters.map((frontendCharacter) => {
+        return { ...frontendCharacter, nft: { ...frontendCharacter.nft, id: BigInt(frontendCharacter.nft.id) } };
+      });
+    },
+  },
+  charactersMarket: {
+    toFront: (backendCharacters: { character: CharacterInMarketBackend; equippedItems: CharacterItems }[]): CharacterInMarket[] => {
+      return backendCharacters.map(({ character, equippedItems }) => {
         return {
-          ...backendCharacter,
-          nft: { ...backendCharacter.nft, id: backendCharacter.nft.id },
+          ...character,
+          id: String(character.id),
+          character: { ...character.character, id: String(character.id) },
+          equippedItems,
         };
       });
     },
-    toBack: (frontendCharacters: ExtendedCharacter[]): ExtendedCharacter[] => {
+    toBack: (frontendCharacters: CharacterInMarket[]): CharacterInMarketBackend[] => {
       return frontendCharacters.map((frontendCharacter) => {
+        const { equippedItems: _, ...rest } = frontendCharacter;
+
         return {
-          ...frontendCharacter,
-          nft: {
-            ...frontendCharacter.nft,
-            id: Number(frontendCharacter.nft.id),
-          },
+          ...rest,
+          id: BigInt(rest.id),
+          character: { ...rest.character, id: BigInt(rest.id) },
         };
       });
     },
   },
-  // charactersMarket: {
-  //   toFront: (
-  //     backendCharacters: {
-  //       character: KreadCharacterInMarket;
-  //       equippedItems: CharacterItems;
-  //     }[],
-  //   ): CharacterInMarket[] => {
-  //     return backendCharacters.map(({ character, equippedItems }) => {
-  //       return {
-  //         ...character,
-  //         id: String(character.id),
-  //         character: { ...character.object, id: String(character.object.id) },
-  //         equippedItems,
-  //         sell: {
-  //           ask:
-  //         }
-  //       };
-  //     });
-  //   },
-  //   toBack: (frontendCharacters: CharacterInMarket[]): CharacterInMarketBackend[] => {
-  //     return frontendCharacters.map((frontendCharacter) => {
-  //       const { equippedItems: _, ...rest } = frontendCharacter;
-
-  //       return {
-  //         ...rest,
-  //         id: BigInt(rest.id),
-  //         character: { ...rest.character, id: BigInt(rest.id) },
-  //       };
-  //     });
-  //   },
-  // },
-};
-
-export const itemArrayToObject = (itemsArray: Item[]): CharacterItems => {
-  return {
-    perk1: itemsArray.find((i) => i.category === "perk1"),
-    patch: itemsArray.find((i) => i.category === "patch"),
-    mask: itemsArray.find((i) => i.category === "mask"),
-    headPiece: itemsArray.find((i) => i.category === "headPiece"),
-    hair: itemsArray.find((i) => i.category === "hair"),
-    filter1: itemsArray.find((i) => i.category === "filter1"),
-    filter2: itemsArray.find((i) => i.category === "filter2"),
-    background: itemsArray.find((i) => i.category === "background"),
-    perk2: itemsArray.find((i) => i.category === "perk2"),
-    garment: itemsArray.find((i) => i.category === "garment"),
-  };
 };

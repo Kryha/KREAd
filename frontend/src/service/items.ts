@@ -1,75 +1,22 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Category, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
-import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
+import { E } from "@endo/eventual-send";
+
+import { Item, ItemBackend, ItemEquip, ItemInMarket, ItemInMarketBackend } from "../interfaces";
+import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
+import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
+import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
+import { useSelectedCharacter } from "./character";
 import { useOffers } from "./offers";
-import { INVENTORY_CALL_FETCH_DELAY, ITEM_PURSE_NAME } from "../constants";
-import { useUserState, useUserStateDispatch } from "../context/user";
-import { useWalletState } from "../context/wallet";
-import { marketService } from "./character/market";
-import { inventoryService } from "./character/inventory";
-import { useItemMarketState } from "../context/item-shop-context";
+import { ITEM_PURSE_NAME } from "../constants";
 
-export function getRarityString(rarity: number) {
-  if (rarity > 79) return "exotic" as Rarity;
-  else if (rarity > 59) return "legendary" as Rarity;
-  else if (rarity > 39) return "rare" as Rarity;
-  else if (rarity > 19) return "uncommon" as Rarity;
-  else return "common" as Rarity;
-}
+export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
+  const [{ all }, isLoading] = useMyItems();
 
-export const useGetItemInInventoryByNameAndCategory = (
-  name: any,
-  category: any,
-  characterName: string | undefined,
-): [Item | undefined, boolean] => {
-  const [items, isLoading] = useGetItemsInInventory();
-
-  const found = useMemo(
-    () => items.find((item) => item.category === category && item.name === name && item.equippedTo === characterName),
-    [items, category, name, characterName],
-  );
+  const found = useMemo(() => all.find((item) => item.id === id), [all, id]);
 
   return [found, isLoading];
-};
-
-export const useGetItemsInInventory = (): [Item[], boolean] => {
-  const { characters, fetched } = useUserState();
-  const { items } = useUserState();
-  const allItems: Item[] = [
-    ...characters.flatMap((c) => Object.values(c.equippedItems)).filter((item): item is Item => item !== undefined), // Filter out undefined items
-    ...items,
-  ];
-  const filtered = useFilterItems(allItems);
-
-  return [filtered, !fetched];
-};
-
-export const useGetItemsForCanvas = (): [Item[], boolean] => {
-  const { characters, fetched } = useUserState();
-  const { items } = useUserState();
-  const allItems: Item[] = [
-    ...characters.flatMap((c) => Object.values(c.equippedItems)).filter((item): item is Item => item !== undefined), // Filter out undefined items
-    ...items,
-  ];
-  return [allItems, !fetched];
-};
-
-export const useGetItemsInInventoryByCategory = (category: string | null): [Item[], boolean] => {
-  const [items, isLoading] = useGetItemsInInventory();
-
-  const filtered = useMemo(() => items.filter((item) => item.category === category), [category, items]);
-
-  return [filtered, isLoading];
-};
-
-export const useGetItemInInventoryByName = (category: string | null, itemName: string | null): Item | undefined => {
-  const [items] = useGetItemsInInventory();
-
-  return items.find((item) => {
-    return item.category === category && item.name === itemName;
-  });
 };
 
 export const useMyItemsForSale = () => {
@@ -85,18 +32,18 @@ export const useMyItemsForSale = () => {
           return false;
         }
       }),
-    [offers],
+    [offers]
   );
 
   // getting items from filtered offers
-  const itemsForSale: Item[] = useMemo(() => {
+  const itemsForSale: ItemEquip[] = useMemo(() => {
     try {
-      const itemsFromOffers: Item[] = itemOffers.map((offer: any) => {
+      const itemsFromOffers: ItemBackend[] = itemOffers.map((offer: any) => {
         return offer.proposalTemplate.give.Items.value[0];
       });
-      const itemsFromOffersFrontend: Item[] = mediate.items
+      const itemsFromOffersFrontend: ItemEquip[] = mediate.items
         .toFront(itemsFromOffers)
-        .map((item) => ({ ...item, equippedTo: "", isForSale: true }));
+        .map((item) => ({ ...item, isEquipped: false, isForSale: true }));
       return itemsFromOffersFrontend;
     } catch (error) {
       return [];
@@ -106,219 +53,215 @@ export const useMyItemsForSale = () => {
   return itemsForSale;
 };
 
-export const useGetItemInShopById = (id: string): [ItemInMarket | undefined, boolean] => {
-  const { items, fetched } = useItemMarketState();
+export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean] => {
+  const [{ owned, equipped, fetched }] = useItemContext();
+  const itemsForSale = useMyItemsForSale();
 
-  const filteredItems = useFilterItemsInShop(items);
-  const found = useMemo(() => filteredItems.find((item) => item.id === id), [id, filteredItems]);
-
-  return [found, !fetched];
-};
-
-export const useGetItemsInShop = (): [ItemInMarket[], boolean] => {
-  const { items, fetched } = useItemMarketState();
-  const filtered = useFilterItemsInShop(items);
-
-  return [filtered, !fetched];
-};
-
-export const useGetItemMarketMetrics = (): MarketMetrics => {
-  const { metrics } = useItemMarketState();
-  return metrics;
-};
-
-export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {
-  const [service] = useAgoricContext();
-  const { items } = useUserState();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const callback = useCallback(
-    async (price: number, setPlacedInShop: () => void) => {
-      try {
-        const found = items.find((item) => item.name === itemName && item.category === itemCategory);
-        if (!found) return;
-        const { forSale, equippedTo, activity, ...itemToSell } = found;
-        const instance = service.contracts.kread.instance;
-        const itemBrand = service.tokenInfo.item.brand;
-        const uISTPrice = ISTTouIST(price);
-
-        setIsLoading(true);
-
-        await marketService.sellItem({
-          item: itemToSell,
-          price: BigInt(uISTPrice),
-          service: {
-            kreadInstance: instance,
-            itemBrand,
-            makeOffer: service.walletConnection.makeOffer,
-            istBrand: service.tokenInfo.ist.brand,
-          },
-          callback: async () => {
-            console.info("SellItem call settled");
-            setIsLoading(false);
-          },
-        });
-        setPlacedInShop();
-        return true;
-      } catch (error) {
-        console.warn(error);
-        return false;
-      }
-    },
-    [itemName, itemCategory, items, service],
+  const all = useMemo(
+    () => [
+      ...equipped.map((item) => ({ ...item, isEquipped: true, isForSale: false })),
+      ...owned.map((item) => ({ ...item, isEquipped: false, isForSale: false })),
+    ],
+    [equipped, owned]
   );
 
-  return { callback, isLoading };
+  // mixing items from wallet to items from offers
+  const allWithForSale: ItemEquip[] = useMemo(() => {
+    try {
+      return [...all, ...itemsForSale];
+    } catch (error) {
+      return all;
+    }
+  }, [all, itemsForSale]);
+
+  // filtering all the items
+  const filtered = useMemo(() => {
+    if (!filters) return allWithForSale;
+    return filterItems(allWithForSale, filters);
+  }, [allWithForSale, filters]);
+
+  return [{ owned, equipped, all: filtered }, !fetched];
 };
 
-export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
+// export const useMyItemsPage = (page: number, filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean, number] => {
+//   const [{ owned, equipped, fetched }] = useItemContext();
+//   // TODO: get total pages
+//   const totalPages = 20;
+//   const all = useMemo(
+//     () => [...equipped.map((item) => ({ ...item, isEquipped: true })), ...owned.map((item) => ({ ...item, isEquipped: false }))],
+//     [equipped, owned]
+//   );
+
+//   const filtered = useMemo(() => {
+//     if (!filters) return all;
+//     return filterItems(all, filters);
+//   }, [all, filters]);
+
+//   return [{ owned, equipped, all: filtered }, !fetched, totalPages];
+// };
+
+export const useItemFromMarket = (id: string): [ItemInMarket | undefined, boolean] => {
+  const [items, isLoading] = useItemsMarket();
+
+  const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
+
+  return [found, isLoading];
+};
+
+export const useItemsMarket = (filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
+  const [{ market, marketFetched }] = useItemContext();
+
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterItemsMarket(market, filters);
+  }, [filters, market]);
+
+  return [filtered, !marketFetched];
+};
+
+export const useItemsMarketPage = (page: number, filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
+  const [{ market, marketFetched }] = useItemContext();
+
+  const filtered = useMemo(() => {
+    if (!filters) return market;
+    return filterItemsMarket(market, filters);
+  }, [filters, market]);
+
+  return [filtered, !marketFetched];
+};
+
+export const useSellItem = (itemId: string) => {
   const [service] = useAgoricContext();
-  const wallet = useWalletState();
-  const [items] = useGetItemsInShop();
+  const [{ owned }] = useMyItems();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const instance = service.contracts.kread.instance;
-  const itemBrand = service.tokenInfo.item.brand;
-  const istBrand = service.tokenInfo.ist.brand;
+  const [itemInMarket, setItemInMarket] = useState<ItemInMarketBackend>();
 
-  const callback = useCallback(
-    async (setIsAwaitingApprovalToFalse: () => void) => {
+  useEffect(() => {
+    const addToMarket = async () => {
       try {
-        if (!itemToBuy) return;
-        const { forSale, equippedTo, activity, ...itemObject } = itemToBuy.item;
-        itemToBuy.item = itemObject;
+        if (!itemInMarket || !service.offers.length) return;
 
-        setIsLoading(true);
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "seller") return;
+        if (!latestOffer.status || latestOffer.status !== "pending") return;
 
-        return await marketService.buyItem({
-          entryId: itemToBuy.id,
-          item: itemToBuy.item,
-          price: BigInt(itemToBuy.sell.price + itemToBuy.sell.platformFee + itemToBuy.sell.royalty),
-          service: {
-            kreadInstance: instance,
-            itemBrand,
-            makeOffer: service.walletConnection.makeOffer,
-            istBrand,
-          },
-          callback: async () => {
-            console.info("BuyItem call settled");
-            setIsLoading(false);
-            setIsAwaitingApprovalToFalse();
-          },
-        });
+        const itemFromProposal = latestOffer.proposalTemplate.give.Items.value[0];
+        if (!itemFromProposal || String(itemFromProposal.id) !== itemId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).storeItemInMarket(itemInMarket);
+        setIsSuccess(true);
       } catch (error) {
         console.warn(error);
         setIsError(true);
-        setIsAwaitingApprovalToFalse();
+      }
+      setIsLoading(false);
+    };
+    addToMarket();
+  }, [itemId, itemInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(
+    async (price: number) => {
+      try {
+        const found = owned.find((item) => item.id === itemId);
+        if (!found) return;
+
+        const mediated = mediate.items.toBack([found])[0];
+        setIsLoading(true);
+        const toStore = await sellItem(service, mediated, BigInt(price));
+        setItemInMarket(toStore);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
       }
     },
-    [itemToBuy, items, wallet, service],
+    [itemId, owned, service]
   );
 
-  return { callback, isLoading, isError };
+  return { callback, isLoading, isError, isSuccess };
 };
 
-export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item | undefined>>) => {
+export const useBuyItem = (itemId: string) => {
   const [service] = useAgoricContext();
-  const { selected: character } = useUserState();
-  const { character: charactersInWallet } = useWalletState();
-  const userStateDispatch = useUserStateDispatch();
-  const kreadInstance = service.contracts.kread.instance;
-  const characterBrand = service.tokenInfo.character.brand;
-  const itemBrand = service.tokenInfo.item.brand;
+  const [items] = useItemsMarket();
 
-  return useMutation(async (body: { item: Item; currentlyEquipped?: Item }): Promise<void> => {
-    if (!character || !body.item) {
-      console.error("Could not find item or character");
-      return;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    const removeFromMarket = async () => {
+      try {
+        if (!service.offers.length) return;
+
+        const latestOffer = service.offers[service.offers.length - 1];
+        if (latestOffer.invitationDetails.description !== "buyer") return;
+        if (!latestOffer.status || latestOffer.status !== "accept") return;
+
+        const itemFromProposal = latestOffer.proposalTemplate.want.Items.value[0];
+        if (!itemFromProposal || String(itemFromProposal.id) !== itemId) return;
+
+        await E(service.contracts.characterBuilder.publicFacet).removeItemFromMarket(BigInt(itemId));
+        setIsSuccess(true);
+      } catch (error) {
+        console.warn(error);
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    removeFromMarket();
+  }, [itemId, service.contracts.characterBuilder.publicFacet, service.offers]);
+
+  const callback = useCallback(async () => {
+    try {
+      const found = items.find((item) => item.id === itemId);
+      if (!found) return;
+
+      const mediated = mediate.itemsMarket.toBack([found])[0];
+      setIsLoading(true);
+      await buyItem(service, mediated);
+    } catch (error) {
+      console.warn(error);
+      setIsError(true);
     }
-    // FIXME: add character type
-    const characterInWallet = charactersInWallet.find((walletEntry: any) => walletEntry.id == character.nft.id);
+  }, [itemId, items, service]);
 
-    userStateDispatch({ type: "START_INVENTORY_CALL" });
+  return { callback, isLoading, isError, isSuccess };
+};
 
-    const { forSale, equippedTo, activity, ...itemToEquip } = body.item;
-    if (body.currentlyEquipped) {
-      const { forSale: f_, equippedTo: e_, activity: a_, ...itemToUnequip } = body.currentlyEquipped;
-      await inventoryService.swapItems({
-        character: characterInWallet,
-        giveItem: itemToEquip,
-        wantItem: itemToUnequip,
-        service: {
-          kreadInstance,
-          characterBrand,
-          itemBrand,
-          makeOffer: service.walletConnection.makeOffer,
-        },
-        callback: async () => {
-          console.info("Swap call settled");
+export const useEquipItem = () => {
+  const [service] = useAgoricContext();
+  const [{ owned }] = useMyItems();
+  const [character] = useSelectedCharacter();
 
-          if (callback) callback(body.item);
+  return useMutation(async (body: { itemId: string }) => {
+    if (!character) return;
 
-          // Using a delay to prevent the character from disappearing when making inventory calls
-          setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-        },
-      });
-    } else {
-      await inventoryService.equipItem({
-        character: characterInWallet,
-        item: itemToEquip,
-        service: {
-          kreadInstance,
-          characterBrand,
-          itemBrand,
-          makeOffer: service.walletConnection.makeOffer,
-        },
-        callback: async () => {
-          console.info("Equip call settled");
+    const item = owned.find((item) => item.id === body.itemId);
 
-          if (callback) callback(body.item);
+    if (!item) return;
 
-          // Using a delay to prevent the character from disappearing when making inventory calls
-          setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-        },
-      });
-    }
+    // TODO: check if unequip gets performed before
+    await equipItem(service, item, character.nft);
   });
 };
 
-export const useUnequipItem = (callback?: () => void) => {
+export const useUnequipItem = () => {
   const [service] = useAgoricContext();
-  const { characters: ownedCharacters } = useUserState();
-  const userStateDispatch = useUserStateDispatch();
-  const instance = service.contracts.kread.instance;
-  const charBrand = service.tokenInfo.character.brand;
-  const itemBrand = service.tokenInfo.item.brand;
+  const [{ equipped }] = useMyItems();
+  const [character] = useSelectedCharacter();
 
-  return useMutation(async (body: { item: Item }) => {
-    if (!body.item) return;
-    userStateDispatch({ type: "START_INVENTORY_CALL" });
+  // TODO: check why tx offer gets rejected
+  return useMutation(async (body: { itemId: string }) => {
+    if (!character) return;
 
-    const { forSale, equippedTo, activity, ...itemToUnequip } = body.item;
-    const characterToUnequipFrom = ownedCharacters.find((character) => character.nft.name === equippedTo);
-    if (!characterToUnequipFrom) {
-      console.error("Could find character to unequip from");
-      return;
-    }
+    const item = equipped.find((item) => item.id === body.itemId);
 
-    await inventoryService.unequipItem({
-      item: itemToUnequip,
-      character: characterToUnequipFrom.nft,
-      service: {
-        kreadInstance: instance,
-        characterBrand: charBrand,
-        itemBrand,
-        makeOffer: service.walletConnection.makeOffer,
-      },
-      callback: async () => {
-        console.info("Unequip call settled");
-        if (callback) callback();
+    if (!item) return;
 
-        // Using a delay to prevent the character from disappearing when making inventory calls
-        setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-      },
-    });
+    await unequipItem(service, item, character.nft.name);
   });
 };

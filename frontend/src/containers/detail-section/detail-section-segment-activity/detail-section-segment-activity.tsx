@@ -11,10 +11,6 @@ interface Props {
 }
 
 export const DetailSectionSegmentActivity: FC<Props> = ({ events }) => {
-  if (!events || !events.length) return <OverviewEmpty descriptionText={text.general.thereIsNoActity} />;
-  return (
-    <DetailSectionSegmentActivityWrap>
-      <ActivityTable events={events} />
-    </DetailSectionSegmentActivityWrap>
-  );
+  if (!events || !events.length) return <OverviewEmpty descriptionText={text.general.thereIsNoActity}/>;
+  return <DetailSectionSegmentActivityWrap><ActivityTable events={events}/></DetailSectionSegmentActivityWrap>;
 };
