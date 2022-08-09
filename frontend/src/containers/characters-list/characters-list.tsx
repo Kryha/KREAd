@@ -22,7 +22,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
   const [intitial, setInitial] = useState(true);
   const [page, setPage] = useState(1);
 
-  const [myCharacters, isLoading, totalPages] = useMyCharactersPage(page, { category: selectedCategory, sorting: selectedSorting });
+  const [myCharacters, isLoading] = useMyCharactersPage(page, { category: selectedCategory, sorting: selectedSorting });
 
   useEffect(() => {
     onFilterClick(!myCharacters || !myCharacters.length);

@@ -4,9 +4,9 @@ import { E } from "@endo/eventual-send";
 import dappConstants from "../service/conf/defaults";
 import { AgoricState } from "../interfaces/agoric.interfaces";
 import { inter } from "../util";
-import { ActivityEvent, Character, CharacterInMarket, CharacterInMarketBackend, Item, ItemActivityEventBackend, ItemBackend, ItemInMarketBackend } from "../interfaces";
+import { ActivityEvent, Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
 import { formatIdAsNumber } from "./util";
-import { EVENT_TYPE, PAGE_SIZE } from "../constants";
+import { EVENT_TYPE } from "../constants";
 
 export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
@@ -91,7 +91,6 @@ export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBa
     purses,
   } = service;
 
-  console.log("BUY FN", service, itemInMarket );
   if (!publicFacet || !walletP) return;
 
   const itemPurse = purses.item[purses.item.length - 1];
@@ -336,10 +335,7 @@ export const itemSwap = async (service: AgoricState, item: Item, character: Char
 };
 
 export const getItemActivity = async (itemId: string, agoric: AgoricState): Promise<ActivityEvent[]> => {
-  console.log("FETCH ACTIVITY", itemId);
-
   const fetchedActivity = await E(agoric.contracts.characterBuilder.publicFacet).getItemHistory(itemId);
-  console.log("FETCHED ACTIVITY: ", fetchedActivity);
   const itemActivity = fetchedActivity.map((event: any) => {
     if (event.type === EVENT_TYPE.mint) {
       return {
@@ -354,6 +350,5 @@ export const getItemActivity = async (itemId: string, agoric: AgoricState): Prom
       };
     }
   });
-  console.log(itemActivity);
   return itemActivity;
 };

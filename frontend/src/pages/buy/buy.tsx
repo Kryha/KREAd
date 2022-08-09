@@ -27,12 +27,10 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
   if (!data) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
-    console.log("STEP: ",currentStep);
     switch (currentStep) {
       case 1:
         return (
           <BuyForm onSubmit={() => {
-            console.log("calling submit");
             onSubmit();
           }} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
         );
@@ -41,7 +39,6 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
       default:
         return (
           <BuyForm onSubmit={() => {
-            console.log("calling submit");
             onSubmit();
           }} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
         );

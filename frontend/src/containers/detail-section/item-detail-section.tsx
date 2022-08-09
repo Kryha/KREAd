@@ -32,7 +32,6 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
     const fetchActivity = async () => {
       if (!item) return;
       const activity = await getItemActivity(item.id, agoric);
-      console.log("ACTIVITY: ", activity);
       setActivity(activity);
     };
     fetchActivity();

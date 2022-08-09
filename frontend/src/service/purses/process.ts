@@ -10,7 +10,6 @@ import { itemCategories } from "../util";
 
 const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
   const itemsMarket = await E(publicFacet).getItemsMarketRange(PAGE_SIZE, 1);
-  console.log("🚨ITEMS:", itemsMarket);
 
   const mediatedItemsMarket = mediate.itemsMarket.toFront(itemsMarket);
 
@@ -19,11 +18,8 @@ const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
 };
 
 export const loadItemsMarket = async (page: number, publicFacet: any, dispatch: ItemDispatch) => {
-  console.log("🚨GET ITEMs PAGE:", page);
   
   const itemsMarket = await E(publicFacet).getItemsMarketRange(PAGE_SIZE, page);
-  console.log("🚨ITEMS:", itemsMarket);
-
   const mediatedItemsMarket = mediate.itemsMarket.toFront(itemsMarket);
 
   dispatch({ type: "ADD_ITEMS_MARKET", payload: mediatedItemsMarket });
@@ -32,7 +28,6 @@ export const loadItemsMarket = async (page: number, publicFacet: any, dispatch: 
 
 const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispatch) => {
   const charactersMarket = await E(publicFacet).getCharactersMarketRange(PAGE_SIZE, 1);
-  console.log("🚨CHARACTERS:", charactersMarket);
   if (!charactersMarket) return [];
   const marketWithItems = await Promise.all(
     charactersMarket.map(async (character: CharacterInMarketBackend) => {
@@ -49,7 +44,6 @@ const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispa
 
 export const loadCharactersMarket = async (page: number, publicFacet: any, dispatch: CharacterDispatch) => {
   const { characters: charactersMarket } = await E(publicFacet).getCharactersMarketRange(PAGE_SIZE, page);
-  console.log("🚨CHARACTERS:", charactersMarket);
 
   const marketWithItems = await Promise.all(
     charactersMarket.map(async (character: CharacterInMarketBackend) => {
@@ -121,7 +115,6 @@ export const processPurses = async (
 
   if (extendedCharacters.length) {
     const frontendCharacters = mediate.characters.toFront(extendedCharacters);
-    console.log("OWNED CHARACTERS: ", frontendCharacters);
     characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: frontendCharacters });
     characterDispatch({ type: "SET_SELECTED_CHARACTER", payload: frontendCharacters[0] });
   }

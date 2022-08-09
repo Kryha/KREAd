@@ -73,7 +73,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   };
 
   const buy = () => {
-    console.log(selectedItem);
     if (!selectedItem) return;
     navigate(`${routes.buyItem}/${selectedItem.id}`);
   };
@@ -83,7 +82,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   };
 
   const loadMore = async () => {
-    console.log("LOADING MORE ITEMS");
     setPage(prevState => prevState + 1);
     await loadItemsMarket(page+1, characterBuilder.publicFacet, itemDispatch);
   };

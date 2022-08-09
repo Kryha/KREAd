@@ -196,7 +196,6 @@ export async function doFetch(req, endpoint = '/private/wallet-bridge') {
   socket.send(JSON.stringify(req));
   const expectedResponse = `${req.type}Response`;
   function getResponse({ data: msg }) {
-    // console.log('got', msg);
     const obj = JSON.parse(msg);
     logMsg(obj, 'recv:');
     if (obj.type === expectedResponse) {
