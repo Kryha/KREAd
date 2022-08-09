@@ -30,8 +30,9 @@ interface BuyFormProps {
 }
 
 export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
-  const isOnFirstStep = !isLoading && !isOfferAccepted;
+  const isOnFirstStep = !isLoading;
   const isOnSecondStep = isLoading && !isOfferAccepted;
+  console.log(isOnFirstStep, isOnSecondStep, isOfferAccepted, isLoading);
 
   return (
     <ContentWrapper>

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { color, fontWeight } from "../../design";
+import { color, fontWeight, zIndex } from "../../design";
 import { ButtonText } from "./text";
 
 interface ButtonProps {
@@ -86,6 +86,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   color: ${(props): string => props.fontColor || color.black};
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
+  z-index: ${zIndex.onTop};
   ${ButtonText} {
     color: ${(props): string => props.fontColor || color.black};
   }

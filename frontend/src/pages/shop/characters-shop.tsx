@@ -20,6 +20,9 @@ import { FilterContainer, FilterWrapper, NotificationContainer, SelectorContaine
 import { useCharactersMarketPages } from "../../service";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharactersShopDetail } from "./character-shop-detail";
+import { loadCharactersMarket } from "../../service/purses/process";
+import { useCharacterStateDispatch } from "../../context/characters";
+import { useAgoricState } from "../../context/agoric";
 
 interface Props {
   pageSelector: ReactNode;
@@ -32,6 +35,8 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [showToast, setShowToast] = useState(false);
   const [page, setPage] = useState(1);
+  const { contracts: { characterBuilder } } = useAgoricState();
+  const characterDispatch = useCharacterStateDispatch();
 
   const [characters, isLoading, totalPages] = useCharactersMarketPages(page, {
     category: selectedCategory,
@@ -45,6 +50,11 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
+  };
+
+  const loadMore = () => {
+    setPage(prevState => prevState + 1);
+    loadCharactersMarket(page, characterBuilder.publicFacet, characterDispatch);
   };
 
   return (
@@ -83,7 +93,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           selectedPrice={selectedPrice}
           setShowToast={setShowToast}
           page={page}
-          setPage={setPage}
+          loadMore={loadMore}
         />
       )}
       <FadeInOut show={showToast} exiting={!showToast}>

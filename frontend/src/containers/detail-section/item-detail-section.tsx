@@ -14,10 +14,10 @@ import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 import { getItemActivity } from "../../service/item-actions";
 import { useAgoricState } from "../../context/agoric";
-import { LoadingPage } from "../../components";
+import { ErrorView, LoadingPage } from "../../components";
 
 interface ItemDetailSectionProps {
-  item: Item;
+  item?: Item;
   actions?: DetailSectionActions;
 }
 
@@ -30,13 +30,16 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
   // TODO: Make this a hook and set store accordingly
   useEffect(() => {
     const fetchActivity = async () => {
+      if (!item) return;
       const activity = await getItemActivity(item.id, agoric);
       console.log("ACTIVITY: ", activity);
       setActivity(activity);
     };
     fetchActivity();
-  }, [agoric, item.id]);
-
+  }, [agoric, item]);
+  
+  if (!item) return <ErrorView />;
+  
   return (
     <DetailSectionWrap width={width}>
       {/* header */}

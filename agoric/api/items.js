@@ -183,10 +183,10 @@ export const defaultItems = {
       'https://ipfs.io/ipfs/QmaYb31m9CRTKJQzVgi2NaHfPqdUTYuXQq5jLzTbTa2YVx',
     thumbnail:
       'https://ipfs.io/ipfs/QmYRmByVnzK2D6akMDEfMj3LPLSJw15R9s9gdu9oGcEV7E',
-    level: Math.ceil(Math.random() * 200 + 0),
+    level: Math.ceil(Math.random() * 100 + 0),
     rarity: Math.ceil(Math.random() * 400 + 10),
-    effectiveness: Math.ceil(Math.random() * 30 + 5),
-    layerComplexity: Math.ceil(Math.random() * 50 + 100),
+    effectiveness: Math.ceil(Math.random() * 80 + 20),
+    layerComplexity: Math.ceil(Math.random() * 50 + 50),
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],

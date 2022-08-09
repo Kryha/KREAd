@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { PAGE_SIZE } from "../../constants";
 import { CharacterDetailSection } from "../../containers/detail-section";
+import { useAgoricState } from "../../context/agoric";
+import { useCharacterStateDispatch } from "../../context/characters";
 
 interface Props {
   characters: CharacterInMarket[];
@@ -19,7 +21,7 @@ interface Props {
   selectedPrice: { min: number; max: number };
   setShowToast: (isShown: boolean) => void;
   page: number;
-  setPage: (page: number) => void;
+  loadMore: () => void;
 }
 
 export const CharactersShopDetail: FC<Props> = ({
@@ -31,13 +33,13 @@ export const CharactersShopDetail: FC<Props> = ({
   selectedPrice,
   setShowToast,
   page,
-  setPage,
+  loadMore,
 }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterInMarket>();
   const [close, setClose] = useState(false);
-
+  
   const noFilteredCharacters =
     (!selectedCategory.length || !selectedSorting.length || !selectedPrice) && (!characters || !characters.length);
 
@@ -69,7 +71,7 @@ export const CharactersShopDetail: FC<Props> = ({
                 ))}
               </ItemContainer>
               <LoadMoreWrapper>
-                {characters.length > PAGE_SIZE && <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />}
+                {characters.length >= (PAGE_SIZE*page) && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
               </LoadMoreWrapper>
             </ItemWrapper>
           )}

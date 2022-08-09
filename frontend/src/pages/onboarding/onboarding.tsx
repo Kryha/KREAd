@@ -26,6 +26,7 @@ import { useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, KRYHA_LINK, SLIDER_TIME } from "../../constants";
 import { useTimer } from "../../hooks/hooks";
+// import { useCharacterState } from "../../context/characters";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
@@ -36,8 +37,7 @@ export const Onboarding: FC = () => {
   const isConnectButtonVisible = useOnScreen(ref);
 
   const connectWallet = () => {
-    // TODO: check if you have any assets in your wallet & connect to wallet
-    navigate(routes.createCharacter);
+    navigate(routes.character);
   };
 
   return (

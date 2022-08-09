@@ -37,6 +37,9 @@ import { ItemInMarket } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
+import { loadItemsMarket } from "../../service/purses/process";
+import { useAgoricState } from "../../context/agoric";
+import { useItemStateDispatch } from "../../context/items";
 
 interface Props {
   pageSelector: ReactNode;
@@ -53,8 +56,9 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
   const [page, setPage] = useState(1);
-
-  const [items, isLoading, totalPages] = useItemsMarketPage(page, {
+  const { contracts: { characterBuilder } } = useAgoricState();
+  const itemDispatch = useItemStateDispatch();
+  const [items, isLoading] = useItemsMarketPage(page, {
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,
@@ -69,12 +73,19 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   };
 
   const buy = () => {
+    console.log(selectedItem);
     if (!selectedItem) return;
     navigate(`${routes.buyItem}/${selectedItem.id}`);
   };
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
+  };
+
+  const loadMore = async () => {
+    console.log("LOADING MORE ITEMS");
+    setPage(prevState => prevState + 1);
+    await loadItemsMarket(page+1, characterBuilder.publicFacet, itemDispatch);
   };
 
   return (
@@ -128,7 +139,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
                 ))}
               </ItemContainer>
               <LoadMoreWrapper>
-                {items.length > PAGE_SIZE && <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />}
+                {items.length >= (PAGE_SIZE*page) && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
               </LoadMoreWrapper>
             </ItemWrapper>
           )}

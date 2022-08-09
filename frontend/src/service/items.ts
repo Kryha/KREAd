@@ -120,17 +120,15 @@ export const useItemsMarket = (filters?: ItemsMarketFilters): [ItemInMarket[], b
   return [filtered, !marketFetched];
 };
 
-export const useItemsMarketPage = (page: number, filters?: ItemsMarketFilters): [ItemInMarket[], boolean, number] => {
+export const useItemsMarketPage = (page: number, filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
   const [{ market, marketFetched }] = useItemContext();
-  // TODO: get total pages
-  const totalPages = 20;
 
   const filtered = useMemo(() => {
     if (!filters) return market;
     return filterItemsMarket(market, filters);
   }, [filters, market]);
 
-  return [filtered, !marketFetched, totalPages];
+  return [filtered, !marketFetched];
 };
 
 export const useSellItem = (itemId: string) => {
@@ -221,10 +219,12 @@ export const useBuyItem = (itemId: string) => {
   const callback = useCallback(async () => {
     try {
       const found = items.find((item) => item.id === itemId);
+      console.log("NOT FOUND:",found);
       if (!found) return;
 
       const mediated = mediate.itemsMarket.toBack([found])[0];
       setIsLoading(true);
+      console.log("buying item: ", mediated);
       await buyItem(service, mediated);
     } catch (error) {
       console.warn(error);

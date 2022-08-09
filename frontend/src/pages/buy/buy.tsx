@@ -1,6 +1,6 @@
 import { FC, ReactNode, useState } from "react";
 
-import { FormHeader } from "../../components";
+import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
@@ -12,7 +12,7 @@ import { BuyData, BuyStep, BuyText } from "./types";
 
 interface Props {
   children: ReactNode;
-  data: BuyData;
+  data?: BuyData;
   text: BuyText;
 
   onSubmit: () => void;
@@ -24,15 +24,27 @@ interface Props {
 export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoading, isOfferAccepted }) => {
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<BuyStep>(1);
+  if (!data) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
+    console.log("STEP: ",currentStep);
     switch (currentStep) {
       case 1:
         return (
-          <BuyForm onSubmit={onSubmit} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
+          <BuyForm onSubmit={() => {
+            console.log("calling submit");
+            onSubmit();
+          }} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
         );
       case 2:
         return <Confirmation text={pText} />;
+      default:
+        return (
+          <BuyForm onSubmit={() => {
+            console.log("calling submit");
+            onSubmit();
+          }} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
+        );
     }
   };
 

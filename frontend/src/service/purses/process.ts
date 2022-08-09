@@ -1,4 +1,5 @@
 import { E } from "@endo/eventual-send";
+import { PAGE_SIZE } from "../../constants";
 
 import { CharacterBackend, CharacterInMarketBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
@@ -8,7 +9,8 @@ import { mediate } from "../../util";
 import { itemCategories } from "../util";
 
 const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
-  const { items: itemsMarket } = await E(publicFacet).getItemsMarket();
+  const itemsMarket = await E(publicFacet).getItemsMarketRange(PAGE_SIZE, 1);
+  console.log("🚨ITEMS:", itemsMarket);
 
   const mediatedItemsMarket = mediate.itemsMarket.toFront(itemsMarket);
 
@@ -16,9 +18,22 @@ const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
   dispatch({ type: "SET_MARKET_FETCHED", payload: true });
 };
 
-const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispatch) => {
-  const { characters: charactersMarket } = await E(publicFacet).getCharactersMarket();
+export const loadItemsMarket = async (page: number, publicFacet: any, dispatch: ItemDispatch) => {
+  console.log("🚨GET ITEMs PAGE:", page);
+  
+  const itemsMarket = await E(publicFacet).getItemsMarketRange(PAGE_SIZE, page);
+  console.log("🚨ITEMS:", itemsMarket);
 
+  const mediatedItemsMarket = mediate.itemsMarket.toFront(itemsMarket);
+
+  dispatch({ type: "ADD_ITEMS_MARKET", payload: mediatedItemsMarket });
+  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
+};
+
+const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispatch) => {
+  const charactersMarket = await E(publicFacet).getCharactersMarketRange(PAGE_SIZE, 1);
+  console.log("🚨CHARACTERS:", charactersMarket);
+  if (!charactersMarket) return [];
   const marketWithItems = await Promise.all(
     charactersMarket.map(async (character: CharacterInMarketBackend) => {
       const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.character.name);
@@ -29,6 +44,23 @@ const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispa
   const mediatedCharactersMarket = mediate.charactersMarket.toFront(marketWithItems);
 
   dispatch({ type: "SET_CHARACTERS_MARKET", payload: mediatedCharactersMarket });
+  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
+};
+
+export const loadCharactersMarket = async (page: number, publicFacet: any, dispatch: CharacterDispatch) => {
+  const { characters: charactersMarket } = await E(publicFacet).getCharactersMarketRange(PAGE_SIZE, page);
+  console.log("🚨CHARACTERS:", charactersMarket);
+
+  const marketWithItems = await Promise.all(
+    charactersMarket.map(async (character: CharacterInMarketBackend) => {
+      const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.character.name);
+      return { character, equippedItems };
+    })
+  );
+
+  const mediatedCharactersMarket = mediate.charactersMarket.toFront(marketWithItems);
+
+  dispatch({ type: "ADD_CHARACTERS_MARKET", payload: mediatedCharactersMarket });
   dispatch({ type: "SET_MARKET_FETCHED", payload: true });
 };
 
@@ -69,6 +101,8 @@ export const processPurses = async (
         to: "unknown",
         date: event.timestamp,
       }));
+      console.log("🦋CHARACTER ACTIVITY:", activity);
+
       const { items: equippedItems } = await E(contractPublicFacet).getCharacterInventory(character.name);
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
       equippedCharacterItems.push(...frontendEquippedItems);
@@ -87,6 +121,7 @@ export const processPurses = async (
 
   if (extendedCharacters.length) {
     const frontendCharacters = mediate.characters.toFront(extendedCharacters);
+    console.log("OWNED CHARACTERS: ", frontendCharacters);
     characterDispatch({ type: "SET_OWNED_CHARACTERS", payload: frontendCharacters });
     characterDispatch({ type: "SET_SELECTED_CHARACTER", payload: frontendCharacters[0] });
   }

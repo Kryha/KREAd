@@ -20,18 +20,19 @@ export const ItemBuy = () => {
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
   const [data, setData] = useState<ItemInMarket>();
-
   useEffect(() => {
+    console.log("submitting");
     // without this, the view will error out after purchase, since the item won't be on the market anymore
     if (itemInMarket) setData(itemInMarket);
-  }, [itemInMarket]);
+  }, [itemInMarket, buyItem]);
 
-  useEffect(() => {
-    // TODO: handle declining item and error
-    if (boughtItem && !buyItem.isLoading) setIsAwaitingApproval(false);
-  }, [boughtItem, buyItem.isLoading]);
+  // useEffect(() => {
+  //   // TODO: handle declining item and error
+  //   // if (boughtItem && !buyItem.isLoading) setIsAwaitingApproval(false);
+  // }, [boughtItem, buyItem.isLoading]);
 
   const handleSubmit = () => {
+    console.log("HANDLE SUBMIT: ", id, isAwaitingApproval,);
     if (!id) return;
     setIsAwaitingApproval(true);
     buyItem.callback();
@@ -39,11 +40,9 @@ export const ItemBuy = () => {
 
   isLoadingItem && <LoadingPage />;
 
-  if (!data) return <ErrorView />;
-
   return (
     <Buy
-      data={{ ...data.item, price: Number(data.sell.price) }}
+      data={data && { ...data.item, price: Number(data.sell.price) }}
       onSubmit={handleSubmit}
       isLoading={isAwaitingApproval}
       isOfferAccepted={!!boughtItem}
@@ -55,7 +54,7 @@ export const ItemBuy = () => {
       }}
     >
       <FadeInOut show>
-        <ItemDetailSection item={data.item} />
+        <ItemDetailSection item={data &&  data.item} />
       </FadeInOut>
     </Buy>
   );

@@ -63,10 +63,16 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-    
-    // console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterKey("PABLO"));
-    const { items: currentInventoryItems }: {items: Item[]} = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory("CRISI");
-    console.log(await itemSwap(service, currentInventoryItems[0], characters.owned[0].nft));
+    console.log(await E(service.contracts.characterBuilder.publicFacet).getItemsMarketRange(20, 1));
+
+    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharactersMarketRange(20, 1));
+    const charH = await E(service.contracts.characterBuilder.publicFacet).getCharacterHistory("PaBLO");
+    console.log(charH);
+    const itemH = await E(service.contracts.characterBuilder.publicFacet).getItemHistory("8");
+    console.log(itemH);
+
+    // const { items: currentInventoryItems }: {items: Item[]} = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory("CRISI");
+    // console.log(await itemSwap(service, currentInventoryItems[0], characters.owned[0].nft));
   };
 
   const getLogs = async () => {

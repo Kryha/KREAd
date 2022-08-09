@@ -11,6 +11,9 @@ import { color } from "../../design";
 import { colors } from "../../service/fake-item-data";
 import { EmptyCard } from "../../components/empty-card";
 import { PAGE_SIZE } from "../../constants";
+import { useItemStateDispatch } from "../../context/items";
+import { useAgoricState } from "../../context/agoric";
+import { loadItemsMarket } from "../../service/purses/process";
 
 interface Props {
   onItemClick: (id: string) => void;
@@ -24,6 +27,8 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
   const [page, setPage] = useState(1);
+  const { contracts: { characterBuilder } } = useAgoricState();
+  const itemDispatch = useItemStateDispatch();
 
   const [{ all: items }, isLoading, totalPages] = useMyItemsPage(page, {
     category: selectedCategory,
@@ -61,6 +66,10 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
     setInitial(false);
   };
 
+  const loadMore = () => {
+    setPage(prevState => prevState + 1);
+    loadItemsMarket(page, characterBuilder.publicFacet, itemDispatch);
+  };
   return (
     <SortableListWrap>
       <ListHeader>
@@ -104,7 +113,7 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
               isForSale={item.isForSale}
             />
           ))}
-          {items.length > PAGE_SIZE && <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />}
+          {items.length > PAGE_SIZE && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
         </ListContainer>
       )}
       {(!items || !items.length) && <EmptyCard title={text.item.noItemsInInventory} description={text.item.buyItemsFromStore} />}

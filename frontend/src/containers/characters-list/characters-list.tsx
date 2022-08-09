@@ -44,6 +44,9 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
     setInitial(false);
   };
 
+  const loadMore = () => {
+    setPage(prevState => prevState + 1);
+  };
   return (
     <SortableListWrap>
       <ListHeader>
@@ -93,7 +96,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
             isForSale={character.isForSale}
           />
         ))}
-        {myCharacters.length > PAGE_SIZE && <LoadMore totalPages={totalPages} isLoading={isLoading} page={page} setPage={setPage} />}
+        {myCharacters.length > PAGE_SIZE && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
       </ListContainer>
     </SortableListWrap>
   );

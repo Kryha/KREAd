@@ -4,23 +4,23 @@ import { ButtonText, SecondaryButton } from "../atoms";
 import { LoadMoreContainer, Refresh } from "./styles";
 
 interface LoadMoreProps {
-  totalPages: number;
   isLoading: boolean;
   page: number;
-  setPage: (page: number) => void;
+  loadMore: () => void;
 }
 
-export const LoadMore: FC<LoadMoreProps> = ({ totalPages, isLoading, page, setPage }) => {
+export const LoadMore: FC<LoadMoreProps> = ({ isLoading, page, loadMore }) => {
   return (
     <>
-      {totalPages !== page && (
-        <LoadMoreContainer>
-          <SecondaryButton onClick={() => setPage(page + 1)}>
-            <ButtonText>{isLoading ? text.general.loading : text.general.loadMore}</ButtonText>
-            <Refresh />
-          </SecondaryButton>
-        </LoadMoreContainer>
-      )}
+      <LoadMoreContainer>
+        <SecondaryButton disabled={false} onClick={() => {
+          console.log("WHY");
+          loadMore();
+        }}>
+          <ButtonText>{isLoading ? text.general.loading : text.general.loadMore}</ButtonText>
+          <Refresh />
+        </SecondaryButton>
+      </LoadMoreContainer>
     </>
   );
 };
