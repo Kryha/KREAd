@@ -219,12 +219,10 @@ export const useBuyItem = (itemId: string) => {
   const callback = useCallback(async () => {
     try {
       const found = items.find((item) => item.id === itemId);
-      console.log("NOT FOUND:",found);
       if (!found) return;
 
       const mediated = mediate.itemsMarket.toBack([found])[0];
       setIsLoading(true);
-      console.log("buying item: ", mediated);
       await buyItem(service, mediated);
     } catch (error) {
       console.warn(error);

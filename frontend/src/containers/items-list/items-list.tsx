@@ -30,7 +30,7 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   const { contracts: { characterBuilder } } = useAgoricState();
   const itemDispatch = useItemStateDispatch();
 
-  const [{ all: items }, isLoading, totalPages] = useMyItemsPage(page, {
+  const [{ all: items }, isLoading] = useMyItemsPage(page, {
     category: selectedCategory,
     sorting: selectedSorting,
     color: selectedColor,
