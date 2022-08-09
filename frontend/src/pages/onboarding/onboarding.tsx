@@ -39,7 +39,7 @@ export const Onboarding: FC = () => {
   const isConnectButtonVisible = useOnScreen(ref);
 
   const connectWallet = () => {
-    navigate(routes.createCharacter);
+    navigate(routes.character);
     setShowAnimation(false);
   };
 
