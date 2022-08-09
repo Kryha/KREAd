@@ -6,7 +6,7 @@ import { Tooltip } from "../tooltip";
 import { ButtonInfoWrap } from "./styles";
 
 interface ButtonInfoProps {
-  title: string;
+  title?: string;
   info: string;
   infoPosition?: InfoPosition;
 }
