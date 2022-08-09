@@ -1,0 +1,15 @@
+export const filters = {
+  allCategories: "all categories",
+  aToZ: "A to Z",
+  highestPrice: "highest price",
+  lowestPrice: "lowest price",
+  rarity: "rarity",
+  latest: "latest",
+  color: "colors",
+  sortBy: "sort by",
+  price: "price",
+  category: "category",
+  categoriex: "categories",
+  clearFilter: "clear filter",
+  apply: "apply",
+};
