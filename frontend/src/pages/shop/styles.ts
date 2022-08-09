@@ -89,7 +89,6 @@ export const ItemContainer = styled.div`
 export const LoadMoreWrapper = styled.div`
   ${LoadMoreContainer} {
     margin-top: -130px;
-    margin-left: 50%;
   }
 `;
 
@@ -187,7 +186,7 @@ export const Card = styled.div<ViewProps>`
       return "flex: 1 0 500px;";
     }
   }
-}
+  }
 `;
 
 export const DetailContainer = styled.div`
