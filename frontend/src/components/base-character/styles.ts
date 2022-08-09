@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 import { margins } from "../../design";
-import { SecondaryButton, zoomIn } from "../atoms";
+import { SecondaryButton, zoomClothing, zoomIn } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 import { css } from "@emotion/react";
@@ -12,6 +12,7 @@ interface ImageProps {
   zIndex?: number;
   isZoomed?: boolean;
   size?: "mini" | "medium" | "half" | "normal" | "large" | "extraLarge";
+  isClothing?: boolean;
 }
 
 interface ViewProps {
@@ -154,9 +155,16 @@ ${({ size, width, height }): string => {
       return `width: ${width * 0.4}px; height: ${height}px;`;
     }
   }};
-  ${({ size }) => (size === "extraLarge" ?
+  ${({ size, isClothing }) => (size === "extraLarge" && !isClothing ?
     css`
     animation: ${zoomIn} 5s ease-out 1 forwards;
+    `
+    :
+    css``
+  )};
+  ${({ size, isClothing }) => (size === "extraLarge" && isClothing ?
+    css`
+    animation: ${zoomClothing} 5s ease-out 1 forwards;
     `
     :
     css``

@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, TickIcon } from "../../assets";
 import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText } from "../../components";
-import { fadeUp } from "../../components/atoms/animations";
-import { Spinner, SpinnerContainer } from "../../components/content-loader/styles";
+import { Spinner, LoadingPageContainer } from "../../components/content-loader/styles";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
@@ -74,7 +73,7 @@ export const ButtonContainer = styled.div`
       }
     }
   }
-  ${SpinnerContainer}{
+  ${LoadingPageContainer}{
     width: 35px;
   }
   ${Spinner} {

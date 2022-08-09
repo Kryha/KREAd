@@ -37,11 +37,7 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   });
 
   useEffect(() => {
-    if (!items || !items.length) {
-      onFilterClick(true);
-    } else {
-      onFilterClick(false);
-    }
+    onFilterClick(!items || !items.length);
   }, [items, onFilterClick]);
 
   if (isLoading) return <LoadingPage spinner={false} />;

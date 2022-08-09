@@ -21,10 +21,12 @@ import {
   ScrollContainer,
   SectionContainer,
   KryhaLink,
+  KreadLogo,
+  LogoContainer,
 } from "./styles";
-import { useOnScreen, useViewport } from "../../hooks";
+import { useLocalStorage, useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
-import { AGORIC_LINK, KRYHA_LINK, SLIDER_TIME } from "../../constants";
+import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
 import { useTimer } from "../../hooks/hooks";
 // import { useCharacterState } from "../../context/characters";
 
@@ -32,17 +34,19 @@ export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
+  const [showAnimation, setShowAnimation] = useLocalStorage(FIRST_TIME);
 
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
 
   const connectWallet = () => {
-    navigate(routes.character);
+    navigate(routes.createCharacter);
+    setShowAnimation(false);
   };
 
   return (
     <>
-      <OnboardingContainer height={height} width={width}>
+      <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <PrimaryButton onClick={() => connectWallet()}>
             <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
@@ -84,9 +88,15 @@ export const Onboarding: FC = () => {
           <Footer />
         </FooterContainer>
       </OnboardingContainer>
-      <KreadContainer height={height} width={width} showSlider={showSlider}>
-        <AnimatedLogo iteration={1} />
-      </KreadContainer>
+      {showAnimation ? (
+        <KreadContainer height={height} width={width} showSlider={showSlider}>
+          <AnimatedLogo iteration={1} />
+        </KreadContainer>
+      ) : (
+        <LogoContainer>
+          <KreadLogo />
+        </LogoContainer>
+      )}
     </>
   );
 };

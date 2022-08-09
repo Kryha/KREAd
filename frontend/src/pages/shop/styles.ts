@@ -7,7 +7,6 @@ import { LoadMoreContainer } from "../../components/load-more/styles";
 import { KreadIcon } from "../../components/logo/styles";
 import { ToastContainer } from "../../components/notification-detail/styles";
 import { OverviewWrapper } from "../../components/overview-empty/styles";
-import { PriceContainer } from "../../components/price-in-ist/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
@@ -193,10 +192,7 @@ export const Card = styled.div<ViewProps>`
 
 export const DetailContainer = styled.div`
   ${DetailSectionHeaderNavigationWrap} {
-    align-items: flex-end;
-  }
-  ${PriceContainer} {
-    margin-top: 8px;
+    align-items: center;
   }
 `;
 

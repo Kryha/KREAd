@@ -57,7 +57,7 @@ export const ItemsInventory: FC = () => {
   if (!item) return <EmptyItemInventory />;
 
   const detailActions = () => {
-    if (item.isEquipped) {
+    if (item.isEquipped || item.isForSale) {
       return { primary: { text: text.item.unequip, onClick: unequip } };
     } else {
       return { primary: { text: text.item.equip, onClick: equip }, secondary: { text: text.item.sell, onClick: sell } };

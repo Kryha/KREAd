@@ -20,16 +20,36 @@ export const Spinner = styled.div`
   height: ${margins.large};
   animation: ${spin} 0.6s linear infinite;
 `;
+interface SpinnerProps {
+  isSpinner?: boolean;
+}
 
-export const SpinnerContainer = styled.div`
+
+export const LoadingPageContainer = styled.div<SpinnerProps>`
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 350px 0;
+  ${({ isSpinner }): string => {
+    return isSpinner
+      ? `
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 350px 0;
+        `
+      : `
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      `;
+  }};
 `;
-
 interface AnimationProps {
   iteration?: number;
 }

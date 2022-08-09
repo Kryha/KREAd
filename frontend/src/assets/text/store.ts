@@ -16,8 +16,6 @@ export const store = {
   checkCharacter: "check character",
   sellCharacter: "sell character",
   setPrice: "set price",
-  sellDescription:
-    "etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Aenean ut eros et nisl sagittis vestibulum. Nullam nulla eros, ultricies sit amet, nonummy id, imperdiet feugiat, pede. Sed lectus. Donec mollis hendrerit risus.",
   placeInShop: "place in shop",
   noResults: "no results",
   thereAreNoItemsAvailableFilter: "there are no items available with the chosen filter combination. Please change it to find more items.",
@@ -27,4 +25,5 @@ export const store = {
   thereAreNoCharactersInTheShop: "there are no characters in the shop",
   thereAreNoItemsAvailable: "there are no items available in the shop. Wait for items to be placed in the shop",
   thereAreNoCharactersAvailable: "there are no characters available in the shop. Wait for characters to be placed in the shop",
+  sellDescription: "you're listing your item for sale on the shop. To finish please go to your wallet to accept your action.",
 };

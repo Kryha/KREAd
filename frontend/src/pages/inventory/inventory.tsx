@@ -1,12 +1,13 @@
 import { FC, useMemo, useState } from "react";
 
-import { AnimatedLogo, BaseRoute, SwitchSelector } from "../../components";
+import { BaseRoute, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { Page } from "../shop";
 import { InventoryWrapper, KreadContainer } from "./styles";
 import { ItemsInventory } from "./item-inventory";
 import { CharactersInventory } from "./character-inventory";
 import { useViewport } from "../../hooks";
+import { KreadIcon } from "../../components/logo/styles";
 
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
@@ -30,7 +31,7 @@ export const Inventory: FC = () => {
       <InventoryWrapper>{pageSelector}</InventoryWrapper>
       {showItemsInventory ? <ItemsInventory /> : <CharactersInventory />}
       <KreadContainer height={height} width={width}>
-        <AnimatedLogo iteration={1} />
+        <KreadIcon />
       </KreadContainer>
     </BaseRoute>
   );

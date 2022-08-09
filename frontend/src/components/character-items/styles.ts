@@ -21,7 +21,7 @@ export const LeftItemContainer = styled.div<Animation>`
     :
     css`
     animation: ${fadeOut};
-    animation-duration: 1s;
+    animation-duration: 0.5s;
    `)};
    ${({ showItems }): string => {
     return showItems
@@ -49,7 +49,7 @@ export const RightItemContainer = styled.div<Animation>`
     :
     css`
     animation: ${fadeOut};
-    animation-duration: 1s;
+    animation-duration: 0.5s;
   `)};
   ${({ showItems }): string => {
     return showItems

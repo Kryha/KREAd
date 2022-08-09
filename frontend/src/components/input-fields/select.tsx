@@ -4,6 +4,8 @@ import { Tick, SelectBox, StyledSelect } from "./styles";
 import { ButtonText } from "../atoms";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
+import { Diamond } from "../price-in-ist/styles";
+import { ITEM_CATEGORIES } from "../../constants";
 
 export interface Options {
   label: string;
@@ -21,13 +23,27 @@ export const Select: FC<SelectProps> = ({ label, options, handleChange }) => {
   const { height } = useViewport();
   return (
     <SelectBox height={height}>
-      <StyledSelect selected={selected === -1} onClick={() => { handleChange(""); setSelected(-1); }}>
+      <StyledSelect
+        selected={selected === -1}
+        onClick={() => {
+          handleChange("");
+          setSelected(-1);
+        }}
+      >
         <ButtonText customColor={selected === -1 ? color.black : color.darkGrey}>{label}</ButtonText>
         <Tick />
       </StyledSelect>
       {options.map((option, index) => (
-        <StyledSelect selected={selected === index} key={index} onClick={() => { handleChange(options[index].value); setSelected(index); }}>
+        <StyledSelect
+          selected={selected === index}
+          key={index}
+          onClick={() => {
+            handleChange(options[index].value);
+            setSelected(index);
+          }}
+        >
           <ButtonText customColor={selected === index ? color.black : color.darkGrey}>{option.label}</ButtonText>
+          {option.value === ITEM_CATEGORIES.forSale && <Diamond />}
           <Tick />
         </StyledSelect>
       ))}

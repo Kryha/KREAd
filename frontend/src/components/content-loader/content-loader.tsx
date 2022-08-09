@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { AnimatedLoading } from "./animated-loading";
-import { Spinner, SpinnerContainer } from "./styles";
+import { LoadingPageContainer, Spinner } from "./styles";
 
 interface ContentLoaderProps {
   loading: boolean;
@@ -12,7 +12,7 @@ interface LoadingPageProps {
 }
 
 export const LoadingPage: FC<LoadingPageProps> = ({ spinner = true }) => (
-  <SpinnerContainer>{spinner ? <Spinner /> : <AnimatedLoading />}</SpinnerContainer>
+  <LoadingPageContainer isSpinner={spinner}>{spinner ? <Spinner /> : <AnimatedLoading />}</LoadingPageContainer>
 );
 
 export const ContentLoader: FC<ContentLoaderProps> = ({ loading, children, spinner }) => {
