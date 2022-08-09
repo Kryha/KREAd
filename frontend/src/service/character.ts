@@ -124,26 +124,25 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
   return [filtered, !fetched];
 };
 
-export const useMyCharactersPage = (page: number, filters?: CharacterFilters): [CharacterEquip[], boolean, number] => {
-  const [{ owned, selected, fetched }] = useCharacterContext();
+// export const useMyCharactersPage = (page: number, filters?: CharacterFilters): [CharacterEquip[], boolean, number] => {
+//   const [{ owned, selected, fetched }] = useCharacterContext();
 
-  
-  const totalPages = Math.ceil(owned.length/PAGE_SIZE);
+//   const totalPages = Math.ceil(owned.length/PAGE_SIZE);
 
-  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
-    return owned.map((character) => {
-      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true };
-      return { ...character, isEquipped: false };
-    });
-  }, [owned, selected?.nft.id]);
+//   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
+//     return owned.map((character) => {
+//       if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true };
+//       return { ...character, isEquipped: false };
+//     });
+//   }, [owned, selected?.nft.id]);
 
-  const filtered = useMemo(() => {
-    if (!filters) return charactersWithEquip;
-    return filterCharacters(charactersWithEquip, filters);
-  }, [charactersWithEquip, filters]);
+//   const filtered = useMemo(() => {
+//     if (!filters) return charactersWithEquip;
+//     return filterCharacters(charactersWithEquip, filters);
+//   }, [charactersWithEquip, filters]);
 
-  return [filtered, !fetched, totalPages];
-};
+//   return [filtered, !fetched, totalPages];
+// };
 
 export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefined, boolean] => {
   const [characters, isLoading] = useCharactersMarket();

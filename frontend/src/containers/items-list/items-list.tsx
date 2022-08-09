@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { ButtonText, ColorSelector, Filters, HorizontalDivider, Label, LoadingPage, MenuItem, Select, LoadMore } from "../../components";
 import { BaseFilterContainer, ColorContainer, ListContainer, ListHeader, SortableListWrap, SortContainer } from "./styles";
 
-import { useMyItemsPage } from "../../service";
+import { useMyItems } from "../../service";
 
 import { text } from "../../assets";
 import { itemCategories, sortingInventory } from "../../assets/text/filter-options";
@@ -27,10 +27,12 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
   const [page, setPage] = useState(1);
-  const { contracts: { characterBuilder } } = useAgoricState();
+  const {
+    contracts: { characterBuilder },
+  } = useAgoricState();
   const itemDispatch = useItemStateDispatch();
 
-  const [{ all: items }, isLoading] = useMyItemsPage(page, {
+  const [{ all: items }, isLoading] = useMyItems({
     category: selectedCategory,
     sorting: selectedSorting,
     color: selectedColor,
@@ -63,7 +65,7 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   };
 
   const loadMore = () => {
-    setPage(prevState => prevState + 1);
+    setPage((prevState) => prevState + 1);
     loadItemsMarket(page, characterBuilder.publicFacet, itemDispatch);
   };
   return (
