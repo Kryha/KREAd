@@ -95,7 +95,6 @@ export const processPurses = async (
         to: "unknown",
         date: event.timestamp,
       }));
-      console.log("🦋CHARACTER ACTIVITY:", activity);
 
       const { items: equippedItems } = await E(contractPublicFacet).getCharacterInventory(character.name);
       const frontendEquippedItems = mediate.items.toFront(equippedItems);

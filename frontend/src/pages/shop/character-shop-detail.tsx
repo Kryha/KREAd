@@ -9,8 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { PAGE_SIZE } from "../../constants";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useAgoricState } from "../../context/agoric";
-import { useCharacterStateDispatch } from "../../context/characters";
 
 interface Props {
   characters: CharacterInMarket[];
@@ -26,7 +24,6 @@ interface Props {
 
 export const CharactersShopDetail: FC<Props> = ({
   characters,
-  totalPages,
   isLoading,
   selectedCategory,
   selectedSorting,
@@ -62,20 +59,18 @@ export const CharactersShopDetail: FC<Props> = ({
           redirectRoute={routes.character}
         />
       ) : (
-        <>
-          {!noFilteredCharacters && (
-            <ItemWrapper height={height}>
-              <ItemContainer>
-                {characters.map((character) => (
-                  <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
-                ))}
-              </ItemContainer>
-              <LoadMoreWrapper>
-                {characters.length >= (PAGE_SIZE*page) && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
-              </LoadMoreWrapper>
-            </ItemWrapper>
-          )}
-        </>
+        !noFilteredCharacters && (
+          <ItemWrapper height={height}>
+            <ItemContainer>
+              {characters.map((character) => (
+                <CharacterShopCard key={character.id} character={character} onClick={setSelectedCharacter} />
+              ))}
+            </ItemContainer>
+            <LoadMoreWrapper>
+              {characters.length >= (PAGE_SIZE*page) && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
+            </LoadMoreWrapper>
+          </ItemWrapper>
+        )
       )}
       <FadeInOut show={!!selectedCharacter} exiting={close}>
         {!!selectedCharacter && (

@@ -28,7 +28,6 @@ import { useLocalStorage, useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
 import { useTimer } from "../../hooks/hooks";
-// import { useCharacterState } from "../../context/characters";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();

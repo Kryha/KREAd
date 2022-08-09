@@ -17,7 +17,7 @@ import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./chara
 import { useAgoricContext } from "../context/agoric";
 import { E } from "@endo/eventual-send";
 import { useOffers } from "./offers";
-import { CHARACTER_PURSE_NAME } from "../constants";
+import { CHARACTER_PURSE_NAME, PAGE_SIZE } from "../constants";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
@@ -127,8 +127,8 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
 export const useMyCharactersPage = (page: number, filters?: CharacterFilters): [CharacterEquip[], boolean, number] => {
   const [{ owned, selected, fetched }] = useCharacterContext();
 
-  // TODO: get total pages
-  const totalPages = 20;
+  
+  const totalPages = Math.ceil(owned.length/PAGE_SIZE);
 
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
     return owned.map((character) => {
