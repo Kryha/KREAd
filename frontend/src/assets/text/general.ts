@@ -53,4 +53,10 @@ export const general = {
   goToYourWallet: "go to your wallet to accept the action!",
   yourActionIsPending: "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
   loading: "loading...",
+  characterCardTitle: "mint a new character",
+  characterCardInfo: "a new character will appear in your purse once you have minted a new character.",
+  createACharacterTitle: "character name",
+  createACharacterInfo: "your character name must be max 16 characters.",
+  sellAssetTitle: "set price",
+  sellAssetInfo: "set the price that you would like to sell this asset.",
 };

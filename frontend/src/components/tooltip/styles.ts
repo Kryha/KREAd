@@ -39,6 +39,9 @@ export const TooltipContent = styled.div`
   }
   p {
     font-size: ${fontSize.subTitle};
+    :first-letter {
+      text-transform: capitalize;
+    }
   }
   &.top {
     top: calc(${margins.mini} * -1);
