@@ -94,6 +94,121 @@ export const mintNfts = async (service: AgoricState, name: string) => {
   return E(walletP).addOffer(offerConfig);
 };
 
+export const newSellCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
+  const {
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    agoric: { walletP, board, zoe },
+    purses,
+  } = service;
+
+  if (!publicFacet) return;
+  const characterPurse = purses.character[purses.character.length - 1];
+  const moneyPurse = purses.money[purses.money.length - 1];
+  const character2sell = characterPurse.currentAmount.value[0];
+  console.log(character2sell);
+  if (!characterPurse || !moneyPurse) return;
+
+  const sellInvitation = await E(publicFacet).makeSellInvitation();
+
+  await E(walletP).addOffer(
+    harden({
+      id: Date.now().toString(),
+      invitation: sellInvitation,
+      proposalTemplate: {
+        want: {
+          Money: {
+            pursePetname: moneyPurse.pursePetname,
+            value: inter(price),
+          },
+        },
+        give: {
+          Character: {
+            pursePetname: characterPurse.pursePetname,
+            value: [character2sell],
+          },
+        },
+      },
+      dappContext: true,
+    })
+  );
+
+  // const characterInMarket = {
+  //   id: character.id,
+  //   character,
+  //   sell: { instance, publicFacet: sellAssetsPublicFacet, price },
+  // };
+
+  console.log("PLACED FOR SALE");
+};
+
+export const newBuyCharacter = async (service: AgoricState) => {
+  const {
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    agoric: { walletP, board, zoe },
+    purses,
+  } = service;
+
+  if (!publicFacet) return;
+  const characterPurse = purses.character[purses.character.length - 1];
+  const moneyPurse = purses.money[purses.money.length - 1];
+  const character2buy = {
+    date: 2n,
+    description: "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
+    detail: {
+      artist: "emily",
+      boardId: "06553",
+      contractAddresss: "0x0177812bsjs7998",
+      metadata: "https://yourmetadata.info",
+      standard: "standard",
+    },
+    id: 1669218489n,
+    image: "https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg",
+    keyId: 1,
+    level: 1,
+    name: "CMONEY",
+    projectDescription: "this is a project",
+    title: "character 1",
+    type: "tempetScavenger",
+  };
+  if (!characterPurse || !moneyPurse) return;
+
+  const buyInvitation = await E(publicFacet).makeBuyInvitation();
+
+  await E(walletP).addOffer(
+    harden({
+      id: Date.now().toString(),
+      invitation: buyInvitation,
+      proposalTemplate: {
+        want: {
+          Character: {
+            pursePetname: characterPurse.pursePetname,
+            value: [character2buy],
+          },
+        },
+        give: {
+          Money: {
+            pursePetname: moneyPurse.pursePetname,
+            value: inter(3n),
+          },
+        },
+      },
+      dappContext: true,
+    })
+  );
+
+  // const characterInMarket = {
+  //   id: character.id,
+  //   character,
+  //   sell: { instance, publicFacet: sellAssetsPublicFacet, price },
+  // };
+
+  console.log("PLACED FOR SALE");
+};
+
 export const sellCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
   const {
     contracts: {

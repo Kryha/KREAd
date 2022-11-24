@@ -602,6 +602,64 @@ const start = async (zcf) => {
     seat.exit();
   };
 
+  const forsalez = {};
+  let forsalezArray = [];
+  /**
+   * Put character up for sale
+   *
+   * @param {ZCFSeat} sellSeat
+   */
+  const sellCharacter = (sellSeat) => {
+    const characterInSellSeat = sellSeat.getAmountAllocated('Character');
+    const characterName = characterInSellSeat.value[0].name;
+
+    const newEntry = {
+      sellSeat,
+      name: characterName,
+    };
+
+    forsalezArray = [...forsalezArray, newEntry];
+    return 'Character is now for sale';
+  };
+
+  /**
+   * Buy character
+   *
+   * @param {ZCFSeat} buySeat
+   */
+  const buyCharacter = (buySeat) => {
+    // Get reference to the wanted item
+    const { want } = buySeat.getProposal();
+    const { Character: wantedCharacter } = want;
+    const characterName = wantedCharacter.value[0].name;
+    // const isForSale = forsalez[characterName];
+
+    const character2sell = forsalezArray.find(
+      (character) => characterName === character.name,
+    );
+
+    assert(
+      character2sell,
+      `wanted character is not for sale: ${JSON.stringify(
+        character2sell.name,
+      )}`,
+    );
+    const { sellSeat } = character2sell;
+    const moneyInBuySeat = buySeat.getAmountAllocated('Money');
+
+    forsalez[characterName] = undefined;
+
+    // Swap Inventory Keys
+    buySeat.decrementBy({ Money: moneyInBuySeat });
+    buySeat.incrementBy({ Character: wantedCharacter });
+    sellSeat.incrementBy({ Money: moneyInBuySeat });
+    sellSeat.decrementBy({ Character: wantedCharacter });
+
+    zcf.reallocate(sellSeat, buySeat);
+    buySeat.exit();
+    sellSeat.exit();
+    return 'Character bought';
+  };
   // Opportunity for more complex queries
   const getCharacters = () => {
     return harden({
@@ -689,6 +747,19 @@ const start = async (zcf) => {
     getItemHistory: (id) => itemHistory[id],
     getAllCharacterHistory: () => characterHistory.entries(),
     getAllItemHistory: () => itemHistory.entries(),
+
+    // custom buy/sell
+    makeSellInvitation: () =>
+      zcf.makeInvitation(sellCharacter, 'sell yo character'),
+    makeSellInvitation2: () =>
+      zcf.makeInvitation(
+        (seat) => (forsalezArray = [...forsalezArray, seat]),
+        'sell yo character',
+      ),
+    makeBuyInvitation: () =>
+      zcf.makeInvitation(buyCharacter, 'buy yo character'),
+    getForsalez: () => forsalez,
+    getForsalezArray: () => forsalezArray,
   });
 
   return harden({ creatorFacet, publicFacet });

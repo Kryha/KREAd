@@ -13,7 +13,7 @@ import {
 import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
+import { buyCharacter, extendCharacters, mintNfts, newSellCharacter, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 import { E } from "@endo/eventual-send";
 import { useOffers } from "./offers";
@@ -235,8 +235,8 @@ export const useSellCharacter = (characterId: string) => {
 
       setIsLoading(true);
 
-      const toStore = await sellCharacter(service, backendCharacter.nft, BigInt(price));
-      setCharacterInMarket(toStore);
+      const toStore = await newSellCharacter(service, backendCharacter.nft, BigInt(price));
+      // setCharacterInMarket(toStore);
     },
     [characterId, characters, service]
   );

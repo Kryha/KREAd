@@ -13,6 +13,7 @@ import { useCharacterStateDispatch } from "./characters";
 import { useItemStateDispatch } from "./items";
 
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
+import { newBuyCharacter } from "../service/character-actions";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
@@ -214,6 +215,15 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       // TODO: Add getMyItems() instead of global getItems
       // const itemNFTs = await E(nftPublicFacet).getItems();
       // itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
+
+      console.log("🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨");
+      const forsale = await E(nftPublicFacet).getForsalezArray();
+      // const seat1 = forsale[0];
+      // console.log(seat1.getProposal());
+      // const { want: { Character: wantedCharacter }} = seat1.getProposal();
+      // console.log(wantedCharacter);
+      console.log(forsale);
+
       dispatch({ type: "SET_LOADING", payload: false });
 
       // TODO: set up chain notifiers
