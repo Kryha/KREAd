@@ -296,8 +296,8 @@ const start = async (zcf) => {
     STATE.charactersMarket = [...STATE.charactersMarket, characterInMarket];
 
     // Add to history
-    const currentHistory = itemHistory[characterInMarket.id];
-    characterHistory[characterInMarket.id] = [
+    const currentHistory = characterHistory[characterInMarket.character.name];
+    characterHistory[characterInMarket.character.name] = [
       ...currentHistory,
       {
         type: 'addToMarket',
@@ -326,8 +326,8 @@ const start = async (zcf) => {
     STATE.charactersMarket = newMarket;
 
     // Add to history
-    const currentHistory = itemHistory[characterInMarket.id];
-    characterHistory[characterInMarket.id] = [
+    const currentHistory = characterHistory[characterInMarket.character.name];
+    characterHistory[characterInMarket.character.name] = [
       ...currentHistory,
       {
         type: 'removeFromMarket',
