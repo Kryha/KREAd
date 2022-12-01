@@ -6,7 +6,7 @@ import { Item, ItemBackend, ItemEquip, ItemInMarket, ItemInMarketBackend } from 
 import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
-import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
+import { equipItem, unequipItem, sellItem, buyItem, newSellItem } from "./item-actions";
 import { useSelectedCharacter } from "./character";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
@@ -171,8 +171,8 @@ export const useSellItem = (itemId: string) => {
 
         const mediated = mediate.items.toBack([found])[0];
         setIsLoading(true);
-        const toStore = await sellItem(service, mediated, BigInt(price));
-        setItemInMarket(toStore);
+        const toStore = await newSellItem(service);//sellItem(service, mediated, BigInt(price));
+        // setItemInMarket(toStore);
       } catch (error) {
         console.warn(error);
         setIsError(true);

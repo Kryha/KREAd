@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
-import { AssetKind, AmountMath } from '@agoric/ertp';
+import { AssetKind, AmountMath, makeIssuerKit } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
@@ -36,6 +36,9 @@ const start = async (zcf) => {
 
   let PRNG; // Pseudo random number generator (mulberry32)
 
+  // const {mint: assetMint, issuer: assetIssuer, brand: assetBrand} = makeIssuerKit('KREAd Character', AssetKind.SET);
+  const forsalez = {};
+  let forsalezArray = [];
   /**
    * Contract STATE
    *
@@ -597,28 +600,129 @@ const start = async (zcf) => {
 
     // Move items from inventory to user set
     seat.incrementBy(inventorySeat.decrementBy({ Item: items }));
-
     zcf.reallocate(seat, inventorySeat);
     seat.exit();
   };
 
-  const forsalez = {};
-  let forsalezArray = [];
+  // TODO: SELLLLL
+  /**
+   * Put character up for sale
+   *
+   * @param {ZCFSeat} sellerSeat
+   */
+  const sellCharacter = async (sellerSeat) => {
+    assertProposalShape(buyerSeat, {
+      give: {
+        Character: null,
+      },
+      want: {
+        Price: null,
+      },
+    });
+    // Inspect allocation of Character keyword in seller seat
+    const characterInSellSeat = sellerSeat.getAmountAllocated('Character');
+    const character = characterInSellSeat.value[0];
+    assert(
+      character.name,
+      `No character name found in ${JSON.stringify(characterInSellSeat)}`,
+    );
+
+    // Add to store array
+    const newEntry = {
+      sellerSeat,
+      name: character.name,
+      character,
+    };
+
+    forsalezArray = [...forsalezArray, newEntry];
+    return `Store entry: ${JSON.stringify(newEntry)}`;
+  };
+
+  /**
+   *
+   * @param {ZCFSeat} buyerSeat
+   */
+  const buyCharacter = async (buyerSeat) => {
+    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(buyerSeat, {
+      give: {
+        Price: null,
+      },
+      want: {
+        Character: null,
+      },
+    });
+
+    // Inspect Character keyword in buyer seat
+    const { want, give } = buyerSeat.getProposal();
+    const { Character: wantedCharacterAmount } = want;
+    const character = wantedCharacterAmount.value[0];
+    // Find characterRecord entry based on wanted character
+    const characterRecord = state.getCharacterRecord(character.name, STATE);
+    assert(
+      characterRecord,
+      `Couldn't find character record for ${JSON.stringify(character)}`,
+    );
+    // Find store record based on wanted character
+    const sellRecord = forsalezArray.find(
+      (record) => record.name === character.name,
+    );
+    assert(
+      sellRecord,
+      `Couldn't find character record for ${JSON.stringify(character)}`,
+    );
+    const sellerSeat = sellRecord.sellerSeat;
+
+    // Inspect Price keyword from buyer seat
+    const { Price: providedMoneyAmount } = give;
+
+    // Widthdraw Character from user seat
+    sellerSeat.decrementBy({ Character: wantedCharacterAmount });
+
+    // Deposit Character to inventory seat
+    buyerSeat.incrementBy({ Character: wantedCharacterAmount });
+
+    // Widthdraw Key from character seat and Deposit into user seat
+    buyerSeat.decrementBy({ Money: providedMoneyAmount });
+    sellerSeat.incrementBy({ Money: providedMoneyAmount });
+
+    zcf.reallocate(buyerSeat, sellerSeat);
+
+    buyerSeat.exit();
+    sellerSeat.exit();
+
+    return 'Success';
+  };
+
   /**
    * Put character up for sale
    *
    * @param {ZCFSeat} sellSeat
    */
-  const sellCharacter = (sellSeat) => {
-    const characterInSellSeat = sellSeat.getAmountAllocated('Character');
-    const characterName = characterInSellSeat.value[0].name;
+  const sellItem = (sellSeat) => {
+    const {
+      give: { Items: itemsInSellSeat },
+    } = sellSeat.getProposal();
 
-    const newEntry = {
-      sellSeat,
-      name: characterName,
-    };
+    assert(itemsInSellSeat, 'THERE WAS AN ERROR PARSING THE ITEM FOR SALE 1');
 
-    forsalezArray = [...forsalezArray, newEntry];
+    const itemId = itemsInSellSeat.value[0].id;
+    const { userSeat: newSeat } = zcf.makeEmptySeatKit();
+
+    // Swap Inventory Keys
+    sellSeat.decrementBy({ Items: itemsInSellSeat });
+    newSeat.incrementBy({ Items: itemsInSellSeat });
+
+    zcf.reallocate(sellSeat, newSeat);
+    sellSeat.exit();
+
+    assert(itemId, 'THERE WAS AN ERROR PARSING THE ITEM FOR SALE 2');
+    // const newEntry = {
+    //   sellSeat,
+    //   name: itemId,
+    // };
+
+    // forsalezArray = [...forsalezArray, newEntry];
     return 'Character is now for sale';
   };
 
@@ -627,33 +731,65 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} buySeat
    */
-  const buyCharacter = (buySeat) => {
+  // const buyCharacter = (buySeat) => {
+  //   // Get reference to the wanted item
+  //   const { want } = buySeat.getProposal();
+  //   const { Character: wantedCharacter } = want;
+  //   const characterName = wantedCharacter.value[0].name;
+  //   // const isForSale = forsalez[characterName];
+
+  //   const character2sell = forsalezArray.find(
+  //     (character) => characterName === character.name,
+  //   );
+
+  //   assert(
+  //     character2sell,
+  //     `wanted character is not for sale: ${JSON.stringify(
+  //       character2sell.name,
+  //     )}`,
+  //   );
+  //   const { sellSeat } = character2sell;
+  //   const moneyInBuySeat = buySeat.getAmountAllocated('Money');
+
+  //   forsalez[characterName] = undefined;
+
+  //   // Swap Inventory Keys
+  //   buySeat.decrementBy({ Money: moneyInBuySeat });
+  //   buySeat.incrementBy({ Character: wantedCharacter });
+  //   sellSeat.incrementBy({ Money: moneyInBuySeat });
+  //   sellSeat.decrementBy({ Character: wantedCharacter });
+
+  //   zcf.reallocate(sellSeat, buySeat);
+  //   buySeat.exit();
+  //   sellSeat.exit();
+  //   return 'Character bought';
+  // };
+  /**
+   * Buy character
+   *
+   * @param {ZCFSeat} buySeat
+   */
+  const buyItem = (buySeat) => {
     // Get reference to the wanted item
     const { want } = buySeat.getProposal();
-    const { Character: wantedCharacter } = want;
-    const characterName = wantedCharacter.value[0].name;
+    const { Item: wantedItem } = want;
+    const itemId = wantedItem.value[0].id;
     // const isForSale = forsalez[characterName];
 
-    const character2sell = forsalezArray.find(
-      (character) => characterName === character.name,
-    );
+    const item2sell = forsalezArray.find((item) => itemId === item.name);
 
     assert(
-      character2sell,
-      `wanted character is not for sale: ${JSON.stringify(
-        character2sell.name,
-      )}`,
+      item2sell,
+      `wanted item is not for sale: ${JSON.stringify(item2sell.name)}`,
     );
-    const { sellSeat } = character2sell;
+    const { sellSeat } = item2sell;
     const moneyInBuySeat = buySeat.getAmountAllocated('Money');
-
-    forsalez[characterName] = undefined;
 
     // Swap Inventory Keys
     buySeat.decrementBy({ Money: moneyInBuySeat });
-    buySeat.incrementBy({ Character: wantedCharacter });
+    buySeat.incrementBy({ Character: wantedItem });
     sellSeat.incrementBy({ Money: moneyInBuySeat });
-    sellSeat.decrementBy({ Character: wantedCharacter });
+    sellSeat.decrementBy({ Character: wantedItem });
 
     zcf.reallocate(sellSeat, buySeat);
     buySeat.exit();
@@ -683,6 +819,63 @@ const start = async (zcf) => {
     return harden({
       items: STATE.itemsMarket,
     });
+  };
+
+  /**
+   *
+   * @param {ZCFSeat} seat
+   */
+  const testSellCharacter = async (seat) => {
+    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(seat, {
+      give: {
+        Character: null,
+      },
+      want: {
+        Money: null,
+      },
+    });
+
+    // Retrieve Items and Inventory key from user seat
+    const providedCharacterAmount = seat.getAmountAllocated('Character');
+    const providedCharacter = providedCharacterAmount.value[0];
+    const characterName = providedCharacter.name;
+    assert(characterName, "Couldn't parse character to sell");
+
+    // Find characterRecord entry based on provided key
+    const characterRecord = state.getCharacterRecord(characterName, STATE);
+    // const inventorySeat = characterRecord.inventory;
+    assert(characterRecord, "Couldn't find character record");
+
+    const { want } = seat.getProposal();
+    const { Money: wantedMoneyAmount } = want;
+
+    const sellRecord = {
+      sellerSeat: seat,
+      ask: wantedMoneyAmount,
+      character: providedCharacter,
+      name: characterName,
+    };
+
+    forsalezArray = [...forsalezArray, sellRecord];
+
+    // Widthdraw Character from user seat
+    // seat.decrementBy({ Character: providedCharacterAmount });
+
+    // Deposit Character to inventory seat
+    // inventorySeat.incrementBy({ Character: providedCharacterAmount });
+
+    // Widthdraw Key from character seat and Deposit into user seat
+    // inventorySeat.decrementBy({ CharacterKey: inventoryCharacterKey });
+    // seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
+
+    // Ensure staged inventory STATE is valid before reallocation
+    // @ts-ignore
+    // validateInventoryState(inventorySeat.getStagedAllocation().Item.value);
+
+    // zcf.reallocate(seat, inventorySeat);
+
+    // seat.exit();
   };
 
   const creatorFacet = Far('Character store creator', {
@@ -749,16 +942,13 @@ const start = async (zcf) => {
     getAllItemHistory: () => itemHistory.entries(),
 
     // custom buy/sell
-    makeSellInvitation: () =>
+    makeSellCharacterInvitation: () =>
       zcf.makeInvitation(sellCharacter, 'sell yo character'),
-    makeSellInvitation2: () =>
-      zcf.makeInvitation(
-        (seat) => (forsalezArray = [...forsalezArray, seat]),
-        'sell yo character',
-      ),
-    makeBuyInvitation: () =>
+    makeBuyCharacterInvitation: () =>
       zcf.makeInvitation(buyCharacter, 'buy yo character'),
-    getForsalez: () => forsalez,
+    makeSellItemInvitation: () => zcf.makeInvitation(sellItem, 'sell yo item'),
+    makeBuyItemInvitation: () =>
+      zcf.makeInvitation(buyItem, 'buy yo character'),
     getForsalezArray: () => forsalezArray,
   });
 
