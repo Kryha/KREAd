@@ -79,7 +79,7 @@ export default async function deployContract(
   // To share the installation, we're going to put it in the
   // board. The board is a shared, on-chain object that maps
   // strings to objects.
-  const CONTRACT_NAME = 'CHARACTER';
+  const CONTRACT_NAME = 'KREAd';
   const INSTALLATION_BOARD_ID = await E(board).getId(installation);
   const SELL_ASSETS_INSTALLATION_BOARD_ID = await E(board).getId(
     sellAssetsInstallation,

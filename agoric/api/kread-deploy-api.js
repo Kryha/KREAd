@@ -93,8 +93,8 @@ export default async function deployApi(homePromise, { pathResolve }) {
   // send to users.
 
   const {
-    creatorFacet: nftMakerSellerFacet,
-    publicFacet: nftMakerPublicFacet,
+    creatorFacet: kreadAdminFacet,
+    publicFacet: kreadPublicFacet,
     instance: instanceNftMaker,
   } = await E(zoe).startInstance(installation);
 
@@ -102,7 +102,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   /**
    * @type {ERef<Issuer>}
    */
-  const moneyIssuerP = E(home.agoricNames).lookup('issuer', 'IST');
+  const moneyIssuerP = E(home.agoricNames).lookup('issuer', 'RUN');
 
   const moneyBrandP = E(moneyIssuerP).getBrand();
   const [moneyIssuer, moneyBrand, { decimalPlaces = 0 }] = await Promise.all([
@@ -299,25 +299,25 @@ export default async function deployApi(homePromise, { pathResolve }) {
   }
 
   const chainTimerService = await chainTimerServiceP;
-  console.log(
-    await E(nftMakerSellerFacet).initConfig({
-      baseCharacters: updatedDefaultCharacters,
-      defaultItems: updatedDefaultItems,
-      sellAssetsInstallation,
-      moneyIssuer,
-      moneyBrand,
-      chainTimerService,
-    }),
-  );
+  const kreadConfig = {
+    baseCharacters: updatedDefaultCharacters,
+    defaultItems: updatedDefaultItems,
+    sellAssetsInstallation,
+    moneyIssuer,
+    moneyBrand,
+    chainTimerService,
+  };
 
+  console.log('KREAd Config: ', kreadConfig);
+  console.log(await E(kreadAdminFacet).initConfig(kreadConfig));
   console.log('- SUCCESS! contract instance is running on Zoe');
-
   console.log('Retrieving Board IDs for issuers and brands');
+
   const invitationIssuerP = E(zoe).getInvitationIssuer();
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
-  const characterIssuerP = E(nftMakerPublicFacet).getCharacterIssuer();
-  const itemIssuerP = E(nftMakerPublicFacet).getItemIssuer();
+  const characterIssuerP = E(kreadPublicFacet).getCharacterIssuer();
+  const itemIssuerP = E(kreadPublicFacet).getItemIssuer();
 
   const [
     characterIssuer,
