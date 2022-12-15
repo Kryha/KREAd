@@ -241,16 +241,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       dispatch({ type: "SET_LOADING", payload: false });
 
-      // TODO: set up chain notifiers
-      // const availableItemsNotifier = E(
-      //   publicFacetRef.current,
-      // ).getAvailableItemsNotifier();
-
-      // for await (const cardsAvailableAmount of iterateNotifier(
-      //   availableItemsNotifier,
-      // )) {
-      //   setAvailableCards(cardsAvailableAmount.value);
-      // }
     };
 
     const onDisconnect = () => {

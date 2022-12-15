@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useCharacterContext } from "../context/characters";
 import { useAgoricContext } from "../context/agoric";
 import { equipItem, mintItem, unequipItem } from "./item-actions";
-import { newBuyCharacter, newSellCharacter } from "./character-actions";
+import { buyCharacter, sellCharacter } from "./character-actions";
 import { useCharacterMarketState } from "../context/character-shop";
 
 export const TestServiceUI = () => {
@@ -41,18 +41,18 @@ export const TestServiceUI = () => {
 
   //   await sellItem(service, item, 1n);
   // };
-  const sellCharacter = async () => {
+  const handleSellCharacter = async () => {
     const character = service.purses.character[service.purses.character.length - 1].currentAmount.value[0];
     if (!character) return;
     console.log("/////////////SELLING CHARACTER :", character);
-    await newSellCharacter(service, character, 4n);
+    await sellCharacter(service, character, 4n);
   };
-  const buyCharacter = async () => {
+  const handleBuyCharacter = async () => {
     if (!service) return;
     const characters = await E(publicFacet).getForsalezArray();
     const character = characters[characters.length - 1].character;
     console.log("/////////////BUYING CHARACTER :", character);
-    await newBuyCharacter(service, character, 4n);
+    await buyCharacter(service, character, 4n);
   };
   // const buyItemNFT = async () => {
   //   const {
@@ -149,10 +149,10 @@ export const TestServiceUI = () => {
         <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={mintItemNFT}>
           MINT ITEM
         </button>
-        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={sellCharacter}>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={handleSellCharacter}>
           SELL CHARACTER
         </button>
-        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={buyCharacter}>
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={handleBuyCharacter}>
           BUY CHARACTER
         </button>
         <button

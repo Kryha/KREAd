@@ -17,10 +17,10 @@ function logMsg(obj, direction = 'send:') {
       // console.log(direction, obj);
       return;
     case 'CTP_CALL':
-      CTP_LOG_CONFIG.CALL && console.info(direction, type, obj.method && obj.method.body, obj);
+      CTP_LOG_CONFIG.CALL //&& console.info(direction, type, obj.method && obj.method.body, obj);
       return;
     case 'CTP_RETURN':
-      CTP_LOG_CONFIG.RETURN && console.info(direction, type, (obj.exception || obj.result).body, obj);
+      CTP_LOG_CONFIG.RETURN //&& console.info(direction, type, (obj.exception || obj.result).body, obj);
       return;
     default:
       console.info(direction, type, obj);

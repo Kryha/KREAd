@@ -27,7 +27,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
 
   useEffect(() => {
-    console.count("🛍 CHARACTER SHOP USE EFFECT");
+    console.count("🛍 UPDATING CHARACTER SHOP");
     const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
       const extendedCharacter = await extendCharacters(kreadPublicFacet, [marketEntry.character]);
       const equippedItems = itemArrayToObject(extendedCharacter.equippedItems);
@@ -43,18 +43,14 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       };
     };
     const watchNotifiers = async () => {
-      console.count("checking notifiers");
+      console.count("Checking Character Market Notifier");
       const notifier = E(kreadPublicFacet).getCharacterShopNotifier();
-      // const notifierUpdateCount = notifier.getUpdateSince();
-      // marketDispatch(prevState => ({ ...prevState, notifierUpdateCount: notifierUpdateCount }));
+      
       for await (const charactersInMarket of iterateNotifier(
         notifier,
       )) {
-        const market = await E(kreadPublicFacet).getMarketData();
-        const fetched = market.characters; // charactersInMarket;
+        const fetched = charactersInMarket;
         const characters = await Promise.all(fetched.map((character: any) => formatMarketEntry(character)));
-        console.count("iterator");
-        console.log(charactersInMarket, market, characters);
         marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
       }
     };

@@ -8,8 +8,6 @@ import { ItemsInventory } from "./item-inventory";
 import { CharactersInventory } from "./character-inventory";
 import { useViewport } from "../../hooks";
 import { KreadIcon } from "../../components/logo/styles";
-import { newBuyCharacter } from "../../service/character-actions";
-import { useAgoricContext } from "../../context/agoric";
 
 export const Inventory: FC = () => {
   const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);

@@ -1,11 +1,9 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { AmountMath } from "@agoric/ertp";
-
-import dappConstants from "../service/conf/defaults";
 import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
-import { inter, mediate } from "../util";
-import { CharacterBackend, CharacterInMarketBackend, ExtendedCharacterBackend, Item } from "../interfaces";
+import { mediate } from "../util";
+import { CharacterBackend, ExtendedCharacterBackend, Item } from "../interfaces";
 import { formatIdAsNumber, itemCategories } from "./util";
 
 export const formOfferForCharacter = (purses: Purses, character: any) => ({
@@ -94,13 +92,12 @@ export const mintNfts = async (service: AgoricState, name: string) => {
   return E(walletP).addOffer(offerConfig);
 };
 
-export const newSellCharacter = async (service: AgoricState, character: any, price: bigint) => {
-  console.log("🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️ CALLING SELL CHARACTER 🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️");
+export const sellCharacter = async (service: AgoricState, character: any, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
     },
-    agoric: { walletP, board, zoe },
+    agoric: { walletP },
     purses,
   } = service;
 
@@ -109,8 +106,6 @@ export const newSellCharacter = async (service: AgoricState, character: any, pri
   const tokenPurse = purses.token[purses.token.length - 1];
   const moneyPurse = purses.money[purses.money.length - 1];
 
-  // const character2sell = characterPurse.currentAmount.value[0];
-  // console.log(character2sell);
   if (!characterPurse || !tokenPurse || !moneyPurse) return;
 
   const sellInvitation = await E(publicFacet).makeSellCharacterInvitation();
@@ -133,19 +128,12 @@ export const newSellCharacter = async (service: AgoricState, character: any, pri
     },
     dappContext: true,
   });
-  console.log(offer);
   return await E(walletP).addOffer(
     offer
   );
-  // const characterInMarket = {
-  //   id: character.id,
-  //   character,
-  //   sell: { instance, publicFacet: sellAssetsPublicFacet, price },
-  // };
-
 };
 
-export const newBuyCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
+export const buyCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -185,122 +173,5 @@ export const newBuyCharacter = async (service: AgoricState, character: Character
     })
   );
 
-  console.log("BUY OFFER SENT");
-};
-
-export const sellCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
-  const {
-    contracts: {
-      characterBuilder: { publicFacet },
-    },
-    agoric: { walletP, board, zoe },
-    purses,
-  } = service;
-
-  if (!publicFacet) return;
-
-  const characterPurse = purses.character[purses.character.length - 1];
-  const moneyPurse = purses.money[purses.money.length - 1];
-
-  if (!characterPurse || !moneyPurse) return;
-
-  const sellAssetsInstallation = await E(board).getValue(dappConstants.SELL_ASSETS_INSTALLATION_BOARD_ID);
-  const characterIssuer = await E(publicFacet).getCharacterIssuer();
-  const { moneyIssuer } = await E(publicFacet).getConfig();
-
-  const issuerKeywordRecord = harden({
-    Items: characterIssuer,
-    Money: moneyIssuer,
-  });
-
-  const brandKeywordRecord = harden({
-    Items: characterPurse.brand,
-    Money: moneyPurse.brand,
-  });
-
-  const sellAssetsTerms = harden({
-    pricePerItem: { value: price, brand: moneyPurse.brand },
-    issuers: issuerKeywordRecord,
-    brands: brandKeywordRecord,
-  });
-
-  const {
-    creatorInvitation,
-    instance,
-    publicFacet: sellAssetsPublicFacet,
-  } = await E(zoe).startInstance(sellAssetsInstallation, issuerKeywordRecord, sellAssetsTerms);
-
-  await E(walletP).addOffer(
-    harden({
-      id: Date.now().toString(),
-      invitation: creatorInvitation,
-      proposalTemplate: {
-        want: {
-          Money: {
-            pursePetname: moneyPurse.pursePetname,
-            value: inter(price),
-          },
-        },
-        give: {
-          Items: {
-            pursePetname: characterPurse.pursePetname,
-            value: [character],
-          },
-        },
-        exit: { waived: null },
-      },
-      dappContext: true,
-    })
-  );
-
-  const characterInMarket = {
-    id: character.id,
-    character,
-    sell: { instance, publicFacet: sellAssetsPublicFacet, price },
-  };
-
-  return characterInMarket;
-};
-
-export const buyCharacter = async (service: AgoricState, characterInMarket: CharacterInMarketBackend) => {
-  const {
-    agoric: { walletP },
-    contracts: {
-      characterBuilder: { publicFacet },
-    },
-    purses,
-  } = service;
-
-  if (!publicFacet || !walletP) return;
-
-  const characterPurse = purses.character[purses.character.length - 1];
-  const moneyPurse = purses.money[purses.money.length - 1];
-
-  if (!characterPurse || !moneyPurse) return;
-
-  const { sell, character } = characterInMarket;
-
-  const invitation = await E(sell.publicFacet).makeBuyerInvitation();
-
-  await E(walletP).addOffer(
-    harden({
-      id: Date.now().toString(),
-      invitation,
-      proposalTemplate: {
-        want: {
-          Items: {
-            pursePetname: characterPurse.pursePetname,
-            value: [character],
-          },
-        },
-        give: {
-          Money: {
-            pursePetname: moneyPurse.pursePetname,
-            value: inter(sell.price),
-          },
-        },
-      },
-      dappContext: true,
-    })
-  );
+  console.info("BUY OFFER SENT");
 };

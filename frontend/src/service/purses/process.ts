@@ -43,7 +43,7 @@ const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispa
 };
 
 export const loadCharactersMarket = async (page: number, publicFacet: any, dispatch: CharacterDispatch) => {
-  const { characters: charactersMarket } = await E(publicFacet).getCharactersMarketRange(PAGE_SIZE, page);
+  const { characters: charactersMarket } = await E(publicFacet).getCharactersMarket(PAGE_SIZE, page);
 
   const marketWithItems = await Promise.all(
     charactersMarket.map(async (character: CharacterInMarketBackend) => {
@@ -65,10 +65,12 @@ export const processPurses = async (
   characterDispatch: CharacterDispatch,
   itemDispatch: ItemDispatch,
   agoricDispatch: AgoricDispatch,
-  brandsToCheck: { money: string; character: string; item: string }
+  brandsToCheck: { money: string; character: string; item: string, token: string }
 ) => {
   // Load Purses
-  const newTokenPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.money);
+  const newMoneyPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.money);
+  const newTokenPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.token);
+
   const newCharacterPurses = purses.filter(
     ({ brandBoardId }) => brandBoardId === brandsToCheck.character // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
@@ -76,9 +78,11 @@ export const processPurses = async (
     ({ brandBoardId }) => brandBoardId === brandsToCheck.item // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
 
-  agoricDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
+
+  agoricDispatch({ type: "SET_MONEY_PURSES", payload: newMoneyPurses });
   agoricDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
   agoricDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });
+  agoricDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
 
   // Load Characters
   const ownedCharacters = newCharacterPurses.flatMap((purse) => {

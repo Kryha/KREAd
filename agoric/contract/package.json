@@ -33,7 +33,8 @@
     "import-meta-resolve": "^1.1.1",
     "@agoric/ertp": "^0.14.2",
     "@agoric/zoe": "^0.24.0",
-    "@agoric/assert": "^0.4.0"
+    "@agoric/assert": "^0.4.0",
+    "@agoric/notifier": "dev"
   },
   "ava": {
     "files": [

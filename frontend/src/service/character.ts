@@ -13,11 +13,11 @@ import {
 import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { buyCharacter, extendCharacters, mintNfts, newBuyCharacter, newSellCharacter, sellCharacter } from "./character-actions";
+import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 import { E } from "@endo/eventual-send";
 import { useOffers } from "./offers";
-import { CHARACTER_PURSE_NAME, PAGE_SIZE } from "../constants";
+import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
@@ -237,9 +237,8 @@ export const useSellCharacter = (characterId: string) => {
 
       setIsLoading(true);
 
-      const toStore = await newSellCharacter(service, backendCharacter.nft, BigInt(price));
-      console.log(toStore, BigInt(price));
-      // setCharacterInMarket(toStore);
+      const toStore = await sellCharacter(service, backendCharacter.nft, BigInt(price));
+      // TODO: redirect to shop?
     },
     [characterId, characters, service]
   );
@@ -257,26 +256,6 @@ export const useBuyCharacter = (characterId: string) => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    const removeFromMarket = async () => {
-      try {
-        if (!service.offers.length) return;
-
-        const latestOffer = service.offers[service.offers.length - 1];
-        if (latestOffer.invitationDetails.description !== "buyer") return;
-        if (!latestOffer.status || latestOffer.status !== "accept") return;
-
-        const characterFromProposal = latestOffer.proposalTemplate.want.Items.value[0];
-        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
-
-        await E(service.contracts.characterBuilder.publicFacet).removeCharacterFromMarket(BigInt(characterId));
-        setIsSuccess(true);
-      } catch (error) {
-        console.warn(error);
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    // removeFromMarket();
     setIsLoading(false);
 
   }, [characterId, service.contracts.characterBuilder.publicFacet, service.offers]);
@@ -287,7 +266,7 @@ export const useBuyCharacter = (characterId: string) => {
 
     const mediated = mediate.charactersMarket.toBack([found])[0];
     setIsLoading(true);
-    await newBuyCharacter(service, mediated.character, mediated.sell.price);
+    await buyCharacter(service, mediated.character, mediated.sell.price);
   }, [characterId, characters, service]);
 
   return { callback, isLoading, isError, isSuccess };
