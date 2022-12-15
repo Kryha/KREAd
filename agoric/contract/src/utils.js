@@ -71,3 +71,30 @@ export const getPage = (arr, interval, page) =>
   [...Array(Math.ceil(arr.length / interval)).keys()].map((idx) =>
     arr.slice(idx * interval, idx * interval + interval),
   )[page - 1];
+/**
+ * @param {CharacterMarketRecord[]} arr
+ * @param {string} value
+ * @param name
+ * @returns {CharacterMarketRecord[]}
+ */
+export const removeCharacterFromMaketArray = (arr, name) => {
+  const newArr = [...arr];
+  const index = newArr.findIndex((entry) => entry.name === name);
+  if (index > -1) {
+    newArr.splice(index, 1);
+  }
+  return newArr;
+};
+/**
+ * @param {ItemMarketRecord[]} arr
+ * @param {string} id
+ * @returns {ItemMarketRecord[]}
+ */
+export const removeItemFromMaketArray = (arr, id) => {
+  const newArr = [...arr];
+  const index = newArr.findIndex((entry) => entry.id === id);
+  if (index > -1) {
+    newArr.splice(index, 1);
+  }
+  return newArr;
+};

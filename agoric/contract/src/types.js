@@ -8,7 +8,7 @@
  *   config?: Config
  *   itemCount: bigint
  *   characterCount: bigint
- *   token?: {
+ *   assets?: {
  *     character: {
  *       brand: Brand
  *       issuer: Issuer
@@ -17,9 +17,32 @@
  *       brand: Brand
  *       issuer: Issuer
  *     }
+ *     token: {
+ *       brand: Brand
+ *       issuer: Issuer
+ *     }
+ *   }
+ *   market: {
+ *     characters: CharacterMarketRecord[],
+ *     items: ItemMarketRecord[],
  *   }
  *   randomNumber?: Function
  * }} State
+ *
+ * @typedef  {{
+ *   sellerSeat: ZCFSeat
+ *   name: string
+ *   character: object[]
+ *   askingPrice: any
+ * }} CharacterMarketRecord
+ *
+ *
+ * @typedef  {{
+ *   sellerSeat: ZCFSeat
+ *   id: string
+ *   item: object[]
+ *   askingPrice: any
+ * }} ItemMarketRecord
  *
  * @typedef {{
  *   baseCharacters: object[]

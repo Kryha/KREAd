@@ -1,16 +1,22 @@
 /* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
-import { AssetKind, AmountMath, makeIssuerKit } from '@agoric/ertp';
+import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
+import { makeNotifierKit } from '@agoric/notifier';
 
 import { errors } from './errors';
 import { mulberry32 } from './prng';
 import { messages } from './messages';
 import * as state from './get';
-import { getPage, makeCharacterNftObjs } from './utils';
+import {
+  getPage,
+  makeCharacterNftObjs,
+  removeCharacterFromMaketArray,
+  removeItemFromMaketArray,
+} from './utils';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -23,22 +29,27 @@ import { getPage, makeCharacterNftObjs } from './utils';
 const start = async (zcf) => {
   // Define Assets
   const assetMints = await Promise.all([
-    zcf.makeZCFMint('KREA', AssetKind.SET),
-    zcf.makeZCFMint('KREAITEM', AssetKind.SET),
+    zcf.makeZCFMint('KREAdCHARACTER', AssetKind.SET),
+    zcf.makeZCFMint('KREAdITEM', AssetKind.SET),
+    zcf.makeZCFMint('KREAdTOKEN', AssetKind.NAT),
   ]);
 
   const [
     { issuer: characterIssuer, brand: characterBrand },
     { issuer: itemIssuer, brand: itemBrand },
+    { issuer: tokenIssuer, brand: tokenBrand },
   ] = assetMints.map((mint) => mint.getIssuerRecord());
 
-  const [characterMint, itemMint] = assetMints;
+  const [characterMint, itemMint, tokenMint] = assetMints;
 
   let PRNG; // Pseudo random number generator (mulberry32)
 
-  // const {mint: assetMint, issuer: assetIssuer, brand: assetBrand} = makeIssuerKit('KREAd Character', AssetKind.SET);
-  const forsalez = {};
-  let forsalezArray = [];
+  // Set up notifiers
+  const { notifier: characterShopNotifier, updater: characterShopUpdater } =
+    makeNotifierKit();
+  const { notifier: itemShopNotifier, updater: itemShopUpdater } =
+    makeNotifierKit();
+
   /**
    * Contract STATE
    *
@@ -52,7 +63,7 @@ const start = async (zcf) => {
     itemsMarket: [],
     itemCount: 0n,
     characterCount: 0n,
-    token: {
+    assets: {
       character: {
         brand: characterBrand,
         issuer: characterIssuer,
@@ -61,9 +72,25 @@ const start = async (zcf) => {
         brand: itemBrand,
         issuer: itemIssuer,
       },
+      token: {
+        brand: tokenBrand,
+        issuer: tokenIssuer,
+      },
+    },
+    market: {
+      characters: [],
+      items: [],
     },
   };
 
+  /**
+   * @type {CharacterMarketRecord[]}
+   */
+  let characterMarket = [];
+  /**
+   * @type {ItemMarketRecord[]}
+   */
+  let itemMarket = [];
   const characterHistory = {};
   const itemHistory = {};
 
@@ -604,14 +631,14 @@ const start = async (zcf) => {
     seat.exit();
   };
 
-  // TODO: SELLLLL
   /**
    * Put character up for sale
    *
    * @param {ZCFSeat} sellerSeat
    */
   const sellCharacter = async (sellerSeat) => {
-    assertProposalShape(buyerSeat, {
+    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(sellerSeat, {
       give: {
         Character: null,
       },
@@ -621,21 +648,72 @@ const start = async (zcf) => {
     });
     // Inspect allocation of Character keyword in seller seat
     const characterInSellSeat = sellerSeat.getAmountAllocated('Character');
+    const { want } = sellerSeat.getProposal();
+    const askingPrice = {
+      brand: want.Price.brand,
+      value: want.Price.value,
+    };
+
     const character = characterInSellSeat.value[0];
     assert(
       character.name,
-      `No character name found in ${JSON.stringify(characterInSellSeat)}`,
+      `No character name found in seller seat. Character asset brand ${characterInSellSeat.brand} asset`,
     );
 
     // Add to store array
     const newEntry = {
       sellerSeat,
       name: character.name,
+      askingPrice,
       character,
     };
 
-    forsalezArray = [...forsalezArray, newEntry];
-    return `Store entry: ${JSON.stringify(newEntry)}`;
+    characterMarket = [...characterMarket, newEntry];
+    characterShopUpdater.updateState(characterMarket);
+
+    return harden({ characterMarket });
+  };
+
+  /**
+   * Put character up for sale
+   *
+   * @param {ZCFSeat} sellerSeat
+   */
+  const sellItem = async (sellerSeat) => {
+    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(sellerSeat, {
+      give: {
+        Item: null,
+      },
+      want: {
+        Price: null,
+      },
+    });
+    // Inspect allocation of Character keyword in seller seat
+    const itemInSellSeat = sellerSeat.getAmountAllocated('Item');
+    const { want } = sellerSeat.getProposal();
+    const askingPrice = {
+      brand: want.Price.brand,
+      value: want.Price.value,
+    };
+    const item = itemInSellSeat.value[0];
+    assert(
+      item.id,
+      `No character name found in seller seat. Character asset brand ${itemInSellSeat.brand} asset`,
+    );
+
+    // Add to store array
+    const newEntry = {
+      sellerSeat,
+      id: item.id,
+      askingPrice,
+      item,
+    };
+
+    itemMarket = [...itemMarket, newEntry];
+    itemShopUpdater.updateState(itemMarket);
+
+    return harden({ itemMarket });
   };
 
   /**
@@ -661,141 +739,107 @@ const start = async (zcf) => {
     const characterRecord = state.getCharacterRecord(character.name, STATE);
     assert(
       characterRecord,
-      `Couldn't find character record for ${JSON.stringify(character)}`,
+      `Couldn't find character record for ${character.name}`,
     );
     // Find store record based on wanted character
-    const sellRecord = forsalezArray.find(
+    const sellRecord = characterMarket.find(
       (record) => record.name === character.name,
     );
-    assert(
-      sellRecord,
-      `Couldn't find character record for ${JSON.stringify(character)}`,
-    );
+    assert(sellRecord, `Couldn't find character record for ${character.name}`);
     const sellerSeat = sellRecord.sellerSeat;
 
     // Inspect Price keyword from buyer seat
     const { Price: providedMoneyAmount } = give;
+    const { Character: characterForSaleAmount } = sellerSeat.getProposal().give;
+    assert(
+      AmountMath.isEqual(
+        wantedCharacterAmount,
+        characterForSaleAmount,
+        characterBrand,
+      ),
+      'Wanted Character amount does not match character in sellerSeat',
+    );
 
-    // Widthdraw Character from user seat
-    sellerSeat.decrementBy({ Character: wantedCharacterAmount });
+    // Widthdraw Character from seller seat and deposit into buyer seat
+    buyerSeat.incrementBy(
+      sellerSeat.decrementBy({ Character: characterForSaleAmount }),
+    );
 
-    // Deposit Character to inventory seat
-    buyerSeat.incrementBy({ Character: wantedCharacterAmount });
-
-    // Widthdraw Key from character seat and Deposit into user seat
-    buyerSeat.decrementBy({ Money: providedMoneyAmount });
-    sellerSeat.incrementBy({ Money: providedMoneyAmount });
+    // Widthdraw price from buyer seat and deposit into seller seat
+    sellerSeat.incrementBy(
+      buyerSeat.decrementBy({ Price: providedMoneyAmount }),
+    );
 
     zcf.reallocate(buyerSeat, sellerSeat);
 
     buyerSeat.exit();
     sellerSeat.exit();
 
-    return 'Success';
+    // Remove entry from store array
+    characterMarket = removeCharacterFromMaketArray(
+      characterMarket,
+      sellRecord.name,
+    );
+    characterShopUpdater.updateState(characterMarket);
+
+    return harden({ characterMarket });
   };
 
   /**
-   * Put character up for sale
    *
-   * @param {ZCFSeat} sellSeat
+   * @param {ZCFSeat} buyerSeat
    */
-  const sellItem = (sellSeat) => {
-    const {
-      give: { Items: itemsInSellSeat },
-    } = sellSeat.getProposal();
+  const buyItem = async (buyerSeat) => {
+    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    assertProposalShape(buyerSeat, {
+      give: {
+        Price: null,
+      },
+      want: {
+        Item: null,
+      },
+    });
 
-    assert(itemsInSellSeat, 'THERE WAS AN ERROR PARSING THE ITEM FOR SALE 1');
+    // Inspect Character keyword in buyer seat
+    const { want, give } = buyerSeat.getProposal();
+    const { Item: wantedItemAmount } = want;
+    const item = wantedItemAmount.value[0];
 
-    const itemId = itemsInSellSeat.value[0].id;
-    const { userSeat: newSeat } = zcf.makeEmptySeatKit();
+    // Find store record based on wanted character
+    const sellRecord = itemMarket.find((record) => record.id === item.id);
+    assert(sellRecord, `Couldn't find character record for ${item.id}`);
+    const sellerSeat = sellRecord.sellerSeat;
 
-    // Swap Inventory Keys
-    sellSeat.decrementBy({ Items: itemsInSellSeat });
-    newSeat.incrementBy({ Items: itemsInSellSeat });
-
-    zcf.reallocate(sellSeat, newSeat);
-    sellSeat.exit();
-
-    assert(itemId, 'THERE WAS AN ERROR PARSING THE ITEM FOR SALE 2');
-    // const newEntry = {
-    //   sellSeat,
-    //   name: itemId,
-    // };
-
-    // forsalezArray = [...forsalezArray, newEntry];
-    return 'Character is now for sale';
-  };
-
-  /**
-   * Buy character
-   *
-   * @param {ZCFSeat} buySeat
-   */
-  // const buyCharacter = (buySeat) => {
-  //   // Get reference to the wanted item
-  //   const { want } = buySeat.getProposal();
-  //   const { Character: wantedCharacter } = want;
-  //   const characterName = wantedCharacter.value[0].name;
-  //   // const isForSale = forsalez[characterName];
-
-  //   const character2sell = forsalezArray.find(
-  //     (character) => characterName === character.name,
-  //   );
-
-  //   assert(
-  //     character2sell,
-  //     `wanted character is not for sale: ${JSON.stringify(
-  //       character2sell.name,
-  //     )}`,
-  //   );
-  //   const { sellSeat } = character2sell;
-  //   const moneyInBuySeat = buySeat.getAmountAllocated('Money');
-
-  //   forsalez[characterName] = undefined;
-
-  //   // Swap Inventory Keys
-  //   buySeat.decrementBy({ Money: moneyInBuySeat });
-  //   buySeat.incrementBy({ Character: wantedCharacter });
-  //   sellSeat.incrementBy({ Money: moneyInBuySeat });
-  //   sellSeat.decrementBy({ Character: wantedCharacter });
-
-  //   zcf.reallocate(sellSeat, buySeat);
-  //   buySeat.exit();
-  //   sellSeat.exit();
-  //   return 'Character bought';
-  // };
-  /**
-   * Buy character
-   *
-   * @param {ZCFSeat} buySeat
-   */
-  const buyItem = (buySeat) => {
-    // Get reference to the wanted item
-    const { want } = buySeat.getProposal();
-    const { Item: wantedItem } = want;
-    const itemId = wantedItem.value[0].id;
-    // const isForSale = forsalez[characterName];
-
-    const item2sell = forsalezArray.find((item) => itemId === item.name);
+    // Inspect Price keyword from buyer seat
+    const { Price: providedMoneyAmount } = give;
+    const { Item: itemForSaleAmount } = sellerSeat.getProposal().give;
+    assert(
+      AmountMath.isEqual(wantedItemAmount, itemForSaleAmount, itemBrand),
+      'Wanted Item amount does not match item in sellerSeat',
+    );
+    const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
 
     assert(
-      item2sell,
-      `wanted item is not for sale: ${JSON.stringify(item2sell.name)}`,
+      AmountMath.isGTE(providedMoneyAmount, itemForSalePrice, tokenBrand),
+      'Provided payment is lower than the asking price for this Item',
     );
-    const { sellSeat } = item2sell;
-    const moneyInBuySeat = buySeat.getAmountAllocated('Money');
+    // Widthdraw Character from seller seat and deposit into buyer seat
+    buyerSeat.incrementBy(sellerSeat.decrementBy({ Item: itemForSaleAmount }));
 
-    // Swap Inventory Keys
-    buySeat.decrementBy({ Money: moneyInBuySeat });
-    buySeat.incrementBy({ Character: wantedItem });
-    sellSeat.incrementBy({ Money: moneyInBuySeat });
-    sellSeat.decrementBy({ Character: wantedItem });
+    // Widthdraw price from buyer seat and deposit into seller seat
+    sellerSeat.incrementBy(
+      buyerSeat.decrementBy({ Price: providedMoneyAmount }),
+    );
 
-    zcf.reallocate(sellSeat, buySeat);
-    buySeat.exit();
-    sellSeat.exit();
-    return 'Character bought';
+    zcf.reallocate(buyerSeat, sellerSeat);
+
+    buyerSeat.exit();
+    sellerSeat.exit();
+    itemMarket = removeItemFromMaketArray(itemMarket, sellRecord.id);
+    itemShopUpdater.updateState(itemMarket);
+    return harden({ itemMarket });
   };
+
   // Opportunity for more complex queries
   const getCharacters = () => {
     return harden({
@@ -825,59 +869,12 @@ const start = async (zcf) => {
    *
    * @param {ZCFSeat} seat
    */
-  const testSellCharacter = async (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(seat, {
-      give: {
-        Character: null,
-      },
-      want: {
-        Money: null,
-      },
-    });
-
-    // Retrieve Items and Inventory key from user seat
-    const providedCharacterAmount = seat.getAmountAllocated('Character');
-    const providedCharacter = providedCharacterAmount.value[0];
-    const characterName = providedCharacter.name;
-    assert(characterName, "Couldn't parse character to sell");
-
-    // Find characterRecord entry based on provided key
-    const characterRecord = state.getCharacterRecord(characterName, STATE);
-    // const inventorySeat = characterRecord.inventory;
-    assert(characterRecord, "Couldn't find character record");
-
+  const tokenFacet = (seat) => {
     const { want } = seat.getProposal();
-    const { Money: wantedMoneyAmount } = want;
-
-    const sellRecord = {
-      sellerSeat: seat,
-      ask: wantedMoneyAmount,
-      character: providedCharacter,
-      name: characterName,
-    };
-
-    forsalezArray = [...forsalezArray, sellRecord];
-
-    // Widthdraw Character from user seat
-    // seat.decrementBy({ Character: providedCharacterAmount });
-
-    // Deposit Character to inventory seat
-    // inventorySeat.incrementBy({ Character: providedCharacterAmount });
-
-    // Widthdraw Key from character seat and Deposit into user seat
-    // inventorySeat.decrementBy({ CharacterKey: inventoryCharacterKey });
-    // seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
-
-    // Ensure staged inventory STATE is valid before reallocation
-    // @ts-ignore
-    // validateInventoryState(inventorySeat.getStagedAllocation().Item.value);
-
-    // zcf.reallocate(seat, inventorySeat);
-
-    // seat.exit();
+    tokenMint.mintGains(want, seat);
+    seat.exit();
+    return 'Success';
   };
-
   const creatorFacet = Far('Character store creator', {
     initConfig,
     getCharacterIssuer: () => characterIssuer,
@@ -888,8 +885,15 @@ const start = async (zcf) => {
   });
 
   const publicFacet = Far('Chracter store public', {
+    makeTokenFacetInvitation: () =>
+      zcf.makeInvitation(tokenFacet, 'get tokens'),
     // config
     getConfig: () => STATE.config,
+    getAssets: () => [
+      STATE.assets?.character,
+      STATE.assets?.item,
+      STATE.assets?.token,
+    ],
     // characters
     getCharacterBase: () => STATE.config?.baseCharacters[0],
     getCharacters,
@@ -941,15 +945,17 @@ const start = async (zcf) => {
     getAllCharacterHistory: () => characterHistory.entries(),
     getAllItemHistory: () => itemHistory.entries(),
 
-    // custom buy/sell
+    // kread buy/sell
     makeSellCharacterInvitation: () =>
       zcf.makeInvitation(sellCharacter, 'sell yo character'),
     makeBuyCharacterInvitation: () =>
       zcf.makeInvitation(buyCharacter, 'buy yo character'),
     makeSellItemInvitation: () => zcf.makeInvitation(sellItem, 'sell yo item'),
-    makeBuyItemInvitation: () =>
-      zcf.makeInvitation(buyItem, 'buy yo character'),
-    getForsalezArray: () => forsalezArray,
+    makeBuyItemInvitation: () => zcf.makeInvitation(buyItem, 'buy yo item'),
+
+    getMarketData: () => ({ characters: characterMarket, items: itemMarket }),
+    getCharacterShopNotifier: () => characterShopNotifier,
+    getItemShopNotifier: () => itemShopNotifier,
   });
 
   return harden({ creatorFacet, publicFacet });

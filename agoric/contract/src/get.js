@@ -53,7 +53,7 @@ export const getCharacterInventory = (characterName, state) => {
   const { inventory } = characterRecord;
   const items = inventory.getAmountAllocated(
     'Item',
-    state.token.item.brand,
+    state.assets.item.brand,
   ).value;
   // @ts-ignore
   return { items };
@@ -74,7 +74,7 @@ export const getCharacterKey = (characterName, state) => {
   const { inventory } = characterRecord;
   const key = inventory.getAmountAllocated(
     'CharacterKey',
-    state.token.character.brand,
+    state.assets.character.brand,
   );
   return { key };
 };
