@@ -13,15 +13,14 @@ import { useCharacterStateDispatch } from "./characters";
 import { useItemStateDispatch } from "./items";
 
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
-import { newBuyCharacter } from "../service/character-actions";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   SELL_ASSETS_INSTALLATION_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
-  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
-  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, Token: TOKEN_ISSUER_BOARD_ID },
+  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID, Token: TOKEN_BRAND_BOARD_ID },
 } = dappConstants;
 
 const initialState: AgoricState = {
@@ -34,8 +33,15 @@ const initialState: AgoricState = {
     money: [],
     character: [],
     item: [],
+    token: [],
   },
   offers: [],
+  notifiers: {
+    shop: {
+      items: undefined,
+      characters: undefined,
+    }
+  },
   agoric: {
     zoe: undefined,
     board: undefined,
@@ -45,6 +51,7 @@ const initialState: AgoricState = {
     apiSend: undefined,
   },
   contracts: {
+    // FIXME: rename to kread
     characterBuilder: {
       instance: undefined,
       publicFacet: undefined,
@@ -70,7 +77,7 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_WALLET_CONNECTED":
       return { ...state, status: { ...state.status, walletConnected: action.payload } };
 
-    case "SET_TOKEN_PURSES":
+    case "SET_MONEY_PURSES":
       return { ...state, purses: { ...state.purses, money: action.payload } };
 
     case "SET_OFFERS":
@@ -82,11 +89,17 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_ITEM_PURSES":
       return { ...state, purses: { ...state.purses, item: action.payload } };
 
+    case "SET_TOKEN_PURSES":
+      return { ...state, purses: { ...state.purses, token: action.payload } };
+
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
 
     case "SET_APISEND":
       return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
+    
+    case "SET_NOTIFIERS":
+      return { ...state, notifiers: { ...state.notifiers, ...action.payload } };
 
     case "SET_CHARACTER_CONTRACT":
       return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
@@ -151,21 +164,24 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const zoe = E(walletP).getZoe();
       const board = E(walletP).getBoard();
       const instanceNft = await E(board).getValue(INSTANCE_NFT_MAKER_BOARD_ID);
-      const nftPublicFacet = await E(zoe).getPublicFacet(instanceNft);
-      const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
+      const kreadFacet = await E(zoe).getPublicFacet(instanceNft);
+      const invitationIssuer = E(zoe).getInvitationIssuer(kreadFacet);
+      const characterShopNotifier = E(kreadFacet).getCharacterShopNotifier();
 
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
-      dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
+      dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
+      dispatch({ type: "SET_NOTIFIERS", payload: { shop: { characters: characterShopNotifier, items: undefined} } });
 
       async function watchPurses() {
         const pn = E(walletP).getPursesNotifier();
         // TODO: check iterateNotifier race condition on first run (when purses are not yet created in the wallet)
         for await (const purses of iterateNotifier(pn)) {
-          console.info("🧐 CHECKING PURSES");
-          processPurses(purses, nftPublicFacet, characterDispatch, itemDispatch, dispatch, {
+          console.count("🧐 CHECKING PURSES");
+          processPurses(purses, kreadFacet, characterDispatch, itemDispatch, dispatch, {
             money: MONEY_BRAND_BOARD_ID,
             character: CHARACTER_BRAND_BOARD_ID,
             item: ITEM_BRAND_BOARD_ID,
+            token: TOKEN_BRAND_BOARD_ID,
           });
         }
       }
@@ -176,7 +192,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       async function watchOffers() {
         const on = E(walletP).getOffersNotifier();
         for await (const offers of iterateNotifier(on)) {
-          console.info("📡 CHECKING OFFERS");
+          console.count("📡 CHECKING OFFERS");
           const last3 = offers.slice(-3);
           console.info(last3);
           processOffers(offers, dispatch);
@@ -186,21 +202,24 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         console.error("got watchOffers err", err);
       });
 
-      // TODO: Check if purses already exist before suggesting installation
+      // Check if dapp is already approved before suggesting installation
+      // if (state.purses.character.length===0) {
       // Suggest installation and brands to wallet
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestInstallation("Installation Sell Assets", SELL_ASSETS_INSTALLATION_BOARD_ID),
-        E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
-      ]);
+        E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID),
+      ]);        
+      // }
 
       // TODO: Fetch owned Characters from the wallet character purse
       // This currently returns every Minted Character
       // {name, character: Character, inventory: inventorySeat}
       // Fetch Characters from Wallet
-      // const characterNFTs = await E(nftPublicFacet).getCharacters();
+      // const characterNFTs = await E(kreadFacet).getCharacters();
       // const characterNFTs = await E()
 
       // TODO: Loop through own characters and fetch corresponding item list from itemsRepo in the contract
@@ -213,16 +232,12 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       // Fetch Items from Chain
       // TODO: Add getMyItems() instead of global getItems
-      // const itemNFTs = await E(nftPublicFacet).getItems();
+      // const itemNFTs = await E(kreadFacet).getItems();
       // itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
-
-      console.log("🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨");
-      const forsale = await E(nftPublicFacet).getForsalezArray();
       // const seat1 = forsale[0];
       // console.log(seat1.getProposal());
       // const { want: { Character: wantedCharacter }} = seat1.getProposal();
-      // console.log(wantedCharacter);
-      console.log(forsale);
+      
 
       dispatch({ type: "SET_LOADING", payload: false });
 
