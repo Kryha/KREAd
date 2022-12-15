@@ -17,7 +17,7 @@ import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
 import { FilterContainer, FilterWrapper, NotificationContainer, SelectorContainer, SortByContainer } from "./styles";
-import { useCharactersMarketPages } from "../../service";
+import { useCharactersMarket, useCharactersMarketPages } from "../../service";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharactersShopDetail } from "./character-shop-detail";
 import { loadCharactersMarket } from "../../service/purses/process";
@@ -38,7 +38,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const { contracts: { characterBuilder } } = useAgoricState();
   const characterDispatch = useCharacterStateDispatch();
 
-  const [characters, isLoading, totalPages] = useCharactersMarketPages(page, {
+  const [characters, isLoading] = useCharactersMarket({
     category: selectedCategory,
     sorting: selectedSorting,
     price: selectedPrice,
@@ -86,7 +86,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
       ) : (
         <CharactersShopDetail
           characters={characters}
-          totalPages={totalPages}
+          totalPages={1}//totalPages}
           isLoading={isLoading}
           selectedCategory={selectedCategory}
           selectedSorting={selectedSorting}

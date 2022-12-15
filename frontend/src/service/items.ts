@@ -6,10 +6,11 @@ import { Item, ItemBackend, ItemEquip, ItemInMarket, ItemInMarketBackend } from 
 import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
-import { equipItem, unequipItem, sellItem, buyItem, newSellItem } from "./item-actions";
+import { equipItem, unequipItem, sellItem, buyItem, newSellItem, newBuyItem } from "./item-actions";
 import { useSelectedCharacter } from "./character";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
+import { useItemMarketState } from "../context/item-shop";
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   const [{ all }, isLoading] = useMyItems();
@@ -109,25 +110,24 @@ export const useItemFromMarket = (id: string): [ItemInMarket | undefined, boolea
 };
 
 export const useItemsMarket = (filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
-  const [{ market, marketFetched }] = useItemContext();
-
+  const { items, fetched } = useItemMarketState();
   const filtered = useMemo(() => {
-    if (!filters) return market;
-    return filterItemsMarket(market, filters);
-  }, [filters, market]);
+    if (!filters) return items;
+    return filterItemsMarket(items, filters);
+  }, [filters, items]);
 
-  return [filtered, !marketFetched];
+  return [filtered, !fetched];
 };
 
 export const useItemsMarketPage = (page: number, filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
-  const [{ market, marketFetched }] = useItemContext();
+  const { items, fetched } = useItemMarketState();
 
   const filtered = useMemo(() => {
-    if (!filters) return market;
-    return filterItemsMarket(market, filters);
-  }, [filters, market]);
+    if (!filters) return items;
+    return filterItemsMarket(items, filters);
+  }, [filters, items]);
 
-  return [filtered, !marketFetched];
+  return [filtered, !fetched];
 };
 
 export const useSellItem = (itemId: string) => {
@@ -160,7 +160,7 @@ export const useSellItem = (itemId: string) => {
       }
       setIsLoading(false);
     };
-    addToMarket();
+    // addToMarket();
   }, [itemId, itemInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(
@@ -171,7 +171,8 @@ export const useSellItem = (itemId: string) => {
 
         const mediated = mediate.items.toBack([found])[0];
         setIsLoading(true);
-        const toStore = await newSellItem(service);//sellItem(service, mediated, BigInt(price));
+        console.log(await newSellItem(service, mediated, BigInt(price)));//sellItem(service, mediated, BigInt(price));
+        
         // setItemInMarket(toStore);
       } catch (error) {
         console.warn(error);
@@ -212,7 +213,7 @@ export const useBuyItem = (itemId: string) => {
       }
       setIsLoading(false);
     };
-    removeFromMarket();
+    // removeFromMarket();
   }, [itemId, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(async () => {
@@ -222,7 +223,7 @@ export const useBuyItem = (itemId: string) => {
 
       const mediated = mediate.itemsMarket.toBack([found])[0];
       setIsLoading(true);
-      await buyItem(service, mediated);
+      await newBuyItem(service, mediated.item, mediated.sell.price);
     } catch (error) {
       console.warn(error);
       setIsError(true);

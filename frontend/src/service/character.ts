@@ -13,11 +13,12 @@ import {
 import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { buyCharacter, extendCharacters, mintNfts, newSellCharacter, sellCharacter } from "./character-actions";
+import { buyCharacter, extendCharacters, mintNfts, newBuyCharacter, newSellCharacter, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
 import { E } from "@endo/eventual-send";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME, PAGE_SIZE } from "../constants";
+import { useCharacterMarketState } from "../context/character-shop";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
@@ -153,14 +154,14 @@ export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefin
 };
 
 export const useCharactersMarket = (filters?: CharactersMarketFilters): [CharacterInMarket[], boolean] => {
-  const [{ market, marketFetched }] = useCharacterContext();
-
+  // const [{ market, marketFetched }] = useCharacterContext();
+  const { characters, fetched } = useCharacterMarketState();
   const filtered = useMemo(() => {
-    if (!filters) return market;
-    return filterCharactersMarket(market, filters);
-  }, [filters, market]);
+    if (!filters) return characters;
+    return filterCharactersMarket(characters, filters);
+  }, [filters, characters]);
 
-  return [filtered, !marketFetched];
+  return [filtered, !fetched];
 };
 
 export const useCharactersMarketPages = (page: number, filters?: CharactersMarketFilters): [CharacterInMarket[], boolean, number] => {
@@ -223,7 +224,8 @@ export const useSellCharacter = (characterId: string) => {
       }
       setIsLoading(false);
     };
-    addToMarket();
+    setIsLoading(false);
+    // addToMarket();
   }, [characterId, characterInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(
@@ -236,6 +238,7 @@ export const useSellCharacter = (characterId: string) => {
       setIsLoading(true);
 
       const toStore = await newSellCharacter(service, backendCharacter.nft, BigInt(price));
+      console.log(toStore, BigInt(price));
       // setCharacterInMarket(toStore);
     },
     [characterId, characters, service]
@@ -273,7 +276,9 @@ export const useBuyCharacter = (characterId: string) => {
       }
       setIsLoading(false);
     };
-    removeFromMarket();
+    // removeFromMarket();
+    setIsLoading(false);
+
   }, [characterId, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(async () => {
@@ -282,7 +287,7 @@ export const useBuyCharacter = (characterId: string) => {
 
     const mediated = mediate.charactersMarket.toBack([found])[0];
     setIsLoading(true);
-    await buyCharacter(service, mediated);
+    await newBuyCharacter(service, mediated.character, mediated.sell.price);
   }, [characterId, characters, service]);
 
   return { callback, isLoading, isError, isSuccess };

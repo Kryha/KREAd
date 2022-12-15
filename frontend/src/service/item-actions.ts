@@ -8,20 +8,18 @@ import { ActivityEvent, Character, Item, ItemBackend, ItemInMarketBackend } from
 import { formatIdAsNumber } from "./util";
 import { EVENT_TYPE } from "../constants";
 
-export const newSellItem = async (service: AgoricState) => {
+export const newSellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
     },
-    agoric: { walletP, board, zoe },
+    agoric: { walletP },
     purses,
   } = service;
 
   if (!publicFacet) return;
   const itemPurse = purses.item[purses.character.length - 1];
-  const moneyPurse = purses.money[purses.money.length - 1];
-  const item2sell = itemPurse.currentAmount.value[0];
-  console.log(item2sell);
+  const moneyPurse = purses.token[purses.token.length - 1];
   if (!itemPurse || !moneyPurse) return;
 
   const sellInvitation = await E(publicFacet).makeSellItemInvitation();
@@ -32,15 +30,15 @@ export const newSellItem = async (service: AgoricState) => {
       invitation: sellInvitation,
       proposalTemplate: {
         want: {
-          Money: {
+          Price: {
             pursePetname: moneyPurse.pursePetname,
-            value: inter(1n),
+            value: price,
           },
         },
         give: {
-          Items: {
+          Item: {
             pursePetname: itemPurse.pursePetname,
-            value: [item2sell],
+            value: [item],
           },
         },
       },
@@ -48,13 +46,49 @@ export const newSellItem = async (service: AgoricState) => {
     })
   );
 
-  // const characterInMarket = {
-  //   id: character.id,
-  //   character,
-  //   sell: { instance, publicFacet: sellAssetsPublicFacet, price },
-  // };
-
   console.log("PLACED FOR SALE");
+};
+
+export const newBuyItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
+  const {
+    contracts: {
+      characterBuilder: { publicFacet },
+    },
+    agoric: { walletP },
+    purses,
+  } = service;
+
+  if (!publicFacet) return;
+  const itemPurse = purses.item[purses.item.length - 1];
+  const moneyPurse = purses.token[purses.token.length - 1];
+  
+  if (!itemPurse || !moneyPurse) return;
+
+  const buyInvitation = await E(publicFacet).makeBuyItemInvitation();
+
+  await E(walletP).addOffer(
+    harden({
+      id: Date.now().toString(),
+      invitation: buyInvitation,
+      proposalTemplate: {
+        want: {
+          Item: {
+            pursePetname: itemPurse.pursePetname,
+            value: [item],
+          },
+        },
+        give: {
+          Price: {
+            pursePetname: moneyPurse.pursePetname,
+            value: (price),
+          },
+        },
+      },
+      dappContext: true,
+    })
+  );
+
+  console.log("BUY OFFER SENT");
 };
 
 export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {

@@ -94,7 +94,7 @@ export const mintNfts = async (service: AgoricState, name: string) => {
   return E(walletP).addOffer(offerConfig);
 };
 
-export const newSellCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
+export const newSellCharacter = async (service: AgoricState, character: any, price: bigint) => {
   console.log("🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️ CALLING SELL CHARACTER 🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️🧝‍♀️");
   const {
     contracts: {
@@ -106,10 +106,12 @@ export const newSellCharacter = async (service: AgoricState, character: Characte
 
   if (!publicFacet) return;
   const characterPurse = purses.character[purses.character.length - 1];
+  const tokenPurse = purses.token[purses.token.length - 1];
   const moneyPurse = purses.money[purses.money.length - 1];
-  const character2sell = characterPurse.currentAmount.value[0];
-  console.log(character2sell);
-  if (!characterPurse || !moneyPurse) return;
+
+  // const character2sell = characterPurse.currentAmount.value[0];
+  // console.log(character2sell);
+  if (!characterPurse || !tokenPurse || !moneyPurse) return;
 
   const sellInvitation = await E(publicFacet).makeSellCharacterInvitation();
   const offer = harden({
@@ -118,14 +120,14 @@ export const newSellCharacter = async (service: AgoricState, character: Characte
     proposalTemplate: {
       want: {
         Price: {
-          pursePetname: moneyPurse.pursePetname,
-          value: inter(price),
+          pursePetname: tokenPurse.pursePetname,
+          value: (price),
         },
       },
       give: {
         Character: {
           pursePetname: characterPurse.pursePetname,
-          value: [formatIdAsNumber(character2sell)],
+          value: [formatIdAsNumber(character)],
         },
       },
     },
@@ -143,40 +145,23 @@ export const newSellCharacter = async (service: AgoricState, character: Characte
 
 };
 
-export const newBuyCharacter = async (service: AgoricState) => {
+export const newBuyCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
     },
-    agoric: { walletP, board, zoe },
+    agoric: { walletP },
     purses,
   } = service;
 
   if (!publicFacet) return;
   const characterPurse = purses.character[purses.character.length - 1];
+  const tokenPurse = purses.token[purses.token.length - 1];
   const moneyPurse = purses.money[purses.money.length - 1];
-  const character2buy = {
-    date: 2n,
-    description: "A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.",
-    detail: {
-      artist: "emily",
-      boardId: "06553",
-      contractAddresss: "0x0177812bsjs7998",
-      metadata: "https://yourmetadata.info",
-      standard: "standard",
-    },
-    id: 1669218489n,
-    image: "https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg",
-    keyId: 1,
-    level: 1,
-    name: "CMONEY",
-    projectDescription: "this is a project",
-    title: "character 1",
-    type: "tempetScavenger",
-  };
-  if (!characterPurse || !moneyPurse) return;
+  
+  if (!characterPurse || !moneyPurse || !tokenPurse) return;
 
-  const buyInvitation = await E(publicFacet).makeBuyInvitation();
+  const buyInvitation = await E(publicFacet).makeBuyCharacterInvitation();
 
   await E(walletP).addOffer(
     harden({
@@ -186,13 +171,13 @@ export const newBuyCharacter = async (service: AgoricState) => {
         want: {
           Character: {
             pursePetname: characterPurse.pursePetname,
-            value: [character2buy],
+            value: [character],
           },
         },
         give: {
-          Money: {
-            pursePetname: moneyPurse.pursePetname,
-            value: inter(3n),
+          Price: {
+            pursePetname: tokenPurse.pursePetname,
+            value: (price),
           },
         },
       },
@@ -200,13 +185,7 @@ export const newBuyCharacter = async (service: AgoricState) => {
     })
   );
 
-  // const characterInMarket = {
-  //   id: character.id,
-  //   character,
-  //   sell: { instance, publicFacet: sellAssetsPublicFacet, price },
-  // };
-
-  console.log("PLACED FOR SALE");
+  console.log("BUY OFFER SENT");
 };
 
 export const sellCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {

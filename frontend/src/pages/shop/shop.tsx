@@ -7,6 +7,8 @@ import { ItemsShop } from "./items-shop";
 import { CharactersShop } from "./characters-shop";
 import { useViewport } from "../../hooks";
 import { KreadIcon } from "../../components/logo/styles";
+import { ItemMarketContextProvider } from "../../context/item-shop";
+import { CharacterMarketContextProvider } from "../../context/character-shop";
 
 export enum Page {
   Items = 0,
@@ -14,7 +16,7 @@ export enum Page {
 }
 
 export const Shop: FC = () => {
-  const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
+  const [selectedPage, setSelectedPage] = useState<Page>(Page.Characters);
   const { width, height } = useViewport();
   const pageSelector = useMemo(
     () => (
@@ -29,13 +31,18 @@ export const Shop: FC = () => {
   );
 
   return (
-    <BaseRoute sideNavigation={<></>}>
-      <ShopWrapper>
-        {selectedPage === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
-      </ShopWrapper>
-      <KreadContainer height={height} width={width}>
-        <KreadIcon />
-      </KreadContainer>
-    </BaseRoute>
+    <CharacterMarketContextProvider>
+      <ItemMarketContextProvider>
+        <BaseRoute sideNavigation={<></>}>
+          <ShopWrapper>
+            {selectedPage === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
+          </ShopWrapper>
+          <KreadContainer height={height} width={width}>
+            <KreadIcon />
+          </KreadContainer>
+        </BaseRoute>
+      </ItemMarketContextProvider>
+    </CharacterMarketContextProvider>
+
   );
 };

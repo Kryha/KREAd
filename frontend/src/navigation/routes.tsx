@@ -10,13 +10,18 @@ import { TestServiceUI } from "../service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { CharacterStateProvider } from "../context/characters";
 import { ItemStateProvider } from "../context/items";
+import { CharacterMarketContextProvider } from "../context/character-shop";
+import { ItemMarketContextProvider } from "../context/item-shop";
+import { UseWithMarketContext } from "../context/wrapper";
 
 export const InternalAppWrapper = () => {
   return (
     <CharacterStateProvider>
       <ItemStateProvider>
         <AgoricStateProvider>
-          <InternalAppRoutes />
+          <UseWithMarketContext>
+            <InternalAppRoutes />
+          </UseWithMarketContext>
         </AgoricStateProvider>
       </ItemStateProvider>
     </CharacterStateProvider>
@@ -40,10 +45,9 @@ export const InternalAppRoutes: FC = () => {
           <Route path={routes.shop} element={<Shop />} />
           <Route path={routes.inventory} element={<Inventory />} />
           <Route path={routes.createCharacter} element={<CreateCharacter />} />
-
+          
           <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
           <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
-
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
 
