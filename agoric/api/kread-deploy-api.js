@@ -102,7 +102,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   /**
    * @type {ERef<Issuer>}
    */
-  const moneyIssuerP = E(home.agoricNames).lookup('issuer', 'RUN');
+  const moneyIssuerP = E(home.agoricNames).lookup('issuer', 'IST');
 
   const moneyBrandP = E(moneyIssuerP).getBrand();
   const [moneyIssuer, moneyBrand, { decimalPlaces = 0 }] = await Promise.all([
@@ -316,21 +316,13 @@ export default async function deployApi(homePromise, { pathResolve }) {
   const invitationIssuerP = E(zoe).getInvitationIssuer();
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
-  const characterIssuerP = E(kreadPublicFacet).getCharacterIssuer();
-  const itemIssuerP = E(kreadPublicFacet).getItemIssuer();
-
   const [
-    characterIssuer,
-    characterBrand,
-    itemIssuer,
-    itemBrand,
-    invitationBrand,
-    invitationIssuer,
-  ] = await Promise.all([
-    characterIssuerP,
-    E(characterIssuerP).getBrand(),
-    itemIssuerP,
-    E(itemIssuerP).getBrand(),
+    { issuer: characterIssuer, brand: characterBrand },
+    { issuer: itemIssuer, brand: itemBrand },
+    { issuer: tokenIssuer, brand: tokenBrand },
+  ] = await E(kreadPublicFacet).getAssets();
+
+  const [invitationBrand, invitationIssuer] = await Promise.all([
     invitationBrandP,
     invitationBrandP,
   ]);
@@ -343,6 +335,8 @@ export default async function deployApi(homePromise, { pathResolve }) {
     ITEM_ISSUER_BOARD_ID,
     MONEY_BRAND_BOARD_ID,
     MONEY_ISSUER_BOARD_ID,
+    TOKEN_BRAND_BOARD_ID,
+    TOKEN_ISSUER_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
     INVITE_ISSUER_BOARD_ID,
   ] = await Promise.all([
@@ -353,6 +347,8 @@ export default async function deployApi(homePromise, { pathResolve }) {
     E(board).getId(itemIssuer),
     E(board).getId(moneyBrand),
     E(board).getId(moneyIssuer),
+    E(board).getId(tokenBrand),
+    E(board).getId(tokenIssuer),
     E(board).getId(invitationBrand),
     E(board).getId(invitationIssuer),
   ]);
@@ -411,11 +407,13 @@ export default async function deployApi(homePromise, { pathResolve }) {
       Character: CHARACTER_BRAND_BOARD_ID,
       Item: ITEM_BRAND_BOARD_ID,
       Money: MONEY_BRAND_BOARD_ID,
+      Token: TOKEN_BRAND_BOARD_ID,
     },
     issuerBoardIds: {
       Character: CHARACTER_ISSUER_BOARD_ID,
       Item: ITEM_ISSUER_BOARD_ID,
       Money: MONEY_ISSUER_BOARD_ID,
+      Token: TOKEN_ISSUER_BOARD_ID,
     },
     MONEY_DECIMAL_PLACES: decimalPlaces,
     API_URL,
