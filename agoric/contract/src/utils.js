@@ -53,10 +53,7 @@ export const makeCharacterNftObjs = (
     keyId: 1,
   };
   const newCharacter2 = {
-    ...randomCharacterBase,
-    date: currentTime,
-    id: newCharacterId,
-    name,
+    ...newCharacter1,
     keyId: 2,
   };
   return [newCharacter1, newCharacter2];
