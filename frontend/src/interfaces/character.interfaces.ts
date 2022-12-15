@@ -62,16 +62,25 @@ export interface CharacterInMarket {
   character: Character;
   equippedItems: CharacterItems;
   sell: {
-    publicFacet: any;
+    publicFacet?: any;
     price: bigint;
   };
 }
 
+export interface KreadCharacterInMarket {
+  sellerSeat: any
+  name: string
+  askingPrice: {
+    value: bigint,
+    brand: any
+  }
+  character: CharacterBackend
+}
 export interface CharacterInMarketBackend {
   id: bigint;
   character: CharacterBackend;
   sell: {
-    publicFacet: any;
+    publicFacet?: any;
     price: bigint;
   };
 }

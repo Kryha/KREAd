@@ -35,11 +35,20 @@ export interface Item {
   activity: ActivityEvent[];
 }
 
+export interface KreadItemInMarket {
+  sellerSeat: any
+  id: string
+  askingPrice: {
+    value: bigint,
+    brand: any
+  }
+  item: ItemBackend
+}
 export interface ItemInMarket {
   id: string;
   item: Item;
   sell: {
-    publicFacet: any;
+    publicFacet?: any;
     price: bigint;
   };
 }
@@ -48,7 +57,7 @@ export interface ItemInMarketBackend {
   id: bigint;
   item: ItemBackend;
   sell: {
-    publicFacet: any;
+    publicFacet?: any;
     price: bigint;
   };
 }
