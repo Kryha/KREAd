@@ -5,10 +5,8 @@ const initialState: ItemState = {
   items: [],
   owned: [],
   equipped: [],
-  market: [],
 
   fetched: false,
-  marketFetched: false,
 };
 
 const Context = createContext<ItemState | undefined>(undefined);
@@ -22,12 +20,6 @@ const Reducer = (state: ItemState, action: ItemStateActions): ItemState => {
     case "ADD_ITEMS":
       return { ...state, fetched: true, items: [...state.items, ...action.payload] };
 
-    case "SET_ITEMS_MARKET":
-      return { ...state, market: action.payload };
-
-    case "ADD_ITEMS_MARKET":
-      return { ...state, fetched: true, market: [...state.market, ...action.payload] };
-
     case "SET_OWNED_ITEMS":
       return { ...state, owned: action.payload };
 
@@ -40,12 +32,10 @@ const Reducer = (state: ItemState, action: ItemStateActions): ItemState => {
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };
 
-    case "SET_MARKET_FETCHED":
-      return { ...state, marketFetched: action.payload };
-
     case "RESET":
       return initialState;
   }
+  return state;
 };
 
 type ProviderProps = Omit<React.ProviderProps<ItemState>, "value">;

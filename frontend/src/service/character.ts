@@ -164,17 +164,18 @@ export const useCharactersMarket = (filters?: CharactersMarketFilters): [Charact
   return [filtered, !fetched];
 };
 
+// TODO: consider whether fetching by range is necessary after implementing notifiers
 export const useCharactersMarketPages = (page: number, filters?: CharactersMarketFilters): [CharacterInMarket[], boolean, number] => {
-  const [{ market, marketFetched }] = useCharacterContext();
+  const { characters, fetched } = useCharacterMarketState();
   // TODO: get total pages
   const totalPages = 20;
 
   const filtered = useMemo(() => {
-    if (!filters) return market;
-    return filterCharactersMarket(market, filters);
-  }, [filters, market]);
+    if (!filters) return characters;
+    return filterCharactersMarket(characters, filters);
+  }, [filters, characters]);
 
-  return [filtered, !marketFetched, totalPages];
+  return [filtered, !fetched, totalPages];
 };
 
 // TODO: Add error management
@@ -246,7 +247,6 @@ export const useSellCharacter = (characterId: string) => {
   return { callback, isLoading, isError, isSuccess };
 };
 
-// TODO: test after merge with equip/unequip fix
 export const useBuyCharacter = (characterId: string) => {
   const [service] = useAgoricContext();
   const [characters] = useCharactersMarket();

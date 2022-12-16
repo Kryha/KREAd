@@ -37,7 +37,6 @@ import { ItemInMarket } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
-import { loadItemsMarket } from "../../service/purses/process";
 import { useAgoricState } from "../../context/agoric";
 import { useItemStateDispatch } from "../../context/items";
 
@@ -81,9 +80,9 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
     setFilterId(id !== filterId ? id : "");
   };
 
+  // FIXME: Still needed?
   const loadMore = async () => {
     setPage(prevState => prevState + 1);
-    await loadItemsMarket(page+1, characterBuilder.publicFacet, itemDispatch);
   };
 
   return (

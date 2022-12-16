@@ -13,7 +13,6 @@ import { EmptyCard } from "../../components/empty-card";
 import { PAGE_SIZE } from "../../constants";
 import { useItemStateDispatch } from "../../context/items";
 import { useAgoricState } from "../../context/agoric";
-import { loadItemsMarket } from "../../service/purses/process";
 
 interface Props {
   onItemClick: (id: string) => void;
@@ -64,9 +63,9 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
     setInitial(false);
   };
 
+  // FIXME: still needed?
   const loadMore = () => {
     setPage((prevState) => prevState + 1);
-    loadItemsMarket(page, characterBuilder.publicFacet, itemDispatch);
   };
   return (
     <SortableListWrap>

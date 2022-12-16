@@ -17,12 +17,10 @@ import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
 import { characterCategories, sorting } from "../../assets/text/filter-options";
 import { FilterContainer, FilterWrapper, NotificationContainer, SelectorContainer, SortByContainer } from "./styles";
-import { useCharactersMarket, useCharactersMarketPages } from "../../service";
+import { useCharactersMarket } from "../../service";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharactersShopDetail } from "./character-shop-detail";
-import { loadCharactersMarket } from "../../service/purses/process";
-import { useCharacterStateDispatch } from "../../context/characters";
-import { useAgoricState } from "../../context/agoric";
+
 
 interface Props {
   pageSelector: ReactNode;
@@ -35,8 +33,6 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [showToast, setShowToast] = useState(false);
   const [page, setPage] = useState(1);
-  const { contracts: { characterBuilder } } = useAgoricState();
-  const characterDispatch = useCharacterStateDispatch();
 
   const [characters, isLoading] = useCharactersMarket({
     category: selectedCategory,
@@ -52,9 +48,9 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
     setFilterId(id !== filterId ? id : "");
   };
 
+  // FIXME:  still needed?
   const loadMore = () => {
     setPage(prevState => prevState + 1);
-    loadCharactersMarket(page, characterBuilder.publicFacet, characterDispatch);
   };
 
   return (

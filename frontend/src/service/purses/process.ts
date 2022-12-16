@@ -1,62 +1,12 @@
 import { E } from "@endo/eventual-send";
 import { PAGE_SIZE } from "../../constants";
 
-import { CharacterBackend, CharacterInMarketBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
+import { CharacterBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
 import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
 import { mediate } from "../../util";
 import { itemCategories } from "../util";
-
-const updateItemsMarket = async (publicFacet: any, dispatch: ItemDispatch) => {
-  const itemsMarket = await E(publicFacet).getItemsMarketRange(PAGE_SIZE, 1);
-
-  const mediatedItemsMarket = mediate.itemsMarket.toFront(itemsMarket);
-
-  dispatch({ type: "SET_ITEMS_MARKET", payload: mediatedItemsMarket });
-  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
-};
-
-export const loadItemsMarket = async (page: number, publicFacet: any, dispatch: ItemDispatch) => {
-  
-  const itemsMarket = await E(publicFacet).getItemsMarketRange(PAGE_SIZE, page);
-  const mediatedItemsMarket = mediate.itemsMarket.toFront(itemsMarket);
-
-  dispatch({ type: "ADD_ITEMS_MARKET", payload: mediatedItemsMarket });
-  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
-};
-
-const updateCharactersMarket = async (publicFacet: any, dispatch: CharacterDispatch) => {
-  const charactersMarket = await E(publicFacet).getCharactersMarketRange(PAGE_SIZE, 1);
-  if (!charactersMarket) return [];
-  const marketWithItems = await Promise.all(
-    charactersMarket.map(async (character: CharacterInMarketBackend) => {
-      const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.character.name);
-      return { character, equippedItems };
-    })
-  );
-
-  const mediatedCharactersMarket = mediate.charactersMarket.toFront(marketWithItems);
-
-  dispatch({ type: "SET_CHARACTERS_MARKET", payload: mediatedCharactersMarket });
-  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
-};
-
-export const loadCharactersMarket = async (page: number, publicFacet: any, dispatch: CharacterDispatch) => {
-  const { characters: charactersMarket } = await E(publicFacet).getCharactersMarket(PAGE_SIZE, page);
-
-  const marketWithItems = await Promise.all(
-    charactersMarket.map(async (character: CharacterInMarketBackend) => {
-      const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.character.name);
-      return { character, equippedItems };
-    })
-  );
-
-  const mediatedCharactersMarket = mediate.charactersMarket.toFront(marketWithItems);
-
-  dispatch({ type: "ADD_CHARACTERS_MARKET", payload: mediatedCharactersMarket });
-  dispatch({ type: "SET_MARKET_FETCHED", payload: true });
-};
 
 // This fetches assets data from purses in the wallet and updates the local context state for characters & items
 export const processPurses = async (
@@ -130,9 +80,6 @@ export const processPurses = async (
   itemDispatch({ type: "SET_OWNED_ITEMS", payload: ownedItemsFrontend });
   itemDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
   itemDispatch({ type: "SET_FETCHED", payload: true });
-
-  await updateItemsMarket(contractPublicFacet, itemDispatch);
-  await updateCharactersMarket(contractPublicFacet, characterDispatch);
 
   console.info(`👤 Found ${ownedCharacters.length} characters.`);
   console.info(`📦 Found ${ownedItems.length} Items.`);

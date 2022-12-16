@@ -121,6 +121,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
   const itemDispatch = useItemStateDispatch();
   const walletPRef = useRef(undefined);
 
+  // TODO: optimize useEffect startup logic
   useEffect(() => {
     // Receive callbacks from the wallet connection.
     const otherSide = Far("otherSide", {
@@ -202,7 +203,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         console.error("got watchOffers err", err);
       });
 
-      // Check if dapp is already approved before suggesting installation
+      //TODO: Check if dapp is already approved before suggesting installation
       // if (state.purses.character.length===0) {
       // Suggest installation and brands to wallet
       await Promise.all([
