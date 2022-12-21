@@ -21,7 +21,6 @@ import { useCharactersMarket } from "../../service";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { CharactersShopDetail } from "./character-shop-detail";
 
-
 interface Props {
   pageSelector: ReactNode;
 }
@@ -50,7 +49,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   // FIXME:  still needed?
   const loadMore = () => {
-    setPage(prevState => prevState + 1);
+    setPage((prevState) => prevState + 1);
   };
 
   return (
@@ -82,7 +81,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
       ) : (
         <CharactersShopDetail
           characters={characters}
-          totalPages={1}//totalPages}
+          totalPages={1} // TODO: limit the notifier to the latest n characters/items and then have a getter for fetching by page thereafter
           isLoading={isLoading}
           selectedCategory={selectedCategory}
           selectedSorting={selectedSorting}

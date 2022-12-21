@@ -26,7 +26,7 @@ const start = async (zcf) => {
   const assetMints = await Promise.all([
     zcf.makeZCFMint('KREAdCHARACTER', AssetKind.SET),
     zcf.makeZCFMint('KREAdITEM', AssetKind.SET),
-    zcf.makeZCFMint('KREAdTOKEN', AssetKind.NAT),
+    zcf.makeZCFMint('KREAdTOKEN', AssetKind.NAT), // TODO: Change to IST
   ]);
 
   const [

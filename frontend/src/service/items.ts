@@ -83,23 +83,6 @@ export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: I
   return [{ owned, equipped, all: filtered }, !fetched];
 };
 
-// export const useMyItemsPage = (page: number, filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean, number] => {
-//   const [{ owned, equipped, fetched }] = useItemContext();
-//   // TODO: get total pages
-//   const totalPages = 20;
-//   const all = useMemo(
-//     () => [...equipped.map((item) => ({ ...item, isEquipped: true })), ...owned.map((item) => ({ ...item, isEquipped: false }))],
-//     [equipped, owned]
-//   );
-
-//   const filtered = useMemo(() => {
-//     if (!filters) return all;
-//     return filterItems(all, filters);
-//   }, [all, filters]);
-
-//   return [{ owned, equipped, all: filtered }, !fetched, totalPages];
-// };
-
 export const useItemFromMarket = (id: string): [ItemInMarket | undefined, boolean] => {
   const [items, isLoading] = useItemsMarket();
 
@@ -135,8 +118,7 @@ export const useSellItem = (itemId: string) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  // TODO: enable listening to offer approved 
-  const [isSuccess, setIsSuccess] = useState(false);
+  // TODO: enable listening to offer approved
 
   const callback = useCallback(
     async (price: number) => {
@@ -146,7 +128,7 @@ export const useSellItem = (itemId: string) => {
 
         const mediated = mediate.items.toBack([found])[0];
         setIsLoading(true);
-        return await sellItem(service, mediated, BigInt(price));//sellItem(service, mediated, BigInt(price));
+        return await sellItem(service, mediated, BigInt(price)); //sellItem(service, mediated, BigInt(price));
       } catch (error) {
         console.warn(error);
         setIsError(true);
@@ -155,7 +137,7 @@ export const useSellItem = (itemId: string) => {
     [itemId, owned, service]
   );
 
-  return { callback, isLoading, isError, isSuccess };
+  return { callback, isLoading, isError };
 };
 
 export const useBuyItem = (itemId: string) => {
@@ -164,8 +146,7 @@ export const useBuyItem = (itemId: string) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  // TODO: enable listening to offer approved 
-  const [isSuccess, setIsSuccess] = useState(false);
+  // TODO: enable listening to offer approved
 
   const callback = useCallback(async () => {
     try {
@@ -181,7 +162,7 @@ export const useBuyItem = (itemId: string) => {
     }
   }, [itemId, items, service]);
 
-  return { callback, isLoading, isError, isSuccess };
+  return { callback, isLoading, isError };
 };
 
 export const useEquipItem = () => {
