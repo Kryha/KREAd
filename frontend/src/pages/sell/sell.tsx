@@ -54,6 +54,7 @@ export const Sell: FC<Props> = ({ children, onSubmit, text: pText, data, isLoadi
             <InputContainer>
               <Label>{text.store.setPrice}</Label>
               <TextLabel>
+                {/*TODO: remove support for e notation, or handle conversion to bigint */}
                 <Input type="number" defaultValue="" {...register("price", { required: true, min: 1 })} />
               </TextLabel>
             </InputContainer>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage, Overlay, NotificationDetail } from "../../components";
@@ -14,6 +14,7 @@ export const ItemSell = () => {
   const idString = String(id);
   const [showToast, setShowToast] = useState(false);
   const [data, isLoading] = useMyItem(idString);
+  const [isError, setIsError] = useState(false);
   const sellItem = useSellItem(idString);
   const navigate = useNavigate();
 
@@ -23,7 +24,8 @@ export const ItemSell = () => {
       displayToast();
       console.info("Sell offer sent, redirecting to shop");
     } else {
-      throw "There was a problem sending the sell offer to the wallet. Please try again later.";
+      console.warn("There was a problem sending the sell offer to the wallet. Please try again later.");
+      setIsError(true);
     }
   };
 
@@ -36,9 +38,7 @@ export const ItemSell = () => {
     navigate(`${routes.inventory}`);
   };
 
-  if (sellItem.isError) return <ErrorView />;
-
-  if (sellItem.isSuccess) return <Navigate to={routes.shop} />;
+  if (isError) return <ErrorView />;
 
   if (isLoading) return <LoadingPage spinner={false} />;
 

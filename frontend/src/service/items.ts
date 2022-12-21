@@ -117,7 +117,6 @@ export const useSellItem = (itemId: string) => {
   const [{ owned }] = useMyItems();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
   // TODO: enable listening to offer approved
 
   const callback = useCallback(
@@ -125,19 +124,18 @@ export const useSellItem = (itemId: string) => {
       try {
         const found = owned.find((item) => item.id === itemId);
         if (!found) return;
-
         const mediated = mediate.items.toBack([found])[0];
         setIsLoading(true);
-        return await sellItem(service, mediated, BigInt(price)); //sellItem(service, mediated, BigInt(price));
+        return await sellItem(service, mediated, BigInt(price));
       } catch (error) {
         console.warn(error);
-        setIsError(true);
+        return false;
       }
     },
     [itemId, owned, service]
   );
 
-  return { callback, isLoading, isError };
+  return { callback, isLoading };
 };
 
 export const useBuyItem = (itemId: string) => {
