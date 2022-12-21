@@ -33,7 +33,7 @@ export const ItemSell = () => {
 
   const closeAndRedirect = () => {
     setShowToast(false);
-    navigate(`${routes.shop}`);
+    navigate(`${routes.inventory}`);
   };
 
   if (sellItem.isError) return <ErrorView />;

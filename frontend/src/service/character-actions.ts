@@ -174,4 +174,5 @@ export const buyCharacter = async (service: AgoricState, character: CharacterBac
   );
 
   console.info("BUY OFFER SENT");
+  return true;
 };

@@ -44,7 +44,7 @@ export const CharacterSell = () => {
 
   const closeAndRedirect = () => {
     setShowToast(false);
-    navigate(`${routes.shop}`);
+    navigate(`${routes.inventory}`);
   };
 
   return (
