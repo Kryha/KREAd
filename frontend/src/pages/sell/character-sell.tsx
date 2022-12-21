@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
@@ -15,6 +15,7 @@ export const CharacterSell = () => {
 
   const idString = String(id);
   const [showToast, setShowToast] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [data, isLoading] = useMyCharacter(idString);
   const sellCharacter = useSellCharacter(idString);
 
@@ -24,13 +25,12 @@ export const CharacterSell = () => {
       displayToast();
       console.info("Sell offer sent, redirecting to shop");
     } else {
-      throw "There was a problem sending the sell offer to the wallet. Please try again later.";
+      console.warn("There was a problem sending the sell offer to the wallet. Please try again later.");
+      setIsError(true);
     }
   };
 
-  if (sellCharacter.isError) return <ErrorView />;
-
-  if (sellCharacter.isSuccess) return <Navigate to={routes.shop} />;
+  if (isError) return <ErrorView />;
 
   if (isLoading) return <LoadingPage spinner={false} />;
 

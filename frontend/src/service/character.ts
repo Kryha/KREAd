@@ -182,32 +182,6 @@ export const useSellCharacter = (characterId: string) => {
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const [characterInMarket, setCharacterInMarket] = useState<CharacterInMarketBackend>();
-
-  useEffect(() => {
-    const addToMarket = async () => {
-      try {
-        if (!characterInMarket || !service.offers.length) return;
-
-        const latestOffer = service.offers[service.offers.length - 1];
-        if (latestOffer.invitationDetails.description !== "seller") return;
-        if (!latestOffer.status || latestOffer.status !== "pending") return;
-
-        const characterFromProposal = latestOffer.proposalTemplate.give.Items.value[0];
-        if (!characterFromProposal || String(characterFromProposal.id) !== characterId) return;
-
-        await E(service.contracts.characterBuilder.publicFacet).storeCharacterInMarket(characterInMarket);
-        setIsSuccess(true);
-      } catch (error) {
-        console.warn(error);
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    setIsLoading(false);
-    // addToMarket();
-  }, [characterId, characterInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
-
   const callback = useCallback(
     async (price: number) => {
       const found = characters.find((character) => character.nft.id === characterId);
@@ -217,9 +191,7 @@ export const useSellCharacter = (characterId: string) => {
 
       setIsLoading(true);
 
-      const toStore = await sellCharacter(service, backendCharacter.nft, BigInt(price));
-      console.log(toStore);
-      return true;
+      return await sellCharacter(service, backendCharacter.nft, BigInt(price));
     },
     [characterId, characters, service]
   );

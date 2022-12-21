@@ -92,7 +92,7 @@ export const mintNfts = async (service: AgoricState, name: string) => {
   return E(walletP).addOffer(offerConfig);
 };
 
-export const sellCharacter = async (service: AgoricState, character: any, price: bigint) => {
+export const sellCharacter = async (service: AgoricState, character: any, price: bigint): Promise<boolean> => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -101,12 +101,12 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
     purses,
   } = service;
 
-  if (!publicFacet) return;
+  if (!publicFacet) return false;
   const characterPurse = purses.character[purses.character.length - 1];
   const tokenPurse = purses.token[purses.token.length - 1];
   const moneyPurse = purses.money[purses.money.length - 1];
 
-  if (!characterPurse || !tokenPurse || !moneyPurse) return;
+  if (!characterPurse || !tokenPurse || !moneyPurse) return false;
 
   const sellInvitation = await E(publicFacet).makeSellCharacterInvitation();
   const offer = harden({
@@ -128,9 +128,10 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
     },
     dappContext: true,
   });
-  return await E(walletP).addOffer(
+  await E(walletP).addOffer(
     offer
   );
+  return true;
 };
 
 export const buyCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
