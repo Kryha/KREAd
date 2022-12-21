@@ -46,7 +46,6 @@ export const sellItem = async (service: AgoricState, item: ItemBackend, price: b
     })
   );
 
-  console.info("ITEM PLACED FOR SALE");
   return true;
 };
 
@@ -62,7 +61,7 @@ export const buyItem = async (service: AgoricState, item: ItemBackend, price: bi
   if (!publicFacet) return;
   const itemPurse = purses.item[purses.item.length - 1];
   const moneyPurse = purses.token[purses.token.length - 1];
-  
+
   if (!itemPurse || !moneyPurse) return;
 
   const buyInvitation = await E(publicFacet).makeBuyItemInvitation();
@@ -81,7 +80,7 @@ export const buyItem = async (service: AgoricState, item: ItemBackend, price: bi
         give: {
           Price: {
             pursePetname: moneyPurse.pursePetname,
-            value: (price),
+            value: price,
           },
         },
       },
@@ -89,7 +88,6 @@ export const buyItem = async (service: AgoricState, item: ItemBackend, price: bi
     })
   );
 
-  console.info("BUY OFFER SENT");
   return true;
 };
 
@@ -118,8 +116,6 @@ export const mintItem = async (service: AgoricState, item?: any) => {
   });
 
   const invitation = await E(publicFacet).makeMintItemInvitation();
-
-  console.info("Invitation successful, sending to wallet for approval");
 
   const offerConfig = harden({
     id: `${Date.now()}`,
@@ -159,13 +155,10 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
   const filledCategories = currentInventoryItems.map((i) => i.category);
 
   if (filledCategories.includes(item.category)) {
-    console.info("Existing item in seleted category, performing swap");
     itemSwap(service, item, character);
     return;
   }
   const invitation = await E(publicFacet).makeEquipInvitation();
-
-  console.info("Invitation successful, sending to wallet for approval");
 
   const offerConfig = harden({
     id: `${Date.now()}`,
@@ -214,8 +207,6 @@ export const unequipItem = async (service: AgoricState, item: Item, characterNam
   }
 
   const invitation = await E(publicFacet).makeUnequipInvitation();
-
-  console.info("Invitation successful, sending to wallet for approval");
 
   const offerConfig = harden({
     id: `${Date.now()}`,
@@ -268,8 +259,6 @@ export const itemSwap = async (service: AgoricState, item: Item, character: Char
   }
 
   const invitation = await E(publicFacet).makeItemSwapInvitation();
-
-  console.info("Invitation successful, sending to wallet for approval");
 
   const offerConfig = harden({
     id: `${Date.now()}`,
