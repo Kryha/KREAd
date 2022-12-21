@@ -45,7 +45,6 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     const watchNotifiers = async () => {
       console.count("Checking Character Market Notifier");
       const notifier = E(kreadPublicFacet).getCharacterShopNotifier();
-      
       for await (const charactersInMarket of iterateNotifier(
         notifier,
       )) {
@@ -54,9 +53,12 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
         marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
       }
     };
-    if(kreadPublicFacet) watchNotifiers().catch((err) => {
-      console.error("got watchNotifiers err", err);
-    });
+    if (kreadPublicFacet) {
+      // checkMarket();
+      watchNotifiers().catch((err) => {
+        console.error("got watchNotifiers err", err);
+      });
+    }
     return () => {
       marketDispatch(initialState);
     };

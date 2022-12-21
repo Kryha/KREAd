@@ -239,7 +239,8 @@ export const useSellCharacter = (characterId: string) => {
       setIsLoading(true);
 
       const toStore = await sellCharacter(service, backendCharacter.nft, BigInt(price));
-      // TODO: redirect to shop?
+      console.log(toStore);
+      return true;
     },
     [characterId, characters, service]
   );

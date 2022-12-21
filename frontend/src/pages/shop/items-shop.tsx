@@ -37,8 +37,6 @@ import { ItemInMarket } from "../../interfaces";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
-import { useAgoricState } from "../../context/agoric";
-import { useItemStateDispatch } from "../../context/items";
 
 interface Props {
   pageSelector: ReactNode;
@@ -55,8 +53,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [close, setClose] = useState(false);
   const [page, setPage] = useState(1);
-  const { contracts: { characterBuilder } } = useAgoricState();
-  const itemDispatch = useItemStateDispatch();
   const [items, isLoading] = useItemsMarketPage(page, {
     category: selectedCategory,
     sorting: selectedSorting,

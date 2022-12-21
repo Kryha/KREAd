@@ -8,7 +8,7 @@
  *   config?: Config
  *   itemCount: bigint
  *   characterCount: bigint
- *   assets?: {
+ *   assets: {
  *     character: {
  *       brand: Brand
  *       issuer: Issuer

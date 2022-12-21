@@ -11,8 +11,6 @@ import { color } from "../../design";
 import { colors } from "../../service/fake-item-data";
 import { EmptyCard } from "../../components/empty-card";
 import { PAGE_SIZE } from "../../constants";
-import { useItemStateDispatch } from "../../context/items";
-import { useAgoricState } from "../../context/agoric";
 
 interface Props {
   onItemClick: (id: string) => void;
@@ -26,10 +24,6 @@ export const ItemsList: FC<Props> = ({ onItemClick, onFilterClick }) => {
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
   const [page, setPage] = useState(1);
-  const {
-    contracts: { characterBuilder },
-  } = useAgoricState();
-  const itemDispatch = useItemStateDispatch();
 
   const [{ all: items }, isLoading] = useMyItems({
     category: selectedCategory,

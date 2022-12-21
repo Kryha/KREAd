@@ -8,7 +8,7 @@ import { ActivityEvent, Character, Item, ItemBackend, ItemInMarketBackend } from
 import { formatIdAsNumber } from "./util";
 import { EVENT_TYPE } from "../constants";
 
-export const newSellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
+export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -46,10 +46,11 @@ export const newSellItem = async (service: AgoricState, item: ItemBackend, price
     })
   );
 
-  console.log("PLACED FOR SALE");
+  console.info("ITEM PLACED FOR SALE");
+  return true;
 };
 
-export const newBuyItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
+export const buyItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -88,124 +89,8 @@ export const newBuyItem = async (service: AgoricState, item: ItemBackend, price:
     })
   );
 
-  console.log("BUY OFFER SENT");
-};
-
-export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
-  const {
-    contracts: {
-      characterBuilder: { publicFacet },
-    },
-    agoric: { walletP, board, zoe },
-    purses,
-  } = service;
-
-  if (!publicFacet) return;
-
-  const itemPurse = purses.item[purses.item.length - 1];
-  const moneyPurse = purses.money[purses.money.length - 1];
-
-  if (!itemPurse || !moneyPurse) return;
-
-  const sellAssetsInstallation = await E(board).getValue(dappConstants.SELL_ASSETS_INSTALLATION_BOARD_ID);
-  const itemIssuer = await E(publicFacet).getItemIssuer();
-  const { moneyIssuer } = await E(publicFacet).getConfig();
-
-  const issuerKeywordRecord = harden({
-    Items: itemIssuer,
-    Money: moneyIssuer,
-  });
-
-  const brandKeywordRecord = harden({
-    Items: itemPurse.brand,
-    Money: moneyPurse.brand,
-  });
-  
-  const sellAssetsTerms = harden({
-    pricePerItem: { value: price, brand: moneyPurse.brand },
-    issuers: issuerKeywordRecord,
-    brands: brandKeywordRecord,
-  });
-
-  const {
-    creatorInvitation,
-    instance,
-    publicFacet: sellAssetsPublicFacet,
-  } = await E(zoe).startInstance(sellAssetsInstallation, issuerKeywordRecord, sellAssetsTerms);
-
-  await E(walletP).addOffer(
-    harden({
-      id: Date.now().toString(),
-      invitation: creatorInvitation,
-      proposalTemplate: {
-        want: {
-          Money: {
-            pursePetname: moneyPurse.pursePetname,
-            value: inter(price),
-          },
-        },
-        give: {
-          Items: {
-            pursePetname: itemPurse.pursePetname,
-            value: [item],
-          },
-        },
-        exit: { waived: null },
-      },
-      dappContext: true,
-    })
-  );
-
-  const itemInMarket = {
-    id: item.id,
-    item,
-    sell: { instance, publicFacet: sellAssetsPublicFacet, price },
-  };
-
-  return itemInMarket;
-};
-
-export const buyItem = async (service: AgoricState, itemInMarket: ItemInMarketBackend) => {
-  const {
-    agoric: { walletP },
-    contracts: {
-      characterBuilder: { publicFacet },
-    },
-    purses,
-  } = service;
-
-  if (!publicFacet || !walletP) return;
-
-  const itemPurse = purses.item[purses.item.length - 1];
-  const moneyPurse = purses.money[purses.money.length - 1];
-
-  if (!itemPurse || !moneyPurse) return;
-
-  const { sell, item } = itemInMarket;
-
-  const invitation = await E(sell.publicFacet).makeBuyerInvitation();
-
-  await E(walletP).addOffer(
-    harden({
-      id: Date.now().toString(),
-      invitation,
-      proposalTemplate: {
-        want: {
-          Items: {
-            pursePetname: itemPurse.pursePetname,
-            value: [item],
-          },
-        },
-        give: {
-          Money: {
-            pursePetname: moneyPurse.pursePetname,
-            value: inter(sell.price),
-          },
-        },
-      },
-      dappContext: true,
-    })
-  );
+  console.info("BUY OFFER SENT");
+  return true;
 };
 
 // TODO: Add price for minting // price?: bigint

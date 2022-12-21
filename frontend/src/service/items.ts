@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { E } from "@endo/eventual-send";
 
-import { Item, ItemBackend, ItemEquip, ItemInMarket, ItemInMarketBackend } from "../interfaces";
+import { Item, ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
 import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useItemContext } from "../context/items";
 import { useAgoricContext } from "../context/agoric";
-import { equipItem, unequipItem, sellItem, buyItem, newSellItem, newBuyItem } from "./item-actions";
+import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
 import { useSelectedCharacter } from "./character";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
@@ -136,32 +135,8 @@ export const useSellItem = (itemId: string) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  // TODO: enable listening to offer approved 
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const [itemInMarket, setItemInMarket] = useState<ItemInMarketBackend>();
-
-  useEffect(() => {
-    const addToMarket = async () => {
-      try {
-        if (!itemInMarket || !service.offers.length) return;
-
-        const latestOffer = service.offers[service.offers.length - 1];
-        if (latestOffer.invitationDetails.description !== "seller") return;
-        if (!latestOffer.status || latestOffer.status !== "pending") return;
-
-        const itemFromProposal = latestOffer.proposalTemplate.give.Items.value[0];
-        if (!itemFromProposal || String(itemFromProposal.id) !== itemId) return;
-
-        await E(service.contracts.characterBuilder.publicFacet).storeItemInMarket(itemInMarket);
-        setIsSuccess(true);
-      } catch (error) {
-        console.warn(error);
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    // addToMarket();
-  }, [itemId, itemInMarket, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(
     async (price: number) => {
@@ -171,9 +146,7 @@ export const useSellItem = (itemId: string) => {
 
         const mediated = mediate.items.toBack([found])[0];
         setIsLoading(true);
-        console.log(await newSellItem(service, mediated, BigInt(price)));//sellItem(service, mediated, BigInt(price));
-        
-        // setItemInMarket(toStore);
+        return await sellItem(service, mediated, BigInt(price));//sellItem(service, mediated, BigInt(price));
       } catch (error) {
         console.warn(error);
         setIsError(true);
@@ -191,30 +164,8 @@ export const useBuyItem = (itemId: string) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  // TODO: enable listening to offer approved 
   const [isSuccess, setIsSuccess] = useState(false);
-
-  useEffect(() => {
-    const removeFromMarket = async () => {
-      try {
-        if (!service.offers.length) return;
-
-        const latestOffer = service.offers[service.offers.length - 1];
-        if (latestOffer.invitationDetails.description !== "buyer") return;
-        if (!latestOffer.status || latestOffer.status !== "accept") return;
-
-        const itemFromProposal = latestOffer.proposalTemplate.want.Items.value[0];
-        if (!itemFromProposal || String(itemFromProposal.id) !== itemId) return;
-
-        await E(service.contracts.characterBuilder.publicFacet).removeItemFromMarket(BigInt(itemId));
-        setIsSuccess(true);
-      } catch (error) {
-        console.warn(error);
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    // removeFromMarket();
-  }, [itemId, service.contracts.characterBuilder.publicFacet, service.offers]);
 
   const callback = useCallback(async () => {
     try {
@@ -223,7 +174,7 @@ export const useBuyItem = (itemId: string) => {
 
       const mediated = mediate.itemsMarket.toBack([found])[0];
       setIsLoading(true);
-      await newBuyItem(service, mediated.item, mediated.sell.price);
+      return await buyItem(service, mediated.item, mediated.sell.price);
     } catch (error) {
       console.warn(error);
       setIsError(true);

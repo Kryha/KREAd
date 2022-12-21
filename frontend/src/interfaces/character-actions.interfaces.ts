@@ -49,6 +49,6 @@ export type CharacterStateActions =
   | AddCharacters
   | SetOwnedCharacters
   | AddOwnedCharacters
-  | SetSelectedCharacter
+  | SetSelectedCharacter;
 
 export type CharacterDispatch = React.Dispatch<CharacterStateActions>;

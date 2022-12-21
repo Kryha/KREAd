@@ -10,8 +10,6 @@ import { TestServiceUI } from "../service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { CharacterStateProvider } from "../context/characters";
 import { ItemStateProvider } from "../context/items";
-import { CharacterMarketContextProvider } from "../context/character-shop";
-import { ItemMarketContextProvider } from "../context/item-shop";
 import { UseWithMarketContext } from "../context/wrapper";
 
 export const InternalAppWrapper = () => {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { text } from "../../assets";
 import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
@@ -11,14 +11,21 @@ import { Sell } from "./sell";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
+  const navigate = useNavigate();
 
   const idString = String(id);
   const [showToast, setShowToast] = useState(false);
   const [data, isLoading] = useMyCharacter(idString);
   const sellCharacter = useSellCharacter(idString);
 
-  const submitForm = (price: number) => {
-    sellCharacter.callback(price);
+  const submitForm = async (price: number) => {
+    const res = await sellCharacter.callback(price);
+    if (res) {
+      displayToast();
+      console.info("Sell offer sent, redirecting to shop");
+    } else {
+      throw "There was a problem sending the sell offer to the wallet. Please try again later.";
+    }
   };
 
   if (sellCharacter.isError) return <ErrorView />;
@@ -33,6 +40,11 @@ export const CharacterSell = () => {
 
   const displayToast = () => {
     setShowToast(true);
+  };
+
+  const closeAndRedirect = () => {
+    setShowToast(false);
+    navigate(`${routes.shop}`);
   };
 
   return (
@@ -51,7 +63,7 @@ export const CharacterSell = () => {
           <NotificationDetail
             title={text.general.goToYourWallet}
             info={text.general.yourActionIsPending}
-            closeToast={() => setShowToast(false)}
+            closeToast={closeAndRedirect}
             isError
           />
         </NotificationWrapper>
