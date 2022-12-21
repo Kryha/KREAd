@@ -137,7 +137,7 @@ export const useSellItem = (itemId: string) => {
     [itemId, owned, service]
   );
 
-  return { callback, isLoading, isError, isSuccess };
+  return { callback, isLoading, isError };
 };
 
 export const useBuyItem = (itemId: string) => {
@@ -162,7 +162,7 @@ export const useBuyItem = (itemId: string) => {
     }
   }, [itemId, items, service]);
 
-  return { callback, isLoading, isError, isSuccess };
+  return { callback, isLoading, isError };
 };
 
 export const useEquipItem = () => {
