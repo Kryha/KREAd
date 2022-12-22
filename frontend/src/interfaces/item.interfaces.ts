@@ -54,6 +54,7 @@ export interface ItemInMarket {
   };
 }
 
+// TODO: revisit interfaces
 export interface ItemInMarketBackend {
   id: bigint;
   item: ItemBackend;

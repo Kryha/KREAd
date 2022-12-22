@@ -16,18 +16,18 @@ export enum Page {
 }
 
 export const Shop: FC = () => {
-  const [selectedPage, setSelectedPage] = useState<Page>(Page.Characters);
+  const [marketSection, setMarketSection] = useState<Page>(Page.Items);
   const { width, height } = useViewport();
   const pageSelector = useMemo(
     () => (
       <SwitchSelector
         buttonOneText={text.character.items}
         buttonTwoText={text.character.characters}
-        setSelectedIndex={setSelectedPage}
-        selectedIndex={selectedPage}
+        setSelectedIndex={setMarketSection}
+        selectedIndex={marketSection}
       />
     ),
-    [selectedPage]
+    [marketSection]
   );
 
   return (
@@ -35,7 +35,7 @@ export const Shop: FC = () => {
       <ItemMarketContextProvider>
         <BaseRoute sideNavigation={<></>}>
           <ShopWrapper>
-            {selectedPage === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
+            {marketSection === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
           </ShopWrapper>
           <KreadContainer height={height} width={width}>
             <KreadIcon />
