@@ -26,9 +26,9 @@ export const ItemBuy = () => {
   }, [itemInMarket, buyItem]);
 
   // TODO: handle declining item and error
-  // useEffect(() => {
-  //   // if (boughtItem && !buyItem.isLoading) setIsAwaitingApproval(false);
-  // }, [boughtItem, buyItem.isLoading]);
+  useEffect(() => {
+    if (boughtItem && !buyItem.isLoading) setIsAwaitingApproval(false);
+  }, [boughtItem, buyItem.isLoading]);
 
   const handleSubmit = () => {
     if (!id) return;
