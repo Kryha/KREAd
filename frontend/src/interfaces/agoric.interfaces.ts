@@ -47,6 +47,7 @@ interface NotifiersState {
       characters: any,
     }
 }
+
 interface SetDappApproved {
   type: "SET_DAPP_APPROVED";
   payload: boolean;
@@ -66,10 +67,12 @@ interface SetTokenPurses {
   type: "SET_TOKEN_PURSES";
   payload: any[];
 }
+
 interface SetMoneyPurses {
   type: "SET_MONEY_PURSES";
   payload: any[];
 }
+
 interface SetOffers {
   type: "SET_OFFERS";
   payload: any[];
@@ -94,10 +97,12 @@ interface SetCharacterContract {
   type: "SET_CHARACTER_CONTRACT";
   payload: Contract;
 }
+
 interface SetNotifiers {
   type: "SET_NOTIFIERS";
   payload: Partial<NotifiersState>;
 }
+
 interface SetApiSend {
   type: "SET_APISEND";
   payload: any;

@@ -76,6 +76,7 @@ export interface KreadCharacterInMarket {
   }
   character: CharacterBackend
 }
+
 export interface CharacterInMarketBackend {
   id: bigint;
   character: CharacterBackend;

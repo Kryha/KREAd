@@ -217,7 +217,7 @@ export const market = (zcf, STATE) => {
 
     // Find store record based on wanted character
     const sellRecord = itemMarket.find((record) => record.id === item.id);
-    assert(sellRecord, `Couldn't find character record for ${item.id}`);
+    assert(sellRecord, `Couldn't find item record for ${item.id}`);
     const sellerSeat = sellRecord.sellerSeat;
 
     // Inspect Price keyword from buyer seat
