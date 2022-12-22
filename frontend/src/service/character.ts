@@ -1,4 +1,3 @@
-// TODO: Remove this, use ations + context instead
 import { useMutation } from "react-query";
 
 import {
@@ -6,7 +5,6 @@ import {
   CharacterCreation,
   CharacterEquip,
   CharacterInMarket,
-  CharacterInMarketBackend,
   ExtendedCharacter,
   ExtendedCharacterBackend,
 } from "../interfaces";
@@ -15,7 +13,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
 import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
 import { useAgoricContext } from "../context/agoric";
-import { E } from "@endo/eventual-send";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
@@ -179,9 +176,6 @@ export const useSellCharacter = (characterId: string) => {
   const [characters] = useMyCharacters();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
   const callback = useCallback(
     async (price: number) => {
       const found = characters.find((character) => character.nft.id === characterId);
@@ -196,7 +190,7 @@ export const useSellCharacter = (characterId: string) => {
     [characterId, characters, service]
   );
 
-  return { callback, isLoading, isError, isSuccess };
+  return { callback, isLoading };
 };
 
 export const useBuyCharacter = (characterId: string) => {
@@ -204,8 +198,6 @@ export const useBuyCharacter = (characterId: string) => {
   const [characters] = useCharactersMarket();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     setIsLoading(false);
@@ -220,5 +212,5 @@ export const useBuyCharacter = (characterId: string) => {
     await buyCharacter(service, mediated.character, mediated.sell.price);
   }, [characterId, characters, service]);
 
-  return { callback, isLoading, isError, isSuccess };
+  return { callback, isLoading };
 };

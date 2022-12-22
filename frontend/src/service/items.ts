@@ -101,6 +101,7 @@ export const useItemsMarket = (filters?: ItemsMarketFilters): [ItemInMarket[], b
   return [filtered, !fetched];
 };
 
+// TODO: consider removing if unneeded
 export const useItemsMarketPage = (page: number, filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
   const { items, fetched } = useItemMarketState();
 

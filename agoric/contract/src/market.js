@@ -170,6 +170,12 @@ export const market = (zcf, STATE) => {
       'Wanted Character amount does not match character in sellerSeat',
     );
 
+    const { Price: characterForSalePrice } = sellerSeat.getProposal().want;
+    assert(
+      AmountMath.isGTE(providedMoneyAmount, characterForSalePrice, tokenBrand),
+      'Provided payment is lower than the asking price for this Item',
+    );
+
     // Widthdraw Character from seller seat and deposit into buyer seat
     buyerSeat.incrementBy(
       sellerSeat.decrementBy({ Character: characterForSaleAmount }),
@@ -227,12 +233,13 @@ export const market = (zcf, STATE) => {
       AmountMath.isEqual(wantedItemAmount, itemForSaleAmount, itemBrand),
       'Wanted Item amount does not match item in sellerSeat',
     );
-    const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
 
+    const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
     assert(
       AmountMath.isGTE(providedMoneyAmount, itemForSalePrice, tokenBrand),
       'Provided payment is lower than the asking price for this Item',
     );
+
     // Widthdraw Character from seller seat and deposit into buyer seat
     buyerSeat.incrementBy(sellerSeat.decrementBy({ Item: itemForSaleAmount }));
 

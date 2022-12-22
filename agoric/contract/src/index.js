@@ -66,10 +66,6 @@ const start = async (zcf) => {
         issuer: tokenIssuer,
       },
     },
-    market: {
-      characters: [],
-      items: [],
-    },
   };
 
   const characterHistory = {};

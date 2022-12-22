@@ -34,8 +34,10 @@ const Reducer = (state: ItemState, action: ItemStateActions): ItemState => {
 
     case "RESET":
       return initialState;
+    
+    default:
+      return state;
   }
-  return state;
 };
 
 type ProviderProps = Omit<React.ProviderProps<ItemState>, "value">;

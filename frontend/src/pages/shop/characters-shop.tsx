@@ -52,6 +52,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
     setPage((prevState) => prevState + 1);
   };
 
+  // TODO: split into more readable components
   return (
     <>
       <FilterWrapper>

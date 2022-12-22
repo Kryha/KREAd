@@ -48,13 +48,11 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       for await (const charactersInMarket of iterateNotifier(
         notifier,
       )) {
-        const fetched = charactersInMarket;
-        const characters = await Promise.all(fetched.map((character: any) => formatMarketEntry(character)));
+        const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
         marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
       }
     };
     if (kreadPublicFacet) {
-      // checkMarket();
       watchNotifiers().catch((err) => {
         console.error("got watchNotifiers err", err);
       });

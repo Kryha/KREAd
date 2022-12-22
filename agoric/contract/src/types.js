@@ -22,10 +22,6 @@
  *       issuer: Issuer
  *     }
  *   }
- *   market: {
- *     characters: CharacterMarketRecord[],
- *     items: ItemMarketRecord[],
- *   }
  *   randomNumber?: Function
  * }} State
  *
