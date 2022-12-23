@@ -173,7 +173,7 @@ export const market = (zcf, STATE) => {
     const { Price: characterForSalePrice } = sellerSeat.getProposal().want;
     assert(
       AmountMath.isGTE(providedMoneyAmount, characterForSalePrice, tokenBrand),
-      'Provided payment is lower than the asking price for this Item',
+      'Provided payment is lower than the asking price for this Character',
     );
 
     // Widthdraw Character from seller seat and deposit into buyer seat
