@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { text } from "../../assets";
-import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
-import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { ErrorView, FadeInOut, LoadingPage } from "../../components";
+import { ToastGoToWallet } from "../../components/toast-go-to-wallet";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
 import { useMyCharacter, useSellCharacter } from "../../service";
@@ -29,15 +28,6 @@ export const CharacterSell = () => {
       setIsError(true);
     }
   };
-
-  if (isError) return <ErrorView />;
-
-  if (isLoading) return <LoadingPage spinner={false} />;
-
-  if (!data) return <ErrorView />;
-
-  const { nft, equippedItems } = data;
-
   const displayToast = () => {
     setShowToast(true);
   };
@@ -46,6 +36,18 @@ export const CharacterSell = () => {
     setShowToast(false);
     navigate(`${routes.inventory}`);
   };
+  
+  if (isError) return <ErrorView />;
+  
+  if (isLoading) return <LoadingPage spinner={false} />;
+
+  // TODO: this prevents the page from trying to load a character that is no longer available
+  // we'll be refactoring this to listen for the offer accepted action
+  if (!data) closeAndRedirect();
+
+  if (!data) return <ErrorView />;
+  
+  const { nft, equippedItems } = data;  
 
   return (
     <Sell
@@ -57,17 +59,7 @@ export const CharacterSell = () => {
       <FadeInOut show>
         <CharacterDetailSection character={data} showToast={displayToast} />
       </FadeInOut>
-      <FadeInOut show={showToast} exiting={!showToast}>
-        {showToast && <Overlay isOnTop={true} />}
-        <NotificationWrapper showNotification={showToast}>
-          <NotificationDetail
-            title={text.general.goToYourWallet}
-            info={text.general.yourActionIsPending}
-            closeToast={closeAndRedirect}
-            isError
-          />
-        </NotificationWrapper>
-      </FadeInOut>
+      <ToastGoToWallet showToast={showToast} closeAndRedirect={closeAndRedirect} />
     </Sell>
   );
 };

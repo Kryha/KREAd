@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { text } from "../../assets";
-import { ErrorView, FadeInOut, LoadingPage, Overlay, NotificationDetail } from "../../components";
+import { ErrorView, FadeInOut, LoadingPage } from "../../components";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { routes } from "../../navigation";
 import { useMyItem, useSellItem } from "../../service";
 import { Sell } from "./sell";
+import { ToastGoToWallet } from "../../components/toast-go-to-wallet";
 
 export const ItemSell = () => {
   const { id } = useParams<"id">();
@@ -42,6 +42,10 @@ export const ItemSell = () => {
 
   if (isLoading) return <LoadingPage spinner={false} />;
 
+  // TODO: this prevents the page from trying to load an item that is no longer available
+  // we'll be refactoring this to listen for the offer accepted action
+  if (!data) closeAndRedirect();
+
   if (!data) return <ErrorView />;
 
   return (
@@ -54,17 +58,7 @@ export const ItemSell = () => {
       <FadeInOut show>
         <ItemDetailSection item={data} />
       </FadeInOut>
-      <FadeInOut show={showToast} exiting={!showToast}>
-        {showToast && <Overlay isOnTop={true} />}
-        <NotificationWrapper showNotification={showToast}>
-          <NotificationDetail
-            title={text.general.goToYourWallet}
-            info={text.general.yourActionIsPending}
-            closeToast={closeAndRedirect}
-            isError
-          />
-        </NotificationWrapper>
-      </FadeInOut>
+      <ToastGoToWallet showToast={showToast} closeAndRedirect={closeAndRedirect} />
     </Sell>
   );
 };
