@@ -43,6 +43,5 @@ export const Shop: FC = () => {
         </BaseRoute>
       </ItemMarketContextProvider>
     </CharacterMarketContextProvider>
-
   );
 };

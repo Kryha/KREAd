@@ -28,6 +28,7 @@ export const CharacterSell = () => {
       setIsError(true);
     }
   };
+
   const displayToast = () => {
     setShowToast(true);
   };
