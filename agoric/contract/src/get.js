@@ -95,6 +95,24 @@ export const getCharacterRecord = (characterName, state) => {
 
   return characterRecord;
 };
+
+/**
+ * Gets inventory notifier given character name
+ *
+ * @param {string} characterName
+ * @param {State} state
+ * @returns {Notifier}
+ */
+export const getCharacterInventoryNotifier = (characterName, state) => {
+  const characterRecord = state.characters.find(
+    ({ character }) => character.name === characterName,
+  );
+  assert(characterRecord, X`${errors.character404}`);
+  assert(characterRecord.inventory, X`${errors.inventory404}`);
+
+  return characterRecord.notifier;
+};
+
 /**
  * Gets the current time (epoch)
  *

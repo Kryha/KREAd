@@ -55,10 +55,8 @@
  *   character: object
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
- *   auction?: {
- *     instance: Instance,
- *     publicFacet: any,
- *   },
+ *   notifier: Notifier
+ *   updater: IterationObserver<any>
  * }} CharacterRecord
  *
  * @typedef {{

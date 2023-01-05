@@ -5,6 +5,7 @@ import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
+import { makeNotifierKit } from '@agoric/notifier';
 import { errors } from './errors';
 import { mulberry32 } from './prng';
 import { messages } from './messages';
@@ -182,6 +183,9 @@ const start = async (zcf) => {
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
+    // Set up notifiers
+    const { notifier, updater } = makeNotifierKit();
+
     // Mint character to user seat & inventorySeat
     characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
     characterMint.mintGains(
@@ -214,6 +218,8 @@ const start = async (zcf) => {
       name: newCharacterName,
       character: newCharacterAmount1.value[0],
       inventory: inventorySeat,
+      notifier,
+      updater,
     };
     STATE.characters = [...STATE.characters, character];
 
@@ -295,6 +301,8 @@ const start = async (zcf) => {
       STATE.assets?.token,
     ],
     // characters
+    getCharacterInventoryNotifier: (characterName) =>
+      state.getCharacterInventoryNotifier(characterName, STATE),
     getCharacterBase: () => STATE.config?.baseCharacters[0],
     getCharacters,
     getCharactersRange: (range, page) => getPage(STATE.characters, range, page),

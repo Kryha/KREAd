@@ -89,10 +89,14 @@ export const inventory = (zcf, STATE) => {
     seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
 
     // Ensure staged inventory STATE is valid before reallocation
+    const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
     // @ts-ignore
-    validateInventoryState(inventorySeat.getStagedAllocation().Item.value);
+    validateInventoryState(updatedInventory);
 
     zcf.reallocate(seat, inventorySeat);
+
+    const updater = state.getCharacterInventoryNotifier(characterName, STATE);
+    updater.updateState(updatedInventory);
 
     seat.exit();
   };
@@ -151,7 +155,14 @@ export const inventory = (zcf, STATE) => {
     // Deposit item from inventory to user seat
     seat.incrementBy(inventorySeat.decrementBy({ Item: requestedItems }));
 
+    // Ensure staged inventory STATE is valid before reallocation
+    const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
+    // @ts-ignore
+    validateInventoryState(updatedInventory);
     zcf.reallocate(seat, inventorySeat);
+
+    const updater = state.getCharacterInventoryNotifier(characterName, STATE);
+    updater.updateState(updatedInventory);
 
     seat.exit();
   };
@@ -218,10 +229,15 @@ export const inventory = (zcf, STATE) => {
     inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
     // Ensure staged inventory STATE is valid before reallocation
+    const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
+
     // @ts-ignore
-    validateInventoryState(inventorySeat.getStagedAllocation().Item.value);
+    validateInventoryState(updatedInventory);
 
     zcf.reallocate(seat, inventorySeat);
+
+    const updater = state.getCharacterInventoryNotifier(characterName, STATE);
+    updater.updateState(updatedInventory);
 
     seat.exit();
   };
