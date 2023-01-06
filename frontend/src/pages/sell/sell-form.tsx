@@ -17,19 +17,19 @@ import {
   StepText,
   Tick,
 } from "./styles";
-import { BuyData, BuyStep } from "./types";
+import { SellData, SellStep } from "./types";
 
-interface BuyFormProps {
-  data: BuyData;
+interface SellFormProps {
+  data: SellData;
 
-  changeStep: (step: BuyStep) => void;
+  changeStep: (step: SellStep) => void;
   onSubmit: () => void;
 
   isLoading: boolean;
   isOfferAccepted: boolean;
 }
 
-export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
+export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
   const isOnFirstStep = !isLoading;
   const isOnSecondStep = isLoading && !isOfferAccepted;
 

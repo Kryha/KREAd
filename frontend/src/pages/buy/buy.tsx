@@ -29,19 +29,18 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
       case 1:
+      default:
         return (
-          <BuyForm onSubmit={() => {
-            onSubmit();
-          }} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
+          <BuyForm
+            onSubmit={() => onSubmit()}
+            data={data}
+            changeStep={setCurrentStep}
+            isLoading={isLoading}
+            isOfferAccepted={isOfferAccepted}
+          />
         );
       case 2:
         return <Confirmation text={pText} />;
-      default:
-        return (
-          <BuyForm onSubmit={() => {
-            onSubmit();
-          }} data={data} changeStep={setCurrentStep} isLoading={isLoading} isOfferAccepted={isOfferAccepted} />
-        );
     }
   };
 
