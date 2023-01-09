@@ -38,6 +38,8 @@ import { SellText, SellData, SellStep } from "./types";
 import { SellForm } from "./sell-form";
 import { Confirmation } from "./confirmation";
 import { PageContainer } from "../../components/page-container";
+import { PutForSale } from "./put-for-sale";
+import { CharacterInformation } from "./character-information";
 
 interface Props {
   children: ReactNode;
@@ -52,24 +54,28 @@ interface Props {
 
 export const Sell: FC<Props> = ({ children, data, text: pText, onSubmit, isLoading, isOfferAccepted }) => {
   const { width, height } = useViewport();
-  const [currentStep, setCurrentStep] = useState<SellStep>(1);
+  const [currentStep, setCurrentStep] = useState<SellStep>(0);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, dirtyFields },
+  } = useForm<{ price: number }>({ mode: "onChange", reValidateMode: "onChange" });
+
   if (!data) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
-      case 1:
       default:
-        return (
-          <SellForm
-            onSubmit={() => onSubmit(data.price)}
-            data={data}
-            changeStep={setCurrentStep}
-            isLoading={isLoading}
-            isOfferAccepted={isOfferAccepted}
-          />
-        );
+      case 0:
+        // return <h1>Information</h1>;
+        return <CharacterInformation disabled={isLoading} />;
+      case 1:
+        return <h1>PutForSale</h1>;
+      // return <PutForSale sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
       case 2:
-        return <Confirmation text={pText} />;
+        return <h1>Confirmation</h1>;
+      // return <Confirmation character={mintedCharacter?.nft} />;
     }
   };
 
@@ -77,7 +83,7 @@ export const Sell: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadi
     <ContentWrapper>
       <PageContainer sidebarContent={children}>
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} title={pText.sell} link={routes.shop} isSellFlow />
+          <FormHeader currentStep={currentStep} title={pText.sell} link={routes.shop} />
           {perStepDisplay()}
         </FormCard>
       </PageContainer>

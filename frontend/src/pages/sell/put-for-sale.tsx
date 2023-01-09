@@ -26,7 +26,7 @@ interface PaymentProps {
   isLoading: boolean;
 }
 
-export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAccepted, isLoading }) => {
+export const PutForSale: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAccepted, isLoading }) => {
   const [sendOffer, setSendOffer] = useState(false);
   const [disable, setDisable] = useState(false);
   const sendOfferToWallet = async () => {
@@ -75,7 +75,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
       <ButtonContainer>
         <PrimaryButton onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          {isLoading? <LoadingPage /> : <ArrowUp />}
+          {isLoading ? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
     </ContentWrapper>

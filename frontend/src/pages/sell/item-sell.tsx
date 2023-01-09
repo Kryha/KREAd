@@ -50,10 +50,16 @@ export const ItemSell = () => {
 
   return (
     <Sell
+      data={{ ...data, price: Number(10) }}
       isLoading={sellItem.isLoading}
       onSubmit={submitForm}
-      text={{ sell: text.store.sellItem }}
-      data={{ ...data, image: data.thumbnail }}
+      isOfferAccepted={true}
+      text={{
+        sell: text.store.buyCharacter,
+        success: text.store.characterSuccessfullyBought,
+        successLong: text.store.yourNewCharacterIs,
+        check: text.store.checkCharacter,
+      }}
     >
       <FadeInOut show>
         <ItemDetailSection item={data} />

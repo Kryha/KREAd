@@ -29,9 +29,9 @@ export const CharacterSell = () => {
     // }
   };
 
-  // const displayToast = () => {
-  //   setShowToast(true);
-  // };
+  const displayToast = () => {
+    setShowToast(true);
+  };
 
   // const closeAndRedirect = () => {
   //   setShowToast(false);
@@ -52,15 +52,20 @@ export const CharacterSell = () => {
 
   return (
     <Sell
+      data={{ ...data, price: Number(10) }}
       isLoading={sellCharacter.isLoading}
       onSubmit={submitForm}
-      text={{ sell: text.store.sellCharacter }}
-      data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
+      isOfferAccepted={true}
+      text={{
+        sell: text.store.buyCharacter,
+        success: text.store.characterSuccessfullyBought,
+        successLong: text.store.yourNewCharacterIs,
+        check: text.store.checkCharacter,
+      }}
     >
-      {/* <FadeInOut show>
+      <FadeInOut show>
         <CharacterDetailSection character={data} showToast={displayToast} />
       </FadeInOut>
-      <ToastGoToWallet showToast={showToast} closeAndRedirect={closeAndRedirect} /> */}
     </Sell>
   );
 };

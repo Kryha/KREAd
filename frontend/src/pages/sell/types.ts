@@ -9,4 +9,4 @@ export interface SellData {
   price: number;
 }
 
-export type SellStep = 1 | 2;
+export type SellStep = 0 | 1 | 2;
