@@ -1,9 +1,8 @@
 import { E } from "@endo/eventual-send";
-import { PAGE_SIZE } from "../../constants";
 
-import { CharacterBackend, ExtendedCharacterBackend, Item } from "../../interfaces";
+import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item } from "../../interfaces";
 import { AgoricDispatch } from "../../interfaces/agoric.interfaces";
-import { CharacterDispatch } from "../../interfaces/character-actions.interfaces";
+import { CharacterDispatch, CharacterState } from "../../interfaces/character-actions.interfaces";
 import { ItemDispatch } from "../../interfaces/item-actions.interfaces";
 import { mediate } from "../../util";
 import { itemCategories } from "../util";
@@ -12,11 +11,12 @@ import { itemCategories } from "../util";
 export const processPurses = async (
   purses: any[],
   contractPublicFacet: any,
+  charactersToSkip: ExtendedCharacter[],
   characterDispatch: CharacterDispatch,
   itemDispatch: ItemDispatch,
   agoricDispatch: AgoricDispatch,
   brandsToCheck: { money: string; character: string; item: string, token: string }
-) => {
+): Promise<void> => {
   // Load Purses
   const newMoneyPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.money);
   const newTokenPurses = purses.filter(({ brandBoardId }) => brandBoardId === brandsToCheck.token);
@@ -28,17 +28,23 @@ export const processPurses = async (
     ({ brandBoardId }) => brandBoardId === brandsToCheck.item // || brandBoardId === CHARACTER_ZFC_BRAND_BOARD_ID,
   );
 
-
   agoricDispatch({ type: "SET_MONEY_PURSES", payload: newMoneyPurses });
   agoricDispatch({ type: "SET_CHARACTER_PURSES", payload: newCharacterPurses });
   agoricDispatch({ type: "SET_ITEM_PURSES", payload: newItemPurses });
   agoricDispatch({ type: "SET_TOKEN_PURSES", payload: newTokenPurses });
 
   // Load Characters
-  const ownedCharacters = newCharacterPurses.flatMap((purse) => {
+  const charactersInPurse = newCharacterPurses.flatMap((purse) => {
     return purse.value;
   });
 
+  // Skip previously processed characters
+  const ownedCharacters = charactersInPurse;//charactersInPurse.filter((c) => !charactersToSkip.includes(c));
+  // console.log(
+  //   "================ skipppppppping", ownedCharacters
+  // );
+  // if (ownedCharacters.length === 0) return;
+  
   const equippedCharacterItems: Item[] = [];
   // Map characters to the corresponding inventory in the contract
   const extendedCharacters: ExtendedCharacterBackend[] = await Promise.all(
@@ -53,11 +59,17 @@ export const processPurses = async (
       const { items: equippedItems } = await E(contractPublicFacet).getCharacterInventory(character.name);
       const frontendEquippedItems = mediate.items.toFront(equippedItems);
       equippedCharacterItems.push(...frontendEquippedItems);
-      const equipped: {[key: string]: Item | undefined} = {};
+      const equipped: { [key: string]: Item | undefined } = {};
       itemCategories.forEach((category) => {
         equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
       });
       
+      // console.log("-----------------HUHHHHH");
+      // const allcharacters = await E(contractPublicFacet).getCharacters();
+      // console.log(allcharacters);
+      // const notifier = allcharacters.characters[0].notifier;
+      // console.log(notifier);
+
       return {
         nft: character,
         equippedItems: equipped,

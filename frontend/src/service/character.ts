@@ -16,15 +16,18 @@ import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
+import { useUserState } from "../context/character";
+import { useWalletState } from "../context/wallet";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
-  const [{ owned, selected, fetched }, dispatch] = useCharacterContext();
-
-  useEffect(() => {
-    if (!selected) {
-      owned[0] && dispatch({ type: "SET_SELECTED_CHARACTER", payload: owned[0] });
-    }
-  }, [dispatch, owned, selected]);
+  // const [{ owned: owned_, selected, fetched: fetched_ }, dispatch] = useCharacterContext();
+  const { selected, fetched } = useUserState();
+  console.log(fetched, selected);
+  // useEffect(() => {
+  //   if (!selected) {
+  //     owned[0] && dispatch({ type: "SET_SELECTED_CHARACTER", payload: owned[0] });
+  //   }
+  // }, [dispatch, owned, selected]);
 
   return [selected, !fetched];
 };
@@ -91,15 +94,16 @@ export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolea
 };
 
 export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
-  const [{ owned, selected, fetched }] = useCharacterContext();
+  // const [{ owned, selected, fetched }] = useCharacterContext();
+  const { characters, selected, fetched } = useUserState();
   const charactersForSale = useMyCharactersForSale();
 
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
-    return owned.map((character) => {
+    return characters.map((character) => {
       if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true, isForSale: false };
       return { ...character, isEquipped: false, isForSale: false };
     });
-  }, [owned, selected?.nft.id]);
+  }, [characters, selected?.nft.id]);
 
   // mixing characters from wallet with characters from offers
   const charactersWithForSale: CharacterEquip[] = useMemo(() => {
@@ -119,7 +123,8 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
     return filterCharacters(charactersWithForSale, filters);
   }, [charactersWithForSale, filters]);
 
-  return [filtered, !fetched];
+  // FIXME: backto !fetched
+  return [filtered, fetched];
 };
 
 export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefined, boolean] => {
@@ -157,9 +162,10 @@ export const useCharactersMarketPages = (page: number, filters?: CharactersMarke
 // TODO: Add error management
 export const useCreateCharacter = () => {
   const [agoricState] = useAgoricContext();
+  const purses = useWalletState();
   return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
-    await mintNfts(agoricState, body.name);
+    await mintNfts(agoricState, purses, body.name);
   });
 };
 

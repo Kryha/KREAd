@@ -58,13 +58,12 @@ export const extendCharacters = async (
   return { extendedCharacters: charactersWithItems, equippedItems: equippedCharacterItems };
 };
 
-export const mintNfts = async (service: AgoricState, name: string) => {
+export const mintNfts = async (service: AgoricState, purses: any, name: string) => {
   const {
     agoric: { walletP },
     contracts: {
       characterBuilder: { publicFacet },
     },
-    purses,
   } = service;
 
   if (!publicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
@@ -82,7 +81,7 @@ export const mintNfts = async (service: AgoricState, name: string) => {
     proposalTemplate: {
       want: {
         Asset: {
-          pursePetname: service.purses.character[service.purses.character.length - 1].pursePetname,
+          pursePetname: purses.character[purses.character.length - 1].pursePetname,
           value: [{ name }],
         },
       },

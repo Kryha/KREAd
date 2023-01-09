@@ -40,6 +40,7 @@ export const Landing: FC = () => {
     setShowToast(true);
   };
 
+  console.log(isLoading);
   return (
     <BaseRoute
       isLanding

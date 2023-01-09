@@ -7,6 +7,7 @@ import { useAgoricContext } from "../context/agoric";
 import { equipItem, mintItem, unequipItem } from "./item-actions";
 import { buyCharacter, sellCharacter } from "./character-actions";
 import { useCharacterMarketState } from "../context/character-shop";
+import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 
 export const TestServiceUI = () => {
   // service referse to agoricContext
@@ -41,6 +42,7 @@ export const TestServiceUI = () => {
 
   //   await sellItem(service, item, 1n);
   // };
+  
   const handleSellCharacter = async () => {
     const character = service.purses.character[service.purses.character.length - 1].currentAmount.value[0];
     if (!character) return;
@@ -54,6 +56,7 @@ export const TestServiceUI = () => {
     console.log("/////////////BUYING CHARACTER :", character);
     await buyCharacter(service, character, 4n);
   };
+  
   // const buyItemNFT = async () => {
   //   const {
   //     contracts: {
@@ -107,22 +110,24 @@ export const TestServiceUI = () => {
     const character = characters.owned[0];
     console.log(item);
     console.log(character);
-    await unequipItem(service, item, character.nft.name);
+    // await unequipItem(service, item, character.nft.name);
     console.log("done");
   };
 
-  // const test = async () => {
-  //   console.log(await E(service.contracts.characterBuilder.publicFacet).getItemsMarketRange(20, 1));
-
-  //   console.log(await E(service.contracts.characterBuilder.publicFacet).getCharactersMarketRange(20, 1));
-  //   const charH = await E(service.contracts.characterBuilder.publicFacet).getCharacterHistory("PaBLO");
-  //   console.log(charH);
-  //   const itemH = await E(service.contracts.characterBuilder.publicFacet).getItemHistory("8");
-  //   console.log(itemH);
-
-  //   // const { items: currentInventoryItems }: {items: Item[]} = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory("CRISI");
-  //   // console.log(await itemSwap(service, currentInventoryItems[0], characters.owned[0].nft));
-  // };
+  const test = async () => {
+    
+    const characters = E(service.contracts.characterBuilder.publicFacet).getCharacters();
+    console.log(characters);
+   
+    const notifier = characters.characters[0].notifier;
+    console.log(notifier);
+    for await (const update of iterateNotifier(notifier)) {
+      console.log("NOTIFIER UPDATE");
+      console.log(update);
+    }
+    // const { items: currentInventoryItems }: {items: Item[]} = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory("CRISI");
+    // console.log(await itemSwap(service, currentInventoryItems[0], characters.owned[0].nft));
+  };
 
   const getLogs = async () => {
     const privateState = await E(CBPublicFacet).getPrivateState();
@@ -182,8 +187,8 @@ export const TestServiceUI = () => {
         <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={topUp}>
           TOP UP
         </button>
-        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={getLogs}>
-          LOGS
+        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={test}>
+          TEST
         </button>
       </div>
     </>

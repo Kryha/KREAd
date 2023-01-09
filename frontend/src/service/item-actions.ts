@@ -7,6 +7,7 @@ import { inter } from "../util";
 import { ActivityEvent, Character, Item, ItemBackend, ItemInMarketBackend } from "../interfaces";
 import { formatIdAsNumber } from "./util";
 import { EVENT_TYPE } from "../constants";
+import { WalletContext } from "../context/wallet";
 
 export const sellItem = async (service: AgoricState, item: ItemBackend, price: bigint) => {
   const {
@@ -187,7 +188,7 @@ export const equipItem = async (service: AgoricState, item: Item, character: Cha
   return E(walletP).addOffer(offerConfig);
 };
 
-export const unequipItem = async (service: AgoricState, item: Item, characterName: string) => {
+export const unequipItem = async (service: AgoricState, purses: WalletContext, item: Item, characterName: string) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -195,8 +196,8 @@ export const unequipItem = async (service: AgoricState, item: Item, characterNam
     },
   } = service;
 
-  const itemPurse = service.purses.item[service.purses.item.length - 1];
-  const characterPurse = service.purses.character[service.purses.character.length - 1];
+  const itemPurse = purses.item[purses.item.length - 1];
+  const characterPurse = purses.character[purses.character.length - 1];
   const characterInPurse = characterPurse.value.find((character: Character) => character.name === characterName);
   const inventoryCharacter = await E(publicFacet).getCharacterKey(characterName); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];

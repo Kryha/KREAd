@@ -14,6 +14,7 @@ export const ItemSell = () => {
   const idString = String(id);
   const [showToast, setShowToast] = useState(false);
   const [data, isLoading] = useMyItem(idString);
+  console.log(data);
   const [isError, setIsError] = useState(false);
   const sellItem = useSellItem(idString);
   const navigate = useNavigate();

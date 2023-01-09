@@ -9,7 +9,7 @@ import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../serv
 import { connect } from "../service/lib/connect";
 import { apiRecv } from "../service/api/receive";
 import { processOffers, processPurses } from "../service/purses/process";
-import { useCharacterStateDispatch } from "./characters";
+import { useCharacterContext, useCharacterState, useCharacterStateDispatch } from "./characters";
 import { useItemStateDispatch } from "./items";
 
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
@@ -83,15 +83,6 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_OFFERS":
       return { ...state, offers: action.payload };
 
-    case "SET_CHARACTER_PURSES":
-      return { ...state, purses: { ...state.purses, character: action.payload } };
-
-    case "SET_ITEM_PURSES":
-      return { ...state, purses: { ...state.purses, item: action.payload } };
-
-    case "SET_TOKEN_PURSES":
-      return { ...state, purses: { ...state.purses, token: action.payload } };
-
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
 
@@ -117,7 +108,7 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
-  const characterDispatch = useCharacterStateDispatch();
+  const [characterState, characterDispatch] = useCharacterContext();
   const itemDispatch = useItemStateDispatch();
   const walletPRef = useRef(undefined);
 
@@ -142,9 +133,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     const onConnect = async () => {
       // Set up wallet through socket
       console.info("Connecting to wallet...");
-
-      const rawApiSend = await connect("/api/nft-maker", apiRecv, { characterDispatch });
-      dispatch({ type: "SET_APISEND", payload: rawApiSend });
 
       const socket = getActiveSocket();
 
@@ -172,23 +160,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
       dispatch({ type: "SET_NOTIFIERS", payload: { shop: { characters: characterShopNotifier, items: undefined} } });
-
-      async function watchPurses() {
-        const pn = E(walletP).getPursesNotifier();
-        // TODO: check iterateNotifier race condition on first run (when purses are not yet created in the wallet)
-        for await (const purses of iterateNotifier(pn)) {
-          console.count("🧐 CHECKING PURSES");
-          processPurses(purses, kreadFacet, characterDispatch, itemDispatch, dispatch, {
-            money: MONEY_BRAND_BOARD_ID,
-            character: CHARACTER_BRAND_BOARD_ID,
-            item: ITEM_BRAND_BOARD_ID,
-            token: TOKEN_BRAND_BOARD_ID,
-          });
-        }
-      }
-      watchPurses().catch((err) => {
-        console.error("got watchPurses err", err);
-      });
 
       async function watchOffers() {
         const on = E(walletP).getOffersNotifier();

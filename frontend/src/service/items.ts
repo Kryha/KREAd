@@ -10,6 +10,8 @@ import { useSelectedCharacter } from "./character";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
 import { useItemMarketState } from "../context/item-shop";
+import { useUserState } from "../context/character";
+import { useWalletState } from "../context/wallet";
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   const [{ all }, isLoading] = useMyItems();
@@ -54,7 +56,7 @@ export const useMyItemsForSale = () => {
 };
 
 export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean] => {
-  const [{ owned, equipped, fetched }] = useItemContext();
+  const { items: owned, equippedItems: equipped, fetched } = useUserState();
   const itemsForSale = useMyItemsForSale();
 
   const all = useMemo(
@@ -183,9 +185,9 @@ export const useEquipItem = () => {
 
 export const useUnequipItem = () => {
   const [service] = useAgoricContext();
-  const [{ equipped }] = useMyItems();
+  const { equippedItems: equipped } = useUserState();
   const [character] = useSelectedCharacter();
-
+  const purses = useWalletState();
   // TODO: check why tx offer gets rejected
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
@@ -194,6 +196,6 @@ export const useUnequipItem = () => {
 
     if (!item) return;
 
-    await unequipItem(service, item, character.nft.name);
+    await unequipItem(service, purses, item, character.nft.name);
   });
 };

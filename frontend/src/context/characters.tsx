@@ -4,10 +4,8 @@ import { CharacterDispatch, CharacterState, CharacterStateActions } from "../int
 
 const initialState: CharacterState = {
   selected: undefined,
-
   characters: [],
   owned: [],
-
   fetched: false,
 };
 
