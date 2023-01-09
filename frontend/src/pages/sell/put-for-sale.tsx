@@ -19,14 +19,14 @@ import {
   Tick,
 } from "./styles";
 
-interface PlaceInShopProps {
+interface PaymentProps {
   submit: (step: number) => void;
   sendOfferHandler: () => Promise<void>;
   isOfferAccepted: boolean;
   isLoading: boolean;
 }
 
-export const PlaceInShop: FC<PlaceInShopProps> = ({ submit, sendOfferHandler, isOfferAccepted, isLoading }) => {
+export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAccepted, isLoading }) => {
   const [sendOffer, setSendOffer] = useState(false);
   const [disable, setDisable] = useState(false);
   const sendOfferToWallet = async () => {
@@ -75,7 +75,7 @@ export const PlaceInShop: FC<PlaceInShopProps> = ({ submit, sendOfferHandler, is
       <ButtonContainer>
         <PrimaryButton onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          {isLoading ? <LoadingPage /> : <ArrowUp />}
+          {isLoading? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
     </ContentWrapper>
