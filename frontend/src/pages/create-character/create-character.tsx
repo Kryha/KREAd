@@ -52,14 +52,13 @@ export const CreateCharacter: FC = () => {
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
+      default:
       case 0:
         return <Information setData={setData} disabled={createCharacter.isLoading} />;
       case 1:
         return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
       case 2:
         return <Confirmation character={mintedCharacter?.nft} />;
-      default:
-        return <Information setData={setData} disabled={createCharacter.isLoading} />;
     }
   };
 

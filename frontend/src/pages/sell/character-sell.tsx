@@ -57,10 +57,10 @@ export const CharacterSell = () => {
       onSubmit={submitForm}
       isOfferAccepted={true}
       text={{
-        sell: text.store.buyCharacter,
-        success: text.store.characterSuccessfullyBought,
-        successLong: text.store.yourNewCharacterIs,
-        check: text.store.checkCharacter,
+        sell: text.store.sellCharacter,
+        success: text.store.characterSuccessfullyPlacedInShop,
+        successLong: text.store.characterSuccessfullyPlacedInShop,
+        check: text.store.viewInShop,
       }}
     >
       <FadeInOut show>
