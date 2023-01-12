@@ -40,7 +40,12 @@ export const TickContainer = styled.div`
   margin-bottom: ${margins.small};
 `;
 
-export const ContentWrapper = styled.div`
+interface ViewProps {
+  height: number;
+  width: number;
+}
+
+export const ContentWrapper = styled.div<ViewProps>`
   ${FormCard} {
     position: absolute;
     bottom: 40px;

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
 import { FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
-import { PAYMENT_STEP } from "../../constants";
+import { WALLET_INTERACTION_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
 import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -45,7 +45,7 @@ export const CreateCharacter: FC = () => {
 
   const setData = async (data: CharacterCreation): Promise<void> => {
     setCharacterData(data);
-    setCurrentStep(PAYMENT_STEP);
+    setCurrentStep(WALLET_INTERACTION_STEP);
   };
 
   // if (createCharacter.isError) return <ErrorView />;

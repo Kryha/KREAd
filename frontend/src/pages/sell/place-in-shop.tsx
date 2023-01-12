@@ -4,6 +4,7 @@ import { text } from "../../assets";
 import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, MINTING_COST, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
+import { useViewport } from "../../hooks";
 import {
   ArrowUp,
   GeneralInfo,
@@ -18,27 +19,32 @@ import {
   StepText,
   Tick,
 } from "./styles";
+import { SellStep } from "./types";
 
-interface PaymentProps {
-  submit: (step: number) => void;
-  sendOfferHandler: () => Promise<void>;
+interface PlaceInShopProps {
+  submit: (step: SellStep) => void;
+  price: number;
+  sendOfferHandler: (price: number) => Promise<void>;
   isOfferAccepted: boolean;
   isLoading: boolean;
 }
 
-export const PutForSale: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAccepted, isLoading }) => {
+export const PlaceInShop: FC<PlaceInShopProps> = ({ submit, price, sendOfferHandler, isOfferAccepted, isLoading }) => {
+  price = 2;
+  const { width, height } = useViewport();
   const [sendOffer, setSendOffer] = useState(false);
   const [disable, setDisable] = useState(false);
+
   const sendOfferToWallet = async () => {
     setDisable(true);
     console.info("SENDING OFFER TO WALLET");
-    await sendOfferHandler();
+    await sendOfferHandler(price);
     setSendOffer(true);
   };
 
   return (
-    <ContentWrapper>
-      <FormText>{text.mint.theCostsOfMinting}</FormText>
+    <ContentWrapper width={width} height={height}>
+      <FormText>{text.store.sellDescription}</FormText>
       <StepContainer>
         <GeneralInfo active={sendOffer}>
           <PricingContainer>
@@ -46,7 +52,7 @@ export const PutForSale: FC<PaymentProps> = ({ submit, sendOfferHandler, isOffer
             <StepText>{text.mint.sendOfferToWallet}</StepText>
             {!sendOffer && (
               <>
-                <PriceInIst price={MINTING_COST} />
+                <PriceInIst price={price} />
                 <PrimaryButton onClick={sendOfferToWallet} disabled={disable}>
                   <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
                 </PrimaryButton>

@@ -178,12 +178,11 @@ export const useSellCharacter = (characterId: string) => {
   const [isLoading, setIsLoading] = useState(false);
   const callback = useCallback(
     async (price: number) => {
-      const found = characters.find((character) => character.nft.id === characterId);
-      if (!found) return;
-
-      const backendCharacter = mediate.characters.toBack([found])[0];
+      const character = characters.find((character) => character.nft.id === characterId);
+      if (!character) return;
 
       setIsLoading(true);
+      const backendCharacter = mediate.characters.toBack([character])[0];
 
       return await sellCharacter(service, backendCharacter.nft, BigInt(price));
     },

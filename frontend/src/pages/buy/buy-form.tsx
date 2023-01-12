@@ -68,7 +68,6 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
           {isLoading ? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
-      <h1>test</h1>
     </ContentWrapper>
   );
 };

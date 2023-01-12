@@ -1,9 +1,10 @@
 import { FC } from "react";
 
 import { text } from "../../assets";
-import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton } from "../../components";
-import { CONFIRMATION_STEP } from "../../constants";
+import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
+import { CONFIRMATION_STEP, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
+import { useViewport } from "../../hooks";
 import {
   ArrowUp,
   ButtonContainer,
@@ -11,6 +12,7 @@ import {
   GeneralInfo,
   Line,
   NumberContainer,
+  PreviousButtonContainer,
   PricingContainer,
   Step,
   StepContainer,
@@ -30,12 +32,16 @@ interface SellFormProps {
 }
 
 export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
+  const { width, height } = useViewport();
+
   const isOnFirstStep = !isLoading;
   const isOnSecondStep = isLoading && !isOfferAccepted;
 
+  console.log({ isOnFirstStep, isOnSecondStep });
+
   return (
-    <ContentWrapper>
-      <FormText>{text.mint.theCostsOfMinting}</FormText>
+    <ContentWrapper width={width} height={height}>
+      <FormText>{text.store.sellDescription}</FormText>
       <StepContainer>
         <GeneralInfo active={!isOnFirstStep}>
           <PricingContainer>
@@ -51,7 +57,7 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSub
         </GeneralInfo>
         <Line />
         <Step active={!isOnSecondStep}>
-          <NumberContainer active={!isOnSecondStep}>
+          <NumberContainer active={isOnSecondStep}>
             {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
@@ -62,13 +68,19 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSub
           )}
         </Step>
       </StepContainer>
+      {!isOnSecondStep && (
+        <PreviousButtonContainer onClick={() => changeStep(INFORMATION_STEP)}>
+          <SecondaryButton>
+            <ButtonText>{text.mint.previous}</ButtonText>
+          </SecondaryButton>
+        </PreviousButtonContainer>
+      )}
       <ButtonContainer>
         <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
           {isLoading ? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
-      <h1>test</h1>
     </ContentWrapper>
   );
 };

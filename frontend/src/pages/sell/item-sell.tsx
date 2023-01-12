@@ -7,6 +7,7 @@ import { routes } from "../../navigation";
 import { useMyItem, useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { ToastGoToWallet } from "../../components/toast-go-to-wallet";
+import { SellStep } from "./types";
 
 export const ItemSell = () => {
   const { id } = useParams<"id">();
@@ -17,6 +18,20 @@ export const ItemSell = () => {
   const [isError, setIsError] = useState(false);
   const sellItem = useSellItem(idString);
   const navigate = useNavigate();
+
+  const [price, setPrice] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<SellStep>(0);
+
+  const sendOfferHandler = async () => {
+    console.log("sendOfferHandler", price);
+    const res = await sellItem.callback(price);
+    if (res) {
+      console.info("Sell offer sent, redirecting to shop");
+    } else {
+      console.warn("There was a problem sending the sell offer to the wallet. Please try again later.");
+      setIsError(true);
+    }
+  };
 
   const submitForm = async (price: number) => {
     const res = await sellItem.callback(price);
@@ -49,22 +64,28 @@ export const ItemSell = () => {
   if (!data) return <ErrorView />;
 
   return (
-    <Sell
-      data={{ ...data, price: Number(10) }}
-      isLoading={sellItem.isLoading}
-      onSubmit={submitForm}
-      isOfferAccepted={true}
-      text={{
-        sell: text.store.buyCharacter,
-        success: text.store.characterSuccessfullyBought,
-        successLong: text.store.yourNewCharacterIs,
-        check: text.store.checkCharacter,
-      }}
-    >
-      <FadeInOut show>
-        <ItemDetailSection item={data} />
-      </FadeInOut>
-      <ToastGoToWallet showToast={showToast} closeAndRedirect={closeAndRedirect} />
-    </Sell>
+    <h1>hi</h1>
+    // <Sell
+    //   data={{ ...data, price: Number(10) }}
+    //   currentStep={currentStep}
+    //   setCurrentStep={setCurrentStep}
+    //   price={price}
+    //   setPrice={setPrice}
+    //   sendOfferHandler={sendOfferHandler}
+    //   isLoading={sellItem.isLoading}
+    //   // onSubmit={submitForm}
+    //   isOfferAccepted={true}
+    //   text={{
+    //     sell: text.store.sellCharacter,
+    //     success: text.store.characterSuccessfullyPlacedInShop,
+    //     successLong: text.store.characterSuccessfullyPlacedInShop,
+    //     check: text.store.viewInShop,
+    //   }}
+    // >
+    //   <FadeInOut show>
+    //     <ItemDetailSection item={data} />
+    //   </FadeInOut>
+    //   <ToastGoToWallet showToast={showToast} closeAndRedirect={closeAndRedirect} />
+    // </Sell>
   );
 };

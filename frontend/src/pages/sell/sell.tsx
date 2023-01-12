@@ -38,29 +38,55 @@ import { SellText, SellData, SellStep } from "./types";
 import { SellForm } from "./sell-form";
 import { Confirmation } from "./confirmation";
 import { PageContainer } from "../../components/page-container";
-import { PutForSale } from "./put-for-sale";
+import { PlaceInShop } from "./place-in-shop";
 import { CharacterInformation } from "./character-information";
+import { CONFIRMATION_STEP, WALLET_INTERACTION_STEP } from "../../constants";
+import { CharacterEquip } from "../../interfaces";
 
 interface Props {
   children: ReactNode;
   data: SellData;
+  setData: (data: SellData) => void;
   text: SellText;
+  // currentStep: SellStep;
+  // price: number;
 
-  onSubmit: (price: number) => void;
+  sendOfferHandler: (data: SellData) => Promise<void>;
+  // setCurrentStep: (step: SellStep) => void;
+  // onSubmit: (price: number) => void;
+  // setPrice: (price: number) => void;
 
   isLoading: boolean;
   isOfferAccepted: boolean;
 }
 
-export const Sell: FC<Props> = ({ children, data, text: pText, onSubmit, isLoading, isOfferAccepted }) => {
+export const Sell: FC<Props> = ({
+  children,
+  data,
+  setData,
+  text: pText,
+  // currentStep,
+  // setCurrentStep,
+  sendOfferHandler,
+  // price,
+  // setPrice,
+  // onSubmit,
+  isLoading,
+  isOfferAccepted,
+}) => {
   const { width, height } = useViewport();
+  // const [price, setPrice] = useState<SellData>({ price: 0 });
   const [currentStep, setCurrentStep] = useState<SellStep>(0);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid, dirtyFields },
-  } = useForm<{ price: number }>({ mode: "onChange", reValidateMode: "onChange" });
+  const setInformationData = async (price: Pick<SellData, "price">) => {
+    setData((prevData: SellData) => ({ ...prevData, price }));
+    // setCurrentStep(WALLET_INTERACTION_STEP);
+    setCurrentStep(CONFIRMATION_STEP);
+  };
+
+  // const changeStep = async (step: SellStep): Promise<void> => {
+  //   setCurrentStep(step);
+  // };
 
   if (!data) return <ErrorView />;
 
@@ -68,26 +94,44 @@ export const Sell: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadi
     switch (currentStep) {
       default:
       case 0:
-        // return <h1>Information</h1>;
-        return <CharacterInformation disabled={isLoading} />;
+        return <CharacterInformation disabled={isLoading} setData={setInformationData} />;
       case 1:
-        return <h1>PutForSale</h1>;
-      // return <PutForSale sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
+        // return <h1>Place In Shop</h1>;
+        // return (
+        //   <PlaceInShop
+        //     sendOfferHandler={sendOfferHandler}
+        //     submit={changeStep}
+        //     price={price}
+        //     isOfferAccepted={isOfferAccepted}
+        //     isLoading={isLoading}
+        //   />
+        // );
+        return (
+          <SellForm
+            onSubmit={() => sendOfferHandler(price)}
+            data={price}
+            changeStep={setCurrentStep}
+            isLoading={isLoading}
+            isOfferAccepted={isOfferAccepted}
+          />
+        );
       case 2:
-        return <h1>Confirmation</h1>;
-      // return <Confirmation character={mintedCharacter?.nft} />;
+        // return <h1>Confirmation</h1>;
+        return <Confirmation data={data} text={pText} />;
     }
   };
 
   return (
-    <ContentWrapper>
-      <PageContainer sidebarContent={children}>
+    <PageContainer
+      sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} title={pText.sell} link={routes.shop} />
+          <FormHeader currentStep={currentStep} title={pText.sell} link={routes.character} />
           {perStepDisplay()}
         </FormCard>
-      </PageContainer>
-    </ContentWrapper>
+      }
+    >
+      <DetailContainer>{children}</DetailContainer>
+    </PageContainer>
   );
 };
 
@@ -96,7 +140,6 @@ export const Sell: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadi
 //       <FormCard height={height} width={width}>
 //         <FormHeaderClose title={pText.sell} link={routes.inventory} />
 //         {/* <CardContainer>
-//           <h1>test</h1>
 //           <MenuItem data={data} />
 //         </CardContainer> */}
 //         <form onSubmit={handleSubmit((data) => onSubmit(data.price))}>
