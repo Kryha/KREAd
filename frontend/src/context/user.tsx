@@ -1,5 +1,5 @@
 import { E } from "@endo/eventual-send";
-import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import { useAgoricState } from "./agoric";
 import { useWalletState } from "./wallet";
 import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item } from "../interfaces";
@@ -14,6 +14,19 @@ interface UserContext {
   fetched: boolean,
 }
 
+interface SetSelected {
+  type: "SET_SELECTED";
+  payload: ExtendedCharacter;
+}
+interface SetState {
+  type: "SET_STATE",
+  payload: Partial<UserContext>
+}
+interface Reset {
+  type: "RESET",
+}
+type UserStateActions = SetSelected | SetState | Reset;
+
 const initialState: UserContext = {
   characters: [],
   selected: undefined,
@@ -22,12 +35,29 @@ const initialState: UserContext = {
   fetched: false,
 };
 
-const Context = createContext<UserContext | undefined>(undefined);
-
+export type UserDispatch = React.Dispatch<UserStateActions>;
 type ProviderProps = Omit<React.ProviderProps<UserContext>, "value">;
+const Context = createContext<UserContext | undefined>(undefined);
+const DispatchContext = createContext<UserDispatch | undefined>(undefined);
+
+const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
+  switch (action.type) {
+    case "SET_STATE":
+      return { ...state, ...action.payload };
+
+    case "SET_SELECTED":
+      return { ...state, selected: action.payload };
+
+    case "RESET":
+      return initialState;
+
+    default:
+      throw new Error("Only defined action types can be handled;");
+  }
+};
 
 export const UserContextProvider = (props: ProviderProps): React.ReactElement => {
-  const [userState, userStateDispatch] = useState<UserContext>(initialState);
+  const [userState, userStateDispatch] = useReducer(Reducer, initialState);
   const wallet = useWalletState();
   const agoric = useAgoricState();
 
@@ -44,10 +74,8 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   }), [itemWallet]);
 
   useEffect(() => {
-    console.count("🛍 CHARACTER CONTEXT USEEFFECT");
-
     const processPurseChanges = async () => {
-      console.info("Processing new characters");
+      console.count("👜 PROCESSING PURSE CHANGE 👜");
       const equippedCharacterItems: Item[] = [];
       // Map characters to the corresponding inventory in the contract
       const extendedCharacters: ExtendedCharacterBackend[] = await Promise.all(
@@ -74,22 +102,29 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
           };
         })
       );
-
       // Load owned Items from wallet and character inventories
-      const ownedItems = itemsInWallet.flatMap((purse) => purse.value);
-      const ownedItemsFrontend = mediate.items.toFront(ownedItems);
+      const ownedItemsFrontend = mediate.items.toFront(itemsInWallet);
 
       if (extendedCharacters.length) {
         const frontendCharacters = mediate.characters.toFront(extendedCharacters);
         const allEquipped = frontendCharacters.flatMap((character) => Object.values(character.equippedItems));
-        userStateDispatch(prevState => ({
-          ...prevState,
-          owned: frontendCharacters,
-          selected: frontendCharacters[0],
-          equippedItems: allEquipped,
-          items: ownedItemsFrontend,
-          fetched: true,
-        }));
+        userStateDispatch({
+          type: "SET_STATE",
+          payload: {
+            characters: frontendCharacters,
+            selected: frontendCharacters[0],
+            equippedItems: allEquipped,
+            items: ownedItemsFrontend,
+            fetched: true,
+          }
+        });
+      } else {
+        userStateDispatch({
+          type: "SET_STATE",
+          payload: {
+            fetched: true,
+          }
+        });
       }
     };
         
@@ -100,13 +135,13 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       });
     }
     return () => {
-      userStateDispatch(initialState);
+      userStateDispatch({type: "RESET"});
     };
   }, [kreadPublicFacet, charactersInWallet, itemsInWallet]);
   
   return (
     <Context.Provider value={userState}>
-      {props.children}
+      <DispatchContext.Provider value={userStateDispatch}>{props.children}</DispatchContext.Provider>
     </Context.Provider>
   );
 };
@@ -117,4 +152,13 @@ export const useUserState = (): UserContext => {
     throw new Error("UserState can only be called inside UserStateProvider.");
   }
   return state;
+};
+
+
+export const useUserStateDispatch = (): React.Dispatch<UserStateActions> => {
+  const dispatch = useContext(DispatchContext);
+  if (dispatch === undefined) {
+    throw new Error("useUserStateDispatch can only be called inside a ServiceProvider.");
+  }
+  return dispatch;
 };

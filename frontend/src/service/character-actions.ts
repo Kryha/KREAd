@@ -5,6 +5,7 @@ import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
 import { mediate } from "../util";
 import { CharacterBackend, ExtendedCharacterBackend, Item } from "../interfaces";
 import { formatIdAsNumber, itemCategories } from "./util";
+import { WalletContext } from "../context/wallet";
 
 export const formOfferForCharacter = (purses: Purses, character: any) => ({
   want: {
@@ -91,19 +92,18 @@ export const mintNfts = async (service: AgoricState, purses: any, name: string) 
   return E(walletP).addOffer(offerConfig);
 };
 
-export const sellCharacter = async (service: AgoricState, character: any, price: bigint): Promise<boolean> => {
+export const sellCharacter = async (service: AgoricState, wallet: WalletContext, character: any, price: bigint): Promise<boolean> => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
     },
     agoric: { walletP },
-    purses,
   } = service;
 
   if (!publicFacet) return false;
-  const characterPurse = purses.character[purses.character.length - 1];
-  const tokenPurse = purses.token[purses.token.length - 1];
-  const moneyPurse = purses.money[purses.money.length - 1];
+  const characterPurse = wallet.character[wallet.character.length - 1];
+  const tokenPurse = wallet.token[wallet.token.length - 1];
+  const moneyPurse = wallet.money[wallet.money.length - 1];
 
   if (!characterPurse || !tokenPurse || !moneyPurse) return false;
 
@@ -133,19 +133,18 @@ export const sellCharacter = async (service: AgoricState, character: any, price:
   return true;
 };
 
-export const buyCharacter = async (service: AgoricState, character: CharacterBackend, price: bigint) => {
+export const buyCharacter = async (service: AgoricState, wallet: WalletContext, character: CharacterBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
     },
     agoric: { walletP },
-    purses,
   } = service;
 
   if (!publicFacet) return;
-  const characterPurse = purses.character[purses.character.length - 1];
-  const tokenPurse = purses.token[purses.token.length - 1];
-  const moneyPurse = purses.money[purses.money.length - 1];
+  const characterPurse = wallet.character[wallet.character.length - 1];
+  const tokenPurse = wallet.token[wallet.token.length - 1];
+  const moneyPurse = wallet.money[wallet.money.length - 1];
   
   if (!characterPurse || !moneyPurse || !tokenPurse) return;
 

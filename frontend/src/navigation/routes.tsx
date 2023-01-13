@@ -8,21 +8,15 @@ import { MainContainer, ErrorFallback, LoadingPage, ErrorView } from "../compone
 import { ItemPage } from "../pages/item";
 import { TestServiceUI } from "../service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
-import { CharacterStateProvider } from "../context/characters";
-import { ItemStateProvider } from "../context/items";
-import { UseWithMarketContext } from "../context/wrapper";
+import { UseWithContext } from "../context/wrapper";
 
 export const InternalAppWrapper = () => {
   return (
-    <CharacterStateProvider>
-      <ItemStateProvider>
-        <AgoricStateProvider>
-          <UseWithMarketContext>
-            <InternalAppRoutes />
-          </UseWithMarketContext>
-        </AgoricStateProvider>
-      </ItemStateProvider>
-    </CharacterStateProvider>
+    <AgoricStateProvider>
+      <UseWithContext>
+        <InternalAppRoutes />
+      </UseWithContext>
+    </AgoricStateProvider>
   );
 };
 

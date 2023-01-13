@@ -108,9 +108,26 @@ export const getCharacterInventoryNotifier = (characterName, state) => {
     ({ character }) => character.name === characterName,
   );
   assert(characterRecord, X`${errors.character404}`);
-  assert(characterRecord.inventory, X`${errors.inventory404}`);
+  assert(characterRecord.notifier, X`${errors.notifier404}`);
 
   return characterRecord.notifier;
+};
+
+/**
+ * Gets inventory updater given character name
+ *
+ * @param {string} characterName
+ * @param {State} state
+ * @returns {Notifier}
+ */
+export const getCharacterInventoryUpdater = (characterName, state) => {
+  const characterRecord = state.characters.find(
+    ({ character }) => character.name === characterName,
+  );
+  assert(characterRecord, X`${errors.character404}`);
+  assert(characterRecord.updater, X`${errors.notifier404}`);
+
+  return characterRecord.updater;
 };
 
 /**

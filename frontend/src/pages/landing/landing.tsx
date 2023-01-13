@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { text } from "../../assets";
 import { color } from "../../design";
 import {
@@ -40,7 +39,6 @@ export const Landing: FC = () => {
     setShowToast(true);
   };
 
-  console.log(isLoading);
   return (
     <BaseRoute
       isLanding

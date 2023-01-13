@@ -14,9 +14,9 @@ import { CharacterDetailSection } from "../../containers/detail-section/characte
 import { EmptyCard } from "../empty-card";
 import { FadeInOut } from "../fade-in-out";
 import { useMyCharacters, useSelectedCharacter } from "../../service";
-import { useCharacterStateDispatch } from "../../context/characters";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
+import { useUserStateDispatch } from "../../context/user";
 
 interface Props {
   id: string;
@@ -28,7 +28,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const [characters] = useMyCharacters();
   const [selectedCharacter] = useSelectedCharacter();
-  const dispatch = useCharacterStateDispatch();
+  const userStateDispatch = useUserStateDispatch();
 
   const [character, setCharacter] = useState<ExtendedCharacter>();
   const [close, setClose] = useState(false);
@@ -50,12 +50,12 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const select = (character: ExtendedCharacter) => {
     if (!character) return;
-    dispatch({ type: "SET_SELECTED_CHARACTER", payload: character });
+    userStateDispatch({ type: "SET_SELECTED", payload: character });
   };
 
   const selectFromState = () => {
     if (!character) return;
-    dispatch({ type: "SET_SELECTED_CHARACTER", payload: character });
+    userStateDispatch({ type: "SET_SELECTED", payload: character });
   };
 
   const sell = () => {

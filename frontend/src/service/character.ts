@@ -8,7 +8,6 @@ import {
   ExtendedCharacter,
   ExtendedCharacterBackend,
 } from "../interfaces";
-import { useCharacterContext } from "../context/characters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
 import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
@@ -16,13 +15,11 @@ import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
-import { useUserState } from "../context/character";
+import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
-  // const [{ owned: owned_, selected, fetched: fetched_ }, dispatch] = useCharacterContext();
   const { selected, fetched } = useUserState();
-  console.log(fetched, selected);
   // useEffect(() => {
   //   if (!selected) {
   //     owned[0] && dispatch({ type: "SET_SELECTED_CHARACTER", payload: owned[0] });
@@ -94,10 +91,8 @@ export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolea
 };
 
 export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
-  // const [{ owned, selected, fetched }] = useCharacterContext();
   const { characters, selected, fetched } = useUserState();
   const charactersForSale = useMyCharactersForSale();
-
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
     return characters.map((character) => {
       if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true, isForSale: false };
@@ -123,8 +118,9 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
     return filterCharacters(charactersWithForSale, filters);
   }, [charactersWithForSale, filters]);
 
-  // FIXME: backto !fetched
-  return [filtered, fetched];
+  const isLoading = !fetched;
+  
+  return [filtered, isLoading];
 };
 
 export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefined, boolean] => {
@@ -179,6 +175,7 @@ export const useEquipCharacter = () => {
 // TODO: test after merge with equip/unequip fix
 export const useSellCharacter = (characterId: string) => {
   const [service] = useAgoricContext();
+  const wallet = useWalletState();
   const [characters] = useMyCharacters();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -186,14 +183,15 @@ export const useSellCharacter = (characterId: string) => {
     async (price: number) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
-
+      
       const backendCharacter = mediate.characters.toBack([found])[0];
-
+      
       setIsLoading(true);
+      console.log(backendCharacter);
 
-      return await sellCharacter(service, backendCharacter.nft, BigInt(price));
+      return await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
     },
-    [characterId, characters, service]
+    [characterId, characters, wallet, service]
   );
 
   return { callback, isLoading };
@@ -201,6 +199,7 @@ export const useSellCharacter = (characterId: string) => {
 
 export const useBuyCharacter = (characterId: string) => {
   const [service] = useAgoricContext();
+  const wallet = useWalletState();
   const [characters] = useCharactersMarket();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -215,8 +214,8 @@ export const useBuyCharacter = (characterId: string) => {
 
     const mediated = mediate.charactersMarket.toBack([found])[0];
     setIsLoading(true);
-    await buyCharacter(service, mediated.character, mediated.sell.price);
-  }, [characterId, characters, service]);
+    await buyCharacter(service, wallet, mediated.character, mediated.sell.price);
+  }, [characterId, characters, wallet, service]);
 
   return { callback, isLoading };
 };

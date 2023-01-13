@@ -45,7 +45,7 @@ export const ItemSell = () => {
 
   // TODO: this prevents the page from trying to load an item that is no longer available
   // we'll be refactoring this to listen for the offer accepted action
-  if (!data) closeAndRedirect();
+  // if (!data) closeAndRedirect();
 
   if (!data) return <ErrorView />;
 

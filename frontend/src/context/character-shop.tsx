@@ -27,7 +27,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
 
   useEffect(() => {
-    console.count("🛍 UPDATING CHARACTER SHOP");
+    console.count("🛍 UPDATING CHARACTER SHOP 🛍");
     const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
       const extendedCharacter = await extendCharacters(kreadPublicFacet, [marketEntry.character]);
       const equippedItems = itemArrayToObject(extendedCharacter.equippedItems);
@@ -56,6 +56,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       watchNotifiers().catch((err) => {
         console.error("got watchNotifiers err", err);
       });
+      marketDispatch((prevState) => ({...prevState, fetched: true }));
     }
     return () => {
       marketDispatch(initialState);

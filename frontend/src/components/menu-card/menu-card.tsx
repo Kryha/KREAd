@@ -58,8 +58,9 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
     setShowToast(!showToast);
     equipItem.mutate({ itemId: id });
   };
-
+  
   const unequip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    console.log(id);
     event.stopPropagation();
     setShowToast(!showToast);
     unequipItem.mutate({ itemId: id });
@@ -160,7 +161,6 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
             title={text.general.goToYourWallet}
             info={text.general.yourActionIsPending}
             closeToast={() => setShowToast(false)}
-            isError
           />
         </NotificationWrapper>
       </FadeInOut>

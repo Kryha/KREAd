@@ -1,10 +1,10 @@
 import { FunctionComponent, PropsWithChildren } from "react";
-import { UserContextProvider } from "./character";
+import { UserContextProvider } from "./user";
 import { CharacterMarketContextProvider } from "./character-shop";
 import { ItemMarketContextProvider } from "./item-shop";
 import { WalletContextProvider } from "./wallet";
 
-export const UseWithMarketContext: FunctionComponent<PropsWithChildren> = ({ children }) =>
+export const UseWithContext: FunctionComponent<PropsWithChildren> = ({ children }) =>
   <WalletContextProvider>
     <UserContextProvider>
       <CharacterMarketContextProvider>

@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-
 import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
@@ -7,7 +6,6 @@ import { ItemDetailSectionSegmentStats } from "./detail-section-segment-stats";
 import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
 import { DetailSectionWrap } from "./styles";
-
 import { text, UnnamedCreator } from "../../assets";
 import { ActivityEvent, Item } from "../../interfaces";
 import { DetailSectionActions } from "./types";

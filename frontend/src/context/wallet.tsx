@@ -35,14 +35,12 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
   const walletP = agoric.agoric.walletP;
 
   useEffect(() => {
-    console.count("🛍 WALLET USEEFFECT");
-
     const watchPurses = async () => {
       console.info("✅ LISTENING FOR PURSE CHANGES");
       const pn = E(walletP).getPursesNotifier();
 
       for await (const purses of iterateNotifier(pn)) {
-        console.count("Processing Purses");
+        console.count("💾 LOADING PURSE CHANGE 💾");
 
         // Load Purses
         const newMoneyPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Money);

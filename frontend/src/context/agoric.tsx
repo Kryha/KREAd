@@ -6,12 +6,6 @@ import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifi
 
 import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
-import { connect } from "../service/lib/connect";
-import { apiRecv } from "../service/api/receive";
-import { processOffers, processPurses } from "../service/purses/process";
-import { useCharacterContext, useCharacterState, useCharacterStateDispatch } from "./characters";
-import { useItemStateDispatch } from "./items";
-
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 
 const {
@@ -20,7 +14,6 @@ const {
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
   issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, Token: TOKEN_ISSUER_BOARD_ID },
-  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID, Token: TOKEN_BRAND_BOARD_ID },
 } = dappConstants;
 
 const initialState: AgoricState = {
@@ -28,12 +21,6 @@ const initialState: AgoricState = {
     walletConnected: false,
     dappApproved: false,
     showApproveDappModal: false,
-  },
-  purses: {
-    money: [],
-    character: [],
-    item: [],
-    token: [],
   },
   offers: [],
   notifiers: {
@@ -77,9 +64,6 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_WALLET_CONNECTED":
       return { ...state, status: { ...state.status, walletConnected: action.payload } };
 
-    case "SET_MONEY_PURSES":
-      return { ...state, purses: { ...state.purses, money: action.payload } };
-
     case "SET_OFFERS":
       return { ...state, offers: action.payload };
 
@@ -89,9 +73,6 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_APISEND":
       return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
     
-    case "SET_NOTIFIERS":
-      return { ...state, notifiers: { ...state.notifiers, ...action.payload } };
-
     case "SET_CHARACTER_CONTRACT":
       return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
 
@@ -108,9 +89,12 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
-  const [characterState, characterDispatch] = useCharacterContext();
-  const itemDispatch = useItemStateDispatch();
   const walletPRef = useRef(undefined);
+
+  const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
+    if (!offers.length) return;
+    agoricDispatch({ type: "SET_OFFERS", payload: offers });
+  };
 
   // TODO: optimize useEffect startup logic
   useEffect(() => {
@@ -155,18 +139,14 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const instanceNft = await E(board).getValue(INSTANCE_NFT_MAKER_BOARD_ID);
       const kreadFacet = await E(zoe).getPublicFacet(instanceNft);
       const invitationIssuer = E(zoe).getInvitationIssuer(kreadFacet);
-      const characterShopNotifier = E(kreadFacet).getCharacterShopNotifier();
 
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
-      dispatch({ type: "SET_NOTIFIERS", payload: { shop: { characters: characterShopNotifier, items: undefined} } });
 
       async function watchOffers() {
         const on = E(walletP).getOffersNotifier();
         for await (const offers of iterateNotifier(on)) {
           console.count("📡 CHECKING OFFERS");
-          const last3 = offers.slice(-3);
-          console.info(last3);
           processOffers(offers, dispatch);
         }
       }
@@ -177,6 +157,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       //TODO: Check if dapp is already approved before suggesting installation
       // if (state.purses.character.length===0) {
       // Suggest installation and brands to wallet
+      // if (!fetched) {
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
@@ -186,30 +167,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID),
       ]);        
       // }
-
-      // TODO: Fetch owned Characters from the wallet character purse
-      // This currently returns every Minted Character
-      // {name, character: Character, inventory: inventorySeat}
-      // Fetch Characters from Wallet
-      // const characterNFTs = await E(kreadFacet).getCharacters();
-      // const characterNFTs = await E()
-
-      // TODO: Loop through own characters and fetch corresponding item list from itemsRepo in the contract
-      // OR update getCharacters to enrich characters with the corresponding items before returning them?
-
-      // characterDispatch({ type: "SET_CHARACTERS", payload: characterNFTs.characters });
-
-      // TODO: creaate a "SET_CHARACTER_INVENTORIES" action
-      // set up am item or character state to hold the inventory seats (we'll need to get the values from the seats )
-
-      // Fetch Items from Chain
-      // TODO: Add getMyItems() instead of global getItems
-      // const itemNFTs = await E(kreadFacet).getItems();
-      // itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
-      // const seat1 = forsale[0];
-      // console.log(seat1.getProposal());
-      // const { want: { Character: wantedCharacter }} = seat1.getProposal();
       
+      console.count("🔧 LOADING AGORIC SERVICE 🔧");
 
       dispatch({ type: "SET_LOADING", payload: false });
 
@@ -231,7 +190,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       onMessage,
     });
     return deactivateWebSocket;
-  }, [characterDispatch, itemDispatch]);
+  }, []);
 
   return (
     <Context.Provider value={state}>

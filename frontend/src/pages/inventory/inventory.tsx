@@ -1,5 +1,4 @@
 import { FC, useMemo, useState } from "react";
-
 import { BaseRoute, SwitchSelector } from "../../components";
 import { text } from "../../assets/text";
 import { Page } from "../shop";

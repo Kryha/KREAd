@@ -7,7 +7,7 @@ import { NotificationWrapper } from "../../components/notification-detail/styles
 import { PageContainer } from "../../components/page-container";
 import { CharactersList } from "../../containers/characters-list";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useCharacterStateDispatch } from "../../context/characters";
+import { useUserStateDispatch } from "../../context/user";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
 import { EmptyDetail } from "./empty-item-inventory";
@@ -16,8 +16,7 @@ import { DetailWrapper } from "./styles";
 export const CharactersInventory: FC = () => {
   const navigate = useNavigate();
 
-  const dispatch = useCharacterStateDispatch();
-
+  const userStateDispatch = useUserStateDispatch();
   const [selectedId, setSelectedId] = useState<string>("");
   const [characters, isLoadingCharacters] = useMyCharacters();
   const [character] = useMyCharacter(selectedId);
@@ -37,7 +36,7 @@ export const CharactersInventory: FC = () => {
   const select = () => {
     if (!character) return;
     const { isEquipped: _, ...rest } = character;
-    dispatch({ type: "SET_SELECTED_CHARACTER", payload: rest });
+    userStateDispatch({ type: "SET_SELECTED", payload: rest });
   };
 
   const sell = () => {

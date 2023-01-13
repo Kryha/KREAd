@@ -32,7 +32,6 @@ export interface Purses {
 
 export interface AgoricState {
   status: Status;
-  purses: Purses;
   contracts: Contracts;
   agoric: AgoricService;
   notifiers: NotifiersState;
@@ -63,28 +62,8 @@ interface SetShowApproveDappModal {
   payload: boolean;
 }
 
-interface SetTokenPurses {
-  type: "SET_TOKEN_PURSES";
-  payload: any[];
-}
-
-interface SetMoneyPurses {
-  type: "SET_MONEY_PURSES";
-  payload: any[];
-}
-
 interface SetOffers {
   type: "SET_OFFERS";
-  payload: any[];
-}
-
-interface SetCharacterPurses {
-  type: "SET_CHARACTER_PURSES";
-  payload: any[];
-}
-
-interface SetItemPurses {
-  type: "SET_ITEM_PURSES";
   payload: any[];
 }
 
@@ -96,11 +75,6 @@ interface SetAgoric {
 interface SetCharacterContract {
   type: "SET_CHARACTER_CONTRACT";
   payload: Contract;
-}
-
-interface SetNotifiers {
-  type: "SET_NOTIFIERS";
-  payload: Partial<NotifiersState>;
 }
 
 interface SetApiSend {
@@ -126,13 +100,8 @@ export type AgoricStateActions =
   | SetDappApproved
   | SetWalletConnected
   | SetShowApproveDappModal
-  | SetTokenPurses
-  | SetCharacterPurses
-  | SetMoneyPurses
   | SetAgoric
   | SetCharacterContract
-  | SetItemPurses
-  | SetNotifiers
   | SetApiSend
   | SetLoading
   | SetOffers;

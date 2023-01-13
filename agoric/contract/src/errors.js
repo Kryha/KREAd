@@ -7,6 +7,7 @@ export const errors = {
   depositToFacetFailed: `Could not deposit nft into userFacet`,
   character404: `Character not found`,
   inventory404: `Character inventory not found`,
+  notifier404: `Character inventory notifier not found`,
   updateMarketError: `There was a problem updating the market`,
   privateState404: `Character private state not found`,
   noKeyInInventory: `Could not find character key in inventory`,

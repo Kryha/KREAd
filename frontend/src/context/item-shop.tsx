@@ -1,5 +1,5 @@
 import { E } from "@endo/eventual-send";
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import { useAgoricState } from "./agoric";
@@ -21,10 +21,10 @@ type ProviderProps = Omit<React.ProviderProps<ItemMarketContext>, "value">;
 export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElement => {
   const [marketState, marketDispatch] = useState(initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
+  const kreadPublicFacet = useMemo(() => agoric.contracts.characterBuilder.publicFacet, [agoric.contracts.characterBuilder]); 
   
   useEffect(() => {
-    console.count("🛍 UPDATING ITEM SHOP");
+    console.count("🛍 UPDATING ITEM SHOP 🛍");
     const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {
         id: BigInt(marketEntry.id),
@@ -48,9 +48,13 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
         marketDispatch((prevState) => ({...prevState, items, fetched: true }));
       }
     };
-    if(kreadPublicFacet) watchNotifiers().catch((err) => {
-      console.error("got watchNotifiers err", err);
-    });
+    if (kreadPublicFacet) {
+      watchNotifiers().catch((err) => {
+        console.error("got watchNotifiers err", err);
+      });
+      marketDispatch((prevState) => ({...prevState, fetched: true }));
+
+    }
     return () => {
       marketDispatch(initialState);
     };
