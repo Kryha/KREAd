@@ -14,9 +14,9 @@ export const CharacterSell = () => {
 
   const sellCharacter = useSellCharacter(idString);
   const [character] = useMyCharacter(idString);
-  const characterCopy = character;
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
+  const [characterCopy] = useState(character);
 
   useEffect(() => {
     if (!character) setIsPlacedInShop(true);
