@@ -157,7 +157,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       //TODO: Check if dapp is already approved before suggesting installation
       // if (state.purses.character.length===0) {
       // Suggest installation and brands to wallet
-      // if (!fetched) {
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
@@ -171,7 +170,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       console.count("🔧 LOADING AGORIC SERVICE 🔧");
 
       dispatch({ type: "SET_LOADING", payload: false });
-
     };
 
     const onDisconnect = () => {

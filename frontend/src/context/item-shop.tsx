@@ -21,10 +21,9 @@ type ProviderProps = Omit<React.ProviderProps<ItemMarketContext>, "value">;
 export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElement => {
   const [marketState, marketDispatch] = useState(initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = useMemo(() => agoric.contracts.characterBuilder.publicFacet, [agoric.contracts.characterBuilder]); 
+  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
   
   useEffect(() => {
-    console.count("🛍 UPDATING ITEM SHOP 🛍");
     const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {
         id: BigInt(marketEntry.id),
@@ -33,13 +32,13 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
           price: marketEntry.askingPrice.value
         }
       };
-
+      
       const parsedItem =  mediate.itemsMarket.toFront([item]);
-
+      
       return parsedItem[0];
     };
     const watchNotifiers = async () => {
-      console.count("Checking Item Notifier");
+      console.count("🛍 UPDATING ITEM SHOP 🛍");
       const notifier = E(kreadPublicFacet).getItemShopNotifier();
       for await (const itemsInMarket of iterateNotifier(
         notifier,
@@ -52,8 +51,8 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       watchNotifiers().catch((err) => {
         console.error("got watchNotifiers err", err);
       });
-      marketDispatch((prevState) => ({...prevState, fetched: true }));
-
+      marketDispatch((prevState) => ({ ...prevState, fetched: true }));
+      console.info("✅ LISTENING TO ITEM SHOP NOTIFIER");
     }
     return () => {
       marketDispatch(initialState);

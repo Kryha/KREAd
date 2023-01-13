@@ -1,5 +1,4 @@
 import { FC, useMemo, useState } from "react";
-
 import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import {
@@ -60,7 +59,6 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
   };
   
   const unequip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-    console.log(id);
     event.stopPropagation();
     setShowToast(!showToast);
     unequipItem.mutate({ itemId: id });
