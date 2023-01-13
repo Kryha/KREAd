@@ -57,7 +57,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItem, unequippedIte
     setShowToast(!showToast);
     equipItem.mutate({ itemId: id });
   };
-  
+
   const unequip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
     event.stopPropagation();
     setShowToast(!showToast);
