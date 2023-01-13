@@ -1,17 +1,12 @@
-import { FC, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { FC } from "react";
+import { useForm } from "react-hook-form";
 
 import { text } from "../../assets";
-import { ButtonText, FormText, Input, Label, LoadingPage, PrimaryButton } from "../../components";
+import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../components";
 import { ButtonInfo } from "../../components/button-info";
-import { MAX_CHARACTER_LENGTH } from "../../constants";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { CharacterCreation, CharacterInMarket } from "../../interfaces";
-import { useMyCharacter, useSellCharacter } from "../../service";
 import {
-  ArrowUp,
   ButtonContainer,
   ContentWrapper,
   ErrorContainer,
@@ -23,31 +18,24 @@ import {
   Warning,
 } from "./styles";
 import { SellData } from "./types";
-// import { SellData } from "./types";
 
 interface CharacterInformationProps {
   disabled: boolean;
-  setData: (price: Pick<SellData, "price">) => void;
+  setData: (price: number) => void;
 }
 
 export const CharacterInformation: FC<CharacterInformationProps> = ({ setData, disabled }) => {
   const { width, height } = useViewport();
-  const { id } = useParams<"id">();
-
-  const idString = String(id);
-  // const [isError, setIsError] = useState(false);
-  // const [data, isLoading] = useMyCharacter(idString);
-  // const sellCharacter = useSellCharacter(idString);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid, dirtyFields },
-  } = useForm<Pick<SellData, "price">>({ mode: "onChange", reValidateMode: "onChange" });
+  } = useForm<SellData>({ mode: "onChange", reValidateMode: "onChange" });
 
   return (
     <ContentWrapper width={width} height={height}>
-      <form onSubmit={handleSubmit((price) => setData(price))}>
+      <form onSubmit={handleSubmit((fields) => setData(fields.price))}>
         <FormFields>
           <InputContainer>
             <Label>{text.store.setPrice}</Label>

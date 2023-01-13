@@ -10,10 +10,11 @@ interface NavigationTabProps {
   currentStep: number;
   title: string;
   isBuyFlow?: boolean;
+  isSellFlow?: boolean;
   link: string;
 }
 
-export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFlow = false, link }) => {
+export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFlow = false, isSellFlow = false, link }) => {
   return (
     <>
       <FormHeaderClose title={title} link={link} />
@@ -26,7 +27,7 @@ export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFl
         <NavigationTab>
           <FormTab
             active={currentStep >= WALLET_INTERACTION_STEP}
-            title={text.mint.payment}
+            title={isSellFlow ? text.store.placeInShop : text.mint.payment}
             amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS}
           />
         </NavigationTab>

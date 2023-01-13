@@ -1,22 +1,22 @@
 // GENERATED FROM /Users/nickkoster/Kryha/kread/agoric/api/deploy.js
 export default {
-  "INSTANCE_NFT_MAKER_BOARD_ID": "board04542",
-  "INSTALLATION_BOARD_ID": "board03040",
-  "SELL_ASSETS_INSTALLATION_BOARD_ID": "board05141",
+  "INSTANCE_NFT_MAKER_BOARD_ID": "board04431",
+  "INSTALLATION_BOARD_ID": "board01029",
+  "SELL_ASSETS_INSTALLATION_BOARD_ID": "board00530",
   "INVITE_BRAND_BOARD_ID": "board0371",
   "INVITE_ISSUER_BOARD_ID": "board0371",
   "BRIDGE_URL": "agoric-lookup:https://local.agoric.com?append=/bridge",
   "brandBoardIds": {
-    "Character": "board00443",
-    "Item": "board06445",
+    "Character": "board05432",
+    "Item": "board01034",
     "Money": "board0425",
-    "Token": "board01547"
+    "Token": "board05736"
   },
   "issuerBoardIds": {
-    "Character": "board01744",
-    "Item": "board03446",
+    "Character": "board02733",
+    "Item": "board03935",
     "Money": "board03523",
-    "Token": "board00848"
+    "Token": "board02437"
   },
   "MONEY_DECIMAL_PLACES": 6,
   "API_URL": "http://127.0.0.1:8000",

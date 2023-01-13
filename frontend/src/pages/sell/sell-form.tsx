@@ -28,16 +28,14 @@ interface SellFormProps {
   onSubmit: () => void;
 
   isLoading: boolean;
-  isOfferAccepted: boolean;
+  isPlacedInShop: boolean;
 }
 
-export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
+export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSubmit, isPlacedInShop }) => {
   const { width, height } = useViewport();
 
   const isOnFirstStep = !isLoading;
-  const isOnSecondStep = isLoading && !isOfferAccepted;
-
-  console.log({ isOnFirstStep, isOnSecondStep });
+  const isOnSecondStep = isLoading && !isPlacedInShop;
 
   return (
     <ContentWrapper width={width} height={height}>
@@ -50,7 +48,7 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSub
             {isOnFirstStep && <PriceInIst price={data.price} />}
           </PricingContainer>
           {isOnFirstStep && (
-            <PrimaryButton onClick={() => onSubmit()}>
+            <PrimaryButton onClick={() => onSubmit()} disabled={data.price < 1}>
               <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
             </PrimaryButton>
           )}
@@ -58,7 +56,7 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSub
         <Line />
         <Step active={!isOnSecondStep}>
           <NumberContainer active={isOnSecondStep}>
-            {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
+            {isPlacedInShop ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
           {isOnSecondStep && (
@@ -76,7 +74,7 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, isLoading, onSub
         </PreviousButtonContainer>
       )}
       <ButtonContainer>
-        <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
+        <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isPlacedInShop}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
           {isLoading ? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>

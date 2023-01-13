@@ -17,10 +17,6 @@ export const Confirmation: FC<Props> = ({ data, text }) => {
   const { width, height } = useViewport();
   const navigate = useNavigate();
 
-  const onClickHandler = () => {
-    navigate(`${data.object === "character" ? routes.buyCharacter : routes.buyItem}/${data.id}`);
-  };
-
   return (
     <ContentWrapper width={width} height={height}>
       <TickContainer>
@@ -31,7 +27,7 @@ export const Confirmation: FC<Props> = ({ data, text }) => {
         <FormText>{text.successLong}</FormText>
       </InfoContainer>
       <ButtonContainer>
-        <PrimaryButton onClick={onClickHandler}>
+        <PrimaryButton onClick={() => navigate(routes.inventory)}>
           <ButtonText customColor={color.white}>{text.check}</ButtonText>
           <ArrowUp />
         </PrimaryButton>

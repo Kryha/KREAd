@@ -6,8 +6,6 @@ export interface SellText {
 }
 
 export interface SellData {
-  id: string;
-  object: "character" | "item";
   price: number;
 }
 

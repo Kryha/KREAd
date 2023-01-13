@@ -46,20 +46,18 @@ interface ViewProps {
 }
 
 export const ContentWrapper = styled.div<ViewProps>`
+  margin-left: 40px;
   ${FormCard} {
-    position: absolute;
-    bottom: 40px;
-    right: 40px;
+    width: 40%;
+    min-width: 40%;
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
     transform: translate3d(0, 1rem, 0);
   }
   ${DetailSectionWrap} {
-    margin-top: 40px;
     position: absolute;
     bottom: 40px;
-    left: 40px;
-    height: 80vh;
+    right: 40px;
   }
   ${DetailSectionHeaderNavigationWrap} {
     display: none;

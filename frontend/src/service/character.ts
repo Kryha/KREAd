@@ -184,7 +184,11 @@ export const useSellCharacter = (characterId: string) => {
       setIsLoading(true);
       const backendCharacter = mediate.characters.toBack([character])[0];
 
-      return await sellCharacter(service, backendCharacter.nft, BigInt(price));
+      await sellCharacter(service, backendCharacter.nft, BigInt(price));
+
+      setIsLoading(false);
+
+      return;
     },
     [characterId, characters, service]
   );
