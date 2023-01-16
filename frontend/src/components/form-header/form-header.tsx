@@ -1,42 +1,38 @@
 import { FC } from "react";
 
 import { text } from "../../assets";
-import { BUY_FLOW_STEPS, CONFIRMATION_STEP, WALLET_INTERACTION_STEP, SELL_FLOW_STEPS } from "../../constants";
+import { CONFIRMATION_STEP, WALLET_INTERACTION_STEP } from "../../constants";
 import { FormHeaderClose } from "../form-header-close";
 import { FormTab } from "../form-tab";
 import { FormNavigation, NavigationTab } from "./styles";
 
 interface NavigationTabProps {
   currentStep: number;
+  stepAmount: number;
   title: string;
-  isBuyFlow?: boolean;
-  isSellFlow?: boolean;
+  isPaymentFlow?: boolean;
   link: string;
 }
 
-export const FormHeader: FC<NavigationTabProps> = ({ currentStep, title, isBuyFlow = false, isSellFlow = false, link }) => {
+export const FormHeader: FC<NavigationTabProps> = ({ currentStep, stepAmount, title, isPaymentFlow = false, link }) => {
   return (
     <>
       <FormHeaderClose title={title} link={link} />
       <FormNavigation>
-        {!isBuyFlow && (
+        {stepAmount == 3 && (
           <NavigationTab>
-            <FormTab active title={text.mint.information} amount={BUY_FLOW_STEPS} />
+            <FormTab active title={text.mint.information} amount={stepAmount} />
           </NavigationTab>
         )}
         <NavigationTab>
           <FormTab
             active={currentStep >= WALLET_INTERACTION_STEP}
-            title={isSellFlow ? text.store.placeInShop : text.mint.payment}
-            amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS}
+            title={isPaymentFlow ? text.mint.payment : text.store.placeInShop}
+            amount={stepAmount}
           />
         </NavigationTab>
         <NavigationTab>
-          <FormTab
-            active={currentStep >= CONFIRMATION_STEP}
-            title={text.mint.confirmation}
-            amount={isBuyFlow ? SELL_FLOW_STEPS : BUY_FLOW_STEPS}
-          />
+          <FormTab active={currentStep >= CONFIRMATION_STEP} title={text.mint.confirmation} amount={stepAmount} />
         </NavigationTab>
       </FormNavigation>
     </>

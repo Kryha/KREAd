@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
 import { FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
-import { WALLET_INTERACTION_STEP } from "../../constants";
+import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
 import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -68,7 +68,13 @@ export const CreateCharacter: FC = () => {
     <PageContainer
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.character} />
+          <FormHeader
+            currentStep={currentStep}
+            stepAmount={MINT_CHARACTER_FLOW_STEPS}
+            title={text.mint.mintNew}
+            link={routes.character}
+            isPaymentFlow
+          />
           {perStepDisplay()}
         </FormCard>
       }

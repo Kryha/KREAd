@@ -13,7 +13,7 @@ export const store = {
   buyCharacter: "buy character",
   characterSuccessfullyBought: "character succesfully bought!",
   characterPlacedInShop: "character placed in the shop.",
-  characterSuccessfullyPlacedInShop: "Your character is succesfully placed in the shop!",
+  characterSuccessfullyPlacedInShop: "your character is succesfully placed in the shop!",
   yourNewCharacterIs: "your new character is successfully bought.",
   checkCharacter: "check character",
   sellCharacter: "sell character",

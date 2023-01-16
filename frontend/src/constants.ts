@@ -9,7 +9,8 @@ export const MINTING_COST = 2;
 export const MONEY_DECIMALS = 6;
 
 export const SUCCESSFUL_MINT_REPONSE_MSG = "Character mint successful, use attached public facet to purchase";
-export const BUY_FLOW_STEPS = 3;
+export const MINT_CHARACTER_FLOW_STEPS = 3;
+export const BUY_FLOW_STEPS = 2;
 export const SELL_FLOW_STEPS = 3;
 export const BUY_FLOW_WIDTH = 80;
 export const SELL_FLOW_WIDTH = 140;

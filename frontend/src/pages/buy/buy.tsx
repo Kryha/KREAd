@@ -2,6 +2,7 @@ import { FC, ReactNode, useState } from "react";
 
 import { ErrorView, FormHeader } from "../../components";
 import { PageContainer } from "../../components/page-container";
+import { BUY_FLOW_STEPS } from "../../constants";
 import { useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { FormCard } from "../create-character/styles";
@@ -28,8 +29,8 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
-      case 1:
       default:
+      case 1:
         return (
           <BuyForm
             onSubmit={() => onSubmit()}
@@ -48,7 +49,7 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
     <ContentWrapper>
       <PageContainer sidebarContent={children}>
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} title={pText.buy} link={routes.shop} isBuyFlow />
+          <FormHeader currentStep={currentStep} stepAmount={BUY_FLOW_STEPS} title={pText.buy} link={routes.shop} isPaymentFlow />
           {perStepDisplay()}
         </FormCard>
       </PageContainer>

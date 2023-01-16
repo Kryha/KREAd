@@ -9,7 +9,7 @@ import { SellText, SellData, SellStep } from "./types";
 import { SellForm } from "./sell-form";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
-import { WALLET_INTERACTION_STEP } from "../../constants";
+import { SELL_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 
 interface Props {
   children: ReactNode;
@@ -50,7 +50,7 @@ export const Sell: FC<Props> = ({ children, data, setData, text: pText, sendOffe
   return (
     <ContentWrapper width={width} height={height}>
       <FormCard height={height} width={width}>
-        <FormHeader currentStep={currentStep} title={pText.sell} link={routes.character} isSellFlow />
+        <FormHeader currentStep={currentStep} stepAmount={SELL_FLOW_STEPS} title={pText.sell} link={routes.character} />
         {perStepDisplay()}
       </FormCard>
       <DetailContainer>{children}</DetailContainer>
