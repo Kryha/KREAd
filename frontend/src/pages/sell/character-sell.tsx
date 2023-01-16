@@ -23,8 +23,8 @@ export const CharacterSell = () => {
   }, [character]);
 
   const sendOfferHandler = async (data: SellData) => {
-    if (data.price < 1) return;
-    sellCharacter.callback(data.price);
+    if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
+    await sellCharacter.callback(data.price);
   };
 
   const displayToast = () => {
@@ -38,7 +38,6 @@ export const CharacterSell = () => {
       data={data}
       setData={setData}
       sendOfferHandler={sendOfferHandler}
-      isLoading={sellCharacter.isLoading}
       isPlacedInShop={isPlacedInShop}
       text={{
         sell: text.store.sellCharacter,

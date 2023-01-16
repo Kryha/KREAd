@@ -19,12 +19,11 @@ import {
 } from "./styles";
 import { SellData } from "./types";
 
-interface CharacterInformationProps {
-  disabled: boolean;
+interface InformationProps {
   setData: (price: number) => void;
 }
 
-export const CharacterInformation: FC<CharacterInformationProps> = ({ setData, disabled }) => {
+export const Information: FC<InformationProps> = ({ setData }) => {
   const { width, height } = useViewport();
 
   const {
@@ -63,7 +62,7 @@ export const CharacterInformation: FC<CharacterInformationProps> = ({ setData, d
         </FormFields>
         <FormText>{text.store.sellDescription}</FormText>
         <ButtonContainer>
-          <PrimaryButton type="submit" disabled={!isValid || disabled}>
+          <PrimaryButton type="submit" disabled={!isValid}>
             <ButtonText customColor={color.white}>{text.general.next}</ButtonText>
           </PrimaryButton>
         </ButtonContainer>

@@ -8,23 +8,21 @@ import { ContentWrapper, DetailContainer } from "./styles";
 import { SellText, SellData, SellStep } from "./types";
 import { SellForm } from "./sell-form";
 import { Confirmation } from "./confirmation";
-import { PageContainer } from "../../components/page-container";
-import { CharacterInformation } from "./character-information";
+import { Information } from "./information";
 import { WALLET_INTERACTION_STEP } from "../../constants";
 
 interface Props {
   children: ReactNode;
   data: SellData;
-  setData: (data: SellData) => void;
   text: SellText;
 
+  setData: (data: SellData) => void;
   sendOfferHandler: (data: SellData) => Promise<void>;
 
-  isLoading: boolean;
   isPlacedInShop: boolean;
 }
 
-export const Sell: FC<Props> = ({ children, data, setData, text: pText, sendOfferHandler, isLoading, isPlacedInShop }) => {
+export const Sell: FC<Props> = ({ children, data, setData, text: pText, sendOfferHandler, isPlacedInShop }) => {
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<SellStep>(0);
 
@@ -33,25 +31,19 @@ export const Sell: FC<Props> = ({ children, data, setData, text: pText, sendOffe
     setCurrentStep(WALLET_INTERACTION_STEP);
   };
 
+  const onSellFormSubmit = async () => await sendOfferHandler(data);
+
   if (!data) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
       default:
       case 0:
-        return <CharacterInformation disabled={isLoading} setData={setInformationData} />;
+        return <Information setData={setInformationData} />;
       case 1:
-        return (
-          <SellForm
-            onSubmit={() => sendOfferHandler(data)}
-            data={data}
-            changeStep={setCurrentStep}
-            isLoading={isLoading}
-            isPlacedInShop={isPlacedInShop}
-          />
-        );
+        return <SellForm onSubmit={onSellFormSubmit} data={data} changeStep={setCurrentStep} isPlacedInShop={isPlacedInShop} />;
       case 2:
-        return <Confirmation data={data} text={pText} />;
+        return <Confirmation text={pText} />;
     }
   };
 

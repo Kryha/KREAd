@@ -5,6 +5,7 @@ export const store = {
   buyMoreAtStore: "buy more at store",
   buyItem: "buy item",
   itemSuccessfullyBought: "item succesfully bought!",
+  itemPlacedInShop: "item placed in the shop",
   itemSuccessfullyPlacedInShop: "item succesfully placed in the shop!",
   yourNewItemIs: "your new item is successfully bought.",
   checkItem: "check item",
