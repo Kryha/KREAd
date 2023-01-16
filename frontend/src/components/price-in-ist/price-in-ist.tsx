@@ -7,7 +7,7 @@ import { BoldLabel } from "../atoms";
 import { Diamond, PriceContainer } from "./styles";
 
 interface PriceInIstProps {
-  price: number | bigint;
+  price: number;
 }
 
 export const PriceInIst: FC<PriceInIstProps> = ({ price }) => {
