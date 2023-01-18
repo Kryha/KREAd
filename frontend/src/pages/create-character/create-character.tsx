@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
-import { FormHeader, LoadingPage } from "../../components";
+import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
-import { PAYMENT_STEP } from "../../constants";
+import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
 import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -45,10 +45,8 @@ export const CreateCharacter: FC = () => {
 
   const setData = async (data: CharacterCreation): Promise<void> => {
     setCharacterData(data);
-    setCurrentStep(PAYMENT_STEP);
+    setCurrentStep(WALLET_INTERACTION_STEP);
   };
-
-  // if (createCharacter.isError) return <ErrorView />;
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
@@ -59,7 +57,7 @@ export const CreateCharacter: FC = () => {
       case 2:
         return <Confirmation character={mintedCharacter?.nft} />;
       default:
-        return <Information setData={setData} disabled={createCharacter.isLoading} />;
+        return <ErrorView />;
     }
   };
 
@@ -69,7 +67,13 @@ export const CreateCharacter: FC = () => {
     <PageContainer
       sidebarContent={
         <FormCard height={height} width={width}>
-          <FormHeader currentStep={currentStep} title={text.mint.mintNew} link={routes.character} />
+          <FormHeader
+            currentStep={currentStep}
+            stepAmount={MINT_CHARACTER_FLOW_STEPS}
+            title={text.mint.mintNew}
+            link={routes.character}
+            isPaymentFlow
+          />
           {perStepDisplay()}
         </FormCard>
       }
