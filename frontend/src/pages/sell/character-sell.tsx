@@ -9,7 +9,6 @@ import { SellData } from "./types";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
-  const [_, setShowToast] = useState(false);
   const idString = String(id);
 
   const sellCharacter = useSellCharacter(idString);
@@ -25,10 +24,6 @@ export const CharacterSell = () => {
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
     await sellCharacter.callback(data.price);
-  };
-
-  const displayToast = () => {
-    setShowToast(true);
   };
 
   if (!data || !characterCopy) return <ErrorView />;
@@ -47,7 +42,7 @@ export const CharacterSell = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={characterCopy} showToast={displayToast} />
+        <CharacterDetailSection character={characterCopy} showToast={() => ({})} />
       </FadeInOut>
     </Sell>
   );

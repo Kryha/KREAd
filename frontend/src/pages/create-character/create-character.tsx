@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
-import { FormHeader, LoadingPage } from "../../components";
+import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useViewport } from "../../hooks";
@@ -48,17 +48,16 @@ export const CreateCharacter: FC = () => {
     setCurrentStep(WALLET_INTERACTION_STEP);
   };
 
-  // if (createCharacter.isError) return <ErrorView />;
-
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
-      default:
       case 0:
         return <Information setData={setData} disabled={createCharacter.isLoading} />;
       case 1:
         return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
       case 2:
         return <Confirmation character={mintedCharacter?.nft} />;
+      default:
+        return <ErrorView />;
     }
   };
 

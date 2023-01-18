@@ -29,7 +29,6 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
-      default:
       case 1:
         return (
           <BuyForm
@@ -42,6 +41,8 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
         );
       case 2:
         return <Confirmation text={pText} />;
+      default:
+        return <ErrorView />;
     }
   };
 

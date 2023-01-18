@@ -37,13 +37,14 @@ export const Sell: FC<Props> = ({ children, data, setData, text: pText, sendOffe
 
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
-      default:
       case 0:
         return <Information setData={setInformationData} />;
       case 1:
         return <SellForm onSubmit={onSellFormSubmit} data={data} changeStep={setCurrentStep} isPlacedInShop={isPlacedInShop} />;
       case 2:
         return <Confirmation text={pText} />;
+      default:
+        return <ErrorView />;
     }
   };
 
