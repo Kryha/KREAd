@@ -15,11 +15,13 @@ interface NavigationTabProps {
 }
 
 export const FormHeader: FC<NavigationTabProps> = ({ currentStep, stepAmount, title, isPaymentFlow = false, link }) => {
+  const INFORMATION_STEP_INCLUDED = 3;
+
   return (
     <>
       <FormHeaderClose title={title} link={link} />
       <FormNavigation>
-        {stepAmount == 3 && (
+        {stepAmount == INFORMATION_STEP_INCLUDED && (
           <NavigationTab>
             <FormTab active title={text.mint.information} amount={stepAmount} />
           </NavigationTab>
