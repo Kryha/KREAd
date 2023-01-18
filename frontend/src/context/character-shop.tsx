@@ -58,9 +58,6 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       marketDispatch((prevState) => ({ ...prevState, fetched: true }));
       console.info("✅ LISTENING TO CHARACTER SHOP NOTIFIER");
     }
-    return () => {
-      marketDispatch(initialState);
-    };
   }, [kreadPublicFacet]);
   
   return (

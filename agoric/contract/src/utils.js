@@ -74,7 +74,7 @@ export const getPage = (arr, interval, page) =>
  * @param name
  * @returns {CharacterMarketRecord[]}
  */
-export const removeCharacterFromMaketArray = (arr, name) => {
+export const removeCharacterFromMarketArray = (arr, name) => {
   const newArr = [...arr];
   const index = newArr.findIndex((entry) => entry.name === name);
   if (index > -1) {
@@ -87,7 +87,7 @@ export const removeCharacterFromMaketArray = (arr, name) => {
  * @param {string} id
  * @returns {ItemMarketRecord[]}
  */
-export const removeItemFromMaketArray = (arr, id) => {
+export const removeItemFromMarketArray = (arr, id) => {
   const newArr = [...arr];
   const index = newArr.findIndex((entry) => entry.id === id);
   if (index > -1) {

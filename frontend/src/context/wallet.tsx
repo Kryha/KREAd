@@ -62,9 +62,6 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         console.error("got watchNotifiers err", err);
       });
     }
-    return () => {
-      walletDispatch(initialState);
-    };
   }, [walletP, kreadPublicFacet]);
   
   return (

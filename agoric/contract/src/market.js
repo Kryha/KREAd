@@ -7,8 +7,8 @@ import { makeNotifierKit } from '@agoric/notifier';
 import { errors } from './errors';
 import * as state from './get';
 import {
-  removeCharacterFromMaketArray,
-  removeItemFromMaketArray,
+  removeCharacterFromMarketArray,
+  removeItemFromMarketArray,
 } from './utils';
 
 /**
@@ -192,7 +192,7 @@ export const market = (zcf, STATE) => {
     sellerSeat.exit();
 
     // Remove entry from store array
-    characterMarket = removeCharacterFromMaketArray(
+    characterMarket = removeCharacterFromMarketArray(
       characterMarket,
       sellRecord.name,
     );
@@ -252,7 +252,7 @@ export const market = (zcf, STATE) => {
 
     buyerSeat.exit();
     sellerSeat.exit();
-    itemMarket = removeItemFromMaketArray(itemMarket, sellRecord.id);
+    itemMarket = removeItemFromMarketArray(itemMarket, sellRecord.id);
     itemShopUpdater.updateState(itemMarket);
     return harden({ itemMarket });
   };

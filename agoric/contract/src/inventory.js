@@ -96,7 +96,10 @@ export const inventory = (zcf, STATE) => {
     zcf.reallocate(seat, inventorySeat);
 
     const updater = state.getCharacterInventoryUpdater(characterName, STATE);
-    updater.updateState(updatedInventory);
+    updater.updateState({
+      character: characterName,
+      inventory: updatedInventory,
+    });
 
     seat.exit();
   };
@@ -163,7 +166,10 @@ export const inventory = (zcf, STATE) => {
 
     const updater = state.getCharacterInventoryUpdater(characterName, STATE);
     assert(updater, 'Could not find updater');
-    updater.updateState(updatedInventory);
+    updater.updateState({
+      character: characterName,
+      inventory: updatedInventory,
+    });
 
     seat.exit();
   };
@@ -238,7 +244,10 @@ export const inventory = (zcf, STATE) => {
     zcf.reallocate(seat, inventorySeat);
 
     const updater = state.getCharacterInventoryUpdater(characterName, STATE);
-    updater.updateState(updatedInventory);
+    updater.updateState({
+      character: characterName,
+      inventory: updatedInventory,
+    });
 
     seat.exit();
   };

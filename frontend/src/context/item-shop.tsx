@@ -54,9 +54,6 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       marketDispatch((prevState) => ({ ...prevState, fetched: true }));
       console.info("✅ LISTENING TO ITEM SHOP NOTIFIER");
     }
-    return () => {
-      marketDispatch(initialState);
-    };
   }, [kreadPublicFacet]);
   
   return (
