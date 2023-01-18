@@ -11,6 +11,9 @@ import {
   removeItemFromMaketArray,
 } from './utils';
 
+export const SELL_CHARACTER_DESCRIPTION = 'Sell Character in KREAd marketplace';
+export const SELL_ITEM_DESCRIPTION = 'Sell Item in KREAd marketplace';
+
 /**
  * Put character up for sale
  *
@@ -259,11 +262,11 @@ export const market = (zcf, STATE) => {
 
   return {
     makeSellCharacterInvitation: () =>
-      zcf.makeInvitation(sellCharacter, 'Sell Character in KREAd marketplace'),
+      zcf.makeInvitation(sellCharacter, SELL_CHARACTER_DESCRIPTION),
     makeBuyCharacterInvitation: () =>
       zcf.makeInvitation(buyCharacter, 'Buy Character in KREAd marketplace'),
     makeSellItemInvitation: () =>
-      zcf.makeInvitation(sellItem, 'Sell Item in KREAd marketplace'),
+      zcf.makeInvitation(sellItem, SELL_CHARACTER_DESCRIPTION),
     makeBuyItemInvitation: () =>
       zcf.makeInvitation(buyItem, 'Buy Item in KREAd marketplace'),
     getCharacterShopNotifier: () => characterShopNotifier,

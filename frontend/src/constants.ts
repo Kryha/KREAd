@@ -9,6 +9,8 @@ export const MINTING_COST = 2;
 export const MONEY_DECIMALS = 6;
 
 export const SUCCESSFUL_MINT_REPONSE_MSG = "Character mint successful, use attached public facet to purchase";
+export const SELL_CHARACTER_DESCRIPTION = "Sell Character in KREAd marketplace";
+export const SELL_ITEM_DESCRIPTION = "Sell Item in KREAd marketplace";
 export const MINT_CHARACTER_FLOW_STEPS = 3;
 export const BUY_FLOW_STEPS = 2;
 export const SELL_FLOW_STEPS = 3;

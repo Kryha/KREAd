@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 import { ErrorView, FadeInOut } from "../../components";
+import { SELL_CHARACTER_DESCRIPTION } from "../../constants";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useMyCharacter, useSellCharacter } from "../../service";
+import { useMyCharacter, useOffers, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
 
@@ -13,13 +14,16 @@ export const CharacterSell = () => {
 
   const sellCharacter = useSellCharacter(idString);
   const [character] = useMyCharacter(idString);
+  const [characterCopy] = useState(character);
+  const offers = useOffers({ description: SELL_CHARACTER_DESCRIPTION, status: "pending" });
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
-  const [characterCopy] = useState(character);
 
   useEffect(() => {
-    if (!character) setIsPlacedInShop(true);
-  }, [character]);
+    if (offers.filter((offer) => offer.proposalTemplate.give.Character.value[0].id === Number(idString)).length > 0) {
+      setIsPlacedInShop(true);
+    }
+  }, [idString, offers]);
 
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
