@@ -1,5 +1,5 @@
 import { E } from "@endo/eventual-send";
-import React, { createContext, useContext, useEffect, useMemo, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { useAgoricState } from "./agoric";
 import { useWalletState } from "./wallet";
 import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
