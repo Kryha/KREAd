@@ -15,16 +15,17 @@ import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
-import { useUserState } from "../context/user";
+import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
-  const { selected, fetched } = useUserState();
-  // useEffect(() => {
-  //   if (!selected) {
-  //     owned[0] && dispatch({ type: "SET_SELECTED_CHARACTER", payload: owned[0] });
-  //   }
-  // }, [dispatch, owned, selected]);
+  const { characters, selected, fetched } = useUserState();
+  const userStateDispatch = useUserStateDispatch();
+  useEffect(() => {
+    if (!selected) {
+      characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+    }
+  }, [userStateDispatch, characters, selected]);
 
   return [selected, !fetched];
 };
@@ -100,7 +101,7 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
     });
   }, [characters, selected?.nft.id]);
 
-  // mixing characters from wallet with characters from offers
+  // mixing characters from wallet with characters from shop
   const charactersWithForSale: CharacterEquip[] = useMemo(() => {
     try {
       const offerCharactersFrontend: CharacterEquip[] = mediate.characters
@@ -187,7 +188,6 @@ export const useSellCharacter = (characterId: string) => {
       const backendCharacter = mediate.characters.toBack([found])[0];
       
       setIsLoading(true);
-      console.log(backendCharacter);
 
       return await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
     },

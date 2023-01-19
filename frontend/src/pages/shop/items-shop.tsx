@@ -79,7 +79,6 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const loadMore = async () => {
     setPage(prevState => prevState + 1);
   };
-  console.log(items);
 
   return (
     <>

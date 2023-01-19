@@ -1,7 +1,7 @@
 import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { CharacterInMarket, KreadCharacterInMarket } from "../interfaces";
-import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
+import { observeIteration } from "@agoric/notifier";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/character-actions";
 import { itemArrayToObject } from "../util";
@@ -27,6 +27,14 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
 
   useEffect(() => {
+    const observer = harden({
+      updateState: async (charactersInMarket: any) => {
+        const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
+        marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
+      },
+      finish: (completion: unknown)=> console.info("INVENTORY NOTIFIER FINISHED", completion),
+      fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
+    });
     const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
       const extendedCharacter = await extendCharacters(kreadPublicFacet, [marketEntry.character]);
       const equippedItems = itemArrayToObject(extendedCharacter.equippedItems);
@@ -43,13 +51,14 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     };
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING CHARACTER SHOP 🛍");
-      const notifier = E(kreadPublicFacet).getCharacterShopNotifier();
-      for await (const charactersInMarket of iterateNotifier(
-        notifier,
-      )) {
-        const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
-        marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
-      }
+      const shopNotifier = E(kreadPublicFacet).getCharacterShopNotifier();
+      observeIteration(shopNotifier, observer);
+      // for await (const charactersInMarket of iterateNotifier(
+      //   notifier,
+      // )) {
+      //   const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
+      //   marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
+      // }
     };
     if (kreadPublicFacet) {
       watchNotifiers().catch((err) => {

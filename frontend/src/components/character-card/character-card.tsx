@@ -1,4 +1,4 @@
-import { FC, Fragment, useMemo, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper, EmptyViewContainer } from "./styles";
@@ -43,7 +43,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
     allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
     return allItems;
   }, [characters, id]);
-
+  
   const showInfo = (values: ExtendedCharacter) => {
     setCharacter(values);
   };

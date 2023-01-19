@@ -1,9 +1,9 @@
 import { E } from "@endo/eventual-send";
-import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { ItemInMarket, KreadItemInMarket } from "../interfaces";
-import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
+import { observeIteration } from "@agoric/notifier";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -24,6 +24,14 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
   
   useEffect(() => {
+    const observer = harden({
+      updateState: async (itemsInMarket: any) => {
+        const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
+        marketDispatch((prevState) => ({...prevState, items, fetched: true }));
+      },
+      finish: (completion: unknown)=> console.info("INVENTORY NOTIFIER FINISHED", completion),
+      fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
+    });
     const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {
         id: BigInt(marketEntry.id),
@@ -39,13 +47,14 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
     };
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING ITEM SHOP 🛍");
-      const notifier = E(kreadPublicFacet).getItemShopNotifier();
-      for await (const itemsInMarket of iterateNotifier(
-        notifier,
-      )) {
-        const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
-        marketDispatch((prevState) => ({...prevState, items, fetched: true }));
-      }
+      const shopNotifier = E(kreadPublicFacet).getItemShopNotifier();
+      observeIteration(shopNotifier, observer);
+      // for await (const itemsInMarket of iterateNotifier(
+      //   notifier,
+      // )) {
+      //   const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
+      //   marketDispatch((prevState) => ({...prevState, items, fetched: true }));
+      // }
     };
     if (kreadPublicFacet) {
       watchNotifiers().catch((err) => {

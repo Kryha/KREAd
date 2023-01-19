@@ -2,7 +2,7 @@
 import React, { createContext, useReducer, useContext, useEffect, useRef } from "react";
 import { Far } from "@endo/marshal";
 import { makeCapTP, E } from "@endo/captp";
-import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
+import { observeIteration } from "@agoric/notifier";
 
 import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
@@ -96,7 +96,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     agoricDispatch({ type: "SET_OFFERS", payload: offers });
   };
 
-  // TODO: optimize useEffect startup logic
   useEffect(() => {
     // Receive callbacks from the wallet connection.
     const otherSide = Far("otherSide", {
@@ -142,14 +141,21 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
-
-      async function watchOffers() {
-        const on = E(walletP).getOffersNotifier();
-        for await (const offers of iterateNotifier(on)) {
+      
+      const observer = harden({
+        updateState: async (offers: any) => {
           console.count("📡 CHECKING OFFERS");
           processOffers(offers, dispatch);
-        }
+        },
+        finish: (completion: unknown)=> console.info("INVENTORY NOTIFIER FINISHED", completion),
+        fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
+      });
+
+      async function watchOffers() {
+        const offerNotifier = E(walletP).getOffersNotifier();
+        observeIteration(offerNotifier, observer);
       }
+
       watchOffers().catch((err) => {
         console.error("got watchOffers err", err);
       });

@@ -1,6 +1,6 @@
 import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
+import { observeIteration } from "@agoric/notifier";
 import { useAgoricState } from "./agoric";
 
 import dappConstants from "../service/conf/defaults";
@@ -31,15 +31,12 @@ type ProviderProps = Omit<React.ProviderProps<WalletContext>, "value">;
 export const WalletContextProvider = (props: ProviderProps): React.ReactElement => {
   const [walletState, walletDispatch] = useState<WalletContext>(initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
+  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
   const walletP = agoric.agoric.walletP;
 
   useEffect(() => {
-    const watchPurses = async () => {
-      console.info("✅ LISTENING FOR PURSE CHANGES");
-      const pn = E(walletP).getPursesNotifier();
-
-      for await (const purses of iterateNotifier(pn)) {
+    const observer = harden({
+      updateState: (purses: any) => {
         console.count("💾 LOADING PURSE CHANGE 💾");
 
         // Load Purses
@@ -55,8 +52,18 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
           character: newCharacterPurses,
           item: newItemPurses,
         }));
-      }
+      },
+      finish: (completion: unknown)=> console.info("WALLET NOTIFIER FINISHED", completion),
+      fail: (reason: unknown) => console.info("WALLET NOTIFIER ERROR", reason),
+    });
+
+    const watchPurses = async () => {
+      console.info("✅ LISTENING FOR PURSE CHANGES");
+
+      const purseNotifier = E(walletP).getPursesNotifier();
+      observeIteration(purseNotifier, observer);
     };
+
     if (walletP && kreadPublicFacet) {
       watchPurses().catch((err) => {
         console.error("got watchNotifiers err", err);
