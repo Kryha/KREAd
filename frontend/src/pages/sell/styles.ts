@@ -10,6 +10,10 @@ import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { margins, color } from "../../design";
 import { FormCard } from "../create-character/styles";
 
+interface ActiveProps {
+  active: boolean;
+}
+
 export const Exclamation = styled(ExclamationIcon)`
   margin-right: 20px;
   margin-bottom: 10px;
@@ -42,18 +46,18 @@ interface ViewProps {
 }
 
 export const ContentWrapper = styled.div<ViewProps>`
-margin-left: 40px;
-  ${DetailSectionWrap} {
-    position: absolute;
-    bottom: 40px;
-    right: 40px;
-  }
+  margin-left: 40px;
   ${FormCard} {
     width: 40%;
     min-width: 40%;
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
     transform: translate3d(0, 1rem, 0);
+  }
+  ${DetailSectionWrap} {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
   }
   ${DetailSectionHeaderNavigationWrap} {
     display: none;
@@ -63,14 +67,6 @@ margin-left: 40px;
   }
   ${TickContainer} {
     margin-top: ${margins.big};
-  }
-  ${Info} {
-    border: 1px solid ${color.darkGrey};
-    background-color: ${color.lightGrey};
-    margin-top: 40px;
-  }
-  ${Button} {
-    display: none;
   }
 `;
 
@@ -92,7 +88,7 @@ export const ButtonContainer = styled.div`
       }
     }
   }
-  ${LoadingPageContainer}{
+  ${LoadingPageContainer} {
     width: 35px;
   }
   ${Spinner} {
@@ -120,7 +116,7 @@ export const StepText = styled(ButtonText)`
   line-height: 20.5px;
 `;
 
-export const Step = styled.div`
+export const Step = styled.div<ActiveProps>`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -143,6 +139,15 @@ export const Step = styled.div`
   ${Badge} {
     background: transparent;
   }
+  ${({ active }): string => {
+    return active
+      ? `
+      background: ${color.white};
+        `
+      : `
+      background: ${color.lightGrey};
+      `;
+  }};
 `;
 
 export const Line = styled.div`
@@ -279,3 +284,46 @@ export const CardContainer = styled.div`
 `;
 
 export const DetailContainer = styled.div``;
+
+export const GeneralInfo = styled.div<ActiveProps>`
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: center;
+  padding: ${margins.medium};
+  position: static;
+  width: 100%;
+  height: 88px;
+  left: 0px;
+  top: 0px;
+  background: ${color.white};
+  border: 1px solid ${color.darkGrey};
+  border-radius: 24px;
+  ${StepText} {
+    margin: 0px ${margins.small};
+  }
+  ${PrimaryButton} {
+    margin-left: ${margins.small};
+  }
+  ${Badge} {
+    background: transparent;
+  }
+  ${({ active }): string => {
+    return active
+      ? `
+      background: ${color.white};
+        `
+      : `
+      background: ${color.lightGrey};
+      `;
+  }};
+`;
+
+export const PricingContainer = styled.div`
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: center;
+  position: static;
+`;

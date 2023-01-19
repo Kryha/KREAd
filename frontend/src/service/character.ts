@@ -188,7 +188,7 @@ export const useSellCharacter = (characterId: string) => {
       const backendCharacter = mediate.characters.toBack([found])[0];
       
       setIsLoading(true);
-
+      
       return await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
     },
     [characterId, characters, wallet, service]

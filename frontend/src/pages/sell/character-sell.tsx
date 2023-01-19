@@ -1,66 +1,53 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { text } from "../../assets";
-import { ErrorView, FadeInOut, LoadingPage } from "../../components";
-import { ToastGoToWallet } from "../../components/toast-go-to-wallet";
+import { ErrorView, FadeInOut } from "../../components";
+import { SELL_CHARACTER_DESCRIPTION } from "../../constants";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { routes } from "../../navigation";
-import { useMyCharacter, useSellCharacter } from "../../service";
+import { useMyCharacter, useOffers, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
+import { SellData } from "./types";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
-  const navigate = useNavigate();
-
   const idString = String(id);
-  const [showToast, setShowToast] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [data, isLoading] = useMyCharacter(idString);
+
   const sellCharacter = useSellCharacter(idString);
+  const [character] = useMyCharacter(idString);
+  const [characterCopy] = useState(character);
+  const offers = useOffers({ description: SELL_CHARACTER_DESCRIPTION, status: "pending" });
+  const [isPlacedInShop, setIsPlacedInShop] = useState(false);
+  const [data, setData] = useState<SellData>({ price: 0 });
 
-  const submitForm = async (price: number) => {
-    const res = await sellCharacter.callback(price);
-    if (res) {
-      displayToast();
-      console.info("Sell offer sent, redirecting to shop");
-    } else {
-      console.warn("There was a problem sending the sell offer to the wallet. Please try again later.");
-      setIsError(true);
+  useEffect(() => {
+    if (offers.filter((offer) => offer.proposalTemplate.give.Character.value[0].id === Number(idString)).length > 0) {
+      setIsPlacedInShop(true);
     }
+  }, [idString, offers]);
+
+  const sendOfferHandler = async (data: SellData) => {
+    if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
+    await sellCharacter.callback(data.price);
   };
 
-  const displayToast = () => {
-    setShowToast(true);
-  };
-
-  const closeAndRedirect = () => {
-    setShowToast(false);
-    navigate(`${routes.inventory}`);
-  };
-  
-  if (isError) return <ErrorView />;
-  
-  if (isLoading) return <LoadingPage spinner={false} />;
-
-  // TODO: this prevents the page from trying to load a character that is no longer available
-  // we'll be refactoring this to listen for the offer accepted action
-  if (!data) closeAndRedirect();
-
-  if (!data) return <ErrorView />;
-  
-  const { nft, equippedItems } = data;  
+  if (!data || !characterCopy) return <ErrorView />;
 
   return (
     <Sell
-      isLoading={sellCharacter.isLoading}
-      onSubmit={submitForm}
-      text={{ sell: text.store.sellCharacter }}
-      data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
+      data={data}
+      setData={setData}
+      sendOfferHandler={sendOfferHandler}
+      isPlacedInShop={isPlacedInShop}
+      text={{
+        sell: text.store.sellCharacter,
+        success: text.store.characterPlacedInShop,
+        successLong: text.store.characterSuccessfullyPlacedInShop,
+        check: text.store.goToInventory,
+      }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={data} showToast={displayToast} />
+        <CharacterDetailSection character={characterCopy} showToast={() => ({})} />
       </FadeInOut>
-      <ToastGoToWallet showToast={showToast} closeAndRedirect={closeAndRedirect} />
     </Sell>
   );
 };

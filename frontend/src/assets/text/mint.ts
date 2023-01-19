@@ -5,7 +5,7 @@ export const mint = {
   confirmation: "confirmation",
   characterTitle: "character title",
   characterName: "character name",
-  theCostsOfMinting: "minting requires a small fee in IST to be payed to the network",
+  theCostsOfMinting: "minting requires a small fee in IST to be paid to the network.",
   next: "next",
   confirm: "confirm",
   sendOffer: "send offer",

@@ -28,7 +28,7 @@ export const param = {
     background: "background",
     frontMask: "front mask",
     clothing: "clothing",
-    tempetScavenger: "tempet scavenger"
+    tempetScavenger: "tempet scavenger",
   },
   fullstop: (word: string) => `${word}.`,
   comma: (word: string) => `${word},`,
