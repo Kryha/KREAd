@@ -7,7 +7,7 @@ import { useAgoricContext } from "../context/agoric";
 // import { buyCharacter, sellCharacter } from "./character-actions";
 import { useCharacterMarketState } from "../context/character-shop";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import { useUserState } from "../context/user";
+import { useUserState } from "../context/user/user";
 import { useWalletState } from "../context/wallet";
 
 export const TestServiceUI = () => {
@@ -74,7 +74,7 @@ export const TestServiceUI = () => {
   const topUp = async () => {
 
     const invitation = await E(publicFacet).makeTokenFacetInvitation();
-    const tokenPurse = purses.token[purses.token.length - 1];
+    const tokenPurse = purses.token;
     if (!tokenPurse) return;
     console.log(await E(service.agoric.walletP).addOffer(
       harden({

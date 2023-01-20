@@ -1,12 +1,12 @@
 import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { useAgoricState } from "./agoric";
-import { useWalletState } from "./wallet";
-import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
-import { mediate } from "../util";
-import { itemCategories } from "../service/util";
+import { useAgoricState } from "../agoric";
+import { useWalletState } from "../wallet";
+import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../../interfaces";
+import { mediate } from "../../util";
+import { itemCategories } from "../../service/util";
 import { observeIteration } from "@agoric/notifier";
-import { dedupArrById, dedupArrByName, replaceCharacterInventoryInUserStateArray } from "../util/other";
+import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../../util/other";
 
 interface UserContext {
   characters: ExtendedCharacter[],
@@ -67,9 +67,9 @@ const DispatchContext = createContext<UserDispatch | undefined>(undefined);
 
 const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
   switch (action.type) {
-    case "SET_CHARACTERS":
-      return { ...state, characters: dedupArrByName([...state.characters, ...action.payload]), fetched: true };
-    
+    case "SET_CHARACTERS":{
+      return { ...state, characters: action.payload, fetched: true };
+    }
     case "SET_ITEMS": {
       const frontendEquippedItems = mediate.items.toFront(action.payload);
       return { ...state, items:  frontendEquippedItems, fetched: true };
@@ -101,7 +101,7 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     }
 
     case "SET_PROCESSED":
-      return { ...state, processed: [...new Set([...state.processed, ...action.payload])] };
+      return { ...state, processed: (action.payload).sort() };
 
     case "SET_SELECTED":
       return { ...state, selected: action.payload };
@@ -118,13 +118,14 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
 };
 
 export const UserContextProvider = (props: ProviderProps): React.ReactElement => {
+
   const [userState, userStateDispatch] = useReducer(Reducer, initialState);
   const wallet = useWalletState();
   const agoric = useAgoricState();
 
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
-  const characterWallet = wallet.character;
-  const itemWallet = wallet.item;
+  const charactersInWallet = wallet.character ? wallet.character.value : undefined;
+  const itemsInWallet = wallet.item ? wallet.item.value : undefined;
 
   useEffect(() => {
     const observer = harden({
@@ -143,7 +144,6 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
 
-      
       // Fetch inventory once 
       const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(characterName);
       userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: equippedItems, characterName });
@@ -151,22 +151,56 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       // Let the notifier handle updates thereafter
       const inventoryNotifier = E(kreadPublicFacet).getCharacterInventoryNotifier(characterName);
       observeIteration(inventoryNotifier, observer);
-      userStateDispatch({ type: "SET_PROCESSED", payload: [characterName] });
     };
 
     const processPurseChanges = async () => {
-      const latestCharacterWallet = characterWallet[characterWallet.length - 1];
-      const lastestItemWallet = itemWallet[itemWallet.length - 1];
       
-      if (!latestCharacterWallet || !lastestItemWallet) return;
+      console.count("👜 PROCESSING PURSE CHANGE");
       
-      const charactersInWallet = characterWallet[characterWallet.length - 1].value;
-      const itemsInWallet = itemWallet[itemWallet.length - 1].value;
+      // Always run on purse updates
+      userStateDispatch({
+        type: "SET_ITEMS",
+        payload: itemsInWallet,
+      });
+      userStateDispatch({
+        type: "SET_FETCHED",
+        payload: true,
+      });
+      
+      const processedCharacters = [...userState.processed].sort();
+      const ownedCharacterNames: string[] = charactersInWallet.map((character: CharacterBackend) => character.name).sort();
 
-      console.count("👜 PROCESSING PURSE CHANGE 👜");
+      // No new characters to process
+      if (charactersInWallet.length === 0 || processedCharacters.join() === ownedCharacterNames.join()) {
+        userStateDispatch({
+          type: "SET_CHARACTERS",
+          payload: [],
+        });
+        userStateDispatch({
+          type: "SET_EQUIPPED_ITEMS",
+          payload: [],
+        });
+        userStateDispatch({
+          type: "SET_FETCHED",
+          payload: true,
+        });
+        userStateDispatch({ type: "SET_PROCESSED", payload: [] });
+        return;
+      }
+
+      // User has less characters than before, adjust the state accordingly
+      if (charactersInWallet.length < processedCharacters.length) {
+
+        processedCharacters.forEach((name) => {
+          if (!ownedCharacterNames.includes(name)) {
+            processedCharacters.splice(processedCharacters.indexOf(name), 1);
+          }
+        });
+        userStateDispatch({type: "SET_PROCESSED", payload: processedCharacters});
+      }
       const equippedCharacterItems: Item[] = [];
-
-      const charactersToProcess = charactersInWallet.filter((character: {name: string}) => !userState.processed.includes(character.name));
+        
+      const charactersToProcess = charactersInWallet.filter((character: { name: string}) => !processedCharacters.includes(character.name));
       // Map characters to the corresponding inventory in the contract
       const extendedCharacters = await Promise.all(
         charactersToProcess.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
@@ -176,7 +210,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
             to: "unknown",
             date: event.timestamp,
           }));
-
+        
           const equipped: { [key: string]: Item | undefined } = {};
           const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(character.name);
           const frontendEquippedItems = mediate.items.toFront(equippedItems);
@@ -185,6 +219,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
             equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
           });
           processInventory(character.name);
+
           return {
             nft: character,
             equippedItems: equipped,
@@ -193,33 +228,27 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
         })
       );
 
-      if (extendedCharacters.length) {
-        const frontendCharacters = mediate.characters.toFront(extendedCharacters);
-        userStateDispatch({
-          type: "SET_CHARACTERS",
-          payload: frontendCharacters,
-        });
-        userStateDispatch({
-          type: "SET_EQUIPPED_ITEMS",
-          payload: equippedCharacterItems,
-        });
-      }
+      const frontendCharacters = mediate.characters.toFront(extendedCharacters);
+
       userStateDispatch({
-        type: "SET_FETCHED",
-        payload: true,
+        type: "SET_CHARACTERS",
+        payload: frontendCharacters,
       });
       userStateDispatch({
-        type: "SET_ITEMS",
-        payload: itemsInWallet,
+        type: "SET_EQUIPPED_ITEMS",
+        payload: equippedCharacterItems,
       });
     };
-    
+
     if (kreadPublicFacet) {
-      processPurseChanges().catch((err) => {
-        console.error("got watchNotifiers err", err);
-      });
+      if (charactersInWallet && charactersInWallet.length !== userState.processed.length) {
+        processPurseChanges().catch((err) => {
+          console.error("got watchNotifiers err", err);
+        });
+      }
+      userStateDispatch({ type: "SET_FETCHED", payload: true});
     }
-  }, [kreadPublicFacet, characterWallet, itemWallet, userState.processed]);
+  }, [kreadPublicFacet, charactersInWallet, itemsInWallet, userState.processed]);
   
   return (
     <Context.Provider value={userState}>

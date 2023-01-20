@@ -7,7 +7,7 @@ import { NotificationWrapper } from "../../components/notification-detail/styles
 import { PageContainer } from "../../components/page-container";
 import { CharactersList } from "../../containers/characters-list";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { useUserStateDispatch } from "../../context/user";
+import { useUserStateDispatch } from "../../context/user/user";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
 import { EmptyDetail } from "./empty-item-inventory";

@@ -9,18 +9,18 @@ const {
   brandBoardIds
 } = dappConstants;
 export interface WalletContext {
-  token: any[],
-  money: any[],
-  character: any[],
-  item: any[],
+  token: any,
+  money: any,
+  character: any,
+  item: any,
   fetched: boolean,
 }
 
 const initialState: WalletContext = {
-  token: [],
-  money: [],
-  character: [],
-  item: [],
+  token: undefined,
+  money: undefined,
+  character: undefined,
+  item: undefined,
   fetched: false,
 };
 
@@ -45,12 +45,17 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         const newCharacterPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Character);
         const newItemPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Item);
         
+        const characterWallet = newCharacterPurses[newCharacterPurses.length - 1];
+        const itemWallet = newItemPurses[newItemPurses.length - 1];
+        const moneyWallet = newMoneyPurses[newCharacterPurses.length - 1];
+        const tokenWallet = newTokenPurses[newItemPurses.length - 1];
+
         walletDispatch(prevState => ({
           ...prevState,
-          token: newTokenPurses,
-          money: newMoneyPurses,
-          character: newCharacterPurses,
-          item: newItemPurses,
+          token: tokenWallet,
+          money: moneyWallet,
+          character: characterWallet,
+          item: itemWallet,
         }));
       },
       finish: (completion: unknown)=> console.info("WALLET NOTIFIER FINISHED", completion),
@@ -62,14 +67,18 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
 
       const purseNotifier = E(walletP).getPursesNotifier();
       observeIteration(purseNotifier, observer);
+      walletDispatch(prevState => ({
+        ...prevState,
+        fetched: true
+      }));
     };
 
-    if (walletP && kreadPublicFacet) {
+    if (walletP && kreadPublicFacet && !walletState.fetched) {
       watchPurses().catch((err) => {
         console.error("got watchNotifiers err", err);
       });
     }
-  }, [walletP, kreadPublicFacet]);
+  }, [walletP, kreadPublicFacet, walletState.fetched]);
   
   return (
     <Context.Provider value={walletState}>

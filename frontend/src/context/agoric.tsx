@@ -193,7 +193,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       onDisconnect,
       onMessage,
     });
-    return deactivateWebSocket;
+    // return deactivateWebSocket;
   }, []);
 
   return (

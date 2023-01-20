@@ -15,19 +15,20 @@ import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
-import { useUserState, useUserStateDispatch } from "../context/user";
+import { useUserState, useUserStateDispatch } from "../context/user/user";
 import { useWalletState } from "../context/wallet";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
   const userStateDispatch = useUserStateDispatch();
   useEffect(() => {
-    if (!selected) {
+    if (!selected || !characters.map(c => c.nft.name).includes(selected?.nft.name)) {
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
   }, [userStateDispatch, characters, selected]);
 
-  return [selected, !fetched];
+  const isLoading = !fetched;
+  return [selected, isLoading];
 };
 
 export const useMyCharactersForSale = () => {
@@ -120,7 +121,6 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
   }, [charactersWithForSale, filters]);
 
   const isLoading = !fetched;
-  
   return [filtered, isLoading];
 };
 
@@ -139,7 +139,8 @@ export const useCharactersMarket = (filters?: CharactersMarketFilters): [Charact
     return filterCharactersMarket(characters, filters);
   }, [filters, characters]);
 
-  return [filtered, !fetched];
+  const isLoading = !fetched;
+  return [filtered, isLoading];
 };
 
 // TODO: consider whether fetching by range is necessary after implementing notifiers
@@ -153,7 +154,8 @@ export const useCharactersMarketPages = (page: number, filters?: CharactersMarke
     return filterCharactersMarket(characters, filters);
   }, [filters, characters]);
 
-  return [filtered, !fetched, totalPages];
+  const isLoading = !fetched;
+  return [filtered, isLoading, totalPages];
 };
 
 // TODO: Add error management
@@ -188,7 +190,6 @@ export const useSellCharacter = (characterId: string) => {
       const backendCharacter = mediate.characters.toBack([found])[0];
       
       setIsLoading(true);
-      
       return await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
     },
     [characterId, characters, wallet, service]

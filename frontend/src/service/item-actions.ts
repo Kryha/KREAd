@@ -15,8 +15,8 @@ export const sellItem = async (service: AgoricState, purses: WalletContext, item
   } = service;
 
   if (!publicFacet) return;
-  const itemPurse = purses.item[purses.character.length - 1];
-  const moneyPurse = purses.token[purses.token.length - 1];
+  const itemPurse = purses.item;
+  const moneyPurse = purses.token;
   if (!itemPurse || !moneyPurse) return;
 
   const sellInvitation = await E(publicFacet).makeSellItemInvitation();
@@ -55,8 +55,8 @@ export const buyItem = async (service: AgoricState, purses: WalletContext, item:
   } = service;
 
   if (!publicFacet) return;
-  const itemPurse = purses.item[purses.item.length - 1];
-  const moneyPurse = purses.token[purses.token.length - 1];
+  const itemPurse = purses.item;
+  const moneyPurse = purses.token;
 
   if (!itemPurse || !moneyPurse) return;
 
@@ -97,7 +97,7 @@ export const mintItem = async (service: AgoricState, purses: WalletContext, item
     },
   } = service;
 
-  if (!publicFacet || !walletP || !purses.item[0].pursePetname) {
+  if (!publicFacet || !walletP || !purses.item.pursePetname) {
     console.error("undefined parameter");
     return;
   }
@@ -118,7 +118,7 @@ export const mintItem = async (service: AgoricState, purses: WalletContext, item
     proposalTemplate: {
       want: {
         Item: {
-          pursePetname: purses.item[purses.item.length - 1].brandPetname,
+          pursePetname: purses.item.brandPetname,
           value: uniqueItems,
         },
       },
@@ -136,9 +136,9 @@ export const equipItem = async (service: AgoricState, purses: WalletContext, ite
     },
   } = service;
 
-  const itemPurse = purses.item[purses.item.length - 1];
-  const characterPurse = purses.character[purses.character.length - 1];
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
+  const itemPurse = purses.item;
+  const characterPurse = purses.character;
+  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name);
   const wantedCharacter = inventoryCharacter.key.value[0];
 
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
@@ -190,8 +190,8 @@ export const unequipItem = async (service: AgoricState, purses: WalletContext, i
     },
   } = service;
 
-  const itemPurse = purses.item[purses.item.length - 1];
-  const characterPurse = purses.character[purses.character.length - 1];
+  const itemPurse = purses.item;
+  const characterPurse = purses.character;
   const characterInPurse = characterPurse.value.find((character: Character) => character.name === characterName);
   const inventoryCharacter = await E(publicFacet).getCharacterKey(characterName); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
@@ -238,8 +238,8 @@ export const itemSwap = async (service: AgoricState, purses: WalletContext, item
     },
   } = service;
 
-  const itemPurse = purses.item[purses.item.length - 1];
-  const characterPurse = purses.character[purses.character.length - 1];
+  const itemPurse = purses.item;
+  const characterPurse = purses.character;
   const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
   const { items: currentInventoryItems }: { items: Item[] } = await E(publicFacet).getCharacterInventory(character.name);

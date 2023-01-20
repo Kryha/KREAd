@@ -1,22 +1,22 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { AmountMath } from "@agoric/ertp";
-import { Purses, AgoricState } from "../interfaces/agoric.interfaces";
+import { AgoricState } from "../interfaces/agoric.interfaces";
 import { mediate } from "../util";
 import { CharacterBackend, ExtendedCharacterBackend, Item } from "../interfaces";
-import { formatIdAsNumber, itemCategories } from "./util";
+import { itemCategories } from "./util";
 import { WalletContext } from "../context/wallet";
 
-export const formOfferForCharacter = (purses: Purses, character: any) => ({
+export const formOfferForCharacter = (purses: WalletContext, character: CharacterBackend) => ({
   want: {
     Asset: {
-      pursePetname: purses.character[0].pursePetname,
+      pursePetname: purses.character.pursePetname,
       value: character,
     },
   },
   give: {
     Price: {
-      pursePetname: purses.money[0].pursePetname,
+      pursePetname: purses.money.pursePetname,
       value: 10,
     },
   },
@@ -59,7 +59,7 @@ export const extendCharacters = async (
   return { extendedCharacters: charactersWithItems, equippedItems: equippedCharacterItems };
 };
 
-export const mintNfts = async (service: AgoricState, purses: any, name: string) => {
+export const mintNfts = async (service: AgoricState, purses: WalletContext, name: string) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -67,7 +67,7 @@ export const mintNfts = async (service: AgoricState, purses: any, name: string) 
     },
   } = service;
 
-  if (!publicFacet || !walletP || !purses.money[0].pursePetname || !purses.character[0].pursePetname) {
+  if (!publicFacet || !walletP || !purses.token.pursePetname || !purses.character.pursePetname) {
     console.error("Could not make bid for character: undefined parameter");
     return;
   }
@@ -82,7 +82,7 @@ export const mintNfts = async (service: AgoricState, purses: any, name: string) 
     proposalTemplate: {
       want: {
         Asset: {
-          pursePetname: purses.character[purses.character.length - 1].pursePetname,
+          pursePetname: purses.character.pursePetname,
           value: [{ name }],
         },
       },
@@ -92,7 +92,7 @@ export const mintNfts = async (service: AgoricState, purses: any, name: string) 
   return E(walletP).addOffer(offerConfig);
 };
 
-export const sellCharacter = async (service: AgoricState, wallet: WalletContext, character: any, price: bigint): Promise<boolean> => {
+export const sellCharacter = async (service: AgoricState, wallet: WalletContext, character: CharacterBackend, price: bigint): Promise<boolean> => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -101,9 +101,9 @@ export const sellCharacter = async (service: AgoricState, wallet: WalletContext,
   } = service;
 
   if (!publicFacet) return false;
-  const characterPurse = wallet.character[wallet.character.length - 1];
-  const tokenPurse = wallet.token[wallet.token.length - 1];
-  const moneyPurse = wallet.money[wallet.money.length - 1];
+  const characterPurse = wallet.character;
+  const tokenPurse = wallet.token;
+  const moneyPurse = wallet.money;
 
   if (!characterPurse || !tokenPurse || !moneyPurse) return false;
 
@@ -121,7 +121,7 @@ export const sellCharacter = async (service: AgoricState, wallet: WalletContext,
       give: {
         Character: {
           pursePetname: characterPurse.pursePetname,
-          value: [formatIdAsNumber(character)],
+          value: [character],
         },
       },
     },
@@ -142,9 +142,9 @@ export const buyCharacter = async (service: AgoricState, wallet: WalletContext, 
   } = service;
 
   if (!publicFacet) return;
-  const characterPurse = wallet.character[wallet.character.length - 1];
-  const tokenPurse = wallet.token[wallet.token.length - 1];
-  const moneyPurse = wallet.money[wallet.money.length - 1];
+  const characterPurse = wallet.character;
+  const tokenPurse = wallet.token;
+  const moneyPurse = wallet.money;
   
   if (!characterPurse || !moneyPurse || !tokenPurse) return;
 
