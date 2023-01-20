@@ -49,12 +49,6 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       console.count("🛍 UPDATING ITEM SHOP 🛍");
       const shopNotifier = E(kreadPublicFacet).getItemShopNotifier();
       observeIteration(shopNotifier, observer);
-      // for await (const itemsInMarket of iterateNotifier(
-      //   notifier,
-      // )) {
-      //   const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
-      //   marketDispatch((prevState) => ({...prevState, items, fetched: true }));
-      // }
     };
     if (kreadPublicFacet) {
       watchNotifiers().catch((err) => {

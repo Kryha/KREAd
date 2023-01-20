@@ -6,7 +6,7 @@ import { formatIdAsNumber } from "./util";
 import { EVENT_TYPE } from "../constants";
 import { WalletContext } from "../context/wallet";
 
-export const sellItem = async (service: AgoricState, purses: WalletContext, item: ItemBackend, price: bigint) => {
+export const sellItem = async (service: AgoricState, wallet: WalletContext, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -15,8 +15,8 @@ export const sellItem = async (service: AgoricState, purses: WalletContext, item
   } = service;
 
   if (!publicFacet) return;
-  const itemPurse = purses.item;
-  const moneyPurse = purses.token;
+  const itemPurse = wallet.item;
+  const moneyPurse = wallet.token;
   if (!itemPurse || !moneyPurse) return;
 
   const sellInvitation = await E(publicFacet).makeSellItemInvitation();
@@ -46,7 +46,7 @@ export const sellItem = async (service: AgoricState, purses: WalletContext, item
   return true;
 };
 
-export const buyItem = async (service: AgoricState, purses: WalletContext, item: ItemBackend, price: bigint) => {
+export const buyItem = async (service: AgoricState, wallet: WalletContext, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
       characterBuilder: { publicFacet },
@@ -55,8 +55,8 @@ export const buyItem = async (service: AgoricState, purses: WalletContext, item:
   } = service;
 
   if (!publicFacet) return;
-  const itemPurse = purses.item;
-  const moneyPurse = purses.token;
+  const itemPurse = wallet.item;
+  const moneyPurse = wallet.token;
 
   if (!itemPurse || !moneyPurse) return;
 
@@ -128,7 +128,7 @@ export const mintItem = async (service: AgoricState, purses: WalletContext, item
   return E(walletP).addOffer(offerConfig);
 };
 
-export const equipItem = async (service: AgoricState, purses: WalletContext, item: Item, character: Character) => {
+export const equipItem = async (service: AgoricState, wallet: WalletContext, item: Item, character: Character) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -136,8 +136,8 @@ export const equipItem = async (service: AgoricState, purses: WalletContext, ite
     },
   } = service;
 
-  const itemPurse = purses.item;
-  const characterPurse = purses.character;
+  const itemPurse = wallet.item;
+  const characterPurse = wallet.character;
   const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name);
   const wantedCharacter = inventoryCharacter.key.value[0];
 
@@ -150,7 +150,7 @@ export const equipItem = async (service: AgoricState, purses: WalletContext, ite
   const filledCategories = currentInventoryItems.map((i) => i.category);
 
   if (filledCategories.includes(item.category)) {
-    itemSwap(service, purses, item, character);
+    itemSwap(service, wallet, item, character);
     return;
   }
   const invitation = await E(publicFacet).makeEquipInvitation();
@@ -182,7 +182,7 @@ export const equipItem = async (service: AgoricState, purses: WalletContext, ite
   return E(walletP).addOffer(offerConfig);
 };
 
-export const unequipItem = async (service: AgoricState, purses: WalletContext, item: Item, characterName: string) => {
+export const unequipItem = async (service: AgoricState, wallet: WalletContext, item: Item, characterName: string) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -190,8 +190,8 @@ export const unequipItem = async (service: AgoricState, purses: WalletContext, i
     },
   } = service;
 
-  const itemPurse = purses.item;
-  const characterPurse = purses.character;
+  const itemPurse = wallet.item;
+  const characterPurse = wallet.character;
   const characterInPurse = characterPurse.value.find((character: Character) => character.name === characterName);
   const inventoryCharacter = await E(publicFacet).getCharacterKey(characterName); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
@@ -230,7 +230,7 @@ export const unequipItem = async (service: AgoricState, purses: WalletContext, i
   return E(walletP).addOffer(offerConfig);
 };
 
-export const itemSwap = async (service: AgoricState, purses: WalletContext, item: Item, character: Character) => {
+export const itemSwap = async (service: AgoricState, wallet: WalletContext, item: Item, character: Character) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -238,8 +238,8 @@ export const itemSwap = async (service: AgoricState, purses: WalletContext, item
     },
   } = service;
 
-  const itemPurse = purses.item;
-  const characterPurse = purses.character;
+  const itemPurse = wallet.item;
+  const characterPurse = wallet.character;
   const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
   const wantedCharacter = inventoryCharacter.key.value[0];
   const { items: currentInventoryItems }: { items: Item[] } = await E(publicFacet).getCharacterInventory(character.name);

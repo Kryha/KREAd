@@ -161,10 +161,10 @@ export const useCharactersMarketPages = (page: number, filters?: CharactersMarke
 // TODO: Add error management
 export const useCreateCharacter = () => {
   const [agoricState] = useAgoricContext();
-  const purses = useWalletState();
+  const wallet = useWalletState();
   return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
-    await mintNfts(agoricState, purses, body.name);
+    await mintNfts(agoricState, wallet, body.name);
   });
 };
 

@@ -53,12 +53,6 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       console.count("🛍 UPDATING CHARACTER SHOP 🛍");
       const shopNotifier = E(kreadPublicFacet).getCharacterShopNotifier();
       observeIteration(shopNotifier, observer);
-      // for await (const charactersInMarket of iterateNotifier(
-      //   notifier,
-      // )) {
-      //   const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
-      //   marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
-      // }
     };
     if (kreadPublicFacet) {
       watchNotifiers().catch((err) => {

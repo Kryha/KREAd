@@ -186,7 +186,7 @@ export const Card = styled.div<ViewProps>`
       return "flex: 1 0 500px;";
     }
   }
-  }
+}
 `;
 
 export const DetailContainer = styled.div`
