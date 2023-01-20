@@ -15,7 +15,7 @@ import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
-import { useUserState, useUserStateDispatch } from "../context/user/user";
+import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {

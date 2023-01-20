@@ -7,7 +7,7 @@ import { useAgoricContext } from "../context/agoric";
 // import { buyCharacter, sellCharacter } from "./character-actions";
 import { useCharacterMarketState } from "../context/character-shop";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import { useUserState } from "../context/user/user";
+import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
 
 export const TestServiceUI = () => {

@@ -1,12 +1,12 @@
 import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
-import { useAgoricState } from "../agoric";
-import { useWalletState } from "../wallet";
-import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../../interfaces";
-import { mediate } from "../../util";
-import { itemCategories } from "../../service/util";
+import { useAgoricState } from "./agoric";
+import { useWalletState } from "./wallet";
+import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
+import { mediate } from "../util";
+import { itemCategories } from "../service/util";
 import { observeIteration } from "@agoric/notifier";
-import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../../util/other";
+import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 
 interface UserContext {
   characters: ExtendedCharacter[],

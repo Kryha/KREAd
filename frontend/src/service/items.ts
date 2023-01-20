@@ -7,7 +7,7 @@ import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
 import { useItemMarketState } from "../context/item-shop";
-import { useUserState } from "../context/user/user";
+import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {

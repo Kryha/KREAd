@@ -16,7 +16,7 @@ import { FadeInOut } from "../fade-in-out";
 import { useMyCharacters, useSelectedCharacter } from "../../service";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
-import { useUserStateDispatch } from "../../context/user/user";
+import { useUserStateDispatch } from "../../context/user";
 
 interface Props {
   id: string;

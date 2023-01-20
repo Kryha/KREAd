@@ -1,5 +1,5 @@
 import { FunctionComponent, PropsWithChildren } from "react";
-import { UserContextProvider } from "./user/user";
+import { UserContextProvider } from "./user";
 import { CharacterMarketContextProvider } from "./character-shop";
 import { ItemMarketContextProvider } from "./item-shop";
 import { WalletContextProvider } from "./wallet";
