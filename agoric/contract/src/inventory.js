@@ -165,7 +165,7 @@ export const inventory = (zcf, STATE) => {
     zcf.reallocate(seat, inventorySeat);
 
     const updater = state.getCharacterInventoryUpdater(characterName, STATE);
-    assert(updater, 'Could not find updater');
+
     updater.updateState({
       character: characterName,
       inventory: updatedInventory,

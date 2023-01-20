@@ -70,10 +70,12 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     case "SET_CHARACTERS":{
       return { ...state, characters: action.payload, fetched: true };
     }
+
     case "SET_ITEMS": {
       const frontendEquippedItems = mediate.items.toFront(action.payload);
       return { ...state, items:  frontendEquippedItems, fetched: true };
     }
+
     case "UPDATE_CHARACTER_ITEMS": {
 
       const frontendEquippedItems = mediate.items.toFront(action.payload);
