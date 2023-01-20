@@ -29,8 +29,8 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
         const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
         marketDispatch((prevState) => ({...prevState, items, fetched: true }));
       },
-      finish: (completion: unknown)=> console.info("INVENTORY NOTIFIER FINISHED", completion),
-      fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
+      finish: (completion: unknown)=> console.info("ITEM SHOP NOTIFIER FINISHED", completion),
+      fail: (reason: unknown) => console.info("ITEM SHOP NOTIFIER ERROR", reason),
     });
     const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {

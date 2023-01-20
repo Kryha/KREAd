@@ -21,7 +21,7 @@ interface SetSelected {
   type: "SET_SELECTED";
   payload: ExtendedCharacter;
 }
-interface SetCharacters{
+interface SetCharacters {
   type: "SET_CHARACTERS",
   payload: ExtendedCharacter[],
 }

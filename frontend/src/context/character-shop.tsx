@@ -32,8 +32,8 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
         const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
         marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
       },
-      finish: (completion: unknown)=> console.info("INVENTORY NOTIFIER FINISHED", completion),
-      fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
+      finish: (completion: unknown)=> console.info("CHARACTER SHOP NOTIFIER FINISHED", completion),
+      fail: (reason: unknown) => console.info("CHARACTER SHOP NOTIFIER ERROR", reason),
     });
     const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
       const extendedCharacter = await extendCharacters(kreadPublicFacet, [marketEntry.character]);
