@@ -30,7 +30,7 @@ interface BuyFormProps {
 }
 
 export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
-  const isOnFirstStep = !isLoading;
+  const isOnFirstStep = !isLoading && !isOfferAccepted;
   const isOnSecondStep = isLoading && !isOfferAccepted;
 
   return (
@@ -50,8 +50,8 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
           )}
         </GeneralInfo>
         <Line />
-        <Step active={!isOnSecondStep}>
-          <NumberContainer active={!isOnSecondStep}>
+        <Step active={!isOnFirstStep}>
+          <NumberContainer active={!isOnFirstStep}>
             {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>

@@ -28,7 +28,7 @@ export const CharacterBuy = () => {
 
   useEffect(() => {
     // TODO: handle declining character and error
-    if (boughtCharacter || !buyCharacter.isLoading) setIsAwaitingApproval(false);
+    if (boughtCharacter) setIsAwaitingApproval(false);
   }, [boughtCharacter, buyCharacter.isLoading]);
 
   // TODO: handle offer denied and error
@@ -60,7 +60,7 @@ export const CharacterBuy = () => {
       }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={{ nft: data.character, equippedItems: data.equippedItems}} showToast={displayToast}/>
+        <CharacterDetailSection character={{ nft: data.character, equippedItems: data.equippedItems }} showToast={displayToast} />
       </FadeInOut>
       <FadeInOut show={showToast} exiting={!showToast}>
         {showToast && <Overlay isOnTop={true} />}
