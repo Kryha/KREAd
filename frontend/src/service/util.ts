@@ -1,5 +1,5 @@
 import { AmountMath } from "@agoric/ertp";
-import { Character, ExtendedCharacter, Item, ItemCategory } from "../interfaces";
+import { Character, CharacterBackend, ExtendedCharacter, Item, ItemCategory } from "../interfaces";
 import { Purses } from "../interfaces/agoric.interfaces";
 
 export const formOfferForItem = (purses: Purses, item: any) => ({
@@ -31,4 +31,14 @@ export const itemCategories: ItemCategory[] = ["noseline", "midBackground", "mas
 
 export const getExtendedCharacter = (name: string, characters: ExtendedCharacter[]): ExtendedCharacter | undefined => {
   return characters.find(c => c.nft.name === name);
+};
+
+export const getCharacterKeys = (characterName: string, characterPurse: CharacterBackend[]): { ownedCharacterKey: CharacterBackend, wantedCharacterKey: CharacterBackend } => {
+  const ownedCharacterKey = characterPurse.find(character => character.name === character.name);
+  
+  if (!ownedCharacterKey) throw `Could not find character (${characterName}) in wallet`;
+  
+  const wantedCharacterKey: CharacterBackend = { ...ownedCharacterKey, keyId: ownedCharacterKey.keyId === 1 ? 2 : 1 };
+
+  return { ownedCharacterKey, wantedCharacterKey };
 };

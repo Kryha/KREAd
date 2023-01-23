@@ -1,8 +1,8 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { AgoricState } from "../interfaces/agoric.interfaces";
-import { ActivityEvent, Character, Item, ItemBackend } from "../interfaces";
-import { formatIdAsNumber } from "./util";
+import { ActivityEvent, Character, CharacterBackend, Item, ItemBackend } from "../interfaces";
+import { formatIdAsNumber, getCharacterKeys } from "./util";
 import { EVENT_TYPE } from "../constants";
 import { WalletContext } from "../context/wallet";
 
@@ -138,10 +138,10 @@ export const equipItem = async (service: AgoricState, wallet: WalletContext, ite
 
   const itemPurse = wallet.item;
   const characterPurse = wallet.character;
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name);
-  const wantedCharacter = inventoryCharacter.key.value[0];
-
-  if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
+  
+  const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(character.name, characterPurse.value);
+  
+  if (!publicFacet || !walletP || !itemPurse || !wantedCharacterKey) {
     console.error("undefined parameter");
     return;
   }
@@ -166,13 +166,13 @@ export const equipItem = async (service: AgoricState, wallet: WalletContext, ite
         },
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
-          value: [formatIdAsNumber(character)],
+          value: [ownedCharacterKey],
         },
       },
       want: {
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
-          value: [formatIdAsNumber(wantedCharacter)],
+          value: [wantedCharacterKey],
         },
       },
     },
@@ -192,11 +192,10 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
 
   const itemPurse = wallet.item;
   const characterPurse = wallet.character;
-  const characterInPurse = characterPurse.value.find((character: Character) => character.name === characterName);
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(characterName); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
-  const wantedCharacter = inventoryCharacter.key.value[0];
+  
+  const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(characterName, characterPurse.value);
 
-  if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacter) {
+  if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacterKey) {
     console.error("undefined parameter");
     return;
   }
@@ -210,7 +209,7 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
       give: {
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
-          value: [formatIdAsNumber(characterInPurse)],
+          value: [ownedCharacterKey],
         },
       },
       want: {
@@ -220,7 +219,7 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
-          value: [formatIdAsNumber(wantedCharacter)],
+          value: [wantedCharacterKey],
         },
       },
     },
@@ -240,15 +239,14 @@ export const itemSwap = async (service: AgoricState, wallet: WalletContext, item
 
   const itemPurse = wallet.item;
   const characterPurse = wallet.character;
-  const inventoryCharacter = await E(publicFacet).getCharacterKey(character.name); //{ ...character, keyId: BigInt(character.keyId === 1 ? 2 : 1) };
-  const wantedCharacter = inventoryCharacter.key.value[0];
-  const { items: currentInventoryItems }: { items: Item[] } = await E(publicFacet).getCharacterInventory(character.name);
+  const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(character.name, characterPurse.value);
 
+  const { items: currentInventoryItems }: { items: Item[] } = await E(publicFacet).getCharacterInventory(character.name);
   const availableItems: Item[] = itemPurse.value.map((item: Item) => formatIdAsNumber(item));
   const itemToSwapGive = availableItems.find((i) => i.category === item.category);
   const itemToSwapWant = currentInventoryItems.find((item: Item) => itemToSwapGive?.category === item.category);
 
-  if (!publicFacet || !walletP || !itemPurse || !wantedCharacter) {
+  if (!publicFacet || !walletP || !itemPurse || !wantedCharacterKey) {
     console.error("undefined parameter");
     return;
   }
@@ -266,7 +264,7 @@ export const itemSwap = async (service: AgoricState, wallet: WalletContext, item
         },
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
-          value: [formatIdAsNumber(character)],
+          value: [ownedCharacterKey],
         },
       },
       want: {
@@ -276,7 +274,7 @@ export const itemSwap = async (service: AgoricState, wallet: WalletContext, item
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
-          value: [formatIdAsNumber(wantedCharacter)],
+          value: [wantedCharacterKey],
         },
       },
     },
