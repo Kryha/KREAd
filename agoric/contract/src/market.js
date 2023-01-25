@@ -266,7 +266,7 @@ export const market = (zcf, STATE) => {
     makeBuyCharacterInvitation: () =>
       zcf.makeInvitation(buyCharacter, 'Buy Character in KREAd marketplace'),
     makeSellItemInvitation: () =>
-      zcf.makeInvitation(sellItem, SELL_CHARACTER_DESCRIPTION),
+      zcf.makeInvitation(sellItem, SELL_ITEM_DESCRIPTION),
     makeBuyItemInvitation: () =>
       zcf.makeInvitation(buyItem, 'Buy Item in KREAd marketplace'),
     getCharacterShopNotifier: () => characterShopNotifier,
