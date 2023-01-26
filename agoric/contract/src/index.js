@@ -21,8 +21,10 @@ import { inventory } from './inventory';
  * and from the inventory, using a token as access
  *
  * @type {ContractStartFn}
+ * @param {ZCF} zcf
+ * @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
  */
-const start = async (zcf) => {
+const start = async (zcf, privateArgs) => {
   // Define Assets
   const assetMints = await Promise.all([
     zcf.makeZCFMint('KREAdCHARACTER', AssetKind.SET),
@@ -46,6 +48,7 @@ const start = async (zcf) => {
    * @type {State}
    */
   const STATE = {
+    privateArgs,
     config: undefined, // Holds list of base characters and default items
     characters: [], // Holds each character's inventory + copy of its data
     charactersMarket: [],
@@ -295,6 +298,7 @@ const start = async (zcf) => {
       zcf.makeInvitation(tokenFacet, 'get tokens'),
     // config
     getConfig: () => STATE.config,
+    getPrivateArgs: () => STATE.privateArgs,
     getAssets: () => [
       STATE.assets?.character,
       STATE.assets?.item,

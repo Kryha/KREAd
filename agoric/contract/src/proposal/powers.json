@@ -1,0 +1,15 @@
+{
+  "consume": {
+    "board": true,
+    "chainStorage": true,
+    "zoe": true
+  },
+  "produce": {
+    "kreadKit": true
+  },
+  "instance": {
+    "produce": {
+      "kread": true
+    }
+  }
+}

@@ -1,6 +1,7 @@
 // ts-check
 /**
  * @typedef {{
+ *   privateArgs: PrivateArgs
  *   characters: CharacterRecord[]
  *   charactersMarket: CharacterInMarket[]
  *   itemsMarket: ItemInMarket[]
@@ -24,6 +25,8 @@
  *   }
  *   randomNumber?: Function
  * }} State
+ *
+ * @typedef {{storageNode: StorageNode, marshaller: Marshaller}} PrivateArgs
  *
  * @typedef  {{
  *   sellerSeat: ZCFSeat
