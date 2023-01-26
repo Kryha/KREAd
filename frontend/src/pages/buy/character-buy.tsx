@@ -29,13 +29,13 @@ export const CharacterBuy = () => {
   useEffect(() => {
     // TODO: handle declining character and error
     if (boughtCharacter) setIsAwaitingApproval(false);
-  }, [boughtCharacter, buyCharacter.isLoading]);
+  }, [boughtCharacter]);
 
   // TODO: handle offer denied and error
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    buyCharacter.callback();
+    await buyCharacter.callback();
   };
 
   if (isLoadingCharacter) return <LoadingPage spinner={false} />;
