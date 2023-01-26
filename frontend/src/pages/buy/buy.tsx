@@ -16,7 +16,7 @@ interface Props {
   data?: BuyData;
   text: BuyText;
 
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
 
   isLoading: boolean;
   isOfferAccepted: boolean;
@@ -27,12 +27,14 @@ export const Buy: FC<Props> = ({ children, data, text: pText, onSubmit, isLoadin
   const [currentStep, setCurrentStep] = useState<BuyStep>(1);
   if (!data) return <ErrorView />;
 
+  const onBuyFormSubmit = async () => await onSubmit();
+
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
       case 1:
         return (
           <BuyForm
-            onSubmit={() => onSubmit()}
+            onSubmit={onBuyFormSubmit}
             data={data}
             changeStep={setCurrentStep}
             isLoading={isLoading}

@@ -10,16 +10,15 @@ import { Buy } from "./buy";
 
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
-
   const idString = String(id);
 
   const [itemInMarket, isLoadingItem] = useItemFromMarket(idString);
   const [boughtItem] = useMyItem(idString);
-
   const buyItem = useBuyItem(idString);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
   const [data, setData] = useState<ItemInMarket>();
+
   useEffect(() => {
     // without this, the view will error out after purchase, since the item won't be on the market anymore
     if (itemInMarket) setData(itemInMarket);
@@ -27,13 +26,13 @@ export const ItemBuy = () => {
 
   // TODO: handle declining item and error
   useEffect(() => {
-    if (boughtItem && !buyItem.isLoading) setIsAwaitingApproval(false);
-  }, [boughtItem, buyItem.isLoading]);
+    if (boughtItem) setIsAwaitingApproval(false);
+  }, [boughtItem]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    buyItem.callback();
+    await buyItem.callback();
   };
 
   isLoadingItem && <LoadingPage />;
@@ -52,7 +51,7 @@ export const ItemBuy = () => {
       }}
     >
       <FadeInOut show>
-        <ItemDetailSection item={data &&  data.item} />
+        <ItemDetailSection item={data && data.item} />
       </FadeInOut>
     </Buy>
   );
