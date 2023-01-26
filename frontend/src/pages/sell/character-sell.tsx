@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 import { ErrorView, FadeInOut } from "../../components";
@@ -20,15 +20,23 @@ export const CharacterSell = () => {
   const [data, setData] = useState<SellData>({ price: 0 });
 
   useEffect(() => {
-    if (offers.filter((offer) => offer.proposalTemplate.give.Character && offer.proposalTemplate.give.Character.value[0].id === Number(idString)).length > 0) {
+    if (
+      offers.filter(
+        (offer) => offer.proposalTemplate.give.Character && offer.proposalTemplate.give.Character.value[0].id === Number(idString)
+      ).length > 0
+    ) {
       setIsPlacedInShop(true);
     }
   }, [idString, offers]);
 
-  const sendOfferHandler = async (data: SellData) => {
-    if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellCharacter.callback(data.price);
-  };
+  const sendOfferHandler = useCallback(
+    async (data: SellData) => {
+      console.count("Selling?");
+      if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
+      await sellCharacter.callback(data.price);
+    },
+    [sellCharacter]
+  );
 
   if (!data || !characterCopy) return <ErrorView />;
 

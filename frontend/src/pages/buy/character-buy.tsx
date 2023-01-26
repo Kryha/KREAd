@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 
@@ -32,11 +32,11 @@ export const CharacterBuy = () => {
   }, [boughtCharacter]);
 
   // TODO: handle offer denied and error
-  const handleSubmit = async () => {
-    if (!id) return;
+  const handleSubmit = useCallback(async () => {
+    console.count("Buying?");
     setIsAwaitingApproval(true);
     await buyCharacter.callback();
-  };
+  }, [buyCharacter]);
 
   if (isLoadingCharacter) return <LoadingPage spinner={false} />;
 
