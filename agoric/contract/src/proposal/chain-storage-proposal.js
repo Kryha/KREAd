@@ -13,8 +13,8 @@
 // import { E } from '@endo/far';
 
 const contractInfo = {
-  storagePath: 'kread',
-
+  storagePath: 'kread1',
+  instanceName: 'kread1',
   // see discussion of publish-bundle and bundleID
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
@@ -45,7 +45,7 @@ const executeProposal = async (powers) => {
     produce: { kreadKit },
     instance: {
       // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
-      produce: { kread },
+      produce: { [contractInfo.instanceName]: kread },
     },
   } = powers;
 
