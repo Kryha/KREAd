@@ -13,8 +13,9 @@
 // import { E } from '@endo/far';
 
 const contractInfo = {
-  storagePath: 'kread1',
-  instanceName: 'kread1',
+  storagePath: 'kread',
+  instanceName: 'kread',
+  boardId: 'board02656',
   // see discussion of publish-bundle and bundleID
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
@@ -57,24 +58,34 @@ const executeProposal = async (powers) => {
   );
   const marshaller = await E(board).getReadonlyMarshaller();
 
-  const privateArgs = harden({ storageNode, marshaller });
+  // const privateArgs = harden({ storageNode, marshaller });
 
-  const installation = await E(zoe).installBundleID(contractInfo.bundleID);
-  const noIssuers = harden({});
-  const noTerms = harden({});
-  const facets = await E(zoe).startInstance(
-    installation,
-    noIssuers,
-    noTerms,
-    privateArgs,
-  );
+  const kreadInstance = await E(board).getValue(contractInfo.boardId);
+  const kreadFacet = await E(zoe).getPublicFacet(kreadInstance);
 
-  // Share instance widely via E(agoricNames).lookup('instance', 'bakeSale')
-  kread.resolve(facets.instance);
+  try {
+    await E(kreadFacet).addStorageNode(storageNode, marshaller);
+  } catch (e) {
+    fail(Error('There was an error calling kread.addStorageNode()', e));
+  }
+
+  // const installation = await E(zoe).installBundleID(contractInfo.bundleID);
+  // const noIssuers = harden({});
+  // const noTerms = harden({});
+  // const facets = await E(zoe).startInstance(
+  //   installation,
+  //   noIssuers,
+  //   noTerms,
+  //   privateArgs,
+  // );
+
+  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
+  kread.resolve(kreadInstance);
+  // kread.resolve(facets.instance);
 
   // Share the publicFacet, creatorFacet, and adminFacet in the bootstrap space
   // for use by other CoreEval behaviors.
-  kreadKit.resolve(facets);
+  kreadKit.resolve(kreadFacet);
 };
 harden(executeProposal);
 

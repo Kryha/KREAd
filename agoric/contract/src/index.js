@@ -22,9 +22,10 @@ import { inventory } from './inventory';
  *
  * @type {ContractStartFn}
  * @param {ZCF} zcf
- * @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
+ *
  */
-const start = async (zcf, privateArgs) => {
+// @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
+const start = async (zcf) => {
   // Define Assets
   const assetMints = await Promise.all([
     zcf.makeZCFMint('KREAdCHARACTER', AssetKind.SET),
@@ -48,7 +49,6 @@ const start = async (zcf, privateArgs) => {
    * @type {State}
    */
   const STATE = {
-    privateArgs,
     config: undefined, // Holds list of base characters and default items
     characters: [], // Holds each character's inventory + copy of its data
     charactersMarket: [],
@@ -87,7 +87,6 @@ const start = async (zcf, privateArgs) => {
    *   seed: number
    *   moneyIssuer: Issuer
    *   moneyBrand: Brand
-   *   sellAssetsInstallation: Installation
    *   chainTimerService: TimerService
    * }} config
    * @returns {string}
@@ -98,7 +97,6 @@ const start = async (zcf, privateArgs) => {
     seed,
     moneyIssuer,
     moneyBrand,
-    sellAssetsInstallation,
     chainTimerService,
   }) => {
     STATE.config = {
@@ -107,13 +105,27 @@ const start = async (zcf, privateArgs) => {
       completed: true,
       moneyIssuer,
       moneyBrand,
-      sellAssetsInstallation,
       chainTimerService,
     };
     assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
     PRNG = mulberry32(seed);
     STATE.randomNumber = PRNG;
     return 'Setup completed';
+  };
+
+  /**
+   *
+   * @param { StorageNode } storageNode
+   * @param { Marshaller } marshaller
+   */
+  const addStorageNode = (storageNode, marshaller) => {
+    STATE.powers = {
+      storageNode,
+      marshaller,
+    };
+    assert(storageNode && marshaller, X`${errors.invalidArg}`);
+    STATE.powers = { storageNode, marshaller };
+    return 'Storage Node added successfully';
   };
 
   /**
@@ -284,6 +296,7 @@ const start = async (zcf, privateArgs) => {
     seat.exit();
     return 'Success';
   };
+
   const creatorFacet = Far('Character store creator', {
     initConfig,
     getCharacterIssuer: () => characterIssuer,
@@ -294,11 +307,12 @@ const start = async (zcf, privateArgs) => {
   });
 
   const publicFacet = Far('Chracter store public', {
+    addStorageNode,
     makeTokenFacetInvitation: () =>
       zcf.makeInvitation(tokenFacet, 'get tokens'),
     // config
     getConfig: () => STATE.config,
-    getPrivateArgs: () => STATE.privateArgs,
+    getPowers: () => ({ powers: STATE.powers, config: STATE.config }),
     getAssets: () => [
       STATE.assets?.character,
       STATE.assets?.item,

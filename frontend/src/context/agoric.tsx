@@ -5,12 +5,11 @@ import { makeCapTP, E } from "@endo/captp";
 import { observeIteration } from "@agoric/notifier";
 
 import dappConstants from "../service/conf/defaults";
-import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
+import { activateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
-  SELL_ASSETS_INSTALLATION_BOARD_ID,
   INVITE_BRAND_BOARD_ID,
   INSTALLATION_BOARD_ID,
   issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, Token: TOKEN_ISSUER_BOARD_ID },
@@ -166,7 +165,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestInstallation("Installation Sell Assets", SELL_ASSETS_INSTALLATION_BOARD_ID),
         E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID),

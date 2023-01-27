@@ -82,9 +82,6 @@ export default async function deployApi(homePromise, { pathResolve }) {
     SELL_ASSETS_INSTALLATION_BOARD_ID,
   } = installationConstants;
   const installation = await E(board).getValue(INSTALLATION_BOARD_ID);
-  const sellAssetsInstallation = await E(board).getValue(
-    SELL_ASSETS_INSTALLATION_BOARD_ID,
-  );
 
   // Second, we can use the installation to create a new instance of
   // our contract code on Zoe. A contract instance is a running
@@ -113,7 +110,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
 
   const IPFS_BASE_URL = 'https://ipfs.io/ipfs/';
 
-  const PINATA_JWT = process.env.PINATA_JWT;
+  const PINATA_JWT = undefined; // process.env.PINATA_JWT;
 
   let updatedDefaultCharacters = defaultCharacters;
   let updatedDefaultItems = defaultItems;
@@ -302,7 +299,6 @@ export default async function deployApi(homePromise, { pathResolve }) {
   const kreadConfig = {
     baseCharacters: updatedDefaultCharacters,
     defaultItems: updatedDefaultItems,
-    sellAssetsInstallation,
     moneyIssuer,
     moneyBrand,
     chainTimerService,
@@ -399,7 +395,6 @@ export default async function deployApi(homePromise, { pathResolve }) {
   const dappConstants = {
     INSTANCE_NFT_MAKER_BOARD_ID,
     INSTALLATION_BOARD_ID,
-    SELL_ASSETS_INSTALLATION_BOARD_ID,
     INVITE_BRAND_BOARD_ID,
     INVITE_ISSUER_BOARD_ID,
     BRIDGE_URL: 'agoric-lookup:https://local.agoric.com?append=/bridge',

@@ -1,7 +1,7 @@
 // ts-check
 /**
  * @typedef {{
- *   privateArgs: PrivateArgs
+ *   powers?: Powers
  *   characters: CharacterRecord[]
  *   charactersMarket: CharacterInMarket[]
  *   itemsMarket: ItemInMarket[]
@@ -26,7 +26,7 @@
  *   randomNumber?: Function
  * }} State
  *
- * @typedef {{storageNode: StorageNode, marshaller: Marshaller}} PrivateArgs
+ * @typedef {{storageNode: StorageNode, marshaller: Marshaller}} Powers
  *
  * @typedef  {{
  *   sellerSeat: ZCFSeat
@@ -49,7 +49,6 @@
  *   completed: boolean
  *   moneyIssuer: Issuer
  *   moneyBrand: Brand
- *   sellAssetsInstallation: Installation
  *   chainTimerService?: TimerService
  * }} Config
  *
