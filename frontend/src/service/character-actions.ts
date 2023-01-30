@@ -111,7 +111,7 @@ export const sellCharacter = async (
   const moneyPurse = wallet.money;
 
   if (!characterPurse || !tokenPurse || !moneyPurse) return false;
-  console.count("SELLING?!?!?!?!");
+
   const sellInvitation = await E(publicFacet).makeSellCharacterInvitation();
   const offer = harden({
     id: Date.now().toString(),
@@ -150,7 +150,7 @@ export const buyCharacter = async (service: AgoricState, wallet: WalletContext, 
   const moneyPurse = wallet.money;
 
   if (!characterPurse || !moneyPurse || !tokenPurse) return;
-  console.count("BUYING?!?!?!?!");
+
   const buyInvitation = await E(publicFacet).makeBuyCharacterInvitation();
 
   await E(walletP).addOffer(

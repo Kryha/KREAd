@@ -33,7 +33,6 @@ export const CharacterBuy = () => {
 
   // TODO: handle offer denied and error
   const handleSubmit = useCallback(async () => {
-    console.count("Buying?");
     setIsAwaitingApproval(true);
     await buyCharacter.callback();
   }, [buyCharacter]);

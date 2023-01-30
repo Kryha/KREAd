@@ -47,7 +47,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         const itemWallet = newItemPurses[newItemPurses.length - 1];
         const moneyWallet = newMoneyPurses[newCharacterPurses.length - 1];
         const tokenWallet = newTokenPurses[newItemPurses.length - 1];
-        console.log("🤷‍♂️ CHARACTER WALLET", characterWallet);
+
         walletDispatch((prevState) => ({
           ...prevState,
           token: tokenWallet,

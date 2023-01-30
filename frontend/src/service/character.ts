@@ -190,9 +190,9 @@ export const useSellCharacter = (characterId: string) => {
       const backendCharacter = mediate.characters.toBack([found])[0];
 
       setIsLoading(true);
-      console.count("sellCharacter");
       const res = await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
       setIsLoading(false);
+
       return res;
     },
     [characterId, characters, wallet, service]
@@ -218,8 +218,8 @@ export const useBuyCharacter = (characterId: string) => {
 
     const mediated = mediate.charactersMarket.toBack([found])[0];
     setIsLoading(true);
-    console.count("buyCharacter");
     await buyCharacter(service, wallet, mediated.character, mediated.sell.price);
+    setIsLoading(false);
   }, [characterId, characters, wallet, service]);
 
   return { callback, isLoading };

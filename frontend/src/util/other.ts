@@ -3,13 +3,9 @@ import { CharacterItems, ExtendedCharacter } from "../interfaces";
 export const replaceCharacterInUserStateArray = (arr: ExtendedCharacter[], name: string, newEntry: ExtendedCharacter) => {
   const newArr = [...arr];
   const index = newArr.findIndex((entry) => entry.nft.name === name);
-  console.log(1, { newArr });
-  console.log({ index });
   if (index > -1) {
-    console.log("HEYA");
     newArr.splice(index, 1, newEntry);
   }
-  console.log(2, { newArr });
 
   return newArr;
 };

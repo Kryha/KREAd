@@ -31,7 +31,6 @@ export const CharacterSell = () => {
 
   const sendOfferHandler = useCallback(
     async (data: SellData) => {
-      console.count("Selling?");
       if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
       await sellCharacter.callback(data.price);
     },

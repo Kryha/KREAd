@@ -25,7 +25,16 @@ export const TestServiceUI = () => {
   }, [service, characters]);
 
   const mintCharacterNFT = async () => {
-    await createCharacter.mutateAsync({ name: (Math.random() + 1).toString(36).substring(7) }); // random 5 char string
+    await createCharacter.mutateAsync({
+      // Random 5 letter string
+      name: Array.from(
+        { length: 5 },
+        () =>
+          Math.random()
+            .toString(36)
+            .replace(/[^a-z]+/g, "")[0]
+      ).join(""),
+    });
   };
 
   const purses = useWalletState();
@@ -92,21 +101,27 @@ export const TestServiceUI = () => {
     height: 100vh;
     background: #333;
     display: flex;
+    align-content: flex-start;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: space-between;
+    margin-bottom: 30px;
   `;
 
   const Button = styled.button`
-    height: 25%;
-    gap: 10px;
-    width: 200px;
+    margin: 30px 15px 0;
+    flex-grow: 1;
+    flex-basis: 220px;
+    min-height: 250px;
     border-radius: 4px;
     background: #81ffad;
     color: #333;
     font-weight: bold;
     cursor: pointer;
+
+    &:hover {
+      background: #86f4ad;
+    }
 
     &:active {
       box-shadow: inset 1px 1px 10px #333;
