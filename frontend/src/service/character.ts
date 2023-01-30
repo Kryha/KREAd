@@ -22,7 +22,7 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
   const { characters, selected, fetched } = useUserState();
   const userStateDispatch = useUserStateDispatch();
   useEffect(() => {
-    if (!selected || !characters.map(c => c.nft.name).includes(selected?.nft.name)) {
+    if (!selected || !characters.map((c) => c.nft.name).includes(selected?.nft.name)) {
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
   }, [userStateDispatch, characters, selected]);
@@ -186,9 +186,9 @@ export const useSellCharacter = (characterId: string) => {
     async (price: number) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
-      
+
       const backendCharacter = mediate.characters.toBack([found])[0];
-      
+
       setIsLoading(true);
       const res = await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
       setIsLoading(false);

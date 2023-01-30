@@ -15,8 +15,10 @@ export const FormTab: FC<FormTabProps> = ({ active, title, amount }) => {
   return (
     <NavTabs>
       <Tab width={width} amount={amount}>
-        <NavTitle width={width} amount={amount} active={active}>{title}</NavTitle>
-        <ActiveLine active={active}/>
+        <NavTitle width={width} amount={amount} active={active}>
+          {title}
+        </NavTitle>
+        <ActiveLine active={active} />
       </Tab>
     </NavTabs>
   );

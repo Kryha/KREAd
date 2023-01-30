@@ -5,15 +5,13 @@ import { useAgoricState } from "./agoric";
 
 import dappConstants from "../service/conf/defaults";
 
-const {
-  brandBoardIds
-} = dappConstants;
+const { brandBoardIds } = dappConstants;
 export interface WalletContext {
-  token: any,
-  money: any,
-  character: any,
-  item: any,
-  fetched: boolean,
+  token: any;
+  money: any;
+  character: any;
+  item: any;
+  fetched: boolean;
 }
 
 const initialState: WalletContext = {
@@ -44,13 +42,13 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         const newTokenPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Token);
         const newCharacterPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Character);
         const newItemPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Item);
-        
+
         const characterWallet = newCharacterPurses[newCharacterPurses.length - 1];
         const itemWallet = newItemPurses[newItemPurses.length - 1];
         const moneyWallet = newMoneyPurses[newCharacterPurses.length - 1];
         const tokenWallet = newTokenPurses[newItemPurses.length - 1];
 
-        walletDispatch(prevState => ({
+        walletDispatch((prevState) => ({
           ...prevState,
           token: tokenWallet,
           money: moneyWallet,
@@ -58,7 +56,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
           item: itemWallet,
         }));
       },
-      finish: (completion: unknown)=> console.info("WALLET NOTIFIER FINISHED", completion),
+      finish: (completion: unknown) => console.info("WALLET NOTIFIER FINISHED", completion),
       fail: (reason: unknown) => console.info("WALLET NOTIFIER ERROR", reason),
     });
 
@@ -67,9 +65,9 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
 
       const purseNotifier = E(walletP).getPursesNotifier();
       observeIteration(purseNotifier, observer);
-      walletDispatch(prevState => ({
+      walletDispatch((prevState) => ({
         ...prevState,
-        fetched: true
+        fetched: true,
       }));
     };
 
@@ -79,12 +77,8 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       });
     }
   }, [walletP, kreadPublicFacet, walletState.fetched]);
-  
-  return (
-    <Context.Provider value={walletState}>
-      {props.children}
-    </Context.Provider>
-  );
+
+  return <Context.Provider value={walletState}>{props.children}</Context.Provider>;
 };
 
 export const useWalletState = (): WalletContext => {

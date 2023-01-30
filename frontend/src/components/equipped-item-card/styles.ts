@@ -35,7 +35,7 @@ export const EquippedContainer = styled.div<DirectionProps>`
         `
       : "";
   }}
-  &: hover{
+  &: hover {
     ${Id} {
       color: ${color.black};
     }

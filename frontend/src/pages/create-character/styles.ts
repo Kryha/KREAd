@@ -10,7 +10,7 @@ interface ViewProps {
   width: number;
 }
 
-export const DefaultImage = styled(CharacterImgs) <ViewProps>`
+export const DefaultImage = styled(CharacterImgs)<ViewProps>`
   margin-left: 140px;
   top: 0;
 `;
@@ -157,7 +157,6 @@ export const Line = styled.div`
   transform: rotate(90deg);
   margin: ${margins.small} 20px ${margins.small} 39px;
 `;
-
 
 export const NumberContainer = styled.div<ActiveProps>`
   display: flex;

@@ -98,12 +98,15 @@ export const FilterOption = styled.div<FilterProps>`
       display: none;
       `;
   }};
-  ${({ isOpen }) => (isOpen === true ?
-    css` animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.2s, 0.5s;
-    animation-delay: 0s, 0.2s;`
-    :
-    css`animation: ${fadeOut};
-   animation-duration: 0.5s;
-  `)};
+  ${({ isOpen }) =>
+    isOpen === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.2s, 0.5s;
+          animation-delay: 0s, 0.2s;
+        `
+      : css`
+          animation: ${fadeOut};
+          animation-duration: 0.5s;
+        `};
 `;

@@ -24,29 +24,29 @@ type ProviderProps = Omit<React.ProviderProps<CharacterMarketContext>, "value">;
 export const CharacterMarketContextProvider = (props: ProviderProps): React.ReactElement => {
   const [marketState, marketDispatch] = useState(initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
+  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
 
   useEffect(() => {
     const observer = harden({
       updateState: async (charactersInMarket: any) => {
         const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
-        marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
+        marketDispatch((prevState) => ({ ...prevState, characters, fetched: true }));
       },
-      finish: (completion: unknown)=> console.info("CHARACTER SHOP NOTIFIER FINISHED", completion),
+      finish: (completion: unknown) => console.info("CHARACTER SHOP NOTIFIER FINISHED", completion),
       fail: (reason: unknown) => console.info("CHARACTER SHOP NOTIFIER ERROR", reason),
     });
-    const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
+    const formatMarketEntry = async (marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
       const extendedCharacter = await extendCharacters(kreadPublicFacet, [marketEntry.character]);
       const equippedItems = itemArrayToObject(extendedCharacter.equippedItems);
       const character = extendedCharacter.extendedCharacters[0].nft;
-      
+
       return {
-        id: (character.id).toString(),
-        character: {...character, id: character.id.toString()},
+        id: character.id.toString(),
+        character: { ...character, id: character.id.toString() },
         equippedItems,
         sell: {
-          price: marketEntry.askingPrice.value
-        }
+          price: marketEntry.askingPrice.value,
+        },
       };
     };
     const watchNotifiers = async () => {
@@ -62,12 +62,8 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       console.info("✅ LISTENING TO CHARACTER SHOP NOTIFIER");
     }
   }, [kreadPublicFacet]);
-  
-  return (
-    <Context.Provider value={marketState}>
-      {props.children}
-    </Context.Provider>
-  );
+
+  return <Context.Provider value={marketState}>{props.children}</Context.Provider>;
 };
 
 export const useCharacterMarketState = (): CharacterMarketContext => {

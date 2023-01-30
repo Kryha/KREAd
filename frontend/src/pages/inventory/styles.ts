@@ -24,7 +24,7 @@ export const InventoryWrapper = styled.div`
 `;
 
 export const OverviewContainer = styled.div`
-  border: 1px solid #D0D0D0;
+  border: 1px solid #d0d0d0;
   border-radius: 24px;
   height: 75vh;
 `;
@@ -67,7 +67,7 @@ interface NotificationProps {
   open: boolean;
 }
 
-export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
+export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
   padding: ${margins.mini};
   position: relative;
   z-index: 1000;
@@ -110,7 +110,7 @@ export const Tag = styled.div`
   gap: 10px;
 
   position: absolute;
-  width:  ${margins.small};
+  width: ${margins.small};
   height: ${margins.small};
   left: 27px;
   top: -3px;
@@ -125,7 +125,7 @@ export const DetailContainer = styled.div`
   opacity: 0;
   transform: translate3d(0, 1rem, 0);
   width: 60%;
-  ${DetailSectionWrap}{
+  ${DetailSectionWrap} {
     max-width: 100%;
   }
 `;

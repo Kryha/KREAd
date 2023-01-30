@@ -16,7 +16,14 @@ interface OverviewProps {
   secondary?: boolean;
 }
 
-export const OverviewEmpty: FC<OverviewProps> = ({ redirectRoute, headingText, buttonText, descriptionText, onButtonClick, secondary = false }) => {
+export const OverviewEmpty: FC<OverviewProps> = ({
+  redirectRoute,
+  headingText,
+  buttonText,
+  descriptionText,
+  onButtonClick,
+  secondary = false,
+}) => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {

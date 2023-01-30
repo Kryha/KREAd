@@ -26,7 +26,7 @@ interface WidthProps {
   active?: boolean;
 }
 
-export const NavTitle = styled(NavigationTitle) <WidthProps>`
+export const NavTitle = styled(NavigationTitle)<WidthProps>`
   text-align: center;
   padding: 0px 0px ${margins.medium} 0px;
   ${({ active }) => {

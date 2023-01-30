@@ -73,7 +73,7 @@ export const ButtonContainer = styled.div`
       }
     }
   }
-  ${LoadingPageContainer}{
+  ${LoadingPageContainer} {
     width: 35px;
   }
   ${Spinner} {

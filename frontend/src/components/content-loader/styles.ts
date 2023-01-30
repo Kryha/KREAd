@@ -24,7 +24,6 @@ interface SpinnerProps {
   isSpinner?: boolean;
 }
 
-
 export const LoadingPageContainer = styled.div<SpinnerProps>`
   width: 100%;
   display: flex;
@@ -55,7 +54,7 @@ interface AnimationProps {
 }
 
 export const LogoWrap = styled.div<AnimationProps>`
-${({ iteration }): string => `
+  ${({ iteration }): string => `
   #eB1kvmsL79H3 {
     animation: eB1kvmsL79H3_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
@@ -387,5 +386,5 @@ ${({ iteration }): string => `
 `;
 
 export const LoadingIcon = styled(Loading)`
-    height: 24px;
+  height: 24px;
 `;

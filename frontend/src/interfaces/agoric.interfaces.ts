@@ -42,9 +42,9 @@ export interface AgoricState {
 
 interface NotifiersState {
   shop: {
-      items: any,
-      characters: any,
-    }
+    items: any;
+    characters: any;
+  };
 }
 
 interface SetDappApproved {

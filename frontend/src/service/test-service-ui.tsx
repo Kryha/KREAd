@@ -12,7 +12,7 @@ import { useWalletState } from "../context/wallet";
 
 export const TestServiceUI = () => {
   // service referse to agoricContext
-  const [service,] = useAgoricContext();
+  const [service] = useAgoricContext();
   const { characters } = useUserState();
   const shop = useCharacterMarketState();
   console.log("---------------TESTUI", shop);
@@ -44,7 +44,7 @@ export const TestServiceUI = () => {
 
   //   await sellItem(service, item, 1n);
   // };
-  
+
   const handleSellCharacter = async () => {
     const character = purses.character[purses.character.length - 1].currentAmount.value[0];
     if (!character) return;
@@ -58,7 +58,7 @@ export const TestServiceUI = () => {
     console.log("/////////////BUYING CHARACTER :", character);
     // await buyCharacter(service, character, 4n);
   };
-  
+
   // const buyItemNFT = async () => {
   //   const {
   //     contracts: {
@@ -72,25 +72,26 @@ export const TestServiceUI = () => {
   const purses = useWalletState();
 
   const topUp = async () => {
-
     const invitation = await E(publicFacet).makeTokenFacetInvitation();
     const tokenPurse = purses.token;
     if (!tokenPurse) return;
-    console.log(await E(service.agoric.walletP).addOffer(
-      harden({
-        id: Date.now().toString(),
-        invitation: invitation,
-        proposalTemplate: {
-          want: {
-            Token: {
-              pursePetname: tokenPurse.pursePetname,
-              value: 100n,
+    console.log(
+      await E(service.agoric.walletP).addOffer(
+        harden({
+          id: Date.now().toString(),
+          invitation: invitation,
+          proposalTemplate: {
+            want: {
+              Token: {
+                pursePetname: tokenPurse.pursePetname,
+                value: 100n,
+              },
             },
+            dappContext: true,
           },
-          dappContext: true,
-        },
-      })
-    ));
+        })
+      )
+    );
   };
   const addItemToInventory = async () => {
     // const item = service.purses.item[service.purses.item.length - 1].currentAmount.value[0];
@@ -102,9 +103,7 @@ export const TestServiceUI = () => {
   };
 
   const removeItemFromInventory = async () => {
-    const { items: equippedItems } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(
-      characters[0].nft.name
-    );
+    const { items: equippedItems } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters[0].nft.name);
 
     const item = equippedItems[0];
     const character = characters[0];
@@ -115,10 +114,9 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-    
     const characters = E(service.contracts.characterBuilder.publicFacet).getCharacters();
     console.log(characters);
-   
+
     const notifier = characters.characters[0].notifier;
     console.log(notifier);
     for await (const update of iterateNotifier(notifier)) {
@@ -146,10 +144,16 @@ export const TestServiceUI = () => {
         <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={mintItemNFT}>
           MINT ITEM
         </button>
-        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={handleSellCharacter}>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={handleSellCharacter}
+        >
           SELL CHARACTER
         </button>
-        <button style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }} onClick={handleBuyCharacter}>
+        <button
+          style={{ height: "30px", width: "200px", borderRadius: "4px", background: "#81ffad", color: "#333" }}
+          onClick={handleBuyCharacter}
+        >
           BUY CHARACTER
         </button>
         <button

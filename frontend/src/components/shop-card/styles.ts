@@ -79,7 +79,7 @@ interface ImageProps {
   category?: string;
 }
 
-export const ItemImage = styled(Img) <ImageProps>`
+export const ItemImage = styled(Img)<ImageProps>`
   width: 354px;
   height: 320px;
 `;
@@ -144,18 +144,14 @@ export const Product = styled.div<ViewProps>`
   ${({ width }): string => {
     if (width <= 1300) {
       return "flex: 0 1 calc(49.6% - 1em);";
-    }
-    else if (width >= 1366 && width <= LARGE_SCREEN_SIZE) {
+    } else if (width >= 1366 && width <= LARGE_SCREEN_SIZE) {
       return "flex: 0 1 calc(32.4% - 1em);";
-    }
-    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
+    } else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
       return "flex: 0 1 calc(24.2% - 1em);";
-    }
-    else {
+    } else {
       return "flex: 1 0 500px;";
     }
-  }
-}
+  }}
   :not(:hover) {
     ${PrimaryButton} {
       display: none;

@@ -27,7 +27,7 @@ const initialState: AgoricState = {
     shop: {
       items: undefined,
       characters: undefined,
-    }
+    },
   },
   agoric: {
     zoe: undefined,
@@ -72,7 +72,7 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
     case "SET_APISEND":
       return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
-    
+
     case "SET_CHARACTER_CONTRACT":
       return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
 
@@ -141,13 +141,13 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
-      
+
       const observer = harden({
         updateState: async (offers: any) => {
           console.count("📡 CHECKING OFFERS");
           processOffers(offers, dispatch);
         },
-        finish: (completion: unknown)=> console.info("INVENTORY NOTIFIER FINISHED", completion),
+        finish: (completion: unknown) => console.info("INVENTORY NOTIFIER FINISHED", completion),
         fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
       });
 
@@ -170,9 +170,9 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID),
-      ]);        
+      ]);
       // }
-      
+
       console.count("🔧 LOADING AGORIC SERVICE 🔧");
 
       dispatch({ type: "SET_LOADING", payload: false });

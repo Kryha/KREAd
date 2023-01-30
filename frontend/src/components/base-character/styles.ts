@@ -19,7 +19,7 @@ interface ViewProps {
   width: number;
 }
 
-export const ExpandButton = styled(SecondaryButton) <ViewProps>`
+export const ExpandButton = styled(SecondaryButton)<ViewProps>`
   position: absolute;
   z-index: 300;
   ${({ width }): string => {
@@ -34,8 +34,7 @@ export const ExpandButton = styled(SecondaryButton) <ViewProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "left: 47%;";
-    }
-    else {
+    } else {
       return "left: 48%;";
     }
   }};
@@ -63,8 +62,7 @@ export const CharacterIcon = styled.img<ImageProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "width: 1018px; ";
-    }
-    else {
+    } else {
       return "width: 742px; ";
     }
   }};
@@ -78,7 +76,7 @@ export const CharacterWrapper = styled.div`
 `;
 
 export const CharacterContainer = styled.div<ImageProps>`
-${({ size, width, height }): string => {
+  ${({ size, width, height }): string => {
     if (size === "mini") {
       if (width <= SMALL_SCREEN_SIZE) {
         return `zoom: 0.1;
@@ -96,8 +94,7 @@ ${({ size, width, height }): string => {
       -moz-transform: scale(0.1);
       -moz-transform-origin: 0 0;
       `;
-    }
-    else if (size === "medium") {
+    } else if (size === "medium") {
       if (width <= SMALL_SCREEN_SIZE) {
         return `zoom: 0.42;
         -moz-transform: scale(0.42);
@@ -121,54 +118,46 @@ ${({ size, width, height }): string => {
         -moz-transform: scale(0.222);
         -moz-transform-origin: 0 0;
         `;
-      }
-      else {
+      } else {
         return `zoom: 0.304;
         -moz-transform: scale(0.304);
         -moz-transform-origin: 0 0;
         `;
       }
-    }
-    else if (size === "half") {
+    } else if (size === "half") {
       return `zoom: 0.5;
       -moz-transform: scale(0.5);
       -moz-transform-origin: 0 0;
       `;
-    }
-    else if (size === "normal") {
+    } else if (size === "normal") {
       return `width: ${width * 0.4}px; height: ${height}px;`;
-    }
-    else if (size === "large") {
+    } else if (size === "large") {
       return `zoom: 1.6;
       -moz-transform: scale(1.6);
       -moz-transform-origin: 0 0;
       `;
-    }
-    else if (size === "extraLarge") {
+    } else if (size === "extraLarge") {
       return `
       zoom: 1.8;
       -moz-transform: scale(1.8);
       -moz-transform-origin: 0 0;
       `;
-    }
-    else {
+    } else {
       return `width: ${width * 0.4}px; height: ${height}px;`;
     }
   }};
-  ${({ size, isClothing }) => (size === "extraLarge" && !isClothing ?
-    css`
-    animation: ${zoomIn} 5s ease-out 1 forwards;
-    `
-    :
-    css``
-  )};
-  ${({ size, isClothing }) => (size === "extraLarge" && isClothing ?
-    css`
-    animation: ${zoomClothing} 5s ease-out 1 forwards;
-    `
-    :
-    css``
-  )};
+  ${({ size, isClothing }) =>
+    size === "extraLarge" && !isClothing
+      ? css`
+          animation: ${zoomIn} 5s ease-out 1 forwards;
+        `
+      : css``};
+  ${({ size, isClothing }) =>
+    size === "extraLarge" && isClothing
+      ? css`
+          animation: ${zoomClothing} 5s ease-out 1 forwards;
+        `
+      : css``};
 `;
 
 export const ItemIcon = styled.img<ImageProps>`
@@ -189,8 +178,7 @@ export const ItemIcon = styled.img<ImageProps>`
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "width: 1018px; ";
-    }
-    else {
+    } else {
       return "width: 742px; ";
     }
   }};

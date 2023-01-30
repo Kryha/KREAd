@@ -41,7 +41,7 @@ export const CategoryButton = styled(SecondaryButton)`
   color: ${color.darkGrey};
   padding: 3px 8px;
   cursor: default;
-  font-size:  12px;
+  font-size: 12px;
   line-height: 15px;
   text-transform: capitalize;
   border: 1px solid ${color.grey};
