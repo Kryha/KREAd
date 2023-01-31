@@ -13,14 +13,14 @@ export const TopbarContainer = styled.header<AnimationProps>`
   justify-content: space-between;
   align-items: flex-end;
   padding: ${margins.big};
-  ${({ isLanding }) => (isLanding === true ?
-    css`
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.8s, 2s;
-    animation-delay: 0s, 0.8s;
-    `
-    :
-    css``)};
+  ${({ isLanding }) =>
+    isLanding === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.8s, 2s;
+          animation-delay: 0s, 0.8s;
+        `
+      : css``};
 `;
 
 export const Box = styled.div`
@@ -38,16 +38,16 @@ export const FooterContainer = styled.div<AnimationProps>`
   bottom: 0;
   right: 0;
   z-index: ${zIndex.overCharacter};
-  ${({ isLanding }) => (isLanding === true ?
-    css`
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.8s, 2s;
-    animation-delay: 0s, 0.8s;
-    `
-    :
-    css`
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.3s, 0.5s;
-    animation-delay: 0s, 0.3s;
-  `)};
+  ${({ isLanding }) =>
+    isLanding === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.8s, 2s;
+          animation-delay: 0s, 0.8s;
+        `
+      : css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.3s, 0.5s;
+          animation-delay: 0s, 0.3s;
+        `};
 `;

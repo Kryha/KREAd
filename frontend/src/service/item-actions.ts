@@ -138,9 +138,9 @@ export const equipItem = async (service: AgoricState, wallet: WalletContext, ite
 
   const itemPurse = wallet.item;
   const characterPurse = wallet.character;
-  
+
   const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(character.name, characterPurse.value);
-  
+
   if (!publicFacet || !walletP || !itemPurse || !wantedCharacterKey) {
     console.error("undefined parameter");
     return;
@@ -192,7 +192,7 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
 
   const itemPurse = wallet.item;
   const characterPurse = wallet.character;
-  
+
   const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(characterName, characterPurse.value);
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacterKey) {

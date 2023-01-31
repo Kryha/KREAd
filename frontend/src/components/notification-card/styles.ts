@@ -35,10 +35,10 @@ export const NotificationWrapper = styled.div<NotificationProps>`
       width: 45%;
       max-height: ${height - 140}px;
    `};
-   overflow-y: scroll;
-   animation: ${fadeUp} 1.2s ease-out 0s forwards;
-   opacity: 0;
-   transform: translate3d(0, 1rem, 0);
+  overflow-y: scroll;
+  animation: ${fadeUp} 1.2s ease-out 0s forwards;
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
 `;
 
 export const NotificationHeader = styled.div`

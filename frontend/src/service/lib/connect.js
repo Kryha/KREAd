@@ -8,10 +8,9 @@ import { activateSocket as startApi } from "../lib/api-client.js";
  * @param {object} recvArgs
  * @param {string} [query='']
  */
-export const connect = (endpointPath, recv, recvArgs, query = "", ) => {
+export const connect = (endpointPath, recv, recvArgs, query = "") => {
   const statusId = endpointPath === "wallet" ? "wallet-status" : "api-status";
-  const endpoint =
-    endpointPath === "wallet" ? `/private/wallet-bridge${query}` : endpointPath;
+  const endpoint = endpointPath === "wallet" ? `/private/wallet-bridge${query}` : endpointPath;
 
   /**
    * @param {{ type: string, data: any}} obj
@@ -56,7 +55,7 @@ export const connect = (endpointPath, recv, recvArgs, query = "", ) => {
         reject();
       },
     },
-    endpoint,
+    endpoint
   );
 
   return sendP;

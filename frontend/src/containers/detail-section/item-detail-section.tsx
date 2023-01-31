@@ -34,9 +34,9 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
     };
     fetchActivity();
   }, [agoric, item]);
-  
+
   if (!item) return <ErrorView />;
-  
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}

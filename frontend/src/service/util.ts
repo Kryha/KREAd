@@ -27,17 +27,31 @@ export const formOfferForCharacter = (characterBrand: any, character: any, money
 
 export const formatIdAsNumber = (obj: Character | Item) => ({ ...obj, id: BigInt(obj.id) });
 
-export const itemCategories: ItemCategory[] = ["noseline", "midBackground", "mask", "headPiece", "hair", "frontMask", "liquid", "background", "airReservoir", "clothing"];
+export const itemCategories: ItemCategory[] = [
+  "noseline",
+  "midBackground",
+  "mask",
+  "headPiece",
+  "hair",
+  "frontMask",
+  "liquid",
+  "background",
+  "airReservoir",
+  "clothing",
+];
 
 export const getExtendedCharacter = (name: string, characters: ExtendedCharacter[]): ExtendedCharacter | undefined => {
-  return characters.find(c => c.nft.name === name);
+  return characters.find((c) => c.nft.name === name);
 };
 
-export const getCharacterKeys = (characterName: string, characterPurse: CharacterBackend[]): { ownedCharacterKey: CharacterBackend, wantedCharacterKey: CharacterBackend } => {
-  const ownedCharacterKey = characterPurse.find(character => character.name === character.name);
-  
+export const getCharacterKeys = (
+  characterName: string,
+  characterPurse: CharacterBackend[]
+): { ownedCharacterKey: CharacterBackend; wantedCharacterKey: CharacterBackend } => {
+  const ownedCharacterKey = characterPurse.find((character) => character.name === character.name);
+
   if (!ownedCharacterKey) throw `Could not find character (${characterName}) in wallet`;
-  
+
   const wantedCharacterKey: CharacterBackend = { ...ownedCharacterKey, keyId: ownedCharacterKey.keyId === 1 ? 2 : 1 };
 
   return { ownedCharacterKey, wantedCharacterKey };

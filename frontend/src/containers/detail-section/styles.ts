@@ -25,21 +25,16 @@ export const DetailSectionWrap = styled.div<ViewProps>`
   ${({ width }): string => {
     if (width <= 1300) {
       return "max-width: 47%;";
-    }
-    else if (width >= 1300 && width <= 1440) {
+    } else if (width >= 1300 && width <= 1440) {
       return "max-width: 51%;";
-    }
-    else if (width >= 1440 && width <= LARGE_SCREEN_SIZE) {
+    } else if (width >= 1440 && width <= LARGE_SCREEN_SIZE) {
       return "max-width: 52.7%;";
-    }
-    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
+    } else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
       return "max-width: 53.7%;";
-    }
-    else {
+    } else {
       return "max-width: 55%;";
     }
-  }
-}
+  }}
 `;
 
 export const EmptyView = styled.section`

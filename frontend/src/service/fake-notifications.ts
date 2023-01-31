@@ -42,5 +42,5 @@ export const FakeNotifications: Notification[] = [
     itemName: "AirTox: Fairy Dust Elite",
     status: "sold",
     price: 12,
-  }
+  },
 ];

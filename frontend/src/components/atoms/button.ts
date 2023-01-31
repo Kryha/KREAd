@@ -82,7 +82,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   }};
 `;
 
-export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
+export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   color: ${(props): string => props.fontColor || color.black};
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
@@ -151,7 +151,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   }};
 `;
 
-export const TertiaryButton = styled(PrimaryButton) <ButtonProps>`
+export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
   background-color: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
   border: none;

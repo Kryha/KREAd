@@ -30,7 +30,7 @@ const handlerToListener = new Map();
  *
  * @param {object} obj
  */
-function objToString (obj) {
+function objToString(obj) {
   let str = "";
   for (const [p, val] of Object.entries(obj)) {
     str += `${p}::${val}\n`;
@@ -72,9 +72,7 @@ function createSocket({ onConnect, onDisconnect, onMessage }, endpoint) {
     socket.addEventListener("close", () => onDisconnect());
   }
   if (onMessage) {
-    socket.addEventListener("message", ({ data }) =>
-      onMessage(JSON.parse(data)),
-    );
+    socket.addEventListener("message", ({ data }) => onMessage(JSON.parse(data)));
   }
 }
 

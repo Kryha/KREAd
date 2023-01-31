@@ -77,7 +77,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
 
   // FIXME: Still needed?
   const loadMore = async () => {
-    setPage(prevState => prevState + 1);
+    setPage((prevState) => prevState + 1);
   };
 
   return (
@@ -131,7 +131,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
                 ))}
               </ItemContainer>
               <LoadMoreWrapper>
-                {items.length >= (PAGE_SIZE*page) && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
+                {items.length >= PAGE_SIZE * page && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
               </LoadMoreWrapper>
             </ItemWrapper>
           )}

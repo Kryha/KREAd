@@ -62,7 +62,7 @@ export const Tag = styled.div`
   gap: 10px;
 
   position: absolute;
-  width:  ${margins.small};
+  width: ${margins.small};
   height: ${margins.small};
   left: 27px;
   top: -3px;

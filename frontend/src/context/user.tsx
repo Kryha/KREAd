@@ -209,6 +209,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
             to: "unknown",
             date: event.timestamp,
           }));
+
           const equipped: { [key: string]: Item | undefined } = {};
           const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(character.name);
           const frontendEquippedItems = mediate.items.toFront(equippedItems);

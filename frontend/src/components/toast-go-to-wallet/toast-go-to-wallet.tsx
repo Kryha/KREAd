@@ -5,7 +5,7 @@ import { NotificationWrapper } from "../../components/notification-detail/styles
 
 interface ToastGoToWalletProps {
   showToast: boolean;
-  closeAndRedirect: ()=>void;
+  closeAndRedirect: () => void;
 }
 
 export const ToastGoToWallet: FC<ToastGoToWalletProps> = ({ showToast, closeAndRedirect }) => {

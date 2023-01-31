@@ -4,14 +4,12 @@ import { CharacterMarketContextProvider } from "./character-shop";
 import { ItemMarketContextProvider } from "./item-shop";
 import { WalletContextProvider } from "./wallet";
 
-export const UseWithContext: FunctionComponent<PropsWithChildren> = ({ children }) =>
+export const UseWithContext: FunctionComponent<PropsWithChildren> = ({ children }) => (
   <WalletContextProvider>
     <UserContextProvider>
       <CharacterMarketContextProvider>
-        <ItemMarketContextProvider>
-          {children}
-        </ItemMarketContextProvider>
+        <ItemMarketContextProvider>{children}</ItemMarketContextProvider>
       </CharacterMarketContextProvider>
     </UserContextProvider>
-  </WalletContextProvider>;
-  
+  </WalletContextProvider>
+);
