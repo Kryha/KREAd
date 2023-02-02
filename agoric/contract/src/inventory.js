@@ -95,8 +95,11 @@ export const inventory = (zcf, STATE) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    const updater = state.getCharacterInventoryUpdater(characterName, STATE);
-    updater.updateState({
+    const publisher = state.getCharacterInventoryPublisher(
+      characterName,
+      STATE,
+    );
+    publisher.updateState({
       character: characterName,
       inventory: updatedInventory,
     });
@@ -164,7 +167,7 @@ export const inventory = (zcf, STATE) => {
     validateInventoryState(updatedInventory);
     zcf.reallocate(seat, inventorySeat);
 
-    const updater = state.getCharacterInventoryUpdater(characterName, STATE);
+    const updater = state.getCharacterInventoryPublisher(characterName, STATE);
 
     updater.updateState({
       character: characterName,
@@ -243,7 +246,7 @@ export const inventory = (zcf, STATE) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    const updater = state.getCharacterInventoryUpdater(characterName, STATE);
+    const updater = state.getCharacterInventoryPublisher(characterName, STATE);
     updater.updateState({
       character: characterName,
       inventory: updatedInventory,

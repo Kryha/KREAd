@@ -81,3 +81,6 @@ export const EVENT_TYPE = {
   sell: "sell",
   buy: "buy",
 };
+
+export const LOCAL_DEVNET_RPC = "http://127.0.0.1:26657";
+export const STORAGE_NODE_SPEC_MARKET = ":published.kread.market";

@@ -5,6 +5,12 @@
  *   characters: CharacterRecord[]
  *   charactersMarket: CharacterInMarket[]
  *   itemsMarket: ItemInMarket[]
+ *   notifiers?: {
+ *    market: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ *   }
  *   items: ItemRecord[]
  *   config?: Config
  *   itemCount: bigint
@@ -26,7 +32,7 @@
  *   randomNumber?: Function
  * }} State
  *
- * @typedef {{storageNode: StorageNode, marshaller: Marshaller}} Powers
+ * @typedef {{storageNode: StorageNode, marshaller: Marshaller, completed: boolean}} Powers
  *
  * @typedef  {{
  *   sellerSeat: ZCFSeat

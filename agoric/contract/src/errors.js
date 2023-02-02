@@ -19,4 +19,5 @@ export const errors = {
   itemNotInMarket: `Could not find Item in market`,
   characterNotInMarket: `Could not find Character in market`,
   invalidArg: `Invalid Argument`,
+  missingStorageNode: `Missing Storage Node, notifications are not enabled`,
 };

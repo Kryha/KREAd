@@ -1,3 +1,9 @@
+// @ts-check
+import { assert, details as X } from '@agoric/assert';
+import { makeStoredPublishKit } from '@agoric/notifier';
+import { E } from '@endo/eventual-send';
+import { errors } from './errors';
+
 export const sameType = (a, b) => {
   const objectA = Object(a) === a;
   const objectB = Object(b) === b;
@@ -32,7 +38,6 @@ export const makeHashId = (str, seed = 42) => {
 /**
  * @param {string} name
  * @param {Object} randomCharacterBase
- * @param {State} state
  * @param currentTime
  * @param newCharacterId
  * @returns {Object[]}
@@ -58,6 +63,7 @@ export const makeCharacterNftObjs = (
   };
   return [newCharacter1, newCharacter2];
 };
+
 /**
  * @param {any[]} arr
  * @param {number} interval
@@ -68,10 +74,10 @@ export const getPage = (arr, interval, page) =>
   [...Array(Math.ceil(arr.length / interval)).keys()].map((idx) =>
     arr.slice(idx * interval, idx * interval + interval),
   )[page - 1];
+
 /**
  * @param {CharacterMarketRecord[]} arr
- * @param {string} value
- * @param name
+ * @param {string} name
  * @returns {CharacterMarketRecord[]}
  */
 export const removeCharacterFromMarketArray = (arr, name) => {
@@ -82,6 +88,7 @@ export const removeCharacterFromMarketArray = (arr, name) => {
   }
   return newArr;
 };
+
 /**
  * @param {ItemMarketRecord[]} arr
  * @param {string} id
@@ -95,3 +102,28 @@ export const removeItemFromMarketArray = (arr, id) => {
   }
   return newArr;
 };
+
+/**
+ * @template T
+ * @typedef {object} PublishKit<T>
+ * @property {Publisher<T>} publisher
+ * @property {StoredSubscriber<T>} subscriber
+ */
+
+/**
+ * @template T
+ * @param {ERef<StorageNode>} storageNode
+ * @param {ERef<Marshaller>} marshaller
+ * @returns {PublishKit<T>}
+ */
+export const makeStorageNodeMarketPublishKit = (storageNode, marshaller) => {
+  assert(storageNode && marshaller, X`${errors.missingStorageNode}`);
+  const marketNode = E(storageNode).makeChildNode('market');
+  /** @type {StoredPublishKit<T>} */
+  const kit = makeStoredPublishKit(marketNode, marshaller);
+  return {
+    publisher: kit.publisher,
+    subscriber: kit.subscriber,
+  };
+};
+// harden(makeMetricsPublishKit);

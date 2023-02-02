@@ -1,10 +1,10 @@
-import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { CharacterInMarket, KreadCharacterInMarket } from "../interfaces";
-import { observeIteration } from "@agoric/notifier";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/character-actions";
 import { itemArrayToObject } from "../util";
+import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET } from "../constants";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
@@ -27,14 +27,11 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
 
   useEffect(() => {
-    const observer = harden({
-      updateState: async (charactersInMarket: any) => {
-        const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
-        marketDispatch((prevState) => ({...prevState, characters, fetched: true }));
-      },
-      finish: (completion: unknown)=> console.info("CHARACTER SHOP NOTIFIER FINISHED", completion),
-      fail: (reason: unknown) => console.info("CHARACTER SHOP NOTIFIER ERROR", reason),
-    });
+    const parseCharacterMarketUpdate = async (charactersInMarket: any) => {
+      console.log("NEW CHARACTERS", charactersInMarket);
+      const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
+      marketDispatch((prevState) => ({ ...prevState, characters, fetched: true }));
+    };
     const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
       const extendedCharacter = await extendCharacters(kreadPublicFacet, [marketEntry.character]);
       const equippedItems = itemArrayToObject(extendedCharacter.equippedItems);
@@ -51,8 +48,13 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     };
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING CHARACTER SHOP 🛍");
-      const shopNotifier = E(kreadPublicFacet).getCharacterShopNotifier();
-      observeIteration(shopNotifier, observer);
+      // Iterate over kread's storageNode follower on local-devnet
+      const leader = makeLeader(LOCAL_DEVNET_RPC);
+      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET);
+      const follower = makeFollower(castingSpec, leader);
+      for await (const value of iterateLatest(follower)) {
+        parseCharacterMarketUpdate(value.value.character);
+      }
     };
     if (kreadPublicFacet) {
       watchNotifiers().catch((err) => {

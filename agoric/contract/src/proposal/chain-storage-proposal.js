@@ -15,12 +15,11 @@
 const contractInfo = {
   storagePath: 'kread',
   instanceName: 'kread',
-  boardId: 'board02656',
+  boardId: 'board05557',
   // see discussion of publish-bundle and bundleID
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
-  bundleID:
-    'b1-0855c6b9a1604951fb0435dbdb1afc3617a29ac9e8cec1efe9fb6902f3ae7a907169765c5e90c50cfab55552642dea9db289cab2204902df6378b2ee7a42aaa9',
+  bundleID: 'b1-',
 };
 
 const fail = (reason) => {

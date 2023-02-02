@@ -1,9 +1,9 @@
-import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
-import { observeIteration } from "@agoric/notifier";
+import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET } from "../constants";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -24,14 +24,11 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
   
   useEffect(() => {
-    const observer = harden({
-      updateState: async (itemsInMarket: any) => {
-        const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
-        marketDispatch((prevState) => ({...prevState, items, fetched: true }));
-      },
-      finish: (completion: unknown)=> console.info("ITEM SHOP NOTIFIER FINISHED", completion),
-      fail: (reason: unknown) => console.info("ITEM SHOP NOTIFIER ERROR", reason),
-    });
+    const parseItemMarketUpdate = async (itemsInMarket: any) => {
+      console.log("NEW ITEMS", itemsInMarket);
+      const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
+      marketDispatch((prevState) => ({...prevState, items, fetched: true }));
+    };
     const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {
         id: BigInt(marketEntry.id),
@@ -45,10 +42,18 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       
       return parsedItem[0];
     };
+
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING ITEM SHOP 🛍");
-      const shopNotifier = E(kreadPublicFacet).getItemShopNotifier();
-      observeIteration(shopNotifier, observer);
+      // Iterate over kread's storageNode follower on local-devnet
+      console.log(LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET);
+      const leader = makeLeader(LOCAL_DEVNET_RPC);
+      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET);
+      const follower = makeFollower(castingSpec, leader);
+      for await (const value of iterateLatest(follower)) {
+        console.log(value);
+        parseItemMarketUpdate(value.value.items);
+      }
     };
     if (kreadPublicFacet) {
       watchNotifiers().catch((err) => {

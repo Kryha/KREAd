@@ -103,7 +103,8 @@ export const getCharacterRecord = (characterName, state) => {
  * @param {State} state
  * @returns {Notifier}
  */
-export const getCharacterInventoryNotifier = (characterName, state) => {
+export const getCharacterInventorySubscriber = (characterName, state) => {
+  assert(state.powers.completed, X`${errors.missingStorageNode}`);
   const characterRecord = state.characters.find(
     ({ character }) => character.name === characterName,
   );
@@ -120,7 +121,8 @@ export const getCharacterInventoryNotifier = (characterName, state) => {
  * @param {State} state
  * @returns {Notifier}
  */
-export const getCharacterInventoryUpdater = (characterName, state) => {
+export const getCharacterInventoryPublisher = (characterName, state) => {
+  assert(state.powers.completed, X`${errors.missingStorageNode}`);
   const characterRecord = state.characters.find(
     ({ character }) => character.name === characterName,
   );

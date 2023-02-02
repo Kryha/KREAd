@@ -3,7 +3,7 @@
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
-import { makeNotifierKit } from '@agoric/notifier';
+// import { makeNotifierKit } from '@agoric/notifier';
 import { errors } from './errors';
 import * as state from './get';
 import {
@@ -18,7 +18,7 @@ export const SELL_ITEM_DESCRIPTION = 'Sell Item in KREAd marketplace';
  * Put character up for sale
  *
  * @param {ZCF} zcf
- * @param {State} STATE
+ * @param {()=>State} STATE
  * @param STATE
  */
 export const market = (zcf, STATE) => {
@@ -32,25 +32,42 @@ export const market = (zcf, STATE) => {
   let itemMarket = [];
 
   // Set up notifiers
-  const { notifier: characterShopNotifier, updater: characterShopUpdater } =
-    makeNotifierKit();
-  const { notifier: itemShopNotifier, updater: itemShopUpdater } =
-    makeNotifierKit();
+  // const {
+  //   metricsPublisher: characterShopPublisher,
+  //   metricsSubscriber: characterShopSubscriber,
+  // } = makeMetricsPublishKit(
+  //   STATE.powers?.storageNode,
+  //   STATE.powers?.marshaller,
+  // );
 
-  const {
-    assets: {
-      character: { brand: characterBrand },
-      item: { brand: itemBrand },
-      token: { brand: tokenBrand },
-    },
-  } = STATE;
+  // const {
+  //   metricsPublisher: itemShopPublisher,
+  //   metricsSubscriber: itemShopSubscriber,
+  // } = makeMetricsPublishKit(
+  //   STATE.powers?.storageNode,
+  //   STATE.powers?.marshaller,
+  // );
+
+  // const { notifier: itemShopNotifier, updater: itemShopUpdater } =
+  //   makeNotifierKit();
+
+  // const {
+  //   assets: {
+  //     character: { brand: characterBrand },
+  //     item: { brand: itemBrand },
+  //     token: { brand: tokenBrand },
+  //   },
+  //   notifiers,
+  // } = STATE;
+
   /**
    * Put character up for sale
    *
    * @param {ZCFSeat} sellerSeat
    */
   const sellCharacter = async (sellerSeat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    const { config, notifiers } = STATE();
+    assert(config?.completed, X`${errors.noConfig}`);
     assertProposalShape(sellerSeat, {
       give: {
         Character: null,
@@ -82,8 +99,13 @@ export const market = (zcf, STATE) => {
     };
 
     characterMarket = [...characterMarket, newEntry];
-    characterShopUpdater.updateState(characterMarket);
-    return harden({ characterMarket });
+    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
+    notifiers.market.publisher.publish({
+      items: itemMarket,
+      characters: characterMarket,
+    });
+
+    return harden({ characterMarket, itemMarket });
   };
 
   /**
@@ -92,7 +114,9 @@ export const market = (zcf, STATE) => {
    * @param {ZCFSeat} sellerSeat
    */
   const sellItem = async (sellerSeat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    const { config, notifiers } = STATE();
+
+    assert(config?.completed, X`${errors.noConfig}`);
     assertProposalShape(sellerSeat, {
       give: {
         Item: null,
@@ -124,7 +148,11 @@ export const market = (zcf, STATE) => {
 
     itemMarket = [...itemMarket, newEntry];
 
-    itemShopUpdater.updateState(itemMarket);
+    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
+    notifiers.market.publisher.publish({
+      items: itemMarket,
+      characters: characterMarket,
+    });
 
     return harden({ itemMarket });
   };
@@ -134,7 +162,15 @@ export const market = (zcf, STATE) => {
    * @param {ZCFSeat} buyerSeat
    */
   const buyCharacter = async (buyerSeat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    const {
+      config,
+      notifiers,
+      assets: {
+        character: { brand: characterBrand },
+        token: { brand: tokenBrand },
+      },
+    } = STATE();
+    assert(config?.completed, X`${errors.noConfig}`);
     assertProposalShape(buyerSeat, {
       give: {
         Price: null,
@@ -149,7 +185,7 @@ export const market = (zcf, STATE) => {
     const { Character: wantedCharacterAmount } = want;
     const character = wantedCharacterAmount.value[0];
     // Find characterRecord entry based on wanted character
-    const characterRecord = state.getCharacterRecord(character.name, STATE);
+    const characterRecord = state.getCharacterRecord(character.name, STATE());
     assert(
       characterRecord,
       `Couldn't find character record for ${character.name}`,
@@ -199,7 +235,12 @@ export const market = (zcf, STATE) => {
       characterMarket,
       sellRecord.name,
     );
-    characterShopUpdater.updateState(characterMarket);
+
+    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
+    notifiers.market.publisher.publish({
+      items: itemMarket,
+      characters: characterMarket,
+    });
 
     return harden({ characterMarket });
   };
@@ -209,7 +250,15 @@ export const market = (zcf, STATE) => {
    * @param {ZCFSeat} buyerSeat
    */
   const buyItem = async (buyerSeat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
+    const {
+      config,
+      notifiers,
+      assets: {
+        token: { brand: tokenBrand },
+        item: { brand: itemBrand },
+      },
+    } = STATE();
+    assert(config?.completed, X`${errors.noConfig}`);
     assertProposalShape(buyerSeat, {
       give: {
         Price: null,
@@ -256,8 +305,20 @@ export const market = (zcf, STATE) => {
     buyerSeat.exit();
     sellerSeat.exit();
     itemMarket = removeItemFromMarketArray(itemMarket, sellRecord.id);
-    itemShopUpdater.updateState(itemMarket);
+
+    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
+    notifiers.market.publisher.publish({
+      items: itemMarket,
+      characters: characterMarket,
+    });
+
     return harden({ itemMarket });
+  };
+
+  const getMarketSubscriber = () => {
+    const { notifiers } = STATE();
+    assert(notifiers?.market.subscriber, X`${errors.missingStorageNode}`);
+    return notifiers.market.subscriber;
   };
 
   return {
@@ -269,7 +330,6 @@ export const market = (zcf, STATE) => {
       zcf.makeInvitation(sellItem, SELL_CHARACTER_DESCRIPTION),
     makeBuyItemInvitation: () =>
       zcf.makeInvitation(buyItem, 'Buy Item in KREAd marketplace'),
-    getCharacterShopNotifier: () => characterShopNotifier,
-    getItemShopNotifier: () => itemShopNotifier,
+    getMarketSubscriber,
   };
 };

@@ -10,7 +10,11 @@ import { errors } from './errors';
 import { mulberry32 } from './prng';
 import { messages } from './messages';
 import * as state from './get';
-import { getPage, makeCharacterNftObjs } from './utils';
+import {
+  getPage,
+  makeCharacterNftObjs,
+  makeStorageNodeMarketPublishKit,
+} from './utils';
 import { market } from './market';
 import { inventory } from './inventory';
 
@@ -110,7 +114,7 @@ const start = async (zcf) => {
     assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
     PRNG = mulberry32(seed);
     STATE.randomNumber = PRNG;
-    return 'Setup completed';
+    return 'Setup complete';
   };
 
   /**
@@ -119,12 +123,27 @@ const start = async (zcf) => {
    * @param { Marshaller } marshaller
    */
   const addStorageNode = (storageNode, marshaller) => {
+    assert(storageNode && marshaller, X`${errors.invalidArg}`);
+
+    // Set up notifiers
+    // const { publisher, subscriber: characterShopSubscriber } =
+    //   makeStorageNodeMarketPublishKit(storageNode, marshaller);
+
+    // const { publisher: itemShopPublisher, subscriber: itemShopSubscriber } =
+    //   makeStorageNodePublishKit(storageNode, marshaller);
+
+    STATE.notifiers = {
+      market: makeStorageNodeMarketPublishKit(storageNode, marshaller),
+      // items: {
+      //   publisher: itemShopPublisher,
+      //   subscriber: itemShopSubscriber,
+      // },
+    };
     STATE.powers = {
       storageNode,
       marshaller,
+      completed: true,
     };
-    assert(storageNode && marshaller, X`${errors.invalidArg}`);
-    STATE.powers = { storageNode, marshaller };
     return 'Storage Node added successfully';
   };
 
@@ -320,7 +339,7 @@ const start = async (zcf) => {
     ],
     // characters
     getCharacterInventoryNotifier: (characterName) =>
-      state.getCharacterInventoryNotifier(characterName, STATE),
+      state.getCharacterInventorySubscriber(characterName, STATE),
     getCharacterBase: () => STATE.config?.baseCharacters[0],
     getCharacters,
     getCharactersRange: (range, page) => getPage(STATE.characters, range, page),
@@ -359,7 +378,7 @@ const start = async (zcf) => {
     getAllCharacterHistory: () => characterHistory.entries(),
     getAllItemHistory: () => itemHistory.entries(),
 
-    ...market(zcf, STATE),
+    ...market(zcf, () => STATE),
     // getMarketData: () => ({ characters: characterMarket, items: itemMarket }),
   });
 

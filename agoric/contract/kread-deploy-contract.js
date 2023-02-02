@@ -84,6 +84,7 @@ export default async function deployContract(
     INSTALLATION_BOARD_ID,
   };
   const defaultsFolder = pathResolve(`../../frontend/src/service/conf`);
+
   const defaultsFile = pathResolve(
     `../../frontend/src/service/conf/installation-constants-nft-maker.js`,
   );
