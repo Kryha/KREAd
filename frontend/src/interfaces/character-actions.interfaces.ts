@@ -1,4 +1,4 @@
-import { CharacterInMarket, ExtendedCharacter } from "./character.interfaces";
+import { ExtendedCharacter } from "./character.interfaces";
 
 // TODO: add fetched flag for each array
 export type CharacterState = {

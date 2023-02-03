@@ -6,6 +6,7 @@ export const replaceCharacterInUserStateArray = (arr: ExtendedCharacter[], name:
   if (index > -1) {
     newArr.splice(index, 1, newEntry);
   }
+
   return newArr;
 };
 

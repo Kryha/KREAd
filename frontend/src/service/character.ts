@@ -192,6 +192,7 @@ export const useSellCharacter = (characterId: string) => {
       setIsLoading(true);
       const res = await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
       setIsLoading(false);
+
       return res;
     },
     [characterId, characters, wallet, service]
@@ -218,6 +219,7 @@ export const useBuyCharacter = (characterId: string) => {
     const mediated = mediate.charactersMarket.toBack([found])[0];
     setIsLoading(true);
     await buyCharacter(service, wallet, mediated.character, mediated.sell.price);
+    setIsLoading(false);
   }, [characterId, characters, wallet, service]);
 
   return { callback, isLoading };
