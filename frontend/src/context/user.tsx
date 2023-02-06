@@ -5,8 +5,10 @@ import { useWalletState } from "./wallet";
 import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
 import { mediate } from "../util";
 import { itemCategories } from "../service/util";
-import { observeIteration } from "@agoric/notifier";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
+import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
+import { observeIteration } from "@agoric/notifier";
 
 interface UserContext {
   characters: ExtendedCharacter[],
@@ -130,16 +132,11 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   const itemsInWallet = wallet.item ? wallet.item.value : undefined;
 
   useEffect(() => {
-    const observer = harden({
-      updateState: (value: { character: string, inventory: ItemBackend[] }) => {
-        console.count("🎒 LOADING INVENTORY CHANGE 🎒");
-        
-        const { character: characterName, inventory } = value;
-        userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: inventory, characterName });
-      },
-      finish: (completion: unknown)=> console.info("INVENTORY NOTIFIER FINISHED", completion),
-      fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
-    });
+    const parseInventoryUpdate = (value: { character: string, inventory: ItemBackend[] }) => {
+      console.count("🎒 LOADING INVENTORY CHANGE 🎒");
+      const { character: characterName, inventory } = value;
+      userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: inventory, characterName });
+    };
 
     const processInventory = async (characterName: string) => {
       if (userState.processed.includes(characterName)) {
@@ -149,10 +146,20 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       // Fetch inventory once 
       const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(characterName);
       userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: equippedItems, characterName });
-      
+
+      // Iterate over kread's storageNode follower on local-devnet
+      // console.log(LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY);
+      const leader = makeLeader(LOCAL_DEVNET_RPC);
+      const castingSpec = makeCastingSpec(`${STORAGE_NODE_SPEC_INVENTORY}-${characterName}`);
+      const follower = makeFollower(castingSpec, leader);
+      console.log("FOLLOWER SET UP: ", follower);
+      for await (const { value } of iterateLatest(follower)) {
+        console.log(value);
+        parseInventoryUpdate(value.value.items);
+      }
       // Let the notifier handle updates thereafter
-      const inventoryNotifier = E(kreadPublicFacet).getCharacterInventoryNotifier(characterName);
-      observeIteration(inventoryNotifier, observer);
+      // const inventoryNotifier = E(kreadPublicFacet).getCharacterInventoryNotifier(characterName);
+      // observeIteration(follower, observer);
     };
 
     const processPurseChanges = async () => {

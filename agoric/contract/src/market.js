@@ -31,35 +31,6 @@ export const market = (zcf, STATE) => {
    */
   let itemMarket = [];
 
-  // Set up notifiers
-  // const {
-  //   metricsPublisher: characterShopPublisher,
-  //   metricsSubscriber: characterShopSubscriber,
-  // } = makeMetricsPublishKit(
-  //   STATE.powers?.storageNode,
-  //   STATE.powers?.marshaller,
-  // );
-
-  // const {
-  //   metricsPublisher: itemShopPublisher,
-  //   metricsSubscriber: itemShopSubscriber,
-  // } = makeMetricsPublishKit(
-  //   STATE.powers?.storageNode,
-  //   STATE.powers?.marshaller,
-  // );
-
-  // const { notifier: itemShopNotifier, updater: itemShopUpdater } =
-  //   makeNotifierKit();
-
-  // const {
-  //   assets: {
-  //     character: { brand: characterBrand },
-  //     item: { brand: itemBrand },
-  //     token: { brand: tokenBrand },
-  //   },
-  //   notifiers,
-  // } = STATE;
-
   /**
    * Put character up for sale
    *

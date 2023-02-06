@@ -119,7 +119,7 @@ export const getCharacterInventorySubscriber = (characterName, state) => {
  *
  * @param {string} characterName
  * @param {State} state
- * @returns {Notifier}
+ * @returns {Publisher<any>}
  */
 export const getCharacterInventoryPublisher = (characterName, state) => {
   assert(state.powers.completed, X`${errors.missingStorageNode}`);
@@ -127,9 +127,9 @@ export const getCharacterInventoryPublisher = (characterName, state) => {
     ({ character }) => character.name === characterName,
   );
   assert(characterRecord, X`${errors.character404}`);
-  assert(characterRecord.updater, X`${errors.notifier404}`);
+  assert(characterRecord.publisher, X`${errors.notifier404}`);
 
-  return characterRecord.updater;
+  return characterRecord.publisher;
 };
 
 /**

@@ -126,4 +126,21 @@ export const makeStorageNodeMarketPublishKit = (storageNode, marshaller) => {
     subscriber: kit.subscriber,
   };
 };
-// harden(makeMetricsPublishKit);
+
+/**
+ * @template T
+ * @param {ERef<StorageNode>} storageNode
+ * @param {ERef<Marshaller>} marshaller
+ * @param {string} path
+ * @returns {PublishKit<T>}
+ */
+export const makeStorageNodePublishKit = (storageNode, marshaller, path) => {
+  assert(storageNode && marshaller, X`${errors.missingStorageNode}`);
+  const marketNode = E(storageNode).makeChildNode(path);
+  /** @type {StoredPublishKit<T>} */
+  const kit = makeStoredPublishKit(marketNode, marshaller);
+  return {
+    publisher: kit.publisher,
+    subscriber: kit.subscriber,
+  };
+};

@@ -5,7 +5,6 @@ import { AssetKind, AmountMath } from '@agoric/ertp';
 import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
-import { makeNotifierKit } from '@agoric/notifier';
 import { errors } from './errors';
 import { mulberry32 } from './prng';
 import { messages } from './messages';
@@ -14,6 +13,7 @@ import {
   getPage,
   makeCharacterNftObjs,
   makeStorageNodeMarketPublishKit,
+  makeStorageNodePublishKit,
 } from './utils';
 import { market } from './market';
 import { inventory } from './inventory';
@@ -125,19 +125,13 @@ const start = async (zcf) => {
   const addStorageNode = (storageNode, marshaller) => {
     assert(storageNode && marshaller, X`${errors.invalidArg}`);
 
-    // Set up notifiers
-    // const { publisher, subscriber: characterShopSubscriber } =
-    //   makeStorageNodeMarketPublishKit(storageNode, marshaller);
-
-    // const { publisher: itemShopPublisher, subscriber: itemShopSubscriber } =
-    //   makeStorageNodePublishKit(storageNode, marshaller);
-
     STATE.notifiers = {
       market: makeStorageNodeMarketPublishKit(storageNode, marshaller),
-      // items: {
-      //   publisher: itemShopPublisher,
-      //   subscriber: itemShopSubscriber,
-      // },
+      inventory: makeStorageNodePublishKit(
+        storageNode,
+        marshaller,
+        'inventory-general',
+      ),
     };
     STATE.powers = {
       storageNode,
@@ -217,9 +211,6 @@ const start = async (zcf) => {
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
-    // Set up notifiers
-    const { notifier, updater } = makeNotifierKit();
-
     // Mint character to user seat & inventorySeat
     characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
     characterMint.mintGains(
@@ -244,6 +235,17 @@ const start = async (zcf) => {
     const itemsAmount = AmountMath.make(itemBrand, harden(uniqueItems));
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
 
+    assert(
+      STATE.notifiers?.inventory.publisher,
+      X`${errors.missingStorageNode}`,
+    );
+
+    const inventoryNotifier = makeStorageNodePublishKit(
+      STATE.powers?.storageNode,
+      STATE.powers?.marshaller,
+      `inventory-${newCharacterName}`,
+    );
+
     // Add to public STATE
     /**
      * @type {CharacterRecord}
@@ -252,8 +254,7 @@ const start = async (zcf) => {
       name: newCharacterName,
       character: newCharacterAmount1.value[0],
       inventory: inventorySeat,
-      notifier,
-      updater,
+      publisher: inventoryNotifier.publisher,
     };
     STATE.characters = [...STATE.characters, character];
 
@@ -265,6 +266,7 @@ const start = async (zcf) => {
         timestamp: currentTime,
       },
     ];
+
     uniqueItems.forEach((item) => {
       itemHistory[item.id.toString()] = [
         {
@@ -274,6 +276,10 @@ const start = async (zcf) => {
         },
       ];
     });
+
+    inventoryNotifier.publisher.publish(
+      inventorySeat.getAmountAllocated('Item').value,
+    );
 
     seat.exit();
 

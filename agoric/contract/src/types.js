@@ -10,6 +10,10 @@
  *      subscriber: StoredSubscriber<any>
  *      publisher: Publisher<any>
  *    }
+ *    inventory: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
  *   }
  *   items: ItemRecord[]
  *   config?: Config
@@ -18,15 +22,15 @@
  *   assets: {
  *     character: {
  *       brand: Brand
- *       issuer: Issuer
+ *       issuer: Issuer<set>
  *     }
  *     item: {
  *       brand: Brand
- *       issuer: Issuer
+ *       issuer: Issuer<set>
  *     }
  *     token: {
  *       brand: Brand
- *       issuer: Issuer
+ *       issuer: Issuer<nat>
  *     }
  *   }
  *   randomNumber?: Function
@@ -40,7 +44,6 @@
  *   character: object[]
  *   askingPrice: any
  * }} CharacterMarketRecord
- *
  *
  * @typedef  {{
  *   sellerSeat: ZCFSeat
@@ -63,8 +66,8 @@
  *   character: object
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
- *   notifier: Notifier
- *   updater: IterationObserver<any>
+ *   notifier?: Notifier
+ *   publisher?: Publisher<any>
  * }} CharacterRecord
  *
  * @typedef {{

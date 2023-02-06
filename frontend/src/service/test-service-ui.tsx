@@ -116,7 +116,7 @@ export const TestServiceUI = () => {
 
   const test = async () => {
     
-    const powers = await E(publicFacet).getPowers();
+    const powers = await E(publicFacet).getCharacters();
     console.log(powers);
    
     // const notifier = characters.characters[0].notifier;
