@@ -1,9 +1,6 @@
 // @ts-check
 import { AssetKind } from "@agoric/ertp";
-import {
-  stringifyValue as formatValue,
-  parseAsValue,
-} from "@agoric/ui-components";
+import { stringifyValue as formatValue, parseAsValue } from "@agoric/ui-components";
 
 /**
  * @typedef {{ assetKind?: AssetKind } & DisplayInfo} AmountDisplayInfo

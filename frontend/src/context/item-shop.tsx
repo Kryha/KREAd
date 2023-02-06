@@ -21,8 +21,8 @@ type ProviderProps = Omit<React.ProviderProps<ItemMarketContext>, "value">;
 export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElement => {
   const [marketState, marketDispatch] = useState(initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet; 
-  
+  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
+
   useEffect(() => {
     const parseItemMarketUpdate = async (itemsInMarket: any) => {
       console.log("NEW ITEMS", itemsInMarket);
@@ -34,12 +34,12 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
         id: BigInt(marketEntry.id),
         item: marketEntry.item,
         sell: {
-          price: marketEntry.askingPrice.value
-        }
+          price: marketEntry.askingPrice.value,
+        },
       };
-      
-      const parsedItem =  mediate.itemsMarket.toFront([item]);
-      
+
+      const parsedItem = mediate.itemsMarket.toFront([item]);
+
       return parsedItem[0];
     };
 
@@ -63,12 +63,8 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       console.info("✅ LISTENING TO ITEM SHOP NOTIFIER");
     }
   }, [kreadPublicFacet]);
-  
-  return (
-    <Context.Provider value={marketState}>
-      {props.children}
-    </Context.Provider>
-  );
+
+  return <Context.Provider value={marketState}>{props.children}</Context.Provider>;
 };
 
 export const useItemMarketState = (): ItemMarketContext => {

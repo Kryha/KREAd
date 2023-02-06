@@ -12,7 +12,7 @@
     "emitDeclarationOnly": true,
 
     "strictNullChecks": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node"
   },
-  "include": ["src/**/*.js", "test/**/*.js", "deploy.js"],
+  "include": ["src/**/*.js", "test/**/*.js", "deploy.js"]
 }

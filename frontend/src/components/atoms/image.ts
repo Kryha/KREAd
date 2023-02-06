@@ -31,8 +31,8 @@ export interface CharacterImageProps {
 }
 
 export const CharacterImgs = styled.img<CharacterImageProps>`
-${({ height }): string => `height: ${height}px;`};
-${({ width }): string => {
+  ${({ height }): string => `height: ${height}px;`};
+  ${({ width }): string => {
     if (width <= SMALL_SCREEN_SIZE) {
       return "width: 600px;";
     }
@@ -44,8 +44,7 @@ ${({ width }): string => {
     }
     if (width >= EXTRA_LARGE_SCREEN_SIZE && width >= LARGE_SCREEN_SIZE) {
       return "width: 1018px; ";
-    }
-    else {
+    } else {
       return "width: 742px; ";
     }
   }};

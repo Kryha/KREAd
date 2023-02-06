@@ -36,7 +36,7 @@ export const CharactersShopDetail: FC<Props> = ({
   const navigate = useNavigate();
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterInMarket>();
   const [close, setClose] = useState(false);
-  
+
   const noFilteredCharacters =
     (!selectedCategory.length || !selectedSorting.length || !selectedPrice) && (!characters || !characters.length);
 
@@ -67,7 +67,7 @@ export const CharactersShopDetail: FC<Props> = ({
               ))}
             </ItemContainer>
             <LoadMoreWrapper>
-              {characters.length >= (PAGE_SIZE*page) && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
+              {characters.length >= PAGE_SIZE * page && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
             </LoadMoreWrapper>
           </ItemWrapper>
         )

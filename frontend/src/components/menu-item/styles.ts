@@ -95,7 +95,6 @@ export const Dash = styled.div`
   margin-left: 8px;
 `;
 
-
 export const InlineDetails = styled.div`
   display: flex;
   align-items: center;

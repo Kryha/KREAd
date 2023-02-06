@@ -61,7 +61,7 @@ interface InfoProps {
   selected?: boolean;
 }
 
-export const Info = styled(EmptyInfo) <InfoProps>`
+export const Info = styled(EmptyInfo)<InfoProps>`
   ${({ selected }) =>
     selected &&
     `

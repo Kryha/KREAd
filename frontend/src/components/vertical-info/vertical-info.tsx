@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import {  Id, InfoContainer } from "./styles";
+import { Id, InfoContainer } from "./styles";
 
 interface VerticalInfoProps {
   code: string;
@@ -10,7 +10,9 @@ interface VerticalInfoProps {
 export const VerticalInfo: FC<VerticalInfoProps> = ({ code, isRight = false }) => {
   return (
     <InfoContainer>
-      <Id isRight={isRight} category={code}>{code}</Id>
+      <Id isRight={isRight} category={code}>
+        {code}
+      </Id>
     </InfoContainer>
   );
 };

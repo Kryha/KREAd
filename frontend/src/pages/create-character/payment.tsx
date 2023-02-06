@@ -75,7 +75,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
       <ButtonContainer>
         <PrimaryButton onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
           <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          {isLoading? <LoadingPage /> : <ArrowUp />}
+          {isLoading ? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
     </ContentWrapper>

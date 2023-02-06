@@ -6,6 +6,7 @@ export const replaceCharacterInUserStateArray = (arr: ExtendedCharacter[], name:
   if (index > -1) {
     newArr.splice(index, 1, newEntry);
   }
+
   return newArr;
 };
 
@@ -20,6 +21,6 @@ export const replaceCharacterInventoryInUserStateArray = (arr: ExtendedCharacter
   return newArr;
 };
 
-export const dedupArrById = (arr: any[]) => [...new Map(arr.map(v => [v.id, v])).values()];
+export const dedupArrById = (arr: any[]) => [...new Map(arr.map((v) => [v.id, v])).values()];
 
-export const dedupArrByName = (arr: any[]) => [...new Map(arr.map(v => [v.nft.name, v])).values()];
+export const dedupArrByName = (arr: any[]) => [...new Map(arr.map((v) => [v.nft.name, v])).values()];

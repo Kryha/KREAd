@@ -36,13 +36,13 @@ export interface Item {
 }
 
 export interface KreadItemInMarket {
-  sellerSeat: any
-  id: string
+  sellerSeat: any;
+  id: string;
   askingPrice: {
-    value: bigint,
-    brand: any
-  }
-  item: ItemBackend
+    value: bigint;
+    brand: any;
+  };
+  item: ItemBackend;
 }
 
 export interface ItemInMarket {

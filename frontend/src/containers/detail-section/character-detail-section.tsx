@@ -24,9 +24,9 @@ interface CharacterDetailSectionProps {
 // TODO: Make index dynamic
 export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions, showToast }) => {
   const { width } = useViewport();
-  
+
   const itemsValues = useMemo(() => Object.values(character?.equippedItems).filter((item) => item), [character.equippedItems]);
-  
+
   if (!character) return <ErrorView />;
 
   return (
@@ -37,7 +37,9 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>
         {/* TODO: fetch actual creator image */}
-        <DetailSectionSegmentStory data={{ ...character.nft, creatorImage: UnnamedCreator, image: character.equippedItems, characterImage: character.nft.image }} />
+        <DetailSectionSegmentStory
+          data={{ ...character.nft, creatorImage: UnnamedCreator, image: character.equippedItems, characterImage: character.nft.image }}
+        />
       </DetailSectionSegment>
 
       {/* stats */}

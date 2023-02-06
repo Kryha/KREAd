@@ -15,16 +15,16 @@ export const ItemWrapper = styled.div<ViewProps>`
   ${({ height }): string => `max-height: ${height}px;`};
   ${CharacterWrapper} {
     left: 10%;
-  ${({ position }): string => {
-    switch (position) {
-      case "hair":
-        return "top: 0px;";
-      case "clothing":
-        return "top: -120%;";
-      default:
-        return "top: -75%;";
-    }
-  }};
+    ${({ position }): string => {
+      switch (position) {
+        case "hair":
+          return "top: 0px;";
+        case "clothing":
+          return "top: -120%;";
+        default:
+          return "top: -75%;";
+      }
+    }};
   }
 
   ${ExpandButton} {

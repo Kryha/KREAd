@@ -6,6 +6,6 @@ export const navigation = {
   inventory: "inventory",
   myCharacters: "my characters",
   about: "about",
-  agoric2022: "©2022 Agoric",
-  privacyAndTerms: "privacy & terms",
+  agoricCopyright: (year: number) => `©${year} Agoric`,
+  privacyAndTerms: "privacy & Terms",
 };

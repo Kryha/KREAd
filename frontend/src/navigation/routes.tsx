@@ -37,7 +37,7 @@ export const InternalAppRoutes: FC = () => {
           <Route path={routes.shop} element={<Shop />} />
           <Route path={routes.inventory} element={<Inventory />} />
           <Route path={routes.createCharacter} element={<CreateCharacter />} />
-          
+
           <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
           <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />

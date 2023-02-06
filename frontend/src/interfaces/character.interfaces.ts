@@ -69,13 +69,13 @@ export interface CharacterInMarket {
 }
 
 export interface KreadCharacterInMarket {
-  sellerSeat: any
-  name: string
+  sellerSeat: any;
+  name: string;
   askingPrice: {
-    value: bigint,
-    brand: any
-  }
-  character: CharacterBackend
+    value: bigint;
+    brand: any;
+  };
+  character: CharacterBackend;
 }
 
 export interface CharacterInMarketBackend {

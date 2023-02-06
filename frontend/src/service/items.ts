@@ -171,7 +171,7 @@ export const useEquipItem = () => {
 
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
-    
+
     const item = items.find((item) => item.id === body.itemId);
 
     if (!item) return;
@@ -184,10 +184,10 @@ export const useUnequipItem = () => {
   const [service] = useAgoricContext();
   const { equippedItems: equipped, selected: character } = useUserState();
   const wallet = useWalletState();
-  
+
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
-    const sanitizedEquipped = equipped.filter(item => item !== undefined);
+    const sanitizedEquipped = equipped.filter((item) => item !== undefined);
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
     if (!item) return;
     await unequipItem(service, wallet, item, character.nft.name);
