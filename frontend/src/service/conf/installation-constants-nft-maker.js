@@ -1,5 +1,5 @@
-// GENERATED FROM /Users/nickkoster/Kryha/kread/agoric/contract/deploy.js
+// GENERATED FROM /Users/carlostrigoseguin/Documents/KRYHA/agoric/REPO/agoric/contract/deploy.js
 export default {
   "CONTRACT_NAME": "KREAd",
-  "INSTALLATION_BOARD_ID": "board02963"
+  "INSTALLATION_BOARD_ID": "board00855"
 };

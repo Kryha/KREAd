@@ -190,6 +190,6 @@ export const useUnequipItem = () => {
     const sanitizedEquipped = equipped.filter((item) => item !== undefined);
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
     if (!item) return;
-    await unequipItem(service, wallet, item, character.nft.name);
+    await unequipItem(service, wallet, item, character);
   });
 };

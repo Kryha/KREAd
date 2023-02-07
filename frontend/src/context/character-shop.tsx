@@ -8,12 +8,10 @@ import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET } from "../constants";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
-  notifierUpdateCount: any;
   fetched: boolean;
 }
 const initialState: CharacterMarketContext = {
   characters: [],
-  notifierUpdateCount: undefined,
   fetched: false,
 };
 
@@ -27,9 +25,8 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
 
   useEffect(() => {
-    const parseCharacterMarketUpdate = async (charactersInMarket: any) => {
-      console.log("NEW CHARACTERS", charactersInMarket);
-      const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
+    const parseCharacterMarketUpdate = async (charactersInMarket: KreadCharacterInMarket[]) => {
+      const characters = await Promise.all(charactersInMarket.map((character) => formatMarketEntry(character)));
       marketDispatch((prevState) => ({ ...prevState, characters, fetched: true }));
     };
     const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
@@ -48,10 +45,11 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     };
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING CHARACTER SHOP 🛍");
-      // Iterate over kread's storageNode follower on local-devnet
+
       const leader = makeLeader(LOCAL_DEVNET_RPC);
       const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET);
       const follower = makeFollower(castingSpec, leader);
+      // Iterate over kread's storageNode follower on local-devnet
       for await (const value of iterateLatest(follower)) {
         parseCharacterMarketUpdate(value.value.character);
       }
