@@ -3,7 +3,7 @@ import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
 import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
-import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET } from "../constants";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_ITEMS } from "../constants";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -46,7 +46,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       console.count("🛍 UPDATING ITEM SHOP 🛍");
 
       const leader = makeLeader(LOCAL_DEVNET_RPC);
-      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET);
+      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_ITEMS);
       const follower = makeFollower(castingSpec, leader);
       // Iterate over kread's storageNode follower on local-devnet
       for await (const value of iterateLatest(follower)) {

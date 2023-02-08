@@ -83,5 +83,7 @@ export const EVENT_TYPE = {
 };
 
 export const LOCAL_DEVNET_RPC = "http://127.0.0.1:26657";
-export const STORAGE_NODE_SPEC_MARKET = ":published.kread.market";
-export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory";
+export const STORAGE_NODE_SPEC_MARKET_ITEMS = ":published.kread.market-items";
+export const STORAGE_NODE_SPEC_MARKET_CHARACTERS = ":published.kread.market-characters";
+
+export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-";

@@ -7,8 +7,14 @@
  *   itemsMarket: ItemInMarket[]
  *   notifiers?: {
  *    market: {
- *      subscriber: StoredSubscriber<any>
- *      publisher: Publisher<any>
+ *      characters: {
+ *        subscriber: StoredSubscriber<any>
+ *        publisher: Publisher<any>
+ *      }
+ *      items: {
+ *        subscriber: StoredSubscriber<any>
+ *        publisher: Publisher<any>
+ *      }
  *    }
  *    inventory: {
  *      subscriber: StoredSubscriber<any>

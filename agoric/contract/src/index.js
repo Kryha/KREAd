@@ -12,7 +12,6 @@ import * as state from './get';
 import {
   getPage,
   makeCharacterNftObjs,
-  makeStorageNodeMarketPublishKit,
   makeStorageNodePublishKit,
 } from './utils';
 import { market } from './market';
@@ -126,7 +125,18 @@ const start = async (zcf) => {
     assert(storageNode && marshaller, X`${errors.invalidArg}`);
 
     STATE.notifiers = {
-      market: makeStorageNodeMarketPublishKit(storageNode, marshaller),
+      market: {
+        characters: makeStorageNodePublishKit(
+          storageNode,
+          marshaller,
+          'market-characters',
+        ),
+        items: makeStorageNodePublishKit(
+          storageNode,
+          marshaller,
+          'market-items',
+        ),
+      },
       inventory: makeStorageNodePublishKit(
         storageNode,
         marshaller,

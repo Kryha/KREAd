@@ -24,7 +24,6 @@ export const ItemPage: FC = () => {
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage spinner={false} />;
 
   if (!category || !character || !isItemCategory(category)) return <ErrorView />;
-
   return (
     <ItemWrapper height={height} position={category} width={width}>
       <BaseCharacter

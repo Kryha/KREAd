@@ -4,7 +4,7 @@ import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/character-actions";
 import { itemArrayToObject } from "../util";
 import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
-import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET } from "../constants";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_CHARACTERS } from "../constants";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
@@ -47,11 +47,11 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       console.count("🛍 UPDATING CHARACTER SHOP 🛍");
 
       const leader = makeLeader(LOCAL_DEVNET_RPC);
-      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET);
+      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_CHARACTERS);
       const follower = makeFollower(castingSpec, leader);
       // Iterate over kread's storageNode follower on local-devnet
-      for await (const value of iterateLatest(follower)) {
-        parseCharacterMarketUpdate(value.value.character);
+      for await (const { value } of iterateLatest(follower)) {
+        parseCharacterMarketUpdate(value.characters);
       }
     };
     if (kreadPublicFacet) {

@@ -22,7 +22,8 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
   const { characters, selected, fetched } = useUserState();
   const userStateDispatch = useUserStateDispatch();
   useEffect(() => {
-    if (!selected || !characters.map((c) => c.nft.name).includes(selected?.nft.name)) {
+    // if (!selected || !characters.map((c) => c.nft.name).includes(selected?.nft.name)) {
+    if (!selected){
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
   }, [userStateDispatch, characters, selected]);
@@ -180,7 +181,7 @@ export const useSellCharacter = (characterId: string) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [characters] = useMyCharacters();
-
+  const userDispatch = useUserStateDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const callback = useCallback(
     async (price: number) => {
@@ -192,10 +193,10 @@ export const useSellCharacter = (characterId: string) => {
       setIsLoading(true);
       const res = await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
       setIsLoading(false);
-
+      userDispatch({ type: "SET_SELECTED", payload: undefined });
       return res;
     },
-    [characterId, characters, wallet, service]
+    [characterId, characters, wallet, service, userDispatch]
   );
 
   return { callback, isLoading };
