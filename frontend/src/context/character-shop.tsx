@@ -4,16 +4,14 @@ import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/character-actions";
 import { itemArrayToObject } from "../util";
 import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
-import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET } from "../constants";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_CHARACTERS } from "../constants";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
-  notifierUpdateCount: any;
   fetched: boolean;
 }
 const initialState: CharacterMarketContext = {
   characters: [],
-  notifierUpdateCount: undefined,
   fetched: false,
 };
 
@@ -27,9 +25,8 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
 
   useEffect(() => {
-    const parseCharacterMarketUpdate = async (charactersInMarket: any) => {
-      console.log("NEW CHARACTERS", charactersInMarket);
-      const characters = await Promise.all(charactersInMarket.map((character: any) => formatMarketEntry(character)));
+    const parseCharacterMarketUpdate = async (charactersInMarket: KreadCharacterInMarket[]) => {
+      const characters = await Promise.all(charactersInMarket.map((character) => formatMarketEntry(character)));
       marketDispatch((prevState) => ({ ...prevState, characters, fetched: true }));
     };
     const formatMarketEntry = async(marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
@@ -48,12 +45,13 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     };
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING CHARACTER SHOP 🛍");
-      // Iterate over kread's storageNode follower on local-devnet
+
       const leader = makeLeader(LOCAL_DEVNET_RPC);
-      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET);
+      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_CHARACTERS);
       const follower = makeFollower(castingSpec, leader);
-      for await (const value of iterateLatest(follower)) {
-        parseCharacterMarketUpdate(value.value.character);
+      // Iterate over kread's storageNode follower on local-devnet
+      for await (const { value } of iterateLatest(follower)) {
+        parseCharacterMarketUpdate(value.characters);
       }
     };
     if (kreadPublicFacet) {

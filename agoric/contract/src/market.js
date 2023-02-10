@@ -70,11 +70,11 @@ export const market = (zcf, STATE) => {
     };
 
     characterMarket = [...characterMarket, newEntry];
-    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
-    notifiers.market.publisher.publish({
-      items: itemMarket,
-      characters: characterMarket,
-    });
+    assert(
+      notifiers?.market.characters.publisher,
+      X`${errors.missingStorageNode}`,
+    );
+    notifiers.market.characters.publisher.publish(characterMarket);
 
     return harden({ characterMarket, itemMarket });
   };
@@ -119,11 +119,8 @@ export const market = (zcf, STATE) => {
 
     itemMarket = [...itemMarket, newEntry];
 
-    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
-    notifiers.market.publisher.publish({
-      items: itemMarket,
-      characters: characterMarket,
-    });
+    assert(notifiers?.market.items.publisher, X`${errors.missingStorageNode}`);
+    notifiers.market.items.publisher.publish(itemMarket);
 
     return harden({ itemMarket });
   };
@@ -207,11 +204,11 @@ export const market = (zcf, STATE) => {
       sellRecord.name,
     );
 
-    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
-    notifiers.market.publisher.publish({
-      items: itemMarket,
-      characters: characterMarket,
-    });
+    assert(
+      notifiers?.market.characters.publisher,
+      X`${errors.missingStorageNode}`,
+    );
+    notifiers.market.characters.publisher.publish(characterMarket);
 
     return harden({ characterMarket });
   };
@@ -277,19 +274,19 @@ export const market = (zcf, STATE) => {
     sellerSeat.exit();
     itemMarket = removeItemFromMarketArray(itemMarket, sellRecord.id);
 
-    assert(notifiers?.market.publisher, X`${errors.missingStorageNode}`);
-    notifiers.market.publisher.publish({
-      items: itemMarket,
-      characters: characterMarket,
-    });
+    assert(notifiers?.market.items.publisher, X`${errors.missingStorageNode}`);
+    notifiers.market.items.publisher.publish(itemMarket);
 
     return harden({ itemMarket });
   };
 
-  const getMarketSubscriber = () => {
+  const getMarketSubscribers = () => {
     const { notifiers } = STATE();
-    assert(notifiers?.market.subscriber, X`${errors.missingStorageNode}`);
-    return notifiers.market.subscriber;
+    assert(notifiers?.market, X`${errors.missingStorageNode}`);
+    return {
+      characters: notifiers.market.characters.subscriber,
+      items: notifiers.market.items.subscriber,
+    };
   };
 
   return {
@@ -301,6 +298,6 @@ export const market = (zcf, STATE) => {
       zcf.makeInvitation(sellItem, SELL_ITEM_DESCRIPTION),
     makeBuyItemInvitation: () =>
       zcf.makeInvitation(buyItem, 'Buy Item in KREAd marketplace'),
-    getMarketSubscriber,
+    getMarketSubscribers,
   };
 };

@@ -340,6 +340,7 @@ const defaultItems = {
 const contractInfo = {
   storagePath: 'kread',
   instanceName: 'kread',
+  boardId: 'board01664',
   // see discussion of publish-bundle and bundleID
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397

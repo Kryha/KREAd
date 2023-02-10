@@ -8,7 +8,6 @@ import { itemCategories } from "../service/util";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
 import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
-import { observeIteration } from "@agoric/notifier";
 
 interface UserContext {
   characters: ExtendedCharacter[];
@@ -155,19 +154,14 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(characterName);
       userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: equippedItems, characterName });
 
-      // Iterate over kread's storageNode follower on local-devnet
-      // console.log(LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY);
       const leader = makeLeader(LOCAL_DEVNET_RPC);
       const castingSpec = makeCastingSpec(`${STORAGE_NODE_SPEC_INVENTORY}-${characterName}`);
       const follower = makeFollower(castingSpec, leader);
-      console.log("FOLLOWER SET UP: ", follower);
+
+      // Iterate over kread's storageNode follower on local-devnet
       for await (const { value } of iterateLatest(follower)) {
-        console.log(value);
         parseInventoryUpdate(value.value.items);
       }
-      // Let the notifier handle updates thereafter
-      // const inventoryNotifier = E(kreadPublicFacet).getCharacterInventoryNotifier(characterName);
-      // observeIteration(follower, observer);
     };
 
     const processPurseChanges = async () => {

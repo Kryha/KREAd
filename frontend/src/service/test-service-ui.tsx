@@ -77,17 +77,8 @@ export const TestServiceUI = () => {
 
   const test = async () => {
     
-    const powers = await E(publicFacet).getCharacters();
+    const powers = await E(publicFacet).getPowers();
     console.log(powers);
-   
-    // const notifier = characters.characters[0].notifier;
-    // console.log(notifier);
-    // for await (const update of iterateNotifier(notifier)) {
-    //   console.log("NOTIFIER UPDATE");
-    //   console.log(update);
-    // }
-    // const { items: currentInventoryItems }: {items: Item[]} = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory("CRISI");
-    // console.log(await itemSwap(service, currentInventoryItems[0], characters.owned[0].nft));
   };
 
   const getCharacterInventory = async () => {

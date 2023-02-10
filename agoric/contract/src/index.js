@@ -12,7 +12,6 @@ import * as state from './get';
 import {
   getPage,
   makeCharacterNftObjs,
-  makeStorageNodeMarketPublishKit,
   makeStorageNodePublishKit,
 } from './utils';
 import { market } from './market';
@@ -336,12 +335,12 @@ const start = async (zcf, privateArgs) => {
   });
 
   const publicFacet = Far('Chracter store public', {
-    addStorageNode,
+    addStorageNode, // FIXME: RESTRICT PRIVILEGED FN
     makeTokenFacetInvitation: () =>
-      zcf.makeInvitation(tokenFacet, 'get tokens'),
+      zcf.makeInvitation(tokenFacet, 'get tokens'), // FIXME: RESTRICT PRIVILEGED FN
     // config
-    getConfig: () => STATE.config,
-    getPowers: () => ({ powers: STATE.powers, config: STATE.config }),
+    getConfig: () => STATE.config, // TODO: PRIVILEGED? FN
+    getPowers: () => ({ powers: STATE.powers, config: STATE.config }), // FIXME: RESTRICT PRIVILEGED FN
     getAssets: () => [
       STATE.assets?.character,
       STATE.assets?.item,

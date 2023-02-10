@@ -3,7 +3,7 @@ import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
 import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
-import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET } from "../constants";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_ITEMS } from "../constants";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -24,9 +24,8 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
 
   useEffect(() => {
-    const parseItemMarketUpdate = async (itemsInMarket: any) => {
-      console.log("NEW ITEMS", itemsInMarket);
-      const items = await Promise.all(itemsInMarket.map((item: any) => formatMarketEntry(item)));
+    const parseItemMarketUpdate = async (itemsInMarket: KreadItemInMarket[]) => {
+      const items = await Promise.all(itemsInMarket.map((item) => formatMarketEntry(item)));
       marketDispatch((prevState) => ({...prevState, items, fetched: true }));
     };
     const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
@@ -45,13 +44,12 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
 
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING ITEM SHOP 🛍");
-      // Iterate over kread's storageNode follower on local-devnet
-      console.log(LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET);
+
       const leader = makeLeader(LOCAL_DEVNET_RPC);
-      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET);
+      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_ITEMS);
       const follower = makeFollower(castingSpec, leader);
+      // Iterate over kread's storageNode follower on local-devnet
       for await (const value of iterateLatest(follower)) {
-        console.log(value);
         parseItemMarketUpdate(value.value.items);
       }
     };

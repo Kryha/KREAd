@@ -1,10 +1,11 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { AgoricState } from "../interfaces/agoric.interfaces";
-import { ActivityEvent, Character, CharacterBackend, Item, ItemBackend } from "../interfaces";
+import { ActivityEvent, Character, ExtendedCharacter, Item, ItemBackend } from "../interfaces";
 import { formatIdAsNumber, getCharacterKeys } from "./util";
 import { EVENT_TYPE } from "../constants";
 import { WalletContext } from "../context/wallet";
+import { mediate } from "../util";
 
 export const sellItem = async (service: AgoricState, wallet: WalletContext, item: ItemBackend, price: bigint) => {
   const {
@@ -182,7 +183,7 @@ export const equipItem = async (service: AgoricState, wallet: WalletContext, ite
   return E(walletP).addOffer(offerConfig);
 };
 
-export const unequipItem = async (service: AgoricState, wallet: WalletContext, item: Item, characterName: string) => {
+export const unequipItem = async (service: AgoricState, wallet: WalletContext, item: Item, character: ExtendedCharacter) => {
   const {
     agoric: { walletP },
     contracts: {
@@ -192,8 +193,11 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
 
   const itemPurse = wallet.item;
   const characterPurse = wallet.character;
-
-  const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(characterName, characterPurse.value);
+  const ownedCharacterKey = mediate.characters.toBack([character])[0];
+  const wantedCharacterKey = mediate.characters.toBack([{
+    ...character, nft: { ...character.nft, keyId: character.nft.keyId === 1 ? 2 : 1 },
+  }])[0];
+  // const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(characterName, characterPurse.value);
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacterKey) {
     console.error("undefined parameter");
@@ -209,7 +213,7 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
       give: {
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
-          value: [ownedCharacterKey],
+          value: [ownedCharacterKey.nft],
         },
       },
       want: {
@@ -219,7 +223,7 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
-          value: [wantedCharacterKey],
+          value: [wantedCharacterKey.nft],
         },
       },
     },
