@@ -1,8 +1,10 @@
 {
   "consume": {
+    "chainTimerService": "timer",
     "board": true,
     "chainStorage": true,
-    "zoe": true
+    "zoe": true,
+    "agoricNames": true
   },
   "produce": {
     "kreadKit": true

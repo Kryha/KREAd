@@ -26,10 +26,17 @@ import { inventory } from './inventory';
  *
  * @type {ContractStartFn}
  * @param {ZCF} zcf
+ * @param {{storageNode: StorageNode, marshaller: Marshaller, kreadConfig: {
+ *   baseCharacters: any[],
+ *   defaultItems: any[],
+ *   seed: number
+ *   moneyIssuer?: Issuer
+ *   moneyBrand?: Brand
+ *   chainTimerService: TimerService
+ * }}} privateArgs
  *
  */
-// @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
-const start = async (zcf) => {
+const start = async (zcf, privateArgs) => {
   // Define Assets
   const assetMints = await Promise.all([
     zcf.makeZCFMint('KREAdCHARACTER', AssetKind.SET),
@@ -89,26 +96,22 @@ const start = async (zcf) => {
    *   baseCharacters: any[],
    *   defaultItems: any[],
    *   seed: number
-   *   moneyIssuer: Issuer
-   *   moneyBrand: Brand
    *   chainTimerService: TimerService
    * }} config
    * @returns {string}
    */
-  const initConfig = ({
-    baseCharacters,
-    defaultItems,
-    seed,
-    moneyIssuer,
-    moneyBrand,
-    chainTimerService,
-  }) => {
+  const initConfig = (
+    {
+      baseCharacters,
+      defaultItems,
+      seed,
+      chainTimerService,
+    } = privateArgs.kreadConfig,
+  ) => {
     STATE.config = {
       baseCharacters,
       defaultItems,
       completed: true,
-      moneyIssuer,
-      moneyBrand,
       chainTimerService,
     };
     assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
@@ -118,15 +121,13 @@ const start = async (zcf) => {
   };
 
   /**
-   *
-   * @param { StorageNode } storageNode
-   * @param { Marshaller } marshaller
+   * @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
    */
-  const addStorageNode = (storageNode, marshaller) => {
+  const addStorageNode = ({ storageNode, marshaller }) => {
     assert(storageNode && marshaller, X`${errors.invalidArg}`);
 
     STATE.notifiers = {
-      market: makeStorageNodeMarketPublishKit(storageNode, marshaller),
+      market: makeStorageNodeMarketPublishKit(privateArgs),
       inventory: makeStorageNodePublishKit(
         storageNode,
         marshaller,
@@ -140,6 +141,8 @@ const start = async (zcf) => {
     };
     return 'Storage Node added successfully';
   };
+
+  addStorageNode(privateArgs);
 
   /**
    * Mints Item NFTs via mintGains
