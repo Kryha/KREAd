@@ -12,9 +12,6 @@
 // uncomment the following line to typecheck, for example, in vs-code.
 // import { E } from '@endo/far';
 
-// import { baseCharacters } from '../../../api/src/characters.js';
-// import { defaultItems } from '../../../api/src/items.js';
-
 const defaultCharacters = [
   {
     title: 'character 1',
@@ -343,12 +340,11 @@ const defaultItems = {
 const contractInfo = {
   storagePath: 'kread',
   instanceName: 'kread',
-  // boardId: 'board01664',
   // see discussion of publish-bundle and bundleID
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-6dbdbf1125e9cdb8774d3f5234df005bd0f6aa9ebe3d96b03c03ef69046d6d460bc97732e2f26ff84f284eb2438e0574e63d10c5bc9eb77f0218b8b29526f947',
+    'b1-47de61f970d0b209f593f683f8bedbf503630dcc0b3bd0bda9da77322b85f3e8807b020d70b0a3dcb492d308acb31032ecb4b1922b18513866f634acc3f63584',
 };
 
 const fail = (reason) => {
@@ -366,12 +362,10 @@ const fail = (reason) => {
  *   in `bridgeCoreEval()`
  */
 const executeProposal = async (powers) => {
-  // const home = await homePromise;
-
   // Destructure the powers that we use.
   // See also bakeSale-permit.json
   const {
-    consume: { board, chainStorage, zoe },
+    consume: { board, chainStorage, zoe, chainTimerService },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
     instance: {
@@ -380,39 +374,19 @@ const executeProposal = async (powers) => {
     },
   } = powers;
 
-  const moneyIssuerP = E(home.agoricNames).lookup('issuer', 'IST');
-  const moneyBrandP = E(moneyIssuerP).getBrand();
-  const [moneyIssuer, moneyBrand] = await Promise.all([
-    moneyIssuerP,
-    moneyBrandP,
-  ]);
-
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
   const storageNode = E(chainStorageSettled).makeChildNode(
     contractInfo.storagePath,
   );
-  // const chainTimerService = await chainTimerServiceP;
-
   const marshaller = await E(board).getReadonlyMarshaller();
   const kreadConfig = harden({
-    baseCharacters,
+    defaultCharacters,
     defaultItems,
-    moneyIssuer,
-    moneyBrand,
-    // chainTimerService,
+    chainTimerService,
   });
 
   const privateArgs = harden({ storageNode, marshaller, kreadConfig });
-
-  // const kreadInstance = await E(board).getValue(contractInfo.boardId);
-  // const kreadFacet = await E(zoe).getPublicFacet(kreadInstance);
-
-  // try {
-  //   await E(kreadFacet).addStorageNode(storageNode, marshaller);
-  // } catch (e) {
-  //   fail(Error('There was an error calling kread.addStorageNode()', e));
-  // }
 
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
   const noIssuers = harden({});
@@ -425,16 +399,16 @@ const executeProposal = async (powers) => {
   );
 
   const instance = await E(board).getId(facets.instance);
-  console.log({ instance });
+  console.log({ instance }); // We need this to get the board ID
 
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
-  // kread.resolve(kreadInstance);
   kread.resolve(facets.instance);
 
   // Share the publicFacet, creatorFacet, and adminFacet in the bootstrap space
   // for use by other CoreEval behaviors.
   // kreadKit.resolve(kreadFacet);
 };
+
 harden(executeProposal);
 
 // "export" the function as the script completion value

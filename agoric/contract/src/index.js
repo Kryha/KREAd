@@ -120,6 +120,8 @@ const start = async (zcf, privateArgs) => {
     return 'Setup complete';
   };
 
+  initConfig(privateArgs.kreadConfig);
+
   /**
    * @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
    */
@@ -139,6 +141,7 @@ const start = async (zcf, privateArgs) => {
       marshaller,
       completed: true,
     };
+
     return 'Storage Node added successfully';
   };
 
@@ -172,7 +175,6 @@ const start = async (zcf, privateArgs) => {
     seat.exit();
 
     // Add to history
-
     items.forEach((item) => {
       itemHistory[item.id.toString()] = [
         {
@@ -315,7 +317,6 @@ const start = async (zcf, privateArgs) => {
   };
 
   /**
-   *
    * @param {ZCFSeat} seat
    */
   const tokenFacet = (seat) => {
