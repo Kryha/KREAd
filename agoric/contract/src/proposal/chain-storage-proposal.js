@@ -403,10 +403,6 @@ const executeProposal = async (powers) => {
 
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(facets.instance);
-
-  // Share the publicFacet, creatorFacet, and adminFacet in the bootstrap space
-  // for use by other CoreEval behaviors.
-  // kreadKit.resolve(kreadFacet);
 };
 
 harden(executeProposal);
