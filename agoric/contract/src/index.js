@@ -7,7 +7,11 @@ import { assert, details as X } from '@agoric/assert';
 import { errors } from './errors';
 import { mulberry32 } from './prng';
 import { messages } from './messages';
-import { makeCharacterNftObjs, makeStorageNodePublishKit } from './utils';
+import {
+  makeCharacterNftObjs,
+  makeStorageNodePublishKit,
+  setupStorageNodeNotifiers,
+} from './utils';
 import { market } from './market';
 import { inventory } from './inventory';
 import { kreadState } from './kread-state';
@@ -63,12 +67,13 @@ const start = async (zcf, privateArgs) => {
     },
     timerService: privateArgs.chainTimerService,
     ready: false,
+    powers: privateArgs.powers,
   };
 
   assert(!Number.isNaN(privateArgs.seed), X`${errors.seedInvalid}`);
 
   /** @type KreadState  */
-  let state = kreadState({
+  const state = kreadState({
     assetMints: {
       character: characterMint,
       item: itemMint,
@@ -93,121 +98,11 @@ const start = async (zcf, privateArgs) => {
     },
     config,
     randomNumber: mulberry32(privateArgs.seed),
+    notifiers: setupStorageNodeNotifiers(privateArgs.powers),
   });
 
   const characterHistory = {};
   const itemHistory = {};
-
-  /**
-   * Stores the storage node and marshaller
-   * and creates the relevant notifiers
-   *
-   * @param { Powers } powers
-   */
-  const addStorageNode = ({ storageNode, marshaller }) => {
-    assert(storageNode && marshaller, X`${errors.invalidArg}`);
-
-    const notifiers = {
-      market: {
-        characters: makeStorageNodePublishKit(
-          storageNode,
-          marshaller,
-          'market-characters',
-        ),
-        items: makeStorageNodePublishKit(
-          storageNode,
-          marshaller,
-          'market-items',
-        ),
-      },
-      inventory: makeStorageNodePublishKit(
-        storageNode,
-        marshaller,
-        'inventory-general',
-      ),
-    };
-
-    state.set.powers(
-      {
-        storageNode,
-        marshaller,
-      },
-      notifiers,
-    );
-
-    return 'Storage Node added successfully';
-  };
-
-  /**
-   * Set contract configuration, required for most contract features,
-   * base characters will be picked at random on new mint
-   * default items will be minted along each character
-   * seed is used to init the PRNG
-   *
-   * @param {{
-   *   baseCharacters: object[],
-   *   defaultItems: object[],
-   *   seed: number
-   *   chainTimerService: TimerService
-   *   powers: Powers
-   * }} config
-   * @returns {string}
-   */
-  const initConfig = ({
-    baseCharacters,
-    defaultItems,
-    seed,
-    chainTimerService,
-    powers,
-  }) => {
-    const kreadConfig = {
-      tokenData: {
-        characters: baseCharacters,
-        items: defaultItems,
-      },
-      // defaultPaymentToken: {
-      //   issuer: moneyIssuer,
-      //   brand: moneyBrand,
-      // },
-      timerService: chainTimerService,
-      ready: false,
-    };
-
-    assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
-
-    state = kreadState({
-      config: kreadConfig,
-      assetMints: {
-        character: characterMint,
-        item: itemMint,
-        paymentFT: paymentFTMint,
-      },
-      tokenInfo: {
-        character: {
-          name: assetNames.character,
-          brand: characterBrand,
-          issuer: characterIssuer,
-        },
-        item: {
-          name: assetNames.item,
-          brand: itemBrand,
-          issuer: itemIssuer,
-        },
-        paymentFT: {
-          name: assetNames.paymentFT,
-          brand: paymentFTBrand,
-          issuer: paymentFTIssuer,
-        },
-      },
-      randomNumber: mulberry32(seed),
-    });
-
-    addStorageNode(powers);
-
-    return 'Setup complete';
-  };
-
-  initConfig(privateArgs);
 
   /**
    * Mints Item NFTs via mintGains
@@ -379,7 +274,7 @@ const start = async (zcf, privateArgs) => {
   };
 
   const creatorFacet = Far('Character store creator', {
-    initConfig,
+    // initConfig,
     getCharacterIssuer: () => characterIssuer,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
@@ -387,7 +282,6 @@ const start = async (zcf, privateArgs) => {
   });
 
   const publicFacet = Far('Chracter store public', {
-    addStorageNode, // FIXME: RESTRICT PRIVILEGED FN
     makeTokenFacetInvitation: () =>
       zcf.makeInvitation(tokenFacet, 'get tokens'), // FIXME: RESTRICT PRIVILEGED FN
 

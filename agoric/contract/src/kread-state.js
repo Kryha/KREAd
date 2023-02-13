@@ -12,10 +12,11 @@ import { getPage } from './utils';
  *   config: Config
  *   assetMints: AssetMints
  *   randomNumber: function
+ *   notifiers: Notifiers
  * }} initialState
  * @returns {KreadState}
  */
-export const kreadState = ({ tokenInfo, config, assetMints, randomNumber }) => {
+export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifiers }) => {
   /**
    * Contract STATE
    *
@@ -31,7 +32,7 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber }) => {
     },
     tokenInfo,
     assetMints,
-    notifiers: undefined,
+    notifiers,
     randomNumber,
     ready: false,
     configReady: true,

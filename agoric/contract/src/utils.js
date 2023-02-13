@@ -147,3 +147,32 @@ export const makeStorageNodePublishKit = (storageNode, marshaller, path) => {
     subscriber: kit.subscriber,
   };
 };
+
+/**
+ * Stores the storage node and marshaller
+ * and creates the relevant notifiers
+ *
+ * @param { Powers } powers
+ * @returns { Notifiers }
+ */
+export const setupStorageNodeNotifiers = ({ storageNode, marshaller }) => {
+  assert(storageNode && marshaller, X`${errors.invalidArg}`);
+
+  const notifiers = {
+    market: {
+      characters: makeStorageNodePublishKit(
+        storageNode,
+        marshaller,
+        'market-characters',
+      ),
+      items: makeStorageNodePublishKit(storageNode, marshaller, 'market-items'),
+    },
+    inventory: makeStorageNodePublishKit(
+      storageNode,
+      marshaller,
+      'inventory-general',
+    ),
+  };
+
+  return notifiers;
+};

@@ -340,12 +340,11 @@ const defaultItems = {
 const contractInfo = {
   storagePath: 'kread',
   instanceName: 'kread',
-  boardId: 'board01664',
   // see discussion of publish-bundle and bundleID
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-47de61f970d0b209f593f683f8bedbf503630dcc0b3bd0bda9da77322b85f3e8807b020d70b0a3dcb492d308acb31032ecb4b1922b18513866f634acc3f63584',
+    'b1-bcee665c0ae5954f29669e6c3f319d6500a413d941640b7bcdc94e5acfbc7f72f85e92f47bb3aa685746ffff5915370b7797950c48bb1f976d1916d5be70ee83',
 };
 
 const fail = (reason) => {
@@ -381,13 +380,15 @@ const executeProposal = async (powers) => {
     contractInfo.storagePath,
   );
   const marshaller = await E(board).getReadonlyMarshaller();
+  const kreadPowers = { storageNode, marshaller };
   const kreadConfig = harden({
     defaultCharacters,
     defaultItems,
     chainTimerService,
+    seed: 303,
   });
 
-  const privateArgs = harden({ storageNode, marshaller, kreadConfig });
+  const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
   const noIssuers = harden({});
@@ -399,8 +400,43 @@ const executeProposal = async (powers) => {
     privateArgs,
   );
 
+  // Get board ids for instance and assets
   const instance = await E(board).getId(facets.instance);
-  console.log({ instance }); // We need this to get the board ID
+  const {
+    character: { issuer: characterIssuer, brand: characterBrand },
+    item: { issuer: itemIssuer, brand: itemBrand },
+    paymentFT: { issuer: tokenIssuer, brand: tokenBrand },
+  } = await E(facets.publicFacet).getTokenInfo();
+
+  const [
+    INSTANCE_NFT_MAKER_BOARD_ID,
+    CHARACTER_BRAND_BOARD_ID,
+    CHARACTER_ISSUER_BOARD_ID,
+    ITEM_BRAND_BOARD_ID,
+    ITEM_ISSUER_BOARD_ID,
+    TOKEN_BRAND_BOARD_ID,
+    TOKEN_ISSUER_BOARD_ID,
+  ] = await Promise.all([
+    E(board).getId(instance),
+    E(board).getId(characterBrand),
+    E(board).getId(characterIssuer),
+    E(board).getId(itemBrand),
+    E(board).getId(itemIssuer),
+    E(board).getId(tokenBrand),
+    E(board).getId(tokenIssuer),
+  ]);
+
+  const assetBoardIds = {
+    character: {
+      issuer: CHARACTER_ISSUER_BOARD_ID,
+      brand: CHARACTER_BRAND_BOARD_ID,
+    },
+    item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
+    paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
+  };
+
+  console.log(`KREAD BOARD ID: ${instance}`); // We need this to get the board ID
+  console.log(`ASSET BOARD ID: ${assetBoardIds}`);
 
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(facets.instance);
@@ -411,4 +447,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-// # sourceURL=/Users/nickkoster/Kryha/kread/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=../../../REPO/agoric/contract/src/proposal/chain-storage-proposal.js
