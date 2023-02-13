@@ -1,48 +1,46 @@
 // ts-check
 /**
  * @typedef {{
- *   powers?: Powers
+ *   config: Config
+ *   assetMints: AssetMints
+ *   tokenInfo: TokenInfo
+ *   notifiers?: Notifiers
  *   characters: CharacterRecord[]
- *   charactersMarket: CharacterInMarket[]
- *   itemsMarket: ItemInMarket[]
- *   notifiers?: {
- *    market: {
- *      characters: {
- *        subscriber: StoredSubscriber<any>
- *        publisher: Publisher<any>
- *      }
- *      items: {
- *        subscriber: StoredSubscriber<any>
- *        publisher: Publisher<any>
- *      }
- *    }
- *    inventory: {
- *      subscriber: StoredSubscriber<any>
- *      publisher: Publisher<any>
- *    }
- *   }
  *   items: ItemRecord[]
- *   config?: Config
- *   itemCount: bigint
- *   characterCount: bigint
- *   assets: {
- *     character: {
- *       brand: Brand
- *       issuer: Issuer<set>
- *     }
- *     item: {
- *       brand: Brand
- *       issuer: Issuer<set>
- *     }
- *     token: {
- *       brand: Brand
- *       issuer: Issuer<nat>
- *     }
- *   }
  *   randomNumber?: Function
+ *   market: Market
+ *   ready: boolean
+ *   isConfigReady: boolean
  * }} State
  *
- * @typedef {{storageNode: StorageNode, marshaller: Marshaller, completed: boolean}} Powers
+ * @typedef {{
+ *   character: ZCFMint<"set">
+ *   item: ZCFMint<"set">
+ *   paymentFT: ZCFMint<"nat">
+ * }} AssetMints
+ *
+ * * @typedef {{
+ *   character: CharacterMarketRecord[]
+ *   item: ItemMarketRecord[]
+ * }} Market
+ *
+ * @typedef {{
+ *   character: {
+ *     name: string
+ *     brand: Brand
+ *     issuer: Issuer<set>
+ *   }
+ *   item: {
+ *     name: string
+ *     brand: Brand
+ *     issuer: Issuer<set>
+ *   }
+ *   paymentFT: {
+ *     name: string
+ *     brand: Brand
+ *     issuer: Issuer<nat>
+ *   }
+ * }} TokenInfo
  *
  * @typedef  {{
  *   sellerSeat: ZCFSeat
@@ -59,13 +57,39 @@
  * }} ItemMarketRecord
  *
  * @typedef {{
- *   baseCharacters: object[]
- *   defaultItems: object[]
- *   completed: boolean
- *   moneyIssuer: Issuer
- *   moneyBrand: Brand
- *   chainTimerService?: TimerService
+ *    storageNode: StorageNode
+ *    marshaller: Marshaller
+ * }} Powers
+ *
+ * @typedef {{
+ *   tokenData: {
+ *     characters: object[]
+ *     items: object[]
+ *   }
+ *   defaultPaymentToken: {
+ *      brand: Brand<"nat">
+ *      issuer: Issuer<"nat">
+ *   }
+ *   timerService: TimerService
+ *   powers?: Powers
  * }} Config
+ *
+ * @typedef {{
+ *    market: {
+ *      characters: {
+ *        subscriber: StoredSubscriber<any>
+ *        publisher: Publisher<any>
+ *      }
+ *      items: {
+ *        subscriber: StoredSubscriber<any>
+ *        publisher: Publisher<any>
+ *      }
+ *    }
+ *    inventory: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ * }} Notifiers
  *
  * @typedef {{
  *   name: string
@@ -87,7 +111,7 @@
  *   background?: Item;
  *   airReservoir?: Item;
  *   clothing?: Item;
- * }} DefaultItems
+ * }} DefaultItem
  *
  * @typedef {{
  *   id: bigint
@@ -150,4 +174,64 @@
  * }} InventoryKeyRecord
  *
  * @typedef {InventoryKeyRecord[]} InventoryKeyStorage
+ *
+ * @typedef {{
+ *   get: {
+ *     isReady: () => boolean
+ *     isConfigReady: () => boolean
+ *     inventory: (name: string) => { items: Item[] }
+ *     inventoryPublisher: (name: string) => Publisher<any>
+ *     characterKey: (name: string) => { key: Amount }
+ *     count: () => { characters: bigint, items: bigint }
+ *     character: (name: string) => CharacterRecord
+ *     time: () => Promise<bigint>
+ *     randomBaseCharacter: () => object
+ *     assetInfo: () => TokenInfo
+ *     defaultItems: () => any[]
+ *     powers: () => Powers | undefined
+ *     config: () => Config
+ *     randomItem: () => object
+ *     marketPublisher: () => {
+ *       characters: {
+ *         subscriber: StoredSubscriber<any>;
+ *         publisher: Publisher<any>;
+ *       };
+ *       items: {
+ *         subscriber: StoredSubscriber<any>;
+ *         publisher: Publisher<...>;
+ *       };
+ *     }
+ *   }
+ *   set: {
+ *     powers: (powers: Powers, notifiers: Notifiers) => void
+ *   }
+ *   add: {
+ *     characters: (characters: CharacterRecord[]) => void
+ *     items: (items: ItemRecord[]) => void
+ *     updateConfig: (newConfig: Config) => void
+ *   }
+ *   validate: {
+ *     nameIsUnique: (name: string) => boolean
+ *   }
+ *   public: {
+ *     isReady: () => boolean
+ *     isValidName: () => boolean
+ *     getInventory: (name: string) => { items: Item[] }
+ *     getCharacterKey: (name: string) => { key: Amount }
+ *     getCount: () => { characters: bigint, items: bigint }
+ *     getCharacter: (name: string) => CharacterRecord
+ *     getTime: () => Promise<bigint>
+ *     getRandomBaseCharacter: () => object
+ *     getTokenInfo: () => TokenInfo
+ *     getDefaultItems: () => any[]
+ *     getPowers: () => Powers | undefined
+ *     getConfig: () => Config
+ *     getRandomItem: () => object
+ *     getCount: () => { characters: bigint, items: bigint }
+ *     getCharacterMarket: () => CharacterMarketRecord[]
+ *     getCharacterMarketRange: () => CharacterMarketRecord[]
+ *     getItemMarket: () => ItemMarketRecord[]
+ *     getItemMarketRange: () => ItemMarketRecord[]
+ *   }
+ * }} KreadState
  */

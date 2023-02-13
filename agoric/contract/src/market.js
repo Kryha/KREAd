@@ -2,10 +2,8 @@
 // @ts-check
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath } from '@agoric/ertp';
-import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 // import { makeNotifierKit } from '@agoric/notifier';
 import { errors } from './errors';
-import * as state from './get';
 import {
   removeCharacterFromMarketArray,
   removeItemFromMarketArray,
@@ -18,10 +16,11 @@ export const SELL_ITEM_DESCRIPTION = 'Sell Item in KREAd marketplace';
  * Put character up for sale
  *
  * @param {ZCF} zcf
- * @param {()=>State} STATE
- * @param STATE
+ * @param {()=>KreadState} getState
  */
-export const market = (zcf, STATE) => {
+export const market = (zcf, getState) => {
+  const state = getState();
+
   /**
    * @type {CharacterMarketRecord[]}
    */
@@ -37,16 +36,8 @@ export const market = (zcf, STATE) => {
    * @param {ZCFSeat} sellerSeat
    */
   const sellCharacter = async (sellerSeat) => {
-    const { config, notifiers } = STATE();
-    assert(config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(sellerSeat, {
-      give: {
-        Character: null,
-      },
-      want: {
-        Price: null,
-      },
-    });
+    assert(state.get.isReady(), X`${errors.noConfig}`);
+
     // Inspect allocation of Character keyword in seller seat
     const characterInSellSeat = sellerSeat.getAmountAllocated('Character');
     const { want } = sellerSeat.getProposal();
@@ -70,11 +61,11 @@ export const market = (zcf, STATE) => {
     };
 
     characterMarket = [...characterMarket, newEntry];
-    assert(
-      notifiers?.market.characters.publisher,
-      X`${errors.missingStorageNode}`,
-    );
-    notifiers.market.characters.publisher.publish(characterMarket);
+    const {
+      characters: { publisher },
+    } = state.get.marketPublisher();
+    assert(publisher, X`${errors.missingStorageNode}`);
+    publisher.publish(characterMarket);
 
     return harden({ characterMarket, itemMarket });
   };
@@ -85,17 +76,8 @@ export const market = (zcf, STATE) => {
    * @param {ZCFSeat} sellerSeat
    */
   const sellItem = async (sellerSeat) => {
-    const { config, notifiers } = STATE();
+    assert(state.get.isReady(), X`${errors.noConfig}`);
 
-    assert(config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(sellerSeat, {
-      give: {
-        Item: null,
-      },
-      want: {
-        Price: null,
-      },
-    });
     // Inspect allocation of Character keyword in seller seat
     const itemInSellSeat = sellerSeat.getAmountAllocated('Item');
     const { want } = sellerSeat.getProposal();
@@ -119,8 +101,11 @@ export const market = (zcf, STATE) => {
 
     itemMarket = [...itemMarket, newEntry];
 
-    assert(notifiers?.market.items.publisher, X`${errors.missingStorageNode}`);
-    notifiers.market.items.publisher.publish(itemMarket);
+    const {
+      items: { publisher },
+    } = state.get.marketPublisher();
+    assert(publisher, X`${errors.missingStorageNode}`);
+    publisher.publish(itemMarket);
 
     return harden({ itemMarket });
   };
@@ -130,30 +115,18 @@ export const market = (zcf, STATE) => {
    * @param {ZCFSeat} buyerSeat
    */
   const buyCharacter = async (buyerSeat) => {
+    assert(state.get.isReady(), X`${errors.noConfig}`);
     const {
-      config,
-      notifiers,
-      assets: {
-        character: { brand: characterBrand },
-        token: { brand: tokenBrand },
-      },
-    } = STATE();
-    assert(config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(buyerSeat, {
-      give: {
-        Price: null,
-      },
-      want: {
-        Character: null,
-      },
-    });
+      character: { brand: characterBrand },
+      paymentFT: { brand: paymentFTBrand },
+    } = state.get.assetInfo();
 
     // Inspect Character keyword in buyer seat
     const { want, give } = buyerSeat.getProposal();
     const { Character: wantedCharacterAmount } = want;
     const character = wantedCharacterAmount.value[0];
     // Find characterRecord entry based on wanted character
-    const characterRecord = state.getCharacterRecord(character.name, STATE());
+    const characterRecord = state.get.character(character.name);
     assert(
       characterRecord,
       `Couldn't find character record for ${character.name}`,
@@ -179,7 +152,11 @@ export const market = (zcf, STATE) => {
 
     const { Price: characterForSalePrice } = sellerSeat.getProposal().want;
     assert(
-      AmountMath.isGTE(providedMoneyAmount, characterForSalePrice, tokenBrand),
+      AmountMath.isGTE(
+        providedMoneyAmount,
+        characterForSalePrice,
+        paymentFTBrand,
+      ),
       'Provided payment is lower than the asking price for this Character',
     );
 
@@ -204,11 +181,11 @@ export const market = (zcf, STATE) => {
       sellRecord.name,
     );
 
-    assert(
-      notifiers?.market.characters.publisher,
-      X`${errors.missingStorageNode}`,
-    );
-    notifiers.market.characters.publisher.publish(characterMarket);
+    const {
+      characters: { publisher },
+    } = state.get.marketPublisher();
+    assert(publisher, X`${errors.missingStorageNode}`);
+    publisher.publish(characterMarket);
 
     return harden({ characterMarket });
   };
@@ -218,23 +195,11 @@ export const market = (zcf, STATE) => {
    * @param {ZCFSeat} buyerSeat
    */
   const buyItem = async (buyerSeat) => {
+    assert(state.get.isReady(), X`${errors.noConfig}`);
     const {
-      config,
-      notifiers,
-      assets: {
-        token: { brand: tokenBrand },
-        item: { brand: itemBrand },
-      },
-    } = STATE();
-    assert(config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(buyerSeat, {
-      give: {
-        Price: null,
-      },
-      want: {
-        Item: null,
-      },
-    });
+      item: { brand: itemBrand },
+      paymentFT: { brand: paymentFTBrand },
+    } = state.get.assetInfo();
 
     // Inspect Character keyword in buyer seat
     const { want, give } = buyerSeat.getProposal();
@@ -256,7 +221,7 @@ export const market = (zcf, STATE) => {
 
     const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
     assert(
-      AmountMath.isGTE(providedMoneyAmount, itemForSalePrice, tokenBrand),
+      AmountMath.isGTE(providedMoneyAmount, itemForSalePrice, paymentFTBrand),
       'Provided payment is lower than the asking price for this Item',
     );
 
@@ -274,19 +239,13 @@ export const market = (zcf, STATE) => {
     sellerSeat.exit();
     itemMarket = removeItemFromMarketArray(itemMarket, sellRecord.id);
 
-    assert(notifiers?.market.items.publisher, X`${errors.missingStorageNode}`);
-    notifiers.market.items.publisher.publish(itemMarket);
+    const {
+      items: { publisher },
+    } = state.get.marketPublisher();
+    assert(publisher, X`${errors.missingStorageNode}`);
+    publisher.publish(itemMarket);
 
     return harden({ itemMarket });
-  };
-
-  const getMarketSubscribers = () => {
-    const { notifiers } = STATE();
-    assert(notifiers?.market, X`${errors.missingStorageNode}`);
-    return {
-      characters: notifiers.market.characters.subscriber,
-      items: notifiers.market.items.subscriber,
-    };
   };
 
   return {
@@ -298,6 +257,5 @@ export const market = (zcf, STATE) => {
       zcf.makeInvitation(sellItem, SELL_ITEM_DESCRIPTION),
     makeBuyItemInvitation: () =>
       zcf.makeInvitation(buyItem, 'Buy Item in KREAd marketplace'),
-    getMarketSubscribers,
   };
 };

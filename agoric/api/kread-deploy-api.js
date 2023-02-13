@@ -76,11 +76,7 @@ export default async function deployApi(homePromise, { pathResolve }) {
   // To get the backend of our dapp up and running, first we need to
   // grab the installation that our contract deploy script put
   // in the public board.
-  const {
-    INSTALLATION_BOARD_ID,
-    CONTRACT_NAME,
-    SELL_ASSETS_INSTALLATION_BOARD_ID,
-  } = installationConstants;
+  const { INSTALLATION_BOARD_ID, CONTRACT_NAME } = installationConstants;
   const installation = await E(board).getValue(INSTALLATION_BOARD_ID);
 
   // Second, we can use the installation to create a new instance of
@@ -89,13 +85,6 @@ export default async function deployApi(homePromise, { pathResolve }) {
   // give us a `creatorFacet` that will let us make invitations we can
   // send to users.
 
-  const {
-    creatorFacet: kreadAdminFacet,
-    publicFacet: kreadPublicFacet,
-    instance: instanceNftMaker,
-  } = await E(zoe).startInstance(installation);
-
-  console.log(instanceNftMaker);
   /**
    * @type {ERef<Issuer>}
    */
@@ -302,21 +291,26 @@ export default async function deployApi(homePromise, { pathResolve }) {
     moneyIssuer,
     moneyBrand,
     chainTimerService,
+    seed: 300032,
   };
 
   console.log('KREAd Config: ', kreadConfig);
-  console.log(await E(kreadAdminFacet).initConfig(kreadConfig));
+  const { publicFacet: kreadPublicFacet, instance: instanceNftMaker } = await E(
+    zoe,
+  ).startInstance(installation, {}, {}, kreadConfig);
+
+  // console.log(await E(kreadAdminFacet).initConfig(kreadConfig));
   console.log('- SUCCESS! contract instance is running on Zoe');
   console.log('Retrieving Board IDs for issuers and brands');
 
   const invitationIssuerP = E(zoe).getInvitationIssuer();
   const invitationBrandP = E(invitationIssuerP).getBrand();
 
-  const [
-    { issuer: characterIssuer, brand: characterBrand },
-    { issuer: itemIssuer, brand: itemBrand },
-    { issuer: tokenIssuer, brand: tokenBrand },
-  ] = await E(kreadPublicFacet).getAssets();
+  const {
+    character: { issuer: characterIssuer, brand: characterBrand },
+    item: { issuer: itemIssuer, brand: itemBrand },
+    paymentFT: { issuer: tokenIssuer, brand: tokenBrand },
+  } = await E(kreadPublicFacet).getTokenInfo();
 
   const [invitationBrand, invitationIssuer] = await Promise.all([
     invitationBrandP,

@@ -2,23 +2,16 @@
 // @ts-check
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath } from '@agoric/ertp';
-import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { errors } from './errors';
-import * as state from './get';
 
 /**
  * Inventory methods
  *
  * @param {ZCF} zcf
- * @param {State} STATE
+ * @param {()=>KreadState} getState
  */
-export const inventory = (zcf, STATE) => {
-  const {
-    assets: {
-      character: { brand: characterBrand },
-      item: { brand: itemBrand },
-    },
-  } = STATE;
+export const inventory = (zcf, getState) => {
+  const state = getState();
 
   /**
    * This function validates an inventory update
@@ -39,16 +32,10 @@ export const inventory = (zcf, STATE) => {
    * @param {ZCFSeat} seat
    */
   const equip = async (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(seat, {
-      give: {
-        Item: null,
-        CharacterKey1: null,
-      },
-      want: {
-        CharacterKey2: null,
-      },
-    });
+    assert(state.get.isReady(), X`${errors.noConfig}`);
+    const {
+      character: { brand: characterBrand },
+    } = state.get.assetInfo();
 
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item');
@@ -57,7 +44,7 @@ export const inventory = (zcf, STATE) => {
     const characterName = providedCharacterKey.name;
 
     // Find characterRecord entry based on provided key
-    const characterRecord = state.getCharacterRecord(characterName, STATE);
+    const characterRecord = state.get.character(characterName);
     const inventorySeat = characterRecord.inventory;
 
     const { want } = seat.getProposal();
@@ -95,10 +82,7 @@ export const inventory = (zcf, STATE) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    const publisher = state.getCharacterInventoryPublisher(
-      characterName,
-      STATE,
-    );
+    const publisher = state.get.inventoryPublisher(characterName);
     publisher.publish({
       character: characterName,
       inventory: updatedInventory,
@@ -113,16 +97,10 @@ export const inventory = (zcf, STATE) => {
    * @param {ZCFSeat} seat
    */
   const unequip = async (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(seat, {
-      give: {
-        CharacterKey1: null,
-      },
-      want: {
-        Item: null,
-        CharacterKey2: null,
-      },
-    });
+    assert(state.get.isReady(), X`${errors.noConfig}`);
+    const {
+      character: { brand: characterBrand },
+    } = state.get.assetInfo();
 
     // Retrieve Character key from user seat
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
@@ -130,7 +108,7 @@ export const inventory = (zcf, STATE) => {
     const characterName = providedCharacterKey.name;
 
     // Find character record entry based on provided key
-    const characterRecord = state.getCharacterRecord(characterName, STATE);
+    const characterRecord = state.get.character(characterName);
     const inventorySeat = characterRecord.inventory;
     assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 
@@ -167,10 +145,7 @@ export const inventory = (zcf, STATE) => {
     validateInventoryState(updatedInventory);
     zcf.reallocate(seat, inventorySeat);
 
-    const publisher = state.getCharacterInventoryPublisher(
-      characterName,
-      STATE,
-    );
+    const publisher = state.get.inventoryPublisher(characterName);
 
     publisher.publish({
       character: characterName,
@@ -188,17 +163,10 @@ export const inventory = (zcf, STATE) => {
    * @param {ZCFSeat} seat
    */
   const swapItems = async (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(seat, {
-      give: {
-        Item1: null,
-        CharacterKey1: null,
-      },
-      want: {
-        Item2: null,
-        CharacterKey2: null,
-      },
-    });
+    assert(state.get.isReady(), X`${errors.noConfig}`);
+    const {
+      character: { brand: characterBrand },
+    } = state.get.assetInfo();
 
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item1');
@@ -208,7 +176,7 @@ export const inventory = (zcf, STATE) => {
     const characterName = providedCharacterKey.name;
 
     // Find character record entry based on provided key
-    const characterRecord = state.getCharacterRecord(characterName, STATE);
+    const characterRecord = state.get.character(characterName);
     const inventorySeat = characterRecord.inventory;
     assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 
@@ -249,10 +217,7 @@ export const inventory = (zcf, STATE) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    const publisher = state.getCharacterInventoryPublisher(
-      characterName,
-      STATE,
-    );
+    const publisher = state.get.inventoryPublisher(characterName);
     publisher.publish({
       character: characterName,
       inventory: updatedInventory,
@@ -267,16 +232,11 @@ export const inventory = (zcf, STATE) => {
    * @param {ZCFSeat} seat
    */
   const unequipAll = async (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(seat, {
-      give: {
-        CharacterKey1: null,
-      },
-      want: {
-        Item: null,
-        CharacterKey2: null,
-      },
-    });
+    assert(state.get.isReady(), X`${errors.noConfig}`);
+    const {
+      character: { brand: characterBrand },
+      item: { brand: itemBrand },
+    } = state.get.assetInfo();
 
     // Retrieve Character key from user seat
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
@@ -284,7 +244,7 @@ export const inventory = (zcf, STATE) => {
     const characterName = providedCharacterKey.name;
 
     // Find character record entry based on provided key
-    const characterRecord = state.getCharacterRecord(characterName, STATE);
+    const characterRecord = state.get.character(characterName);
     const inventorySeat = characterRecord.inventory;
     assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
 

@@ -2,20 +2,15 @@
 // @ts-check
 import '@agoric/zoe/exported';
 import { AssetKind, AmountMath } from '@agoric/ertp';
-import { assertProposalShape } from '@agoric/zoe/src/contractSupport/index.js';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
 import { errors } from './errors';
 import { mulberry32 } from './prng';
 import { messages } from './messages';
-import * as state from './get';
-import {
-  getPage,
-  makeCharacterNftObjs,
-  makeStorageNodePublishKit,
-} from './utils';
+import { makeCharacterNftObjs, makeStorageNodePublishKit } from './utils';
 import { market } from './market';
 import { inventory } from './inventory';
+import { kreadState } from './kread-state';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -25,55 +20,80 @@ import { inventory } from './inventory';
  *
  * @type {ContractStartFn}
  * @param {ZCF} zcf
- *
- */
+ * @param {{
+ *   baseCharacters: object[],
+ *   defaultItems: object[],
+ *   seed: number
+ *   moneyIssuer: Issuer<"nat">
+ *   moneyBrand: Brand<"nat">
+ *   chainTimerService: TimerService
+ * }} privateArgs
+ * */
 // @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
-const start = async (zcf) => {
+const start = async (zcf, privateArgs) => {
+  const assetNames = {
+    character: 'KREAdCHARACTER',
+    item: 'KREAdITEM',
+    paymentNFT: 'KREAdTOKEN',
+  };
+
   // Define Assets
   const assetMints = await Promise.all([
-    zcf.makeZCFMint('KREAdCHARACTER', AssetKind.SET),
-    zcf.makeZCFMint('KREAdITEM', AssetKind.SET),
-    zcf.makeZCFMint('KREAdTOKEN', AssetKind.NAT), // TODO: Change to IST
+    zcf.makeZCFMint(assetNames.character, AssetKind.SET),
+    zcf.makeZCFMint(assetNames.item, AssetKind.SET),
+    zcf.makeZCFMint(assetNames.paymentNFT, AssetKind.NAT), // TODO: Change to IST
   ]);
 
   const [
     { issuer: characterIssuer, brand: characterBrand },
     { issuer: itemIssuer, brand: itemBrand },
-    { issuer: tokenIssuer, brand: tokenBrand },
+    { issuer: paymentFTIssuer, brand: paymentFTBrand },
   ] = assetMints.map((mint) => mint.getIssuerRecord());
 
-  const [characterMint, itemMint, tokenMint] = assetMints;
+  const [characterMint, itemMint, paymentFTMint] = assetMints;
 
-  let PRNG; // Pseudo random number generator (mulberry32)
+  const config = {
+    tokenData: {
+      characters: privateArgs.baseCharacters,
+      items: privateArgs.defaultItems,
+    },
+    defaultPaymentToken: {
+      issuer: privateArgs.moneyIssuer,
+      brand: privateArgs.moneyBrand,
+    },
+    timerService: privateArgs.chainTimerService,
+    ready: false,
+  };
 
-  /**
-   * Contract STATE
-   *
-   * @type {State}
-   */
-  const STATE = {
-    config: undefined, // Holds list of base characters and default items
-    characters: [], // Holds each character's inventory + copy of its data
-    charactersMarket: [],
-    items: [],
-    itemsMarket: [],
-    itemCount: 0n,
-    characterCount: 0n,
-    assets: {
+  assert(!Number.isNaN(privateArgs.seed), X`${errors.seedInvalid}`);
+
+  /** @type KreadState  */
+  let state = kreadState({
+    assetMints: {
+      character: characterMint,
+      item: itemMint,
+      paymentFT: paymentFTMint,
+    },
+    tokenInfo: {
       character: {
+        name: assetNames.character,
         brand: characterBrand,
         issuer: characterIssuer,
       },
       item: {
+        name: assetNames.item,
         brand: itemBrand,
         issuer: itemIssuer,
       },
-      token: {
-        brand: tokenBrand,
-        issuer: tokenIssuer,
+      paymentFT: {
+        name: assetNames.paymentFT,
+        brand: paymentFTBrand,
+        issuer: paymentFTIssuer,
       },
     },
-  };
+    config,
+    randomNumber: mulberry32(privateArgs.seed),
+  });
 
   const characterHistory = {};
   const itemHistory = {};
@@ -85,11 +105,11 @@ const start = async (zcf) => {
    * seed is used to init the PRNG
    *
    * @param {{
-   *   baseCharacters: any[],
-   *   defaultItems: any[],
+   *   baseCharacters: object[],
+   *   defaultItems: object[],
    *   seed: number
-   *   moneyIssuer: Issuer
-   *   moneyBrand: Brand
+   *   moneyIssuer: Issuer<"nat">
+   *   moneyBrand: Brand<"nat">
    *   chainTimerService: TimerService
    * }} config
    * @returns {string}
@@ -102,29 +122,61 @@ const start = async (zcf) => {
     moneyBrand,
     chainTimerService,
   }) => {
-    STATE.config = {
-      baseCharacters,
-      defaultItems,
-      completed: true,
-      moneyIssuer,
-      moneyBrand,
-      chainTimerService,
+    const kreadConfig = {
+      tokenData: {
+        characters: baseCharacters,
+        items: defaultItems,
+      },
+      defaultPaymentToken: {
+        issuer: moneyIssuer,
+        brand: moneyBrand,
+      },
+      timerService: chainTimerService,
+      ready: false,
     };
+
     assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
-    PRNG = mulberry32(seed);
-    STATE.randomNumber = PRNG;
+
+    state = kreadState({
+      config: kreadConfig,
+      assetMints: {
+        character: characterMint,
+        item: itemMint,
+        paymentFT: paymentFTMint,
+      },
+      tokenInfo: {
+        character: {
+          name: assetNames.character,
+          brand: characterBrand,
+          issuer: characterIssuer,
+        },
+        item: {
+          name: assetNames.item,
+          brand: itemBrand,
+          issuer: itemIssuer,
+        },
+        paymentFT: {
+          name: assetNames.paymentFT,
+          brand: paymentFTBrand,
+          issuer: paymentFTIssuer,
+        },
+      },
+      randomNumber: mulberry32(seed),
+    });
+
     return 'Setup complete';
   };
 
   /**
+   * Stores the storage node and marshaller
+   * and creates the relevant notifiers
    *
-   * @param { StorageNode } storageNode
-   * @param { Marshaller } marshaller
+   * @param { Powers } powers
    */
-  const addStorageNode = (storageNode, marshaller) => {
+  const addStorageNode = ({ storageNode, marshaller }) => {
     assert(storageNode && marshaller, X`${errors.invalidArg}`);
 
-    STATE.notifiers = {
+    const notifiers = {
       market: {
         characters: makeStorageNodePublishKit(
           storageNode,
@@ -143,11 +195,15 @@ const start = async (zcf) => {
         'inventory-general',
       ),
     };
-    STATE.powers = {
-      storageNode,
-      marshaller,
-      completed: true,
-    };
+
+    state.set.powers(
+      {
+        storageNode,
+        marshaller,
+      },
+      notifiers,
+    );
+
     return 'Storage Node added successfully';
   };
 
@@ -157,29 +213,24 @@ const start = async (zcf) => {
    * @param {ZCFSeat} seat
    */
   const mintItemNFT = async (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
-    assertProposalShape(seat, {
-      want: { Item: null },
-    });
+    assert(state.get.isReady(), X`${errors.noConfig}`);
+
     const { want } = seat.getProposal();
 
-    // @ts-ignore
-    const currentTime = await state.getCurrentTime(STATE);
+    const currentTime = await state.get.time();
 
     // @ts-ignore
     const items = want.Item.value.map((item) => {
-      const id = STATE.itemCount;
-      STATE.itemCount = 1n + STATE.itemCount;
+      const id = state.get.count().items;
       return { ...item, id, date: currentTime };
     });
-
     const newItemAmount = AmountMath.make(itemBrand, harden(items));
+
     itemMint.mintGains({ Asset: newItemAmount }, seat);
 
     seat.exit();
 
     // Add to history
-
     items.forEach((item) => {
       itemHistory[item.id.toString()] = [
         {
@@ -199,23 +250,20 @@ const start = async (zcf) => {
    * @param {ZCFSeat} seat
    */
   const mintCharacterNFT = async (seat) => {
-    assert(STATE.config?.completed, X`${errors.noConfig}`);
-    // TODO add Give statement with Money
-    assertProposalShape(seat, {
-      want: {
-        Asset: null,
-      },
-    });
-    const { want } = seat.getProposal();
-    const newCharacterName = want.Asset.value[0].name;
-    assert(state.nameIsUnique(newCharacterName, STATE), X`${errors.nameTaken}`);
+    assert(state.get.isReady(), X`${errors.noConfig}`);
 
-    const currentTime = await state.getCurrentTime(STATE);
-    STATE.characterCount = 1n + STATE.characterCount;
+    const { want } = seat.getProposal();
+    const currentTime = await state.get.time();
+    const newCharacterName = want.Asset.value[0].name;
+    assert(
+      state.validate.nameIsUnique(newCharacterName),
+      X`${errors.nameTaken}`,
+    );
+
     const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
       newCharacterName,
-      state.getRandomBaseCharacter(STATE),
-      STATE.characterCount,
+      state.get.randomBaseCharacter(),
+      state.get.count().characters,
       currentTime,
     ).map((character) => AmountMath.make(characterBrand, harden([character])));
 
@@ -229,34 +277,29 @@ const start = async (zcf) => {
     );
 
     // Mint items to inventory seat
-    // TODO: Replace Date by a valid time generator now it returns NaN
-    const allDefaultItems = Object.values(STATE.config.defaultItems);
+    const allDefaultItems = Object.values(state.get.defaultItems());
     const uniqueItems = allDefaultItems.map((item) => {
+      /** @type {ItemRecord} */
       const newItemWithId = {
         ...item,
-        id: STATE.itemCount,
+        id: state.get.count().items,
       };
-
-      STATE.itemCount = 1n + STATE.itemCount;
-
       return newItemWithId;
     });
 
     const itemsAmount = AmountMath.make(itemBrand, harden(uniqueItems));
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
 
-    assert(
-      STATE.notifiers?.inventory.publisher,
-      X`${errors.missingStorageNode}`,
-    );
+    const powers = state.get.powers();
+    assert(powers);
 
     const inventoryNotifier = makeStorageNodePublishKit(
-      STATE.powers?.storageNode,
-      STATE.powers?.marshaller,
+      powers.storageNode,
+      powers.marshaller,
       `inventory-${newCharacterName}`,
     );
 
-    // Add to public STATE
+    // Add to state
     /**
      * @type {CharacterRecord}
      */
@@ -266,7 +309,9 @@ const start = async (zcf) => {
       inventory: inventorySeat,
       publisher: inventoryNotifier.publisher,
     };
-    STATE.characters = [...STATE.characters, character];
+
+    state.add.characters([character]);
+    state.add.items(uniqueItems);
 
     // Add to history
     characterHistory[character.name] = [
@@ -297,29 +342,29 @@ const start = async (zcf) => {
   };
 
   // Opportunity for more complex queries
-  const getCharacters = () => {
-    return harden({
-      characters: STATE.characters,
-    });
-  };
+  // const getCharacters = () => {
+  //   return harden({
+  //     characters: state.characters,
+  //   });
+  // };
 
-  const getCharactersMarket = () => {
-    return harden({
-      characters: STATE.charactersMarket,
-    });
-  };
+  // const getCharactersMarket = () => {
+  //   return harden({
+  //     characters: state.charactersMarket,
+  //   });
+  // };
 
-  const getItems = () => {
-    return harden({
-      items: STATE.items,
-    });
-  };
+  // const getItems = () => {
+  //   return harden({
+  //     items: state.items,
+  //   });
+  // };
 
-  const getItemsMarket = () => {
-    return harden({
-      items: STATE.itemsMarket,
-    });
-  };
+  // const getItemsMarket = () => {
+  //   return harden({
+  //     items: state.itemsMarket,
+  //   });
+  // };
 
   /**
    *
@@ -327,7 +372,7 @@ const start = async (zcf) => {
    */
   const tokenFacet = (seat) => {
     const { want } = seat.getProposal();
-    tokenMint.mintGains(want, seat);
+    paymentFTMint.mintGains(want, seat);
     seat.exit();
     return 'Success';
   };
@@ -337,50 +382,19 @@ const start = async (zcf) => {
     getCharacterIssuer: () => characterIssuer,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
-    getCharacters,
-    getConfig: () => STATE.config,
+    getState: () => state,
   });
 
   const publicFacet = Far('Chracter store public', {
     addStorageNode, // FIXME: RESTRICT PRIVILEGED FN
     makeTokenFacetInvitation: () =>
       zcf.makeInvitation(tokenFacet, 'get tokens'), // FIXME: RESTRICT PRIVILEGED FN
-    // config
-    getConfig: () => STATE.config, // TODO: PRIVILEGED? FN
-    getPowers: () => ({ powers: STATE.powers, config: STATE.config }), // FIXME: RESTRICT PRIVILEGED FN
-    getAssets: () => [
-      STATE.assets?.character,
-      STATE.assets?.item,
-      STATE.assets?.token,
-    ],
-    // characters
-    getCharacterInventoryNotifier: (characterName) =>
-      state.getCharacterInventorySubscriber(characterName, STATE),
-    getCharacterBase: () => STATE.config?.baseCharacters[0],
-    getCharacters,
-    getCharactersRange: (range, page) => getPage(STATE.characters, range, page),
-    getCharactersMarket,
-    getCharactersMarketRange: (range, page) =>
-      getPage(STATE.charactersMarket, range, page),
-    getCharacterInventory: (name) => state.getCharacterInventory(name, STATE),
-    getCharacterKey: (name) => state.getCharacterKey(name, STATE),
-    getCharacterCount: () => STATE.characters.length,
-    getCharacterIssuer: () => characterIssuer,
-    getCharacterBrand: () => characterBrand,
-    randomBaseCharacter: () => state.getRandomBaseCharacter(STATE),
-    // TODO: improve name validation
-    isValidName: state.nameIsUnique,
-    // items
-    getItems,
-    getItemsMarket,
-    getItemsMarketRange: (range, page) =>
-      getPage(STATE.itemsMarket, range, page),
-    getItemIssuer: () => itemIssuer,
-    getItemBrand: () => itemBrand,
-    randomItem: () => state.getRandomItem(STATE),
+
+    // public state getters
+    ...state.public,
 
     // equip/unequip
-    ...inventory(zcf, STATE),
+    ...inventory(zcf, () => state),
 
     // mint
     makeMintCharacterInvitation: () =>
@@ -394,7 +408,7 @@ const start = async (zcf) => {
     getAllCharacterHistory: () => characterHistory.entries(),
     getAllItemHistory: () => itemHistory.entries(),
 
-    ...market(zcf, () => STATE),
+    ...market(zcf, () => state),
     // getMarketData: () => ({ characters: characterMarket, items: itemMarket }),
   });
 
