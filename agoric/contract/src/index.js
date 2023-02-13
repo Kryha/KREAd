@@ -25,7 +25,7 @@ import { kreadState } from './kread-state';
  * @type {ContractStartFn}
  * @param {ZCF} zcf
  * @param {{
- *   baseCharacters: object[],
+ *   defaultCharacters: object[],
  *   defaultItems: object[],
  *   seed: number
  *   moneyIssuer: Issuer<"nat">
@@ -58,7 +58,7 @@ const start = async (zcf, privateArgs) => {
 
   const config = {
     tokenData: {
-      characters: privateArgs.baseCharacters,
+      characters: privateArgs.defaultCharacters,
       items: privateArgs.defaultItems,
     },
     defaultPaymentToken: {
@@ -66,7 +66,7 @@ const start = async (zcf, privateArgs) => {
       brand: privateArgs.moneyBrand,
     },
     timerService: privateArgs.chainTimerService,
-    ready: false,
+    ready: true,
     powers: privateArgs.powers,
   };
 

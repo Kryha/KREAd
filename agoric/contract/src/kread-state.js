@@ -34,7 +34,7 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     assetMints,
     notifiers,
     randomNumber,
-    ready: false,
+    ready: true,
     configReady: true,
   };
 
@@ -72,7 +72,7 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     const { inventory } = characterRecord;
     const items = inventory.getAmountAllocated(
       'Item',
-      state.assets.item.brand,
+      state.tokenInfo.item.brand,
     ).value;
     // @ts-ignore
     return { items };
@@ -92,7 +92,7 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     const { inventory } = characterRecord;
     const key = inventory.getAmountAllocated(
       'CharacterKey',
-      state.assets.character.brand,
+      state.tokenInfo.character.brand,
     );
     return { key };
   };
@@ -138,27 +138,6 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
   const getCurrentTime = async () =>
     E(state.config.timerService).getCurrentTimestamp();
 
-  const get = Far('kread state get', {
-    isReady: () => state.ready,
-    isConfigReady: () => state.isConfigReady,
-    inventory: getCharacterInventory,
-    inventoryPublisher: getCharacterInventoryPublisher,
-    characterKey: getCharacterKey,
-    character: getCharacterRecord,
-    time: getCurrentTime,
-    marketPublisher: () => state.notifiers.market,
-    randomBaseCharacter: getRandomBaseCharacter,
-    assetInfo: () => state.tokenInfo,
-    defaultItems: () => state.config.tokenData.items,
-    powers: () => state.config.powers,
-    config: () => state.config,
-    randomItem: getRandomItem,
-    count: () => ({
-      characters: state.characters.length,
-      items: state.items.length,
-    }),
-  });
-
   /**
    * @param {string} name
    * @returns {boolean}
@@ -196,27 +175,54 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     state.config = newConfig;
   };
 
+  /**
+   *
+   * @param {Powers} powers
+   * @param {Notifiers} notifiers
+  */
+ const setPowers = (powers, notifiers) => {
+   state.config.powers = powers;
+   state.notifiers = notifiers;
+   state.ready = true;
+  };
+  
+  // Full access getters
+  const get = Far('kread state get', {
+    isReady: () => state.ready,
+    isConfigReady: () => state.isConfigReady,
+    inventory: getCharacterInventory,
+    inventoryPublisher: getCharacterInventoryPublisher,
+    characterKey: getCharacterKey,
+    character: getCharacterRecord,
+    time: getCurrentTime,
+    marketPublisher: () => state.notifiers.market,
+    randomBaseCharacter: getRandomBaseCharacter,
+    assetInfo: () => state.tokenInfo,
+    defaultItems: () => state.config.tokenData.items,
+    powers: () => state.config.powers,
+    config: () => state.config,
+    randomItem: getRandomItem,
+    count: () => ({
+      characters: state.characters.length,
+      items: state.items.length,
+    }),
+  });
+
+  // Adds content to specific entries of the
+  // state by merging it with their current values
   const add = Far('kread state add', {
     characters: addCharacters,
     items: addItems,
     updateConfig,
   });
-
-  /**
-   *
-   * @param {Powers} powers
-   * @param {Notifiers} notifiers
-   */
-  const setPowers = (powers, notifiers) => {
-    state.config.powers = powers;
-    state.notifiers = notifiers;
-    state.ready = true;
-  };
-
+  
+  // Replaces specific entries in the state
   const set = Far('kread state set', {
     powers: setPowers,
   });
 
+  // Limited getters
+  // Methods available in Kread's public facet
   const publicFacet = Far('kread state public facet', {
     isReady: () => state.ready,
     getCharacterInventory,

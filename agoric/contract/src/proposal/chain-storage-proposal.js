@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-bcee665c0ae5954f29669e6c3f319d6500a413d941640b7bcdc94e5acfbc7f72f85e92f47bb3aa685746ffff5915370b7797950c48bb1f976d1916d5be70ee83',
+    'b1-36aa054562f4b402993063616e4266077fc68380daec29b8c3f97765da9a29ac04964b2c8ab4665ca859466e9c20bcd820a3360df248eed84a49f115bd881914',
 };
 
 const fail = (reason) => {
@@ -409,7 +409,6 @@ const executeProposal = async (powers) => {
   } = await E(facets.publicFacet).getTokenInfo();
 
   const [
-    INSTANCE_NFT_MAKER_BOARD_ID,
     CHARACTER_BRAND_BOARD_ID,
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
@@ -417,7 +416,6 @@ const executeProposal = async (powers) => {
     TOKEN_BRAND_BOARD_ID,
     TOKEN_ISSUER_BOARD_ID,
   ] = await Promise.all([
-    E(board).getId(instance),
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
     E(board).getId(itemBrand),
@@ -435,8 +433,12 @@ const executeProposal = async (powers) => {
     paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
   };
 
-  console.log(`KREAD BOARD ID: ${instance}`); // We need this to get the board ID
-  console.log(`ASSET BOARD ID: ${assetBoardIds}`);
+  // Log board ids for use in frontend constants
+  console.log(`KREAD BOARD ID: ${instance}`);
+  for (const [key, value] of Object.entries(assetBoardIds)) {
+    console.log(`${key.toUpperCase()} BRAND BOARD ID: ${value.brand}`);
+    console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
+  }
 
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(facets.instance);

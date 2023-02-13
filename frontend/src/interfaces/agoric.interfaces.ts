@@ -1,7 +1,7 @@
 export interface AgoricService {
   zoe: any;
   board: any;
-  zoeInvitationDepositFacetId: any;
+  zoeInvitationDepositFacetId?: any;
   invitationIssuer: any;
   walletP: any;
   apiSend: any;

@@ -10,8 +10,7 @@ import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/a
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
-  INVITE_BRAND_BOARD_ID,
-  INSTALLATION_BOARD_ID,
+  // INSTALLATION_BOARD_ID,
   issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, Token: TOKEN_ISSUER_BOARD_ID },
 } = dappConstants;
 
@@ -131,14 +130,13 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
 
       // Initialize agoric service based on constants
-      const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
-      const zoe = E(walletP).getZoe();
-      const board = E(walletP).getBoard();
+      const zoe = await E(walletP).getZoe();
+      const board = await E(walletP).getBoard();
       const instanceNft = await E(board).getValue(INSTANCE_NFT_MAKER_BOARD_ID);
       const kreadFacet = await E(zoe).getPublicFacet(instanceNft);
-      const invitationIssuer = E(zoe).getInvitationIssuer(kreadFacet);
-
-      dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
+      const invitationIssuer = await E(zoe).getInvitationIssuer(kreadFacet);
+      
+      dispatch({ type: "SET_AGORIC", payload: { zoe, board, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
 
       const observer = harden({
@@ -164,7 +162,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       // Suggest installation and brands to wallet
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
-        E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
+        // E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
         E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID),
         E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID),
