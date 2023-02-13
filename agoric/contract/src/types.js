@@ -66,7 +66,7 @@
  *     characters: object[]
  *     items: object[]
  *   }
- *   defaultPaymentToken: {
+ *   defaultPaymentToken?: {
  *      brand: Brand<"nat">
  *      issuer: Issuer<"nat">
  *   }

@@ -27,9 +27,9 @@ import { kreadState } from './kread-state';
  *   moneyIssuer: Issuer<"nat">
  *   moneyBrand: Brand<"nat">
  *   chainTimerService: TimerService
+ *   powers: { storageNode: StorageNode, marshaller: Marshaller }
  * }} privateArgs
  * */
-// @param {{storageNode: StorageNode, marshaller: Marshaller}} privateArgs
 const start = async (zcf, privateArgs) => {
   const assetNames = {
     character: 'KREAdCHARACTER',
@@ -99,75 +99,6 @@ const start = async (zcf, privateArgs) => {
   const itemHistory = {};
 
   /**
-   * Set contract configuration, required for most contract features,
-   * base characters will be picked at random on new mint
-   * default items will be minted along each character
-   * seed is used to init the PRNG
-   *
-   * @param {{
-   *   baseCharacters: object[],
-   *   defaultItems: object[],
-   *   seed: number
-   *   moneyIssuer: Issuer<"nat">
-   *   moneyBrand: Brand<"nat">
-   *   chainTimerService: TimerService
-   * }} config
-   * @returns {string}
-   */
-  const initConfig = ({
-    baseCharacters,
-    defaultItems,
-    seed,
-    moneyIssuer,
-    moneyBrand,
-    chainTimerService,
-  }) => {
-    const kreadConfig = {
-      tokenData: {
-        characters: baseCharacters,
-        items: defaultItems,
-      },
-      defaultPaymentToken: {
-        issuer: moneyIssuer,
-        brand: moneyBrand,
-      },
-      timerService: chainTimerService,
-      ready: false,
-    };
-
-    assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
-
-    state = kreadState({
-      config: kreadConfig,
-      assetMints: {
-        character: characterMint,
-        item: itemMint,
-        paymentFT: paymentFTMint,
-      },
-      tokenInfo: {
-        character: {
-          name: assetNames.character,
-          brand: characterBrand,
-          issuer: characterIssuer,
-        },
-        item: {
-          name: assetNames.item,
-          brand: itemBrand,
-          issuer: itemIssuer,
-        },
-        paymentFT: {
-          name: assetNames.paymentFT,
-          brand: paymentFTBrand,
-          issuer: paymentFTIssuer,
-        },
-      },
-      randomNumber: mulberry32(seed),
-    });
-
-    return 'Setup complete';
-  };
-
-  /**
    * Stores the storage node and marshaller
    * and creates the relevant notifiers
    *
@@ -206,6 +137,77 @@ const start = async (zcf, privateArgs) => {
 
     return 'Storage Node added successfully';
   };
+
+  /**
+   * Set contract configuration, required for most contract features,
+   * base characters will be picked at random on new mint
+   * default items will be minted along each character
+   * seed is used to init the PRNG
+   *
+   * @param {{
+   *   baseCharacters: object[],
+   *   defaultItems: object[],
+   *   seed: number
+   *   chainTimerService: TimerService
+   *   powers: Powers
+   * }} config
+   * @returns {string}
+   */
+  const initConfig = ({
+    baseCharacters,
+    defaultItems,
+    seed,
+    chainTimerService,
+    powers,
+  }) => {
+    const kreadConfig = {
+      tokenData: {
+        characters: baseCharacters,
+        items: defaultItems,
+      },
+      // defaultPaymentToken: {
+      //   issuer: moneyIssuer,
+      //   brand: moneyBrand,
+      // },
+      timerService: chainTimerService,
+      ready: false,
+    };
+
+    assert(!Number.isNaN(seed), X`${errors.seedInvalid}`);
+
+    state = kreadState({
+      config: kreadConfig,
+      assetMints: {
+        character: characterMint,
+        item: itemMint,
+        paymentFT: paymentFTMint,
+      },
+      tokenInfo: {
+        character: {
+          name: assetNames.character,
+          brand: characterBrand,
+          issuer: characterIssuer,
+        },
+        item: {
+          name: assetNames.item,
+          brand: itemBrand,
+          issuer: itemIssuer,
+        },
+        paymentFT: {
+          name: assetNames.paymentFT,
+          brand: paymentFTBrand,
+          issuer: paymentFTIssuer,
+        },
+      },
+      randomNumber: mulberry32(seed),
+    });
+
+    addStorageNode(powers);
+
+    return 'Setup complete';
+  };
+
+  initConfig(privateArgs);
 
   /**
    * Mints Item NFTs via mintGains
@@ -367,7 +369,6 @@ const start = async (zcf, privateArgs) => {
   // };
 
   /**
-   *
    * @param {ZCFSeat} seat
    */
   const tokenFacet = (seat) => {
