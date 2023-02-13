@@ -116,7 +116,10 @@ export const removeItemFromMarketArray = (arr, id) => {
  * @param {ERef<Marshaller>} marshaller
  * @returns {PublishKit<T>}
  */
-export const makeStorageNodeMarketPublishKit = (storageNode, marshaller) => {
+export const makeStorageNodeMarketPublishKit = ({
+  storageNode,
+  marshaller,
+}) => {
   assert(storageNode && marshaller, X`${errors.missingStorageNode}`);
   const marketNode = E(storageNode).makeChildNode('market');
   /** @type {StoredPublishKit<T>} */

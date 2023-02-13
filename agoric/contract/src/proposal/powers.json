@@ -1,5 +1,6 @@
 {
   "consume": {
+    "chainTimerService": "timer",
     "board": true,
     "chainStorage": true,
     "zoe": true

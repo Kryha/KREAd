@@ -62,8 +62,8 @@
  *   baseCharacters: object[]
  *   defaultItems: object[]
  *   completed: boolean
- *   moneyIssuer: Issuer
- *   moneyBrand: Brand
+ *   moneyIssuer?: Issuer
+ *   moneyBrand?: Brand
  *   chainTimerService?: TimerService
  * }} Config
  *
