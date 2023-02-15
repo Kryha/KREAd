@@ -130,20 +130,31 @@ export const inventory = (zcf, getState) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    // Inventory Key Swap
-    seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-    seat.incrementBy({ CharacterKey2: wantedCharacter });
-    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-    inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
+    try {
+      // Inventory Key Swap
+      seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
+      seat.incrementBy({ CharacterKey2: wantedCharacter });
+      inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
+      inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
-    // Deposit item from inventory to user seat
-    seat.incrementBy(inventorySeat.decrementBy({ Item: requestedItems }));
+      // Deposit item from inventory to user seat
+      seat.incrementBy(inventorySeat.decrementBy({ Item: requestedItems }));
+    } catch (e) {
+      seat.fail(e);
+      return `Swap assets error: ${e}`;
+    }
 
     // Ensure staged inventory STATE is valid before reallocation
     const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
     // @ts-ignore
     validateInventoryState(updatedInventory);
-    zcf.reallocate(seat, inventorySeat);
+
+    try {
+      zcf.reallocate(seat, inventorySeat);
+    } catch (e) {
+      seat.fail(e);
+      return `Reallocation error: ${e}`;
+    }
 
     const publisher = state.get.inventoryPublisher(characterName);
 
@@ -153,6 +164,7 @@ export const inventory = (zcf, getState) => {
     });
 
     seat.exit();
+    return 'Item(s) were unequipped successfully';
   };
 
   /**

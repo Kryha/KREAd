@@ -94,10 +94,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmayqpgHTDQ8qQCWv8DPax2mfhtXey3kmzWqEBHdphyAZx',
     thumbnail:
       'https://ipfs.io/ipfs/QmeSU6u5jQgcjfTyQuhwjqaFgM5vZmZeoxYPBTeEev9ALs',
-    level: 0.14 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
+    level: 5,
+    rarity: 2,
+    effectiveness: 3,
+    layerComplexity: 5,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
@@ -119,10 +119,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmTdg7MpcL3rKfLiBAfLkedBp74uPKx3CTGrYdwARspy4e',
     thumbnail:
       'https://ipfs.io/ipfs/QmS3fkmVaToE7imZn9jtMZMbSTTeeyGZBHLocUUw7u5z4T',
-    level: 0.12 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
+    level: 54,
+    rarity: 35,
+    effectiveness: 4,
+    layerComplexity: 6,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#7B5B7B'],
@@ -144,10 +144,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmadebCRvkLSHdeSTnPJv58XHtjk5DwYbeUigNNcWPs2Vn',
     thumbnail:
       'https://ipfs.io/ipfs/QmYmyyNeoyeAQ8qPHkufum848mA1P5Q1KHZp7n6vhwGsgd',
-    level: 0.12 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
+    level: 34,
+    rarity: 4,
+    effectiveness: 5,
+    layerComplexity: 400,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#968996', '#FFFFFF'],
@@ -169,10 +169,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/Qmb1ZXVuJifqQ28fEqiSEB7kgXXRqKfwYA7CD4aeLUbrtR',
     thumbnail:
       'https://ipfs.io/ipfs/QmciQkft6W2oZeGQuahosN5LaBawXYkJZTVq8VCEMLZVVG',
-    level: 0.12 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
+    level: 340,
+    rarity: 4,
+    effectiveness: 404,
+    layerComplexity: 5000,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
@@ -194,10 +194,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmdMyDHeudz3RJDFbrwgAvtC2Kx6rmcMbbF85hyqnnNcfE',
     thumbnail:
       'https://ipfs.io/ipfs/QmPQbf3NkPbSv6HABKPeEkbGdsoXVyVnpY5kXY3mS8Q4yR',
-    level: 0.12 * 200 + 0,
-    rarity: 3,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
+    level: 4555,
+    rarity: 53,
+    effectiveness: 45,
+    layerComplexity: 100,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
@@ -219,9 +219,9 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmS5TvnX9PMobuME6bLuuDWR4avhGGeuHg7eAFfZAiLLZ1',
     thumbnail:
       'https://ipfs.io/ipfs/QmS1X4KRtcumk4PqjowgKsbMh2uN79wwUsYYKnakqr7FZn',
-    level: 0.12 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
+    level: 3440,
+    rarity: 30,
+    effectiveness: 3405,
     layerComplexity: 0.12 * 50 + 100,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
@@ -244,10 +244,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
     thumbnail:
       'https://ipfs.io/ipfs/QmcVTwEMR8XzsF8hThYMpajTb6oL7TtvfuH3MEpwyvZUMi',
-    level: 0.12 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
+    level: 455,
+    rarity: 3333,
+    effectiveness: 234,
+    layerComplexity: 3,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
@@ -269,10 +269,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmaYb31m9CRTKJQzVgi2NaHfPqdUTYuXQq5jLzTbTa2YVx',
     thumbnail:
       'https://ipfs.io/ipfs/QmYRmByVnzK2D6akMDEfMj3LPLSJw15R9s9gdu9oGcEV7E',
-    level: 0.12 * 100 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 80 + 20,
-    layerComplexity: 0.12 * 50 + 50,
+    level: 40,
+    rarity: 1,
+    effectiveness: 3,
+    layerComplexity: 50,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
@@ -319,10 +319,10 @@ const defaultItems = {
       'https://ipfs.io/ipfs/QmShge9z81i5sRjgHUjH5EBwtKPvSRNap5JHbp4imLgJ4H',
     thumbnail:
       'https://ipfs.io/ipfs/QmdVLuhUPRvpHzmERTSsChHBexAhc6TUK6SPHsGnqQ7QaM',
-    level: 0.12 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
+    level: 1,
+    rarity: 2,
+    effectiveness: 35,
+    layerComplexity: 100,
     forged: 'Tempet Section 1',
     baseMaterial: 'Mars & Earth',
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-bcee665c0ae5954f29669e6c3f319d6500a413d941640b7bcdc94e5acfbc7f72f85e92f47bb3aa685746ffff5915370b7797950c48bb1f976d1916d5be70ee83',
+    'b1-108fbc3cb8ef46ec0dc5069d27b74ddf5b1b19aef45188f48526ebf63b77d271263aecd3787ac415bb30611b6a2ea77e196557840a777f0aaad6099ef91c1196',
 };
 
 const fail = (reason) => {
@@ -409,7 +409,6 @@ const executeProposal = async (powers) => {
   } = await E(facets.publicFacet).getTokenInfo();
 
   const [
-    INSTANCE_NFT_MAKER_BOARD_ID,
     CHARACTER_BRAND_BOARD_ID,
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
@@ -417,7 +416,6 @@ const executeProposal = async (powers) => {
     TOKEN_BRAND_BOARD_ID,
     TOKEN_ISSUER_BOARD_ID,
   ] = await Promise.all([
-    E(board).getId(instance),
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
     E(board).getId(itemBrand),
@@ -435,8 +433,12 @@ const executeProposal = async (powers) => {
     paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
   };
 
-  console.log(`KREAD BOARD ID: ${instance}`); // We need this to get the board ID
-  console.log(`ASSET BOARD ID: ${assetBoardIds}`);
+  // Log board ids for use in frontend constants
+  console.log(`KREAD BOARD ID: ${instance}`);
+  for (const [key, value] of Object.entries(assetBoardIds)) {
+    console.log(`${key.toUpperCase()} BRAND BOARD ID: ${value.brand}`);
+    console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
+  }
 
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(facets.instance);

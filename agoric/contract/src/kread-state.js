@@ -120,7 +120,7 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
    * @returns {Publisher<any>}
    */
   const getCharacterInventoryPublisher = (name) => {
-    assert(state.powers.completed, X`${errors.missingStorageNode}`);
+    assert(state.ready, X`${errors.missingStorageNode}`);
     const characterRecord = state.characters.find(
       ({ character }) => character.name === name,
     );

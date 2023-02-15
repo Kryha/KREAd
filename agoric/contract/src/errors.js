@@ -20,4 +20,7 @@ export const errors = {
   characterNotInMarket: `Could not find Character in market`,
   invalidArg: `Invalid Argument`,
   missingStorageNode: `Missing Storage Node, notifications are not enabled`,
+  sellerSeatMismatch: `Wanted Item amount does not match item in sellerSeat`,
+  insufficientFunds: `Provided payment is lower than the asking price for this Item`,
+  itemNotFound: (item) => `Couldn't find item record for ${item}`,
 };

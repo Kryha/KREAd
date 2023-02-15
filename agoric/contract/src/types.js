@@ -4,13 +4,12 @@
  *   config: Config
  *   assetMints: AssetMints
  *   tokenInfo: TokenInfo
- *   notifiers?: Notifiers
+ *   notifiers: Notifiers
  *   characters: CharacterRecord[]
  *   items: ItemRecord[]
  *   randomNumber?: Function
  *   market: Market
  *   ready: boolean
- *   isConfigReady: boolean
  * }} State
  *
  * @typedef {{

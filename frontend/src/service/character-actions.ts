@@ -65,6 +65,7 @@ export const mintNfts = async (service: AgoricState, purses: WalletContext, name
     contracts: {
       characterBuilder: { publicFacet },
     },
+    tokenInfo: { character: characterPurse },
   } = service;
 
   if (!publicFacet || !walletP || !purses.token.pursePetname || !purses.character.pursePetname) {

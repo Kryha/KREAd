@@ -47,10 +47,7 @@ export const market = (zcf, getState) => {
     };
 
     const character = characterInSellSeat.value[0];
-    assert(
-      character.name,
-      `No character name found in seller seat. Character asset brand ${characterInSellSeat.brand} asset`,
-    );
+    assert(character.name, X`${errors.character404}`);
 
     // Add to store array
     const newEntry = {
@@ -86,10 +83,6 @@ export const market = (zcf, getState) => {
       value: want.Price.value,
     };
     const item = itemInSellSeat.value[0];
-    assert(
-      item.id,
-      `No character name found in seller seat. Character asset brand ${itemInSellSeat.brand} asset`,
-    );
 
     // Add to store array
     const newEntry = {
@@ -127,15 +120,12 @@ export const market = (zcf, getState) => {
     const character = wantedCharacterAmount.value[0];
     // Find characterRecord entry based on wanted character
     const characterRecord = state.get.character(character.name);
-    assert(
-      characterRecord,
-      `Couldn't find character record for ${character.name}`,
-    );
+    assert(characterRecord, X`${errors.character404}`);
     // Find store record based on wanted character
     const sellRecord = characterMarket.find(
       (record) => record.name === character.name,
     );
-    assert(sellRecord, `Couldn't find character record for ${character.name}`);
+    assert(sellRecord, X`${errors.character404}`);
     const sellerSeat = sellRecord.sellerSeat;
 
     // Inspect Price keyword from buyer seat
@@ -147,7 +137,7 @@ export const market = (zcf, getState) => {
         characterForSaleAmount,
         characterBrand,
       ),
-      'Wanted Character amount does not match character in sellerSeat',
+      X`${errors.sellerSeatMismatch}`,
     );
 
     const { Price: characterForSalePrice } = sellerSeat.getProposal().want;
@@ -157,7 +147,7 @@ export const market = (zcf, getState) => {
         characterForSalePrice,
         paymentFTBrand,
       ),
-      'Provided payment is lower than the asking price for this Character',
+      X`${errors.insufficientFunds}`,
     );
 
     // Widthdraw Character from seller seat and deposit into buyer seat
@@ -208,7 +198,7 @@ export const market = (zcf, getState) => {
 
     // Find store record based on wanted character
     const sellRecord = itemMarket.find((record) => record.id === item.id);
-    assert(sellRecord, `Couldn't find item record for ${item.id}`);
+    assert(sellRecord, X`${errors.itemNotFound(item.id)}`);
     const sellerSeat = sellRecord.sellerSeat;
 
     // Inspect Price keyword from buyer seat
@@ -216,13 +206,13 @@ export const market = (zcf, getState) => {
     const { Item: itemForSaleAmount } = sellerSeat.getProposal().give;
     assert(
       AmountMath.isEqual(wantedItemAmount, itemForSaleAmount, itemBrand),
-      'Wanted Item amount does not match item in sellerSeat',
+      X`${errors.sellerSeatMismatch}`,
     );
 
     const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
     assert(
       AmountMath.isGTE(providedMoneyAmount, itemForSalePrice, paymentFTBrand),
-      'Provided payment is lower than the asking price for this Item',
+      X`${errors.insufficientFunds}`,
     );
 
     // Widthdraw Character from seller seat and deposit into buyer seat

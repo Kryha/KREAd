@@ -7,6 +7,7 @@ import { observeIteration } from "@agoric/notifier";
 import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
+import { getTokenInfo } from "../service/util";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
@@ -42,6 +43,16 @@ const initialState: AgoricState = {
       publicFacet: undefined,
     },
   },
+  tokenInfo: {
+    character: { issuer: undefined, brand: undefined },
+    item: { issuer: undefined, brand: undefined },
+    paymentFT: { issuer: undefined, brand: undefined },
+    boardIds: {
+      character: { issuer: undefined, brand: undefined },
+      item: { issuer: undefined, brand: undefined },
+      paymentFT: { issuer: undefined, brand: undefined },
+    }
+  },
   isLoading: true,
 };
 
@@ -76,6 +87,9 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
+    
+    case "SET_TOKEN_INFO":
+      return { ...state, tokenInfo: action.payload };
 
     case "RESET":
       return initialState;
@@ -136,9 +150,13 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const kreadFacet = await E(zoe).getPublicFacet(instanceNft);
       const invitationIssuer = await E(zoe).getInvitationIssuer(kreadFacet);
       
+      const tokenInfo = await getTokenInfo(kreadFacet, board);
+
+      
+      dispatch({ type: "SET_TOKEN_INFO", payload: tokenInfo });
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
-
+      
       const observer = harden({
         updateState: async (offers: any) => {
           console.count("📡 CHECKING OFFERS");
@@ -147,25 +165,30 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         finish: (completion: unknown) => console.info("INVENTORY NOTIFIER FINISHED", completion),
         fail: (reason: unknown) => console.info("INVENTORY NOTIFIER ERROR", reason),
       });
-
+      
       async function watchOffers() {
         const offerNotifier = E(walletP).getOffersNotifier();
         observeIteration(offerNotifier, observer);
       }
-
+      
       watchOffers().catch((err) => {
         console.error("got watchOffers err", err);
       });
-
+      
+      // console.log(tokenInfo, dappConstants);
+      // E(walletP).suggestInstance("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID);
+      // E(walletP).suggestIssuer("CHARACTER", tokenInfo.boardIds.character.issuer);
+      // E(walletP).suggestIssuer("ITEM", tokenInfo.boardIds.character.issuer);
+      // E(walletP).suggestIssuer("TOKEN", tokenInfo.boardIds.paymentFT.issuer);
       //TODO: Check if dapp is already approved before suggesting installation
       // if (state.purses.character.length===0) {
       // Suggest installation and brands to wallet
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         // E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID),
+        E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID/*, tokenInfo.boardIds.character.issuer*/),
+        E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID/*, tokenInfo.boardIds.item.issuer*/),
+        E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID/*, tokenInfo.boardIds.paymentFT.issuer*/),
       ]);
       // }
 

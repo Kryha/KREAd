@@ -76,8 +76,7 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-    
-    const powers = await E(publicFacet).getPowers();
+    const powers = await E(publicFacet).isReady();
     console.log(powers);
   };
 

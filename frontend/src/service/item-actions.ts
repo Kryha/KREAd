@@ -36,7 +36,7 @@ export const sellItem = async (service: AgoricState, wallet: WalletContext, item
         give: {
           Item: {
             pursePetname: itemPurse.pursePetname,
-            value: [item],
+            value: [{ ...item, id: Number(item.id) }],
           },
         },
       },
@@ -71,7 +71,7 @@ export const buyItem = async (service: AgoricState, wallet: WalletContext, item:
         want: {
           Item: {
             pursePetname: itemPurse.pursePetname,
-            value: [item],
+            value: [{ ...item, id: Number(item.id) }],
           },
         },
         give: {
@@ -163,7 +163,7 @@ export const equipItem = async (service: AgoricState, wallet: WalletContext, ite
       give: {
         Item: {
           pursePetname: itemPurse.brandPetname,
-          value: [formatIdAsNumber(item)],
+          value: [{ ...item, id: Number(item.id) }],
         },
         CharacterKey1: {
           pursePetname: characterPurse.brandPetname,
@@ -219,7 +219,7 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
       want: {
         Item: {
           pursePetname: itemPurse.brandPetname,
-          value: [formatIdAsNumber(item)],
+          value: [{ ...item, id: Number(item.id) }],
         },
         CharacterKey2: {
           pursePetname: characterPurse.brandPetname,
@@ -230,6 +230,7 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
     dappContext: true,
   });
 
+  console.log(offerConfig);
   return E(walletP).addOffer(offerConfig);
 };
 

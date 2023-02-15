@@ -1,3 +1,5 @@
+import { inter } from "../util";
+
 export interface AgoricService {
   zoe: any;
   board: any;
@@ -36,8 +38,14 @@ export interface AgoricState {
   agoric: AgoricService;
   notifiers: NotifiersState;
   offers: any[];
-
+  tokenInfo: TokenInfo & { boardIds: TokenInfo };
   isLoading: boolean;
+}
+
+export interface TokenInfo {
+  character: { issuer: any, brand: any },
+  item: { issuer: any, brand: any },
+  paymentFT: { issuer: any, brand: any },
 }
 
 interface NotifiersState {
@@ -87,6 +95,11 @@ interface SetLoading {
   payload: boolean;
 }
 
+interface SetTokenInfo {
+  type: "SET_TOKEN_INFO";
+  payload: TokenInfo & { boardIds: TokenInfo };
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -104,4 +117,5 @@ export type AgoricStateActions =
   | SetCharacterContract
   | SetApiSend
   | SetLoading
+  | SetTokenInfo
   | SetOffers;
