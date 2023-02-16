@@ -191,8 +191,6 @@ const start = async (zcf, privateArgs) => {
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
 
     const powers = state.get.powers();
-    assert(powers);
-
     const inventoryNotifier = makeStorageNodePublishKit(
       powers.storageNode,
       powers.marshaller,
@@ -252,7 +250,6 @@ const start = async (zcf, privateArgs) => {
   };
 
   const creatorFacet = Far('Character store creator', {
-    // initConfig,
     getCharacterIssuer: () => characterIssuer,
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
@@ -282,7 +279,6 @@ const start = async (zcf, privateArgs) => {
     getAllItemHistory: () => itemHistory.entries(),
 
     ...market(zcf, () => state),
-    // getMarketData: () => ({ characters: characterMarket, items: itemMarket }),
   });
 
   return harden({ creatorFacet, publicFacet });

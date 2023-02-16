@@ -1,6 +1,7 @@
 // @ts-check
 /* global process */
 
+// TODO: update this to work w the current contract improvements
 // Agoric Dapp api deployment script
 
 import fs from 'fs';

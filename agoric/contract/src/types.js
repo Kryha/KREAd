@@ -70,7 +70,7 @@
  *      issuer: Issuer<"nat">
  *   }
  *   timerService: TimerService
- *   powers?: Powers
+ *   powers: Powers
  * }} Config
  *
  * @typedef {{
@@ -188,7 +188,7 @@
  *     randomBaseCharacter: () => object
  *     assetInfo: () => TokenInfo
  *     defaultItems: () => any[]
- *     powers: () => Powers | undefined
+ *     powers: () => Powers
  *     config: () => Config
  *     randomItem: () => object
  *     marketPublisher: () => {
