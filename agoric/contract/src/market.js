@@ -2,7 +2,6 @@
 // @ts-check
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath } from '@agoric/ertp';
-// import { makeNotifierKit } from '@agoric/notifier';
 import { errors } from './errors';
 import {
   removeCharacterFromMarketArray,
@@ -58,6 +57,7 @@ export const market = (zcf, getState) => {
     };
 
     characterMarket = [...characterMarket, newEntry];
+
     const {
       characters: { publisher },
     } = state.get.marketPublisher();
@@ -97,6 +97,7 @@ export const market = (zcf, getState) => {
     const {
       items: { publisher },
     } = state.get.marketPublisher();
+
     assert(publisher, X`${errors.missingStorageNode}`);
     publisher.publish(itemMarket);
 
@@ -109,6 +110,7 @@ export const market = (zcf, getState) => {
    */
   const buyCharacter = async (buyerSeat) => {
     assert(state.get.isReady(), X`${errors.noConfig}`);
+
     const {
       character: { brand: characterBrand },
       paymentFT: { brand: paymentFTBrand },
@@ -118,13 +120,16 @@ export const market = (zcf, getState) => {
     const { want, give } = buyerSeat.getProposal();
     const { Character: wantedCharacterAmount } = want;
     const character = wantedCharacterAmount.value[0];
+
     // Find characterRecord entry based on wanted character
     const characterRecord = state.get.character(character.name);
     assert(characterRecord, X`${errors.character404}`);
+
     // Find store record based on wanted character
     const sellRecord = characterMarket.find(
       (record) => record.name === character.name,
     );
+
     assert(sellRecord, X`${errors.character404}`);
     const sellerSeat = sellRecord.sellerSeat;
 
@@ -174,6 +179,7 @@ export const market = (zcf, getState) => {
     const {
       characters: { publisher },
     } = state.get.marketPublisher();
+
     assert(publisher, X`${errors.missingStorageNode}`);
     publisher.publish(characterMarket);
 
@@ -186,6 +192,7 @@ export const market = (zcf, getState) => {
    */
   const buyItem = async (buyerSeat) => {
     assert(state.get.isReady(), X`${errors.noConfig}`);
+
     const {
       item: { brand: itemBrand },
       paymentFT: { brand: paymentFTBrand },
