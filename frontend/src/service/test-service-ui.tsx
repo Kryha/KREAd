@@ -76,7 +76,7 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-    const powers = await E(publicFacet).isReady();
+    const powers = await E(publicFacet).getCount();
     console.log(powers);
   };
 
@@ -96,19 +96,27 @@ export const TestServiceUI = () => {
     align-content: flex-start;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     margin-bottom: 30px;
+    padding: 0 30vw;
+  `;
+
+  const Title = styled.h1`
+    width: 500px;
+    text-align: center;
+    margin-top: 200px;
   `;
 
   const Button = styled.button`
     margin: 30px 15px 0;
-    flex-grow: 1;
     flex-basis: 220px;
-    min-height: 250px;
     border-radius: 4px;
-    background: #81ffad;
-    color: #333;
-    font-weight: bold;
+    height: 40px;
+    width: 300px;
+    background: transparent;
+    border: #81ffad solid 4px;
+    color: #81ffad;
+    font-weight: light;
     cursor: pointer;
 
     &:hover {
@@ -123,8 +131,8 @@ export const TestServiceUI = () => {
 
   return (
     <>
-      <h1>SERVICE TEST UI</h1>
       <Container>
+        <Title>🔧</Title>
         <Button onClick={mintCharacterNFT}>MINT CHARACTER</Button>
         <Button onClick={topUp}>TOP UP</Button>
         <Button onClick={removeItemFromInventory}>REMOVE FROM INVENTORY</Button>

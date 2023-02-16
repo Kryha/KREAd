@@ -230,7 +230,6 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
     dappContext: true,
   });
 
-  console.log(offerConfig);
   return E(walletP).addOffer(offerConfig);
 };
 

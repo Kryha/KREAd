@@ -202,10 +202,8 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     powers: () => state.config.powers,
     config: () => state.config,
     randomItem: getRandomItem,
-    count: () => ({
-      characters: state.characters.length,
-      items: state.items.length,
-    }),
+    characterCount: () => state.characters.length,
+    itemCount: () => state.items.length,
   });
 
   // Adds content to specific entries of the
@@ -243,10 +241,8 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     getConfig: () => state.config, // FIXME: restric or remove access
     getRandomItem,
     isValidName: () => validate.nameIsUnique(),
-    getCount: () => ({
-      characters: state.characters.length,
-      items: state.items.length,
-    }),
+    getCharacterCount: () => state.characters.length,
+    getItemCount: () => state.items.length,
   });
 
   return { get, set, add, validate, public: publicFacet };

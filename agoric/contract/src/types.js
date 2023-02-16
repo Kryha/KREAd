@@ -181,7 +181,8 @@
  *     inventory: (name: string) => { items: Item[] }
  *     inventoryPublisher: (name: string) => Publisher<any>
  *     characterKey: (name: string) => { key: Amount }
- *     count: () => { characters: bigint, items: bigint }
+ *     characterCount: () => number
+ *     itemCount: () => number
  *     character: (name: string) => CharacterRecord
  *     time: () => Promise<bigint>
  *     randomBaseCharacter: () => object
@@ -226,7 +227,8 @@
  *     getPowers: () => Powers | undefined
  *     getConfig: () => Config
  *     getRandomItem: () => object
- *     getCount: () => { characters: bigint, items: bigint }
+ *     getCharacterCount: () => number
+ *     getItemCount: () => number
  *     getCharacterMarket: () => CharacterMarketRecord[]
  *     getCharacterMarketRange: () => CharacterMarketRecord[]
  *     getItemMarket: () => ItemMarketRecord[]

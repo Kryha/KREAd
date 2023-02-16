@@ -116,9 +116,10 @@ const start = async (zcf, privateArgs) => {
 
     const currentTime = await state.get.time();
 
+    let id = state.get.itemCount();
     // @ts-ignore
     const items = want.Item.value.map((item) => {
-      const id = state.get.count().items;
+      id += 1;
       return { ...item, id, date: currentTime };
     });
     const newItemAmount = AmountMath.make(itemBrand, harden(items));
@@ -160,7 +161,7 @@ const start = async (zcf, privateArgs) => {
     const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
       newCharacterName,
       state.get.randomBaseCharacter(),
-      state.get.count().characters,
+      state.get.characterCount(),
       currentTime,
     ).map((character) => AmountMath.make(characterBrand, harden([character])));
 
@@ -175,12 +176,14 @@ const start = async (zcf, privateArgs) => {
 
     // Mint items to inventory seat
     const allDefaultItems = Object.values(state.get.defaultItems());
+    let id = state.get.itemCount() + 1; // Avoid id of 0;
     const uniqueItems = allDefaultItems.map((item) => {
       /** @type {ItemRecord} */
       const newItemWithId = {
         ...item,
-        id: state.get.count().items,
+        id,
       };
+      id += 1;
       return newItemWithId;
     });
 
@@ -237,31 +240,6 @@ const start = async (zcf, privateArgs) => {
 
     return messages.mintCharacterReturn;
   };
-
-  // Opportunity for more complex queries
-  // const getCharacters = () => {
-  //   return harden({
-  //     characters: state.characters,
-  //   });
-  // };
-
-  // const getCharactersMarket = () => {
-  //   return harden({
-  //     characters: state.charactersMarket,
-  //   });
-  // };
-
-  // const getItems = () => {
-  //   return harden({
-  //     items: state.items,
-  //   });
-  // };
-
-  // const getItemsMarket = () => {
-  //   return harden({
-  //     items: state.itemsMarket,
-  //   });
-  // };
 
   /**
    * @param {ZCFSeat} seat

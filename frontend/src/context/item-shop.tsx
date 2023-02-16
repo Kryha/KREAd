@@ -26,7 +26,8 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   useEffect(() => {
     const parseItemMarketUpdate = async (itemsInMarket: KreadItemInMarket[]) => {
       const items = await Promise.all(itemsInMarket.map((item) => formatMarketEntry(item)));
-      marketDispatch((prevState) => ({...prevState, items, fetched: true }));
+      console.log(items);
+      marketDispatch((prevState) => ({ ...prevState, items, fetched: true }));
     };
     const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {
@@ -48,9 +49,10 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       const leader = makeLeader(LOCAL_DEVNET_RPC);
       const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_ITEMS);
       const follower = makeFollower(castingSpec, leader);
+      
       // Iterate over kread's storageNode follower on local-devnet
-      for await (const value of iterateLatest(follower)) {
-        parseItemMarketUpdate(value.value.items);
+      for await (const { value } of iterateLatest(follower)) {
+        parseItemMarketUpdate(value);
       }
     };
     if (kreadPublicFacet) {

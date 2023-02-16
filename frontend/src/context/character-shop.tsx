@@ -49,9 +49,10 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       const leader = makeLeader(LOCAL_DEVNET_RPC);
       const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_CHARACTERS);
       const follower = makeFollower(castingSpec, leader);
+      
       // Iterate over kread's storageNode follower on local-devnet
       for await (const { value } of iterateLatest(follower)) {
-        parseCharacterMarketUpdate(value.characters);
+        parseCharacterMarketUpdate(value);
       }
     };
     if (kreadPublicFacet) {
