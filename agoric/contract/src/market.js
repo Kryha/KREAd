@@ -61,6 +61,7 @@ export const market = (zcf, getState) => {
     const {
       characters: { publisher },
     } = state.get.marketPublisher();
+
     assert(publisher, X`${errors.missingStorageNode}`);
     publisher.publish(characterMarket);
 
@@ -239,6 +240,7 @@ export const market = (zcf, getState) => {
     const {
       items: { publisher },
     } = state.get.marketPublisher();
+
     assert(publisher, X`${errors.missingStorageNode}`);
     publisher.publish(itemMarket);
 

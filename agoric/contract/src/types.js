@@ -96,7 +96,7 @@
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
  *   notifier?: Notifier
- *   publisher?: Publisher<any>
+ *   publisher: Publisher<any>
  * }} CharacterRecord
  *
  * @typedef {{

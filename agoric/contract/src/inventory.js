@@ -82,8 +82,7 @@ export const inventory = (zcf, getState) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    const publisher = state.get.inventoryPublisher(characterName);
-    publisher.publish({
+    characterRecord.publisher.publish({
       character: characterName,
       inventory: updatedInventory,
     });
@@ -156,9 +155,7 @@ export const inventory = (zcf, getState) => {
       return `Reallocation error: ${e}`;
     }
 
-    const publisher = state.get.inventoryPublisher(characterName);
-
-    publisher.publish({
+    characterRecord.publisher.publish({
       character: characterName,
       inventory: updatedInventory,
     });
@@ -229,8 +226,7 @@ export const inventory = (zcf, getState) => {
 
     zcf.reallocate(seat, inventorySeat);
 
-    const publisher = state.get.inventoryPublisher(characterName);
-    publisher.publish({
+    characterRecord.publisher.publish({
       character: characterName,
       inventory: updatedInventory,
     });
