@@ -22,7 +22,6 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
   const { characters, selected, fetched } = useUserState();
   const userStateDispatch = useUserStateDispatch();
   useEffect(() => {
-    // if (!selected || !characters.map((c) => c.nft.name).includes(selected?.nft.name)) {
     if (!selected){
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
