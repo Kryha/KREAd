@@ -2,6 +2,7 @@ import { AmountMath } from "@agoric/ertp";
 import { E } from "@endo/eventual-send";
 import { Character, CharacterBackend, ExtendedCharacter, Item, ItemCategory } from "../interfaces";
 import { Purses, TokenInfo } from "../interfaces/agoric.interfaces";
+import { makeLeader, makeFollower, makeCastingSpec } from "@agoric/casting";
 
 export const formOfferForItem = (purses: Purses, item: any) => ({
   want: {
@@ -94,4 +95,10 @@ export const getTokenInfo = async (kreadFacet: any, board: any): Promise<TokenIn
       paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
     }
   };
+};
+
+export const setupStorageNodeFollower = (LOCAL_DEVNET_RPC: string, STORAGE_NODE_SPEC: string): any => {
+  const leader = makeLeader(LOCAL_DEVNET_RPC);
+  const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC);
+  return makeFollower(castingSpec, leader);
 };

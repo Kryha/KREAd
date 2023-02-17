@@ -5,6 +5,7 @@ import { extendCharacters } from "../service/character-actions";
 import { itemArrayToObject } from "../util";
 import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
 import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_CHARACTERS } from "../constants";
+import { setupStorageNodeFollower } from "../service/util";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
@@ -46,9 +47,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING CHARACTER SHOP 🛍");
 
-      const leader = makeLeader(LOCAL_DEVNET_RPC);
-      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_CHARACTERS);
-      const follower = makeFollower(castingSpec, leader);
+      const follower = setupStorageNodeFollower(LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_CHARACTERS);
       
       // Iterate over kread's storageNode follower on local-devnet
       for await (const { value } of iterateLatest(follower)) {

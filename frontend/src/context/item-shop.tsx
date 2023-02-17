@@ -2,8 +2,9 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
-import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
+import { iterateLatest } from "@agoric/casting";
 import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_ITEMS } from "../constants";
+import { setupStorageNodeFollower } from "../service/util";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -46,9 +47,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
     const watchNotifiers = async () => {
       console.count("🛍 UPDATING ITEM SHOP 🛍");
 
-      const leader = makeLeader(LOCAL_DEVNET_RPC);
-      const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC_MARKET_ITEMS);
-      const follower = makeFollower(castingSpec, leader);
+      const follower = setupStorageNodeFollower(LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_ITEMS);
       
       // Iterate over kread's storageNode follower on local-devnet
       for await (const { value } of iterateLatest(follower)) {
