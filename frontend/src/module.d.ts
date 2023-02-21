@@ -5,3 +5,4 @@ declare module "@agoric/ui-components";
 declare module "@endo/marshal";
 declare module "@agoric/notifier";
 declare module "@agoric/casting";
+declare module "@agoric/web-components";

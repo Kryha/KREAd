@@ -1,11 +1,11 @@
 {
   "name": "@builder/frontend",
   "version": "0.1.0",
-  "type": "module",
   "dependencies": {
     "@agoric/assert": "^0.4.0",
     "@agoric/casting": "^0.3.3",
     "@agoric/ertp": "^0.14.2",
+    "@agoric/web-components": "^0.5.2",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@endo/captp": "^2.0.8",

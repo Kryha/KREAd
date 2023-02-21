@@ -40,6 +40,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@agoric/cache@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@agoric/cache@npm:0.2.4"
+  dependencies:
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/vat-data": ^0.4.5
+    "@agoric/vats": ^0.13.2
+    "@endo/far": ^0.2.11
+    "@endo/marshal": ^0.7.5
+  checksum: d7126a819ab133887350159d824b4b9b0d659b183f977a0369ecbec7e7869eb7a645fcf72b642048ece6dd8dd7d48011e25c1f3e4ffc39eb9d4fea0cb934b625
+  languageName: node
+  linkType: hard
+
 "@agoric/casting@npm:^0.3.3":
   version: 0.3.3
   resolution: "@agoric/casting@npm:0.3.3"
@@ -60,6 +74,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@agoric/casting@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "@agoric/casting@npm:0.3.4"
+  dependencies:
+    "@agoric/notifier": ^0.5.1
+    "@agoric/spawner": ^0.6.5
+    "@cosmjs/encoding": 0.29.0
+    "@cosmjs/proto-signing": 0.29.0
+    "@cosmjs/stargate": 0.29.0
+    "@cosmjs/tendermint-rpc": 0.29.0
+    "@endo/far": ^0.2.11
+    "@endo/init": ^0.5.49
+    "@endo/lockdown": ^0.1.21
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+    node-fetch: ^2.6.0
+  checksum: 4ef0a8f4002f7003b2d7efed55e04945cfbe04b18fa29cbfae258c11b79a031ab6842056df20adc4de36c12201d500090db70943c4a4a2fa98a6e332a10eadec
+  languageName: node
+  linkType: hard
+
 "@agoric/ertp@npm:^0.14.2":
   version: 0.14.2
   resolution: "@agoric/ertp@npm:0.14.2"
@@ -74,6 +108,84 @@ __metadata:
     "@endo/marshal": ^0.6.7
     "@endo/promise-kit": ^0.2.41
   checksum: 1a87706c604252fc8b2373bbc7e71b5ee15249dd7560d4de9e9d8feb094ab0a93be0036d2f924e93e4440faffd05e61d55888234ba982fbd6ee97b69759fb626
+  languageName: node
+  linkType: hard
+
+"@agoric/ertp@npm:^0.15.5":
+  version: 0.15.5
+  resolution: "@agoric/ertp@npm:0.15.5"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/swingset-vat": ^0.31.0
+    "@agoric/vat-data": ^0.4.5
+    "@endo/eventual-send": ^0.16.5
+    "@endo/far": ^0.2.11
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+  checksum: 4b620fbc8971ba05a88413de9168627a653c0a69bcc60f14e469fb9e7de77ca628ac2fe6d142331b984852844c59b40feae504c57757892e6bed25bd9b594436
+  languageName: node
+  linkType: hard
+
+"@agoric/governance@npm:^0.9.3":
+  version: 0.9.3
+  resolution: "@agoric/governance@npm:0.9.3"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/ertp": ^0.15.5
+    "@agoric/internal": ^0.2.1
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/swingset-vat": ^0.31.0
+    "@agoric/vat-data": ^0.4.5
+    "@agoric/vats": ^0.13.2
+    "@agoric/zoe": ^0.25.5
+    "@endo/captp": ^2.0.15
+    "@endo/eventual-send": ^0.16.5
+    "@endo/far": ^0.2.11
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+  checksum: 88f54afdf99442fce0ca768d490019f9a5f4dedf36774bbdbede0c5d6723e54c64dd237300e35d312f307adb648d5fdac13855888aeba25f69535d54122abb9c
+  languageName: node
+  linkType: hard
+
+"@agoric/inter-protocol@npm:^0.13.3":
+  version: 0.13.3
+  resolution: "@agoric/inter-protocol@npm:0.13.3"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/ertp": ^0.15.5
+    "@agoric/governance": ^0.9.3
+    "@agoric/internal": ^0.2.1
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/swingset-vat": ^0.31.0
+    "@agoric/vat-data": ^0.4.5
+    "@agoric/vats": ^0.13.2
+    "@agoric/zoe": ^0.25.5
+    "@endo/bundle-source": ^2.3.1
+    "@endo/captp": ^2.0.15
+    "@endo/eventual-send": ^0.16.5
+    "@endo/far": ^0.2.11
+    "@endo/marshal": ^0.7.5
+    "@endo/nat": ^4.1.20
+    "@endo/promise-kit": ^0.2.49
+  checksum: e9e62c6728e112c3acb989df2351506a47e129ec790002985d35bd58c1fa0c4234a13a902d9deaa4973863bb41c70bf2d1c9767e43ffaa2014855183f9253e6d
+  languageName: node
+  linkType: hard
+
+"@agoric/internal@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@agoric/internal@npm:0.2.1"
+  dependencies:
+    "@endo/eventual-send": ^0.16.5
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+  checksum: c482d9a9e5449653c7816e93002e50ebb3cd2e2fd8a342288f1b14d4b81adc96484a7a4c38d0b186945e36eaaabd20e0cbe4f25c71831588e128bc9172fd5683
   languageName: node
   linkType: hard
 
@@ -108,6 +220,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@agoric/pegasus@npm:^0.7.8":
+  version: 0.7.8
+  resolution: "@agoric/pegasus@npm:0.7.8"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/ertp": ^0.15.5
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/swingset-vat": ^0.31.0
+    "@agoric/vats": ^0.13.2
+    "@agoric/zoe": ^0.25.5
+    "@endo/bundle-source": ^2.3.1
+    "@endo/captp": ^2.0.15
+    "@endo/far": ^0.2.11
+    "@endo/init": ^0.5.49
+    "@endo/promise-kit": ^0.2.49
+  checksum: 6c01a6467723381ef2c4bde163572e9594fd6f09129212828f9445966f7568670a90a0d7fb44c1ca280cb9202e37a72088dbb2e2f921aef4860f43b2c77f3cac
+  languageName: node
+  linkType: hard
+
+"@agoric/sharing-service@npm:^0.2.8":
+  version: 0.2.8
+  resolution: "@agoric/sharing-service@npm:0.2.8"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@endo/marshal": ^0.7.5
+  checksum: 33d9ad2c086087afcd774510ac3797ba3b23b7667ede9dab2889e52655cc70e389fa0bfc88776006bce27d3916ca436f18e0648e020fa25ccd08a4913b5e471f
+  languageName: node
+  linkType: hard
+
 "@agoric/spawner@npm:^0.6.4":
   version: 0.6.4
   resolution: "@agoric/spawner@npm:0.6.4"
@@ -117,6 +260,18 @@ __metadata:
     "@endo/import-bundle": ^0.2.53
     "@endo/marshal": ^0.7.5
   checksum: f3f72847d4014b214a26d040946fce3a084c6a3d24dc4194f05e0620999ff9fb9b2fe0d50e2f91edabc6602d22f93fa508fc93d770a6e14922ab8595aa9088b5
+  languageName: node
+  linkType: hard
+
+"@agoric/spawner@npm:^0.6.5":
+  version: 0.6.5
+  resolution: "@agoric/spawner@npm:0.6.5"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@endo/eventual-send": ^0.16.5
+    "@endo/import-bundle": ^0.2.53
+    "@endo/marshal": ^0.7.5
+  checksum: d415a6785a1c58dd94cf2cf53a1683bee237d84a42b43c44cde8ab8bb5bc19d5356addd0ee04e0e5fbbb1e0904118fa39d218c8e69e6d95dbbbcdb354ad43077
   languageName: node
   linkType: hard
 
@@ -132,6 +287,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@agoric/store@npm:^0.8.5":
+  version: 0.8.5
+  resolution: "@agoric/store@npm:0.8.5"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/internal": ^0.2.1
+    "@endo/eventual-send": ^0.16.5
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+  checksum: b4adf30e217a616171cb4357f2060b0fb009b1c5fee47616ff14a386dab4f5b802761b9b7fcfba3a616bee8dcdbcb5f493e46a8f65b20f9926a14daf3eaa3fbd
+  languageName: node
+  linkType: hard
+
 "@agoric/swing-store@npm:^0.7.0":
   version: 0.7.0
   resolution: "@agoric/swing-store@npm:0.7.0"
@@ -141,6 +309,19 @@ __metadata:
     node-lmdb: ^0.9.5
     tmp: ^0.2.1
   checksum: 1e339aba7f6fe08991657a0edaf549d005dac900afae8a0413dd3b2d2e836b869d4d8256cc1794672ee95cbb7a8bedc2dfd56a9216f06aa0a77fc55ee3fe9e90
+  languageName: node
+  linkType: hard
+
+"@agoric/swing-store@npm:^0.8.1":
+  version: 0.8.1
+  resolution: "@agoric/swing-store@npm:0.8.1"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/internal": ^0.2.1
+    better-sqlite3: ^7.5.0
+    lmdb: ^2.4.5
+    tmp: ^0.2.1
+  checksum: c15817426993913e00982fbd5610e2f43f816fdbdb2dcf2b3b60b668b282e11edf46191d59a0dc327496cf1c2c848621d70e42d7bc3eb3c3bf4a89a02e1038d6
   languageName: node
   linkType: hard
 
@@ -178,6 +359,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@agoric/swingset-vat@npm:^0.31.0":
+  version: 0.31.0
+  resolution: "@agoric/swingset-vat@npm:0.31.0"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/internal": ^0.2.1
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/swing-store": ^0.8.1
+    "@agoric/vat-data": ^0.4.5
+    "@agoric/xsnap": ^0.13.3
+    "@endo/base64": ^0.2.27
+    "@endo/bundle-source": ^2.3.1
+    "@endo/captp": ^2.0.15
+    "@endo/check-bundle": ^0.2.11
+    "@endo/compartment-mapper": ^0.7.13
+    "@endo/eventual-send": ^0.16.5
+    "@endo/import-bundle": ^0.2.53
+    "@endo/init": ^0.5.49
+    "@endo/marshal": ^0.7.5
+    "@endo/nat": ^4.1.20
+    "@endo/promise-kit": ^0.2.49
+    "@endo/zip": ^0.2.27
+    anylogger: ^0.21.0
+    import-meta-resolve: ^1.1.1
+    lmdb: ^2.4.5
+    microtime: ^3.1.0
+    semver: ^6.3.0
+  peerDependencies:
+    "@endo/ses-ava": ^0.2.33
+    ava: ^4.3.1
+  bin:
+    vat: bin/vat
+  checksum: f86753ae4c81105435af30320097e29a32d1a76217d139a9128d52ad22f5ba10bb17fe21f17b4b276348f79555b4c06a26f1bc6619938e427d5d071099bc784c
+  languageName: node
+  linkType: hard
+
 "@agoric/vat-data@npm:^0.3.1":
   version: 0.3.1
   resolution: "@agoric/vat-data@npm:0.3.1"
@@ -185,6 +404,83 @@ __metadata:
     "@agoric/assert": ^0.4.0
     "@agoric/store": ^0.7.2
   checksum: 0ff360820c1c83bbe8ee37970fc70ff33e54ba7032e0eafafd8af49511441543be47fae9bad9875be39fa5f10eb07c63a2bcf1a39232981366746be79edd8eb5
+  languageName: node
+  linkType: hard
+
+"@agoric/vat-data@npm:^0.4.5":
+  version: 0.4.5
+  resolution: "@agoric/vat-data@npm:0.4.5"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/internal": ^0.2.1
+    "@agoric/store": ^0.8.5
+  checksum: 8970c61d3ea5f6a7a000ef7ad93f53ae56d0fb1e2bb781bf9e110ee199bc7b8873b67509f2a59138cbe373b11affe2ddaedf17c55e185bc48ffdbefa58064a94
+  languageName: node
+  linkType: hard
+
+"@agoric/vats@npm:^0.13.2":
+  version: 0.13.2
+  resolution: "@agoric/vats@npm:0.13.2"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/ertp": ^0.15.5
+    "@agoric/governance": ^0.9.3
+    "@agoric/inter-protocol": ^0.13.3
+    "@agoric/internal": ^0.2.1
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/pegasus": ^0.7.8
+    "@agoric/sharing-service": ^0.2.8
+    "@agoric/store": ^0.8.5
+    "@agoric/swingset-vat": ^0.31.0
+    "@agoric/wallet-backend": ^0.13.5
+    "@agoric/zoe": ^0.25.5
+    "@endo/far": ^0.2.11
+    "@endo/import-bundle": ^0.2.53
+    "@endo/init": ^0.5.49
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+  checksum: 5507feedc69c4eee0354d4e592365087be016ae3f43760467571e1d47d83ff5558cda306fc65a5098b0bdeff0a502368ac86499f3ed1e7d54b39fef9a8dc8efe
+  languageName: node
+  linkType: hard
+
+"@agoric/wallet-backend@npm:^0.13.5":
+  version: 0.13.5
+  resolution: "@agoric/wallet-backend@npm:0.13.5"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/cache": ^0.2.4
+    "@agoric/ertp": ^0.15.5
+    "@agoric/inter-protocol": ^0.13.3
+    "@agoric/internal": ^0.2.1
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/vat-data": ^0.4.5
+    "@agoric/zoe": ^0.25.5
+    "@endo/eventual-send": ^0.16.5
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+    import-meta-resolve: ^1.1.1
+  checksum: 0c01309b0f1fc6f351e6bfb19308e08fa3c25d53982de8c699d71ffa5bbdf20efde5c6e7019dfe598219b8d085d108d1abc89af96161d1916f7f28edb7e83921
+  languageName: node
+  linkType: hard
+
+"@agoric/web-components@npm:^0.5.2":
+  version: 0.5.2
+  resolution: "@agoric/web-components@npm:0.5.2"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/cache": ^0.2.4
+    "@agoric/casting": ^0.3.4
+    "@endo/captp": ^2.0.15
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+    "@lit-labs/react": ^1.0.1
+    lit: ^2.0.2
+    robot3: ^0.2.19
+    rollup-plugin-polyfill-node: ^0.9.0
+  checksum: 9ea2cdeb1911d4df6f86e909203da5194b502bcbc4232d73ee691e372da443802352d6df504ec88aa67d8887ef411e86b6e63fae4a609c7f86005127d56dbd1c
   languageName: node
   linkType: hard
 
@@ -205,6 +501,49 @@ __metadata:
     ava-xs: src/ava-xs.js
     xsrepl: src/xsrepl
   checksum: e0c2144555beca9cca7b8ea107c490052651bcec48149a55ed94c539403efd5c5298e369657dbc3f82fbe3728aed44c937772d238428b1d45fdd0ce2a31d5ff7
+  languageName: node
+  linkType: hard
+
+"@agoric/xsnap@npm:^0.13.3":
+  version: 0.13.3
+  resolution: "@agoric/xsnap@npm:0.13.3"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@endo/bundle-source": ^2.3.1
+    "@endo/eventual-send": ^0.16.5
+    "@endo/init": ^0.5.49
+    "@endo/netstring": ^0.3.19
+    "@endo/promise-kit": ^0.2.49
+    "@endo/stream": ^0.3.18
+    "@endo/stream-node": ^0.2.19
+    glob: ^7.1.6
+    rollup-plugin-string: ^3.0.0
+  bin:
+    ava-xs: src/ava-xs.js
+    xsrepl: src/xsrepl
+  checksum: 76f1677ed0d819ebffcfd7c09152e768d85ec672d90267a655e2b008419e136c4a458516a17f438325708b10846b996a5e9c5ebea899a1458226b5cf7f69385c
+  languageName: node
+  linkType: hard
+
+"@agoric/zoe@npm:^0.25.5":
+  version: 0.25.5
+  resolution: "@agoric/zoe@npm:0.25.5"
+  dependencies:
+    "@agoric/assert": ^0.5.1
+    "@agoric/ertp": ^0.15.5
+    "@agoric/internal": ^0.2.1
+    "@agoric/nat": ^4.1.0
+    "@agoric/notifier": ^0.5.1
+    "@agoric/store": ^0.8.5
+    "@agoric/swingset-vat": ^0.31.0
+    "@agoric/vat-data": ^0.4.5
+    "@endo/bundle-source": ^2.3.1
+    "@endo/eventual-send": ^0.16.5
+    "@endo/far": ^0.2.11
+    "@endo/import-bundle": ^0.2.53
+    "@endo/marshal": ^0.7.5
+    "@endo/promise-kit": ^0.2.49
+  checksum: f96d66009252748a458b724401c4fae522e89c2c235307088e6b1fb3c6a04b326a1d96521202916bc16f28b6eaa36124eeabd6f67a030a8be1a775bd25844e08
   languageName: node
   linkType: hard
 
@@ -1709,6 +2048,7 @@ __metadata:
     "@agoric/assert": ^0.4.0
     "@agoric/casting": ^0.3.3
     "@agoric/ertp": ^0.14.2
+    "@agoric/web-components": ^0.5.2
     "@emotion/babel-plugin": ^11.9.2
     "@emotion/react": ^11.9.3
     "@emotion/styled": ^11.9.3
@@ -2294,6 +2634,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@endo/bundle-source@npm:^2.3.1":
+  version: 2.4.3
+  resolution: "@endo/bundle-source@npm:2.4.3"
+  dependencies:
+    "@agoric/babel-generator": ^7.17.4
+    "@babel/parser": ^7.17.3
+    "@babel/traverse": ^7.17.3
+    "@endo/base64": ^0.2.29
+    "@endo/compartment-mapper": ^0.8.1
+    "@endo/init": ^0.5.53
+    "@rollup/plugin-commonjs": ^19.0.0
+    "@rollup/plugin-node-resolve": ^13.0.0
+    acorn: ^8.2.4
+    rollup: "github:endojs/endo#rollup-2.7.1-patch-1"
+    source-map: ^0.7.3
+  bin:
+    bundle-source: src/tool.js
+  checksum: 1cd7919af6de41f89316bc2377475493f801e485ff675c3e6af840f77c8cc08a53bf83771846fa7099de1c7c22d19107249463b0ff64772f2f36970ec4148d49
+  languageName: node
+  linkType: hard
+
+"@endo/captp@npm:^2.0.15":
+  version: 2.0.19
+  resolution: "@endo/captp@npm:2.0.19"
+  dependencies:
+    "@endo/eventual-send": ^0.16.9
+    "@endo/marshal": ^0.8.2
+    "@endo/nat": ^4.1.24
+    "@endo/promise-kit": ^0.2.53
+  checksum: 74d2728cd33a2657e9439ea8d0afd3a4ec63ad6579ec21e676a5b43610124cd452c8b8e2c20cfdae0db65df23cc86d306201468fb0e255d1435be22c97d4b2e5
+  languageName: node
+  linkType: hard
+
 "@endo/captp@npm:^2.0.7, @endo/captp@npm:^2.0.8":
   version: 2.0.8
   resolution: "@endo/captp@npm:2.0.8"
@@ -2303,6 +2676,16 @@ __metadata:
     "@endo/nat": ^4.1.13
     "@endo/promise-kit": ^0.2.42
   checksum: b8e4cb2c997d26b846aecb008a3d67f554a8686ccc13a5b7e5e8f975ff2c4b3c2b31d48a8be4887460ee190c86f0dad18106908fa90ff15ca57dfed2197346f8
+  languageName: node
+  linkType: hard
+
+"@endo/check-bundle@npm:^0.2.11":
+  version: 0.2.15
+  resolution: "@endo/check-bundle@npm:0.2.15"
+  dependencies:
+    "@endo/base64": ^0.2.29
+    "@endo/compartment-mapper": ^0.8.1
+  checksum: 561a9f93d98bf2b8dcfc32c0003ce3a4547e55a5132c65ff9f21c50ad7d573869ef316cda737cb8ba853018452e94f6595f9b4cc71fe06f37afac9dddfbf116f
   languageName: node
   linkType: hard
 
@@ -2323,14 +2706,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/cjs-module-analyzer@npm:^0.2.27":
+"@endo/cjs-module-analyzer@npm:^0.2.27, @endo/cjs-module-analyzer@npm:^0.2.29":
   version: 0.2.29
   resolution: "@endo/cjs-module-analyzer@npm:0.2.29"
   checksum: 4cf77f73189de9e8622f18eac5d956a8571f256e896706249ad52bc3fdb2b30ffd09313876e4da6f70b03733bfc28d08037f204942626a48822e45577680913c
   languageName: node
   linkType: hard
 
-"@endo/compartment-mapper@npm:^0.7.15":
+"@endo/compartment-mapper@npm:^0.7.13, @endo/compartment-mapper@npm:^0.7.15":
   version: 0.7.15
   resolution: "@endo/compartment-mapper@npm:0.7.15"
   dependencies:
@@ -2351,6 +2734,18 @@ __metadata:
     "@endo/zip": ^0.2.26
     ses: ^0.15.16
   checksum: a1cc818fced487fd6fa374e2113f7d344d5218eb634701642e33a5847e7edc1c2d4e8fd293c13f6d817929cf380c2da789231327eecbfe87a4ce53909bfd08d3
+  languageName: node
+  linkType: hard
+
+"@endo/compartment-mapper@npm:^0.8.1":
+  version: 0.8.1
+  resolution: "@endo/compartment-mapper@npm:0.8.1"
+  dependencies:
+    "@endo/cjs-module-analyzer": ^0.2.29
+    "@endo/static-module-record": ^0.7.16
+    "@endo/zip": ^0.2.29
+    ses: ^0.18.1
+  checksum: 48228cea29e01173b52e16026f2e332864cd09ad3fb44a840d5279e4de9d646b075ce1dc39ecb6f1f7ea15b178695eb96b72df47fe46637c05114f5238be4ac5
   languageName: node
   linkType: hard
 
@@ -2418,7 +2813,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/init@npm:^0.5.49":
+"@endo/init@npm:^0.5.49, @endo/init@npm:^0.5.53":
   version: 0.5.53
   resolution: "@endo/init@npm:0.5.53"
   dependencies:
@@ -2488,7 +2883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/nat@npm:^4.1.21, @endo/nat@npm:^4.1.24":
+"@endo/nat@npm:^4.1.20, @endo/nat@npm:^4.1.21, @endo/nat@npm:^4.1.24":
   version: 4.1.24
   resolution: "@endo/nat@npm:4.1.24"
   checksum: 558b98af5025146db72bdfa3e99b88b8329ac4af2123b0f074621345867755beeaf9dc06dbb620bec5cdcd6c10a52139c15af5df4932768d527e65de49ed0c62
@@ -2503,6 +2898,17 @@ __metadata:
     "@endo/stream": ^0.3.11
     ses: ^0.15.16
   checksum: 4c24544740aeb73c69857d4593af6c7a539eb45e9e0acff2befd2b6226d18aa55b48dd0423cb704e66eae1bb8f3301a104352c70f128c57c693985a4c19e34ff
+  languageName: node
+  linkType: hard
+
+"@endo/netstring@npm:^0.3.19":
+  version: 0.3.23
+  resolution: "@endo/netstring@npm:0.3.23"
+  dependencies:
+    "@endo/init": ^0.5.53
+    "@endo/stream": ^0.3.22
+    ses: ^0.18.1
+  checksum: 54d46c2252f4a3d575e7b94ca350e69d10d518c435ddd0704310f169b11569da832e19fe346a9341ee5262953aa4d601e0c7d69167aa0dd78b4310b381cec8f8
   languageName: node
   linkType: hard
 
@@ -2524,7 +2930,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/static-module-record@npm:^0.7.14":
+"@endo/static-module-record@npm:^0.7.14, @endo/static-module-record@npm:^0.7.16":
   version: 0.7.16
   resolution: "@endo/static-module-record@npm:0.7.16"
   dependencies:
@@ -2561,6 +2967,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@endo/stream-node@npm:^0.2.19":
+  version: 0.2.23
+  resolution: "@endo/stream-node@npm:0.2.23"
+  dependencies:
+    "@endo/init": ^0.5.53
+    "@endo/stream": ^0.3.22
+    ses: ^0.18.1
+  checksum: 2f9870378d3e41a46b80d3f763d4c1ff1fa9780fd45b4e14a5e4bb64e442dd6c0e1606ea170cb9ec639ff890e4c59db752d0ffa1e2fd049abebb91e89b829ff0
+  languageName: node
+  linkType: hard
+
 "@endo/stream@npm:^0.3.10, @endo/stream@npm:^0.3.11":
   version: 0.3.11
   resolution: "@endo/stream@npm:0.3.11"
@@ -2572,6 +2989,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@endo/stream@npm:^0.3.18, @endo/stream@npm:^0.3.22":
+  version: 0.3.22
+  resolution: "@endo/stream@npm:0.3.22"
+  dependencies:
+    "@endo/eventual-send": ^0.16.9
+    "@endo/promise-kit": ^0.2.53
+    ses: ^0.18.1
+  checksum: cf069401cdacefca95c7f2148f9498d5c388c466dddb7129cd9c04cc664e70f2b2a58ed762123f7b124bd4970161c514cd2d664304eed68e2932621fe7e5346f
+  languageName: node
+  linkType: hard
+
 "@endo/zip@npm:^0.2.25, @endo/zip@npm:^0.2.26":
   version: 0.2.26
   resolution: "@endo/zip@npm:0.2.26"
@@ -2579,7 +3007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/zip@npm:^0.2.27":
+"@endo/zip@npm:^0.2.27, @endo/zip@npm:^0.2.29":
   version: 0.2.29
   resolution: "@endo/zip@npm:0.2.29"
   checksum: aae852fc5e5169f7140bcdae7442a38f5d4c8978542abc4241bce24a0f68b2362fa5ac833602a1de561faaea782accb72287ce11cf1ab6819ff9c4369758482f
@@ -2987,6 +3415,113 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lit-labs/react@npm:^1.0.1":
+  version: 1.1.1
+  resolution: "@lit-labs/react@npm:1.1.1"
+  checksum: e46b87a3e04b329b62e67360a7a1b21c55abf91c17d3059b550654565b53c73a25832e95426698e9b78488cc4ebaeb20b8a8ca64a220325e31633355a245710d
+  languageName: node
+  linkType: hard
+
+"@lit-labs/ssr-dom-shim@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@lit-labs/ssr-dom-shim@npm:1.0.0"
+  checksum: ccba6675ad631c6f7360af4e12e328e88d877a52ec992ae9254a1be9902ef699b7916d851b073803dd91244d0f709de2c0539a7db643889cfe341ff6e1a74eb5
+  languageName: node
+  linkType: hard
+
+"@lit/reactive-element@npm:^1.3.0, @lit/reactive-element@npm:^1.6.0":
+  version: 1.6.1
+  resolution: "@lit/reactive-element@npm:1.6.1"
+  dependencies:
+    "@lit-labs/ssr-dom-shim": ^1.0.0
+  checksum: fab0bcfdade9c26af2ad5115fb564bcf8ba0732a3a8be86c157851c2771e3fdc65ab38f2cd60fa121946058bf6e487461fd217f87b01f96e88ee7a95d5d866ba
+  languageName: node
+  linkType: hard
+
+"@lmdb/lmdb-darwin-arm64@npm:2.7.9":
+  version: 2.7.9
+  resolution: "@lmdb/lmdb-darwin-arm64@npm:2.7.9"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@lmdb/lmdb-darwin-x64@npm:2.7.9":
+  version: 2.7.9
+  resolution: "@lmdb/lmdb-darwin-x64@npm:2.7.9"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@lmdb/lmdb-linux-arm64@npm:2.7.9":
+  version: 2.7.9
+  resolution: "@lmdb/lmdb-linux-arm64@npm:2.7.9"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@lmdb/lmdb-linux-arm@npm:2.7.9":
+  version: 2.7.9
+  resolution: "@lmdb/lmdb-linux-arm@npm:2.7.9"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@lmdb/lmdb-linux-x64@npm:2.7.9":
+  version: 2.7.9
+  resolution: "@lmdb/lmdb-linux-x64@npm:2.7.9"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@lmdb/lmdb-win32-x64@npm:2.7.9":
+  version: 2.7.9
+  resolution: "@lmdb/lmdb-win32-x64@npm:2.7.9"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@msgpackr-extract/msgpackr-extract-darwin-arm64@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@msgpackr-extract/msgpackr-extract-darwin-arm64@npm:3.0.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@msgpackr-extract/msgpackr-extract-darwin-x64@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@msgpackr-extract/msgpackr-extract-darwin-x64@npm:3.0.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@msgpackr-extract/msgpackr-extract-linux-arm64@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@msgpackr-extract/msgpackr-extract-linux-arm64@npm:3.0.0"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@msgpackr-extract/msgpackr-extract-linux-arm@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@msgpackr-extract/msgpackr-extract-linux-arm@npm:3.0.0"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@msgpackr-extract/msgpackr-extract-linux-x64@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@msgpackr-extract/msgpackr-extract-linux-x64@npm:3.0.0"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@msgpackr-extract/msgpackr-extract-win32-x64@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@msgpackr-extract/msgpackr-extract-win32-x64@npm:3.0.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@noble/hashes@npm:^1, @noble/hashes@npm:^1.0.0":
   version: 1.1.5
   resolution: "@noble/hashes@npm:1.1.5"
@@ -3184,6 +3719,19 @@ __metadata:
   peerDependencies:
     rollup: ^2.38.3
   checksum: bf60da71b12c1c52fc2ca223272a1b5a4c27e47f707077024338f841b97f5656c352a3c2c11dd6a5fec0d63ae53407b9ceab72b87dda5701ddffdc09bba34513
+  languageName: node
+  linkType: hard
+
+"@rollup/plugin-inject@npm:^4.0.0":
+  version: 4.0.4
+  resolution: "@rollup/plugin-inject@npm:4.0.4"
+  dependencies:
+    "@rollup/pluginutils": ^3.1.0
+    estree-walker: ^2.0.1
+    magic-string: ^0.25.7
+  peerDependencies:
+    rollup: ^1.20.0 || ^2.0.0
+  checksum: 22a1847372a96296a5b176af3d5b23ac7b48143a32c77ec4efed38daf4b0d1399a3cd144496d65731299984c5f98c9e00dc6a7f53d0fe87bd4aab2d4bd7b8289
   languageName: node
   linkType: hard
 
@@ -10000,6 +10548,71 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lit-element@npm:^3.2.0":
+  version: 3.2.2
+  resolution: "lit-element@npm:3.2.2"
+  dependencies:
+    "@lit/reactive-element": ^1.3.0
+    lit-html: ^2.2.0
+  checksum: e1df57c02ad5ae4c42b49a5066b3b623bccf7fa6610bbc3f65bc22cbbe1546ecd6a7f717b1f01863929262f416c4b8b7a39ff166114215f93cc22f4e5b3825c3
+  languageName: node
+  linkType: hard
+
+"lit-html@npm:^2.2.0, lit-html@npm:^2.6.0":
+  version: 2.6.1
+  resolution: "lit-html@npm:2.6.1"
+  dependencies:
+    "@types/trusted-types": ^2.0.2
+  checksum: 32291eb5bcaa7fcc1d433522a9a62c3c3d240e49bb8c57ccea5c10014823d94f62f17e2d5361781cb6ee0b3c9078ef839de6164d5374371d650471904515e48e
+  languageName: node
+  linkType: hard
+
+"lit@npm:^2.0.2":
+  version: 2.6.1
+  resolution: "lit@npm:2.6.1"
+  dependencies:
+    "@lit/reactive-element": ^1.6.0
+    lit-element: ^3.2.0
+    lit-html: ^2.6.0
+  checksum: 74f2813152a48f195784f01b6b4ff7e4e7d8fa90ac272b725d1953fa3e1d6c9dca60b77da435f34144fcdd38705480889a8ea986835676932a8559c897cea517
+  languageName: node
+  linkType: hard
+
+"lmdb@npm:^2.4.5":
+  version: 2.7.9
+  resolution: "lmdb@npm:2.7.9"
+  dependencies:
+    "@lmdb/lmdb-darwin-arm64": 2.7.9
+    "@lmdb/lmdb-darwin-x64": 2.7.9
+    "@lmdb/lmdb-linux-arm": 2.7.9
+    "@lmdb/lmdb-linux-arm64": 2.7.9
+    "@lmdb/lmdb-linux-x64": 2.7.9
+    "@lmdb/lmdb-win32-x64": 2.7.9
+    msgpackr: 1.8.3
+    node-addon-api: ^4.3.0
+    node-gyp: latest
+    node-gyp-build-optional-packages: 5.0.6
+    ordered-binary: ^1.4.0
+    weak-lru-cache: ^1.2.2
+  dependenciesMeta:
+    "@lmdb/lmdb-darwin-arm64":
+      optional: true
+    "@lmdb/lmdb-darwin-x64":
+      optional: true
+    "@lmdb/lmdb-linux-arm":
+      optional: true
+    "@lmdb/lmdb-linux-arm64":
+      optional: true
+    "@lmdb/lmdb-linux-x64":
+      optional: true
+    "@lmdb/lmdb-win32-x64":
+      optional: true
+  bin:
+    download-lmdb-prebuilds: bin/download-prebuilds.js
+  checksum: 76c5288cbd1b58127d478cc7247cc158e50d39f772e852ff0826b2c75a09a65ea05be579a8851e31cf9dca8e021d2e18ad2f91c66348d6f05bbc542bb3734207
+  languageName: node
+  linkType: hard
+
 "loader-runner@npm:^4.2.0":
   version: 4.3.0
   resolution: "loader-runner@npm:4.3.0"
@@ -10321,6 +10934,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"microtime@npm:^3.1.0":
+  version: 3.1.1
+  resolution: "microtime@npm:3.1.1"
+  dependencies:
+    node-addon-api: ^5.0.0
+    node-gyp: latest
+    node-gyp-build: ^4.4.0
+  checksum: 1161571d9c994070139d8dd65160bb5ebb87044cb0ea9828a65fde201fcf9b90da9c2897e352a26e852a7fa9dd7b6774128b50854462d117be1b019abff41887
+  languageName: node
+  linkType: hard
+
 "miller-rabin@npm:^4.0.0":
   version: 4.0.1
   resolution: "miller-rabin@npm:4.0.1"
@@ -10556,6 +11180,49 @@ __metadata:
   languageName: node
   linkType: hard
 
+"msgpackr-extract@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "msgpackr-extract@npm:3.0.0"
+  dependencies:
+    "@msgpackr-extract/msgpackr-extract-darwin-arm64": 3.0.0
+    "@msgpackr-extract/msgpackr-extract-darwin-x64": 3.0.0
+    "@msgpackr-extract/msgpackr-extract-linux-arm": 3.0.0
+    "@msgpackr-extract/msgpackr-extract-linux-arm64": 3.0.0
+    "@msgpackr-extract/msgpackr-extract-linux-x64": 3.0.0
+    "@msgpackr-extract/msgpackr-extract-win32-x64": 3.0.0
+    node-gyp: latest
+    node-gyp-build-optional-packages: 5.0.7
+  dependenciesMeta:
+    "@msgpackr-extract/msgpackr-extract-darwin-arm64":
+      optional: true
+    "@msgpackr-extract/msgpackr-extract-darwin-x64":
+      optional: true
+    "@msgpackr-extract/msgpackr-extract-linux-arm":
+      optional: true
+    "@msgpackr-extract/msgpackr-extract-linux-arm64":
+      optional: true
+    "@msgpackr-extract/msgpackr-extract-linux-x64":
+      optional: true
+    "@msgpackr-extract/msgpackr-extract-win32-x64":
+      optional: true
+  bin:
+    download-msgpackr-prebuilds: bin/download-prebuilds.js
+  checksum: 89a92c1422399ab796f31742a8b1724b4e7a766706417c7c6da30f3be2a1dff64d182ed20109987dc38520c0864c9c7607a082ae95f1d15a2fa3695aa30dcd22
+  languageName: node
+  linkType: hard
+
+"msgpackr@npm:1.8.3":
+  version: 1.8.3
+  resolution: "msgpackr@npm:1.8.3"
+  dependencies:
+    msgpackr-extract: ^3.0.0
+  dependenciesMeta:
+    msgpackr-extract:
+      optional: true
+  checksum: 15a3a7db3332b1a6e9b5ca71d57b862bf10c73d7b3e4f37abfe009d9b0843857cc9c625fed942f3f53d39770468c9ef92a83798e64993cb6389fd695075f3f74
+  languageName: node
+  linkType: hard
+
 "multicast-dns@npm:^7.2.5":
   version: 7.2.5
   resolution: "multicast-dns@npm:7.2.5"
@@ -10656,6 +11323,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-addon-api@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "node-addon-api@npm:4.3.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 3de396e23cc209f539c704583e8e99c148850226f6e389a641b92e8967953713228109f919765abc1f4355e801e8f41842f96210b8d61c7dcc10a477002dcf00
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^5.0.0":
+  version: 5.1.0
+  resolution: "node-addon-api@npm:5.1.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 2508bd2d2981945406243a7bd31362fc7af8b70b8b4d65f869c61731800058fb818cc2fd36c8eac714ddd0e568cc85becf5e165cebbdf7b5024d5151bbc75ea1
+  languageName: node
+  linkType: hard
+
 "node-fetch@npm:^2.6.0":
   version: 2.6.9
   resolution: "node-fetch@npm:2.6.9"
@@ -10677,6 +11362,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-gyp-build-optional-packages@npm:5.0.6":
+  version: 5.0.6
+  resolution: "node-gyp-build-optional-packages@npm:5.0.6"
+  bin:
+    node-gyp-build-optional-packages: bin.js
+    node-gyp-build-optional-packages-optional: optional.js
+    node-gyp-build-optional-packages-test: build-test.js
+  checksum: 080656ae27e914035f8b259b3cd2e7e75538e219544a0378485714953eb5cf24391ea2e3d0c3cd4dabd75bebab966c1ac7c1432af9af0b2c2ef02bf9ec56ef99
+  languageName: node
+  linkType: hard
+
+"node-gyp-build-optional-packages@npm:5.0.7":
+  version: 5.0.7
+  resolution: "node-gyp-build-optional-packages@npm:5.0.7"
+  bin:
+    node-gyp-build-optional-packages: bin.js
+    node-gyp-build-optional-packages-optional: optional.js
+    node-gyp-build-optional-packages-test: build-test.js
+  checksum: bcb4537af15bcb3811914ea0db8f69284ca10db1cc7543a167a4c41ae4b9b5044b133f789fdadad0b7adc6931f6ae7def3c75b0bc7b05836881aae52400163e6
+  languageName: node
+  linkType: hard
+
 "node-gyp-build@npm:^4.2.3":
   version: 4.4.0
   resolution: "node-gyp-build@npm:4.4.0"
@@ -10685,6 +11392,17 @@ __metadata:
     node-gyp-build-optional: optional.js
     node-gyp-build-test: build-test.js
   checksum: 972a059f960253d254e0b23ce10f54c8982236fc0edcab85166d0b7f87443b2ce98391c877cfb2f6eeafcf03c538c5f4dd3e0bfff03828eb48634f58f4c64343
+  languageName: node
+  linkType: hard
+
+"node-gyp-build@npm:^4.4.0":
+  version: 4.6.0
+  resolution: "node-gyp-build@npm:4.6.0"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 25d78c5ef1f8c24291f4a370c47ba52fcea14f39272041a90a7894cd50d766f7c8cb8fb06c0f42bf6f69b204b49d9be3c8fc344aac09714d5bdb95965499eb15
   languageName: node
   linkType: hard
 
@@ -11016,6 +11734,13 @@ __metadata:
     strip-ansi: ^6.0.0
     wcwidth: ^1.0.1
   checksum: 28d476ee6c1049d68368c0dc922e7225e3b5600c3ede88fade8052837f9ed342625fdaa84a6209302587c8ddd9b664f71f0759833cbdb3a4cf81344057e63c63
+  languageName: node
+  linkType: hard
+
+"ordered-binary@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "ordered-binary@npm:1.4.0"
+  checksum: 951fecb400b4e4e5176983679994cb7eb0a3ed1da8406d2bb1f7e76417cb61af85ea557d184cccfa3fe50b4c1582a69a4b2e20625f0d56083330b11bf1bcdeb4
   languageName: node
   linkType: hard
 
@@ -13096,6 +13821,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"robot3@npm:^0.2.19":
+  version: 0.2.21
+  resolution: "robot3@npm:0.2.21"
+  checksum: fb1c43e89cd187f77d14576c4ea84c3cdda8bbee68feb405f6aa8bba5ffd8a483cba339fab31c354b6a2895b0676358fe8b4e249b73b6a2673057a92a97b130d
+  languageName: node
+  linkType: hard
+
+"rollup-plugin-polyfill-node@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "rollup-plugin-polyfill-node@npm:0.9.0"
+  dependencies:
+    "@rollup/plugin-inject": ^4.0.0
+  peerDependencies:
+    rollup: ^1.20.0 || ^2.0.0
+  checksum: a7531a850cf5c8a8d8705aacdad449c14f25368d98cf1f06f22b5f300fde45ac9b1eda533d61e7377366b3ce4ade2075b2deb7c55b9f823d9e609d1d6c23d925
+  languageName: node
+  linkType: hard
+
 "rollup-plugin-string@npm:^3.0.0":
   version: 3.0.0
   resolution: "rollup-plugin-string@npm:3.0.0"
@@ -14742,6 +15485,13 @@ __metadata:
   dependencies:
     defaults: ^1.0.3
   checksum: 814e9d1ddcc9798f7377ffa448a5a3892232b9275ebb30a41b529607691c0491de47cba426e917a4d08ded3ee7e9ba2f3fe32e62ee3cd9c7d3bafb7754bd553c
+  languageName: node
+  linkType: hard
+
+"weak-lru-cache@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "weak-lru-cache@npm:1.2.2"
+  checksum: 0fbe16839d193ed82ddb4fe331ca8cfaee2ecbd42596aa02366c708956cf41f7258f2d5411c3bc9aa099c26058dc47afbd2593d449718a18e4ef4d870c5ace18
   languageName: node
   linkType: hard
 

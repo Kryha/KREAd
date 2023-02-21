@@ -1,5 +1,5 @@
 /// <reference types="ses"/>
-import React, { createContext, useReducer, useContext, useEffect, useRef } from "react";
+import React, { createContext, useReducer, useContext, useEffect, useRef, useState } from "react";
 import { Far } from "@endo/marshal";
 import { makeCapTP, E } from "@endo/captp";
 import { observeIteration } from "@agoric/notifier";
@@ -8,6 +8,8 @@ import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 import { getTokenInfo } from "../service/util";
+import { makeAgoricKeplrConnection, AgoricKeplrConnectionErrors as Errors } from "@agoric/web-components";
+import { networkConfigs } from "../constants";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
@@ -102,6 +104,7 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
   const walletPRef = useRef(undefined);
+  const [currentStatus, setCurrentStatus] = useState<"not connected" | "connecting" | "connected">("not connected");
 
   const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
     if (!offers.length) return;
@@ -125,6 +128,60 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     let walletAbort: () => any;
     let walletDispatch: (arg0: any) => any;
 
+
+    const onConnect = async () => {
+      const status = {
+        connected: "connected",
+        connecting: "connecting",
+        notConnected: "not connected"
+      };
+      
+      if(currentStatus === status.connecting || currentStatus === status.connected) return;
+      
+      // if (checkTerms && !areLatestTermsAgreed) {
+      //   setIsTermsDialogOpen(true);
+      //   return;
+      // }
+  
+      let connection;
+      dispatch({ type: "SET_LOADING", payload: true });
+      try {
+        connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
+        console.log(connection);
+      } catch (e: any) {
+        switch (e.message) {
+          case Errors.enableKeplr:
+            console.error("Enable the connection in Keplr to continue.", {
+              hideProgressBar: false,
+              autoClose: 5000,
+            });
+            break;
+          case Errors.networkConfig:
+            console.error("Network not found.");
+            break;
+          case Errors.noSmartWallet:
+            console.error("NO SMART WALLET");
+            // console.error(
+            //   <p>
+            //     No Agoric smart wallet found for this address. Try creating one at{" "}
+            //     <a
+            //       className="underline text-blue-500"
+            //       href="https://wallet.agoric.app/wallet/"
+            //       target="_blank"
+            //       rel="noreferrer"
+            //     >
+            //       wallet.agoric.app/wallet/
+            //     </a>
+            //     .{" "}
+            //   </p>
+            // );
+            break;
+        }
+      } finally {
+        setCurrentStatus("connected");
+      }
+    };
+    /* AG-SOLO CONNECT
     const onConnect = async () => {
       // Set up wallet through socket
       console.info("Connecting to wallet...");
@@ -178,16 +235,16 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         // E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID/*, tokenInfo.boardIds.character.issuer*/),
-        E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID/*, tokenInfo.boardIds.item.issuer*/),
-        E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID/*, tokenInfo.boardIds.paymentFT.issuer*/),
+        E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID/*, tokenInfo.boardIds.character.issuer),
+        E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID/*, tokenInfo.boardIds.item.issuer),
+        E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID/*, tokenInfo.boardIds.paymentFT.issuer),
       ]);
 
       console.count("🔧 LOADING AGORIC SERVICE 🔧");
 
       dispatch({ type: "SET_LOADING", payload: false });
     };
-
+    */
     const onDisconnect = () => {
       dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
       walletAbort && walletAbort();
@@ -204,7 +261,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       onMessage,
     });
     // return deactivateWebSocket;
-  }, []);
+  }, [currentStatus]);
 
   return (
     <Context.Provider value={state}>
