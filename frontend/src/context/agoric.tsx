@@ -135,7 +135,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         connecting: "connecting",
         notConnected: "not connected"
       };
-      
+
       if(currentStatus === status.connecting || currentStatus === status.connected) return;
       
       // if (checkTerms && !areLatestTermsAgreed) {
@@ -146,7 +146,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       let connection;
       dispatch({ type: "SET_LOADING", payload: true });
       try {
-        connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
+        connection = await makeAgoricKeplrConnection(networkConfigs.smartWallet.url);
         console.log(connection);
       } catch (e: any) {
         switch (e.message) {

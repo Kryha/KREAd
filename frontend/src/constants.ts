@@ -119,9 +119,8 @@ export const networkConfigs = {
     label: "Local Network",
     url: "http://localhost:3000/wallet/network-config",
   },
-  localDevnet: {
+  smartWallet: {
     label: "Local Devnet",
-    url: "https://devnet.agoric.net/network-config",
-    chainId: "agoriclocal"
+    url: "https://wallet.agoric.app/wallet/network-config",
   },
 };
