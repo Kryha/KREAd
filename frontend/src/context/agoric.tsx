@@ -146,7 +146,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       let connection;
       dispatch({ type: "SET_LOADING", payload: true });
       try {
-        connection = await makeAgoricKeplrConnection(networkConfigs.smartWallet.url);
+        connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
         console.log(connection);
       } catch (e: any) {
         switch (e.message) {
@@ -255,11 +255,11 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       walletDispatch && walletDispatch(obj);
     };
 
-    activateWebSocket({
-      onConnect,
-      onDisconnect,
-      onMessage,
-    });
+    // activateWebSocket({
+    //   onConnect,
+    //   onDisconnect,
+    //   onMessage,
+    // });
     // return deactivateWebSocket;
   }, [currentStatus]);
 

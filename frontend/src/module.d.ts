@@ -6,3 +6,7 @@ declare module "@endo/marshal";
 declare module "@agoric/notifier";
 declare module "@agoric/casting";
 declare module "@agoric/web-components";
+declare module "@agoric/web-components/react" {
+  export const makeReactAgoricWalletConnection;
+  export const makeReactDappWalletBridge;
+}

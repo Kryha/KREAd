@@ -21,6 +21,7 @@ import { CharacterDetailSection } from "../../containers/detail-section";
 import { useSelectedCharacter } from "../../service";
 import { routes } from "../../navigation";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
+import WalletBridge from "../../context/wallet-bridge";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ export const Landing: FC = () => {
         />
       ) : (
         <>
+          <WalletBridge/>
           {/* character big picture */}
           <LandingContainer isZoomed={!openTab}>
             <BaseCharacter

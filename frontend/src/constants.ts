@@ -119,7 +119,7 @@ export const networkConfigs = {
     label: "Local Network",
     url: "http://localhost:3000/wallet/network-config",
   },
-  smartWallet: {
+  localDevnet: {
     label: "Local Devnet",
     url: "https://wallet.agoric.app/wallet/network-config",
   },
