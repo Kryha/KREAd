@@ -55,7 +55,7 @@ const initialState: AgoricState = {
       paymentFT: { issuer: undefined, brand: undefined },
     }
   },
-  isLoading: true,
+  isLoading: false,
 };
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
@@ -113,23 +113,23 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
   useEffect(() => {
     // Receive callbacks from the wallet connection.
-    const otherSide = Far("otherSide", {
-      needDappApproval(_dappOrigin: any, _suggestedDappPetname: any) {
-        dispatch({ type: "SET_DAPP_APPROVED", payload: false });
-        dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: true });
-      },
-      dappApproved(_dappOrigin: any) {
-        dispatch({ type: "SET_DAPP_APPROVED", payload: true });
-        dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: false });
-      },
-    });
+    // const otherSide = Far("otherSide", {
+    //   needDappApproval(_dappOrigin: any, _suggestedDappPetname: any) {
+    //     dispatch({ type: "SET_DAPP_APPROVED", payload: false });
+    //     dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: true });
+    //   },
+    //   dappApproved(_dappOrigin: any) {
+    //     dispatch({ type: "SET_DAPP_APPROVED", payload: true });
+    //     dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: false });
+    //   },
+    // });
 
     // TODO: Implement
     let walletAbort: () => any;
     let walletDispatch: (arg0: any) => any;
 
 
-    const onConnect = async () => {
+    const connect = async () => {
       const status = {
         connected: "connected",
         connecting: "connecting",
@@ -254,6 +254,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const obj = JSON.parse(data);
       walletDispatch && walletDispatch(obj);
     };
+
+    connect();
 
     // activateWebSocket({
     //   onConnect,

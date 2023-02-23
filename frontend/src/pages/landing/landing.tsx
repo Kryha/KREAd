@@ -25,7 +25,7 @@ import WalletBridge from "../../context/wallet-bridge";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
-
+  console.log("LANDINGs");
   const [openTab, setOpenTab] = useState(false);
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const [showDetail, setShowDetail] = useState(false);
@@ -62,7 +62,6 @@ export const Landing: FC = () => {
         />
       ) : (
         <>
-          <WalletBridge/>
           {/* character big picture */}
           <LandingContainer isZoomed={!openTab}>
             <BaseCharacter

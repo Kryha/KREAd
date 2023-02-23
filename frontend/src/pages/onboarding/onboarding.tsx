@@ -28,8 +28,10 @@ import { useLocalStorage, useOnScreen, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
 import { useTimer } from "../../hooks/hooks";
+import WalletBridge from "../../context/wallet-bridge";
 
 export const Onboarding: FC = () => {
+  console.log("onboarding");
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
@@ -45,6 +47,7 @@ export const Onboarding: FC = () => {
 
   return (
     <>
+      <WalletBridge />
       <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <PrimaryButton onClick={() => connectWallet()}>

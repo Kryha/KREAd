@@ -30,7 +30,7 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.31.3",
     "react-query": "^3.39.0",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "ses": "^0.15.16",
     "three": "^0.144.0",

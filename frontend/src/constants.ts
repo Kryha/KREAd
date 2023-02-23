@@ -117,10 +117,17 @@ export const networkConfigs = {
   },
   localhost: {
     label: "Local Network",
-    url: "http://localhost:3000/wallet/network-config",
+    url: "http://localhost:3001/wallet/network-config",
   },
   localDevnet: {
     label: "Local Devnet",
     url: "https://wallet.agoric.app/wallet/network-config",
   },
+};
+
+export const localBridgeHref = "http://localhost:3001/wallet/bridge.html";
+
+export const walletUiHref = () => {
+  const bridgeUrl = new URL(localBridgeHref);
+  return bridgeUrl ? bridgeUrl.origin + "/wallet/" : "";
 };

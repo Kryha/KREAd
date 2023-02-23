@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { BridgeProtocol } from "@agoric/web-components";
 import { makeReactDappWalletBridge } from "@agoric/web-components/react";
+import { localBridgeHref, walletUiHref } from "../constants";
 
 type BridgeReadyMessage = {
   detail: {
@@ -34,11 +35,12 @@ type BridgeError = {
 const DappWalletBridge = makeReactDappWalletBridge(React);
 
 const WalletBridge = () => {
+  console.log("WALLET BRIDGE");
   const [bridgeApproved, setBridgeApproved] = useState(false);
   const setWallet = useState();
-  const chainConnection = useState();
-  const bridgeHref = "";
-  const walletUiHref = "";
+  const bridgeHref = localBridgeHref;
+  const walletUIRef = walletUiHref();
+  console.log(walletUIRef);
 
   const showWarning = () => {
     console.log("warning");
@@ -53,13 +55,14 @@ const WalletBridge = () => {
       detail: { isDappApproved, requestDappConnection, addOffer },
     } = ev;
     if (!isDappApproved) {
+      console.log("need dapp approval: requesting connection...");
       requestDappConnection("kread");
     } else {
       setBridgeApproved(true);
       showConnectionSuccessful();
     }
     console.log(addOffer, ev);
-    //setWallet({ addOffer });
+    // setWallet({ addOffer });
   };
 
   const onError = (ev: BridgeError) => {
@@ -84,18 +87,17 @@ const WalletBridge = () => {
     }
   };
 
+  console.log("BRIDGEEEE");
   return (
     <div className="hidden">
-      {chainConnection && (
-        <DappWalletBridge
-          bridgeHref={bridgeHref}
-          onBridgeMessage={onBridgeMessage}
-          onBridgeReady={onBridgeReady}
-          onError={onError}
-          address={"http://localhost:26657"}
-          chainId={"agoriclocal"}
-        />
-      )}
+      <DappWalletBridge
+        bridgeHref={bridgeHref}
+        onBridgeMessage={onBridgeMessage}
+        onBridgeReady={onBridgeReady}
+        onError={onError}
+        address={"http://localhost:26657"}
+        chainId={"agoriclocal"}
+      />
     </div>
   );
 };
