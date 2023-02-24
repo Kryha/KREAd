@@ -149,6 +149,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
         console.log(connection);
       } catch (e: any) {
+        console.log(e);
         switch (e.message) {
           case Errors.enableKeplr:
             console.error("Enable the connection in Keplr to continue.", {
@@ -255,6 +256,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       walletDispatch && walletDispatch(obj);
     };
 
+    console.log("finna connect");
     connect();
 
     // activateWebSocket({
