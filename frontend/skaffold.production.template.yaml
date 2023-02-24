@@ -13,7 +13,7 @@ build:
       docker:
         dockerfile: Dockerfile.ui
         buildArgs:
-          REACT_APP_DAPP_CONSTANTS_JSON: "" # TODO: provide actual value
+          VITE_DAPP_CONSTANTS_JSON: "" # TODO: provide actual value
 deploy:
   kustomize:
     paths:
