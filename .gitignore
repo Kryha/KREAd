@@ -22,6 +22,7 @@ node_modules
 backend/.env
 frontend/.env
 /agoric/_agstate
+.yarn
 
 ## npm deprecated in favour of yarn
 package-lock.json
