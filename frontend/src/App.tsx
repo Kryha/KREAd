@@ -1,3 +1,4 @@
+import "./installSesLockdown";
 import "./App.css";
 import { QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
