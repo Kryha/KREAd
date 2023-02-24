@@ -70,7 +70,7 @@ function createSocket({ onConnect, onDisconnect, onMessage }, endpoint) {
       });
     }
     let ifrQ = [];
-    ifr.src = `${process.env.PUBLIC_URL}/agoric-wallet.html?suggestedDappPetname=${encodeURIComponent(CONTRACT_NAME)}`;
+    ifr.src = `${import.meta.env.PUBLIC_URL}/agoric-wallet.html?suggestedDappPetname=${encodeURIComponent(CONTRACT_NAME)}`;
     ifr.addEventListener("load", () => {
       while (ifrQ && ifrQ.length) {
         const obj = ifrQ.shift();
