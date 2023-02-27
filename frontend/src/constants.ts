@@ -132,3 +132,6 @@ export const walletUiHref = () => {
   const bridgeUrl = new URL(prodBridgeHref);
   return bridgeUrl ? bridgeUrl.origin + "/wallet/" : "";
 };
+
+const usp = new URLSearchParams(window.location.search);
+const wallet = usp.get('wallet');

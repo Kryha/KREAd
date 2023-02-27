@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { BridgeProtocol } from "@agoric/web-components";
 import { makeReactDappWalletBridge } from "@agoric/web-components/react";
-import { localBridgeHref, prodBridgeHref, walletUiHref } from "../constants";
+import { prodBridgeHref, walletUiHref } from "../constants";
+import { useAgoricStateDispatch } from "./agoric";
 
 type BridgeReadyMessage = {
   detail: {
@@ -35,9 +36,8 @@ type BridgeError = {
 const DappWalletBridge = makeReactDappWalletBridge(React);
 
 const WalletBridge = () => {
-  console.log("WALLET BRIDGE");
+  const agoricDispatch = useAgoricStateDispatch();
   const [bridgeApproved, setBridgeApproved] = useState(false);
-  const setWallet = useState();
   const bridgeHref = prodBridgeHref;
   const walletUIRef = walletUiHref();
   console.log(walletUIRef);
@@ -62,7 +62,7 @@ const WalletBridge = () => {
       showConnectionSuccessful();
     }
     console.log(addOffer, ev);
-    // setWallet({ addOffer });
+    agoricDispatch({ type: "SET_ADD_OFFER", payload: addOffer });
   };
 
   const onError = (ev: BridgeError) => {
@@ -88,7 +88,6 @@ const WalletBridge = () => {
     }
   };
 
-  console.log("BRIDGEEEE");
   return (
     <div className="hidden">
       <DappWalletBridge
@@ -96,7 +95,7 @@ const WalletBridge = () => {
         onBridgeMessage={onBridgeMessage}
         onBridgeReady={onBridgeReady}
         onError={onError}
-        address={"http://localhost:26657"}
+        address={"agoric1tq3v943uaycqp90qvuyaqzwdc3eh52xzrcl4p6"}
         chainId={"agoriclocal"}
       />
     </div>

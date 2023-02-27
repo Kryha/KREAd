@@ -616,17 +616,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/vat-data@npm:0.4.4-dev-f5341af.0+f5341af":
-  version: 0.4.4-dev-f5341af.0
-  resolution: "@agoric/vat-data@npm:0.4.4-dev-f5341af.0"
-  dependencies:
-    "@agoric/assert": 0.5.2-dev-f5341af.0+f5341af
-    "@agoric/internal": 0.2.2-dev-f5341af.0+f5341af
-    "@agoric/store": 0.8.4-dev-f5341af.0+f5341af
-  checksum: 683085210c7fb1073bf2e13b25eccb2798765aa28cf869414ee74117a4da4482d15ca06d5ea5c2849216ad0c6adf80088b71035c7804d51abf743c3747f51e04
-  languageName: node
-  linkType: hard
-
 "@agoric/vat-data@npm:^0.4.5":
   version: 0.4.5
   resolution: "@agoric/vat-data@npm:0.4.5"
@@ -2666,6 +2655,7 @@ __metadata:
     "@agoric/smart-wallet": 0.4.4
     "@agoric/ui-components": 0.3.4-dev-f5341af.0
     "@agoric/wallet": ^0.17.2
+    "@agoric/wallet-backend": ^0.13.5
     "@agoric/web-components": 0.5.1-dev-f5341af.0
     "@emotion/babel-plugin": ^11.9.2
     "@emotion/react": ^11.9.3

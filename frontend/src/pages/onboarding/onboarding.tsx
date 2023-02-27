@@ -31,7 +31,6 @@ import { useTimer } from "../../hooks/hooks";
 import WalletBridge from "../../context/wallet-bridge";
 
 export const Onboarding: FC = () => {
-  console.log("onboarding");
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
@@ -47,7 +46,6 @@ export const Onboarding: FC = () => {
 
   return (
     <>
-      <WalletBridge />
       <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <PrimaryButton onClick={() => connectWallet()}>

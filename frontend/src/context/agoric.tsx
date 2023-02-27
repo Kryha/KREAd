@@ -10,6 +10,7 @@ import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/a
 import { getTokenInfo } from "../service/util";
 import { makeAgoricKeplrConnection, AgoricKeplrConnectionErrors as Errors } from "@agoric/web-components";
 import { networkConfigs } from "../constants";
+import WalletBridge from "./wallet-bridge";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
@@ -38,6 +39,7 @@ const initialState: AgoricState = {
     walletP: undefined,
     apiSend: undefined,
   },
+  addOffer: undefined,
   contracts: {
     // FIXME: rename to kread
     characterBuilder: {
@@ -56,6 +58,7 @@ const initialState: AgoricState = {
     }
   },
   isLoading: false,
+  isReady: false,
 };
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
@@ -93,12 +96,15 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_TOKEN_INFO":
       return { ...state, tokenInfo: action.payload };
 
+    case "SET_ADD_OFFER":
+      return { ...state, addOffer: action.payload };
+
     case "RESET":
       return initialState;
 
     default:
       throw new Error("Only defined action types can be handled;");
-  }
+  };
 };
 
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
@@ -144,44 +150,33 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       // }
   
       let connection;
-      dispatch({ type: "SET_LOADING", payload: true });
-      try {
-        connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
-        console.log(connection);
-      } catch (e: any) {
-        console.log(e);
-        switch (e.message) {
-          case Errors.enableKeplr:
-            console.error("Enable the connection in Keplr to continue.", {
-              hideProgressBar: false,
-              autoClose: 5000,
-            });
-            break;
-          case Errors.networkConfig:
-            console.error("Network not found.");
-            break;
-          case Errors.noSmartWallet:
-            console.error("NO SMART WALLET");
-            // console.error(
-            //   <p>
-            //     No Agoric smart wallet found for this address. Try creating one at{" "}
-            //     <a
-            //       className="underline text-blue-500"
-            //       href="https://wallet.agoric.app/wallet/"
-            //       target="_blank"
-            //       rel="noreferrer"
-            //     >
-            //       wallet.agoric.app/wallet/
-            //     </a>
-            //     .{" "}
-            //   </p>
-            // );
-            break;
+      // dispatch({ type: "SET_LOADING", payload: true });
+
+
+      const connectKeplr = async () => {
+        try {
+          connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
+          console.log(connection);
+        } catch (e: any) {
+          switch (e.message) {
+            case Errors.enableKeplr:
+              console.error("Enable the connection in Keplr to continue.", {
+                hideProgressBar: false,
+                autoClose: 5000,
+              });
+              break;
+            case Errors.networkConfig:
+              console.error("Network not found.");
+              break;
+            case Errors.noSmartWallet:
+              console.error("NO SMART WALLET");
+              break;
+          }
+        } finally {
+          setCurrentStatus("connected");
         }
-      } finally {
-        setCurrentStatus("connected");
-      }
-    };
+      };
+    }
     /* AG-SOLO CONNECT
     const onConnect = async () => {
       // Set up wallet through socket
@@ -269,7 +264,10 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
   return (
     <Context.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>{props.children}</DispatchContext.Provider>
+      <DispatchContext.Provider value={dispatch}>
+        <WalletBridge />
+        {props.children}
+      </DispatchContext.Provider>
     </Context.Provider>
   );
 };

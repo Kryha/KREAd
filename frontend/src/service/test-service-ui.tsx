@@ -45,23 +45,22 @@ export const TestServiceUI = () => {
 
     if (!tokenPurse) return;
 
-    console.log(
-      await E(service.agoric.walletP).addOffer(
-        harden({
-          id: Date.now().toString(),
-          invitation: invitation,
-          proposalTemplate: {
-            want: {
-              Token: {
-                pursePetname: tokenPurse.pursePetname,
-                value: 1000n,
-              },
-            },
-            dappContext: true,
+    const offer = harden({
+      id: Date.now().toString(),
+      invitation: invitation,
+      proposalTemplate: {
+        want: {
+          Token: {
+            pursePetname: tokenPurse.pursePetname,
+            value: 1000n,
           },
-        })
-      )
-    );
+        },
+        dappContext: true,
+      },
+    });
+
+    console.log(service.addOffer(offer));
+    // console.log(await E(service.agoric.walletP).addOffer(offer))
   };
 
   const removeItemFromInventory = async () => {

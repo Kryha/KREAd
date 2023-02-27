@@ -36,10 +36,12 @@ export interface AgoricState {
   status: Status;
   contracts: Contracts;
   agoric: AgoricService;
+  addOffer: any;
   notifiers: NotifiersState;
   offers: any[];
   tokenInfo: TokenInfo & { boardIds: TokenInfo };
   isLoading: boolean;
+  isReady: boolean;
 }
 
 export interface TokenInfo {
@@ -100,6 +102,11 @@ interface SetTokenInfo {
   payload: TokenInfo & { boardIds: TokenInfo };
 }
 
+interface SetAddOffer {
+  type: "SET_ADD_OFFER";
+  payload: any;
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -118,4 +125,5 @@ export type AgoricStateActions =
   | SetApiSend
   | SetLoading
   | SetTokenInfo
+  | SetAddOffer
   | SetOffers;
