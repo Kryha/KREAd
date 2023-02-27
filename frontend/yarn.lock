@@ -16,16 +16,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/access-token@npm:^0.4.18":
-  version: 0.4.18
-  resolution: "@agoric/access-token@npm:0.4.18"
-  dependencies:
-    "@agoric/assert": ^0.4.0
-    n-readlines: ^1.0.0
-  checksum: 037e8fbcc500b99e870e27678fcb1feff166aa57c97c5a2e51dc2552c611dcc6e5c3278857674144c17948f7df610c64f45b5eb1c85333291377c666a9dd4be1
-  languageName: node
-  linkType: hard
-
 "@agoric/access-token@npm:^0.4.20":
   version: 0.4.20
   resolution: "@agoric/access-token@npm:0.4.20"
@@ -97,7 +87,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/casting@npm:0.3.3-dev-f5341af.0+f5341af":
+"@agoric/casting@npm:0.3.3-dev-f5341af.0, @agoric/casting@npm:0.3.3-dev-f5341af.0+f5341af":
   version: 0.3.3-dev-f5341af.0
   resolution: "@agoric/casting@npm:0.3.3-dev-f5341af.0"
   dependencies:
@@ -118,7 +108,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/casting@npm:^0.3.3-dev-f5341af.0, @agoric/casting@npm:^0.3.4":
+"@agoric/casting@npm:^0.3.4":
   version: 0.3.4
   resolution: "@agoric/casting@npm:0.3.4"
   dependencies:
@@ -156,7 +146,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/ertp@npm:0.15.4-dev-f5341af.0+f5341af":
+"@agoric/ertp@npm:0.15.4-dev-f5341af.0, @agoric/ertp@npm:0.15.4-dev-f5341af.0+f5341af":
   version: 0.15.4-dev-f5341af.0
   resolution: "@agoric/ertp@npm:0.15.4-dev-f5341af.0"
   dependencies:
@@ -174,7 +164,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/ertp@npm:^0.15.4-dev-f5341af.0, @agoric/ertp@npm:^0.15.5":
+"@agoric/ertp@npm:^0.15.5":
   version: 0.15.5
   resolution: "@agoric/ertp@npm:0.15.5"
   dependencies:
@@ -597,21 +587,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/ui-components@npm:^0.3.4-dev-1adb7a2.0":
-  version: 0.3.5
-  resolution: "@agoric/ui-components@npm:0.3.5"
+"@agoric/ui-components@npm:0.3.4-dev-f5341af.0":
+  version: 0.3.4-dev-f5341af.0
+  resolution: "@agoric/ui-components@npm:0.3.4-dev-f5341af.0"
   dependencies:
-    "@agoric/assert": ^0.5.1
-    "@agoric/ertp": ^0.15.5
+    "@agoric/assert": 0.5.2-dev-f5341af.0+f5341af
+    "@agoric/ertp": 0.15.4-dev-f5341af.0+f5341af
     "@agoric/nat": ^4.1.0
-    "@endo/eventual-send": ^0.16.5
-    "@endo/init": ^0.5.49
+    "@endo/eventual-send": ^0.16.7
+    "@endo/init": ^0.5.51
     clsx: ^1.1.1
   peerDependencies:
     "@material-ui/core": ^4.11.3
     react: ^16.14.0
     react-dom: ^16.8.0
-  checksum: 553049ff1e7415b09f36038352094ef6e56ddd988b68ffd44aa6aceba794be1262c8c60d4846ef5d342691f705fcad5e9fc2808056b4f7ee1464592ca544235a
+  checksum: c9d0d0fe2ed2e4ca108c0ae6b2186259a9a941f4308f3323f0346b65a2b30aef71a90edf9c3ecde107e7b3b52fdd8a2673114c7ba211d84c83a65d1957bb7bfa
+  languageName: node
+  linkType: hard
+
+"@agoric/vat-data@npm:0.4.4-dev-f5341af.0+f5341af":
+  version: 0.4.4-dev-f5341af.0
+  resolution: "@agoric/vat-data@npm:0.4.4-dev-f5341af.0"
+  dependencies:
+    "@agoric/assert": 0.5.2-dev-f5341af.0+f5341af
+    "@agoric/internal": 0.2.2-dev-f5341af.0+f5341af
+    "@agoric/store": 0.8.4-dev-f5341af.0+f5341af
+  checksum: 683085210c7fb1073bf2e13b25eccb2798765aa28cf869414ee74117a4da4482d15ca06d5ea5c2849216ad0c6adf80088b71035c7804d51abf743c3747f51e04
   languageName: node
   linkType: hard
 
@@ -753,7 +754,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@agoric/wallet@npm:0.17.2":
+"@agoric/wallet@npm:^0.17.2":
   version: 0.17.2
   resolution: "@agoric/wallet@npm:0.17.2"
   dependencies:
@@ -2660,11 +2661,11 @@ __metadata:
   resolution: "@builder/frontend@workspace:."
   dependencies:
     "@agoric/assert": ^0.4.0
-    "@agoric/casting": ^0.3.3-dev-f5341af.0
-    "@agoric/ertp": ^0.15.4-dev-f5341af.0
+    "@agoric/casting": 0.3.3-dev-f5341af.0
+    "@agoric/ertp": 0.15.4-dev-f5341af.0
     "@agoric/smart-wallet": 0.4.4
-    "@agoric/ui-components": ^0.3.4-dev-1adb7a2.0
-    "@agoric/wallet": 0.17.2
+    "@agoric/ui-components": 0.3.4-dev-f5341af.0
+    "@agoric/wallet": ^0.17.2
     "@agoric/web-components": 0.5.1-dev-f5341af.0
     "@emotion/babel-plugin": ^11.9.2
     "@emotion/react": ^11.9.3
@@ -2690,7 +2691,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.25.0
     "@typescript-eslint/parser": ^5.25.0
     "@vitejs/plugin-react": ^2.0.1
-    agoric: ^0.16.0
     axios: ^0.27.2
     crypto-browserify: ^3.12.0
     customize-cra: ^1.0.0
@@ -3171,27 +3171,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/bundle-source@npm:^2.2.0":
-  version: 2.2.1
-  resolution: "@endo/bundle-source@npm:2.2.1"
-  dependencies:
-    "@agoric/babel-generator": ^7.17.4
-    "@babel/parser": ^7.17.3
-    "@babel/traverse": ^7.17.3
-    "@endo/base64": ^0.2.26
-    "@endo/compartment-mapper": ^0.7.6
-    "@endo/init": ^0.5.42
-    "@rollup/plugin-commonjs": ^19.0.0
-    "@rollup/plugin-node-resolve": ^13.0.0
-    acorn: ^8.2.4
-    rollup: "github:endojs/endo#rollup-2.7.1-patch-1"
-    source-map: ^0.7.3
-  bin:
-    bundle-source: src/tool.js
-  checksum: 23e38c8cadfd4074024faba4e6745410ecb6e89bbb060542f07cd4c494403af364f5b91464805467bf3b546b65931b15136946955917b416bff652e0abcda29d
-  languageName: node
-  linkType: hard
-
 "@endo/bundle-source@npm:^2.3.1, @endo/bundle-source@npm:^2.4.1":
   version: 2.4.3
   resolution: "@endo/bundle-source@npm:2.4.3"
@@ -3225,7 +3204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/captp@npm:^2.0.7, @endo/captp@npm:^2.0.8":
+"@endo/captp@npm:^2.0.8":
   version: 2.0.8
   resolution: "@endo/captp@npm:2.0.8"
   dependencies:
@@ -3247,13 +3226,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/cjs-module-analyzer@npm:^0.2.26":
-  version: 0.2.26
-  resolution: "@endo/cjs-module-analyzer@npm:0.2.26"
-  checksum: 7fd18e3ff7aab0940c00a6b3cadb033a516f23087122f3d583efd7044cd5687b037c757a744b56257258c63ad4a12a1e216b16dd7ab939890a7e396c4dade8e5
-  languageName: node
-  linkType: hard
-
 "@endo/cjs-module-analyzer@npm:^0.2.27, @endo/cjs-module-analyzer@npm:^0.2.29":
   version: 0.2.29
   resolution: "@endo/cjs-module-analyzer@npm:0.2.29"
@@ -3270,18 +3242,6 @@ __metadata:
     "@endo/zip": ^0.2.27
     ses: ^0.17.0
   checksum: 9f4d7553a6e338b1d883cddde4ef8692ed0e825cca3159932581c36ca74564f3bc1ccd6149662fa86f79032d5e0eff3a01c7f56fabd51af839305fd41888d154
-  languageName: node
-  linkType: hard
-
-"@endo/compartment-mapper@npm:^0.7.5, @endo/compartment-mapper@npm:^0.7.6":
-  version: 0.7.6
-  resolution: "@endo/compartment-mapper@npm:0.7.6"
-  dependencies:
-    "@endo/cjs-module-analyzer": ^0.2.26
-    "@endo/static-module-record": ^0.7.5
-    "@endo/zip": ^0.2.26
-    ses: ^0.15.16
-  checksum: a1cc818fced487fd6fa374e2113f7d344d5218eb634701642e33a5847e7edc1c2d4e8fd293c13f6d817929cf380c2da789231327eecbfe87a4ce53909bfd08d3
   languageName: node
   linkType: hard
 
@@ -3340,7 +3300,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/init@npm:^0.5.41, @endo/init@npm:^0.5.42":
+"@endo/init@npm:^0.5.41":
   version: 0.5.42
   resolution: "@endo/init@npm:0.5.42"
   dependencies:
@@ -3439,7 +3399,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/promise-kit@npm:^0.2.41, @endo/promise-kit@npm:^0.2.42":
+"@endo/promise-kit@npm:^0.2.42":
   version: 0.2.42
   resolution: "@endo/promise-kit@npm:0.2.42"
   dependencies:
@@ -3470,19 +3430,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@endo/static-module-record@npm:^0.7.5":
-  version: 0.7.5
-  resolution: "@endo/static-module-record@npm:0.7.5"
-  dependencies:
-    "@agoric/babel-generator": ^7.17.6
-    "@babel/parser": ^7.17.3
-    "@babel/traverse": ^7.17.3
-    "@babel/types": ^7.17.0
-    ses: ^0.15.16
-  checksum: 3acd27942f4d797788aefe06dc1a9a75e9d9c3e531038081126d6efa483dc5623d5c43aaf759c6ec79a67d68564cdd44e247c5c0a3cb37c411691eff34ab73d2
-  languageName: node
-  linkType: hard
-
 "@endo/stream-node@npm:^0.2.19, @endo/stream-node@npm:^0.2.21":
   version: 0.2.23
   resolution: "@endo/stream-node@npm:0.2.23"
@@ -3502,13 +3449,6 @@ __metadata:
     "@endo/promise-kit": ^0.2.53
     ses: ^0.18.1
   checksum: cf069401cdacefca95c7f2148f9498d5c388c466dddb7129cd9c04cc664e70f2b2a58ed762123f7b124bd4970161c514cd2d664304eed68e2932621fe7e5346f
-  languageName: node
-  linkType: hard
-
-"@endo/zip@npm:^0.2.26":
-  version: 0.2.26
-  resolution: "@endo/zip@npm:0.2.26"
-  checksum: 350a73420c94642313f1a96039068c401913ae2eda71defc5b8e44d0e30ace4f2f9332ca59366b3b4c36eac4fc78c400d1586fb2f4702cd7bc184dbbc591486f
   languageName: node
   linkType: hard
 
@@ -4978,34 +4918,6 @@ __metadata:
     agops: src/bin-agops.js
     agoric: src/entrypoint.js
   checksum: a0971681146992067d1a03fc5f8907148d6a4a02c97acc71b2bff8c0457099c68f9ac5aa93363d5946b09d20b217b846a5b662b7b4be0834e75507e9e47154e0
-  languageName: node
-  linkType: hard
-
-"agoric@npm:^0.16.0":
-  version: 0.16.0
-  resolution: "agoric@npm:0.16.0"
-  dependencies:
-    "@agoric/access-token": ^0.4.18
-    "@agoric/assert": ^0.4.0
-    "@agoric/nat": ^4.1.0
-    "@endo/bundle-source": ^2.2.0
-    "@endo/captp": ^2.0.7
-    "@endo/compartment-mapper": ^0.7.5
-    "@endo/init": ^0.5.41
-    "@endo/promise-kit": ^0.2.41
-    "@iarna/toml": ^2.2.3
-    anylogger: ^0.21.0
-    chalk: ^2.4.2
-    commander: ^5.0.0
-    deterministic-json: ^1.0.5
-    esm: "github:agoric-labs/esm#Agoric-built"
-    inquirer: ^8.2.2
-    opener: ^1.5.2
-    tmp: ^0.2.1
-    ws: ^7.2.0
-  bin:
-    agoric: src/entrypoint.js
-  checksum: 602aab0ce62dee4d7b7a5f04f91faadad409d50e1b7dcc5842d837a43900b2ed71f6392ae6f7129cacb95e43e0836ddbae55c92e8e70762dae82b252ba33d357
   languageName: node
   linkType: hard
 

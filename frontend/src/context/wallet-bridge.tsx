@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { BridgeProtocol } from "@agoric/web-components";
 import { makeReactDappWalletBridge } from "@agoric/web-components/react";
-import { localBridgeHref, walletUiHref } from "../constants";
+import { localBridgeHref, prodBridgeHref, walletUiHref } from "../constants";
 
 type BridgeReadyMessage = {
   detail: {
@@ -38,7 +38,7 @@ const WalletBridge = () => {
   console.log("WALLET BRIDGE");
   const [bridgeApproved, setBridgeApproved] = useState(false);
   const setWallet = useState();
-  const bridgeHref = localBridgeHref;
+  const bridgeHref = prodBridgeHref;
   const walletUIRef = walletUiHref();
   console.log(walletUIRef);
 
@@ -66,6 +66,7 @@ const WalletBridge = () => {
   };
 
   const onError = (ev: BridgeError) => {
+    console.log(ev);
     const message = ev.detail.e.message;
     console.log("error", message);
   };
