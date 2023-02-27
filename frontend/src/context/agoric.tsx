@@ -152,7 +152,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       let connection;
       // dispatch({ type: "SET_LOADING", payload: true });
 
-
       const connectKeplr = async () => {
         try {
           connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
@@ -176,7 +175,9 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
           setCurrentStatus("connected");
         }
       };
+      connectKeplr();
     }
+    connect();
     /* AG-SOLO CONNECT
     const onConnect = async () => {
       // Set up wallet through socket
