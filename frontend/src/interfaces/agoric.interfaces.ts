@@ -37,6 +37,15 @@ export interface AgoricState {
   contracts: Contracts;
   agoric: AgoricService;
   addOffer: any;
+  walletConnection: {
+    pursesNotifier: any,
+    addOffer: any,
+    publicSubscribersNotifier: any,
+    leader: any,
+    address: any,
+    chainId: string,
+    unserializer: any,
+  },  
   notifiers: NotifiersState;
   offers: any[];
   tokenInfo: TokenInfo & { boardIds: TokenInfo };
@@ -107,6 +116,11 @@ interface SetAddOffer {
   payload: any;
 }
 
+interface SetWalletConnection {
+  type: "SET_WALLET_CONNECTION";
+  payload: any;
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -126,4 +140,5 @@ export type AgoricStateActions =
   | SetLoading
   | SetTokenInfo
   | SetAddOffer
+  | SetWalletConnection
   | SetOffers;

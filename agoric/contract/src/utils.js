@@ -152,6 +152,7 @@ export const setupStorageNodeNotifiers = ({ storageNode, marshaller }) => {
       marshaller,
       'inventory-general',
     ),
+    info: makeStorageNodePublishKit(storageNode, marshaller, 'info'),
   };
 
   return notifiers;

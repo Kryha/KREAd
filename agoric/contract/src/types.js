@@ -10,6 +10,7 @@
  *   randomNumber?: Function
  *   market: Market
  *   ready: boolean
+ *   boardId?: string
  * }} State
  *
  * @typedef {{
@@ -85,6 +86,10 @@
  *      }
  *    }
  *    inventory: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ *    info: {
  *      subscriber: StoredSubscriber<any>
  *      publisher: Publisher<any>
  *    }
@@ -204,6 +209,7 @@
  *   }
  *   set: {
  *     powers: (powers: Powers, notifiers: Notifiers) => void
+ *     boardId: (boardId: string) => void
  *   }
  *   add: {
  *     characters: (characters: CharacterRecord[]) => void

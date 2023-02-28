@@ -254,6 +254,7 @@ const start = async (zcf, privateArgs) => {
     getItemIssuer: () => itemIssuer,
     getItemBrand: () => itemBrand,
     getState: () => state,
+    setBoardId: state.set.boardId,
   });
 
   const publicFacet = Far('Chracter store public', {

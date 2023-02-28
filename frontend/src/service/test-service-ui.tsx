@@ -1,7 +1,7 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
-
+import dappConstants from "../service/conf/defaults";
 import { useAgoricContext } from "../context/agoric";
 import { useCharacterMarketState } from "../context/character-shop";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
@@ -16,8 +16,13 @@ export const TestServiceUI = () => {
   const shop = useCharacterMarketState();
   const createCharacter = useCreateCharacter();
 
-  console.log("---------------TESTUI", shop);
+  console.log("---------------TESTUI", service.addOffer, service.walletConnection);
   const publicFacet = service.contracts.characterBuilder.publicFacet;
+  const {
+    INSTANCE_NFT_MAKER_BOARD_ID,
+    // INSTALLATION_BOARD_ID,
+    // issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, Token: TOKEN_ISSUER_BOARD_ID },
+  } = dappConstants;
 
   useEffect(() => {
     console.log("SERVICE:", service);
@@ -40,19 +45,20 @@ export const TestServiceUI = () => {
   const purses = useWalletState();
 
   const topUp = async () => {
-    const invitation = await E(publicFacet).makeTokenFacetInvitation();
-    const tokenPurse = purses.token;
+    // const invitation = await E(publicFacet).makeTokenFacetInvitation();
+    // const tokenPurse = purses.token;
 
-    if (!tokenPurse) return;
+    const serializedInstance = await E(service.walletConnection.unserializer).serialize(INSTANCE_NFT_MAKER_BOARD_ID);
+    // if (!tokenPurse) return;
 
     const offer = harden({
-      id: Date.now().toString(),
-      invitation: invitation,
+      publicInvitationMaker: "topUp",
+      instanceHandle: serializedInstance,
       proposalTemplate: {
         want: {
           Token: {
-            pursePetname: tokenPurse.pursePetname,
-            value: 1000n,
+            pursePetname: "KREAdTOKEN",
+            value: 1000,
           },
         },
         dappContext: true,

@@ -31,6 +31,7 @@ const initialState: AgoricState = {
       characters: undefined,
     },
   },
+  addOffer: undefined,
   agoric: {
     zoe: undefined,
     board: undefined,
@@ -39,7 +40,15 @@ const initialState: AgoricState = {
     walletP: undefined,
     apiSend: undefined,
   },
-  addOffer: undefined,
+  walletConnection: {
+    pursesNotifier: undefined,
+    addOffer: undefined,
+    publicSubscribersNotifier: undefined,
+    leader: undefined,
+    address: undefined,
+    chainId: "",
+    unserializer: undefined,
+  },
   contracts: {
     // FIXME: rename to kread
     characterBuilder: {
@@ -68,6 +77,7 @@ const Context = createContext<AgoricState | undefined>(undefined);
 const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
 const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
+  console.log(action.type)
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
@@ -97,7 +107,10 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
       return { ...state, tokenInfo: action.payload };
 
     case "SET_ADD_OFFER":
-      return { ...state, addOffer: action.payload };
+        return { ...state, addOffer: action.payload };
+  
+    case "SET_WALLET_CONNECTION":
+      return { ...state, walletConnection: action.payload };
 
     case "RESET":
       return initialState;
@@ -156,6 +169,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         try {
           connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
           console.log(connection);
+          dispatch({ type: "SET_WALLET_CONNECTION", payload: connection })
         } catch (e: any) {
           switch (e.message) {
             case Errors.enableKeplr:

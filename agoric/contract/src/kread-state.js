@@ -16,7 +16,13 @@ import { getPage } from './utils';
  * }} initialState
  * @returns {KreadState}
  */
-export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifiers }) => {
+export const kreadState = ({
+  tokenInfo,
+  config,
+  assetMints,
+  randomNumber,
+  notifiers,
+}) => {
   /**
    * Contract STATE
    *
@@ -37,6 +43,10 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     ready: true,
     configReady: true,
   };
+
+  notifiers.info.publisher.publish({
+    tokenInfo,
+  });
 
   /**
    * @returns {object}
@@ -179,13 +189,25 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
    *
    * @param {Powers} powers
    * @param {Notifiers} notifiers
-  */
- const setPowers = (powers, notifiers) => {
-   state.config.powers = powers;
-   state.notifiers = notifiers;
-   state.ready = true;
+   * @param _notifiers
+   */
+  const setPowers = (powers, _notifiers) => {
+    state.config.powers = powers;
+    state.notifiers = _notifiers;
+    state.ready = true;
   };
-  
+
+  /**
+   *
+   * @param {string} boardId
+   * @param id
+   */
+  const boardId = (id) => {
+    assert(boardId, errors.invalidArg);
+    state.boardId = boardId;
+    state.notifiers.info.publisher.publish({ boardId: id });
+  };
+
   // Full access getters
   const get = Far('kread state get', {
     isReady: () => state.ready,
@@ -213,10 +235,11 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     items: addItems,
     updateConfig,
   });
-  
+
   // Replaces specific entries in the state
   const set = Far('kread state set', {
     powers: setPowers,
+    boardId,
   });
 
   // Limited getters

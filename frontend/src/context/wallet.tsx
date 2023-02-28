@@ -30,7 +30,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
   const [walletState, walletDispatch] = useState<WalletContext>(initialState);
   const agoric = useAgoricState();
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
-  const walletP = agoric.agoric.walletP;
+  const pursesNotifier = agoric.walletConnection.pursesNotifier
 
   useEffect(() => {
     const observer = harden({
@@ -63,20 +63,19 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     const watchPurses = async () => {
       console.info("✅ LISTENING FOR PURSE CHANGES");
 
-      const purseNotifier = E(walletP).getPursesNotifier();
-      observeIteration(purseNotifier, observer);
+      observeIteration(pursesNotifier, observer);
       walletDispatch((prevState) => ({
         ...prevState,
         fetched: true,
       }));
     };
 
-    if (walletP && kreadPublicFacet && !walletState.fetched) {
+    if (pursesNotifier && kreadPublicFacet && !walletState.fetched) {
       watchPurses().catch((err) => {
         console.error("got watchNotifiers err", err);
       });
     }
-  }, [walletP, kreadPublicFacet, walletState.fetched]);
+  }, [pursesNotifier, kreadPublicFacet, walletState.fetched]);
 
   return <Context.Provider value={walletState}>{props.children}</Context.Provider>;
 };
