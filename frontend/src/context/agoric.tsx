@@ -187,8 +187,10 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
           }
         } finally {
           setCurrentStatus("connected");
+          console.log("CONNECTED");
         }
       };
+      console.count("CONNECTING");
       connectKeplr();
     }
     connect();
@@ -266,7 +268,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       walletDispatch && walletDispatch(obj);
     };
 
-    console.log("finna connect");
     connect();
 
     // activateWebSocket({

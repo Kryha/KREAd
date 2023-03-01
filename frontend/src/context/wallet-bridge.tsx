@@ -40,7 +40,6 @@ const WalletBridge = () => {
   const [bridgeApproved, setBridgeApproved] = useState(false);
   const bridgeHref = prodBridgeHref;
   const walletUIRef = walletUiHref();
-  console.log(walletUIRef);
 
   const showWarning = () => {
     console.log("warning");
@@ -61,7 +60,6 @@ const WalletBridge = () => {
       setBridgeApproved(true);
       showConnectionSuccessful();
     }
-    console.log(addOffer, ev);
     agoricDispatch({ type: "SET_ADD_OFFER", payload: addOffer });
   };
 

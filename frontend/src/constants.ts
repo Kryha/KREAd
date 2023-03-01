@@ -94,6 +94,8 @@ export const dappConfig = {
   INSTANCES_KEY: ":published.agoricNames.instance",
 };
 
+export const KREAD_STORAGE_NODE_PATH = ":published.kread";
+
 export const networkConfigs = {
   mainnet: {
     label: "Agoric Mainnet",

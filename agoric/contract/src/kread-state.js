@@ -199,13 +199,17 @@ export const kreadState = ({
 
   /**
    *
-   * @param {string} boardId
-   * @param id
+   * @param {string} id
+   * @param publicFacet
    */
-  const boardId = (id) => {
-    assert(boardId, errors.invalidArg);
-    state.boardId = boardId;
-    state.notifiers.info.publisher.publish({ boardId: id });
+  const publishKreadInfo = (id, publicFacet) => {
+    assert(id, errors.invalidArg);
+    state.boardId = id;
+    state.notifiers.info.publisher.publish({
+      boardId: id,
+      tokenInfo: state.tokenInfo,
+      publicFacet,
+    });
   };
 
   // Full access getters
@@ -239,7 +243,7 @@ export const kreadState = ({
   // Replaces specific entries in the state
   const set = Far('kread state set', {
     powers: setPowers,
-    boardId,
+    publishKreadInfo,
   });
 
   // Limited getters

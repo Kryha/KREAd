@@ -249,15 +249,7 @@ const start = async (zcf, privateArgs) => {
     return 'Success';
   };
 
-  const creatorFacet = Far('Character store creator', {
-    getCharacterIssuer: () => characterIssuer,
-    getItemIssuer: () => itemIssuer,
-    getItemBrand: () => itemBrand,
-    getState: () => state,
-    setBoardId: state.set.boardId,
-  });
-
-  const publicFacet = Far('Chracter store public', {
+  const publicFacet = Far('KREAd public facet', {
     makeTokenFacetInvitation: () =>
       zcf.makeInvitation(tokenFacet, 'get tokens'), // FIXME: RESTRICT PRIVILEGED FN
 
@@ -280,6 +272,14 @@ const start = async (zcf, privateArgs) => {
     getAllItemHistory: () => itemHistory.entries(),
 
     ...market(zcf, () => state),
+  });
+
+  const creatorFacet = Far('KREAd creator facet', {
+    getCharacterIssuer: () => characterIssuer,
+    getItemIssuer: () => itemIssuer,
+    getItemBrand: () => itemBrand,
+    getState: () => state,
+    publishKreadInfo: state.set.publishKreadInfo,
   });
 
   return harden({ creatorFacet, publicFacet });

@@ -9,6 +9,10 @@ import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { useCreateCharacter } from "./character";
 import styled from "@emotion/styled";
+import { vstorage } from "./utils/vstorage";
+import { LOCAL_DEVNET_RPC } from "../constants";
+import { setupStorageNodeFollower } from "./util";
+import { watchInstanceIds } from "./utils/updates";
 
 export const TestServiceUI = () => {
   const [service] = useAgoricContext();
@@ -81,8 +85,10 @@ export const TestServiceUI = () => {
   };
 
   const test = async () => {
-    const powers = await E(publicFacet).getCount();
-    console.log(powers);
+    kreadInfo()
+    // queryVStorage();
+    // const powers = await E(publicFacet).getCount();
+    // console.log(powers);
   };
 
   const getCharacterInventory = async () => {
@@ -93,39 +99,66 @@ export const TestServiceUI = () => {
     console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters[0].nft.name));
   };
 
+  const data = {
+    jsonrpc: "2.0",
+    // id:1,
+    method:"abci_query",
+    params: { path:"/custom/vstorage/children/"}
+  };
+
+  const getJSON = async (url: string, data: object) => {
+    const res: any = await (await fetch(url, {
+      method: "POST",
+      // headers: {
+      //   'Accept': 'application/json'
+      // },
+      body: JSON.stringify(data),
+    })).json();
+    console.log(res)
+    return res;
+  };
+
+  const queryVStorage = async () => {
+    // getJSON(LOCAL_DEVNET_RPC);  
+    // console.log(vstorage.url());
+    console.log(await vstorage.read(undefined, getJSON));
+  }
+
+  const kreadInfo = async () => {
+    console.log("info")
+    await watchInstanceIds(service.walletConnection.leader, service.walletConnection.unserializer)
+  }
   const Container = styled.div`
-    width: 100vw;
-    height: 100vh;
-    background: #333;
+    width: 100%;
+    height: 100%;
+    /* background: #333; */
     display: flex;
-    align-content: flex-start;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 30px;
-    padding: 0 30vw;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
   `;
 
   const Title = styled.h1`
     width: 500px;
     text-align: center;
-    margin-top: 200px;
+    margin-top: 70px;
   `;
 
   const Button = styled.button`
     margin: 30px 15px 0;
-    flex-basis: 220px;
-    border-radius: 4px;
+    border-radius: 7px;
     height: 40px;
     width: 300px;
     background: transparent;
     border: #81ffad solid 4px;
-    color: #81ffad;
     font-weight: light;
     cursor: pointer;
+    color: #333;
 
     &:hover {
-      background: #86f4ad;
+      background: #333;
+      border-color: #333;
+      color: #81ffad;
     }
 
     &:active {

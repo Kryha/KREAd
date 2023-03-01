@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-96adb1434057fdb5f19fb47868b97cc119752f93c7e82caa56824140b73f219baed75ddc1b563db3a7adab136d921be2ac233ed4d60cb3d38f2c17864aaba328',
+    'b1-a0dcc75b5c8e5912d70af54138dbb606e8c96fcc4d80846743cf11e53827fc5e96d2f172aaa4b40352397c6ea1a60fb4b7ba0113af55631c3f9b68410a19fe61',
 };
 
 const fail = (reason) => {
@@ -401,7 +401,7 @@ const executeProposal = async (powers) => {
   );
 
   // Get board ids for instance and assets
-  const instance = await E(board).getId(facets.instance);
+  const instanceBoardId = await E(board).getId(facets.instance);
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
@@ -434,11 +434,17 @@ const executeProposal = async (powers) => {
   };
 
   // Log board ids for use in frontend constants
-  console.log(`KREAD BOARD ID: ${instance}`);
+  console.log(`KREAD BOARD ID: ${instanceBoardId}`);
   for (const [key, value] of Object.entries(assetBoardIds)) {
     console.log(`${key.toUpperCase()} BRAND BOARD ID: ${value.brand}`);
     console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
   }
+  console.log(facets.publicFacet, facets.creatorFacet);
+
+  await E(facets.creatorFacet).publishKreadInfo(
+    instanceBoardId,
+    facets.publicFacet,
+  );
 
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(facets.instance);
@@ -449,4 +455,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=../../../REPO/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/carlostrigoseguin/Documents/KRYHA/agoric/REPO/agoric/contract/src/proposal/chain-storage-proposal.js

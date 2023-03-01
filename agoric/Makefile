@@ -45,10 +45,14 @@ client-local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-run-client BASE_PORT=8000; \
 
+provision-account:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS) \
+
 proposal:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval scenario2-vote \
 
-provision-account:
+proposal-2:
 	cd $(COSMIC_SWINGSET_PATH); \
-	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS) \
+	make scenario2-core-eval scenario2-vote VOTE_PROPOSAL=2 \

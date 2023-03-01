@@ -209,7 +209,7 @@
  *   }
  *   set: {
  *     powers: (powers: Powers, notifiers: Notifiers) => void
- *     boardId: (boardId: string) => void
+ *     publishKreadInfo: (boardId: string, publicFacet: object) => void
  *   }
  *   add: {
  *     characters: (characters: CharacterRecord[]) => void
