@@ -14,10 +14,16 @@ const abciQuery = async (path: string, node: string = "http://localhost:26657"):
     }),
   };
 
-  const res = await fetch(node, options);
-  const d = await res.json();
+  try {
+    const result = await fetch(node, options);
+    const data = await result.json();
 
-  return JSON.parse(atob(d?.result?.response?.value));
+    return JSON.parse(atob(data.result.response.value));
+  } catch (error) {
+    console.error(`Error occured at abciQuery(): ${error}`);
+
+    return { children: [], value: "" };
+  }
 };
 
 export const getChildren = async (path: string): Promise<string[]> => {
