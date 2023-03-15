@@ -1,4 +1,6 @@
 export const DEFAULT_NODE_URL = "http://localhost:26657";
+export const CHILDREN_PATH = "/custom/vstorage/children";
+export const DATA_PATH = "/custom/vstorage/data";
 
 export type AbciQueryResponse = {
   children?: string[];
@@ -29,7 +31,7 @@ export const abciQuery = async (path: string, nodeUrl: string = DEFAULT_NODE_URL
 };
 
 export const getChildren = async (path: string): Promise<string[]> => {
-  const { children } = await abciQuery(`/custom/vstorage/children/${path}`);
+  const { children } = await abciQuery(`${CHILDREN_PATH}/${path}`);
 
   if (!children) {
     return [];
@@ -51,7 +53,7 @@ export const getChildren = async (path: string): Promise<string[]> => {
 };
 
 export const getChildData = async (child: string): Promise<string[]> => {
-  const { value } = await abciQuery(`/custom/vstorage/data/${child}`);
+  const { value } = await abciQuery(`${DATA_PATH}/${child}`);
 
   if (!value) {
     return [];

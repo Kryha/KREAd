@@ -1,4 +1,4 @@
-import { abciQuery, getChildren, getChildData, DEFAULT_NODE_URL } from "./vstorage";
+import { abciQuery, getChildren, getChildData, DEFAULT_NODE_URL, CHILDREN_PATH, DATA_PATH } from "./vstorage";
 
 const setupFetchMock = (getResponseValue: (path: string) => string) => {
   global.fetch = jest.fn((_, { body }) => {
@@ -29,7 +29,7 @@ describe("abciQuery", () => {
   });
 
   it("calls fetch with the correct parameters", async () => {
-    await abciQuery("/custom/vstorage/children/path");
+    await abciQuery(`${CHILDREN_PATH}/path`);
 
     expect(fetch).toHaveBeenCalledWith(DEFAULT_NODE_URL, {
       method: "POST",
@@ -37,13 +37,13 @@ describe("abciQuery", () => {
         jsonrpc: "2.0",
         id: 1,
         method: "abci_query",
-        params: { path: "/custom/vstorage/children/path" },
+        params: { path: `${CHILDREN_PATH}/path` },
       }),
     });
   });
 
   it("returns the expected data", async () => {
-    const result = await abciQuery("/custom/vstorage/children/path");
+    const result = await abciQuery(`${CHILDREN_PATH}/path`);
 
     expect(result).toEqual({ value: "mock data" });
   });
@@ -51,7 +51,7 @@ describe("abciQuery", () => {
   it("returns a default value when an error occurs", async () => {
     global.fetch = jest.fn(() => Promise.reject("error")) as any;
 
-    const result = await abciQuery("/custom/vstorage/children/path");
+    const result = await abciQuery(`${CHILDREN_PATH}/path`);
 
     expect(result).toEqual({ children: [], value: "" });
   });
@@ -62,9 +62,9 @@ describe("getChildren", () => {
     setupFetchMock((path) => {
       let value: any;
 
-      if (path === "/custom/vstorage/children/path") {
+      if (path === `${CHILDREN_PATH}/path`) {
         value = { children: ["child1", "child2"] };
-      } else if (path === "/custom/vstorage/children/path.child1") {
+      } else if (path === `${CHILDREN_PATH}/path.child1`) {
         value = { children: ["subchild1", "subchild2"] };
       } else {
         value = { children: [] };
@@ -96,7 +96,7 @@ describe("getChildData", () => {
     setupFetchMock((path) => {
       let value: any;
 
-      if (path === "/custom/vstorage/data/child") {
+      if (path === `${DATA_PATH}/child`) {
         value = {
           value: JSON.stringify({
             values: [
