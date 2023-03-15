@@ -1,9 +1,11 @@
-type AbciQueryResponse = {
+export const DEFAULT_NODE_URL = "http://localhost:26657";
+
+export type AbciQueryResponse = {
   children?: string[];
   value?: string;
 };
 
-const abciQuery = async (path: string, node: string = "http://localhost:26657"): Promise<AbciQueryResponse> => {
+export const abciQuery = async (path: string, nodeUrl: string = DEFAULT_NODE_URL): Promise<AbciQueryResponse> => {
   const options = {
     method: "POST",
     body: JSON.stringify({
@@ -15,7 +17,7 @@ const abciQuery = async (path: string, node: string = "http://localhost:26657"):
   };
 
   try {
-    const result = await fetch(node, options);
+    const result = await fetch(nodeUrl, options);
     const data = await result.json();
 
     return JSON.parse(atob(data.result.response.value));
@@ -27,16 +29,16 @@ const abciQuery = async (path: string, node: string = "http://localhost:26657"):
 };
 
 export const getChildren = async (path: string): Promise<string[]> => {
-  const { children: keys } = await abciQuery(`/custom/vstorage/children/${path}`);
+  const { children } = await abciQuery(`/custom/vstorage/children/${path}`);
 
-  if (!keys) {
+  if (!children) {
     return [];
   }
 
   const allPaths: string[] = [];
 
   await Promise.all(
-    keys.map(async (key: string) => {
+    children.map(async (key: string) => {
       const subPath = path === "" ? key : `${path}.${key}`;
       allPaths.push(subPath);
 
@@ -49,13 +51,13 @@ export const getChildren = async (path: string): Promise<string[]> => {
 };
 
 export const getChildData = async (child: string): Promise<string[]> => {
-  const rawData = await abciQuery(`/custom/vstorage/data/${child}`);
+  const { value } = await abciQuery(`/custom/vstorage/data/${child}`);
 
-  if (!rawData.value) {
+  if (!value) {
     return [];
   }
 
-  const { values } = JSON.parse(rawData.value);
+  const { values } = JSON.parse(value);
   const data: string[] = [];
 
   values.map((v: string) => {
