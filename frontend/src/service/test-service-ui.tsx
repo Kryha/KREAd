@@ -4,15 +4,11 @@ import { useEffect } from "react";
 import dappConstants from "../service/conf/defaults";
 import { useAgoricContext } from "../context/agoric";
 import { useCharacterMarketState } from "../context/character-shop";
-import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { useCreateCharacter } from "./character";
 import styled from "@emotion/styled";
-import { vstorage } from "./utils/vstorage";
-import { LOCAL_DEVNET_RPC } from "../constants";
-import { setupStorageNodeFollower } from "./util";
-import { watchInstanceIds } from "./utils/updates";
+import { getChildData, getChildren } from "./utils/vstorage";
 
 export const TestServiceUI = () => {
   const [service] = useAgoricContext();
@@ -49,12 +45,7 @@ export const TestServiceUI = () => {
   const purses = useWalletState();
 
   const topUp = async () => {
-    // const invitation = await E(publicFacet).makeTokenFacetInvitation();
-    // const tokenPurse = purses.token;
-
     const serializedInstance = await E(service.walletConnection.unserializer).serialize(INSTANCE_NFT_MAKER_BOARD_ID);
-    // if (!tokenPurse) return;
-
     const offer = harden({
       publicInvitationMaker: "topUp",
       instanceHandle: serializedInstance,
@@ -70,7 +61,6 @@ export const TestServiceUI = () => {
     });
 
     console.log(service.addOffer(offer));
-    // console.log(await E(service.agoric.walletP).addOffer(offer))
   };
 
   const removeItemFromInventory = async () => {
@@ -84,11 +74,29 @@ export const TestServiceUI = () => {
     console.log("done");
   };
 
-  const test = async () => {
-    kreadInfo()
-    // queryVStorage();
-    // const powers = await E(publicFacet).getCount();
-    // console.log(powers);
+  const getStorageChildren = async () => {
+    const children = await getChildren("published.kread");
+    console.log(`👦👧 Available children:`);
+    children.map((child) => console.log(`\t- ${child}`));
+
+    return children;
+  };
+
+  const getStorageData = async () => {
+    const children = await getStorageChildren();
+    const data: string[] = [];
+
+    await Promise.all(
+      children.map(async (child: string) => {
+        const key = child.split(".").pop();
+        console.log(`💽 Getting data for "${key}"`);
+
+        const childData = await getChildData(child);
+        data.push(...childData);
+      })
+    );
+
+    console.log("📦 Storage data:", data);
   };
 
   const getCharacterInventory = async () => {
@@ -98,36 +106,6 @@ export const TestServiceUI = () => {
     }
     console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters[0].nft.name));
   };
-
-  const data = {
-    jsonrpc: "2.0",
-    // id:1,
-    method:"abci_query",
-    params: { path:"/custom/vstorage/children/"}
-  };
-
-  const getJSON = async (url: string, data: object) => {
-    const res: any = await (await fetch(url, {
-      method: "POST",
-      // headers: {
-      //   'Accept': 'application/json'
-      // },
-      body: JSON.stringify(data),
-    })).json();
-    console.log(res)
-    return res;
-  };
-
-  const queryVStorage = async () => {
-    // getJSON(LOCAL_DEVNET_RPC);  
-    // console.log(vstorage.url());
-    console.log(await vstorage.read(undefined, getJSON));
-  }
-
-  const kreadInfo = async () => {
-    console.log("info")
-    await watchInstanceIds(service.walletConnection.leader, service.walletConnection.unserializer)
-  }
   const Container = styled.div`
     width: 100%;
     height: 100%;
@@ -176,7 +154,7 @@ export const TestServiceUI = () => {
         <Button onClick={removeItemFromInventory}>REMOVE FROM INVENTORY</Button>
         <Button onClick={async () => await getCharacterInventory()}>GET CHARACTER INVENTORY</Button>
         <Button onClick={() => console.log(characters)}>CHARACTERS</Button>
-        <Button onClick={test}>TEST</Button>
+        <Button onClick={getStorageData}>GET STORAGE DATA</Button>
       </Container>
     </>
   );

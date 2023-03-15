@@ -31,7 +31,7 @@ wallet1:
 deploy:
 	agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js
 
-kread-bundle: 
+kread-bundle:
 	cd $(VATS_PATH); \
   yarn bundle-source --cache-json bundles/ ../../../REPO/agoric/contract/src/index.js kread; \
 	agoric publish --node 127.0.0.1:26657 bundles/bundle-kread.json --chain-id agoriclocal --home ../cosmic-swingset/t1/8000; \
@@ -40,7 +40,7 @@ local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-setup BASE_PORT=8000 NUM_SOLOS=0; \
 	make scenario2-run-chain; \
- 
+
 client-local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-run-client BASE_PORT=8000; \
@@ -56,3 +56,8 @@ proposal:
 proposal-2:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval scenario2-vote VOTE_PROPOSAL=2 \
+
+bootstrap:
+	make provision-account; \
+	make kread-bundle; \
+	make proposal; \
