@@ -30,7 +30,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
   const [walletState, walletDispatch] = useState<WalletContext>(initialState);
   const agoric = useAgoricState();
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
-  const pursesNotifier = agoric.walletConnection.pursesNotifier
+  const pursesNotifier = agoric.walletConnection.pursesNotifier;
 
   useEffect(() => {
     const observer = harden({
