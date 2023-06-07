@@ -78,15 +78,6 @@ test("unequip", async (t) => {
   const itemAmount = AmountMath.make(itemBrand, [{ id: 1, name: "TestItem", category: "hair" }]);
   const itemPayment = itemKit.mint.mintPayment(itemAmount);
 
-  // Make sure an error is thrown if no item is requested
-  const unequipInvitation = E(publicFacet).makeUnequipInvitation();
-  const badProposal = harden({
-    give: { CharacterKey1: characterAmount },
-    want: { CharacterKey2: characterAmount },
-  });
-  const badPayments = harden({ CharacterKey1: characterPayment });
-  await t.throwsAsync(async () => await E(zoe).offer(unequipInvitation, badProposal, badPayments), { message: errors.noItemsRequested });
-
   // Equip an item to the character first
   const equipInvitation = E(publicFacet).makeEquipInvitation();
   const equipProposal = harden({
@@ -95,6 +86,15 @@ test("unequip", async (t) => {
   });
   const equipPayments = harden({ CharacterKey1: characterPayment, Item: itemPayment });
   await E(zoe).offer(equipInvitation, equipProposal, equipPayments);
+
+  // Make sure an error is thrown if no item is requested
+  const unequipInvitation = E(publicFacet).makeUnequipInvitation();
+  const badProposal = harden({
+    give: { CharacterKey1: characterAmount },
+    want: { CharacterKey2: characterAmount },
+  });
+  const badPayments = harden({ CharacterKey1: characterPayment });
+  await t.throwsAsync(async () => await E(zoe).offer(unequipInvitation, badProposal, badPayments), { message: errors.noItemsRequested });
 
   // Now unequip the item from the character
   const proposal = harden({
