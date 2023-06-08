@@ -28,26 +28,20 @@ export const InternalAppRoutes: FC = () => {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
-      <MainContainer>
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
-
           <Route path={routes.character} element={<Landing />} />
           <Route path={`${routes.items}/:category`} element={<ItemPage />} />
           <Route path={routes.shop} element={<Shop />} />
           <Route path={routes.inventory} element={<Inventory />} />
           <Route path={routes.createCharacter} element={<CreateCharacter />} />
-
           <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
           <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
-
           <Route path={"/test"} element={<TestServiceUI />} />
-
           <Route path="*" element={<ErrorView />} />
         </Routes>
-      </MainContainer>
     </ErrorBoundary>
   );
 };
