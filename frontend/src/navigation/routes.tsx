@@ -9,6 +9,7 @@ import { ItemPage } from '../pages';
 import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
+import { DevelopmentMode } from '../service/test-service/development-mode';
 
 export const InternalAppWrapper = () => {
   return (
@@ -52,6 +53,7 @@ export const ExternalAppRoutes: FC = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
       <MainContainer>
+        <DevelopmentMode/>
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
           <Route path={routes.privacy} element={<Privacy />} />
