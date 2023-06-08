@@ -5,8 +5,8 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { routes } from "./route-names";
 import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemSell, CharacterSell, Onboarding, Privacy } from "../pages";
 import { MainContainer, ErrorFallback, LoadingPage, ErrorView } from "../components";
-import { ItemPage } from "../pages/item";
-import { TestServiceUI } from "../service/test-service-ui";
+import { ItemPage } from '../pages';
+import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
 
