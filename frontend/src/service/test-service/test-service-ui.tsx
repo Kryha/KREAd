@@ -149,7 +149,7 @@ export const TestServiceUI = () => {
 
 
 const Container = styled.div`
-  display: grid;
+  display: flex;
   flex-direction: column;
   border-radius: 0;
   position: relative;
