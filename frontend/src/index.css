@@ -1,19 +1,6 @@
-* {
-  margin: 0;
-}
-
-div {
-  box-sizing: border-box;
-}
+/* Global styling that remains consistent throughout the app */
 
 body {
-  margin: 0;
-  font-family:  'aktiv-grotesk',-apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'aktiv-grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
