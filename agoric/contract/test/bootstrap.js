@@ -19,7 +19,6 @@ export const bootstrap = async (conf) => {
   const contractBundle = await bundleSource(conf?.contractPath);
   const installation = await E(zoe).install(contractBundle);
   console.log({ installation });
-  console.log("PARGS", conf.privateArgs);
 
   const privateArgs = {
     storageNode: makeMockChainStorageRoot().makeChildNode("thisElectorate"),
@@ -38,6 +37,8 @@ export const bootstrap = async (conf) => {
       },
     ],
   };
+  console.log("privateArgs", privateArgs);
+  console.log("privateArgs.storageNode", privateArgs.storageNode);
 
   // Start contract instance
   // console.log("IKR", assets.issuerKeywordRecord);
