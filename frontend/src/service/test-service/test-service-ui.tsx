@@ -156,7 +156,7 @@ const Container = styled.div`
   min-height: 100vh;
   height: 100%;
   isolation: isolate;
-  background: hsl(210deg, 30%, 8%);
+  background: hsl(216, 17%, 17%);
   color: #fff;
   `;
 
