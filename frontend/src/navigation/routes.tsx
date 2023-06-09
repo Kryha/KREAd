@@ -10,6 +10,7 @@ import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
 import { DevelopmentMode } from '../service/test-service/development-mode';
+import { isDevelopmentMode } from '../constants';
 
 export const InternalAppWrapper = () => {
   return (
@@ -40,7 +41,11 @@ export const InternalAppRoutes: FC = () => {
           <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
           <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
           <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
-          <Route path={"/test"} element={<TestServiceUI />} />
+
+          {isDevelopmentMode && (
+            <Route path={"/test"} element={<TestServiceUI />} />
+          )}
+
           <Route path="*" element={<ErrorView />} />
         </Routes>
     </ErrorBoundary>
