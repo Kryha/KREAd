@@ -5,6 +5,21 @@ import { bootstrap } from "./bootstrap.js";
 test.before(async (t) => {
   const config = {
     contractPath: "./src/index.js",
+    // privateArgs: {
+    //   defaultCharacters: [
+    //     {
+    //       id: 1,
+    //       name: "TestCharacter",
+    //     },
+    //   ],
+    //   defaultItems: [
+    //     {
+    //       id: 1,
+    //       name: "TestItem",
+    //       category: "hair",
+    //     },
+    //   ],
+    // },
   };
 
   const { zoe, instance } = await bootstrap(config);

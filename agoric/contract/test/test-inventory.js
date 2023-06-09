@@ -1,7 +1,8 @@
+// eslint-disable-next-line import/order
 import { test } from "./prepare-test-env-ava.js";
 import { E } from "@endo/eventual-send";
-import { bootstrap } from "./bootstrap.js";
 import { AmountMath, makeIssuerKit, AssetKind } from "@agoric/ertp";
+import { bootstrap } from "./bootstrap.js";
 import { errors } from "../src/errors.js";
 
 test.before(async (t) => {
