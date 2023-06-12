@@ -12,7 +12,11 @@ import { getTokenInfo } from "../service/util";
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   // INSTALLATION_BOARD_ID,
-  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, Token: TOKEN_ISSUER_BOARD_ID },
+  issuerBoardIds: {
+    Character: CHARACTER_ISSUER_BOARD_ID,
+    Item: ITEM_ISSUER_BOARD_ID,
+    Token: TOKEN_ISSUER_BOARD_ID
+  },
 } = dappConstants;
 
 const initialState: AgoricState = {
