@@ -13,6 +13,7 @@ import { routes } from '../../navigation';
 import { useNavigate } from 'react-router-dom';
 import { fontSize } from '../../design';
 import StatusIndicator from './service-status-indicator';
+import { useDataMode } from '../../hooks/use-data-mode';
 
 export const TestServiceUI = () => {
   const [service] = useAgoricContext();
@@ -20,6 +21,7 @@ export const TestServiceUI = () => {
   const shop = useCharacterMarketState();
   const createCharacter = useCreateCharacter();
   const navigate = useNavigate();
+  const { selectDataMode} = useDataMode();
 
   console.log("---------------TESTUI", shop);
   const publicFacet = service.contracts.characterBuilder.publicFacet;
@@ -27,7 +29,8 @@ export const TestServiceUI = () => {
   useEffect(() => {
     console.log("SERVICE:", service);
     console.log("CHARACTERS: ", characters);
-  }, [service, characters]);
+    console.log("Data Mode: ", selectDataMode);
+  }, [service, characters, selectDataMode]);
 
   const mintCharacterNFT = async () => {
     await createCharacter.mutateAsync({
