@@ -9,6 +9,7 @@ import { routes } from '../../navigation';
 import { Link } from 'react-router-dom';
 import { isDevelopmentMode } from '../../constants';
 import { Tick } from '../../pages/buy/styles';
+import { useDataMode } from '../../hooks/use-data-mode';
 
 interface ModalProps {
   isOpen: boolean;
@@ -92,10 +93,11 @@ const Modal: React.FC<ModalProps> =
       onClose
     }
   ) => {
-  const { height } = useViewport();
 
+    const { height } = useViewport();
     const modalRef = useRef<HTMLDivElement>(null);
     const [selected, setSelected] = useState(-1);
+    const { dataModeSelector} = useDataMode();
 
     const handleButtonClick = (index: number) => {
       setSelected(index);
@@ -128,6 +130,7 @@ const Modal: React.FC<ModalProps> =
   return (
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
     <ModalContainer ref={modalRef} height={height}>
+      {dataModeSelector}
         {buttonLinks.map((button, index) => (
           <ModalContent
             selected={selected === index}
@@ -177,7 +180,7 @@ const ModalWrapper = styled.div<ModalProps>`
 ` ;
 
 const ModalContainer = styled.div<ViewProps>`
-  width: 180px;
+  width: 350px;
   border: 1px solid ${color.grey};
   border-radius: ${margins.small};
   background: ${color.lightGrey};
