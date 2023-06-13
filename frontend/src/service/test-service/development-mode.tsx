@@ -129,26 +129,30 @@ const Modal: React.FC<ModalProps> =
 
   return (
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
-    <ModalContainer ref={modalRef} height={height}>
-      {dataModeSelector}
-        {buttonLinks.map((button, index) => (
-          <ModalContent
-            selected={selected === index}
-            key={index}
-            onClick={() => {
-              setSelected(-1);
-            }}
-          >
-          <ButtonText
-            key={index}
-            customColor={selected === index ? color.black : color.darkGrey}
-            onClick={() => handleButtonClick(index)}
-          >
-            <Link to={button.route}>{button.text}</Link>
-          </ButtonText>
-          </ModalContent>
-        ))}
-    </ModalContainer>
+      <ModalContainer ref={modalRef} height={height}>
+        <ModalHeader>
+          {dataModeSelector}
+        </ModalHeader>
+        <ModalContents>
+          {buttonLinks.map((button, index) => (
+            <ModalContent
+              selected={selected === index}
+              key={index}
+              onClick={() => {
+                setSelected(-1);
+              }}
+            >
+              <ButtonText
+                key={index}
+                customColor={selected === index ? color.black : color.darkGrey}
+                onClick={() => handleButtonClick(index)}
+              >
+                <Link to={button.route}>{button.text}</Link>
+              </ButtonText>
+            </ModalContent>
+          ))}
+        </ModalContents>
+      </ModalContainer>
     </ModalWrapper>
   );
 };
@@ -180,7 +184,6 @@ const ModalWrapper = styled.div<ModalProps>`
 ` ;
 
 const ModalContainer = styled.div<ViewProps>`
-  width: 350px;
   border: 1px solid ${color.grey};
   border-radius: ${margins.small};
   background: ${color.lightGrey};
@@ -189,12 +192,26 @@ const ModalContainer = styled.div<ViewProps>`
   flex-direction: column;
   padding: ${margins.medium};
   ${({ height }): string => `max-height: ${height - 250}px;`};
-  overflow-y: scroll;
 
   &.open {
     opacity: 1;
     visibility: visible;
   }
+  `;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: ${margins.medium};
+  border-bottom: 1px solid ${color.grey};
+  `;
+
+const ModalContents = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none;
   `;
 
 const ModalContent = styled.div<ModalContentProps>`
