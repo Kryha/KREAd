@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/order
 import bundleSource from "@endo/bundle-source";
 import { E } from "@endo/eventual-send";
 import { setupZoe, setupAssets } from "./setup.js";
@@ -16,13 +15,14 @@ export const bootstrap = async (conf) => {
   const assets = setupAssets(conf?.assets);
 
   // Bundle and install contract
-  const contractBundle = await bundleSource(conf?.contractPath);
+  const contractBundle = await bundleSource("./src/index.js");
   const installation = await E(zoe).install(contractBundle);
-  console.log({ installation });
 
   const privateArgs = {
-    storageNode: makeMockChainStorageRoot().makeChildNode("thisElectorate"),
-    marshaller: makeFakeBoard().getReadonlyMarshaller(),
+    powers: {
+      storageNode: makeMockChainStorageRoot().makeChildNode("thisElectorate"),
+      marshaller: makeFakeBoard().getReadonlyMarshaller(),
+    },
     defaultCharacters: [
       {
         id: 1,
@@ -37,20 +37,15 @@ export const bootstrap = async (conf) => {
       },
     ],
   };
-  console.log("privateArgs", privateArgs);
-  console.log("privateArgs.storageNode", privateArgs.storageNode);
 
   // Start contract instance
-  // console.log("IKR", assets.issuerKeywordRecord);
   const instance = await E(zoe).startInstance(installation, assets.issuerKeywordRecord, undefined, privateArgs);
-  console.log({ instance });
 
   const result = {
     assets,
     instance,
     zoe,
   };
-  console.log({ result });
 
   harden(result);
   return result;

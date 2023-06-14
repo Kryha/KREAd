@@ -30,13 +30,13 @@ export const setupAssets = (conf) => {
   if (!conf.fts) conf.fts = [];
   if (!conf.nfts) conf.nfts = [];
 
-  /** @type {Object.<string, AssetObject>} */
+  /** @type {object.<string, AssetObject>} */
   const fts = {};
 
-  /** @type {Object.<string, AssetObject>} */
+  /** @type {object.<string, AssetObject>} */
   const nfts = {};
 
-  /** @type {Object.<string, AssetObject>} */
+  /** @type {object.<string, AssetObject>} */
   const all = {};
 
   // Merge asset conf with default assets

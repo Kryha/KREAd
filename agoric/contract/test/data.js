@@ -1,5 +1,5 @@
-const fts = ["moola", "bucks", "pesos", "pavos", "mctokens"];
-const nfts = ["kread"];
+const fts = ["Moola", "bucks", "pesos", "pavos", "mctokens"];
+const nfts = ["Character", "CharacterKey1", "CharacterKey2", "Item"];
 export const defaultAssets = {
   fts,
   nfts,
@@ -7,6 +7,6 @@ export const defaultAssets = {
 };
 
 export const flow = {
-  sad: `👎 sad   flow`,
+  sad: `👎 sad flow`,
   happy: `👍 happy flow`,
 };
