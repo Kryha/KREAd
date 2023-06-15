@@ -49,6 +49,10 @@ provision-account:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS) \
 
+fund-account:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=100000000000ibc/toyusdc\
+
 proposal:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval scenario2-vote \

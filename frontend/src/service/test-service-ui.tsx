@@ -1,7 +1,7 @@
 /// <reference types="ses"/>
 import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
-import dappConstants from "../service/conf/defaults";
+import dappConstants from "../service/ag-solo-connection/conf/defaults";
 import { useAgoricContext } from "../context/agoric";
 import { useCharacterMarketState } from "../context/character-shop";
 import { useUserState } from "../context/user";

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { observeIteration } from "@agoric/notifier";
 import { useAgoricState } from "./agoric";
 
-import dappConstants from "../service/conf/defaults";
+import dappConstants from "../service/ag-solo-connection/conf/defaults";
 
 const { brandBoardIds } = dappConstants;
 export interface WalletContext {
