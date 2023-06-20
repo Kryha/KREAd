@@ -1,16 +1,23 @@
-import { E } from "@endo/eventual-send";
+import { E } from '@endo/eventual-send';
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
-import { useAgoricState } from "./agoric";
-import { useWalletState } from "./wallet";
-import { ItemActivityEventBackend, CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
-import { mediate } from "../util";
-import { itemCategories } from "../service/util";
-import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
-import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
-import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
+import { useAgoricState } from './agoric';
+import { useWalletState } from './wallet';
+import {
+  CharacterBackend,
+  ExtendedCharacter,
+  ExtendedCharacterBackend,
+  Item,
+  ItemActivityEventBackend,
+  ItemBackend,
+} from '../interfaces';
+import { mediate } from '../util';
+import { itemCategories } from '../service/util';
+import { dedupArrById, replaceCharacterInventoryInUserStateArray } from '../util/other';
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from '../constants';
+import { iterateLatest, makeCastingSpec, makeFollower, makeLeader } from '@agoric/casting';
 import { mockData } from '../service/mock-data/mockData';
 import { mockItemsEquipped } from '../service/mock-data/mockItems';
-import { DataMode, useDataMode } from '../hooks/use-data-mode';
+import { useDataMode } from '../hooks/use-data-mode';
 
 export interface UserContext {
   characters: ExtendedCharacter[];
@@ -143,9 +150,11 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
 
 export const UserContextProvider = (props: ProviderProps): React.ReactElement => {
 
-  const { selectDataMode} = useDataMode();
+  const { mockData} = useDataMode();
 
-  const [userState, userStateDispatch] = useReducer(Reducer, selectDataMode === DataMode.Mock ? initialMockState : initialState);
+  const [userState, userStateDispatch] =
+    useReducer(Reducer, mockData ? initialMockState : initialState);
+
   const wallet = useWalletState();
   const agoric = useAgoricState();
 
