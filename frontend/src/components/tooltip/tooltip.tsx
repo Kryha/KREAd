@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react";
-import { InfoPosition } from "../../interfaces/layout.types";
+import React, { FC, useEffect, useState } from 'react';
+import { InfoPosition } from '../../interfaces';
 import { TooltipContent, TooltipWrap } from "./styles";
 
 interface TooltipProps {
@@ -18,8 +18,33 @@ export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }
 
   const hideTip = () => setActive(false);
 
+  const toggleTip = () => setActive(!active);
+
+  useEffect(() => {
+    const handleTouchStart = () => {
+      setActive(true);
+    };
+
+    const handleTouchEnd = () => {
+      setActive(false);
+    };
+
+    document.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
+
   return (
-    <TooltipWrap onMouseEnter={showTip} onMouseLeave={hideTip} onBlur={hideTip}>
+    <TooltipWrap
+      onMouseEnter={showTip}
+      onMouseLeave={hideTip}
+      onClick={toggleTip}
+      onBlur={hideTip}
+    >
       {children}
       {active && (
         <TooltipContent className={position || "left"}>
