@@ -19,10 +19,10 @@ const setLocalStorageData = (key: string, value: any) => {
 
 export const useDataMode = () => {
   const [selectDataMode, setSelectDataMode] = useState<DataMode>(
-    getLocalStorageData('dataMode', DataMode.Mock) // Retrieve the data mode from local storage or use the default value
+    getLocalStorageData('dataMode', DataMode.Mock)
   );
   const [mockData, setMockData] = useState<boolean>(
-    getLocalStorageData('mockData', false) // Retrieve the mock data setting from local storage or use the default value
+    getLocalStorageData('mockData', false)
   );
 
   const dataModeSelector = useMemo(
@@ -34,7 +34,7 @@ export const useDataMode = () => {
           setSelectedIndex={setSelectDataMode}
           selectedIndex={selectDataMode}
         />
-        Reload page to apply changes
+        Reload page to apply data mode change
       </SelectDataMode>
 
     ),
@@ -42,10 +42,10 @@ export const useDataMode = () => {
   );
 
   useEffect(() => {
-    setLocalStorageData('dataMode', selectDataMode); // Store the selected data mode in local storage
+    setLocalStorageData('dataMode', selectDataMode);
 
     if (selectDataMode === DataMode.Mock) {
-      setLocalStorageData('mockData', true); // Store the mock data setting in local storage
+      setLocalStorageData('mockData', true);
       setMockData(true);
     } else {
       setLocalStorageData('mockData', false);
