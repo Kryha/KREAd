@@ -1,16 +1,17 @@
-import { FC, useEffect, useState } from "react";
-import { DefaultIcon, text } from "../../assets";
-import { ErrorView, FormHeader, LoadingPage } from "../../components";
-import { PageContainer } from "../../components/page-container";
-import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
-import { useViewport } from "../../hooks";
-import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
-import { routes } from "../../navigation";
-import { useCreateCharacter, useMyCharacters } from "../../service";
-import { Confirmation } from "./confirmation";
-import { Information } from "./information";
-import { Payment } from "./payment";
-import { DefaultImage, FormCard } from "./styles";
+import { FC, useEffect, useState } from 'react';
+import { DefaultIcon, text } from '../../assets';
+import { ErrorView, FormHeader, LoadingPage } from '../../components';
+import { PageContainer } from '../../components/page-container';
+import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from '../../constants';
+import { useViewport } from '../../hooks';
+import { CharacterCreation, ExtendedCharacter } from '../../interfaces';
+import { routes } from '../../navigation';
+import { useCreateCharacter, useMyCharacters } from '../../service';
+import { Confirmation } from './confirmation';
+import { Information } from './information';
+import { Payment } from './payment';
+import { DefaultImage, FormCard } from './styles';
+import { useMobile } from '../../hooks/use-mobile';
 
 export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
@@ -21,6 +22,7 @@ export const CreateCharacter: FC = () => {
   const [myCharacters, isLoadingCharacters] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
+  const mobile = useMobile();
 
   // TODO: Implement wallet listener for cases where the user doesn't approve the mint
   // const [isWalletError, setIsWalletError] = useState<boolean>(false);
@@ -63,22 +65,24 @@ export const CreateCharacter: FC = () => {
 
   if (isLoadingCharacters) return <LoadingPage spinner={false} />;
 
-  return (
-    <PageContainer
-      sidebarContent={
-        <FormCard height={height} width={width}>
-          <FormHeader
-            currentStep={currentStep}
-            stepAmount={MINT_CHARACTER_FLOW_STEPS}
-            title={text.mint.mintNew}
-            link={routes.character}
-            isPaymentFlow
-          />
-          {perStepDisplay()}
-        </FormCard>
-      }
-    >
-      <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />
-    </PageContainer>
-  );
+    return (
+      <PageContainer
+        sidebarContent={
+          <FormCard height={height} width={width}>
+            <FormHeader
+              currentStep={currentStep}
+              stepAmount={MINT_CHARACTER_FLOW_STEPS}
+              title={text.mint.mintNew}
+              link={routes.character}
+              isPaymentFlow
+            />
+            {perStepDisplay()}
+          </FormCard>
+        }
+      >
+        {!mobile && (
+          <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />
+        )}
+      </PageContainer>
+    );
 };
