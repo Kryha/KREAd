@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
 import { color, fontSize, margins } from "../../design";
 
-export const TooltipWrap = styled.section`
+export const TooltipWrap = styled.div`
   display: inline-block;
   position: relative;
 `;

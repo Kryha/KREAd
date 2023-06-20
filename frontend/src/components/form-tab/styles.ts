@@ -1,20 +1,7 @@
-import styled from "@emotion/styled";
-import { NavLink } from "react-router-dom";
+import styled from '@emotion/styled';
 
-import { NavigationTitle } from "../atoms";
-import { color, margins } from "../../design";
-import { tabWidth } from "../../util";
-
-export const NavTab = styled(NavLink)`
-  text-decoration: none;
-`;
-
-export const NavTabs = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0px;
-`;
+import { NavigationTitle } from '../atoms';
+import { color } from '../../design';
 
 interface NavTabProps {
   active?: boolean;
@@ -28,7 +15,6 @@ interface WidthProps {
 
 export const NavTitle = styled(NavigationTitle)<WidthProps>`
   text-align: center;
-  padding: 0px 0px ${margins.medium} 0px;
   ${({ active }) => {
     return active
       ? `
@@ -52,8 +38,4 @@ export const ActiveLine = styled.div<NavTabProps>`
       border-bottom: 1px solid ${color.grey};
     `;
   }}
-`;
-
-export const Tab = styled.div<WidthProps>`
-  ${({ width, amount }): string => `width: ${tabWidth(width, amount) / amount}px;`};
 `;

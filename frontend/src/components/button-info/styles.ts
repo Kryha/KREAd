@@ -3,8 +3,10 @@ import { SecondaryButton } from "../atoms";
 
 export const ButtonInfoWrap = styled.div`
   display: inline-block;
-  position: relative;
-  top: -12px;
+  position: absolute;
+  right: 0;
+  margin-right: 20px;
+  margin-bottom: 20px;
   ${SecondaryButton} {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
     text-transform: none;
