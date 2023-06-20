@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { InfoPosition } from '../../interfaces';
 import { TooltipContent, TooltipWrap } from "./styles";
 
@@ -13,28 +13,22 @@ interface TooltipProps {
 // TODO: Make it smart so that if the viewport is smaller it finds a better position to pop
 export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }) => {
   const [active, setActive] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
 
   const showTip = () => setActive(true);
-
   const hideTip = () => setActive(false);
 
-  const toggleTip = () => setActive(!active);
+  const clickAwayListener = (event: MouseEvent) => {
+    if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+      hideTip();
+    }
+  };
 
   useEffect(() => {
-    const handleTouchStart = () => {
-      setActive(true);
-    };
-
-    const handleTouchEnd = () => {
-      setActive(false);
-    };
-
-    document.addEventListener('touchstart', handleTouchStart);
-    document.addEventListener('touchend', handleTouchEnd);
+    document.addEventListener('mousedown', clickAwayListener);
 
     return () => {
-      document.removeEventListener('touchstart', handleTouchStart);
-      document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('mousedown', clickAwayListener);
     };
   }, []);
 
@@ -42,12 +36,12 @@ export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }
     <TooltipWrap
       onMouseEnter={showTip}
       onMouseLeave={hideTip}
-      onClick={toggleTip}
+      onClick={showTip}
       onBlur={hideTip}
     >
       {children}
       {active && (
-        <TooltipContent className={position || "left"}>
+        <TooltipContent ref={tooltipRef} className={position || "left"}>
           <h3>{title}</h3>
           <p>{content}</p>
         </TooltipContent>
