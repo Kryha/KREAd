@@ -3,11 +3,12 @@ import React, { createContext, useReducer, useContext, useEffect, useRef } from 
 import { Far } from "@endo/marshal";
 import { makeCapTP, E } from "@endo/captp";
 import { observeIteration } from "@agoric/notifier";
-
 import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
 import { AgoricDispatch, AgoricState, AgoricStateActions } from '../interfaces';
 import { getTokenInfo } from "../service/util";
+import { isDevelopmentMode } from "../constants";
+import { useDataMode } from "../hooks";
 
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
@@ -55,7 +56,7 @@ const initialState: AgoricState = {
       character: { issuer: undefined, brand: undefined },
       item: { issuer: undefined, brand: undefined },
       paymentFT: { issuer: undefined, brand: undefined },
-    }
+    },
   },
   isLoading: true,
 };
@@ -156,7 +157,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       const tokenInfo = await getTokenInfo(kreadFacet, board);
 
-
       dispatch({ type: "SET_TOKEN_INFO", payload: tokenInfo });
       dispatch({ type: "SET_AGORIC", payload: { zoe, board, invitationIssuer, walletP } });
       dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: kreadFacet } });
@@ -219,9 +219,18 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
 export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
+  const { mockData } = useDataMode();
+
   if (state === undefined) {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
+
+  if (isDevelopmentMode) {
+    if (mockData) {
+      state.isLoading = false;
+    }
+  }
+
   return state;
 };
 
