@@ -4,15 +4,12 @@ import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../
 import { breakpoints, color, margins } from "../../design";
 import { Spinner } from "../../components/content-loader/styles";
 
-
 interface ViewProps {
   height: number;
   width: number;
 }
 
-export const DefaultImage = styled(CharacterImgs)<ViewProps>`
-
-`;
+export const DefaultImage = styled(CharacterImgs)<ViewProps>``;
 
 export const Exclamation = styled(ExclamationIcon)`
   margin-right: 20px;
@@ -27,6 +24,7 @@ export const Tick = styled(TickIcon)`
   height: 10px;
   width: 20px;
 `;
+
 interface ActiveProps {
   active: boolean;
 }
@@ -53,7 +51,6 @@ export const FormCard = styled.div<ViewProps>`
     min-width: fit-content;
     max-width: max-content;
   }
-
 `;
 
 export const Warning = styled(WarningIcon)``;
@@ -70,7 +67,7 @@ export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   height: 100%;
- `;
+`;
 
 export const FormFields = styled.div`
   display: flex;
@@ -96,7 +93,6 @@ export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-
 `;
 
 export const ArrowUp = styled(ArrowUpRightIcon)`
@@ -219,12 +215,6 @@ export const NumberContainer = styled.div<ActiveProps>`
 `;
 
 export const PreviousButtonContainer = styled.div`
-  //position: relative;
-  //display: flex;
-  //flex-direction: column;
-  //align-self: flex-start;
-  //justify-content: flex-end;
-  //flex: 1 1 auto;
   :hover {
     ${ArrowUp} {
       path {
@@ -316,4 +306,4 @@ export const Step = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  `;
+`;
