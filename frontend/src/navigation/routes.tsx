@@ -3,14 +3,27 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
-import { Landing, Shop, Inventory, CreateCharacter, ItemBuy, CharacterBuy, ItemSell, CharacterSell, Onboarding, Privacy } from "../pages";
-import { MainContainer, ErrorFallback, LoadingPage, ErrorView } from "../components";
-import { ItemPage } from '../pages';
+import {
+  CharacterBuy,
+  CharacterSell,
+  CreateCharacter,
+  Inventory,
+  ItemBuy,
+  ItemPage,
+  ItemSell,
+  Landing,
+  Onboarding,
+  Privacy,
+  Shop
+} from "../pages";
+import { ErrorFallback, ErrorView, LoadingPage, MainContainer } from "../components";
+
 import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
-import { DevelopmentMode } from '../service/test-service/development-mode';
-import { isDevelopmentMode } from '../constants';
+import { isDevelopmentMode } from "../constants";
+import { DevelopmentMode } from "../service/test-service/development-mode";
+
 
 export const InternalAppWrapper = () => {
   return (

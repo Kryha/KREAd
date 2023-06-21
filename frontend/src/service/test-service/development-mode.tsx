@@ -1,15 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ButtonText, disappear, fadeIn, fadeOut, PrimaryButton } from '../../components';
-import styled from '@emotion/styled';
-import { useViewport } from '../../hooks';
-import { color, margins } from '../../design';
-import { css } from '@emotion/react';
-import { Diamond } from '../../components/price-in-ist/styles';
-import { routes } from '../../navigation';
-import { Link } from 'react-router-dom';
-import { isDevelopmentMode } from '../../constants';
-import { Tick } from '../../pages/buy/styles';
-import { useDataMode } from '../../hooks/use-data-mode';
+import { isDevelopmentMode } from "../../constants";
+import { routes } from "../../navigation";
+import { useEffect, useRef, useState } from "react";
+import { ButtonText, disappear, fadeIn, fadeOut, PrimaryButton } from "../../components";
+import styled from "@emotion/styled";
+import { useViewport } from "../../hooks";
+import { useDataMode } from "../../hooks/use-data-mode";
+import { Link } from "react-router-dom";
+import { color, margins } from "../../design";
+import { css } from "@emotion/react";
+import { Diamond } from "../../components/price-in-ist/styles";
+import { Tick } from "../../pages/buy/styles";
+
 
 interface ModalProps {
   isOpen: boolean;

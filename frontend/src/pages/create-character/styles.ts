@@ -1,10 +1,9 @@
-import styled from '@emotion/styled';
-import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from '../../assets';
-import { Badge, ButtonText, CharacterImgs, Input, MenuItemName, PrimaryButton } from '../../components';
-import { Spinner } from '../../components/content-loader/styles';
+import { Badge, ButtonText, CharacterImgs, Input, MenuItemName, PrimaryButton } from "../../components";
+import styled from "@emotion/styled";
+import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
+import { breakpoints, color, margins } from "../../design";
+import { Spinner } from "../../components/content-loader/styles";
 
-import { color, margins } from '../../design';
-import { breakpoints } from '../../design/sizes';
 
 interface ViewProps {
   height: number;

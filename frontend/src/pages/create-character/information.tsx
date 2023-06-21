@@ -1,11 +1,6 @@
-import { FC } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { text } from '../../assets';
-import { ButtonText, FormText, Input, Label, PrimaryButton } from '../../components';
-import { ButtonInfo } from '../../components/button-info';
-import { MAX_CHARACTER_LENGTH } from '../../constants';
-import { color } from '../../design';
-import { CharacterCreation } from '../../interfaces';
+import { CharacterCreation } from "../../interfaces";
+import { FC } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   ArrowUp,
   ButtonContainer,
@@ -16,8 +11,13 @@ import {
   FormFields,
   InputWrapper,
   Tick,
-  Warning,
-} from './styles';
+  Warning
+} from "./styles";
+import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../components";
+import { text } from "../../assets";
+import { MAX_CHARACTER_LENGTH } from "../../constants";
+import { ButtonInfo } from "../../components/button-info";
+import { color } from "../../design";
 
 
 interface InformationProps {

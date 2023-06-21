@@ -1,9 +1,7 @@
-import styled from '@emotion/styled';
-import { DetailSectionWrap } from '../../containers/detail-section/styles';
-import { margins } from '../../design';
-import { breakpoints } from '../../design/sizes';
+import styled from "@emotion/styled";
+import { breakpoints, margins } from "../../design";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
-/* Introduce mobile first configuration */
 export const PageWrap = styled.section`
   display: flex;
   flex-direction: column;

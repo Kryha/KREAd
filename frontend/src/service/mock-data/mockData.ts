@@ -1,8 +1,9 @@
-import { ExtendedCharacter } from '../../interfaces';
-import { mockCharacters } from './mockCharacters';
-import { mockCharacterItems } from './mockCharacterItems';
-import { UserContext } from '../../context/user';
-import { mockItems, mockItemsEquipped } from './mockItems';
+import { ExtendedCharacter } from "../../interfaces";
+import { mockCharacterItems } from "./mockCharacterItems";
+import { mockCharacters } from "./mockCharacters";
+import { UserContext } from "../../context/user";
+import { mockItems, mockItemsEquipped } from "./mockItems";
+
 
 export const mockedExtendedCharacters: ExtendedCharacter[] = [
   {

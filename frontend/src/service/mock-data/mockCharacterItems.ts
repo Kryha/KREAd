@@ -1,11 +1,17 @@
-import { CharacterItems } from '../../interfaces';
+import { CharacterItems } from "../../interfaces";
 import {
   TempetAddons,
   TempetAddonsThumbnail,
   TempetBackground1,
-  TempetBackground1Thumbnail, TempetBackground2, TempetBackground2Thumbnail, TempetClothing, TempetClothingThumbnail,
+  TempetBackground1Thumbnail,
+  TempetBackground2,
+  TempetBackground2Thumbnail,
+  TempetClothing,
+  TempetClothingThumbnail,
   TempetFilter1,
-  TempetFilter1Thumbnail, TempetFilter2, TempetFilter2Thumbnail,
+  TempetFilter1Thumbnail,
+  TempetFilter2,
+  TempetFilter2Thumbnail,
   TempetHair,
   TempetHairThumbnail,
   TempetHeadpiece,
@@ -13,8 +19,9 @@ import {
   TempetMask,
   TempetMaskThumbnail,
   TempetStyleline,
-  TempetStylelineThumbnail,
-} from '../../assets';
+  TempetStylelineThumbnail
+} from "../../assets";
+
 
 export const mockCharacterItems: CharacterItems = {
   noseline: {

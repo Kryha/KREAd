@@ -11,14 +11,13 @@ import {
   ErrorTitle,
   ImageConatiner,
   InformationContainer,
-  KreadContainer,
+  KreadContainer
 } from "./styles";
-import { PrimaryButton, SecondaryButton, ButtonText } from "../atoms";
-import { text } from "../../assets/text";
+import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
+import { ErrorImage, text } from "../../assets";
 import { routes } from "../../navigation";
 import { color } from "../../design";
 import { GO_BACK } from "../../constants";
-import { ErrorImage } from "../../assets";
 import { AnimatedLogo } from "../logo";
 
 interface ErrorViewProps {

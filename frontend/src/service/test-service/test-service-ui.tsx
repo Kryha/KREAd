@@ -8,12 +8,13 @@ import { useUserState } from "../../context/user";
 import { useWalletState } from "../../context/wallet";
 import { useCreateCharacter } from "../character";
 import styled from "@emotion/styled";
-import { KreadLogo } from '../../pages/onboarding/styles';
-import { routes } from '../../navigation';
-import { useNavigate } from 'react-router-dom';
-import { fontSize } from '../../design';
-import StatusIndicator from './service-status-indicator';
-import { useDataMode } from '../../hooks/use-data-mode';
+import { useNavigate } from "react-router-dom";
+import { useDataMode } from "../../hooks/use-data-mode";
+import { routes } from "../../navigation";
+import { KreadLogo } from "../../pages/onboarding/styles";
+import StatusIndicator from "./service-status-indicator";
+import { fontSize } from "../../design";
+
 
 export const TestServiceUI = () => {
   const [service] = useAgoricContext();
@@ -21,7 +22,7 @@ export const TestServiceUI = () => {
   const shop = useCharacterMarketState();
   const createCharacter = useCreateCharacter();
   const navigate = useNavigate();
-  const { selectDataMode} = useDataMode();
+  const { mockData} = useDataMode();
 
   console.log("---------------TESTUI", shop);
   const publicFacet = service.contracts.characterBuilder.publicFacet;
@@ -29,8 +30,8 @@ export const TestServiceUI = () => {
   useEffect(() => {
     console.log("SERVICE:", service);
     console.log("CHARACTERS: ", characters);
-    console.log("Data Mode: ", selectDataMode);
-  }, [service, characters, selectDataMode]);
+    console.log("Data Mode: ", mockData);
+  }, [service, characters, mockData]);
 
   const mintCharacterNFT = async () => {
     await createCharacter.mutateAsync({

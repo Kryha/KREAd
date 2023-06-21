@@ -1,23 +1,24 @@
-import { E } from '@endo/eventual-send';
-import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
-import { useAgoricState } from './agoric';
-import { useWalletState } from './wallet';
+import { E } from "@endo/eventual-send";
+import { iterateLatest, makeCastingSpec, makeFollower, makeLeader } from "@agoric/casting";
 import {
   CharacterBackend,
   ExtendedCharacter,
   ExtendedCharacterBackend,
   Item,
   ItemActivityEventBackend,
-  ItemBackend,
-} from '../interfaces';
-import { mediate } from '../util';
-import { itemCategories } from '../service/util';
-import { dedupArrById, replaceCharacterInventoryInUserStateArray } from '../util/other';
-import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from '../constants';
-import { iterateLatest, makeCastingSpec, makeFollower, makeLeader } from '@agoric/casting';
-import { mockData } from '../service/mock-data/mockData';
-import { mockItemsEquipped } from '../service/mock-data/mockItems';
-import { useDataMode } from '../hooks/use-data-mode';
+  ItemBackend
+} from "../interfaces";
+import { mockData } from "../service/mock-data/mockData";
+import { mockItemsEquipped } from "../service/mock-data/mockItems";
+import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
+import { mediate } from "../util";
+import { itemCategories } from "../service/util";
+import { useDataMode } from "../hooks/use-data-mode";
+import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
+import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
+import { useWalletState } from "./wallet";
+import { useAgoricState } from "./agoric";
+
 
 export interface UserContext {
   characters: ExtendedCharacter[];

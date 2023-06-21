@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { AgoricState } from '../../interfaces';
+import { AgoricState } from "../../interfaces";
+
 interface StatusIndicatorProps {
   statusObject: AgoricState["status"];
 }

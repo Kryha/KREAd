@@ -1,9 +1,4 @@
-import { FC, useState } from 'react';
-import { text } from '../../assets';
-
-import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from '../../components';
-import { CONFIRMATION_STEP, INFORMATION_STEP, MINTING_COST } from '../../constants';
-import { color } from '../../design';
+import { FC, useState } from "react";
 import {
   ArrowUp,
   ButtonContainer,
@@ -18,8 +13,12 @@ import {
   StepContainer,
   StepText,
   StepWrapper,
-  Tick,
-} from './styles';
+  Tick
+} from "./styles";
+import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
+import { text } from "../../assets";
+import { CONFIRMATION_STEP, INFORMATION_STEP, MINTING_COST } from "../../constants";
+import { color } from "../../design";
 
 interface PaymentProps {
   submit: (step: number) => void;
