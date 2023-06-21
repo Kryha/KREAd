@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { DefaultIcon, text } from "../../assets";
 import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
-import { useViewport } from "../../hooks";
+import { useMobile, useViewport } from "../../hooks";
 import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter, useMyCharacters } from "../../service";
@@ -11,7 +11,6 @@ import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
-import { useMobile } from "../../hooks/use-mobile";
 
 export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
@@ -65,24 +64,22 @@ export const CreateCharacter: FC = () => {
 
   if (isLoadingCharacters) return <LoadingPage spinner={false} />;
 
-    return (
-      <PageContainer
-        sidebarContent={
-          <FormCard height={height} width={width}>
-            <FormHeader
-              currentStep={currentStep}
-              stepAmount={MINT_CHARACTER_FLOW_STEPS}
-              title={text.mint.mintNew}
-              link={routes.character}
-              isPaymentFlow
-            />
-            {perStepDisplay()}
-          </FormCard>
-        }
-      >
-        {!mobile && (
-          <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />
-        )}
-      </PageContainer>
-    );
+  return (
+    <PageContainer
+      sidebarContent={
+        <FormCard height={height} width={width}>
+          <FormHeader
+            currentStep={currentStep}
+            stepAmount={MINT_CHARACTER_FLOW_STEPS}
+            title={text.mint.mintNew}
+            link={routes.character}
+            isPaymentFlow
+          />
+          {perStepDisplay()}
+        </FormCard>
+      }
+    >
+      {!mobile && <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />}
+    </PageContainer>
+  );
 };
