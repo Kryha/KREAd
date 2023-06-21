@@ -133,7 +133,7 @@ export const InputWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 80%;
+  width: 100%;
 `;
 
 export const StepContainer = styled.div`

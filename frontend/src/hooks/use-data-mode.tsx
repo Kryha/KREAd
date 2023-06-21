@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
-import { SwitchSelector } from '../components';
-import styled from '@emotion/styled';
-import { fontSize, margins } from '../design';
+import { useEffect, useMemo, useState } from "react";
+import { SwitchSelector } from "../components";
+import styled from "@emotion/styled";
+import { fontSize, margins } from "../design";
 
 export enum DataMode {
   Default = 0,
@@ -52,8 +52,6 @@ export const useDataMode = () => {
       setMockData(false);
     }
   }, [selectDataMode]);
-
-  console.log('selectDataMode', mockData);
 
   return { dataModeSelector, mockData };
 };

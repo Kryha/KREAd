@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { color, fontWeight } from '../../design';
+import { color, fontWeight } from "../../design";
 
 export const Input = styled.input`
   color: ${color.black};
@@ -9,6 +9,7 @@ export const Input = styled.input`
   font-size: 14px;
   line-height: 100%;
   background-color: transparent;
+  width: 80% !important;
 
   -moz-appearance: textfield;
   outline: none;

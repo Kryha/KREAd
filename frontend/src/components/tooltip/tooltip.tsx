@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { InfoPosition } from '../../interfaces';
 import { TooltipContent, TooltipWrap } from "./styles";
+import { InfoPosition } from "../../interfaces";
+import { FC, useEffect, useRef, useState } from "react";
 
 interface TooltipProps {
   title?: string;
