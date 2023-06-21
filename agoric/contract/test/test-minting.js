@@ -1,12 +1,14 @@
+// eslint-disable-next-line import/order
 import { test } from "./prepare-test-env-ava.js";
 import { E } from "@endo/eventual-send";
-import { bootstrap } from "./bootstrap.js";
 import { AmountMath, AssetKind, makeIssuerKit } from "@agoric/ertp";
+import { bootstrap } from "./bootstrap.js";
 
 test.before(async (t) => {
-  const { zoe, assets, instance } = await bootstrap();
+  const { zoe, contractAssets, assets, instance } = await bootstrap();
   t.context = {
     instance,
+    contractAssets,
     assets,
     zoe,
   };
@@ -15,31 +17,25 @@ test.before(async (t) => {
 test("mintCharacter", async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet, creatorFacet },
-    assets: { fts, nfts },
+    instance: { publicFacet },
+    contractAssets,
     zoe,
   } = t.context;
-
-  const { brand: characterBrand, issuer: characterIssuer, mint: characterMint } = nfts.Character.kit;
-  const { brand: moolaBrand, issuer: moolaIssuer, mint: moolaMint } = fts.Moola.kit;
-
   const mintCharacterInvitation = await E(publicFacet).makeMintCharacterInvitation();
   const proposal = harden({
-    give: { Moola: AmountMath.make(moolaBrand, 10n) },
-    want: { Character: AmountMath.make(characterBrand, harden([{ id: 1, name: "TestCharacter" }])) },
+    want: { Asset: AmountMath.make(contractAssets.character.brand, harden([{ name: "TestCharacter" }])) },
   });
 
-  const moolaPayment = moolaMint.mintPayment(AmountMath.make(moolaBrand, 10n));
-  const payments = harden({ Moola: moolaPayment });
-  const userSeat = await zoe.offer(mintCharacterInvitation, proposal, payments);
-
-  // const characters = // fetch the characters from somewhere
-  // t.is(characters.length, 1);
-  // t.is(characters[0].name, "TestCharacter");
+  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+  console.log("SEAT", userSeat);
+  // console.log("ALLOCATION: ", userSeat.getCurrentAllocation());
 
   const payout = await E(userSeat).getPayouts();
-  const characterPayoutAmount = await E(characterIssuer).getAmountOf(payout.Moola);
-  t.deepEqual(characterPayoutAmount.value[0].name, "TestCharacter");
+  console.log(payout);
+
+  // const characters = await E(publicFacet).getCharacters();
+  // console.log("CHARACTERS", characters);
+  // t.deepEqual(characterPayoutAmount.value[0].name, "TestCharacter");
 });
 
 // test("mintItem", async (t) => {

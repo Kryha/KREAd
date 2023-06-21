@@ -1,4 +1,4 @@
-const fts = ["Moola", "bucks", "pesos", "pavos", "mctokens"];
+const fts = ["Moola", "Bucks", "Pesos", "Pavos", "Mctokens"];
 const nfts = ["Character", "CharacterKey1", "CharacterKey2", "Item"];
 export const defaultAssets = {
   fts,

@@ -3,6 +3,7 @@ import { E } from "@endo/eventual-send";
 import { setupZoe, setupAssets } from "./setup.js";
 import { makeFakeBoard } from "@agoric/vats/tools/board-utils.js";
 import { makeMockChainStorageRoot } from "@agoric/internal/src/storage-test-utils.js";
+import buildManualTimer from "@agoric/zoe/tools/manualTimer.js";
 
 /**
  * @param {BootstrapConf} [conf]
@@ -23,6 +24,7 @@ export const bootstrap = async (conf) => {
       storageNode: makeMockChainStorageRoot().makeChildNode("thisElectorate"),
       marshaller: makeFakeBoard().getReadonlyMarshaller(),
     },
+    chainTimerService: buildManualTimer(),
     defaultCharacters: [
       {
         id: 1,
@@ -39,9 +41,17 @@ export const bootstrap = async (conf) => {
   };
 
   // Start contract instance
-  const instance = await E(zoe).startInstance(installation, assets.issuerKeywordRecord, undefined, privateArgs);
+  const instance = await E(zoe).startInstance(installation, undefined, undefined, privateArgs);
+  const { publicFacet } = instance;
+  const contractAssets = await E(publicFacet).getTokenInfo();
+  // const {
+  //   character: { issuer: characterIssuer, brand: characterBrand },
+  //   item: { issuer: itemIssuer, brand: itemBrand },
+  //   paymentFT: { issuer: tokenIssuer, brand: tokenBrand },
+  // } = contractAssets;
 
   const result = {
+    contractAssets,
     assets,
     instance,
     zoe,
