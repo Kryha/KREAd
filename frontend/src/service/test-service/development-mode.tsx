@@ -52,7 +52,6 @@ export const DevelopmentMode: React.FC<DevProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleDevModeButtonClick = () => {
     setIsModalOpen(true);
-    console.log("Dev Mode Button clicked");
   };
 
   const handleCloseModal = () => {
