@@ -5,10 +5,11 @@ import { color, fontWeight } from "../../design";
 export const Input = styled.input`
   color: ${color.black};
   font-family: aktiv-grotesk;
-  font-weight: ${fontWeight.medium};
+  font-weight: ${fontWeight.regular};
   font-size: 14px;
-  line-height: 18px;
+  line-height: 100%;
   background-color: transparent;
+  width: 80% !important;
 
   -moz-appearance: textfield;
   outline: none;
@@ -27,7 +28,7 @@ export const Input = styled.input`
   outline: 0;
   border-width: 0 0 1px;
   border-color: ${color.grey};
-  padding: 2px 0px 20.5px 0px;
+  padding: 2px 0 20.5px 0;
   :hover {
     border-color: ${color.black};
   }

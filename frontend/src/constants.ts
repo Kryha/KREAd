@@ -88,13 +88,7 @@ export const STORAGE_NODE_SPEC_MARKET_CHARACTERS = ":published.kread.market-char
 
 export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-";
 
-export const dappConfig = {
-  CONTRACT_NAME: "kread",
-  INSTANCE_PREFIX: ":published.kread",
-  INSTANCES_KEY: ":published.agoricNames.instance",
-};
-
-export const KREAD_STORAGE_NODE_PATH = ":published.kread";
+export const isDevelopmentMode = process.env.NODE_ENV === "development";
 
 export const networkConfigs = {
   mainnet: {
@@ -126,14 +120,3 @@ export const networkConfigs = {
     url: "https://wallet.agoric.app/wallet/network-config",//"https://wallet.agoric.app/wallet/network-config",
   },
 };
-
-export const localBridgeHref = "http://localhost:3000/wallet/bridge.html";
-export const prodBridgeHref = "https://main.wallet-app.pages.dev/wallet/bridge.html"
-
-export const walletUiHref = () => {
-  const bridgeUrl = new URL(prodBridgeHref);
-  return bridgeUrl ? bridgeUrl.origin + "/wallet/" : "";
-};
-
-const usp = new URLSearchParams(window.location.search);
-const wallet = usp.get('wallet');

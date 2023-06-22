@@ -2,8 +2,9 @@
 import React, { createContext, useReducer, useContext, useEffect, useState } from "react";
 import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
 import { makeAgoricKeplrConnection, AgoricKeplrConnectionErrors as Errors } from "@agoric/web-components";
-import { networkConfigs } from "../constants";
+import { isDevelopmentMode, networkConfigs } from "../constants";
 import WalletBridge from "./wallet-bridge";
+import { useDataMode } from "../hooks";
 
 const initialState: AgoricState = {
   status: {
@@ -51,7 +52,7 @@ const initialState: AgoricState = {
       character: { issuer: undefined, brand: undefined },
       item: { issuer: undefined, brand: undefined },
       paymentFT: { issuer: undefined, brand: undefined },
-    }
+    },
   },
   isLoading: false,
   isReady: false,
@@ -89,7 +90,7 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
-    
+
     case "SET_TOKEN_INFO":
       return { ...state, tokenInfo: action.payload };
 
@@ -178,9 +179,18 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
 export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
+  const { mockData } = useDataMode();
+
   if (state === undefined) {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
+
+  if (isDevelopmentMode) {
+    if (mockData) {
+      state.isLoading = false;
+    }
+  }
+
   return state;
 };
 

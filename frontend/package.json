@@ -36,7 +36,7 @@
     "workbox-streams": "^6.5.3"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_ENV=development vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src",

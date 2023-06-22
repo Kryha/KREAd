@@ -1,15 +1,26 @@
 import { E } from "@endo/eventual-send";
-import React, { createContext, useContext, useEffect, useMemo, useReducer } from "react";
-import { useAgoricState } from "./agoric";
-import { useWalletState } from "./wallet";
-import { ItemActivityEventBackend, CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend } from "../interfaces";
+import { iterateLatest, makeCastingSpec, makeFollower, makeLeader } from "@agoric/casting";
+import {
+  CharacterBackend,
+  ExtendedCharacter,
+  ExtendedCharacterBackend,
+  Item,
+  ItemActivityEventBackend,
+  ItemBackend
+} from "../interfaces";
+import { mockData } from "../service/mock-data/mockData";
+import { mockItemsEquipped } from "../service/mock-data/mockItems";
+import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import { mediate } from "../util";
 import { itemCategories } from "../service/util";
-import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
+import { useDataMode } from "../hooks/use-data-mode";
 import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
-import { makeLeader, makeFollower, makeCastingSpec, iterateLatest } from "@agoric/casting";
+import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
+import { useWalletState } from "./wallet";
+import { useAgoricState } from "./agoric";
 
-interface UserContext {
+
+export interface UserContext {
   characters: ExtendedCharacter[];
   selected: ExtendedCharacter | undefined;
   items: Item[];
@@ -67,6 +78,15 @@ const initialState: UserContext = {
   equippedItems: [],
   processed: [],
   fetched: false,
+};
+
+const initialMockState: UserContext = {
+  characters: mockData.characters,
+  selected: undefined,
+  items: mockData.items,
+  equippedItems: mockItemsEquipped,
+  processed: [],
+  fetched: mockData.fetched,
 };
 
 export type UserDispatch = React.Dispatch<UserStateActions>;
@@ -130,7 +150,12 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
 };
 
 export const UserContextProvider = (props: ProviderProps): React.ReactElement => {
-  const [userState, userStateDispatch] = useReducer(Reducer, initialState);
+
+  const { mockData} = useDataMode();
+
+  const [userState, userStateDispatch] =
+    useReducer(Reducer, mockData ? initialMockState : initialState);
+
   const wallet = useWalletState();
   const agoric = useAgoricState();
 
