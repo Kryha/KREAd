@@ -1,3 +1,13 @@
+/* TODO: SMART-WALLET SUPPPRT
+
+Request dapp approval to smart-wallet
+Should store addOffer method in Agoric context
+Should handle wallet responses appropriately
+
+Code below is taken from dapp-inter's implementation 
+(https://github.com/Agoric/dapp-inter/blob/main/src/components/OfferSignerBridge.tsx)
+*/
+
 import React, { useState } from "react";
 import { BridgeProtocol } from "@agoric/web-components";
 import { makeReactDappWalletBridge } from "@agoric/web-components/react";
@@ -92,7 +102,7 @@ const WalletBridge = () => {
   return (
     <div className="hidden">
       <DappWalletBridge
-        bridgeHref={bridgeHref}
+        bridgeHref={prodBridgeHref}
         onBridgeMessage={onBridgeMessage}
         onBridgeReady={onBridgeReady}
         onError={onError}

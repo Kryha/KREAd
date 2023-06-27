@@ -45,12 +45,14 @@ export interface AgoricState {
     address: any,
     chainId: string,
     unserializer: any,
+    importContext: any
   },  
   notifiers: NotifiersState;
   offers: any[];
   tokenInfo: TokenInfo & { boardIds: TokenInfo };
   isLoading: boolean;
   isReady: boolean;
+  chainStorageWatcher: any;
 }
 
 export interface TokenInfo {
@@ -121,6 +123,11 @@ interface SetWalletConnection {
   payload: any;
 }
 
+interface SetChainStorageWatcher {
+  type: "SET_CHAIN_STORAGE_WATCHER";
+  payload: any;
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -141,4 +148,5 @@ export type AgoricStateActions =
   | SetTokenInfo
   | SetAddOffer
   | SetWalletConnection
+  | SetChainStorageWatcher
   | SetOffers;

@@ -49,7 +49,9 @@ export const TestServiceUI = () => {
   const purses = useWalletState();
 
   const topUp = async () => {
+    console.log("toppig up: ", publicFacet)
     const invitation = await E(publicFacet).makeTokenFacetInvitation();
+    console.log(invitation);
     const tokenPurse = purses.token;
 
     if (!tokenPurse) return;

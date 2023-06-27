@@ -120,3 +120,12 @@ export const networkConfigs = {
     url: "https://wallet.agoric.app/wallet/network-config",//"https://wallet.agoric.app/wallet/network-config",
   },
 };
+
+export const localBridgeHref = "http://localhost:3000/wallet/bridge.html";
+export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html"
+export const devBridgeHref = "https://main.wallet-app.pages.dev/wallet/bridge.html"
+
+export const walletUiHref = () => {
+  const bridgeUrl = new URL(prodBridgeHref);
+  return bridgeUrl ? bridgeUrl.origin + "/wallet/" : "";
+};

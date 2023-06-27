@@ -5,6 +5,13 @@ import { makeAgoricKeplrConnection, AgoricKeplrConnectionErrors as Errors } from
 import { isDevelopmentMode, networkConfigs } from "../constants";
 import WalletBridge from "./wallet-bridge";
 import { useDataMode } from "../hooks";
+import {
+  ImportContext,
+  makeImportContext,
+} from '@agoric/smart-wallet/src/marshal-contexts';
+import { makeAgoricChainStorageWatcher } from "../service/storage-node/chain-storage-watcher";
+import { fetchChainInfo } from "./util";
+import { watchCharacter } from "../service/storage-node/watch-character";
 
 const initialState: AgoricState = {
   status: {
@@ -36,6 +43,7 @@ const initialState: AgoricState = {
     address: undefined,
     chainId: "",
     unserializer: undefined,
+    importContext: undefined
   },
   contracts: {
     // FIXME: rename to kread
@@ -56,6 +64,7 @@ const initialState: AgoricState = {
   },
   isLoading: false,
   isReady: false,
+  chainStorageWatcher: undefined
 };
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
@@ -99,6 +108,9 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
   
     case "SET_WALLET_CONNECTION":
       return { ...state, walletConnection: action.payload };
+    
+    case "SET_CHAIN_STORAGE_WATCHER":
+      return { ...state, chainStorageWatcher: action.payload };
 
     case "RESET":
       return initialState;
@@ -139,7 +151,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       const connectKeplr = async () => {
         try {
-          connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url);
+          connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url)
+          connection = { ...connection, importContext: makeImportContext() }
           // FIXME: remove log
           console.log("KEPLER CONNECTION: ", connection);
           dispatch({ type: "SET_WALLET_CONNECTION", payload: connection })
@@ -159,9 +172,40 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
           setCurrentStatus("connected");
         }
       };
+      let isCancelled = false;
+    
+      if (state.chainStorageWatcher) return;
+      const startWatching = async () => {
+        try {
+          const { rpc, chainName } = await fetchChainInfo(networkConfigs.localDevnet.url);
+          console.log("RPC + chainName: ", rpc, chainName)
+          if (isCancelled) return;
+          const chainStorageWatcher = makeAgoricChainStorageWatcher(
+              rpc,
+              chainName,
+              state.walletConnection.importContext.fromBoard.unserialize,
+              e => {
+                console.error(e);
+                throw e;
+              },
+            )
+          dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
+
+          watchCharacter();
+        } catch (e) {
+          if (isCancelled) return;
+          console.error(e);
+        }
+      };
+
+      startWatching();
       // FIXME: remove log
       console.count("CONNECTING");
       connectKeplr();
+
+      return () => {
+        isCancelled = true;
+      };
     }
     connect();
 
