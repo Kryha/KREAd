@@ -7,3 +7,4 @@ export * from "./sell";
 export * from "./onboarding";
 export * from "./content";
 export * from "./item";
+export * from "./download-character";

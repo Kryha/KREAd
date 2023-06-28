@@ -7,6 +7,7 @@ import {
   CharacterBuy,
   CharacterSell,
   CreateCharacter,
+  DownloadCharacter,
   Inventory,
   ItemBuy,
   ItemPage,
@@ -14,7 +15,7 @@ import {
   Landing,
   Onboarding,
   Privacy,
-  Shop
+  Shop,
 } from "../pages";
 import { ErrorFallback, ErrorView, LoadingPage, MainContainer } from "../components";
 
@@ -23,7 +24,6 @@ import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
 import { isDevelopmentMode } from "../constants";
 import { DevelopmentMode } from "../service/test-service/development-mode";
-
 
 export const InternalAppWrapper = () => {
   return (
@@ -43,24 +43,23 @@ export const InternalAppRoutes: FC = () => {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
-        <Routes>
-          <Route path={routes.root} element={<Onboarding />} />
-          <Route path={routes.character} element={<Landing />} />
-          <Route path={`${routes.items}/:category`} element={<ItemPage />} />
-          <Route path={routes.shop} element={<Shop />} />
-          <Route path={routes.inventory} element={<Inventory />} />
-          <Route path={routes.createCharacter} element={<CreateCharacter />} />
-          <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
-          <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
-          <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
-          <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
+      <Routes>
+        <Route path={routes.root} element={<Onboarding />} />
+        <Route path={routes.character} element={<Landing />} />
+        <Route path={`${routes.items}/:category`} element={<ItemPage />} />
+        <Route path={routes.shop} element={<Shop />} />
+        <Route path={routes.inventory} element={<Inventory />} />
+        <Route path={routes.createCharacter} element={<CreateCharacter />} />
+        <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
+        <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
+        <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
+        <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
+        <Route path={routes.downloadCharacter} element={<DownloadCharacter />} />
 
-          {isDevelopmentMode && (
-            <Route path={"/test"} element={<TestServiceUI />} />
-          )}
+        {isDevelopmentMode && <Route path={"/test"} element={<TestServiceUI />} />}
 
-          <Route path="*" element={<ErrorView />} />
-        </Routes>
+        <Route path="*" element={<ErrorView />} />
+      </Routes>
     </ErrorBoundary>
   );
 };
@@ -71,7 +70,7 @@ export const ExternalAppRoutes: FC = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
       <MainContainer>
-        <DevelopmentMode/>
+        <DevelopmentMode />
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
           <Route path={routes.privacy} element={<Privacy />} />
