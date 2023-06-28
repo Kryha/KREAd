@@ -5,9 +5,8 @@ import { ReactComponent as MenuIcon } from "./menu.svg";
 import { ReactComponent as CloseIcon } from "./close.svg";
 import { ReactComponent as ExpandIcon } from "./expand.svg";
 import Empty from "./empty.png";
-import { ReactComponent as CardElementIcon } from "./element.svg";
+import { ReactComponent as CardElementIcon, ReactComponent as NotificationIcon } from "./element.svg";
 import { ReactComponent as SmallElementIcon } from "./element-small.svg";
-import { ReactComponent as NotificationIcon } from "./element.svg";
 import UnnamedCreator from "./unnamed-creator.png";
 import SmallEl from "./small-el.png";
 import { ReactComponent as InventoryItemIcon } from "./Inventoy-Item.svg";
@@ -29,6 +28,8 @@ import { ReactComponent as WarningIcon } from "./warning-icon.svg";
 import { ReactComponent as Logo } from "./kread-logo.svg";
 import { ReactComponent as ArrowDownIcon } from "./arrow-down.svg";
 import { ReactComponent as Loading } from "./kread-loading.svg";
+import { ReactComponent as ZoomInIcon } from "./zoom-in.svg";
+import { ReactComponent as ZoomOutIcon } from "./zoom-out.svg";
 
 export {
   ErrorIcon,
@@ -62,4 +63,6 @@ export {
   Logo,
   ArrowDownIcon,
   Loading,
+  ZoomInIcon,
+  ZoomOutIcon,
 };
