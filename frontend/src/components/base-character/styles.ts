@@ -6,12 +6,21 @@ import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 import { css } from "@emotion/react";
 
-interface ImageProps {
+export enum CharacterSize {
+  mini = "mini",
+  medium = "medium",
+  half = "half",
+  normal = "normal",
+  large = "large",
+  extraLarge = "extraLarge",
+}
+
+export interface ImageProps {
   width: number;
   height: number;
   zIndex?: number;
   isZoomed?: boolean;
-  size?: "mini" | "medium" | "half" | "normal" | "large" | "extraLarge";
+  size?: keyof typeof CharacterSize;
   isClothing?: boolean;
 }
 
