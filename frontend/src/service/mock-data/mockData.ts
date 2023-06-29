@@ -2,8 +2,7 @@ import { ExtendedCharacter } from "../../interfaces";
 import { mockCharacterItems } from "./mockCharacterItems";
 import { mockCharacters } from "./mockCharacters";
 import { UserContext } from "../../context/user";
-import { mockItems, mockItemsEquipped } from "./mockItems";
-
+import { mockItems } from "./mockItems";
 
 export const mockedExtendedCharacters: ExtendedCharacter[] = [
   {
@@ -23,14 +22,14 @@ export const mockedExtendedCharacters: ExtendedCharacter[] = [
     equippedItems: mockCharacterItems,
     activity: [],
     notifier: undefined,
-  }
-  ];
+  },
+];
 
-export const mockData : UserContext = {
+export const mockData: UserContext = {
   characters: mockedExtendedCharacters,
   selected: undefined,
   items: mockItems,
-  equippedItems: mockItemsEquipped,
+  equippedItems: [],
   processed: [],
   fetched: true,
-}
+};
