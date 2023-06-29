@@ -18,80 +18,87 @@ export const DownloadCharacter = () => {
 
   const stageRef = useRef<Konva.Stage>(null);
   const layerRef = useRef<Konva.Layer>(null);
-  const [canvasImage, setCanvasImage] = useState<string | null>(null);
 
   const [resetZoom, setResetZoom] = useState(false);
   const { scale, handleZoomIn, handleZoomOut, handleResetZoom } = useZoomCanvas(stageRef, resetZoom, setResetZoom);
+
   Konva.hitOnDragEnabled = true;
 
-  /* Set the maximum canvas size to 1200 x 1000 */
-  const stageWidth = Math.min(width, 1000);
-  const stageHeight = Math.min(height, 1200);
+  /* Set the maximum canvas size to 800 x 1000 */
+  const stageWidth = Math.min(width, 800);
+  const stageHeight = Math.min(height, 1000);
   const scaledWidth = stageWidth * scale;
   const scaledHeight = stageHeight * scale;
 
   useEffect(() => {
-    const drawItem = (src: string, alt: string, drawWidth: number, drawHeight: number) => {
-      const imageObj = new window.Image();
-      imageObj.src = src;
-      imageObj.crossOrigin = "anonymous"; // This enables CORS
-      imageObj.onload = () => {
-        const x = (width - drawWidth) / 2;
-        const y = (height - drawHeight) / 2;
-        const konvaImage = new Konva.Image({
-          image: imageObj,
-          x: x,
-          y: y,
-          width: drawWidth,
-          height: drawHeight,
-          preventDefault: false,
-        });
-
-        layerRef.current?.add(konvaImage);
-        layerRef.current?.batchDraw();
-      };
-    };
-
     const drawCharacter = async () => {
       layerRef.current?.destroyChildren();
 
-      drawItem(items.background?.image || Empty, items.background?.name || text.character.background, scaledWidth, scaledHeight);
-      drawItem(items.midBackground?.image || Empty, items.midBackground?.name || text.character.midBackground, scaledWidth, scaledHeight);
-      drawItem(character?.image || TempetCharacter, character?.name || text.character.defaultCharacter, scaledWidth, scaledHeight);
-      drawItem(items.hair?.image || Empty, items.hair?.name || text.character.hair, scaledWidth, scaledHeight);
-      drawItem(items.mask?.image || Empty, items.mask?.name || text.character.mask, scaledWidth, scaledHeight);
-      drawItem(items.noseline?.image || Empty, items.noseline?.name || text.character.noseline, scaledWidth, scaledHeight);
-      drawItem(items.liquid?.image || Empty, items.liquid?.name || text.character.liquid, scaledWidth, scaledHeight);
-      drawItem(items.frontMask?.image || Empty, items.frontMask?.name || text.character.frontMask, scaledWidth, scaledHeight);
-      drawItem(items.airReservoir?.image || Empty, items.airReservoir?.name || text.character.airReservoir, scaledWidth, scaledHeight);
-      drawItem(items.clothing?.image || Empty, items.clothing?.name || text.character.clothing, scaledWidth, scaledHeight);
-      drawItem(items.headPiece?.image || Empty, items.headPiece?.name || text.character.headPiece, scaledWidth, scaledHeight);
+      const loadImage = (src: string, alt: string, drawWidth: number, drawHeight: number): Promise<Konva.Image> => {
+        return new Promise((resolve, reject) => {
+          const imageObj = new window.Image();
+          imageObj.src = src;
+          imageObj.crossOrigin = "anonymous"; // This enables CORS
+          imageObj.onload = () => {
+            const x = (width - drawWidth) / 2;
+            const y = (height - drawHeight) / 2;
+            const konvaImage = new Konva.Image({
+              image: imageObj,
+              x: x,
+              y: y,
+              width: drawWidth,
+              height: drawHeight,
+              preventDefault: false,
+            });
+
+            resolve(konvaImage);
+          };
+
+          imageObj.onerror = () => {
+            reject(new Error(`Failed to load image: ${src}`));
+          };
+        });
+      };
+
+      const drawOrder = [
+        { src: items.background?.image || Empty, alt: items.background?.name || text.character.background },
+        { src: items.midBackground?.image || Empty, alt: items.midBackground?.name || text.character.midBackground },
+        { src: character?.image || TempetCharacter, alt: character?.name || text.character.defaultCharacter },
+        { src: items.hair?.image || Empty, alt: items.hair?.name || text.character.hair },
+        { src: items.mask?.image || Empty, alt: items.mask?.name || text.character.mask },
+        { src: items.noseline?.image || Empty, alt: items.noseline?.name || text.character.noseline },
+        { src: items.liquid?.image || Empty, alt: items.liquid?.name || text.character.liquid },
+        { src: items.frontMask?.image || Empty, alt: items.frontMask?.name || text.character.frontMask },
+        { src: items.airReservoir?.image || Empty, alt: items.airReservoir?.name || text.character.airReservoir },
+        { src: items.clothing?.image || Empty, alt: items.clothing?.name || text.character.clothing },
+        { src: items.headPiece?.image || Empty, alt: items.headPiece?.name || text.character.headPiece },
+      ];
+
+      const drawnImages: Konva.Image[] = [];
+
+      for (const { src, alt } of drawOrder) {
+        const completedCharacter = await loadImage(src, alt, scaledWidth, scaledHeight);
+        drawnImages.push(completedCharacter);
+      }
+
+      if (drawnImages.length > 0) {
+        const imageGroup = new Konva.Group({
+          preventDefault: false,
+        });
+        drawnImages.forEach((image) => imageGroup.add(image));
+
+        imageGroup.setAttrs({
+          width: scaledWidth,
+          height: scaledHeight,
+        });
+
+        layerRef.current?.add(imageGroup);
+        layerRef.current?.batchDraw();
+      }
     };
 
     drawCharacter();
   }, [character, items, width, height, scale]);
-
-  const downloadURI = (uri: string, name: string) => {
-    const link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-  const handleDownload = () => {
-    const stage = stageRef.current!;
-    if (stage) {
-      stage.toImage({
-        callback: (image) => {
-          const imageURL = image.src;
-          setCanvasImage(imageURL);
-          downloadURI(imageURL, "character.png");
-        },
-        pixelRatio: 2,
-      });
-    }
-  };
 
   if (isLoading) {
     return <LoadingPage spinner={false} />;
@@ -100,14 +107,7 @@ export const DownloadCharacter = () => {
   if (selectedCharacter) {
     return (
       <CanvasArea>
-        <CanvasUserInterface
-          stageRef={stageRef}
-          scale={scale}
-          handleZoomIn={handleZoomIn}
-          handleZoomOut={handleZoomOut}
-          handleResetZoom={handleResetZoom}
-          handleDownload={handleDownload}
-        />
+        <CanvasUserInterface scale={scale} handleZoomIn={handleZoomIn} handleZoomOut={handleZoomOut} handleResetZoom={handleResetZoom} />
         <Stage width={width} height={height} ref={stageRef} draggable={true}>
           <Layer ref={layerRef} />
         </Stage>
