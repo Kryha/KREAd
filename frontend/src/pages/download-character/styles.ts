@@ -1,6 +1,17 @@
 import styled from "@emotion/styled";
 import { color, margins } from "../../design";
 import { ZoomInIcon, ZoomOutIcon } from "../../assets";
+import { css } from "@emotion/react";
+import { ButtonText, disappear, fadeIn, fadeOut } from "../../components";
+
+export interface DownloadProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+interface ViewProps {
+  height: number;
+}
 
 export const CanvasArea = styled.div`
   position: relative;
@@ -18,7 +29,7 @@ export const ControlAreaWrapper = styled.div`
   width: 100%;
   pointer-events: none;
 `;
-export const ControlArea = styled.footer`
+export const ControlAreaBottom = styled.footer`
   position: absolute;
   display: flex;
   justify-content: space-between;
@@ -32,6 +43,19 @@ export const ControlArea = styled.footer`
   pointer-events: all;
 `;
 
+export const ControlAreaTop = styled.header`
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 0 20px;
+  flex-wrap: nowrap;
+  opacity: 1;
+  top: 1rem;
+  border-radius: 20px;
+  pointer-events: all;
+`;
 export const ZoomActions = styled.div`
   display: grid;
   grid-auto-columns: min-content;
@@ -95,5 +119,71 @@ export const ZoomOut = styled(ZoomOutIcon)`
   svg {
     height: 20px;
     width: 20px;
+  }
+`;
+
+export const DownloadWrapper = styled.div<DownloadProps>`
+  z-index: 1000;
+  ${({ isOpen }): string => {
+    return isOpen
+      ? `
+        position: absolute;
+        margin-bottom: 40px;
+        bottom: 0;
+        z-index: 1000;
+        `
+      : `
+      display: none;
+      `;
+  }};
+  ${({ isOpen }) =>
+    isOpen === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.2s, 0.5s;
+          animation-delay: 0s, 0.2s;
+        `
+      : css`
+          animation: ${fadeOut};
+          animation-duration: 0.5s;
+        `};
+`;
+
+export const DownloadContainer = styled.div<ViewProps>`
+  border: 1px solid ${color.grey};
+  border-radius: ${margins.small};
+  background: ${color.lightGrey};
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: ${margins.medium};
+  ${({ height }): string => `max-height: ${height - 250}px;`};
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+`;
+
+export const DownloadContents = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none;
+`;
+
+export const DownloadContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  margin: ${margins.small} 0px;
+  cursor: pointer;
+  color: ${color.darkGrey};
+  gap: 16px;
+  :hover {
+    ${ButtonText} {
+      color: ${color.black};
+    }
   }
 `;

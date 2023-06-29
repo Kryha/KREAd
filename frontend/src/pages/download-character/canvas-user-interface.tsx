@@ -1,6 +1,7 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
-  ControlArea,
+  ControlAreaBottom,
+  ControlAreaTop,
   ControlAreaWrapper,
   ZoomActions,
   ZoomContainer,
@@ -11,21 +12,41 @@ import {
   ZoomResetButton,
 } from "./styles";
 import { PrimaryButton } from "../../components";
-import Konva from "konva";
+import { routes } from "../../navigation";
+import { useNavigate } from "react-router-dom";
+import { DownloadImageModal } from "../../components/download-image/download-image-modal";
 
 interface Props {
-  stageRef: React.RefObject<Konva.Stage>;
   scale: number;
   handleZoomIn: () => void;
   handleZoomOut: () => void;
   handleResetZoom: () => void;
-  handleDownload: () => void;
 }
 
-export const CanvasUserInterface: FC<Props> = ({ stageRef, scale, handleZoomIn, handleZoomOut, handleResetZoom, handleDownload }) => {
+export const CanvasUserInterface: FC<Props> = ({ scale, handleZoomIn, handleZoomOut, handleResetZoom }) => {
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleDownloadButtonClick = () => {
+    setIsDownloadOpen(true);
+  };
+
+  const handleCloseDownload = () => {
+    setIsDownloadOpen(false);
+  };
+
+  const handleHome = () => {
+    navigate(routes.character);
+  };
+
   return (
     <ControlAreaWrapper>
-      <ControlArea>
+      <ControlAreaTop>
+        <PrimaryButton onClick={handleHome}>Home</PrimaryButton>
+      </ControlAreaTop>
+      <ControlAreaBottom>
+        <DownloadImageModal isOpen={isDownloadOpen} onClose={handleCloseDownload} />
+        <PrimaryButton onClick={handleDownloadButtonClick}>Download</PrimaryButton>
         <ZoomContainer>
           <ZoomActions>
             <ZoomOutButton onClick={handleZoomOut}>
@@ -37,8 +58,7 @@ export const CanvasUserInterface: FC<Props> = ({ stageRef, scale, handleZoomIn, 
             </ZoomInButton>
           </ZoomActions>
         </ZoomContainer>
-        <PrimaryButton onClick={handleDownload}>Download</PrimaryButton>
-      </ControlArea>
+      </ControlAreaBottom>
     </ControlAreaWrapper>
   );
 };
