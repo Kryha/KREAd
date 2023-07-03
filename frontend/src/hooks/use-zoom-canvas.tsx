@@ -1,42 +1,66 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Konva from "konva";
+import { useCharacterImage } from "../context/character-image-provider";
 
-export const useZoomCanvas = (
-  stageRef: React.RefObject<Konva.Stage>,
-  resetZoom: boolean,
-  setResetZoom: { (value: React.SetStateAction<boolean>): void }
-) => {
-  const [scale, setScale] = useState(1);
-  const prevScaleRef = useRef(1);
+const zoomProps = {
+  initialScaleState: 1,
+  zoomSpeed: 0.1,
+  maxScale: 4,
+};
+export const useZoomCanvas = () => {
+  const { stageRef } = useCharacterImage();
+  const [scale, setScale] = useState(zoomProps.initialScaleState);
+  const [zoomRelativeToPointer, setZoomRelativeToPointer] = useState(false);
+  const [resetZoom, setResetZoom] = useState(false);
+
+  const prevScaleRef = useRef(zoomProps.initialScaleState);
   const initialDistanceRef = useRef(0);
   const pinchStartedRef = useRef(false);
-  const zoomSpeed = 0.1;
-  const maxScale = 4; // Maximum scale limit (400%)
+  const lastCenterRef = useRef({ x: 0, y: 0 });
+  const lastDistRef = useRef(0);
+
+  const handleZoom = useCallback(
+    (zoom: number) => {
+      const newScale = Math.round(prevScaleRef.current * zoom * 10) / 10;
+
+      const stage = stageRef.current?.getStage();
+
+      if (stage) {
+        const stageCenter = { x: stage.width() / 2, y: stage.height() / 2 };
+        if (newScale <= zoomProps.maxScale && newScale >= 1) {
+          setScale(newScale);
+          stage.scale({ x: newScale, y: newScale });
+
+          const newPos = {
+            x: stage.x() + (stageCenter.x - stage.x()) * (1 - newScale / prevScaleRef.current),
+            y: stage.y() + (stageCenter.y - stage.y()) * (1 - newScale / prevScaleRef.current),
+          };
+
+          stage.position(newPos);
+          stage.batchDraw();
+        }
+      }
+    },
+    [stageRef]
+  );
 
   const handleZoomIn = () => {
-    const zoom = 1 + zoomSpeed;
-    const newScale = prevScaleRef.current * zoom;
-
-    if (newScale <= maxScale) {
-      setScale(newScale);
-      stageRef.current?.scale({ x: newScale, y: newScale });
-      stageRef.current?.batchDraw();
-    }
+    const zoom = 1 + zoomProps.zoomSpeed;
+    handleZoom(zoom);
   };
 
   const handleZoomOut = () => {
-    const zoom = 1 - zoomSpeed;
-    const newScale = prevScaleRef.current * zoom;
+    const zoom = 1 - zoomProps.zoomSpeed;
+    handleZoom(zoom);
+  };
 
-    if (newScale >= 1) {
-      setScale(newScale);
-      stageRef.current?.scale({ x: newScale, y: newScale });
-      stageRef.current?.batchDraw();
-    }
+  const toggleZoomRelativeToPointer = () => {
+    setZoomRelativeToPointer((prevValue) => !prevValue);
   };
 
   const handleResetZoom = () => {
     setScale(1);
+    setResetZoom(true);
     prevScaleRef.current = 1;
     stageRef.current?.scale({ x: 1, y: 1 });
     stageRef.current?.position({ x: 0, y: 0 });
@@ -44,74 +68,120 @@ export const useZoomCanvas = (
   };
 
   useEffect(() => {
-    const handleWheel = (event: Konva.KonvaEventObject<WheelEvent>) => {
-      event.evt.preventDefault();
+    const stage = stageRef.current?.getStage();
+    if (stage) {
+      const stageCenter = { x: stage.width() / 2, y: stage.height() / 2 };
+      const centeredStagePosition = (newScale: number) => {
+        const x = stage.x() + (stageCenter.x - stage.x()) * (1 - newScale / prevScaleRef.current);
+        const y = stage.y() + (stageCenter.y - stage.y()) * (1 - newScale / prevScaleRef.current);
+        return { x, y };
+      };
 
-      let delta = event.evt.deltaY > 0 ? -1 : 1;
-      const zoom = 1 + zoomSpeed * delta;
-
-      const newScale = prevScaleRef.current * zoom;
-
-      setScale(newScale);
-      stageRef.current?.scale({ x: newScale, y: newScale });
-
-      stageRef.current?.batchDraw();
-    };
-
-    const handleTouchStart = (event: Konva.KonvaEventObject<TouchEvent>) => {
-      if (event.evt.touches.length === 2) {
+      const handleWheel = (event: Konva.KonvaEventObject<WheelEvent>) => {
         event.evt.preventDefault();
-        const touch1 = event.evt.touches[0];
-        const touch2 = event.evt.touches[1];
-        initialDistanceRef.current = Math.hypot(touch2.pageX - touch1.pageX, touch2.pageY - touch1.pageY);
-        pinchStartedRef.current = true;
-      }
-    };
+        let delta = event.evt.deltaY > 0 ? -1 : 1;
+        const zoom = delta > 0 ? 1 + zoomProps.zoomSpeed : 1 - zoomProps.zoomSpeed;
+        const newScale = Math.round(prevScaleRef.current * zoom * 10) / 10;
+        if (newScale <= zoomProps.maxScale && newScale >= 1) {
+          setScale(newScale);
+          const pointerPos = stage.getPointerPosition();
+          if (zoomRelativeToPointer && pointerPos) {
+            const pointerRelativePos = {
+              x: pointerPos.x / stage.width(),
+              y: pointerPos.y / stage.height(),
+            };
 
-    const handleTouchMove = (event: Konva.KonvaEventObject<TouchEvent>) => {
-      if (pinchStartedRef.current && event.evt.touches.length === 2) {
-        event.evt.preventDefault();
-        const touch1 = event.evt.touches[0];
-        const touch2 = event.evt.touches[1];
-        const distance = Math.hypot(touch2.pageX - touch1.pageX, touch2.pageY - touch1.pageY);
-        const zoom = distance / initialDistanceRef.current;
-        setScale((prevScale) => prevScale * zoom);
-      }
-    };
+            const newPos = {
+              x:
+                stage.x() - (pointerRelativePos.x * newScale * stage.width() - pointerRelativePos.x * prevScaleRef.current * stage.width()),
+              y:
+                stage.y() -
+                (pointerRelativePos.y * newScale * stage.height() - pointerRelativePos.y * prevScaleRef.current * stage.height()),
+            };
 
-    const handleTouchEnd = (event: Konva.KonvaEventObject<TouchEvent>) => {
-      if (event.evt.touches.length < 2) {
-        pinchStartedRef.current = false;
-      }
-    };
+            stage.position(newPos);
+          } else {
+            const newPos = centeredStagePosition(newScale);
+            stage.position(newPos);
+          }
 
-    stageRef.current?.on("wheel", handleWheel);
-    stageRef.current?.on("touchstart", handleTouchStart);
-    stageRef.current?.on("touchmove", handleTouchMove);
-    stageRef.current?.on("touchend", handleTouchEnd);
+          stage.scale({ x: newScale, y: newScale });
+          stage.batchDraw();
+        }
+      };
 
-    return () => {
-      stageRef.current?.off("wheel", handleWheel);
-      stageRef.current?.off("touchstart", handleTouchStart);
-      stageRef.current?.off("touchmove", handleTouchMove);
-      stageRef.current?.off("touchend", handleTouchEnd);
-    };
+      const handleTouchStart = (event: Konva.KonvaEventObject<TouchEvent>) => {
+        if (event.evt.touches.length === 2) {
+          event.evt.preventDefault();
+          const touch1 = event.evt.touches[0];
+          const touch2 = event.evt.touches[1];
+          initialDistanceRef.current = getDistance(touch1, touch2);
+          pinchStartedRef.current = true;
+        }
+      };
+
+      const handleTouchMove = (event: Konva.KonvaEventObject<TouchEvent>) => {
+        if (pinchStartedRef.current && event.evt.touches.length === 2) {
+          event.evt.preventDefault();
+          const touch1 = event.evt.touches[0];
+          const touch2 = event.evt.touches[1];
+          const distance = getDistance(touch1, touch2);
+
+          const zoom = Math.pow(distance / initialDistanceRef.current, zoomProps.zoomSpeed / 10);
+          const newScale = prevScaleRef.current * zoom;
+
+          if (stage.isDragging()) {
+            stage.stopDrag();
+          }
+
+          if (newScale <= zoomProps.maxScale && newScale >= 1) {
+            const newPos = centeredStagePosition(newScale);
+            setScale(newScale);
+            stage.scale({ x: newScale, y: newScale });
+            stage.position(newPos);
+            stage.batchDraw();
+          }
+        }
+      };
+
+      const handleTouchEnd = (event: Konva.KonvaEventObject<TouchEvent>) => {
+        if (event.evt.touches.length < 2) {
+          pinchStartedRef.current = false;
+          lastCenterRef.current = { x: 0, y: 0 };
+          lastDistRef.current = 0;
+        }
+      };
+
+      stage.on("wheel", handleWheel);
+      stage.on("touchstart", handleTouchStart);
+      stage.on("touchmove", handleTouchMove);
+      stage.on("touchend", handleTouchEnd);
+
+      return () => {
+        stage.off("wheel", handleWheel);
+        stage.off("touchstart", handleTouchStart);
+        stage.off("touchmove", handleTouchMove);
+        stage.off("touchend", handleTouchEnd);
+      };
+    }
   }, [stageRef]);
 
   useEffect(() => {
+    prevScaleRef.current = scale;
+
     if (resetZoom) {
       setScale(1);
       prevScaleRef.current = 1;
-
       stageRef.current?.scale({ x: 1, y: 1 });
+      stageRef.current?.position({ x: 0, y: 0 });
       stageRef.current?.batchDraw();
       setResetZoom(false);
     }
-  }, [resetZoom, stageRef]);
+  }, [scale, resetZoom, stageRef]);
 
-  useEffect(() => {
-    prevScaleRef.current = scale;
-  }, [scale]);
+  return { scale, handleZoomIn, handleZoomOut, handleResetZoom, toggleZoomRelativeToPointer };
+};
 
-  return { scale, handleZoomIn, handleZoomOut, handleResetZoom };
+const getDistance = (touch1: Touch, touch2: Touch) => {
+  return Math.sqrt(Math.pow(touch2.pageX - touch1.pageX, 2) + Math.pow(touch2.pageY - touch1.pageY, 2));
 };
