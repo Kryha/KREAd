@@ -1,78 +1,50 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   DownloadContainer,
   DownloadContent,
   DownloadContents,
-  DownloadProps,
+  DownloadHeader,
   DownloadWrapper,
 } from "../../pages/download-character/styles";
 import { useViewport } from "../../hooks";
-import { downloadOptions, useImageDownloader } from "../../hooks/use-image-downloader";
-
 import { ButtonText } from "../atoms";
 import { color } from "../../design";
+import { useCharacterDownloader } from "../../context/character-image-provider";
+import { useClickAwayListener } from "../../hooks/use-click-away-listener";
 
+export interface DownloadProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 export const DownloadImageModal: React.FC<DownloadProps> = ({ isOpen, onClose }) => {
   const { height } = useViewport();
   const modalRef = useRef<HTMLDivElement>(null);
-  const [selected, setSelected] = useState(-1);
-  const { setDownloadSize, drawCharacter } = useImageDownloader();
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
+  const { download, downloadUrl, characterName, downloadOptions, setDownloadSize } = useCharacterDownloader();
 
-  const downloadURI = (uri: string, name: string) => {
-    const link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
+  useClickAwayListener(modalRef, isOpen, onClose);
   const handleButtonClick = async (index: number) => {
+    await download();
     setDownloadSize(downloadOptions[index].value);
-    const imageSrc = (await drawCharacter()) as string;
-    if (imageSrc) downloadURI(imageSrc, "character.png");
-    setSelected(index);
+    if (downloadUrl) downloadURI(downloadUrl, characterName);
+    setSelectedMenuItem(downloadOptions[index].value);
   };
-
-  //TODO: use click-away listener hook
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleKeyDown);
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, onClose]);
 
   return (
     <DownloadWrapper isOpen={isOpen} onClose={onClose}>
       <DownloadContainer ref={modalRef} height={height}>
+        <DownloadHeader>Download Character</DownloadHeader>
         <DownloadContents>
           {downloadOptions.map((button, index) => (
             <DownloadContent
               key={index}
               onClick={() => {
-                setSelected(-1);
+                setSelectedMenuItem(button.value);
               }}
             >
               <ButtonText
                 key={index}
-                customColor={selected === index ? color.black : color.darkGrey}
+                customColor={selectedMenuItem === button.value ? color.black : color.darkGrey}
                 onClick={() => handleButtonClick(index)}
               >
                 {button.label}
@@ -83,4 +55,13 @@ export const DownloadImageModal: React.FC<DownloadProps> = ({ isOpen, onClose })
       </DownloadContainer>
     </DownloadWrapper>
   );
+};
+
+const downloadURI = (uri: string, name: string) => {
+  const link = document.createElement("a");
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
