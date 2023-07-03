@@ -1,13 +1,9 @@
 import styled from "@emotion/styled";
-import { color, margins } from "../../design";
-import { ZoomInIcon, ZoomOutIcon } from "../../assets";
+import { color, fontSize, margins } from "../../design";
+import { DownloadIcon, ZoomInIcon, ZoomOutIcon } from "../../assets";
 import { css } from "@emotion/react";
-import { ButtonText, disappear, fadeIn, fadeOut } from "../../components";
-
-export interface DownloadProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { ButtonText, disappear, fadeIn, fadeOut, SecondaryButton } from "../../components";
+import { DownloadProps } from "../../components/download-image/download-image-modal";
 
 interface ViewProps {
   height: number;
@@ -28,21 +24,33 @@ export const ControlAreaWrapper = styled.div`
   height: 100%;
   width: 100%;
   pointer-events: none;
+  touch-action: none;
 `;
-export const ControlAreaBottom = styled.footer`
+
+export const ControlAreaBody = styled.div`
   position: absolute;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 24px;
-  padding: 0 20px;
-  flex-wrap: nowrap;
-  opacity: 1;
-  bottom: 1rem;
-  border-radius: 20px;
+  top: 50%;
+  width: 100%;
   pointer-events: all;
 `;
 
+export const ControlAreaBottomWrapper = styled.footer`
+  position: absolute;
+  width: 100%;
+  opacity: 1;
+  bottom: 1rem;
+  pointer-events: all;
+`;
+
+export const ControlAreaBottom = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 24px;
+  border-radius: 20px;
+  padding: 0 20px;
+`;
 export const ControlAreaTop = styled.header`
   position: absolute;
   display: flex;
@@ -79,6 +87,9 @@ export const ZoomInButton = styled.button`
   border: 1px solid ${color.grey};
   height: 100%;
   width: 100%;
+  &:hover {
+    background: ${color.lightGrey};
+  }
 `;
 
 export const ZoomResetButton = styled.button`
@@ -87,11 +98,35 @@ export const ZoomResetButton = styled.button`
   padding: 0 0.625rem !important;
   justify-content: center;
   color: ${color.black};
+  font-size: ${fontSize.extraSmall};
   background: ${color.white};
   border-top: 1px solid ${color.grey};
   border-bottom: 1px solid ${color.grey};
   height: 100%;
   width: 100%;
+
+  position: relative;
+  /* Add styles for the pop-up */
+  &::before {
+    content: "Reset Zoom";
+    position: absolute;
+    top: -2rem; /* Adjust the vertical position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${color.black};
+    color: ${color.white};
+    padding: 0.25rem 0.5rem;
+    font-size: ${fontSize.extraSmall};
+    border-radius: ${margins.mini};
+    opacity: 0;
+    width: max-content;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Show the pop-up on hover */
+  &:hover::before {
+    opacity: 1;
+  }
 `;
 
 export const ZoomOutButton = styled.button`
@@ -106,12 +141,52 @@ export const ZoomOutButton = styled.button`
   border: 1px solid ${color.grey};
   height: 100%;
   width: 100%;
+  &:hover {
+    background: ${color.lightGrey};
+  }
 `;
 
 export const ZoomIn = styled(ZoomInIcon)`
   svg {
     height: 20px;
     width: 20px;
+  }
+`;
+
+export const DownloadButton = styled(SecondaryButton)`
+  background: ${color.white};
+  padding: 19px 3px;
+  border-radius: 50%;
+
+  position: relative;
+  /* Add styles for the pop-up */
+  &::before {
+    content: "Download Character";
+    position: absolute;
+    top: -2rem; /* Adjust the vertical position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${color.black};
+    color: ${color.white};
+    padding: 0.25rem 0.5rem;
+    font-size: ${fontSize.extraSmall};
+    border-radius: ${margins.mini};
+    opacity: 0;
+    width: max-content;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Show the pop-up on hover */
+  &:hover::before {
+    opacity: 1;
+  }
+`;
+
+export const Download = styled(DownloadIcon)`
+  svg {
+    height: 20px;
+    width: 20px;
+    margin: 0;
   }
 `;
 
@@ -127,10 +202,10 @@ export const DownloadWrapper = styled.div<DownloadProps>`
   ${({ isOpen }): string => {
     return isOpen
       ? `
-        position: absolute;
-        margin-bottom: 40px;
-        bottom: 0;
+        position: relative;
         z-index: 1000;
+        margin: auto;
+        width: 50%;
         `
       : `
       display: none;
@@ -163,6 +238,14 @@ export const DownloadContainer = styled.div<ViewProps>`
     opacity: 1;
     visibility: visible;
   }
+`;
+
+export const DownloadHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: ${margins.small};
+  border-bottom: 1px solid ${color.grey};
 `;
 
 export const DownloadContents = styled.div`

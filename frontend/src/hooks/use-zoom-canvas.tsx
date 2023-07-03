@@ -21,7 +21,7 @@ export const useZoomCanvas = () => {
 
   const handleZoom = useCallback(
     (zoom: number) => {
-      const newScale = Math.round(prevScaleRef.current * zoom * 10) / 10;
+      const newScale = Math.round(prevScaleRef.current * zoom * 10) * zoomProps.zoomSpeed;
 
       const stage = stageRef.current?.getStage();
 
@@ -81,7 +81,7 @@ export const useZoomCanvas = () => {
         event.evt.preventDefault();
         let delta = event.evt.deltaY > 0 ? -1 : 1;
         const zoom = delta > 0 ? 1 + zoomProps.zoomSpeed : 1 - zoomProps.zoomSpeed;
-        const newScale = Math.round(prevScaleRef.current * zoom * 10) / 10;
+        const newScale = Math.round(prevScaleRef.current * zoom * 10) * zoomProps.zoomSpeed;
         if (newScale <= zoomProps.maxScale && newScale >= 1) {
           setScale(newScale);
           const pointerPos = stage.getPointerPosition();
@@ -91,7 +91,7 @@ export const useZoomCanvas = () => {
               y: pointerPos.y / stage.height(),
             };
 
-            const newPos = {
+            const newCenteredStagePosition = {
               x:
                 stage.x() - (pointerRelativePos.x * newScale * stage.width() - pointerRelativePos.x * prevScaleRef.current * stage.width()),
               y:
@@ -99,10 +99,10 @@ export const useZoomCanvas = () => {
                 (pointerRelativePos.y * newScale * stage.height() - pointerRelativePos.y * prevScaleRef.current * stage.height()),
             };
 
-            stage.position(newPos);
+            stage.position(newCenteredStagePosition);
           } else {
-            const newPos = centeredStagePosition(newScale);
-            stage.position(newPos);
+            const newCenteredStagePosition = centeredStagePosition(newScale);
+            stage.position(newCenteredStagePosition);
           }
 
           stage.scale({ x: newScale, y: newScale });
