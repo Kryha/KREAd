@@ -13,6 +13,7 @@ export const margins = {
 export interface zIndexProps {
   [key: string]: number;
 }
+
 export const zIndex: zIndexProps = {
   foreground: 10,
   mid: 20,

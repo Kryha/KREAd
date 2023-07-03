@@ -125,6 +125,7 @@ const downloadOptions = [
   { label: "Original (PNG)", value: "original" },
   { label: "Large (PNG)", value: "large" },
 ];
+
 export function useCharacterDownloader(initialDownloadSize = "original") {
   const { drawCharacter } = useCharacterImage();
   const [downloadSize, setDownloadSize] = useState<string>(initialDownloadSize);

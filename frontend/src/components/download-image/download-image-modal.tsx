@@ -16,6 +16,7 @@ export interface DownloadProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
 export const DownloadImageModal: React.FC<DownloadProps> = ({ isOpen, onClose }) => {
   const { height } = useViewport();
   const modalRef = useRef<HTMLDivElement>(null);

@@ -51,6 +51,7 @@ export const ControlAreaBottom = styled.div`
   border-radius: 20px;
   padding: 0 20px;
 `;
+
 export const ControlAreaTop = styled.header`
   position: absolute;
   display: flex;
@@ -64,6 +65,7 @@ export const ControlAreaTop = styled.header`
   border-radius: 20px;
   pointer-events: all;
 `;
+
 export const ZoomActions = styled.div`
   display: grid;
   grid-auto-columns: min-content;
