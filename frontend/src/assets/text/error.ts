@@ -7,5 +7,5 @@ export const error = {
     "sorry, something went wrong and the page you were looking for is not available right now! We are working hard to solve this problem!",
   goBack: "go back",
   goHome: "go home",
-  downloadFailed: "An error occurred while downloading the character",
+  downloadFailed: "an error occurred while downloading the character",
 };
