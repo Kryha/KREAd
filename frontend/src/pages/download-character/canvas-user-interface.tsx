@@ -3,6 +3,7 @@ import {
   ControlAreaBody,
   ControlAreaBottom,
   ControlAreaBottomWrapper,
+  ControlAreaButton,
   ControlAreaTop,
   ControlAreaWrapper,
   Download,
@@ -15,11 +16,11 @@ import {
   ZoomOutButton,
   ZoomResetButton,
 } from "./styles";
-import { PrimaryButton } from "../../components";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { DownloadImageModal } from "../../components/download-image/download-image-modal";
 import { useZoomCanvas } from "../../hooks/use-zoom-canvas";
+import { text } from "../../assets";
 
 export const CanvasUserInterface: FC = () => {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
@@ -35,7 +36,7 @@ export const CanvasUserInterface: FC = () => {
     setIsDownloadOpen(false);
   };
 
-  const handleHome = () => {
+  const handleGoToMyCharacters = () => {
     navigate(routes.character);
   };
 
@@ -45,7 +46,7 @@ export const CanvasUserInterface: FC = () => {
         <DownloadImageModal isOpen={isDownloadOpen} onClose={handleCloseDownload} />
       </ControlAreaBody>
       <ControlAreaTop>
-        <PrimaryButton onClick={handleHome}>Home</PrimaryButton>
+        <ControlAreaButton onClick={handleGoToMyCharacters}>{text.navigation.myCharacters}</ControlAreaButton>
       </ControlAreaTop>
       <ControlAreaBottomWrapper>
         <ControlAreaBottom>
