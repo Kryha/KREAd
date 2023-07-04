@@ -20,7 +20,7 @@ export interface DownloadProps {
 export const DownloadImageModal: React.FC<DownloadProps> = ({ isOpen, onClose }) => {
   const { height } = useViewport();
   const modalRef = useRef<HTMLDivElement>(null);
-  const [selectedMenuItem, setSelectedMenuItem] = useState<string | null>(null);
+  const [selectedMenuItem, setSelectedMenuItem] = useState<string>("");
   const { download, downloadUrl, characterName, downloadOptions, setDownloadSize } = useCharacterDownloader();
 
   useClickAwayListener(modalRef, isOpen, onClose);
