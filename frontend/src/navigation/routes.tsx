@@ -24,6 +24,9 @@ import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
 import { isDevelopmentMode } from "../constants";
 import { DevelopmentMode } from "../service/test-service/development-mode";
+import { MobileNotAvailable } from "../pages/mobile-not-available";
+import { useIsMobile } from "../hooks";
+import { breakpoints } from "../design";
 
 export const InternalAppWrapper = () => {
   return (
@@ -37,6 +40,7 @@ export const InternalAppWrapper = () => {
 
 export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile(breakpoints.tablet);
   const [service] = useAgoricContext();
 
   if (service.isLoading) return <LoadingPage spinner={false} />;
@@ -46,15 +50,15 @@ export const InternalAppRoutes: FC = () => {
       <Routes>
         <Route path={routes.root} element={<Onboarding />} />
         <Route path={routes.character} element={<Landing />} />
-        <Route path={`${routes.items}/:category`} element={<ItemPage />} />
-        <Route path={routes.shop} element={<Shop />} />
-        <Route path={routes.inventory} element={<Inventory />} />
         <Route path={routes.createCharacter} element={<CreateCharacter />} />
-        <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
-        <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
-        <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
-        <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
         <Route path={routes.downloadCharacter} element={<DownloadCharacter />} />
+        <Route path={`${routes.items}/:category`} element={isMobile ? <MobileNotAvailable /> : <ItemPage />} />
+        <Route path={routes.shop} element={isMobile ? <MobileNotAvailable /> : <Shop />} />
+        <Route path={routes.inventory} element={isMobile ? <MobileNotAvailable /> : <Inventory />} />
+        <Route path={`${routes.buyItem}/:id`} element={isMobile ? <MobileNotAvailable /> : <ItemBuy />} />
+        <Route path={`${routes.buyCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterBuy />} />
+        <Route path={`${routes.sellItem}/:id`} element={isMobile ? <MobileNotAvailable /> : <ItemSell />} />
+        <Route path={`${routes.sellCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterSell />} />
 
         {isDevelopmentMode && <Route path={"/test"} element={<TestServiceUI />} />}
 

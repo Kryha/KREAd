@@ -64,4 +64,6 @@ export const general = {
   sellAssetInfo:
     "add a selling price to your character/item. Keep in mind the level that it is as a reference, since it can help you to set a fair price in comparison of the rest of the characters/items.",
   viewCharacter: "view character",
+  desktopOnly: "unfortunately, this experience can only be enjoyed on desktop devices.",
+  moreAboutThisProject: "more about this project",
 };
