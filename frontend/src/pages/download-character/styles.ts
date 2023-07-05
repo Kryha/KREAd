@@ -66,6 +66,10 @@ export const ControlAreaTop = styled.header`
   pointer-events: all;
 `;
 
+export const ControlAreaButton = styled(SecondaryButton)`
+  text-transform: capitalize;
+`;
+
 export const ZoomActions = styled.div`
   display: grid;
   grid-auto-columns: min-content;
