@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   DownloadContainer,
   DownloadContent,
@@ -11,6 +11,8 @@ import { ButtonText } from "../atoms";
 import { color } from "../../design";
 import { useCharacterDownloader } from "../../context/character-image-provider";
 import { useClickAwayListener } from "../../hooks/use-click-away-listener";
+import { text } from "../../assets";
+import { FloatingSpinner } from "../content-loader/styles";
 
 export interface DownloadProps {
   isOpen: boolean;
@@ -20,32 +22,43 @@ export interface DownloadProps {
 export const DownloadImageModal: React.FC<DownloadProps> = ({ isOpen, onClose }) => {
   const { height } = useViewport();
   const modalRef = useRef<HTMLDivElement>(null);
-  const [selectedMenuItem, setSelectedMenuItem] = useState<string>("");
-  const { download, downloadUrl, characterName, downloadOptions, setDownloadSize } = useCharacterDownloader();
+  const { download, downloadSize, downloadOptions, setDownloadSize } = useCharacterDownloader();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useClickAwayListener(modalRef, isOpen, onClose);
-  const handleButtonClick = async (index: number) => {
-    await download();
-    setDownloadSize(downloadOptions[index].value);
-    if (downloadUrl) downloadURI(downloadUrl, characterName);
-    setSelectedMenuItem(downloadOptions[index].value);
-  };
+
+  const handleButtonClick = useCallback(
+    async (index: number) => {
+      const selectedDownloadSize = downloadOptions[index].value;
+      try {
+        setIsLoading(true);
+        await download(selectedDownloadSize);
+        setIsLoading(false);
+        console.info("Successfully downloaded character image");
+      } catch (error) {
+        console.error(text.error.downloadFailed, error);
+      }
+      onClose();
+    },
+    [download, downloadOptions, onClose]
+  );
 
   return (
     <DownloadWrapper isOpen={isOpen} onClose={onClose}>
       <DownloadContainer ref={modalRef} height={height}>
         <DownloadHeader>Download Character</DownloadHeader>
         <DownloadContents>
+          {isLoading ? <FloatingSpinner /> : null}
           {downloadOptions.map((button, index) => (
             <DownloadContent
               key={index}
               onClick={() => {
-                setSelectedMenuItem(button.value);
+                setDownloadSize(button.value);
               }}
             >
               <ButtonText
                 key={index}
-                customColor={selectedMenuItem === button.value ? color.black : color.darkGrey}
+                customColor={downloadSize === button.value ? color.black : color.darkGrey}
                 onClick={() => handleButtonClick(index)}
               >
                 {button.label}
@@ -56,13 +69,4 @@ export const DownloadImageModal: React.FC<DownloadProps> = ({ isOpen, onClose })
       </DownloadContainer>
     </DownloadWrapper>
   );
-};
-
-const downloadURI = (uri: string, name: string) => {
-  const link = document.createElement("a");
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 };

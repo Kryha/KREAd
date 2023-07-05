@@ -12,6 +12,22 @@ const spin = keyframes`
   }
 `;
 
+export const FloatingSpinner = styled.div`
+  border: 4px solid ${color.black};
+  border-top: 4px solid ${color.offWhite};
+  border-radius: 50%;
+  width: ${margins.large};
+  height: ${margins.large};
+  animation: ${spin} 0.6s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1000;
+`;
+interface SpinnerProps {
+  isSpinner?: boolean;
+}
+
 export const Spinner = styled.div`
   border: 4px solid ${color.black};
   border-top: 4px solid ${color.offWhite};

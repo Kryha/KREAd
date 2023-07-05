@@ -1,4 +1,4 @@
-import React, { createContext, FC, useMemo, useRef, useState } from "react";
+import React, { createContext, FC, useCallback, useMemo, useRef, useState } from "react";
 import { useSelectedCharacter } from "../service";
 import Konva from "konva";
 import { useAndRequireContext } from "../hooks/use-and-require-context";
@@ -129,23 +129,36 @@ const downloadOptions = [
 export function useCharacterDownloader(initialDownloadSize = "original") {
   const { drawCharacter } = useCharacterImage();
   const [downloadSize, setDownloadSize] = useState<string>(initialDownloadSize);
-  const [downloadUrl, setDownloadUrl] = useState<string | undefined>(undefined);
+  const [downloadUrl, setDownloadUrl] = useState<string>("");
   const [characterName, setCharacterName] = useState<string>("");
 
-  const download = async () => {
-    try {
-      const character = await drawCharacter();
-      const dataUrl = character.toDataURL({
-        pixelRatio: downloadSize === "original" ? 1 : 3,
-        quality: 1,
-        mimeType: "image/png",
-      });
-      setDownloadUrl(dataUrl);
-      setCharacterName(character.attrs.name);
-    } catch (error) {
-      console.error(text.error.downloadFailed, error);
-    }
-  };
+  const download = useCallback(
+    async (selected: string) => {
+      setDownloadSize(selected);
+      try {
+        const character = await drawCharacter();
+        const imageBlob = (await character.toBlob({
+          pixelRatio: selected === "original" ? 1 : 2,
+          quality: 1,
+          mimeType: "image/png",
+        })) as Blob;
 
-  return { download, downloadUrl, characterName, downloadOptions, setDownloadSize };
+        const imageBlobUrl = URL.createObjectURL(imageBlob);
+        setDownloadUrl(imageBlobUrl);
+        setCharacterName(character.attrs.name);
+
+        const link = document.createElement("a");
+        link.href = imageBlobUrl;
+        link.download = `${character.attrs.name}.png`;
+        link.click();
+
+        URL.revokeObjectURL(imageBlobUrl);
+      } catch (error) {
+        console.error(text.error.downloadFailed, error);
+      }
+    },
+    [drawCharacter]
+  );
+
+  return { download, downloadUrl, downloadSize, downloadOptions, setDownloadSize, characterName };
 }
