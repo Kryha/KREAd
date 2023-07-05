@@ -211,7 +211,7 @@ export const DownloadWrapper = styled.div<DownloadProps>`
         position: relative;
         z-index: 1000;
         margin: auto;
-        width: 50%;
+        width: max-content;
         `
       : `
       display: none;
@@ -263,7 +263,7 @@ export const DownloadContents = styled.div`
 
 export const DownloadContent = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   padding: 0;
   margin: ${margins.small} 0px;
