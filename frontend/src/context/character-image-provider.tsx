@@ -94,7 +94,6 @@ export const CharacterImageProvider: FC<Props> = ({ children }) => {
         name: character?.name || text.character.defaultCharacter,
       });
     } catch (error) {
-      // Handle the error here
       console.error("An error occurred while loading and pushing images:", error);
     }
 
