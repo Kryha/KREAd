@@ -39,6 +39,7 @@ const buttonLinks: ButtonLink[] = [
   { text: "Inventory", route: routes.inventory },
   { text: "Character", route: routes.character },
   { text: "Create Character", route: routes.createCharacter },
+  { text: "Download Character", route: routes.downloadCharacter },
   { text: "Buy Item", route: routes.buyItem },
   { text: "Sell Item", route: routes.sellItem },
   { text: "Sell Character", route: routes.sellCharacter },

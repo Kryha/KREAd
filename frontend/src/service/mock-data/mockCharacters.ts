@@ -1,9 +1,10 @@
 import { Character } from "../../interfaces";
+import { TempetCharacter } from "../../assets";
 
 export const mockCharacters: Character[] = [
   {
     title: "character 1 tot tjdnsjs sjs ss  jaja",
-    image: "",
+    image: TempetCharacter,
     keyId: 1,
     name: "character 1",
     type: "tempetScavenger",
@@ -29,7 +30,7 @@ export const mockCharacters: Character[] = [
   },
   {
     title: "character 2",
-    image: "",
+    image: TempetCharacter,
     keyId: 1,
     name: "character 2",
     type: "tempetScavenger",
@@ -55,7 +56,7 @@ export const mockCharacters: Character[] = [
   },
   {
     title: "character 3",
-    image: "",
+    image: TempetCharacter,
     keyId: 1,
     name: "character 3",
     type: "tempetScavenger",
@@ -81,7 +82,7 @@ export const mockCharacters: Character[] = [
   },
   {
     title: "character 4",
-    image: "",
+    image: TempetCharacter,
     keyId: 1,
     name: "character 4",
     type: "tempetScavenger",

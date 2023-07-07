@@ -13,4 +13,5 @@ export const routes = {
   privacy: "/privacy",
   onboarding: "/onboarding",
   test: "/test",
+  downloadCharacter: "/download-character",
 };
