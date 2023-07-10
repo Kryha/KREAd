@@ -54,7 +54,6 @@ export interface AgoricState {
   isReady: boolean;
   chainStorageWatcher: any;
 }
-
 export interface TokenInfo {
   character: { issuer: any, brand: any },
   item: { issuer: any, brand: any },

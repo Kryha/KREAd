@@ -1,7 +1,8 @@
 SDK_PATH = ../..
 COSMIC_SWINGSET_PATH = ../../agoric-sdk/packages/cosmic-swingset
 VATS_PATH = ../../agoric-sdk/packages/vats
-KEPLR_ADDRESS = agoric1tq3v943uaycqp90qvuyaqzwdc3eh52xzrcl4p6
+KEPLR_ADDRESS = agoric1g24dty9gfs3407mdjcelr8dmwffx7yq702zzcj
+KREAD_REPO = ../../../agoric/agoric/contract/src/index.js
 
 chain-reset:
 	agoric start local-chain --reset --verbose
@@ -33,7 +34,7 @@ deploy:
 
 kread-bundle:
 	cd $(VATS_PATH); \
-  yarn bundle-source --cache-json bundles/ ../../../REPO/agoric/contract/src/index.js kread; \
+  yarn bundle-source --cache-json bundles/ ${KREAD_REPO} kread; \
 	agoric publish --node 127.0.0.1:26657 bundles/bundle-kread.json --chain-id agoriclocal --home ../cosmic-swingset/t1/8000; \
 
 local-testnet:
@@ -51,7 +52,9 @@ provision-account:
 
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \
-	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=100000000000ibc/toyusdc\
+	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000uist; \
+  make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000ubld; \
+
 
 proposal:
 	cd $(COSMIC_SWINGSET_PATH); \
@@ -63,5 +66,6 @@ proposal-2:
 
 bootstrap:
 	make provision-account; \
+  make fund-account; \
 	make kread-bundle; \
 	make proposal; \

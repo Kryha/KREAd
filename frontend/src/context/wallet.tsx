@@ -1,6 +1,6 @@
 import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { observeIteration } from "@agoric/notifier";
+import { observeIteration, makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import { useAgoricState } from "./agoric";
 
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
@@ -33,48 +33,54 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
   const pursesNotifier = agoric.walletConnection.pursesNotifier;
 
   useEffect(() => {
-    const observer = harden({
-      updateState: (purses: any) => {
-        console.count("💾 LOADING PURSE CHANGE 💾");
+    let isCancelled = false;
 
-        // Load Purses
-        const newMoneyPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Money);
-        const newTokenPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Token);
-        const newCharacterPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Character);
-        const newItemPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Item);
+    const updateState = async (purses: any) => {
+      console.count("💾 LOADING PURSE CHANGE 💾");
 
-        const characterWallet = newCharacterPurses[newCharacterPurses.length - 1];
-        const itemWallet = newItemPurses[newItemPurses.length - 1];
-        const moneyWallet = newMoneyPurses[newCharacterPurses.length - 1];
-        const tokenWallet = newTokenPurses[newItemPurses.length - 1];
+      // Load Purses
+      const newMoneyPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Money);
+      const newTokenPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Token);
+      const newCharacterPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Character);
+      const newItemPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Item);
 
-        walletDispatch((prevState) => ({
-          ...prevState,
-          token: tokenWallet,
-          money: moneyWallet,
-          character: characterWallet,
-          item: itemWallet,
-        }));
-      },
-      finish: (completion: unknown) => console.info("WALLET NOTIFIER FINISHED", completion),
-      fail: (reason: unknown) => console.info("WALLET NOTIFIER ERROR", reason),
-    });
+      const characterWallet = newCharacterPurses[newCharacterPurses.length - 1];
+      const itemWallet = newItemPurses[newItemPurses.length - 1];
+      const moneyWallet = newMoneyPurses[newCharacterPurses.length - 1];
+      const tokenWallet = newTokenPurses[newItemPurses.length - 1];
 
-    const watchPurses = async () => {
-      console.info("✅ LISTENING FOR PURSE CHANGES");
-
-      observeIteration(pursesNotifier, observer);
       walletDispatch((prevState) => ({
         ...prevState,
-        fetched: true,
+        token: tokenWallet,
+        money: moneyWallet,
+        character: characterWallet,
+        item: itemWallet,
       }));
     };
 
-    if (pursesNotifier && kreadPublicFacet && !walletState.fetched) {
+    const watchPurses = async () => {
+      console.info("✅ LISTENING FOR PURSE CHANGES", pursesNotifier);
+      const watch = async () => {
+        for await (const purses of iterateNotifier(pursesNotifier)) {
+          if (isCancelled) return;
+          console.debug("got purses", purses);
+          updateState(purses);
+        }
+      };
+      watch().catch((err: Error) => {
+        console.error("got watchPurses err", err);
+      });
+    };
+
+    if (pursesNotifier && !walletState.fetched) {
       watchPurses().catch((err) => {
         console.error("got watchNotifiers err", err);
       });
     }
+
+    return () => {
+      isCancelled = true;
+    };
   }, [pursesNotifier, kreadPublicFacet, walletState.fetched]);
 
   return <Context.Provider value={walletState}>{props.children}</Context.Provider>;

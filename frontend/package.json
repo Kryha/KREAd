@@ -2,6 +2,7 @@
   "name": "@builder/frontend",
   "version": "0.1.0",
   "dependencies": {
+    "@agoric/rpc": "^0.0.2-dev-2c6fbc5.0",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@testing-library/jest-dom": "^5.16.1",

@@ -12,6 +12,7 @@ import {
 import { makeAgoricChainStorageWatcher } from "../service/storage-node/chain-storage-watcher";
 import { fetchChainInfo } from "./util";
 import { watchCharacter } from "../service/storage-node/watch-character";
+import { AgoricChainStoragePathKind as Kind } from '@agoric/rpc';
 
 const initialState: AgoricState = {
   status: {
@@ -66,6 +67,15 @@ const initialState: AgoricState = {
   isReady: false,
   chainStorageWatcher: undefined
 };
+
+type Status = 'initialState' | 'keplrReady' | 'storageWatcherReady' | 'ready'
+
+const status = {
+  initialState: 'initialState',
+  keplrReady: 'keplrReady',
+  storageWatcherReady: 'storageWatcherReady',
+  ready: 'ready'
+} as const;
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
 type ProviderProps = Omit<React.ProviderProps<AgoricState>, "value">;
@@ -122,94 +132,84 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
-  const [currentStatus, setCurrentStatus] = useState<"not connected" | "connecting" | "connected">("not connected");
+  const [currentStatus, setCurrentStatus] = useState<Status>(status.initialState);
+  const [isCancelled, setIsCancelled] = useState<boolean>(false);
 
   const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
     if (!offers.length) return;
     agoricDispatch({ type: "SET_OFFERS", payload: offers });
   };
+  
 
   useEffect(() => {
+    if (isCancelled) return;
+    // TODO: consider implementing terms agreement
+    // if (checkTerms && !areLatestTermsAgreed) {
+    //   setIsTermsDialogOpen(true);
+    //   return;
+    // }
 
-    const connect = async () => {
-      const status = {
-        connected: "connected",
-        connecting: "connecting",
-        notConnected: "not connected"
-      };
+    let connection;
+    // dispatch({ type: "SET_LOADING", payload: true });
 
-      if(currentStatus === status.connecting || currentStatus === status.connected) return;
-      
-      // TODO: consider implementing terms agreement
-      // if (checkTerms && !areLatestTermsAgreed) {
-      //   setIsTermsDialogOpen(true);
-      //   return;
-      // }
-  
-      let connection;
-      // dispatch({ type: "SET_LOADING", payload: true });
-
-      const connectKeplr = async () => {
-        try {
-          connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url)
-          connection = { ...connection, importContext: makeImportContext() }
-          // FIXME: remove log
-          console.log("KEPLER CONNECTION: ", connection);
-          dispatch({ type: "SET_WALLET_CONNECTION", payload: connection })
-        } catch (e: any) {
-          switch (e.message) {
-            case Errors.enableKeplr:
-              console.error("Enable the connection in Keplr to continue.");
-              break;
-            case Errors.networkConfig:
-              console.error("Network not found.");
-              break;
-            case Errors.noSmartWallet:
-              console.error("NO SMART WALLET");
-              break;
-          }
-        } finally {
-          setCurrentStatus("connected");
+    const connectKeplr = async () => {
+      try {
+        connection = await makeAgoricKeplrConnection(networkConfigs.localDevnet.url)
+        connection = { ...connection, importContext: makeImportContext() }
+        // FIXME: remove log
+        console.log("KEPLER CONNECTION: ", connection);
+        dispatch({ type: "SET_WALLET_CONNECTION", payload: connection })
+        setCurrentStatus(status.keplrReady);
+      } catch (e: any) {
+        switch (e.message) {
+          case Errors.enableKeplr:
+            console.error("Enable the connection in Keplr to continue.");
+            break;
+          case Errors.networkConfig:
+            console.error("Network not found.");
+            break;
+          case Errors.noSmartWallet:
+            console.error("NO SMART WALLET");
+            break;
         }
-      };
-      let isCancelled = false;
-    
-      if (state.chainStorageWatcher) return;
-      const startWatching = async () => {
-        try {
-          const { rpc, chainName } = await fetchChainInfo(networkConfigs.localDevnet.url);
-          console.log("RPC + chainName: ", rpc, chainName)
-          if (isCancelled) return;
-          const chainStorageWatcher = makeAgoricChainStorageWatcher(
-              rpc,
-              chainName,
-              state.walletConnection.importContext.fromBoard.unserialize,
-              e => {
-                console.error(e);
-                throw e;
-              },
-            )
-          dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
-
-          watchCharacter();
-        } catch (e) {
-          if (isCancelled) return;
-          console.error(e);
-        }
-      };
-
-      startWatching();
-      // FIXME: remove log
-      console.count("CONNECTING");
-      connectKeplr();
-
-      return () => {
-        isCancelled = true;
       };
     }
-    connect();
+  
+    const startWatching = async () => {
+      if (state.chainStorageWatcher) return;
+      try {
+        const { rpc, chainName } = await fetchChainInfo(networkConfigs.localDevnet.url);
+        const chainStorageWatcher = makeAgoricChainStorageWatcher(
+          rpc,
+          chainName,
+          state.walletConnection.importContext.fromBoard.unserialize,
+          e => {
+            console.error(e);
+            throw e;
+          },
+        )
+        
+        dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
+        setCurrentStatus(status.storageWatcherReady);
+      } catch (e) {
+        if (isCancelled) return;
+        console.error(e);
+      }
+    };
 
-  }, [currentStatus]);
+    // FIXME: remove log
+    console.count("CONNECTING");
+    if (currentStatus === status.initialState) {
+      connectKeplr();
+    } else if (currentStatus === status.keplrReady) {
+      startWatching();
+    } else if (currentStatus === status.storageWatcherReady) {
+      setCurrentStatus(status.ready)
+      return () => {
+        setIsCancelled(true);
+      };
+    }
+  }, [currentStatus, isCancelled]);
 
   return (
     <Context.Provider value={state}>
