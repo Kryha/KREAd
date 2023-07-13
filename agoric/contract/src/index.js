@@ -4,17 +4,18 @@ import '@agoric/zoe/exported';
 import { AssetKind, AmountMath } from '@agoric/ertp';
 import { Far } from '@endo/marshal';
 import { assert, details as X } from '@agoric/assert';
-import { errors } from './errors';
-import { mulberry32 } from './prng';
-import { messages } from './messages';
+import { errors } from './errors.js';
+import { mulberry32 } from './prng.js';
 import {
   makeCharacterNftObjs,
   makeStorageNodePublishKit,
   setupStorageNodeNotifiers,
-} from './utils';
-import { market } from './market';
-import { inventory } from './inventory';
-import { kreadState } from './kread-state';
+} from './utils.js';
+import { market } from './market.js';
+import { inventory } from './inventory.js';
+import { kreadState } from './kread-state.js';
+import { validation } from './validation.js';
+import { text } from './text.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -38,14 +39,14 @@ const start = async (zcf, privateArgs) => {
   const assetNames = {
     character: 'KREAdCHARACTER',
     item: 'KREAdITEM',
-    paymentNFT: 'KREAdTOKEN',
+    paymentFT: 'KREAdTOKEN',
   };
 
   // Define Assets
   const assetMints = await Promise.all([
     zcf.makeZCFMint(assetNames.character, AssetKind.SET),
     zcf.makeZCFMint(assetNames.item, AssetKind.SET),
-    zcf.makeZCFMint(assetNames.paymentNFT, AssetKind.NAT), // TODO: Change to IST
+    zcf.makeZCFMint(assetNames.paymentFT, AssetKind.NAT), // TODO: Change to IST
   ]);
 
   const [
@@ -101,6 +102,7 @@ const start = async (zcf, privateArgs) => {
     notifiers: setupStorageNodeNotifiers(privateArgs.powers),
   });
 
+  const validate = validation;
   const characterHistory = {};
   const itemHistory = {};
 
@@ -139,7 +141,7 @@ const start = async (zcf, privateArgs) => {
       ];
     });
 
-    return messages.mintItemReturn;
+    return text.mintItemReturn;
   };
 
   /**
@@ -151,13 +153,15 @@ const start = async (zcf, privateArgs) => {
     assert(state.get.isReady(), X`${errors.noConfig}`);
 
     const { want } = seat.getProposal();
-    const currentTime = await state.get.time();
-    const newCharacterName = want.Asset.value[0].name;
-    assert(
-      state.validate.nameIsUnique(newCharacterName),
-      X`${errors.nameTaken}`,
-    );
 
+    const error = validate.mintCharacter(want, state.validate.nameIsUnique);
+    if (error) {
+      return harden({ message: error });
+    }
+
+    const newCharacterName = want.Asset.value[0].name;
+
+    const currentTime = await state.get.time();
     const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
       newCharacterName,
       state.get.randomBaseCharacter(),
@@ -236,7 +240,7 @@ const start = async (zcf, privateArgs) => {
 
     seat.exit();
 
-    return messages.mintCharacterReturn;
+    return text.mintCharacterReturn;
   };
 
   /**
@@ -246,7 +250,7 @@ const start = async (zcf, privateArgs) => {
     const { want } = seat.getProposal();
     paymentFTMint.mintGains(want, seat);
     seat.exit();
-    return 'Success';
+    return text.tokenFacetReturn;
   };
 
   const creatorFacet = Far('Character store creator', {

@@ -1,3 +1,4 @@
+// ts-check
 import { assert, details as X } from '@agoric/assert';
 import { E } from '@endo/eventual-send';
 import { Far } from '@endo/marshal';
@@ -5,7 +6,7 @@ import { errors } from './errors';
 import { getPage } from './utils';
 
 /**
- * Put character up for sale
+ * Manage contract state
  *
  * @param {{
  *   tokenInfo: TokenInfo
@@ -178,14 +179,29 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
   /**
    *
    * @param {Powers} powers
-   * @param {Notifiers} notifiers
-  */
- const setPowers = (powers, notifiers) => {
-   state.config.powers = powers;
-   state.notifiers = notifiers;
-   state.ready = true;
+   * @param {Notifiers} _notifiers
+   */
+  const setPowers = (powers, _notifiers) => {
+    state.config.powers = powers;
+    state.notifiers = _notifiers;
+    state.ready = true;
   };
   
+  /**
+   *
+   * @param {string} id
+   * @param publicFacet
+   */
+  const publishKreadInfo = (id, publicFacet) => {
+    assert(id, errors.invalidArg);
+    state.boardId = id;
+    state.notifiers.info.publisher.publish({
+      boardId: id,
+      tokenInfo: state.tokenInfo,
+      publicFacet,
+    });
+  };
+
   // Full access getters
   const get = Far('kread state get', {
     isReady: () => state.ready,
@@ -214,9 +230,10 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     updateConfig,
   });
   
-  // Replaces specific entries in the state
+// Replaces specific entries in the state
   const set = Far('kread state set', {
     powers: setPowers,
+    publishKreadInfo,
   });
 
   // Limited getters

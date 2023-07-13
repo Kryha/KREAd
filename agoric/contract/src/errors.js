@@ -1,6 +1,8 @@
 export const errors = {
   noConfig: `Configuration not found, use creatorFacet.initConfig(<config>) to enable this method`,
   noNameArg: `Name argument required`,
+  unkwonwnArgInMintOffer: `Mint Character's offer "want" must only contain property "name"`,
+  noWantInOffer: `Offer must include "want" terms in the form of { want: { name: <desired character name> }}`,
   nameTaken: (name) =>
     `Name ${name} is already in use, please select a different name`,
   depositToSeatFailed: `Could not deposit nft into Seat`,

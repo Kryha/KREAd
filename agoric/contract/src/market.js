@@ -2,11 +2,11 @@
 // @ts-check
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath } from '@agoric/ertp';
-import { errors } from './errors';
+import { errors } from './errors.js';
 import {
   removeCharacterFromMarketArray,
   removeItemFromMarketArray,
-} from './utils';
+} from './utils.js';
 
 export const SELL_CHARACTER_DESCRIPTION = 'Sell Character in KREAd marketplace';
 export const SELL_ITEM_DESCRIPTION = 'Sell Item in KREAd marketplace';
@@ -69,7 +69,7 @@ export const market = (zcf, getState) => {
   };
 
   /**
-   * Put character up for sale
+   * Put item up for sale
    *
    * @param {ZCFSeat} sellerSeat
    */
@@ -256,5 +256,7 @@ export const market = (zcf, getState) => {
       zcf.makeInvitation(sellItem, SELL_ITEM_DESCRIPTION),
     makeBuyItemInvitation: () =>
       zcf.makeInvitation(buyItem, 'Buy Item in KREAd marketplace'),
+    getCharactersForSale: () => characterMarket,
+    getItemsForSale: () => itemMarket
   };
 };

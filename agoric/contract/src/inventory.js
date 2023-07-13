@@ -3,6 +3,7 @@
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath } from '@agoric/ertp';
 import { errors } from './errors';
+import { text } from './text';
 
 /**
  * Inventory methods
@@ -88,6 +89,8 @@ export const inventory = (zcf, getState) => {
     });
 
     seat.exit();
+
+    return text.equipReturn;
   };
 
   /**
@@ -161,7 +164,7 @@ export const inventory = (zcf, getState) => {
     });
 
     seat.exit();
-    return 'Item(s) were unequipped successfully';
+    return text.unequipReturn;
   };
 
   /**
