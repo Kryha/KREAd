@@ -24,7 +24,7 @@ test.serial("--| MINT - Expected flow", async (t) => {
     purses,
     zoe,
   } = t.context;
-  const { want, message } = flow.mint.expected;
+  const { want, message } = flow.mintCharacter.expected;
 
   const mintCharacterInvitation = await E(publicFacet).makeMintCharacterInvitation();
   const proposal = harden({
@@ -51,7 +51,7 @@ test.serial("--| MINT - No want in offer", async (t) => {
     contractAssets,
     zoe,
   } = t.context;
-  const { want, message } = flow.mint.noWantInOffer;
+  const { want, message } = flow.mintCharacter.noWantInOffer;
 
   const mintCharacterInvitation = await E(publicFacet).makeMintCharacterInvitation();
   const proposal = harden({
@@ -74,7 +74,7 @@ test.serial("--| MINT - Duplicate Name", async (t) => {
     contractAssets,
     zoe,
   } = t.context;
-  const { want, message } = flow.mint.duplicateName;
+  const { want, message } = flow.mintCharacter.duplicateName;
 
   const mintCharacterInvitation = await E(publicFacet).makeMintCharacterInvitation();
   const proposal = harden({
@@ -98,7 +98,7 @@ test.serial("--| MINT - No name", async (t) => {
     zoe,
   } = t.context;
 
-  const { want, message } = flow.mint.noName;
+  const { want, message } = flow.mintCharacter.noName;
 
   const mintCharacterInvitation = await E(publicFacet).makeMintCharacterInvitation();
   const proposal = harden({
@@ -118,7 +118,7 @@ test.serial("--| MINT - Inventory check", async (t) => {
   const {
     instance: { publicFacet },
   } = t.context;
-  const { want } = flow.mint.expected;
+  const { want } = flow.mintCharacter.expected;
 
   const characterInventory = await E(publicFacet).getCharacterInventory(want.name);
 
@@ -126,3 +126,54 @@ test.serial("--| MINT - Inventory check", async (t) => {
   t.deepEqual(new Set(characterInventory.items.map(i=>i.category)).size, 10, "No two items have the same category");
 
 })
+
+test.serial("--| MINT - Item - Expected flow", async (t) => {
+    /** @type {Bootstrap} */
+    const {
+      instance: { publicFacet },
+      contractAssets,
+      purses,
+      zoe,
+    } = t.context;
+    const { want, message } = flow.mintItem.expected;
+  
+    const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+    const proposal = harden({
+      want: { Item: AmountMath.make(contractAssets.item.brand, harden([want])) },
+    });
+  
+    const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
+  
+    const result = await E(userSeat).getOfferResult();
+    t.deepEqual(result, message, "Offer returns success message");
+    
+    const payout = await E(userSeat).getPayout("Asset");
+    purses.item.deposit(payout);
+    t.deepEqual(purses.item.getCurrentAmount().value[0].name, want.name, "New Item was added to character purse successfully");
+  });
+
+test.serial("--| MINT - Item - Multiple flow", async (t) => {
+    /** @type {Bootstrap} */
+    const {
+      instance: { publicFacet },
+      contractAssets,
+      purses,
+      zoe,
+    } = t.context;
+    const { want, message } = flow.mintItem.multiple;
+  
+    const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+    const proposal = harden({
+      want: { Item: AmountMath.make(contractAssets.item.brand, harden([want])) },
+    });
+  
+    const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
+  
+    const result = await E(userSeat).getOfferResult();
+    t.deepEqual(result, message, "Offer returns success message");
+    
+    const payout = await E(userSeat).getPayout("Asset");
+    purses.item.deposit(payout);
+
+    t.deepEqual(purses.item.getCurrentAmount().value.length, 3)
+  });

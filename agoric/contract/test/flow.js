@@ -1,7 +1,8 @@
 import { errors } from "../src/errors.js";
 import { text } from "./text.js"
+import { defaultItems } from "./items.js"
 
-const mint = {
+const mintCharacter = {
   expected: {
     want: { name: "TestCharacterExpectedFlow" },
     message: text.characterMintSuccess,
@@ -23,6 +24,17 @@ const mint = {
     message: ""
   }
 };
+
+const mintItem = {
+  expected: {
+    want: defaultItems.hair,
+    message: text.itemMintSuccess
+  },
+  multiple: {
+    want: [defaultItems.airReservoir, defaultItems.background],
+    message: text.itemMintSuccess
+  },
+}
 
 const inventory = {
   characterName: "TestCharacterExpectedFlow",
@@ -57,7 +69,8 @@ const market = {
 }
 
 export const flow = {
-  mint,
+  mintCharacter,
+  mintItem,
   inventory,
   market
 };

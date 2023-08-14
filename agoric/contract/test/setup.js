@@ -32,7 +32,7 @@ export const addCharacterToBootstrap = async (bootstrap) => {
     zoe,
   } = bootstrap;
 
-  const { want } = flow.mint.expected;
+  const { want } = flow.mintCharacter.expected;
 
   const mintCharacterInvitation = await E(publicFacet).makeMintCharacterInvitation();
   const asset = AmountMath.make(contractAssets.character.brand, harden([want]))
@@ -46,6 +46,33 @@ export const addCharacterToBootstrap = async (bootstrap) => {
   purses.character.deposit(payout);
 };
 harden(addCharacterToBootstrap);
+
+/**
+ * Mint item and deposit on Bootstrap item purse
+ * 
+ * @param {Bootstrap} bootstrap 
+ */
+export const addItemToBootstrap = async (bootstrap, item) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = bootstrap;
+
+  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const itemAmount = AmountMath.make(contractAssets.item.brand, harden([item]))
+
+  const proposal = harden({
+    want: { Item: itemAmount },
+  });
+
+  const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
+  const payout = await E(userSeat).getPayout("Asset");
+  purses.item.deposit(payout);
+};
+harden(addItemToBootstrap);
 
 /**
  * @param {AssetConf} [conf]
