@@ -1,3 +1,4 @@
+// ts-check
 import { assert, details as X } from '@agoric/assert';
 import { E } from '@endo/eventual-send';
 import { Far } from '@endo/marshal';
@@ -5,7 +6,7 @@ import { errors } from './errors';
 import { getPage } from './utils';
 
 /**
- * Put character up for sale
+ * Manage contract state
  *
  * @param {{
  *   tokenInfo: TokenInfo
@@ -188,8 +189,7 @@ export const kreadState = ({
   /**
    *
    * @param {Powers} powers
-   * @param {Notifiers} notifiers
-   * @param _notifiers
+   * @param {Notifiers} _notifiers
    */
   const setPowers = (powers, _notifiers) => {
     state.config.powers = powers;

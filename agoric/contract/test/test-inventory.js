@@ -1,218 +1,719 @@
 // eslint-disable-next-line import/order
-import { test } from "./prepare-test-env-ava.js";
-import { E } from "@endo/eventual-send";
-import { AmountMath, makeIssuerKit, AssetKind } from "@agoric/ertp";
-import { bootstrap } from "./bootstrap.js";
-import { errors } from "../src/errors.js";
+import { test } from './prepare-test-env-ava.js';
+import { E } from '@endo/eventual-send';
+import { AmountMath } from '@agoric/ertp';
+import { bootstrapContext } from './bootstrap.js';
+import { flow } from './flow.js';
+import { addCharacterToBootstrap, addItemToBootstrap } from './setup.js';
+import { errors } from '../src/errors.js';
 
 test.before(async (t) => {
-  const { zoe, assets, instance } = await bootstrap();
-  t.context = {
-    instance,
-    assets,
-    zoe,
-  };
+  const bootstrap = await bootstrapContext();
+  await addCharacterToBootstrap(bootstrap);
+  t.context = bootstrap;
 });
 
-test("equip", async (t) => {
+test.serial('| INVENTORY - Unequip Item', async (t) => {
   /** @type {Bootstrap} */
   const {
     instance: { publicFacet },
-    assets: { nfts },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const {
+    characterName,
+    unequip: { message },
+  } = flow.inventory;
+
+  let characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  const hairItem = characterInventory.items.find((i) => i.category === 'hair');
+  const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+  };
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+    },
+    want: {
+      Item: AmountMath.make(contractAssets.item.brand, harden([hairItem])),
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+    },
+  });
+
+  const userSeat = await E(zoe).offer(unequipInvitation, proposal, payment);
+  const result = await E(userSeat).getOfferResult();
+  t.deepEqual(result, message, 'Unequip returns success message');
+
+  const itemPayout = await E(userSeat).getPayout('Item');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey2');
+
+  purses.item.deposit(itemPayout);
+  purses.character.deposit(characterPayout);
+
+  t.deepEqual(
+    purses.item.getCurrentAmount().value.length,
+    1,
+    'New Item was added to item purse successfully',
+  );
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+
+  characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  t.deepEqual(
+    characterInventory.items.length,
+    9,
+    'Character Inventory contains 9 items',
+  );
+});
+
+test.serial('| INVENTORY - Unequip already unequipped item', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { characterName } = flow.inventory;
+
+  const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+    },
+    want: {
+      Item: AmountMath.make(
+        contractAssets.item.brand,
+        harden([purses.item.getCurrentAmount().value[0]]),
+      ),
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+    },
+  });
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+  };
+
+  const userSeat = await E(zoe).offer(unequipInvitation, proposal, payment);
+  const result = await E(userSeat).getOfferResult();
+
+  t.deepEqual(result.substring(0, 19), 'Swap assets error: ');
+
+  const characterPayout = await E(userSeat).getPayout('CharacterKey1');
+  purses.character.deposit(characterPayout);
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+});
+
+test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const {
+    characterName,
+    unequip: { message },
+  } = flow.inventory;
+  const initialItemsInPurse = purses.item.getCurrentAmount().value.length;
+
+  let characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  const hairItem = characterInventory.items.find((i) => i.category === 'hair');
+  const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+
+  //incorrectly calculate wantedKeyId
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 1 : 2;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+    },
+    want: {
+      Item: AmountMath.make(contractAssets.item.brand, harden([hairItem])),
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+    },
+  });
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+  };
+
+  const userSeat = await E(zoe).offer(unequipInvitation, proposal, payment);
+  await t.throwsAsync(
+    E(userSeat).getOfferResult(),
+    undefined,
+    'Wanted Key and Inventory Key do not match',
+  );
+
+  const itemPayout = await E(userSeat).getPayout('Item');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey1');
+  purses.item.deposit(itemPayout);
+  purses.character.deposit(characterPayout);
+
+  t.deepEqual(
+    purses.item.getCurrentAmount().value.length,
+    initialItemsInPurse,
+    'No new Item was added to item purse',
+  );
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+});
+
+test.serial('| INVENTORY - Equip Item', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const {
+    characterName,
+    equip: { message },
+  } = flow.inventory;
+
+  let characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  const initialInventorySize = characterInventory.items.length;
+
+  const hairItem = purses.item
+    .getCurrentAmount()
+    .value.find((i) => i.category === 'hair');
+  const invitation = await E(publicFacet).makeEquipInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+  const hairAmount = AmountMath.make(
+    contractAssets.item.brand,
+    harden([hairItem]),
+  );
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+    Item: purses.item.withdraw(hairAmount),
+  };
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+      Item: AmountMath.make(contractAssets.item.brand, harden([hairItem])),
+    },
+    want: {
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+    },
+  });
+
+  const userSeat = await E(zoe).offer(invitation, proposal, payment);
+  const result = await E(userSeat).getOfferResult();
+  t.deepEqual(result, message, 'Equip returns success message');
+
+  const itemPayout = await E(userSeat).getPayout('Item');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey2');
+
+  purses.item.deposit(itemPayout);
+  purses.character.deposit(characterPayout);
+  t.deepEqual(
+    purses.item.getCurrentAmount().value.length,
+    0,
+    'Item was removed from item purse successfully',
+  );
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+
+  characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  t.deepEqual(
+    characterInventory.items.length,
+    initialInventorySize + 1,
+    'Character Inventory size increased by one item',
+  );
+  t.not(
+    characterInventory.items.find((item) => item.id === hairItem.id),
+    undefined,
+    'Character Inventory contains new item',
+  );
+});
+
+test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { characterName } = flow.inventory;
+
+  await addItemToBootstrap(t.context, { name: 'New item', category: 'hair' });
+
+  const hairItem = purses.item
+    .getCurrentAmount()
+    .value.find((i) => i.category === 'hair');
+  const hairAmount = AmountMath.make(
+    contractAssets.item.brand,
+    harden([hairItem]),
+  );
+  const invitation = await E(publicFacet).makeEquipInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+      Item: AmountMath.make(contractAssets.item.brand, harden([hairItem])),
+    },
+    want: {
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+    },
+  });
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+    Item: purses.item.withdraw(hairAmount),
+  };
+
+  const userSeat = await E(zoe).offer(invitation, proposal, payment);
+  const result = await E(userSeat).getOfferResult();
+  t.deepEqual(result, errors.duplicateCategoryInInventory);
+
+  const characterPayout = await E(userSeat).getPayout('CharacterKey1');
+  const itemPayout = await E(userSeat).getPayout('Item');
+
+  purses.character.deposit(characterPayout);
+  purses.item.deposit(itemPayout);
+
+  const characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  t.deepEqual(
+    characterInventory.items.find((item) => item.id === hairItem.id, undefined),
+  );
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+  t.deepEqual(
+    purses.item.getCurrentAmount().value[0],
+    hairItem,
+    'Item was returned to item purse successfully',
+  );
+});
+
+test.serial('| INVENTORY - Swap Items', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { characterName } = flow.inventory;
+
+  const invitation = await E(publicFacet).makeItemSwapInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+
+  const hairItemGiveValue = purses.item
+    .getCurrentAmount()
+    .value.find((item) => item.category === 'hair');
+  const hairItemGive = AmountMath.make(
+    contractAssets.item.brand,
+    harden([hairItemGiveValue]),
+  );
+
+  const characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  const hairItemWantValue = characterInventory.items.find(
+    (item) => item.category === 'hair',
+  );
+  const hairItemWant = AmountMath.make(
+    contractAssets.item.brand,
+    harden([hairItemWantValue]),
+  );
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+      Item1: hairItemGive,
+    },
+    want: {
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+      Item2: hairItemWant,
+    },
+  });
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+    Item1: purses.item.withdraw(hairItemGive),
+  };
+
+  const userSeat = await E(zoe).offer(invitation, proposal, payment);
+
+  const itemPayout = await E(userSeat).getPayout('Item2');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey2');
+
+  purses.item.deposit(itemPayout);
+  purses.character.deposit(characterPayout);
+
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+  t.deepEqual(purses.item.getCurrentAmount().value[0], hairItemWantValue);
+
+  const updatedCharacterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  t.deepEqual(
+    updatedCharacterInventory.items.find((item) => item.category === 'hair'),
+    hairItemGiveValue,
+  );
+  t.deepEqual(updatedCharacterInventory.items.length, 10);
+});
+
+test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { characterName } = flow.inventory;
+
+  await addItemToBootstrap(t.context, { name: 'Random', category: 'other' });
+
+  const invitation = await E(publicFacet).makeItemSwapInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+
+  const otherItemGiveValue = purses.item
+    .getCurrentAmount()
+    .value.find((i) => i.category === 'other');
+  const otherItemGive = AmountMath.make(
+    contractAssets.item.brand,
+    harden([otherItemGiveValue]),
+  );
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+      Item1: otherItemGive,
+    },
+    want: {
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+      Item2: AmountMath.make(contractAssets.item.brand, harden([])),
+    },
+  });
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+    Item1: purses.item.withdraw(otherItemGive),
+  };
+
+  const userSeat = await E(zoe).offer(invitation, proposal, payment);
+
+  const itemPayout = await E(userSeat).getPayout('Item2');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey2');
+
+  purses.item.deposit(itemPayout);
+  purses.character.deposit(characterPayout);
+
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+
+  const updatedCharactedInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  t.deepEqual(
+    updatedCharactedInventory.items.find((item) => item.category === 'other'),
+    otherItemGiveValue,
+    'New Item added to inventory',
+  );
+});
+
+test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { characterName } = flow.inventory;
+
+  const invitation = await E(publicFacet).makeItemSwapInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+
+  const hairItemGiveValue = purses.item
+    .getCurrentAmount()
+    .value.find((item) => item.category === 'hair');
+  const hairItemGive = AmountMath.make(
+    contractAssets.item.brand,
+    harden([hairItemGiveValue]),
+  );
+
+  const characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  const clothingItemWantValue = characterInventory.items.find(
+    (item) => item.category === 'clothing',
+  );
+  const clothingItemWant = AmountMath.make(
+    contractAssets.item.brand,
+    harden([clothingItemWantValue]),
+  );
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+      Item1: hairItemGive,
+    },
+    want: {
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+      Item2: clothingItemWant,
+    },
+  });
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+    Item1: purses.item.withdraw(hairItemGive),
+  };
+
+  const userSeat = await E(zoe).offer(invitation, proposal, payment);
+  const result = await E(userSeat).getOfferResult();
+
+  t.deepEqual(result, errors.duplicateCategoryInInventory);
+
+  const itemPayout = await E(userSeat).getPayout('Item1');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey1');
+
+  purses.item.deposit(itemPayout);
+  purses.character.deposit(characterPayout);
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+  t.deepEqual(
+    purses.item.getCurrentAmount(),
+    hairItemGive,
+    'Hair item returned to purse',
+  );
+
+  const updatedInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  t.deepEqual(
+    updatedInventory.items.find((item) => item.category === 'clothing'),
+    clothingItemWantValue,
+    'Clothing item still in inventory',
+  );
+});
+
+test.serial('| INVENTORY - Unequip all', async (t) => {
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { characterName } = flow.inventory;
+
+  let characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  const initialInventorySize = characterInventory.items.length;
+  const initialPurseSize = purses.item.getCurrentAmount().value.length;
+
+  const invitation = await E(publicFacet).makeUnequipAllInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
+
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
+
+  const proposal = harden({
+    give: {
+      CharacterKey1: characterKeyAmount,
+    },
+    want: {
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+    },
+  });
+
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+  };
+
+  const userSeat = await E(zoe).offer(invitation, proposal, payment);
+
+  const itemPayout = await E(userSeat).getPayout('Item');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey2');
+
+  purses.item.deposit(itemPayout);
+  purses.character.deposit(characterPayout);
+
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
+  t.deepEqual(
+    purses.item.getCurrentAmount().value.length,
+    initialInventorySize + initialPurseSize,
+  );
+
+  characterInventory = await E(publicFacet).getCharacterInventory(
+    characterName,
+  );
+  t.deepEqual(characterInventory.items.length, 0);
+});
+
+test.serial('| INVENTORY - UnequipAll empty inventory', async (t) => {
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
     zoe,
   } = t.context;
 
-  // Setup
-  const { brand: characterBrand, issuer: characterIssuer, mint: characterMint } = nfts.Character.kit;
-  const { brand: itemBrand, issuer: itemIssuer, mint: itemMint } = nfts.Item.kit;
-  const characterAmount = AmountMath.make(characterBrand, harden([{ id: 1, name: "TestCharacter" }]));
-  const characterPayment = characterMint.mintPayment(characterAmount);
-  const itemAmount = AmountMath.make(itemBrand, harden([{ id: 1, name: "TestItem", category: "hair" }]));
-  const itemPayment = itemMint.mintPayment(itemAmount);
+  const { characterName } = flow.inventory;
 
-  // Make invitation
-  const equipInvitation = await E(publicFacet).makeEquipInvitation();
+  const invitation = await E(publicFacet).makeUnequipAllInvitation();
+  const characterKeyAmount = AmountMath.make(
+    contractAssets.character.brand,
+    harden([purses.character.getCurrentAmount().value[0]]),
+  );
 
-  // Make sure an error is thrown if no item is provided
-  // const badProposal = harden({
-  //   give: { CharacterKey1: characterAmount },
-  //   want: { CharacterKey2: characterAmount },
-  // });
-  // const badPayment = harden({ CharacterKey1: characterPayment });
-  // await t.throwsAsync(async () => await E(zoe).offer(equipInvitation, badProposal, badPayment), { message: errors.noItemsRequested });
+  const wantedKeyId = characterKeyAmount.value[0].keyId === 1 ? 2 : 1;
 
-  // Now equip the item to the character
   const proposal = harden({
-    give: { CharacterKey1: characterAmount, Item: itemAmount },
-    want: { CharacterKey2: characterAmount },
+    give: {
+      CharacterKey1: characterKeyAmount,
+    },
+    want: {
+      CharacterKey2: AmountMath.make(
+        contractAssets.character.brand,
+        harden([{ ...characterKeyAmount.value[0], keyId: wantedKeyId }]),
+      ),
+    },
   });
-  const payments = harden({ CharacterKey1: characterPayment, Item: itemPayment });
 
-  const seat = await E(zoe).offer(equipInvitation, proposal, payments);
+  const payment = {
+    CharacterKey1: purses.character.withdraw(characterKeyAmount),
+  };
 
-  // Assertions
-  const finalAllocation = await E(seat).getFinalAllocation();
+  const userSeat = await E(zoe).offer(invitation, proposal, payment);
 
-  console.log(finalAllocation);
-  t.truthy(AmountMath.isEmpty(finalAllocation.CharacterKey1, characterBrand));
-  t.truthy(AmountMath.isEqual(finalAllocation.CharacterKey2, characterAmount));
-  t.truthy(AmountMath.isEmpty(finalAllocation.Item, itemBrand));
+  const itemPayout = await E(userSeat).getPayout('Item');
+  const characterPayout = await E(userSeat).getPayout('CharacterKey2');
+  purses.character.deposit(characterPayout);
+
+  t.deepEqual(
+    (await contractAssets.item.issuer.getAmountOf(itemPayout)).value,
+    [],
+    'No items returned as inventory was empty',
+  );
+  t.deepEqual(
+    purses.character.getCurrentAmount().value[0].name,
+    characterName,
+    'CharacterKey was returned to character purse successfully',
+  );
 });
-
-/**
- * TODO: update all below tests with the correct structure when the one above is working
- */
-
-// test("unequip", async (t) => {
-//   /** @type {Bootstrap} */
-//   const {
-//     instance: { publicFacet },
-//     assets: { nfts },
-//     zoe,
-//   } = t.context;
-
-//   // Setup
-//   const { brand: characterBrand, issuer: characterIssuer, mint: characterMint } = nfts.Character.kit;
-//   const { brand: itemBrand, issuer: itemIssuer, mint: itemMint } = nfts.Item.kit;
-//   const characterAmount = AmountMath.make(characterBrand, harden([{ id: 1, name: "TestCharacter" }]));
-//   const characterPayment = characterMint.mintPayment(characterAmount);
-//   const itemAmount = AmountMath.make(itemBrand, harden([{ id: 1, name: "TestItem", category: "hair" }]));
-//   const itemPayment = itemMint.mintPayment(itemAmount);
-
-//   // Make invitation
-//   const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
-
-//   // Equip an item to the character first
-//   const equipInvitation = E(publicFacet).makeEquipInvitation();
-//   const equipProposal = harden({
-//     give: { CharacterKey1: characterAmount, Item: itemAmount },
-//     want: { CharacterKey2: characterAmount },
-//   });
-//   const equipPayments = harden({ CharacterKey1: characterPayment, Item: itemPayment });
-//   await E(zoe).offer(equipInvitation, equipProposal, equipPayments);
-
-//   // Make sure an error is thrown if no item is requested
-//   const badProposal = harden({
-//     give: { CharacterKey1: characterAmount },
-//     want: { CharacterKey2: characterAmount },
-//   });
-//   const badPayments = harden({ CharacterKey1: characterPayment });
-//   await t.throwsAsync(async () => await E(zoe).offer(unequipInvitation, badProposal, badPayments), { message: errors.noItemsRequested });
-
-//   // Now unequip the item from the character
-//   const proposal = harden({
-//     give: { CharacterKey1: characterAmount },
-//     want: { CharacterKey2: characterAmount, Item: itemAmount },
-//   });
-//   const payments = harden({ CharacterKey1: characterPayment });
-//   const seat = await E(zoe).offer(unequipInvitation, proposal, payments);
-
-//   // Assertions
-//   const currentAllocation = seat.getCurrentAllocation();
-//   t.truthy(AmountMath.isEmpty(currentAllocation.CharacterKey1, characterBrand));
-//   t.truthy(AmountMath.isEqual(currentAllocation.CharacterKey2, characterAmount));
-//   t.truthy(AmountMath.isEqual(currentAllocation.Item, itemAmount));
-// });
-
-// test("unequipAll", async (t) => {
-//   /** @type {Bootstrap} */
-//   const {
-//     instance: { publicFacet },
-//     zoe,
-//   } = t.context;
-
-//   // Setup CharacterKey and Item issuers
-//   const characterKit = makeIssuerKit("CharacterKey", AssetKind.SET);
-//   const itemKit = makeIssuerKit("Item", AssetKind.SET);
-
-//   // Create a character and multiple items
-//   const characterBrand = characterKit.brand;
-//   const characterAmount = AmountMath.make(characterBrand, [{ id: 1, name: "TestCharacter" }]);
-//   const characterPayment = characterKit.mint.mintPayment(characterAmount);
-
-//   const itemBrand = itemKit.brand;
-//   const itemAmount1 = AmountMath.make(itemBrand, [{ id: 1, name: "TestItem1", category: "hair" }]);
-//   const itemPayment1 = itemKit.mint.mintPayment(itemAmount1);
-//   const itemAmount2 = AmountMath.make(itemBrand, [{ id: 2, name: "TestItem2", category: "shirt" }]);
-//   const itemPayment2 = itemKit.mint.mintPayment(itemAmount2);
-
-//   // Equip the items to the character first
-//   const equipInvitation1 = E(publicFacet).makeEquipInvitation();
-//   const equipProposal1 = harden({
-//     give: { CharacterKey1: characterAmount, Item: itemAmount1 },
-//     want: { CharacterKey2: characterAmount },
-//   });
-//   const equipPayments1 = harden({ CharacterKey1: characterPayment, Item: itemPayment1 });
-//   await E(zoe).offer(equipInvitation1, equipProposal1, equipPayments1);
-
-//   const equipInvitation2 = E(publicFacet).makeEquipInvitation();
-//   const equipProposal2 = harden({
-//     give: { CharacterKey1: characterAmount, Item: itemAmount2 },
-//     want: { CharacterKey2: characterAmount },
-//   });
-//   const equipPayments2 = harden({ CharacterKey1: characterPayment, Item: itemPayment2 });
-//   await E(zoe).offer(equipInvitation2, equipProposal2, equipPayments2);
-
-//   // Now unequip all the items from the character
-//   const unequipAllInvitation = E(publicFacet).makeUnequipAllInvitation();
-//   const proposal = harden({
-//     give: { CharacterKey1: characterAmount },
-//     want: { CharacterKey2: characterAmount, Item: AmountMath.add(itemAmount1, itemAmount2) },
-//   });
-//   const payments = harden({ CharacterKey1: characterPayment });
-//   const seat = await E(zoe).offer(unequipAllInvitation, proposal, payments);
-
-//   // Assertions
-//   const currentAllocation = seat.getCurrentAllocation();
-//   t.truthy(AmountMath.isEmpty(currentAllocation.CharacterKey1, characterBrand));
-//   t.truthy(AmountMath.isEqual(currentAllocation.CharacterKey2, characterAmount));
-//   t.truthy(AmountMath.isEqual(currentAllocation.Item, AmountMath.add(itemAmount1, itemAmount2)));
-// });
-
-// test("swapItems", async (t) => {
-//   /** @type {Bootstrap} */
-//   const {
-//     instance: { publicFacet },
-//     zoe,
-//   } = t.context;
-
-//   // Setup CharacterKey and Item issuers
-//   const characterKit = makeIssuerKit("CharacterKey", AssetKind.SET);
-//   const itemKit = makeIssuerKit("Item", AssetKind.SET);
-
-//   // Create a character and items
-//   const characterBrand = characterKit.brand;
-//   const characterAmount = AmountMath.make(characterBrand, [{ id: 1, name: "TestCharacter" }]);
-//   const characterPayment = characterKit.mint.mintPayment(characterAmount);
-
-//   const itemBrand = itemKit.brand;
-//   const itemAmount1 = AmountMath.make(itemBrand, [{ id: 1, name: "TestItem1", category: "hair" }]);
-//   const itemPayment1 = itemKit.mint.mintPayment(itemAmount1);
-//   const itemAmount2 = AmountMath.make(itemBrand, [{ id: 2, name: "TestItem2", category: "clothing" }]);
-//   const itemPayment2 = itemKit.mint.mintPayment(itemAmount2);
-
-//   // Equip item1 to the character first
-//   const equipInvitation1 = E(publicFacet).makeEquipInvitation();
-//   const equipProposal1 = harden({
-//     give: { CharacterKey1: characterAmount, Item: itemAmount1 },
-//     want: { CharacterKey2: characterAmount },
-//   });
-//   const equipPayments1 = harden({ CharacterKey1: characterPayment, Item: itemPayment1 });
-//   await E(zoe).offer(equipInvitation1, equipProposal1, equipPayments1);
-
-//   // Now swap item1 with item2
-//   const swapInvitation = E(publicFacet).makeItemSwapInvitation();
-//   const proposal = harden({
-//     give: { CharacterKey1: characterAmount, Item1: itemAmount2 },
-//     want: { CharacterKey2: characterAmount, Item2: itemAmount1 },
-//   });
-//   const payments = harden({ CharacterKey1: characterPayment, Item1: itemPayment2 });
-//   const seat = await E(zoe).offer(swapInvitation, proposal, payments);
-
-//   // Assertions
-//   const currentAllocation = seat.getCurrentAllocation();
-//   t.truthy(AmountMath.isEmpty(currentAllocation.CharacterKey1, characterBrand));
-//   t.truthy(AmountMath.isEqual(currentAllocation.CharacterKey2, characterAmount));
-//   t.truthy(AmountMath.isEqual(currentAllocation.Item1, itemAmount1));
-//   t.truthy(AmountMath.isEmpty(currentAllocation.Item2, itemBrand));
-// });

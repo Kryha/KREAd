@@ -32,11 +32,27 @@
  */
 
 /**
+ * Contract assets as returned from getTokenInfo
+ *
+ * @typedef {{
+ *  character: { brand: Brand, issuer: Issuer, name: string }
+ *  item: { brand: Brand, issuer: Issuer, name: string }
+ *  paymentFT: { brand: Brand, issuer: Issuer, name: string }
+ * }} ContractAssets
+ */
+
+/**
  * Return value from bootstrap.js
  *
  * @typedef {{
  *  assets: Assets
+ *  contractAssets: ContractAssets
  *  zoe: ZoeService
+ *  purses: {
+ *    character: any
+ *    item: any
+ *    payment: any
+ *  }
  *  instance: StartInstanceResult
  * }} Bootstrap
  */

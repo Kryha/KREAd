@@ -3,6 +3,7 @@
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath } from '@agoric/ertp';
 import { errors } from './errors';
+import { text } from './text';
 
 /**
  * Inventory methods
@@ -77,8 +78,15 @@ export const inventory = (zcf, getState) => {
 
     // Ensure staged inventory STATE is valid before reallocation
     const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
-    // @ts-ignore
-    validateInventoryState(updatedInventory);
+    try {
+      // @ts-ignore
+      validateInventoryState(updatedInventory);
+    } catch (e) {
+      inventorySeat.clear();
+      seat.clear();
+      seat.fail(e);
+      return `${errors.duplicateCategoryInInventory}`;
+    }
 
     zcf.reallocate(seat, inventorySeat);
 
@@ -88,6 +96,8 @@ export const inventory = (zcf, getState) => {
     });
 
     seat.exit();
+
+    return text.equipReturn;
   };
 
   /**
@@ -100,7 +110,7 @@ export const inventory = (zcf, getState) => {
     const {
       character: { brand: characterBrand },
     } = state.get.assetInfo();
-
+    
     // Retrieve Character key from user seat
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
     const providedCharacterKey = providedCharacterKeyAmount.value[0];
@@ -129,24 +139,33 @@ export const inventory = (zcf, getState) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    try {
+    try {      
       // Inventory Key Swap
       seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
       seat.incrementBy({ CharacterKey2: wantedCharacter });
       inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
       inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
-
+     
       // Deposit item from inventory to user seat
       seat.incrementBy(inventorySeat.decrementBy({ Item: requestedItems }));
     } catch (e) {
+      inventorySeat.clear();
+      seat.clear();
       seat.fail(e);
       return `Swap assets error: ${e}`;
     }
 
     // Ensure staged inventory STATE is valid before reallocation
     const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
-    // @ts-ignore
-    validateInventoryState(updatedInventory);
+    try {
+      // @ts-ignore
+      validateInventoryState(updatedInventory);
+    } catch (e) {
+      inventorySeat.clear();
+      seat.clear();
+      seat.fail(e);
+      return `${errors.duplicateCategoryInInventory}`
+    }
 
     try {
       zcf.reallocate(seat, inventorySeat);
@@ -159,9 +178,9 @@ export const inventory = (zcf, getState) => {
       character: characterName,
       inventory: updatedInventory,
     });
-
+   
     seat.exit();
-    return 'Item(s) were unequipped successfully';
+    return text.unequipReturn;
   };
 
   /**
@@ -220,10 +239,16 @@ export const inventory = (zcf, getState) => {
 
     // Ensure staged inventory STATE is valid before reallocation
     const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
-
-    // @ts-ignore
-    validateInventoryState(updatedInventory);
-
+    
+    try {
+      // @ts-ignore
+      validateInventoryState(updatedInventory);
+    } catch (e) {
+      inventorySeat.clear();
+      seat.clear();
+      seat.fail(e);
+      return errors.duplicateCategoryInInventory
+    }
     zcf.reallocate(seat, inventorySeat);
 
     characterRecord.publisher.publish({

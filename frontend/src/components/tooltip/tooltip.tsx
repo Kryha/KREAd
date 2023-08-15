@@ -18,7 +18,7 @@ export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }
   const showTip = () => setActive(true);
   const hideTip = () => setActive(false);
 
-  useClickAwayListener(tooltipRef, hideTip);
+  useClickAwayListener(tooltipRef, active, hideTip);
 
   return (
     <TooltipWrap onMouseEnter={showTip} onMouseLeave={hideTip} onClick={showTip} onBlur={hideTip}>

@@ -1,5 +1,7 @@
 // ts-check
 /**
+ * Holds contract data
+ *
  * @typedef {{
  *   config: Config
  *   assetMints: AssetMints
@@ -13,13 +15,14 @@
  *   boardId?: string
  * }} State
  *
+ * Assets
  * @typedef {{
  *   character: ZCFMint<"set">
- *   item: ZCFMint<"set">
+ *   item: ZCFMint<"copyBag">
  *   paymentFT: ZCFMint<"nat">
  * }} AssetMints
  *
- * * @typedef {{
+ * @typedef {{
  *   character: CharacterMarketRecord[]
  *   item: ItemMarketRecord[]
  * }} Market
@@ -179,47 +182,49 @@
  *
  * @typedef {InventoryKeyRecord[]} InventoryKeyStorage
  *
+ *
  * @typedef {{
- *   get: {
- *     isReady: () => boolean
- *     isConfigReady: () => boolean
- *     inventory: (name: string) => { items: Item[] }
- *     inventoryPublisher: (name: string) => Publisher<any>
- *     characterKey: (name: string) => { key: Amount }
- *     characterCount: () => number
- *     itemCount: () => number
- *     character: (name: string) => CharacterRecord
- *     time: () => Promise<bigint>
- *     randomBaseCharacter: () => object
- *     assetInfo: () => TokenInfo
- *     defaultItems: () => any[]
- *     powers: () => Powers
- *     config: () => Config
- *     randomItem: () => object
- *     marketPublisher: () => {
- *       characters: {
- *         subscriber: StoredSubscriber<any>;
- *         publisher: Publisher<any>;
- *       };
- *       items: {
- *         subscriber: StoredSubscriber<any>;
- *         publisher: Publisher<...>;
- *       };
- *     }
- *   }
- *   set: {
+ *  isReady: () => boolean
+ *  isConfigReady: () => boolean
+ *  inventory: (name: string) => { items: Item[] }
+ *  inventoryPublisher: (name: string) => Publisher<any>
+ *  characterKey: (name: string) => { key: Amount }
+ *  characterCount: () => number
+ *  itemCount: () => number
+ *  character: (name: string) => CharacterRecord
+ *  time: () => Promise<bigint>
+ *  randomBaseCharacter: () => object
+ *  assetInfo: () => TokenInfo
+ *  defaultItems: () => any[]
+ *  powers: () => Powers
+ *  config: () => Config
+ *  randomItem: () => object
+ *  marketPublisher: () => {
+ *    characters: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ *    items: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ * }
+ * }} KreadState_get
+ *
+ * @typedef {{
  *     powers: (powers: Powers, notifiers: Notifiers) => void
  *     publishKreadInfo: (boardId: string, publicFacet: object) => void
- *   }
- *   add: {
- *     characters: (characters: CharacterRecord[]) => void
+ * }} KreadState_set
+ *
+ * @typedef {{
+ * characters: (characters: CharacterRecord[]) => void
  *     items: (items: ItemRecord[]) => void
  *     updateConfig: (newConfig: Config) => void
- *   }
- *   validate: {
- *     nameIsUnique: (name: string) => boolean
- *   }
- *   public: {
+ * }} KreadState_add
+ *
+ * @typedef {{ nameIsUnique: NameIsUniqueFn }} KreadState_validate
+ *
+ * @typedef {{
  *     isReady: () => boolean
  *     isValidName: () => boolean
  *     getInventory: (name: string) => { items: Item[] }
@@ -239,6 +244,15 @@
  *     getCharacterMarketRange: () => CharacterMarketRecord[]
  *     getItemMarket: () => ItemMarketRecord[]
  *     getItemMarketRange: () => ItemMarketRecord[]
- *   }
+ *   }} KreadState_public
+ *
+ *   @typedef {{
+ *     get: KreadState_get
+ *     set: KreadState_set
+ *     add: KreadState_add
+ *     validate: KreadState_validate
+ *     public: KreadState_public
  * }} KreadState
+ *
+ * @typedef {(name: string) => boolean} NameIsUniqueFn
  */

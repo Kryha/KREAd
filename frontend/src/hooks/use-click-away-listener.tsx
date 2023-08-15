@@ -1,17 +1,27 @@
 import { RefObject, useEffect } from "react";
 
-export const useClickAwayListener = (ref: RefObject<HTMLElement>, callback: () => void) => {
+export const useClickAwayListener = (ref: RefObject<HTMLElement>, isOpen: boolean, close: () => void) => {
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        callback();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        close();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        close();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("mousedown", handleClickOutside);
+    }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [ref, callback]);
+  }, [ref, close]);
 };

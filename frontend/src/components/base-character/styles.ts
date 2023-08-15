@@ -6,7 +6,7 @@ import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 import { css } from "@emotion/react";
 
-interface ImageProps {
+export interface ImageProps {
   width: number;
   height: number;
   zIndex?: number;
