@@ -17,7 +17,7 @@
  *
  * Assets
  * @typedef {{
- *   character: ZCFMint<"set">
+ *   character: ZCFMint<"copyBag">
  *   item: ZCFMint<"copyBag">
  *   paymentFT: ZCFMint<"nat">
  * }} AssetMints

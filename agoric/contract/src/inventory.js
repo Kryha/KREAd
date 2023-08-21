@@ -41,7 +41,7 @@ export const inventory = (zcf, getState) => {
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item');
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
-    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const providedCharacterKey = providedCharacterKeyAmount.value.payload[0][0];
     const characterName = providedCharacterKey.name;
 
     // Find characterRecord entry based on provided key
@@ -77,7 +77,7 @@ export const inventory = (zcf, getState) => {
     seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
 
     // Ensure staged inventory STATE is valid before reallocation
-    const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
+    const updatedInventory = inventorySeat.getStagedAllocation().Item.value.payload.map(([value, supply]) => value);;
     try {
       // @ts-ignore
       validateInventoryState(updatedInventory);
@@ -113,7 +113,7 @@ export const inventory = (zcf, getState) => {
     
     // Retrieve Character key from user seat
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
-    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const providedCharacterKey = providedCharacterKeyAmount.value.payload[0][0];
     const characterName = providedCharacterKey.name;
 
     // Find character record entry based on provided key
@@ -156,7 +156,7 @@ export const inventory = (zcf, getState) => {
     }
 
     // Ensure staged inventory STATE is valid before reallocation
-    const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
+    const updatedInventory = inventorySeat.getStagedAllocation().Item.value.payload.map(([value, supply]) => value);;
     try {
       // @ts-ignore
       validateInventoryState(updatedInventory);
@@ -199,7 +199,7 @@ export const inventory = (zcf, getState) => {
     // Retrieve Items and Inventory key from user seat
     const providedItemAmount = seat.getAmountAllocated('Item1');
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
-    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const providedCharacterKey = providedCharacterKeyAmount.value.payload[0][0];
     // const providedItems = providedItemAmount.value;
     const characterName = providedCharacterKey.name;
 
@@ -238,8 +238,7 @@ export const inventory = (zcf, getState) => {
     inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
     // Ensure staged inventory STATE is valid before reallocation
-    const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
-    
+    const updatedInventory = inventorySeat.getStagedAllocation().Item.value.payload.map(([value, supply]) => value);
     try {
       // @ts-ignore
       validateInventoryState(updatedInventory);
@@ -273,7 +272,7 @@ export const inventory = (zcf, getState) => {
 
     // Retrieve Character key from user seat
     const providedCharacterKeyAmount = seat.getAmountAllocated('CharacterKey1');
-    const providedCharacterKey = providedCharacterKeyAmount.value[0];
+    const providedCharacterKey = providedCharacterKeyAmount.value.payload[0][0];
     const characterName = providedCharacterKey.name;
 
     // Find character record entry based on provided key
@@ -299,7 +298,6 @@ export const inventory = (zcf, getState) => {
       ),
       X`${errors.inventoryKeyMismatch}`,
     );
-
     // Swap Inventory Keys
     seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
     seat.incrementBy({ CharacterKey2: wantedCharacter });

@@ -4,6 +4,7 @@ import { makeFakeVatAdmin } from "@agoric/zoe/tools/fakeVatAdmin.js";
 import { E } from "@endo/eventual-send";
 import { defaultAssets } from "./data.js";
 import { flow } from "./flow.js";
+import { makeCopyBag } from "@agoric/store";
 
 export const setupZoe = () => {
   const { admin: fakeVatAdmin, vatAdminState } = makeFakeVatAdmin();
@@ -35,7 +36,8 @@ export const addCharacterToBootstrap = async (bootstrap) => {
   const { want } = flow.mintCharacter.expected;
 
   const mintCharacterInvitation = await E(publicFacet).makeMintCharacterInvitation();
-  const asset = AmountMath.make(contractAssets.character.brand, harden([want]))
+  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
+  const asset = AmountMath.make(contractAssets.character.brand, copyBagAmount);
 
   const proposal = harden({
     want: { Asset: asset },
@@ -62,7 +64,7 @@ export const addItemToBootstrap = async (bootstrap, item) => {
   } = bootstrap;
 
   const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
-  const itemAmount = AmountMath.make(contractAssets.item.brand, harden([item]))
+  const itemAmount = AmountMath.make(contractAssets.item.brand, makeCopyBag(harden([[item, 1n]])))
 
   const proposal = harden({
     want: { Item: itemAmount },

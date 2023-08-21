@@ -45,7 +45,7 @@ export const market = (zcf, getState) => {
       value: want.Price.value,
     };
 
-    const character = characterInSellSeat.value[0];
+    const character = characterInSellSeat.value.payload[0][0];
     assert(character.name, X`${errors.character404}`);
 
     // Add to store array
@@ -83,7 +83,7 @@ export const market = (zcf, getState) => {
       brand: want.Price.brand,
       value: want.Price.value,
     };
-    const item = itemInSellSeat.value[0];
+    const item = itemInSellSeat.value.payload[0][0];
 
     // Add to store array
     const newEntry = {
@@ -120,7 +120,7 @@ export const market = (zcf, getState) => {
     // Inspect Character keyword in buyer seat
     const { want, give } = buyerSeat.getProposal();
     const { Character: wantedCharacterAmount } = want;
-    const character = wantedCharacterAmount.value[0];
+    const character = wantedCharacterAmount.value.payload[0][0];
 
     // Find characterRecord entry based on wanted character
     const characterRecord = state.get.character(character.name);
@@ -202,7 +202,7 @@ export const market = (zcf, getState) => {
     // Inspect Character keyword in buyer seat
     const { want, give } = buyerSeat.getProposal();
     const { Item: wantedItemAmount } = want;
-    const item = wantedItemAmount.value[0];
+    const item = wantedItemAmount.value.payload[0][0];
 
     // Find store record based on wanted character
     const sellRecord = itemMarket.find((record) => record.id === item.id);

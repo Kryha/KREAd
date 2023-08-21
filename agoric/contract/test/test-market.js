@@ -6,6 +6,7 @@ import { bootstrapContext } from "./bootstrap.js";
 import { flow } from "./flow.js";
 import { makeKreadUser } from "./make-user.js";
 import { addCharacterToBootstrap, addItemToBootstrap } from "./setup.js";
+import { makeCopyBag } from "@agoric/store";
 import { errors } from "../src/errors.js"
 
 test.before(async (t) => {
@@ -49,8 +50,9 @@ test.serial("---| MARKET - Sell character", async (t) => {
 
   const { market: { bob: { give: { character } } } } = flow;
 
-  const characterToSell = bob.getCharacters().find(c => c.name === character);
-  const characterToSellAmount = AmountMath.make(contractAssets.character.brand, harden([characterToSell]));
+  const characterToSell = bob.getCharacters().find((c) => c.name === character);
+  const copyBagAmount = makeCopyBag(harden([[characterToSell, 1n]]));
+  const characterToSellAmount = AmountMath.make(contractAssets.character.brand, copyBagAmount);
   const priceAmount = AmountMath.make(contractAssets.paymentFT.brand, 40n);
   
   const sellCharacterInvitation = await E(publicFacet).makeSellCharacterInvitation();
@@ -86,8 +88,8 @@ test.serial("---| MARKET - Buy character; offer less than asking price", async (
 
   let charactersForSale = await E(publicFacet).getCharactersForSale();
   const characterToBuy = charactersForSale.find(c => c.name === character);
-  
-  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, harden([characterToBuy.character]));
+  const copyBagAmount = makeCopyBag(harden([[characterToBuy.character, 1n]]));
+  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, copyBagAmount);
   const priceAmount = AmountMath.make(contractAssets.paymentFT.brand, characterToBuy.askingPrice.value / 2n);
   
   const buyCharacterInvitation = await E(publicFacet).makeBuyCharacterInvitation();
@@ -117,9 +119,9 @@ test.serial("---| MARKET - Buy character", async (t) => {
   const { market: { bob: { give: { character } } } } = flow;
 
   let charactersForSale = await E(publicFacet).getCharactersForSale();
-  const characterToBuy = charactersForSale.find(c => c.name === character);
-  
-  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, harden([characterToBuy.character]));
+  const characterToBuy = charactersForSale.find((c) => c.name === character);
+  const copyBagAmount = makeCopyBag(harden([[characterToBuy.character, 1n]]));
+  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, copyBagAmount);
   const priceAmount = characterToBuy.askingPrice;
   
   const buyCharacterInvitation = await E(publicFacet).makeBuyCharacterInvitation();
@@ -157,8 +159,8 @@ test.serial("---| MARKET - Buy character not on market", async (t) => {
   const initialBalance = alice.getPaymentBalance()
 
   const characterToBuy = alice.getCharacters().find(c => c.name === character)
-
-  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, harden([characterToBuy]));
+  const copyBagAmount = makeCopyBag(harden([[characterToBuy.character, 1n]]));
+  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, copyBagAmount);
   const priceAmount = AmountMath.make(contractAssets.paymentFT.brand, 5n)
   
   const buyCharacterInvitation = await E(publicFacet).makeBuyCharacterInvitation();
@@ -187,7 +189,8 @@ test.serial("---| MARKET - Sell Item", async (t) => {
   } = t.context;
 
   const itemToSellValue = bob.getItems().find(item => item.category === "hair")
-  const itemToSell = AmountMath.make(contractAssets.item.brand, harden([itemToSellValue]))
+  const itemToSellCopyBagAmount = makeCopyBag(harden([[itemToSellValue, 1n]]))
+  const itemToSell = AmountMath.make(contractAssets.item.brand, itemToSellCopyBagAmount)
   const priceAmount = AmountMath.make(contractAssets.paymentFT.brand, 5n);
   
   const sellItemInvitation = await E(publicFacet).makeSellItemInvitation();
@@ -195,6 +198,7 @@ test.serial("---| MARKET - Sell Item", async (t) => {
     give: { Item: itemToSell },
     want: { Price: priceAmount }
   });
+
   const payment = { Item: bob.withdrawItems(itemToSell) }
 
   const userSeat = await E(zoe).offer(sellItemInvitation, proposal, payment);
@@ -223,8 +227,8 @@ test.serial("---| MARKET - Buy item; offer less than asking price", async (t) =>
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
   const itemToBuy = itemsForSale.find(itemEntry => itemEntry.item.category === "hair");
-  
-  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, harden([itemToBuy.item]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy, 1n]]))
+  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, itemToBuyCopyBagAmount);
   const priceAmount = AmountMath.make(contractAssets.paymentFT.brand, itemToBuy.askingPrice.value / 2n);
   
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
@@ -254,7 +258,8 @@ test.serial("---| MARKET - Buy item", async (t) => {
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
   const itemToBuy = itemsForSale.find(itemEntry => itemEntry.item.category === "hair");
-  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, harden([itemToBuy.item]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.item, 1n]]))
+  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, itemToBuyCopyBagAmount);
   const priceAmount = itemToBuy.askingPrice;
   
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
@@ -291,7 +296,8 @@ test.serial("---| MARKET - Buy item not on market", async (t) => {
   const initialBalance = alice.getPaymentBalance();
 
   const itemToBuy = alice.getItems().find(item => item.category === "hair");
-  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, harden([itemToBuy]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.item, 1n]]))
+  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, itemToBuyCopyBagAmount);
   const priceAmount = AmountMath.make(contractAssets.paymentFT.brand, 5n)
   
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
@@ -322,7 +328,8 @@ test.serial("---| MARKET - Buy character; offer more than asking price", async (
 
   //alice puts character for sale
   const characterToSell = alice.getCharacters().find(c => c.name === character);
-  const characterToSellAmount = AmountMath.make(contractAssets.character.brand, harden([characterToSell]));
+  const characterToSellCopyBagAmount = makeCopyBag(harden([[characterToSell, 1n]]))
+  const characterToSellAmount = AmountMath.make(contractAssets.character.brand, characterToSellCopyBagAmount);
   let priceAmount = AmountMath.make(contractAssets.paymentFT.brand, 10n);
   
   const sellCharacterInvitation = await E(publicFacet).makeSellCharacterInvitation();
@@ -342,7 +349,8 @@ test.serial("---| MARKET - Buy character; offer more than asking price", async (
 
   //bob buys character
   const characterToBuy = charactersForSale.find(c => c.name === character);
-  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, harden([characterToBuy.character]));
+  const characterToBuyCopyBagAmount = makeCopyBag(harden([[characterToBuy.character, 1n]]))
+  const characterToBuyAmount = AmountMath.make(contractAssets.character.brand, characterToBuyCopyBagAmount);
   priceAmount = AmountMath.make(contractAssets.paymentFT.brand, characterToBuy.askingPrice.value * 2n);
   
   const buyCharacterInvitation = await E(publicFacet).makeBuyCharacterInvitation();
@@ -377,9 +385,10 @@ test.serial("---| MARKET - Buy item; offer more than asking price", async (t) =>
     users: { bob, alice }
   } = t.context;
 
-  //alice puts item for sale
+  // alice puts item for sale
   const itemToSell = alice.getItems().find(item => item.category === "hair");
-  const itemToSellAmount = AmountMath.make(contractAssets.item.brand, harden([itemToSell]));
+  const itemToSellCopyBagAmount = makeCopyBag(harden([[itemToSell, 1n]]))
+  const itemToSellAmount = AmountMath.make(contractAssets.item.brand, itemToSellCopyBagAmount);
   let priceAmount = AmountMath.make(contractAssets.paymentFT.brand, 10n);
   
   const sellItemInvitation = await E(publicFacet).makeSellItemInvitation();
@@ -399,7 +408,8 @@ test.serial("---| MARKET - Buy item; offer more than asking price", async (t) =>
 
   //bob attempts to buy item
   const itemToBuy = itemsForSale.find(itemEntry => itemEntry.item.category === "hair");
-  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, harden([itemToBuy.item]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.item, 1n]]))
+  const itemToBuyAmount = AmountMath.make(contractAssets.item.brand, itemToBuyCopyBagAmount);
   priceAmount = AmountMath.make(contractAssets.paymentFT.brand, itemToBuy.askingPrice.value * 2n);
   
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
