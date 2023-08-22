@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-a45dda9e01140240db3387acfeada537ab834e6b8f58f44d1cb6a8925c7ab77e92f60bfccd063e4434dc9381a68b0a53b967cce5d2b2a5c4a8ee92d3e135c7ca',
+    'b1-8fb015ff4dbbb135b4cc7512ed72dad70b02ec25c226cafaef630b569b18af7769fc2b6b43409cdef9a3cecb6cee82a9e07ccc5d265f26a1ad63505ad8f1378d',
 };
 
 const fail = (reason) => {
@@ -365,7 +365,14 @@ const executeProposal = async (powers) => {
   // Destructure the powers that we use.
   // See also bakeSale-permit.json
   const {
-    consume: { board, chainStorage, zoe, chainTimerService },
+    consume: {
+      board,
+      chainStorage,
+      zoe,
+      chainTimerService,
+      agoricNamesAdmin,
+      agoricNames,
+    },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
     instance: {
@@ -387,15 +394,16 @@ const executeProposal = async (powers) => {
     chainTimerService,
     seed: 303,
   });
+  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
-  const noIssuers = harden({});
+  const issuers = harden({ Money: istIssuer });
   const noTerms = harden({});
   const facets = await E(zoe).startInstance(
     installation,
-    noIssuers,
+    issuers,
     noTerms,
     privateArgs,
   );
@@ -446,6 +454,15 @@ const executeProposal = async (powers) => {
     facets.publicFacet,
   );
 
+  const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
+
+  await E(kindAdmin('issuer')).update('KREAdCHARACTER', characterIssuer);
+  await E(kindAdmin('brand')).update('KREAdCHARACTER', characterBrand);
+
+  await E(kindAdmin('issuer')).update('KREAdITEM', itemIssuer);
+  await E(kindAdmin('brand')).update('KREAdITEM', itemBrand);
+
+  console.log('ASSETS ADDED TO AGORIC NAMES');
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(facets.instance);
 };

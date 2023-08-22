@@ -82,7 +82,6 @@ export const EVENT_TYPE = {
   buy: "buy",
 };
 
-export const LOCAL_DEVNET_RPC = "http://127.0.0.1:26657";
 export const STORAGE_NODE_SPEC_MARKET_ITEMS = ":published.kread.market-items";
 export const STORAGE_NODE_SPEC_MARKET_CHARACTERS = ":published.kread.market-characters";
 
@@ -98,6 +97,7 @@ export const networkConfigs = {
   testnet: {
     label: "Agoric Testnet",
     url: "https://testnet.agoric.net/network-config",
+    chainId: "agoriclocal",
   },
   devnet: {
     label: "Agoric Devnet",
@@ -117,15 +117,24 @@ export const networkConfigs = {
   },
   localDevnet: {
     label: "Local Devnet",
-    url: "https://wallet.agoric.app/wallet/network-config",//"https://wallet.agoric.app/wallet/network-config",
+    url: "https://wallet.agoric.app/wallet/network-config", //"https://wallet.agoric.app/wallet/network-config",
   },
 };
 
 export const localBridgeHref = "http://localhost:3000/wallet/bridge.html";
-export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html"
-export const devBridgeHref = "https://main.wallet-app.pages.dev/wallet/bridge.html"
+export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html";
+export const devBridgeHref = "https://main.wallet-app.pages.dev/wallet/bridge.html";
+
+export const bridgeHref = import.meta.env.VITE_BRIDGE_HREF || localBridgeHref;
 
 export const walletUiHref = () => {
   const bridgeUrl = new URL(prodBridgeHref);
   return bridgeUrl ? bridgeUrl.origin + "/wallet/" : "";
 };
+
+export const IST_IDENTIFIER = "IST";
+export const KREAD_IDENTIFIER = "kread";
+export const ITEM_IDENTIFIER = "KREAdITEM";
+export const CHARACTER_IDENTIFIER = "KREAdCHARACTER";
+
+export const AGORIC_RPC = import.meta.env.VITE_RPC || "http://127.0.0.1:26657";

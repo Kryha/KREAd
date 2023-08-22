@@ -22,7 +22,7 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
   const { characters, selected, fetched } = useUserState();
   const userStateDispatch = useUserStateDispatch();
   useEffect(() => {
-    if (!selected){
+    if (!selected) {
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
   }, [userStateDispatch, characters, selected]);
@@ -35,7 +35,7 @@ export const useMyCharactersForSale = () => {
   const [
     {
       contracts: {
-        characterBuilder: { publicFacet },
+        kread: { publicFacet },
       },
     },
   ] = useAgoricContext();
@@ -210,7 +210,7 @@ export const useBuyCharacter = (characterId: string) => {
 
   useEffect(() => {
     setIsLoading(false);
-  }, [characterId, service.contracts.characterBuilder.publicFacet, service.offers]);
+  }, [characterId, service.contracts.kread.publicFacet, service.offers]);
 
   const callback = useCallback(async () => {
     const found = characters.find((character) => character.id === characterId);

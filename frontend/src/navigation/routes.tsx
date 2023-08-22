@@ -39,7 +39,7 @@ export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
   const [service] = useAgoricContext();
 
-  if (service.isLoading) return <LoadingPage spinner={false} />;
+  // if (service.isLoading) return <LoadingPage spinner={false} />;
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>

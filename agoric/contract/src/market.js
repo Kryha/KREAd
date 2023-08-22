@@ -130,7 +130,6 @@ export const market = (zcf, getState) => {
     const sellRecord = characterMarket.find(
       (record) => record.name === character.name,
     );
-
     assert(sellRecord, X`${errors.character404}`);
     const sellerSeat = sellRecord.sellerSeat;
 
@@ -151,7 +150,7 @@ export const market = (zcf, getState) => {
       AmountMath.isGTE(
         providedMoneyAmount,
         characterForSalePrice,
-        paymentFTBrand,
+        characterForSalePrice.brand,
       ),
       X`${errors.insufficientFunds}`,
     );
@@ -219,7 +218,11 @@ export const market = (zcf, getState) => {
 
     const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
     assert(
-      AmountMath.isGTE(providedMoneyAmount, itemForSalePrice, paymentFTBrand),
+      AmountMath.isGTE(
+        providedMoneyAmount,
+        itemForSalePrice,
+        itemForSalePrice.brand,
+      ),
       X`${errors.insufficientFunds}`,
     );
 
@@ -257,6 +260,6 @@ export const market = (zcf, getState) => {
     makeBuyItemInvitation: () =>
       zcf.makeInvitation(buyItem, 'Buy Item in KREAd marketplace'),
     getCharactersForSale: () => characterMarket,
-    getItemsForSale: () => itemMarket
+    getItemsForSale: () => itemMarket,
   };
 };

@@ -6,6 +6,7 @@ import { mediate } from "../util";
 import { CharacterBackend, ExtendedCharacterBackend, Item } from "../interfaces";
 import { itemCategories } from "./util";
 import { WalletContext } from "../context/wallet";
+import { fetchFromVStorage } from "./storage-node/fetch-from-vstorage";
 
 export const formOfferForCharacter = (purses: WalletContext, character: CharacterBackend) => ({
   want: {
@@ -32,16 +33,16 @@ export const formOfferForCharacterAmount = (characterBrand: any, character: any,
 });
 
 export const extendCharacters = async (
-  publicFacet: any,
-  characters: CharacterBackend[]
+  characters: CharacterBackend[],
+  marshaller: any
 ): Promise<{ extendedCharacters: ExtendedCharacterBackend[]; equippedItems: Item[] }> => {
   const equippedCharacterItems: Item[] = [];
 
   const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
     characters.map(async (character) => {
-      const { items: equippedItems } = await E(publicFacet).getCharacterInventory(character.name);
+      const result = await fetchFromVStorage(marshaller, `data/published.kread.inventory-${character.name}`);
 
-      const frontendEquippedItems = mediate.items.toFront(equippedItems);
+      const frontendEquippedItems = mediate.items.toFront(result.map((i) => i[0]));
 
       equippedCharacterItems.push(...frontendEquippedItems);
       const equipped: { [key: string]: Item | undefined } = {};
@@ -63,7 +64,7 @@ export const mintNfts = async (service: AgoricState, purses: WalletContext, name
   const {
     agoric: { walletP },
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
     tokenInfo: { character: characterPurse },
   } = service;
@@ -101,7 +102,7 @@ export const sellCharacter = async (
 ): Promise<boolean> => {
   const {
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
     agoric: { walletP },
   } = service;
@@ -140,7 +141,7 @@ export const sellCharacter = async (
 export const buyCharacter = async (service: AgoricState, wallet: WalletContext, character: CharacterBackend, price: bigint) => {
   const {
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
     agoric: { walletP },
   } = service;

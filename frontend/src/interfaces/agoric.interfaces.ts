@@ -12,11 +12,10 @@ export interface AgoricService {
 interface Contract {
   instance: any;
   publicFacet: any;
-  instanceBoardId?: string;
 }
 
 interface Contracts {
-  characterBuilder: Contract;
+  kread: Contract;
 }
 
 interface Status {
@@ -37,27 +36,35 @@ export interface AgoricState {
   contracts: Contracts;
   agoric: AgoricService;
   addOffer: any;
-  walletConnection: {
-    pursesNotifier: any,
-    addOffer: any,
-    publicSubscribersNotifier: any,
-    leader: any,
-    address: any,
-    chainId: string,
-    unserializer: any,
-    importContext: any
-  },  
+  walletConnection: WalletConnection;
   notifiers: NotifiersState;
   offers: any[];
-  tokenInfo: TokenInfo & { boardIds: TokenInfo };
+  tokenInfo: TokenInfo;
+  testCharacterInventory: any;
   isLoading: boolean;
   isReady: boolean;
   chainStorageWatcher: any;
 }
 export interface TokenInfo {
-  character: { issuer: any, brand: any },
-  item: { issuer: any, brand: any },
-  paymentFT: { issuer: any, brand: any },
+  character: { issuer: any; brand: any; petName: string };
+  item: { issuer: any; brand: any; petName: string };
+  ist: { issuer: any; brand: any; petName: string };
+}
+
+export interface WalletConnection {
+  pursesNotifier: any;
+  makeOffer: any;
+  publicSubscribersNotifier: any;
+  leader: any;
+  address: any;
+  chainId: string;
+  unserializer?: {
+    fromCapData: any;
+    serialize: any;
+    toCapData: any;
+    unserialize: any;
+  };
+  importContext: any;
 }
 
 interface NotifiersState {
@@ -92,8 +99,8 @@ interface SetAgoric {
   payload: Omit<AgoricService, "apiSend">;
 }
 
-interface SetCharacterContract {
-  type: "SET_CHARACTER_CONTRACT";
+interface SetKreadContract {
+  type: "SET_KREAD_CONTRACT";
   payload: Contract;
 }
 
@@ -109,7 +116,7 @@ interface SetLoading {
 
 interface SetTokenInfo {
   type: "SET_TOKEN_INFO";
-  payload: TokenInfo & { boardIds: TokenInfo };
+  payload: TokenInfo;
 }
 
 interface SetAddOffer {
@@ -127,6 +134,11 @@ interface SetChainStorageWatcher {
   payload: any;
 }
 
+interface SetTestCharacter {
+  type: "SET_TEST_CHARACTER";
+  payload: any;
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -141,11 +153,12 @@ export type AgoricStateActions =
   | SetWalletConnected
   | SetShowApproveDappModal
   | SetAgoric
-  | SetCharacterContract
+  | SetKreadContract
   | SetApiSend
   | SetLoading
   | SetTokenInfo
   | SetAddOffer
   | SetWalletConnection
   | SetChainStorageWatcher
+  | SetTestCharacter
   | SetOffers;

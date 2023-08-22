@@ -1,8 +1,11 @@
-SDK_PATH = ../..
-COSMIC_SWINGSET_PATH = ../../agoric-sdk/packages/cosmic-swingset
-VATS_PATH = ../../agoric-sdk/packages/vats
-KEPLR_ADDRESS = agoric1g24dty9gfs3407mdjcelr8dmwffx7yq702zzcj
-KREAD_REPO = ../../../agoric/agoric/contract/src/index.js
+SDK_PATH =
+COSMIC_SWINGSET_PATH =
+VATS_PATH =
+KEPLR_ADDRESS =
+KEPLR_ADDRESS2 =
+KREAD_REPO =
+
+include Makefile.paths.local
 
 chain-reset:
 	agoric start local-chain --reset --verbose
@@ -28,13 +31,12 @@ wallet0:
 wallet1:
 	agoric open --hostport=localhost:8001 --no-browser
 
-# TODO: add json attribute and remove
 deploy:
 	agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js
 
 kread-bundle:
 	cd $(VATS_PATH); \
-  yarn bundle-source --cache-json bundles/ ${KREAD_REPO} kread; \
+    yarn bundle-source --cache-json bundles/ ${KREAD_REPO} kread; \
 	agoric publish --node 127.0.0.1:26657 bundles/bundle-kread.json --chain-id agoriclocal --home ../cosmic-swingset/t1/8000; \
 
 local-testnet:
@@ -53,8 +55,15 @@ provision-account:
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000uist; \
-  make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000ubld; \
+    make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000ubld; \
 
+fund-pool:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-provision-pool \
+
+fund-account-atom:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=100000000ibc/toyatom; \
 
 proposal:
 	cd $(COSMIC_SWINGSET_PATH); \
@@ -64,8 +73,15 @@ proposal-2:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval scenario2-vote VOTE_PROPOSAL=2 \
 
+# note if you made changes to the contract code you must
+# copy the resulting hash from kread-bundle into the proposal
+# before running make proposal
 bootstrap:
 	make provision-account; \
-  make fund-account; \
+    make fund-account; \
 	make kread-bundle; \
 	make proposal; \
+
+fund+provision:
+	make provision-account; \
+    make fund-account; \

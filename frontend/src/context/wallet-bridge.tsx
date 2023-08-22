@@ -4,14 +4,14 @@ Request dapp approval to smart-wallet
 Should store addOffer method in Agoric context
 Should handle wallet responses appropriately
 
-Code below is taken from dapp-inter's implementation 
+Code below is taken from dapp-inter's implementation
 (https://github.com/Agoric/dapp-inter/blob/main/src/components/OfferSignerBridge.tsx)
 */
 
 import React, { useState } from "react";
 import { BridgeProtocol } from "@agoric/web-components";
 import { makeReactDappWalletBridge } from "@agoric/web-components/react";
-import { prodBridgeHref, walletUiHref } from "../constants";
+import { bridgeHref, walletUiHref } from "../constants";
 import { useAgoricContext } from "./agoric";
 
 type BridgeReadyMessage = {
@@ -49,7 +49,7 @@ const WalletBridge = () => {
   // const agoricDispatch = useAgoricStateDispatch();
   const [agoricState, agoricDispatch] = useAgoricContext();
   const [bridgeApproved, setBridgeApproved] = useState(false);
-  const bridgeHref = prodBridgeHref;
+
   const walletUIRef = walletUiHref();
 
   const showWarning = () => {
@@ -97,17 +97,17 @@ const WalletBridge = () => {
     }
   };
 
-  if (!agoricState.walletConnection.address || !agoricState.walletConnection.chainId) return <></>
+  if (!agoricState.walletConnection.address || !agoricState.walletConnection.chainId) return <></>;
 
   return (
     <div className="hidden">
       <DappWalletBridge
-        bridgeHref={prodBridgeHref}
+        bridgeHref={bridgeHref}
         onBridgeMessage={onBridgeMessage}
         onBridgeReady={onBridgeReady}
         onError={onError}
-        address={agoricState.walletConnection.address} //"agoric1tq3v943uaycqp90qvuyaqzwdc3eh52xzrcl4p6"
-        chainId={agoricState.walletConnection.chainId} //"agoriclocal"
+        address={agoricState.walletConnection.address}
+        chainId={agoricState.walletConnection.chainId}
       />
     </div>
   );

@@ -1,3 +1,6 @@
+import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
+import { AgoricDispatch } from "../../interfaces";
+
 /* TODO: SMART-WALLET SUPPPRT
 
 Use chain-storage-watcher to get updates on relevant characters,
@@ -6,53 +9,26 @@ and potentially be triggered by that same context in a useEffect.
 Alternatively it could be triggered by the first interface that
 consumes the User context
 
-Commneted code is dapp-inter's implementation 
+Commneted code is dapp-inter's implementation
 (https://github.com/Agoric/dapp-inter/blob/main/src/service/vbank.ts)
 */
+export const watchCharacterInventory = (chainStorageWatcher: any, characterName: string, agoricDispatch: AgoricDispatch) => {
+  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+  const path = `published.kread.inventory-${characterName}`;
 
-export const watchCharacter = '';
-// import type { DisplayInfo, Brand } from '@agoric/ertp/src/types';
-// import { AgoricChainStoragePathKind as Kind } from 'rpc';
-// import { useAgoricState } from '../../context/agoric';
+  chainStorageWatcher.watchLatest(
+    [Kind.Data, path],
+    (value: any) => {
+      console.debug("got update", path, value);
+      if (!value) {
+        console.warn(`${path} returned undefined`);
+        return;
+      }
 
-// type VbankInfo = {
-//   brand: Brand;
-//   displayInfo: DisplayInfo<'nat'>;
-//   issuerName: string;
-// };
-
-// type VbankUpdate = Array<[string, VbankInfo]>;
-
-// export const watchCharacter = () => {
-//   const { chainStorageWatcher } = useAgoricState()
-//   assert(chainStorageWatcher, 'chainStorageWatcher not initialized');
-
-//   const path = 'published.agoricNames.vbankAsset';
-
-//   chainStorageWatcher.watchLatest<VbankUpdate>(
-//     [Kind.Data, path],
-//     value => {
-//       console.debug('got update', path, value);
-//       if (!value) {
-//         appStore.setState({
-//           watchVbankError: `${path} returned undefined`,
-//         });
-//         return;
-//       }
-
-//       const brandToInfo = new Map(
-//         value.map(entry => [
-//           entry[1].brand,
-//           { ...entry[1].displayInfo, petname: entry[1].issuerName },
-//         ]),
-//       );
-//       appStore.setState({ brandToInfo });
-//     },
-//     log => {
-//       console.error('Error watching vbank assets', log);
-//       appStore.setState({
-//         watchVbankError: 'Error loading asset display info',
-//       });
-//     },
-//   );
-// };
+      agoricDispatch({ type: "SET_TEST_CHARACTER", payload: value.map((i) => i[0]) });
+    },
+    (log) => {
+      console.error("Error watching vbank kread character inventory", log);
+    }
+  );
+};

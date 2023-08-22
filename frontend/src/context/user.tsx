@@ -1,24 +1,16 @@
 import { E } from "@endo/eventual-send";
 import { iterateLatest, makeCastingSpec, makeFollower, makeLeader } from "@agoric/casting";
-import {
-  CharacterBackend,
-  ExtendedCharacter,
-  ExtendedCharacterBackend,
-  Item,
-  ItemActivityEventBackend,
-  ItemBackend
-} from "../interfaces";
+import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemActivityEventBackend, ItemBackend } from "../interfaces";
 import { mockData } from "../service/mock-data/mockData";
 import { mockItemsEquipped } from "../service/mock-data/mockItems";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import { mediate } from "../util";
 import { itemCategories } from "../service/util";
 import { useDataMode } from "../hooks/use-data-mode";
-import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
+import { AGORIC_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 import { useWalletState } from "./wallet";
 import { useAgoricState } from "./agoric";
-
 
 export interface UserContext {
   characters: ExtendedCharacter[];
@@ -150,21 +142,19 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
 };
 
 export const UserContextProvider = (props: ProviderProps): React.ReactElement => {
+  const { mockData } = useDataMode();
 
-  const { mockData} = useDataMode();
-
-  const [userState, userStateDispatch] =
-    useReducer(Reducer, mockData ? initialMockState : initialState);
+  const [userState, userStateDispatch] = useReducer(Reducer, mockData ? initialMockState : initialState);
 
   const wallet = useWalletState();
   const agoric = useAgoricState();
 
-  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
+  const kreadPublicFacet = agoric.contracts.kread.publicFacet;
   const charactersInWallet = useMemo(() => (wallet.character ? wallet.character.value : []), [wallet.character]);
   const itemsInWallet = useMemo(() => (wallet.item ? wallet.item.value : []), [wallet.item]);
 
   useEffect(() => {
-    const parseInventoryUpdate = (value: { character: string, inventory: ItemBackend[] }) => {
+    const parseInventoryUpdate = (value: { character: string; inventory: ItemBackend[] }) => {
       console.count("🎒 LOADING INVENTORY CHANGE 🎒");
       const { character: characterName, inventory } = value;
       userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: inventory, characterName });
@@ -179,7 +169,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(characterName);
       userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: equippedItems, characterName });
 
-      const leader = makeLeader(LOCAL_DEVNET_RPC);
+      const leader = makeLeader(AGORIC_RPC);
       const castingSpec = makeCastingSpec(`${STORAGE_NODE_SPEC_INVENTORY}-${characterName}`);
       const follower = makeFollower(castingSpec, leader);
 

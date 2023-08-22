@@ -64,3 +64,5 @@ agoric/_agstate/yarn-links/
 frontend/src/service/conf/defaults.js
 frontend/src/service/conf/defaults.js
 agoric/contract/src/proposal/chain-storage-proposal.js-clean.js
+
+agoric/Makefile.paths.local

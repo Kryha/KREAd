@@ -125,7 +125,10 @@ const start = async (zcf, privateArgs) => {
       id += 1;
       return [{ ...item, id, date: currentTime }, supply];
     });
-    const newItemAmount = AmountMath.make(itemBrand, makeCopyBag(harden(items)));
+    const newItemAmount = AmountMath.make(
+      itemBrand,
+      makeCopyBag(harden(items)),
+    );
 
     itemMint.mintGains({ Asset: newItemAmount }, seat);
 
@@ -167,8 +170,10 @@ const start = async (zcf, privateArgs) => {
       newCharacterName,
       state.get.randomBaseCharacter(),
       state.get.characterCount(),
-      currentTime
-    ).map((character) => AmountMath.make(characterBrand, makeCopyBag(harden([[character, 1n]]))));
+      currentTime,
+    ).map((character) =>
+      AmountMath.make(characterBrand, makeCopyBag(harden([[character, 1n]]))),
+    );
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
@@ -192,7 +197,10 @@ const start = async (zcf, privateArgs) => {
       return newItemWithId;
     });
 
-    const itemsAmount = AmountMath.make(itemBrand, makeCopyBag(harden(uniqueItems.map(item => [item, 1n]))));
+    const itemsAmount = AmountMath.make(
+      itemBrand,
+      makeCopyBag(harden(uniqueItems.map((item) => [item, 1n]))),
+    );
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
 
     const powers = state.get.powers();
@@ -235,8 +243,10 @@ const start = async (zcf, privateArgs) => {
       ];
     });
 
+    // Current design decision is to just push the payloads as inventory updates
+    // this removes he need to deconstruct objects when fetching from storage
     inventoryNotifier.publisher.publish(
-      inventorySeat.getAmountAllocated('Item').value,
+      inventorySeat.getAmountAllocated('Item').value.payload,
     );
 
     seat.exit();

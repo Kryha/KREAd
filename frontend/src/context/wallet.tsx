@@ -1,9 +1,13 @@
 import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { observeIteration, makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
+import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
+
 import { useAgoricState } from "./agoric";
 
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER } from "../constants";
+import { watchPursesNonVbank } from "../service/storage-node/watch-general";
 
 const { brandBoardIds } = dappConstants;
 export interface WalletContext {
@@ -29,32 +33,45 @@ type ProviderProps = Omit<React.ProviderProps<WalletContext>, "value">;
 export const WalletContextProvider = (props: ProviderProps): React.ReactElement => {
   const [walletState, walletDispatch] = useState<WalletContext>(initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
   const pursesNotifier = agoric.walletConnection.pursesNotifier;
+  const chainStorageWatcher = agoric.chainStorageWatcher;
+  const walletAddress = agoric.walletConnection.address;
+  const tokenInfo = agoric.tokenInfo;
 
   useEffect(() => {
     let isCancelled = false;
 
-    const updateState = async (purses: any) => {
+    const updateStateNonVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");
 
       // Load Purses
-      const newMoneyPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Money);
-      const newTokenPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Token);
-      const newCharacterPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Character);
-      const newItemPurses = purses.filter(({ brandBoardId }: any) => brandBoardId === brandBoardIds.Item);
-
-      const characterWallet = newCharacterPurses[newCharacterPurses.length - 1];
-      const itemWallet = newItemPurses[newItemPurses.length - 1];
-      const moneyWallet = newMoneyPurses[newCharacterPurses.length - 1];
-      const tokenWallet = newTokenPurses[newItemPurses.length - 1];
+      // TODO: remove token
+      const newTokenPurses = purses.filter(({ brand }: any) => brand === brandBoardIds.Token);
+      const newCharacterPurses = purses.filter(({ brand }: any) => brand === tokenInfo.character.brand);
+      const newItemPurses = purses.filter(({ brand }: any) => brand === tokenInfo.item.brand);
+      const characterWallet = newCharacterPurses[newCharacterPurses.length - 1]?.balance.value.payload.map((i) => i[0]);
+      //FIXME: this is not going to work when a users has more than 1 item that is the same (then it will be 2n)
+      // Consider creating an array that fills an array n amount of times based onthe amount the user owns
+      const itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i) => i[0]);
+      const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;
 
       walletDispatch((prevState) => ({
         ...prevState,
         token: tokenWallet,
-        money: moneyWallet,
         character: characterWallet,
         item: itemWallet,
+      }));
+    };
+    const updateStateVbank = async (purses: any) => {
+      console.count("💾 LOADING PURSE CHANGE 💾");
+
+      // Load Purses
+      const newMoneyPurses = purses.filter(({ brandPetname }: any) => brandPetname === IST_IDENTIFIER);
+      const moneyWallet = newMoneyPurses[newMoneyPurses.length - 1]?.currentAmount;
+
+      walletDispatch((prevState) => ({
+        ...prevState,
+        money: moneyWallet,
       }));
     };
 
@@ -63,25 +80,27 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       const watch = async () => {
         for await (const purses of iterateNotifier(pursesNotifier)) {
           if (isCancelled) return;
-          console.debug("got purses", purses);
-          updateState(purses);
+          updateStateVbank(purses);
         }
       };
       watch().catch((err: Error) => {
         console.error("got watchPurses err", err);
       });
     };
-
-    if (pursesNotifier && !walletState.fetched) {
+    if (pursesNotifier && !walletState.fetched && chainStorageWatcher) {
       watchPurses().catch((err) => {
         console.error("got watchNotifiers err", err);
       });
     }
 
+    if (!walletState.fetched && chainStorageWatcher) {
+      watchPursesNonVbank(chainStorageWatcher, walletAddress, updateStateNonVbank);
+    }
+
     return () => {
       isCancelled = true;
     };
-  }, [pursesNotifier, kreadPublicFacet, walletState.fetched]);
+  }, [pursesNotifier, walletState.fetched]);
 
   return <Context.Provider value={walletState}>{props.children}</Context.Provider>;
 };
