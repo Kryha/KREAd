@@ -27,9 +27,7 @@ COPY src/ ./src/
 
 RUN yarn install --silent
 
-RUN NODE_OPTIONS='--max-old-space-size=4096' yarn build:ses
-
-RUN NODE_OPTIONS='--max-old-space-size=4096' yarn build:react
+RUN NODE_OPTIONS='--max-old-space-size=4096' yarn build
 
 FROM nginx:1.21-alpine as run
 

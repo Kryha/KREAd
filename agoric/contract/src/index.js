@@ -16,6 +16,7 @@ import { inventory } from './inventory.js';
 import { kreadState } from './kread-state.js';
 import { validation } from './validation.js';
 import { text } from './text.js';
+import { makeCopyBag } from '@agoric/store';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -44,8 +45,8 @@ const start = async (zcf, privateArgs) => {
 
   // Define Assets
   const assetMints = await Promise.all([
-    zcf.makeZCFMint(assetNames.character, AssetKind.SET),
-    zcf.makeZCFMint(assetNames.item, AssetKind.SET),
+    zcf.makeZCFMint(assetNames.character, AssetKind.COPY_BAG),
+    zcf.makeZCFMint(assetNames.item, AssetKind.COPY_BAG),
     zcf.makeZCFMint(assetNames.paymentFT, AssetKind.NAT), // TODO: Change to IST
   ]);
 
@@ -120,18 +121,21 @@ const start = async (zcf, privateArgs) => {
 
     let id = state.get.itemCount();
     // @ts-ignore
-    const items = want.Item.value.map((item) => {
+    const items = want.Item.value.payload.map(([item, supply]) => {
       id += 1;
-      return { ...item, id, date: currentTime };
+      return [{ ...item, id, date: currentTime }, supply];
     });
-    const newItemAmount = AmountMath.make(itemBrand, harden(items));
+    const newItemAmount = AmountMath.make(
+      itemBrand,
+      makeCopyBag(harden(items)),
+    );
 
     itemMint.mintGains({ Asset: newItemAmount }, seat);
 
     seat.exit();
 
     // Add to history
-    items.forEach((item) => {
+    items.forEach(([item, supply]) => {
       itemHistory[item.id.toString()] = [
         {
           type: 'mint',
@@ -159,7 +163,7 @@ const start = async (zcf, privateArgs) => {
       return harden({ message: error });
     }
 
-    const newCharacterName = want.Asset.value[0].name;
+    const newCharacterName = want.Asset.value.payload[0][0].name;
 
     const currentTime = await state.get.time();
     const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
@@ -167,7 +171,9 @@ const start = async (zcf, privateArgs) => {
       state.get.randomBaseCharacter(),
       state.get.characterCount(),
       currentTime,
-    ).map((character) => AmountMath.make(characterBrand, harden([character])));
+    ).map((character) =>
+      AmountMath.make(characterBrand, makeCopyBag(harden([[character, 1n]]))),
+    );
 
     const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
 
@@ -191,7 +197,10 @@ const start = async (zcf, privateArgs) => {
       return newItemWithId;
     });
 
-    const itemsAmount = AmountMath.make(itemBrand, harden(uniqueItems));
+    const itemsAmount = AmountMath.make(
+      itemBrand,
+      makeCopyBag(harden(uniqueItems.map((item) => [item, 1n]))),
+    );
     itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
 
     const powers = state.get.powers();
@@ -207,7 +216,7 @@ const start = async (zcf, privateArgs) => {
      */
     const character = {
       name: newCharacterName,
-      character: newCharacterAmount1.value[0],
+      character: newCharacterAmount1.value.payload[0][0],
       inventory: inventorySeat,
       publisher: inventoryNotifier.publisher,
     };
@@ -234,8 +243,10 @@ const start = async (zcf, privateArgs) => {
       ];
     });
 
+    // Current design decision is to just push the payloads as inventory updates
+    // this removes he need to deconstruct objects when fetching from storage
     inventoryNotifier.publisher.publish(
-      inventorySeat.getAmountAllocated('Item').value,
+      inventorySeat.getAmountAllocated('Item').value.payload,
     );
 
     seat.exit();
@@ -253,14 +264,7 @@ const start = async (zcf, privateArgs) => {
     return text.tokenFacetReturn;
   };
 
-  const creatorFacet = Far('Character store creator', {
-    getCharacterIssuer: () => characterIssuer,
-    getItemIssuer: () => itemIssuer,
-    getItemBrand: () => itemBrand,
-    getState: () => state,
-  });
-
-  const publicFacet = Far('Chracter store public', {
+  const publicFacet = Far('KREAd public facet', {
     makeTokenFacetInvitation: () =>
       zcf.makeInvitation(tokenFacet, 'get tokens'), // FIXME: RESTRICT PRIVILEGED FN
 
@@ -283,6 +287,14 @@ const start = async (zcf, privateArgs) => {
     getAllItemHistory: () => itemHistory.entries(),
 
     ...market(zcf, () => state),
+  });
+
+  const creatorFacet = Far('KREAd creator facet', {
+    getCharacterIssuer: () => characterIssuer,
+    getItemIssuer: () => itemIssuer,
+    getItemBrand: () => itemBrand,
+    getState: () => state,
+    publishKreadInfo: state.set.publishKreadInfo,
   });
 
   return harden({ creatorFacet, publicFacet });

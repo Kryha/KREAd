@@ -48,7 +48,7 @@ export const InternalAppRoutes: FC = () => {
   //   }
   // }, [assembledCharacter, newAssembledCharacter, setAssembledCharacter]);
 
-  if (service.isLoading) return <LoadingPage spinner={false} />;
+  // if (service.isLoading) return <LoadingPage spinner={false} />;
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>

@@ -1,12 +1,10 @@
 /// <reference types="ses"/>
-import { E } from "@endo/eventual-send";
 import { useEffect } from "react";
 
 import { useAgoricContext } from "../../context/agoric";
-import { useCharacterMarketState } from "../../context/character-shop";
 import { useUserState } from "../../context/user";
 import { useWalletState } from "../../context/wallet";
-import { useCreateCharacter } from "../character";
+import { useCharactersMarket, useCreateCharacter } from "../character";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import { useDataMode } from "../../hooks";
@@ -14,23 +12,28 @@ import { routes } from "../../navigation";
 import { KreadLogo } from "../../pages/onboarding/styles";
 import StatusIndicator from "./service-status-indicator";
 import { fontSize } from "../../design";
+import { watchCharacterInventory } from "../storage-node/watch-character";
+import { useItemsMarket } from "../items";
+
+import { makeCopyBag } from "@agoric/store";
 
 export const TestServiceUI = () => {
-  const [service] = useAgoricContext();
+  const [service, dispatch] = useAgoricContext();
+  const [charactersMarket, isLoading] = useCharactersMarket();
+  const [itemsMarket, isLoadingItem] = useItemsMarket();
+
   const { characters } = useUserState();
-  const shop = useCharacterMarketState();
+  const wallet = useWalletState();
   const createCharacter = useCreateCharacter();
   const navigate = useNavigate();
   const { isMockData } = useDataMode();
 
-  console.log("---------------TESTUI", shop);
-  const publicFacet = service.contracts.characterBuilder.publicFacet;
-
   useEffect(() => {
     console.log("SERVICE:", service);
-    console.log("CHARACTERS: ", characters);
-    console.log("Data Mode: ", isMockData);
-  }, [service, characters, isMockData]);
+    if (service.chainStorageWatcher) {
+      watchCharacterInventory(service.chainStorageWatcher, "test2", dispatch);
+    }
+  }, [service.chainStorageWatcher, charactersMarket]);
 
   const mintCharacterNFT = async () => {
     await createCharacter.mutateAsync({
@@ -45,55 +48,447 @@ export const TestServiceUI = () => {
     });
   };
 
-  const purses = useWalletState();
+  const mintCharacterAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+    const charBrand = service.tokenInfo.character.brand;
 
-  const topUp = async () => {
-    const invitation = await E(publicFacet).makeTokenFacetInvitation();
-    const tokenPurse = purses.token;
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeMintCharacterInvitation",
+    };
 
-    if (!tokenPurse) return;
+    const want = {
+      Asset: { brand: charBrand, value: makeCopyBag(harden([[{ name: "test2" }, 1n]])) },
+    };
 
-    console.log(
-      await E(service.agoric.walletP).addOffer(
-        harden({
-          id: Date.now().toString(),
-          invitation: invitation,
-          proposalTemplate: {
-            want: {
-              Token: {
-                pursePetname: tokenPurse.pursePetname,
-                value: 1000n,
-              },
-            },
-            dappContext: true,
-          },
-        })
-      )
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
     );
   };
 
-  const removeItemFromInventory = async () => {
-    const { items: equippedItems } = await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters[0].nft.name);
+  const unequipItemAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+    const charBrand = service.tokenInfo.character.brand;
+    const character = wallet.character[0];
+    const itemBrand = service.tokenInfo.item.brand;
+    const item = service.testCharacterInventory[3];
 
-    const item = equippedItems[0];
-    const character = characters[0];
-    console.log(item);
-    console.log(character);
-    // await unequipItem(service, item, character.nft.name);
-    console.log("done");
+    const wantKey = character.keyId == 2 ? 1 : 2;
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeUnequipInvitation",
+    };
+
+    const give = {
+      CharacterKey1: { brand: charBrand, value: makeCopyBag([[character, 1n]]) },
+    };
+
+    const want = {
+      CharacterKey2: {
+        brand: charBrand,
+        value: makeCopyBag([[{ ...character, keyId: wantKey }, 1n]]),
+      },
+      Item: {
+        brand: itemBrand,
+        value: makeCopyBag([[item, 1n]]),
+      },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
   };
 
-  const test = async () => {
-    const powers = await E(publicFacet).getCount();
-    console.log(powers);
+  const unequipAllAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+    const charBrand = service.tokenInfo.character.brand;
+    const character = wallet.character[0];
+
+    const wantKey = character.keyId == 2 ? 1 : 2;
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeUnequipAllInvitation",
+    };
+
+    const give = {
+      CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+    };
+
+    const want = {
+      CharacterKey2: {
+        brand: charBrand,
+        value: makeCopyBag(harden([[{ ...character, keyId: wantKey }, 1n]])),
+      },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
   };
 
-  const getCharacterInventory = async () => {
-    if (!characters[0].nft.name) {
-      console.log("no characters owned");
-      return;
-    }
-    console.log(await E(service.contracts.characterBuilder.publicFacet).getCharacterInventory(characters[0].nft.name));
+  const equipItemAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+
+    const charBrand = service.tokenInfo.character.brand;
+    const character = wallet.character[0];
+
+    const itemBrand = service.tokenInfo.item.brand;
+    const item = wallet.item[0];
+
+    const wantKey = character.keyId == 2 ? 1 : 2;
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeEquipInvitation",
+    };
+
+    const give = {
+      CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+      Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
+    };
+
+    const want = {
+      CharacterKey2: {
+        brand: charBrand,
+        value: makeCopyBag(harden([[{ ...character, keyId: wantKey }, 1n]])),
+      },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
+  };
+
+  const swapItemAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+
+    const charBrand = service.tokenInfo.character.brand;
+    const character = wallet.character[0];
+
+    const itemBrand = service.tokenInfo.item.brand;
+    const giveItem = wallet.item[0];
+    const wantItem = service.testCharacterInventory.filter((i) => i.category === giveItem.category)[0];
+
+    const wantKey = character.keyId == 2 ? 1 : 2;
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeItemSwapInvitation",
+    };
+
+    const give = {
+      CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+      Item1: { brand: itemBrand, value: makeCopyBag(harden([[giveItem, 1n]])) },
+    };
+
+    const want = {
+      CharacterKey2: {
+        brand: charBrand,
+        value: makeCopyBag(harden([[{ ...character, keyId: wantKey }, 1n]])),
+      },
+      Item2: { brand: itemBrand, value: makeCopyBag(harden([[wantItem, 1n]])) },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
+  };
+
+  const sellCharacterAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+    const charBrand = service.tokenInfo.character.brand;
+    const character = wallet.character[0];
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeSellCharacterInvitation",
+    };
+
+    const give = {
+      Character: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+    };
+
+    const want = {
+      Price: { brand: service.tokenInfo.ist.brand, value: 100n },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+        exit: { waived: null },
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
+  };
+
+  const buyCharacterAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+    const charBrand = service.tokenInfo.character.brand;
+    const istBrand = service.tokenInfo.ist.brand;
+    console.log(222222, charactersMarket);
+    const { sell, character } = charactersMarket[0];
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeBuyCharacterInvitation",
+    };
+
+    const give = {
+      Price: { brand: istBrand, value: sell.price },
+    };
+
+    const want = {
+      Character: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
+  };
+
+  const sellItemAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+
+    const itemBrand = service.tokenInfo.item.brand;
+    const item = wallet.item[0];
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeSellItemInvitation",
+    };
+
+    const give = {
+      Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
+    };
+
+    const want = {
+      Price: { brand: service.tokenInfo.ist.brand, value: 100n },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+        exit: { waived: null },
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
+  };
+
+  const buyItemAddOffer = async () => {
+    const instance = service.contracts.kread.instance;
+    const itemBrand = service.tokenInfo.item.brand;
+    const istBrand = service.tokenInfo.ist.brand;
+    const { sell, item } = itemsMarket[0];
+
+    const spec = {
+      source: "contract",
+      instance,
+      publicInvitationMaker: "makeBuyItemInvitation",
+    };
+
+    const give = {
+      Price: { brand: istBrand, value: sell.price },
+    };
+
+    const want = {
+      Item: { brand: itemBrand, value: makeCopyBag(harden([[{ ...item, id: Number(item.id) }, 1n]])) },
+    };
+
+    const offerConfig = {
+      spec,
+      proposal: {
+        want,
+        give,
+      },
+    };
+
+    service.walletConnection.makeOffer(
+      offerConfig.spec,
+      offerConfig.proposal,
+      undefined,
+      ({ status, data }: { status: string; data: object }) => {
+        if (status === "error") {
+          console.error("Offer error", data);
+        }
+        if (status === "refunded") {
+          console.error("Offer refunded", data);
+        }
+        if (status === "accepted") {
+          console.log("Offer accepted", data);
+        }
+      }
+    );
   };
 
   const goHome = () => {
@@ -101,12 +496,16 @@ export const TestServiceUI = () => {
   };
 
   const buttons = [
-    { text: "MINT CHARACTER", onClick: mintCharacterNFT },
-    { text: "TOP UP", onClick: topUp },
-    { text: "REMOVE FROM INVENTORY", onClick: removeItemFromInventory },
-    { text: "GET CHARACTER INVENTORY", onClick: async () => await getCharacterInventory },
-    { text: "CHARACTERS", onClick: () => console.log("Characters:", characters) },
-    { text: "TEST", onClick: test },
+    { text: "STATE", onClick: () => console.log(service, wallet) },
+    { text: "MINT", onClick: mintCharacterAddOffer },
+    { text: "UNEQUIP", onClick: unequipItemAddOffer },
+    { text: "UNEQUIPALL", onClick: unequipAllAddOffer },
+    { text: "EQUIP", onClick: equipItemAddOffer },
+    { text: "SWAP", onClick: swapItemAddOffer },
+    { text: "SELLCHAR", onClick: sellCharacterAddOffer },
+    { text: "BUYCHAR", onClick: buyCharacterAddOffer },
+    { text: "SELLITEM", onClick: sellItemAddOffer },
+    { text: "BUYITEM", onClick: buyItemAddOffer },
     // Add more buttons here
   ];
 
@@ -158,6 +557,7 @@ const Container = styled.div`
   isolation: isolate;
   background: hsl(216, 17%, 17%);
   color: #fff;
+  overflow: scroll;
 `;
 
 const Section = styled.div`

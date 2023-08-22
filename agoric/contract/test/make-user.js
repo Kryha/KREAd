@@ -38,8 +38,8 @@ export const makeKreadUser = (name, purses) => {
   const seat = {
     market: undefined,
   }
-  const getItems = () => purses.item.getCurrentAmount().value;
-  const getCharacters = () => purses.character.getCurrentAmount().value;
+  const getItems = () => purses.item.getCurrentAmount().value.payload.map(([value, supply]) => value);
+  const getCharacters = () => purses.character.getCurrentAmount().value.payload.map(([value, supply]) => value);;
   const getPaymentBalance = () => purses.payment.getCurrentAmount().value;
 
   const depositItems = (items) => purses.item.deposit(items);

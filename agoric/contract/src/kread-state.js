@@ -2,8 +2,8 @@
 import { assert, details as X } from '@agoric/assert';
 import { E } from '@endo/eventual-send';
 import { Far } from '@endo/marshal';
-import { errors } from './errors';
-import { getPage } from './utils';
+import { errors } from './errors.js';
+import { getPage } from './utils.js';
 
 /**
  * Manage contract state
@@ -17,7 +17,13 @@ import { getPage } from './utils';
  * }} initialState
  * @returns {KreadState}
  */
-export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifiers }) => {
+export const kreadState = ({
+  tokenInfo,
+  config,
+  assetMints,
+  randomNumber,
+  notifiers,
+}) => {
   /**
    * Contract STATE
    *
@@ -38,6 +44,10 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     ready: true,
     configReady: true,
   };
+
+  notifiers.info.publisher.publish({
+    tokenInfo,
+  });
 
   /**
    * @returns {object}
@@ -71,10 +81,10 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     );
     assert(characterRecord, X`${errors.character404}`);
     const { inventory } = characterRecord;
-    const items = inventory.getAmountAllocated(
-      'Item',
-      state.tokenInfo.item.brand,
-    ).value;
+    const items = inventory
+      .getAmountAllocated('Item', state.tokenInfo.item.brand)
+      .value.payload.map(([value, supply]) => value);
+
     // @ts-ignore
     return { items };
   };
@@ -186,7 +196,7 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     state.notifiers = _notifiers;
     state.ready = true;
   };
-  
+
   /**
    *
    * @param {string} id
@@ -229,8 +239,8 @@ export const kreadState = ({ tokenInfo, config, assetMints, randomNumber, notifi
     items: addItems,
     updateConfig,
   });
-  
-// Replaces specific entries in the state
+
+  // Replaces specific entries in the state
   const set = Far('kread state set', {
     powers: setPowers,
     publishKreadInfo,

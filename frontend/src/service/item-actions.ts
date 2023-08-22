@@ -10,7 +10,7 @@ import { mediate } from "../util";
 export const sellItem = async (service: AgoricState, wallet: WalletContext, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
     agoric: { walletP },
   } = service;
@@ -50,7 +50,7 @@ export const sellItem = async (service: AgoricState, wallet: WalletContext, item
 export const buyItem = async (service: AgoricState, wallet: WalletContext, item: ItemBackend, price: bigint) => {
   const {
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
     agoric: { walletP },
   } = service;
@@ -94,7 +94,7 @@ export const mintItem = async (service: AgoricState, purses: WalletContext, item
   const {
     agoric: { walletP },
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
   } = service;
 
@@ -133,7 +133,7 @@ export const equipItem = async (service: AgoricState, wallet: WalletContext, ite
   const {
     agoric: { walletP },
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
   } = service;
 
@@ -187,16 +187,19 @@ export const unequipItem = async (service: AgoricState, wallet: WalletContext, i
   const {
     agoric: { walletP },
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
   } = service;
 
   const itemPurse = wallet.item;
   const characterPurse = wallet.character;
   const ownedCharacterKey = mediate.characters.toBack([character])[0];
-  const wantedCharacterKey = mediate.characters.toBack([{
-    ...character, nft: { ...character.nft, keyId: character.nft.keyId === 1 ? 2 : 1 },
-  }])[0];
+  const wantedCharacterKey = mediate.characters.toBack([
+    {
+      ...character,
+      nft: { ...character.nft, keyId: character.nft.keyId === 1 ? 2 : 1 },
+    },
+  ])[0];
   // const { ownedCharacterKey, wantedCharacterKey } = getCharacterKeys(characterName, characterPurse.value);
 
   if (!publicFacet || !walletP || !itemPurse || !characterPurse || !wantedCharacterKey) {
@@ -237,7 +240,7 @@ export const itemSwap = async (service: AgoricState, wallet: WalletContext, item
   const {
     agoric: { walletP },
     contracts: {
-      characterBuilder: { publicFacet },
+      kread: { publicFacet },
     },
   } = service;
 
@@ -289,7 +292,7 @@ export const itemSwap = async (service: AgoricState, wallet: WalletContext, item
 };
 
 export const getItemActivity = async (itemId: string, agoric: AgoricState): Promise<ActivityEvent[]> => {
-  const fetchedActivity = await E(agoric.contracts.characterBuilder.publicFacet).getItemHistory(itemId);
+  const fetchedActivity = await E(agoric.contracts.kread.publicFacet).getItemHistory(itemId);
   const itemActivity = fetchedActivity.map((event: any) => {
     if (event.type === EVENT_TYPE.mint) {
       return {

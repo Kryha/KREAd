@@ -61,7 +61,7 @@ export const getCharacterKeys = (
 
 export const getTokenInfo = async (kreadFacet: any, board: any): Promise<TokenInfo & { boardIds: TokenInfo }> => {
   const tokenInfo = await E(kreadFacet).getTokenInfo();
-  
+
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
@@ -93,12 +93,12 @@ export const getTokenInfo = async (kreadFacet: any, board: any): Promise<TokenIn
       },
       item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
       paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
-    }
+    },
   };
 };
 
-export const setupStorageNodeFollower = (LOCAL_DEVNET_RPC: string, STORAGE_NODE_SPEC: string): any => {
-  const leader = makeLeader(LOCAL_DEVNET_RPC);
+export const setupStorageNodeFollower = (AGORIC_RPC: string, STORAGE_NODE_SPEC: string): any => {
+  const leader = makeLeader(AGORIC_RPC);
   const castingSpec = makeCastingSpec(STORAGE_NODE_SPEC);
   return makeFollower(castingSpec, leader);
 };
