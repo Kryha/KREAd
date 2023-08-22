@@ -2,8 +2,8 @@
 import { assert, details as X } from '@agoric/assert';
 import { E } from '@endo/eventual-send';
 import { Far } from '@endo/marshal';
-import { errors } from './errors';
-import { getPage } from './utils';
+import { errors } from './errors.js';
+import { getPage } from './utils.js';
 
 /**
  * Manage contract state
@@ -44,6 +44,10 @@ export const kreadState = ({
     ready: true,
     configReady: true,
   };
+
+  notifiers.info.publisher.publish({
+    tokenInfo,
+  });
 
   /**
    * @returns {object}

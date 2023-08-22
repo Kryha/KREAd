@@ -1,6 +1,6 @@
 // ts-check
 /**
- * Holds contract data 
+ * Holds contract data
  *
  * @typedef {{
  *   config: Config
@@ -181,8 +181,8 @@
  * }} InventoryKeyRecord
  *
  * @typedef {InventoryKeyRecord[]} InventoryKeyStorage
- * 
- * 
+ *
+ *
  * @typedef {{
  *  isReady: () => boolean
  *  isConfigReady: () => boolean
@@ -210,20 +210,20 @@
  *    }
  * }
  * }} KreadState_get
- * 
+ *
  * @typedef {{
  *     powers: (powers: Powers, notifiers: Notifiers) => void
  *     publishKreadInfo: (boardId: string, publicFacet: object) => void
  * }} KreadState_set
- * 
+ *
  * @typedef {{
  * characters: (characters: CharacterRecord[]) => void
  *     items: (items: ItemRecord[]) => void
  *     updateConfig: (newConfig: Config) => void
  * }} KreadState_add
- * 
+ *
  * @typedef {{ nameIsUnique: NameIsUniqueFn }} KreadState_validate
- * 
+ *
  * @typedef {{
  *     isReady: () => boolean
  *     isValidName: () => boolean
@@ -245,7 +245,7 @@
  *     getItemMarket: () => ItemMarketRecord[]
  *     getItemMarketRange: () => ItemMarketRecord[]
  *   }} KreadState_public
- * 
+ *
  *   @typedef {{
  *     get: KreadState_get
  *     set: KreadState_set
@@ -253,7 +253,6 @@
  *     validate: KreadState_validate
  *     public: KreadState_public
  * }} KreadState
- * 
+ *
  * @typedef {(name: string) => boolean} NameIsUniqueFn
  */
-

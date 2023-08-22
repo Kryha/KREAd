@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-96adb1434057fdb5f19fb47868b97cc119752f93c7e82caa56824140b73f219baed75ddc1b563db3a7adab136d921be2ac233ed4d60cb3d38f2c17864aaba328',
+    'b1-8fb015ff4dbbb135b4cc7512ed72dad70b02ec25c226cafaef630b569b18af7769fc2b6b43409cdef9a3cecb6cee82a9e07ccc5d265f26a1ad63505ad8f1378d',
 };
 
 const fail = (reason) => {
@@ -365,7 +365,14 @@ const executeProposal = async (powers) => {
   // Destructure the powers that we use.
   // See also bakeSale-permit.json
   const {
-    consume: { board, chainStorage, zoe, chainTimerService },
+    consume: {
+      board,
+      chainStorage,
+      zoe,
+      chainTimerService,
+      agoricNamesAdmin,
+      agoricNames,
+    },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
     instance: {
@@ -387,21 +394,22 @@ const executeProposal = async (powers) => {
     chainTimerService,
     seed: 303,
   });
+  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
-  const noIssuers = harden({});
+  const issuers = harden({ Money: istIssuer });
   const noTerms = harden({});
   const facets = await E(zoe).startInstance(
     installation,
-    noIssuers,
+    issuers,
     noTerms,
     privateArgs,
   );
 
   // Get board ids for instance and assets
-  const instance = await E(board).getId(facets.instance);
+  const instanceBoardId = await E(board).getId(facets.instance);
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
@@ -434,12 +442,27 @@ const executeProposal = async (powers) => {
   };
 
   // Log board ids for use in frontend constants
-  console.log(`KREAD BOARD ID: ${instance}`);
+  console.log(`KREAD BOARD ID: ${instanceBoardId}`);
   for (const [key, value] of Object.entries(assetBoardIds)) {
     console.log(`${key.toUpperCase()} BRAND BOARD ID: ${value.brand}`);
     console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
   }
+  console.log(facets.publicFacet, facets.creatorFacet);
 
+  await E(facets.creatorFacet).publishKreadInfo(
+    instanceBoardId,
+    facets.publicFacet,
+  );
+
+  const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
+
+  await E(kindAdmin('issuer')).update('KREAdCHARACTER', characterIssuer);
+  await E(kindAdmin('brand')).update('KREAdCHARACTER', characterBrand);
+
+  await E(kindAdmin('issuer')).update('KREAdITEM', itemIssuer);
+  await E(kindAdmin('brand')).update('KREAdITEM', itemBrand);
+
+  console.log('ASSETS ADDED TO AGORIC NAMES');
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(facets.instance);
 };
@@ -449,4 +472,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=../../../REPO/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/wietzes/Documents/cosmos/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js

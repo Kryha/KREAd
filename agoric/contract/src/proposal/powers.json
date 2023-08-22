@@ -3,7 +3,9 @@
     "chainTimerService": "timer",
     "board": true,
     "chainStorage": true,
-    "zoe": true
+    "zoe": true,
+    "agoricNamesAdmin": true,
+    "agoricNames": true
   },
   "produce": {
     "kreadKit": true

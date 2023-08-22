@@ -2,7 +2,7 @@
 import { assert, details as X } from '@agoric/assert';
 import { makeStoredPublishKit } from '@agoric/notifier';
 import { E } from '@endo/eventual-send';
-import { errors } from './errors';
+import { errors } from './errors.js';
 
 export const sameType = (a, b) => {
   const objectA = Object(a) === a;
@@ -152,6 +152,7 @@ export const setupStorageNodeNotifiers = ({ storageNode, marshaller }) => {
       marshaller,
       'inventory-general',
     ),
+    info: makeStorageNodePublishKit(storageNode, marshaller, 'info'),
   };
 
   return notifiers;

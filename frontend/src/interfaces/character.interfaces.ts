@@ -38,7 +38,7 @@ export interface Detail {
 }
 
 export interface Character {
-  id: string;
+  id: any;
   keyId: number;
   title: string;
   name: string;
