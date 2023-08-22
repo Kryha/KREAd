@@ -81,10 +81,10 @@ export const kreadState = ({
     );
     assert(characterRecord, X`${errors.character404}`);
     const { inventory } = characterRecord;
-    const items = inventory.getAmountAllocated(
-      'Item',
-      state.tokenInfo.item.brand,
-    ).value;
+    const items = inventory
+      .getAmountAllocated('Item', state.tokenInfo.item.brand)
+      .value.payload.map(([value, supply]) => value);
+
     // @ts-ignore
     return { items };
   };
