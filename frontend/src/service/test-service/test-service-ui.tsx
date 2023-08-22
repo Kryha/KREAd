@@ -9,12 +9,11 @@ import { useWalletState } from "../../context/wallet";
 import { useCreateCharacter } from "../character";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { useDataMode } from "../../hooks/use-data-mode";
+import { useDataMode } from "../../hooks";
 import { routes } from "../../navigation";
 import { KreadLogo } from "../../pages/onboarding/styles";
 import StatusIndicator from "./service-status-indicator";
 import { fontSize } from "../../design";
-
 
 export const TestServiceUI = () => {
   const [service] = useAgoricContext();
@@ -22,7 +21,7 @@ export const TestServiceUI = () => {
   const shop = useCharacterMarketState();
   const createCharacter = useCreateCharacter();
   const navigate = useNavigate();
-  const { mockData} = useDataMode();
+  const { isMockData } = useDataMode();
 
   console.log("---------------TESTUI", shop);
   const publicFacet = service.contracts.characterBuilder.publicFacet;
@@ -30,8 +29,8 @@ export const TestServiceUI = () => {
   useEffect(() => {
     console.log("SERVICE:", service);
     console.log("CHARACTERS: ", characters);
-    console.log("Data Mode: ", mockData);
-  }, [service, characters, mockData]);
+    console.log("Data Mode: ", isMockData);
+  }, [service, characters, isMockData]);
 
   const mintCharacterNFT = async () => {
     await createCharacter.mutateAsync({
@@ -99,13 +98,13 @@ export const TestServiceUI = () => {
 
   const goHome = () => {
     navigate(routes.root);
-  }
+  };
 
   const buttons = [
     { text: "MINT CHARACTER", onClick: mintCharacterNFT },
     { text: "TOP UP", onClick: topUp },
     { text: "REMOVE FROM INVENTORY", onClick: removeItemFromInventory },
-    { text: "GET CHARACTER INVENTORY", onClick: async () => await getCharacterInventory},
+    { text: "GET CHARACTER INVENTORY", onClick: async () => await getCharacterInventory },
     { text: "CHARACTERS", onClick: () => console.log("Characters:", characters) },
     { text: "TEST", onClick: test },
     // Add more buttons here
@@ -123,11 +122,10 @@ export const TestServiceUI = () => {
         <Main>
           <Section>
             <SectionTitle>Agoric Service Status:</SectionTitle>
-            <StatusIndicator statusObject={service.status}/>
+            <StatusIndicator statusObject={service.status} />
           </Section>
           <Section>
             <SectionTitle>Statistics:</SectionTitle>
-
           </Section>
           <Section>
             <SectionTitle>Controls:</SectionTitle>
@@ -143,14 +141,12 @@ export const TestServiceUI = () => {
           </Section>
           <Section>
             <SectionTitle>Results:</SectionTitle>
-
           </Section>
         </Main>
       </Container>
     </>
   );
 };
-
 
 const Container = styled.div`
   display: flex;
@@ -162,12 +158,12 @@ const Container = styled.div`
   isolation: isolate;
   background: hsl(216, 17%, 17%);
   color: #fff;
-  `;
+`;
 
 const Section = styled.div`
   position: relative;
   z-index: 2;
-  `;
+`;
 const SectionTitle = styled.div`
   display: flex;
   -moz-box-pack: justify;
@@ -175,7 +171,7 @@ const SectionTitle = styled.div`
   -moz-box-align: center;
   align-items: center;
   margin-bottom: 4px;
-  `;
+`;
 
 const SectionControls = styled.div`
   display: flex;
@@ -183,10 +179,10 @@ const SectionControls = styled.div`
   -moz-box-pack: center;
   justify-content: center;
   min-height: 1.625rem;
-  `;
+`;
 
 const AppBar = styled.header`
-  --color-primary: hsl(53deg,100%,50%);
+  --color-primary: hsl(53deg, 100%, 50%);
   display: flex;
   flex-direction: column;
   -moz-box-pack: justify;
@@ -194,7 +190,7 @@ const AppBar = styled.header`
   align-items: center;
   padding: 18px;
   border-bottom: 1px solid hsl(210deg, 15%, 20%);
- `;
+`;
 
 const Main = styled.div`
   display: flex;
@@ -204,14 +200,12 @@ const Main = styled.div`
   padding: 16px;
   isolation: isolate;
   max-width: 800px;
-  `;
+`;
 const LogoContainer = styled.a`
   width: 100px;
   height: 24px;
   background: white;
-  `;
-
-
+`;
 
 const Title = styled.h1`
   position: relative;
@@ -232,7 +226,6 @@ const ButtonText = styled.span`
   margin-top: 8px;
 `;
 
-
 const Button = styled.button`
   display: flex;
   -moz-box-pack: center;
@@ -244,22 +237,22 @@ const Button = styled.button`
   border-width: 3px;
   border-image: none 100% / 1 / 0 stretch;
   border-radius: 6px;
-  border-color: hsl(210deg,15%,20%);;
-  color: hsl(210deg,8%,50%);
+  border-color: hsl(210deg, 15%, 20%);
+  color: hsl(210deg, 8%, 50%);
   background: none;
   cursor: pointer;
   user-select: none;
 
   &:hover {
-    border-color: hsl(210deg,15%,30%);
-    color: hsl(210deg,8%,80%);
+    border-color: hsl(210deg, 15%, 30%);
+    color: hsl(210deg, 8%, 80%);
   }
 
   &:active {
     background: #76d397;
     color: #fff;
   }
-  `;
+`;
 
 const ButtonContainer = styled.ul`
   display: flex;

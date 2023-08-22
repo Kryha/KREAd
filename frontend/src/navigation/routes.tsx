@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
@@ -7,7 +7,6 @@ import {
   CharacterBuy,
   CharacterSell,
   CreateCharacter,
-  DownloadCharacter,
   Inventory,
   ItemBuy,
   ItemPage,
@@ -23,7 +22,8 @@ import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
 import { isDevelopmentMode } from "../constants";
-import { DevelopmentMode } from "../service/test-service/development-mode";
+// import { useAssembleCharacter } from "../hooks/use-assemble-character";
+// import { useCharacterCanvas } from "../context/character-builder-provider";
 
 export const InternalAppWrapper = () => {
   return (
@@ -38,6 +38,15 @@ export const InternalAppWrapper = () => {
 export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
   const [service] = useAgoricContext();
+  // const { assembledCharacter, setAssembledCharacter } = useCharacterCanvas();
+  // const { assembledCharacter: newAssembledCharacter } = useAssembleCharacter();
+
+  // useEffect(() => {
+  //   // Assemble the character only once on app launch
+  //   if (!assembledCharacter) {
+  //     setAssembledCharacter(newAssembledCharacter);
+  //   }
+  // }, [assembledCharacter, newAssembledCharacter, setAssembledCharacter]);
 
   if (service.isLoading) return <LoadingPage spinner={false} />;
 
@@ -46,15 +55,14 @@ export const InternalAppRoutes: FC = () => {
       <Routes>
         <Route path={routes.root} element={<Onboarding />} />
         <Route path={routes.character} element={<Landing />} />
+        <Route path={routes.createCharacter} element={<CreateCharacter />} />
         <Route path={`${routes.items}/:category`} element={<ItemPage />} />
         <Route path={routes.shop} element={<Shop />} />
         <Route path={routes.inventory} element={<Inventory />} />
-        <Route path={routes.createCharacter} element={<CreateCharacter />} />
         <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
         <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
         <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
         <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
-        <Route path={routes.downloadCharacter} element={<DownloadCharacter />} />
 
         {isDevelopmentMode && <Route path={"/test"} element={<TestServiceUI />} />}
 
@@ -70,7 +78,6 @@ export const ExternalAppRoutes: FC = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
       <MainContainer>
-        <DevelopmentMode />
         <Routes>
           <Route path={routes.root} element={<Onboarding />} />
           <Route path={routes.privacy} element={<Privacy />} />

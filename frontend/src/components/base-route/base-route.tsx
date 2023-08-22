@@ -1,10 +1,11 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 import { text } from "../../assets";
 import { routes } from "../../navigation";
 import { Footer } from "../footer";
 import { NavigationSection, NavigationTab } from "../navigation-tab";
-import { TopbarContainer, Box, ChildrenContainer, FooterContainer } from "./styles";
+import { Box, ChildrenContainer, FooterContainer, TopbarContainer } from "./styles";
+import { DevelopmentMode } from "../../service/test-service/development-mode";
 
 interface BaseRouteProps {
   sideNavigation: React.ReactNode;
@@ -29,9 +30,12 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
             <NavigationTab title={text.navigation.inventory} route={routes.inventory} />
           </NavigationSection>
         </Box>
-        {sideNavigation}
+        <Box>
+          {sideNavigation}
+          <DevelopmentMode />
+        </Box>
       </TopbarContainer>
-      <ChildrenContainer>{children}</ChildrenContainer>
+      <ChildrenContainer isLanding={isLanding}>{children}</ChildrenContainer>
       <FooterContainer isLanding={isLanding}>
         <Footer />
       </FooterContainer>

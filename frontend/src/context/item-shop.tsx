@@ -1,10 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
 import { iterateLatest } from "@agoric/casting";
 import { LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_ITEMS } from "../constants";
 import { setupStorageNodeFollower } from "../service/util";
+import { mockItemsInMarket } from "../service/mock-data/mockItems";
+import { useDataMode } from "../hooks";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -15,12 +17,18 @@ const initialState: ItemMarketContext = {
   fetched: false,
 };
 
+const initialMockState: ItemMarketContext = {
+  items: mockItemsInMarket,
+  fetched: false,
+};
+
 const Context = createContext<ItemMarketContext | undefined>(undefined);
 
 type ProviderProps = Omit<React.ProviderProps<ItemMarketContext>, "value">;
 
 export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElement => {
-  const [marketState, marketDispatch] = useState(initialState);
+  const { isMockData } = useDataMode();
+  const [marketState, marketDispatch] = useState(isMockData ? initialMockState : initialState);
   const agoric = useAgoricState();
   const kreadPublicFacet = agoric.contracts.characterBuilder.publicFacet;
 
@@ -30,7 +38,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       console.log(items);
       marketDispatch((prevState) => ({ ...prevState, items, fetched: true }));
     };
-    const formatMarketEntry = async(marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
+    const formatMarketEntry = async (marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {
         id: BigInt(marketEntry.id),
         item: marketEntry.item,
@@ -48,7 +56,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       console.count("🛍 UPDATING ITEM SHOP 🛍");
 
       const follower = setupStorageNodeFollower(LOCAL_DEVNET_RPC, STORAGE_NODE_SPEC_MARKET_ITEMS);
-      
+
       // Iterate over kread's storageNode follower on local-devnet
       for await (const { value } of iterateLatest(follower)) {
         parseItemMarketUpdate(value);

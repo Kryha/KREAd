@@ -1,11 +1,11 @@
 /// <reference types="ses"/>
-import React, { createContext, useReducer, useContext, useEffect, useRef } from "react";
+import React, { createContext, useContext, useEffect, useReducer, useRef } from "react";
 import { Far } from "@endo/marshal";
-import { makeCapTP, E } from "@endo/captp";
+import { E, makeCapTP } from "@endo/captp";
 import { observeIteration } from "@agoric/notifier";
 import dappConstants from "../service/conf/defaults";
 import { activateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
-import { AgoricDispatch, AgoricState, AgoricStateActions } from '../interfaces';
+import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces";
 import { getTokenInfo } from "../service/util";
 import { isDevelopmentMode } from "../constants";
 import { useDataMode } from "../hooks";
@@ -13,11 +13,7 @@ import { useDataMode } from "../hooks";
 const {
   INSTANCE_NFT_MAKER_BOARD_ID,
   // INSTALLATION_BOARD_ID,
-  issuerBoardIds: {
-    Character: CHARACTER_ISSUER_BOARD_ID,
-    Item: ITEM_ISSUER_BOARD_ID,
-    Token: TOKEN_ISSUER_BOARD_ID
-  },
+  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID, Token: TOKEN_ISSUER_BOARD_ID },
 } = dappConstants;
 
 const initialState: AgoricState = {
@@ -182,9 +178,9 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       await Promise.all([
         E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
         // E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID/*, tokenInfo.boardIds.character.issuer*/),
-        E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID/*, tokenInfo.boardIds.item.issuer*/),
-        E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID/*, tokenInfo.boardIds.paymentFT.issuer*/),
+        E(walletP).suggestIssuer("CHARACTER", CHARACTER_ISSUER_BOARD_ID /*, tokenInfo.boardIds.character.issuer*/),
+        E(walletP).suggestIssuer("ITEM", ITEM_ISSUER_BOARD_ID /*, tokenInfo.boardIds.item.issuer*/),
+        E(walletP).suggestIssuer("TOKEN", TOKEN_ISSUER_BOARD_ID /*, tokenInfo.boardIds.paymentFT.issuer*/),
       ]);
 
       console.count("🔧 LOADING AGORIC SERVICE 🔧");
@@ -219,14 +215,14 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
 export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
-  const { mockData } = useDataMode();
+  const { isMockData } = useDataMode();
 
   if (state === undefined) {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
 
   if (isDevelopmentMode) {
-    if (mockData) {
+    if (isMockData) {
       state.isLoading = false;
     }
   }
