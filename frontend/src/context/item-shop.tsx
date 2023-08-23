@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
 import { watchItemMarket } from "../service/storage-node/watch-market";
 import { useDataMode } from "../hooks";
-import { mockItemsInMarket } from "../service/mock-data/mockItems";
+import { mockItemsInMarket } from "../service/mock-data/mock-items";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -28,7 +28,6 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   const { isMockData } = useDataMode();
   const [marketState, marketDispatch] = useState(isMockData ? initialMockState : initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = agoric.contracts.kread.publicFacet;
 
   useEffect(() => {
     const parseItemMarketUpdate = async (itemsInMarket: KreadItemInMarket[]) => {

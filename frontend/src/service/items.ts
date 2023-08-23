@@ -1,21 +1,76 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Item, ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
+import { ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
 import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
-import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
+import { buyItem, equipItem, sellItem, unequipItem } from "./item-actions";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
 import { useItemMarketState } from "../context/item-shop";
 import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
+import { useSearchParams } from "react-router-dom";
 
+// TODO: Fix this function used during buy and sell
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
-  const [{ all }, isLoading] = useMyItems();
+  const [found, setFound] = useState<ItemEquip | undefined>(undefined);
+  return [found, false];
+};
 
-  const found = useMemo(() => all.find((item) => item.id === id), [all, id]);
+export const useItemFromInventory = (id: string): [ItemEquip | undefined, boolean] => {
+  const [items, isLoading] = useMyItems();
+
+  const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
 
   return [found, isLoading];
+};
+
+export function extractExistingParams(searchParams: URLSearchParams): Record<string, string[]> {
+  const entries = Array.from(searchParams.entries());
+  return entries.reduce((acc, [key, value]) => {
+    acc[key] = acc[key] || [];
+    acc[key].push(value);
+    return acc;
+  }, {} as Record<string, string[]>);
+}
+
+export function removeExistingParamsArrayValue(searchParams: URLSearchParams, key: string, value: string): Record<string, string[]> {
+  const existingParams = extractExistingParams(searchParams);
+
+  if (existingParams[key]) {
+    existingParams[key] = existingParams[key].filter((v) => v !== value);
+  }
+
+  if (existingParams[key].length === 0) {
+    delete existingParams[key];
+  }
+
+  return existingParams;
+}
+
+export const useMyItems = (filters?: ItemFilters): [ItemEquip[], boolean] => {
+  const { equippedItems, fetched } = useUserState();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  if (!filters) return [equippedItems, !fetched];
+
+  useEffect(() => {
+    const { categories, sorting, color } = filters;
+    setSearchParams(
+      {
+        categories: categories.join(","),
+        sorting,
+        color,
+      },
+      {
+        relative: "path",
+      }
+    );
+  }, [setSearchParams, filters]);
+
+  const filtered = !filters ? equippedItems : filterItems(equippedItems, filters);
+
+  return [filtered, !fetched];
 };
 
 export const useMyItemsForSale = () => {
@@ -50,36 +105,6 @@ export const useMyItemsForSale = () => {
   }, [itemOffers]);
 
   return itemsForSale;
-};
-
-export const useMyItems = (filters?: ItemFilters): [{ owned: Item[]; equipped: Item[]; all: ItemEquip[] }, boolean] => {
-  const { items: owned, equippedItems: equipped, fetched } = useUserState();
-  const itemsForSale = useMyItemsForSale();
-
-  const all = useMemo(
-    () => [
-      ...equipped.map((item) => ({ ...item, isEquipped: true, isForSale: false })),
-      ...owned.map((item) => ({ ...item, isEquipped: false, isForSale: false })),
-    ],
-    [equipped, owned]
-  );
-
-  // mixing items from wallet to items from offers
-  const allWithForSale: ItemEquip[] = useMemo(() => {
-    try {
-      return [...all, ...itemsForSale];
-    } catch (error) {
-      return all;
-    }
-  }, [all, itemsForSale]);
-
-  // filtering all the items
-  const filtered = useMemo(() => {
-    if (!filters) return allWithForSale;
-    return filterItems(allWithForSale, filters);
-  }, [allWithForSale, filters]);
-
-  return [{ owned, equipped, all: filtered }, !fetched];
 };
 
 export const useItemFromMarket = (id: string): [ItemInMarket | undefined, boolean] => {

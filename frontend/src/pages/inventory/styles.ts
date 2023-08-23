@@ -1,40 +1,38 @@
 import styled from "@emotion/styled";
-import { CloseIcon, BellIcon } from "../../assets";
-import { SecondaryButton } from "../../components";
-import { disappear, fadeIn, fadeUp } from "../../components/atoms/animations";
+import { BellIcon, CloseIcon } from "../../assets";
+import { ButtonText, fadeUp, SecondaryButton } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
-
-import { Group } from "../../components/switch-selector/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { color, margins } from "../../design";
+import { breakpoints, color, margins } from "../../design";
 
 interface ViewProps {
   width: number;
   height: number;
 }
 
-export const InventoryWrapper = styled.div`
-  ${Group} {
-    margin-left: ${margins.big};
-    margin-bottom: ${margins.small};
-  }
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 0.2s, 0.4s;
-  animation-delay: 0s, 0.2s;
-`;
+interface InventoryProps {
+  height: number;
+}
 
 export const OverviewContainer = styled.div`
   border: 1px solid #d0d0d0;
   border-radius: 24px;
   height: 75vh;
 `;
+export const ItemInventoryWrapper = styled.div<InventoryProps>`
+  overflow-y: scroll;
+  ${({ height }): string => `height: ${height - 200}px;`};
+`;
 
 export const ItemContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  padding: 8px 24px 8px 8px;
+  padding: 24px 24px 8px 24px;
   gap: 24px;
+  @media screen and (max-width: ${breakpoints.mobile}) {
+    padding: 0;
+  }
 `;
 
 export const InfoContainer = styled.div`
@@ -138,5 +136,25 @@ export const KreadContainer = styled.div<ViewProps>`
     top: 40px;
     width: 100px;
     height: 24px;
+  }
+`;
+
+export const FilterCount = styled(ButtonText)`
+  margin-left: ${margins.mini};
+`;
+
+export const InventoryWrapper = styled.div`
+  margin: 0px ${margins.big} 120px ${margins.big};
+  position: relative;
+
+  ${DetailSectionWrap} {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1000;
+  }
+
+  @media screen and (max-width: ${breakpoints.mobile}) {
+    margin: 0px;
   }
 `;
