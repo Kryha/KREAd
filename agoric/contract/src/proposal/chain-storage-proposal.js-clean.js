@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-8fb015ff4dbbb135b4cc7512ed72dad70b02ec25c226cafaef630b569b18af7769fc2b6b43409cdef9a3cecb6cee82a9e07ccc5d265f26a1ad63505ad8f1378d',
+    'b1-4638280b02bb446debc4999e965f7623a468669200b83e6b89f73fee85ffe211092774de40b0d30442483ee84fe7f5d6fdd5d0218c36db24e7e7bc029316ff02',
 };
 
 const fail = (reason) => {
@@ -369,6 +369,7 @@ const executeProposal = async (powers) => {
       board,
       chainStorage,
       zoe,
+      startUpgradable,
       chainTimerService,
       agoricNamesAdmin,
       agoricNames,
@@ -388,6 +389,7 @@ const executeProposal = async (powers) => {
   );
   const marshaller = await E(board).getReadonlyMarshaller();
   const kreadPowers = { storageNode, marshaller };
+  const settledTimer = await chainTimerService;
   const kreadConfig = harden({
     defaultCharacters,
     defaultItems,
@@ -401,20 +403,22 @@ const executeProposal = async (powers) => {
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
   const issuers = harden({ Money: istIssuer });
   const noTerms = harden({});
-  const facets = await E(zoe).startInstance(
+
+  const { instance, creatorFacet, publicFacet } = await E(startUpgradable)({
     installation,
+    label: 'KREAd',
     issuers,
-    noTerms,
     privateArgs,
-  );
+    noTerms,
+  });
 
   // Get board ids for instance and assets
-  const instanceBoardId = await E(board).getId(facets.instance);
+  const boardId = await E(board).getId(instance);
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
-    paymentFT: { issuer: tokenIssuer, brand: tokenBrand },
-  } = await E(facets.publicFacet).getTokenInfo();
+    payment: { issuer: tokenIssuer, brand: tokenBrand },
+  } = await E(publicFacet).getTokenInfo();
 
   const [
     CHARACTER_BRAND_BOARD_ID,
@@ -441,18 +445,24 @@ const executeProposal = async (powers) => {
     paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
   };
 
+  await E(creatorFacet).publishKreadInfo(
+    boardId,
+    CHARACTER_BRAND_BOARD_ID,
+    CHARACTER_ISSUER_BOARD_ID,
+    ITEM_BRAND_BOARD_ID,
+    ITEM_ISSUER_BOARD_ID,
+    TOKEN_BRAND_BOARD_ID,
+    TOKEN_ISSUER_BOARD_ID,
+  );
   // Log board ids for use in frontend constants
-  console.log(`KREAD BOARD ID: ${instanceBoardId}`);
+  console.log(`KREAD BOARD ID: ${boardId}`);
   for (const [key, value] of Object.entries(assetBoardIds)) {
     console.log(`${key.toUpperCase()} BRAND BOARD ID: ${value.brand}`);
     console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
   }
-  console.log(facets.publicFacet, facets.creatorFacet);
 
-  await E(facets.creatorFacet).publishKreadInfo(
-    instanceBoardId,
-    facets.publicFacet,
-  );
+  //Share instance widely via E(agoricNames).lookup('instance', <instance name>)
+  kread.resolve(instance);
 
   const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
 
@@ -464,7 +474,6 @@ const executeProposal = async (powers) => {
 
   console.log('ASSETS ADDED TO AGORIC NAMES');
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
-  kread.resolve(facets.instance);
 };
 
 harden(executeProposal);

@@ -20,7 +20,6 @@ export const bootstrapContext = async (conf) => {
   // Bundle and install contract
   const contractBundle = await bundleSource('./src/index.js');
   const installation = await E(zoe).install(contractBundle);
-
   const privateArgs = {
     powers: {
       storageNode: makeMockChainStorageRoot().makeChildNode('thisElectorate'),
@@ -36,14 +35,15 @@ export const bootstrapContext = async (conf) => {
     installation,
     undefined,
     undefined,
-    privateArgs,
+    harden(privateArgs),
   );
   const { publicFacet } = instance;
   const contractAssets = await E(publicFacet).getTokenInfo();
+
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
-    paymentFT: { issuer: tokenIssuer, brand: tokenBrand },
+    payment: { issuer: tokenIssuer, brand: tokenBrand },
   } = contractAssets;
 
   const purses = {

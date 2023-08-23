@@ -2,9 +2,9 @@
 import { errors } from './errors.js';
 
 /**
- * 
- * @param {AmountKeywordRecord} want 
- * 
+ *
+ * @param {AmountKeywordRecord} want
+ *
  * @param {NameIsUniqueFn} nameIsUnique
  * @returns {string | undefined}
  */
@@ -31,5 +31,5 @@ const mintCharacter = (want, nameIsUnique) => {
 };
 
 export const validation = {
-  mintCharacter
-}
+  mintCharacter,
+};

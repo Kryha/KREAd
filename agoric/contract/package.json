@@ -31,6 +31,7 @@
     "@agoric/nat": "dev",
     "@agoric/notifier": "beta",
     "@agoric/store": "beta",
+    "@agoric/vat-data": "^0.5.2",
     "@agoric/zoe": "beta",
     "@agoric/vats": "beta",
     "@endo/bundle-source": "^2.1.1",
