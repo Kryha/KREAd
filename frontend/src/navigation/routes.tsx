@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
 import {
@@ -38,6 +38,9 @@ export const InternalAppWrapper = () => {
 export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
   const [service] = useAgoricContext();
+  const location = useLocation();
+
+  // TODO: Add this back once character builder is running
   // const { assembledCharacter, setAssembledCharacter } = useCharacterCanvas();
   // const { assembledCharacter: newAssembledCharacter } = useAssembleCharacter();
 
@@ -48,7 +51,9 @@ export const InternalAppRoutes: FC = () => {
   //   }
   // }, [assembledCharacter, newAssembledCharacter, setAssembledCharacter]);
 
-  // if (service.isLoading) return <LoadingPage spinner={false} />;
+  if (service.isLoading && location.pathname !== routes.test) {
+    return <LoadingPage spinner={false} />;
+  }
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
@@ -64,7 +69,7 @@ export const InternalAppRoutes: FC = () => {
         <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
         <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
 
-        {isDevelopmentMode && <Route path={"/test"} element={<TestServiceUI />} />}
+        {isDevelopmentMode && <Route path={`${routes.test}`} element={<TestServiceUI />} />}
 
         <Route path="*" element={<ErrorView />} />
       </Routes>

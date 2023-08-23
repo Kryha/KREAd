@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ButtonText, disappear, fadeIn, fadeOut, SecondaryButton } from "../../components";
 import styled from "@emotion/styled";
 import { useViewport } from "../../hooks";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { color, fontSize, margins } from "../../design";
 import { css } from "@emotion/react";
 import { Diamond } from "../../components/price-in-ist/styles";
@@ -34,6 +34,10 @@ interface ButtonLink {
   route: string;
 }
 
+interface DevIconProps {
+  color: string;
+}
+
 const buttonLinks: ButtonLink[] = [
   { text: "Test Service UI", route: routes.test },
   { text: "Home", route: routes.root },
@@ -53,6 +57,7 @@ const buttonLinks: ButtonLink[] = [
 
 export const DevelopmentMode: React.FC<DevProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
   const handleDevModeButtonClick = () => {
     setIsModalOpen(true);
   };
@@ -68,7 +73,7 @@ export const DevelopmentMode: React.FC<DevProps> = () => {
   return (
     <DevModeContainer>
       <DevModeButton onClick={handleDevModeButtonClick}>
-        <Dev />
+        <Dev color={location.pathname === routes.test ? "white" : "black"} />
       </DevModeButton>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
     </DevModeContainer>
@@ -181,7 +186,6 @@ const ModalContainer = styled.div<ViewProps>`
 
   &.open {
     opacity: 1;
-    //visibility: visible;
   }
 `;
 
@@ -255,10 +259,13 @@ export const DevModeButton = styled(SecondaryButton)`
   }
 `;
 
-export const Dev = styled(DevIcon)`
+export const Dev = styled(DevIcon)<DevIconProps>`
   svg {
     height: 20px;
     width: 20px;
     margin: 0;
+  }
+  path {
+    fill: ${({ color }) => color};
   }
 `;

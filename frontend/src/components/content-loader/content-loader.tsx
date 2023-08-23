@@ -18,7 +18,6 @@ export const LoadingPage: FC<LoadingPageProps> = ({ spinner = true }) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key === "d") {
-        console.log("Key combination pressed");
         setShowDevelopmentMode((prevMode) => !prevMode);
       }
     };

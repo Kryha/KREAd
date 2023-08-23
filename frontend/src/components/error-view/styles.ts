@@ -91,6 +91,7 @@ export const KreadContainer = styled.div`
     height: 24px;
     text-align: center;
     flex: 1;
+    background: ${color.white};
   }
 `;
 
