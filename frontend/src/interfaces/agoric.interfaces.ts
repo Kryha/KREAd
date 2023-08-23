@@ -9,7 +9,7 @@ export interface AgoricService {
 
 interface Contract {
   instance: any;
-  publicFacet: any;
+  publicFacet?: any;
 }
 
 interface Contracts {

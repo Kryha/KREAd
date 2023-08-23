@@ -44,7 +44,6 @@ const initialState: AgoricState = {
   contracts: {
     kread: {
       instance: undefined,
-      publicFacet: undefined,
     },
   },
   testCharacterInventory: {},
@@ -268,10 +267,8 @@ export const useAgoricState = (): AgoricState => {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
 
-  if (isDevelopmentMode) {
-    if (isMockData) {
-      state.isLoading = false;
-    }
+  if (isDevelopmentMode && isMockData) {
+    state.isLoading = false;
   }
 
   return state;

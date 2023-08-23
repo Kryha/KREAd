@@ -505,12 +505,6 @@ export const TestServiceUI = () => {
   return (
     <>
       <Container>
-        {/*<AppBar>*/}
-        {/*  <LogoContainer onClick={goHome}>*/}
-        {/*    <KreadLogo />*/}
-        {/*  </LogoContainer>*/}
-        {/*  <Title>🔧 Test Service UI </Title>*/}
-        {/*</AppBar>*/}
         <KreadContainer>
           <AnimatedLogo iteration={1} />
           <Title>🔧 Test Service UI </Title>
