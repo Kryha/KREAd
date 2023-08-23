@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
@@ -13,7 +13,10 @@ import { useMyCharacter, useMyCharacters } from "../../service";
 import { EmptyDetail } from "./empty-item-inventory";
 import { DetailWrapper } from "./styles";
 
-export const CharactersInventory: FC = () => {
+interface Props {
+  pageSelector: React.ReactNode;
+}
+export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
   const navigate = useNavigate();
 
   const userStateDispatch = useUserStateDispatch();
@@ -71,6 +74,7 @@ export const CharactersInventory: FC = () => {
 
   return (
     <PageContainer sidebarContent={<CharactersList onCharacterClick={setSelectedId} onFilterClick={onFilterChange} />}>
+      {pageSelector}
       <FadeInOut show>
         <DetailWrapper>
           {noCharacters ? (
