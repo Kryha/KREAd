@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { color, fontWeight, margins, zIndex } from '../../design';
-import { ButtonText } from './text';
+import { breakpoints, color, fontWeight, margins, zIndex } from "../../design";
+import { ButtonText } from "./text";
 
 interface ButtonProps {
   backgroundColor?: string;
@@ -81,6 +81,10 @@ export const PrimaryButton = styled.button<ButtonProps>`
         `
       : "";
   }};
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: 12px;
+  }
 `;
 
 export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`

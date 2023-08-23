@@ -49,6 +49,7 @@ export const ITEM_CATEGORIES = {
     "forSale",
     "equipped",
   ],
+  allCategories: "allCategories",
   noseline: "noseline",
   midBackground: "midBackground",
   mask: "mask",
@@ -70,7 +71,7 @@ export const KRYHA_LINK = "https://kryha.io/";
 
 export const MAX_CHARACTER_LENGTH = 16;
 export const SLIDER_TIME = 4.5;
-export const PAGE_SIZE = 2;
+export const PAGE_SIZE = 10;
 
 export const FIRST_TIME = "first_time";
 export const CHARACTER_PURSE_NAME = "KREA";
@@ -88,6 +89,9 @@ export const STORAGE_NODE_SPEC_MARKET_CHARACTERS = ":published.kread.market-char
 export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-";
 
 export const isDevelopmentMode = process.env.NODE_ENV === "development";
+
+export const DOWNLOAD_CANVAS_WIDTH = 2500;
+export const DOWNLOAD_CANVAS_HEIGHT = 2500;
 
 export const networkConfigs = {
   mainnet: {

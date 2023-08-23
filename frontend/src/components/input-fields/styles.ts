@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 
-import { TickIcon, RangeIcon } from "../../assets";
+import { RangeIcon, TickIcon } from "../../assets";
 import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
 import { color, fontWeight, margins } from "../../design";
-import { ButtonText, SecondaryButton, BodyText, Input } from "../atoms";
+import { BodyText, ButtonText, Input, SecondaryButton } from "../atoms";
 import { Diamond } from "../price-in-ist/styles";
 
 interface SelectProps {
@@ -41,10 +41,16 @@ interface ViewProps {
   height: number;
 }
 
+export const SelectDivider = styled.div`
+  border: 0.5px solid ${color.grey};
+  width: 100%;
+`;
+
 export const SelectBox = styled.div<ViewProps>`
   width: 180px;
   border: 1px solid ${color.grey};
-  border-radius: ${margins.small};
+  border-top-left-radius: ${margins.small};
+  border-bottom-left-radius: ${margins.small};
   background: ${color.lightGrey};
   box-sizing: border-box;
   display: flex;
@@ -70,8 +76,9 @@ export const ColorContainer = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  gap: ${margins.small};
+  align-items: center;
+  justify-content: center;
   padding: 0px;
 `;
 
