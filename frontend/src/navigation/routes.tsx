@@ -7,6 +7,7 @@ import {
   CharacterBuy,
   CharacterSell,
   CreateCharacter,
+  DownloadCharacter,
   Inventory,
   ItemBuy,
   ItemPage,
@@ -22,6 +23,10 @@ import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
 import { isDevelopmentMode } from "../constants";
+import { DevelopmentMode } from "../service/test-service/development-mode";
+import { MobileNotAvailable } from "../pages/mobile-not-available";
+import { useIsMobile } from "../hooks";
+import { breakpoints } from "../design";
 // import { useAssembleCharacter } from "../hooks/use-assemble-character";
 // import { useCharacterCanvas } from "../context/character-builder-provider";
 
@@ -37,6 +42,7 @@ export const InternalAppWrapper = () => {
 
 export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile(breakpoints.tablet);
   const [service] = useAgoricContext();
   const location = useLocation();
 
@@ -44,16 +50,7 @@ export const InternalAppRoutes: FC = () => {
   // const { assembledCharacter, setAssembledCharacter } = useCharacterCanvas();
   // const { assembledCharacter: newAssembledCharacter } = useAssembleCharacter();
 
-  // useEffect(() => {
-  //   // Assemble the character only once on app launch
-  //   if (!assembledCharacter) {
-  //     setAssembledCharacter(newAssembledCharacter);
-  //   }
-  // }, [assembledCharacter, newAssembledCharacter, setAssembledCharacter]);
-
-  if (service.isLoading && location.pathname !== routes.test) {
-    return <LoadingPage spinner={false} />;
-  }
+  if (service.isLoading) return <LoadingPage spinner={false} />;
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
@@ -61,13 +58,14 @@ export const InternalAppRoutes: FC = () => {
         <Route path={routes.root} element={<Onboarding />} />
         <Route path={routes.character} element={<Landing />} />
         <Route path={routes.createCharacter} element={<CreateCharacter />} />
-        <Route path={`${routes.items}/:category`} element={<ItemPage />} />
-        <Route path={routes.shop} element={<Shop />} />
-        <Route path={routes.inventory} element={<Inventory />} />
-        <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
-        <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
-        <Route path={`${routes.sellItem}/:id`} element={<ItemSell />} />
-        <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
+        <Route path={routes.downloadCharacter} element={<DownloadCharacter />} />
+        <Route path={`${routes.items}/:category`} element={isMobile ? <MobileNotAvailable /> : <ItemPage />} />
+        <Route path={routes.shop} element={isMobile ? <MobileNotAvailable /> : <Shop />} />
+        <Route path={routes.inventory} element={isMobile ? <MobileNotAvailable /> : <Inventory />} />
+        <Route path={`${routes.buyItem}/:id`} element={isMobile ? <MobileNotAvailable /> : <ItemBuy />} />
+        <Route path={`${routes.buyCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterBuy />} />
+        <Route path={`${routes.sellItem}/:id`} element={isMobile ? <MobileNotAvailable /> : <ItemSell />} />
+        <Route path={`${routes.sellCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterSell />} />
 
         {isDevelopmentMode && <Route path={`${routes.test}`} element={<TestServiceUI />} />}
 
