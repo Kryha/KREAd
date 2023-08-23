@@ -1,7 +1,8 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
-import { FiltersWrapper, Triangle, FiltersContainer, FilterOption } from "./styles";
+import { FilterOption, FiltersContainer, FiltersWrapper, Triangle } from "./styles";
 import { ButtonText } from "../atoms";
+import { useClickAwayListener } from "../../hooks/use-click-away-listener";
 
 interface FiltersProps {
   children?: React.ReactNode;
@@ -13,8 +14,15 @@ interface FiltersProps {
 }
 
 export const Filters: FC<FiltersProps> = ({ children, label, value, openFilter, id, hasValue }) => {
+  const filterRef = React.useRef<HTMLDivElement>(null);
+
+  const closeFilter = () => {
+    openFilter("");
+  };
+  useClickAwayListener(filterRef, id == label, closeFilter);
+
   return (
-    <FiltersWrapper>
+    <FiltersWrapper ref={filterRef}>
       <FiltersContainer isOpen={id === label} onClick={() => openFilter(label)} hasValue={hasValue}>
         <ButtonText>{value ? value : label}</ButtonText>
         <Triangle />

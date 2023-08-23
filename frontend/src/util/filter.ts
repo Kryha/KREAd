@@ -8,13 +8,13 @@ export interface OfferFilters {
 }
 
 export interface ItemFilters {
-  category: string;
+  categories: string[];
   sorting: string;
   color: string;
 }
 
 export interface ItemsMarketFilters {
-  category: string;
+  categories: string[];
   sorting: string;
   price: { min: number; max: number };
   color: string;
@@ -31,41 +31,93 @@ export interface CharactersMarketFilters {
   price: { min: number; max: number };
 }
 
-export const filterItems = (items: ItemEquip[], { category, sorting, color }: ItemFilters): ItemEquip[] => {
-  if (!category && !sorting && !color && items.length) return items;
+export function extractExistingParams(searchParams: URLSearchParams): Record<string, string[]> {
+  const entries = Array.from(searchParams.entries());
+  return entries.reduce((acc, [key, value]) => {
+    acc[key] = acc[key] || [];
+    acc[key].push(value);
+    return acc;
+  }, {} as Record<string, string[]>);
+}
 
-  const isInCategory = (item: ItemEquip, category: string) => {
-    switch (category) {
-      case "forSale":
-        return item.isForSale;
-      case "equipped":
-        return item.isEquipped;
-      default:
-        return category ? item.category === category : true;
+export function removeExistingParamsArrayValue(searchParams: URLSearchParams, key: string, value: string): Record<string, string[]> {
+  const existingParams = extractExistingParams(searchParams);
+
+  if (existingParams[key]) {
+    existingParams[key] = existingParams[key].filter((v) => v !== value);
+  }
+
+  if (existingParams[key].length === 0) {
+    delete existingParams[key];
+  }
+
+  return existingParams;
+}
+
+export const filterItems = (items: ItemEquip[], { categories, sorting, color }: ItemFilters): ItemEquip[] => {
+  if (items.length === 0) return []; // Return empty array if there are no items to filter
+
+  const isInCategory = (item: ItemEquip, selectedCategories: string[] | undefined) => {
+    if (!selectedCategories || selectedCategories.length === 0) return true; // Return true if no categories are selected
+
+    if (selectedCategories.includes("allCategories")) return true; // Return true if all categories are selected
+
+    const isForSaleSelected = selectedCategories.includes("forSale");
+    const isEquippedSelected = selectedCategories.includes("equipped");
+
+    if (isForSaleSelected && !isEquippedSelected) {
+      // If "forSale" is selected and other categories are listed
+      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
+
+      if (otherSelectedCategories.length > 0) {
+        return otherSelectedCategories.includes(item.category) && item.isForSale;
+      }
+
+      // If only "forSale" is selected, return only for sale items
+      return item.isForSale;
     }
+
+    if (!isForSaleSelected && isEquippedSelected) {
+      // If "equipped" is selected and other categories are listed
+      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
+
+      if (otherSelectedCategories.length > 0) {
+        return otherSelectedCategories.includes(item.category) && item.isEquipped;
+      }
+
+      // If only "equipped" is selected, return only equipped items
+      return item.isEquipped;
+    }
+
+    // If only specific categories are selected (excluding "forSale" and "equipped")
+    const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
+
+    if (otherSelectedCategories.length > 0) {
+      return otherSelectedCategories.includes(item.category);
+    }
+
+    return selectedCategories.includes(item.category);
   };
+  const hasColor = (item: ItemEquip, selectedColor: string) =>
+    selectedColor ? item.colors.some((colorElement) => colorElement === selectedColor) : true;
+  const filteredItems = items.filter((item) => isInCategory(item, categories) && hasColor(item, color));
 
-  const hasColor = (item: ItemEquip, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
-
-  const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
-  const sortedItems = sortItems(sorting, filteredItems);
-
-  return sortedItems;
+  return sortItems(sorting, filteredItems);
 };
 
-export const filterItemsMarket = (items: ItemInMarket[], { category, sorting, price, color }: ItemsMarketFilters): ItemInMarket[] => {
+export const filterItemsMarket = (items: ItemInMarket[], { categories, sorting, price, color }: ItemsMarketFilters): ItemInMarket[] => {
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 
-  if (!category && !sorting && !color && !changedRange && items.length) return items;
+  if (!categories && !sorting && !color && !changedRange && items.length) return items;
 
-  const isInCategory = ({ item }: ItemInMarket, category: string) => (category ? item.category === category : true);
+  if (items.length === 0) return []; // Return empty array if there are no items to filter
+
+  const isInCategory = ({ item }: ItemInMarket, category: string[] | undefined) => (category ? item.category : true);
   const hasColor = ({ item }: ItemInMarket, color: string) => (color ? item.colors.some((colorElement) => colorElement === color) : true);
 
-  const filteredItems = items.filter((item) => isInCategory(item, category) && hasColor(item, color));
+  const filteredItems = items.filter((item) => isInCategory(item, categories) && hasColor(item, color));
   const filteredPrice = filteredItems.filter(({ sell }) => Number(sell.price) > price.min && Number(sell.price) < price.max);
-  const sortedItems = sortItemsMarket(sorting, filteredPrice);
-
-  return sortedItems;
+  return sortItemsMarket(sorting, filteredPrice);
 };
 
 export const filterCharacters = (characters: CharacterEquip[], { category, sorting }: CharacterFilters): CharacterEquip[] => {
@@ -83,9 +135,7 @@ export const filterCharacters = (characters: CharacterEquip[], { category, sorti
   if (!category && !sorting) return characters;
 
   const filteredCharacters = characters.filter((character) => isInCategory(character, category));
-  const sortedCharacters = sortCharacters(sorting, filteredCharacters);
-
-  return sortedCharacters;
+  return sortCharacters(sorting, filteredCharacters);
 };
 
 export const filterCharactersMarket = (
@@ -100,7 +150,5 @@ export const filterCharactersMarket = (
 
   const filteredCharacters = characters.filter((character) => isInCategory(character, category));
   const filteredPrice = filteredCharacters.filter(({ sell }) => Number(sell.price) > price.min && Number(sell.price) < price.max);
-  const sortedCharacters = sortCharactersMarket(sorting, filteredPrice);
-
-  return sortedCharacters;
+  return sortCharactersMarket(sorting, filteredPrice);
 };
