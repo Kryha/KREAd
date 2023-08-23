@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -11,7 +11,8 @@ import {
   ErrorTitle,
   ImageConatiner,
   InformationContainer,
-  KreadContainer
+  KreadContainer,
+  KreadDevelopmentContainer,
 } from "./styles";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
 import { ErrorImage, text } from "../../assets";
@@ -19,6 +20,7 @@ import { routes } from "../../navigation";
 import { color } from "../../design";
 import { GO_BACK } from "../../constants";
 import { AnimatedLogo } from "../logo";
+import { DevelopmentMode } from "../../service/test-service/development-mode";
 
 interface ErrorViewProps {
   headingText?: string;
@@ -40,6 +42,9 @@ export const ErrorView: FC<ErrorViewProps> = ({ redirectRoute, headingText, navi
     <>
       <KreadContainer>
         <AnimatedLogo iteration={1} />
+        <KreadDevelopmentContainer>
+          <DevelopmentMode />
+        </KreadDevelopmentContainer>
       </KreadContainer>
       <ErrorContainer>
         <InformationContainer>

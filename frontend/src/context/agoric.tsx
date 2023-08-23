@@ -1,14 +1,13 @@
 /// <reference types="ses"/>
-import React, { createContext, useReducer, useContext, useEffect, useState } from "react";
-import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces/agoric.interfaces";
-import { makeAgoricWalletConnection, AgoricKeplrConnectionErrors as Errors } from "@agoric/web-components";
-import { isDevelopmentMode, networkConfigs } from "../constants";
+import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
+import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
+import { CHARACTER_IDENTIFIER, isDevelopmentMode, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
 import WalletBridge from "./wallet-bridge";
 import { useDataMode } from "../hooks";
 import { fetchChainInfo } from "./util";
-import { ChainStorageWatcher, AgoricChainStoragePathKind as Kind, makeAgoricChainStorageWatcher } from "@agoric/rpc";
+import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
 import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
-import { ITEM_IDENTIFIER, IST_IDENTIFIER, CHARACTER_IDENTIFIER, KREAD_IDENTIFIER } from "../constants";
 
 const initialState: AgoricState = {
   status: {
@@ -170,7 +169,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
     const fetchInstance = async () => {
       const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, `data/published.agoricNames.instance`);
-      const instance = instances.filter((i) => i[0] === KREAD_IDENTIFIER);
+      const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
       // TODO: remove publicFacet from state
       dispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1], publicFacet: undefined } });
@@ -262,16 +261,14 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
 export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
-  const { mockData } = useDataMode();
+  const { isMockData } = useDataMode();
 
   if (state === undefined) {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
 
-  if (isDevelopmentMode) {
-    if (mockData) {
-      state.isLoading = false;
-    }
+  if (isDevelopmentMode && isMockData) {
+    state.isLoading = false;
   }
 
   return state;

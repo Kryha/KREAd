@@ -31,8 +31,10 @@ import { ReactComponent as Loading } from "./kread-loading.svg";
 import { ReactComponent as ZoomInIcon } from "./zoom-in.svg";
 import { ReactComponent as ZoomOutIcon } from "./zoom-out.svg";
 import { ReactComponent as DownloadIcon } from "./download.svg";
+import { ReactComponent as DevIcon } from "./dev.svg";
 
 export {
+  DevIcon,
   ErrorIcon,
   SelectArrowIcon,
   ArrowUpRightIcon,

@@ -3,7 +3,7 @@ import { DefaultIcon, text } from "../../assets";
 import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
-import { useMobile, useViewport } from "../../hooks";
+import { useIsMobile, useViewport } from "../../hooks";
 import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter, useMyCharacters } from "../../service";
@@ -11,6 +11,7 @@ import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
+import { breakpoints } from "../../design";
 
 export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
@@ -21,7 +22,7 @@ export const CreateCharacter: FC = () => {
   const [myCharacters, isLoadingCharacters] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
-  const mobile = useMobile();
+  const mobile = useIsMobile(breakpoints.tablet);
 
   // TODO: Implement wallet listener for cases where the user doesn't approve the mint
   // const [isWalletError, setIsWalletError] = useState<boolean>(false);

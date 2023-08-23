@@ -41,3 +41,24 @@ p, h1, h2, h3, h4, h5, h6 {
 #root, #__next {
   isolation: isolate;
 }
+
+/* Styles for the scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent; /* Track background color */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(145, 143, 143, 0.5); /* Scrollbar handle color */
+  border-radius: 4px; /* Rounded corners on the scrollbar handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(135, 137, 143); /* Scrollbar handle color on hover */
+}

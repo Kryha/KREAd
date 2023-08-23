@@ -3,6 +3,8 @@ import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { mediate } from "../util";
 import { watchItemMarket } from "../service/storage-node/watch-market";
+import { useDataMode } from "../hooks";
+import { mockItemsInMarket } from "../service/mock-data/mockItems";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
@@ -13,19 +15,25 @@ const initialState: ItemMarketContext = {
   fetched: false,
 };
 
+const initialMockState: ItemMarketContext = {
+  items: mockItemsInMarket,
+  fetched: false,
+};
+
 const Context = createContext<ItemMarketContext | undefined>(undefined);
 
 type ProviderProps = Omit<React.ProviderProps<ItemMarketContext>, "value">;
 
 export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElement => {
-  const [marketState, marketDispatch] = useState(initialState);
+  const { isMockData } = useDataMode();
+  const [marketState, marketDispatch] = useState(isMockData ? initialMockState : initialState);
   const agoric = useAgoricState();
   const kreadPublicFacet = agoric.contracts.kread.publicFacet;
 
   useEffect(() => {
     const parseItemMarketUpdate = async (itemsInMarket: KreadItemInMarket[]) => {
       const items = await Promise.all(itemsInMarket.map((item) => formatMarketEntry(item)));
-      marketDispatch((prevState) => ({ ...prevState, items, fetched: true }));
+      marketDispatch((prevState: any) => ({ ...prevState, items, fetched: true }));
     };
     const formatMarketEntry = async (marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {

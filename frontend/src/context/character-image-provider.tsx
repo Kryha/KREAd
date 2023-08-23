@@ -3,7 +3,6 @@ import { useSelectedCharacter } from "../service";
 import Konva from "konva";
 import { useAndRequireContext } from "../hooks/use-and-require-context";
 import { Empty, text } from "../assets";
-import { LoadingPage } from "../components";
 
 interface Context {
   stageRef: React.MutableRefObject<Konva.Stage | null>;
@@ -18,7 +17,7 @@ interface Props {
 const ContextRef = createContext<Context | undefined>(undefined);
 
 export const CharacterImageProvider: FC<Props> = ({ children }) => {
-  const [selectedCharacter, isLoading] = useSelectedCharacter();
+  const [selectedCharacter] = useSelectedCharacter();
 
   const character = useMemo(() => selectedCharacter?.nft, [selectedCharacter]);
   const items = useMemo(() => selectedCharacter?.equippedItems || {}, [selectedCharacter]);
@@ -99,10 +98,6 @@ export const CharacterImageProvider: FC<Props> = ({ children }) => {
 
     return imageGroup;
   };
-
-  if (isLoading) {
-    return <LoadingPage />;
-  }
 
   const contextValue = useMemo(
     () => ({
