@@ -1,22 +1,11 @@
 /* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
-import { AssetKind, AmountMath } from '@agoric/ertp';
-import { Far } from '@endo/marshal';
-import { assert, details as X } from '@agoric/assert';
-import { errors } from './errors.js';
-import { mulberry32 } from './prng.js';
-import {
-  makeCharacterNftObjs,
-  makeStorageNodePublishKit,
-  setupStorageNodeNotifiers,
-} from './utils.js';
-import { market } from './market.js';
-import { inventory } from './inventory.js';
-import { kreadState } from './kread-state.js';
-import { validation } from './validation.js';
-import { text } from './text.js';
-import { makeCopyBag } from '@agoric/store';
+
+import { AssetKind } from '@agoric/ertp';
+import { prepareKreadKit } from './kreadKit.js';
+import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
+import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -24,7 +13,8 @@ import { makeCopyBag } from '@agoric/store';
  * It also allows for equiping and unequiping items to
  * and from the inventory, using a token as access
  *
- * @type {ContractStartFn}
+ *
+ * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {ZCF} zcf
  * @param {{
  *   defaultCharacters: object[],
@@ -36,269 +26,74 @@ import { makeCopyBag } from '@agoric/store';
  *   powers: { storageNode: StorageNode, marshaller: Marshaller }
  * }} privateArgs
  * */
-const start = async (zcf, privateArgs) => {
+export const start = async (zcf, privateArgs, baggage) => {
+  //TODO: move to proposal
   const assetNames = {
     character: 'KREAdCHARACTER',
     item: 'KREAdITEM',
     paymentFT: 'KREAdTOKEN',
   };
 
-  // Define Assets
-  const assetMints = await Promise.all([
-    zcf.makeZCFMint(assetNames.character, AssetKind.COPY_BAG),
-    zcf.makeZCFMint(assetNames.item, AssetKind.COPY_BAG),
-    zcf.makeZCFMint(assetNames.paymentFT, AssetKind.NAT), // TODO: Change to IST
-  ]);
-
-  const [
-    { issuer: characterIssuer, brand: characterBrand },
-    { issuer: itemIssuer, brand: itemBrand },
-    { issuer: paymentFTIssuer, brand: paymentFTBrand },
-  ] = assetMints.map((mint) => mint.getIssuerRecord());
-
-  const [characterMint, itemMint, paymentFTMint] = assetMints;
-
-  const config = {
-    tokenData: {
-      characters: privateArgs.defaultCharacters,
-      items: privateArgs.defaultItems,
-    },
-    defaultPaymentToken: {
-      issuer: privateArgs.moneyIssuer,
-      brand: privateArgs.moneyBrand,
-    },
-    timerService: privateArgs.chainTimerService,
-    ready: true,
-    powers: privateArgs.powers,
+  const storageNodePaths = {
+    infoKit: 'info',
+    characterKit: 'character',
+    itemKit: 'item',
+    marketCharacterKit: 'market-characters',
+    marketItemKit: 'market-items',
   };
 
-  assert(!Number.isNaN(privateArgs.seed), X`${errors.seedInvalid}`);
-
-  /** @type KreadState  */
-  const state = kreadState({
-    assetMints: {
-      character: characterMint,
-      item: itemMint,
-      paymentFT: paymentFTMint,
-    },
-    tokenInfo: {
-      character: {
-        name: assetNames.character,
-        brand: characterBrand,
-        issuer: characterIssuer,
-      },
-      item: {
-        name: assetNames.item,
-        brand: itemBrand,
-        issuer: itemIssuer,
-      },
-      paymentFT: {
-        name: assetNames.paymentFT,
-        brand: paymentFTBrand,
-        issuer: paymentFTIssuer,
-      },
-    },
-    config,
-    randomNumber: mulberry32(privateArgs.seed),
-    notifiers: setupStorageNodeNotifiers(privateArgs.powers),
+  // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
+  // durability is not a concern with these, and defining them here, passing on what's needed
+  // ensures that the capabilities are where they need to be
+  const { characterMint, itemMint, paymentFTMint } = await provideAll(baggage, {
+    characterMint: () =>
+      zcf.makeZCFMint(assetNames.character, AssetKind.COPY_BAG),
+    itemMint: () => zcf.makeZCFMint(assetNames.item, AssetKind.COPY_BAG),
+    paymentFTMint: () => zcf.makeZCFMint(assetNames.paymentFT, AssetKind.NAT),
   });
 
-  const validate = validation;
-  const characterHistory = {};
-  const itemHistory = {};
+  const characterIssuerRecord = characterMint.getIssuerRecord();
+  const itemIssuerRecord = itemMint.getIssuerRecord();
+  const paymentFTIssuerRecord = paymentFTMint.getIssuerRecord();
 
-  /**
-   * Mints Item NFTs via mintGains
-   *
-   * @param {ZCFSeat} seat
-   */
-  const mintItemNFT = async (seat) => {
-    assert(state.get.isReady(), X`${errors.noConfig}`);
+  const { defaultCharacters, defaultItems, powers, chainTimerService, seed } =
+    privateArgs;
 
-    const { want } = seat.getProposal();
+  const { makeRecorderKit } = prepareRecorderKitMakers(
+    baggage,
+    powers.marshaller,
+  );
 
-    const currentTime = await state.get.time();
-
-    let id = state.get.itemCount();
-    // @ts-ignore
-    const items = want.Item.value.payload.map(([item, supply]) => {
-      id += 1;
-      return [{ ...item, id, date: currentTime }, supply];
-    });
-    const newItemAmount = AmountMath.make(
-      itemBrand,
-      makeCopyBag(harden(items)),
-    );
-
-    itemMint.mintGains({ Asset: newItemAmount }, seat);
-
-    seat.exit();
-
-    // Add to history
-    items.forEach(([item, supply]) => {
-      itemHistory[item.id.toString()] = [
-        {
-          type: 'mint',
-          data: item,
-          timestamp: currentTime,
-        },
-      ];
-    });
-
-    return text.mintItemReturn;
-  };
-
-  /**
-   * Mints a new character
-   *
-   * @param {ZCFSeat} seat
-   */
-  const mintCharacterNFT = async (seat) => {
-    assert(state.get.isReady(), X`${errors.noConfig}`);
-
-    const { want } = seat.getProposal();
-
-    const error = validate.mintCharacter(want, state.validate.nameIsUnique);
-    if (error) {
-      return harden({ message: error });
-    }
-
-    const newCharacterName = want.Asset.value.payload[0][0].name;
-
-    const currentTime = await state.get.time();
-    const [newCharacterAmount1, newCharacterAmount2] = makeCharacterNftObjs(
-      newCharacterName,
-      state.get.randomBaseCharacter(),
-      state.get.characterCount(),
-      currentTime,
-    ).map((character) =>
-      AmountMath.make(characterBrand, makeCopyBag(harden([[character, 1n]]))),
-    );
-
-    const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
-
-    // Mint character to user seat & inventorySeat
-    characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
-    characterMint.mintGains(
-      { CharacterKey: newCharacterAmount2 },
-      inventorySeat,
-    );
-
-    // Mint items to inventory seat
-    const allDefaultItems = Object.values(state.get.defaultItems());
-    let id = state.get.itemCount() + 1; // Avoid id of 0;
-    const uniqueItems = allDefaultItems.map((item) => {
-      /** @type {ItemRecord} */
-      const newItemWithId = {
-        ...item,
-        id,
-      };
-      id += 1;
-      return newItemWithId;
-    });
-
-    const itemsAmount = AmountMath.make(
-      itemBrand,
-      makeCopyBag(harden(uniqueItems.map((item) => [item, 1n]))),
-    );
-    itemMint.mintGains({ Item: itemsAmount }, inventorySeat);
-
-    const powers = state.get.powers();
-    const inventoryNotifier = makeStorageNodePublishKit(
-      powers.storageNode,
-      powers.marshaller,
-      `inventory-${newCharacterName}`,
-    );
-
-    // Add to state
-    /**
-     * @type {CharacterRecord}
-     */
-    const character = {
-      name: newCharacterName,
-      character: newCharacterAmount1.value.payload[0][0],
-      inventory: inventorySeat,
-      publisher: inventoryNotifier.publisher,
-    };
-
-    state.add.characters([character]);
-    state.add.items(uniqueItems);
-
-    // Add to history
-    characterHistory[character.name] = [
+  const kreadKit = await harden(
+    prepareKreadKit(
+      baggage,
+      zcf,
       {
-        type: 'mint',
-        data: character,
-        timestamp: currentTime,
+        defaultCharacters,
+        defaultItems,
+        seed,
       },
-    ];
+      harden({
+        characterIssuerRecord,
+        characterMint,
+        itemIssuerRecord,
+        itemMint,
+        paymentFTIssuerRecord,
+        paymentFTMint,
+        chainTimerService,
+        storageNode: powers.storageNode,
+        makeRecorderKit,
+        storageNodePaths,
+      }),
+    ),
+  );
 
-    uniqueItems.forEach((item) => {
-      itemHistory[item.id.toString()] = [
-        {
-          type: 'mint',
-          data: item,
-          timestamp: currentTime,
-        },
-      ];
-    });
-
-    // Current design decision is to just push the payloads as inventory updates
-    // this removes he need to deconstruct objects when fetching from storage
-    inventoryNotifier.publisher.publish(
-      inventorySeat.getAmountAllocated('Item').value.payload,
-    );
-
-    seat.exit();
-
-    return text.mintCharacterReturn;
-  };
-
-  /**
-   * @param {ZCFSeat} seat
-   */
-  const tokenFacet = (seat) => {
-    const { want } = seat.getProposal();
-    paymentFTMint.mintGains(want, seat);
-    seat.exit();
-    return text.tokenFacetReturn;
-  };
-
-  const publicFacet = Far('KREAd public facet', {
-    makeTokenFacetInvitation: () =>
-      zcf.makeInvitation(tokenFacet, 'get tokens'), // FIXME: RESTRICT PRIVILEGED FN
-
-    // public state getters
-    ...state.public,
-
-    // equip/unequip
-    ...inventory(zcf, () => state),
-
-    // mint
-    makeMintCharacterInvitation: () =>
-      zcf.makeInvitation(mintCharacterNFT, 'mintCharacterNfts'),
-    makeMintItemInvitation: () =>
-      zcf.makeInvitation(mintItemNFT, 'mintItemNfts'),
-
-    // activity
-    getCharacterHistory: (characterId) => characterHistory[characterId],
-    getItemHistory: (id) => itemHistory[id],
-    getAllCharacterHistory: () => characterHistory.entries(),
-    getAllItemHistory: () => itemHistory.entries(),
-
-    ...market(zcf, () => state),
+  // currently still structuring this with just a public and creator facet
+  // TODO: think if this still makes sense or if other patterns are more useful (e.g. characterFacet)
+  return harden({
+    creatorFacet: kreadKit.creator,
+    publicFacet: kreadKit.public,
   });
-
-  const creatorFacet = Far('KREAd creator facet', {
-    getCharacterIssuer: () => characterIssuer,
-    getItemIssuer: () => itemIssuer,
-    getItemBrand: () => itemBrand,
-    getState: () => state,
-    publishKreadInfo: state.set.publishKreadInfo,
-  });
-
-  return harden({ creatorFacet, publicFacet });
 };
 
 harden(start);
-export { start };

@@ -355,7 +355,7 @@ export const TestServiceUI = () => {
     const instance = service.contracts.kread.instance;
     const charBrand = service.tokenInfo.character.brand;
     const istBrand = service.tokenInfo.ist.brand;
-    console.log(222222, charactersMarket);
+
     const { sell, character } = charactersMarket[0];
 
     const spec = {
