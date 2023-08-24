@@ -1,34 +1,29 @@
 import styled from "@emotion/styled";
 import { color, fontWeight, margins } from "../../../design";
 
+interface ProgressBarProps {
+  value: number;
+  max: number;
+}
 export const DetailSectionProgressBarWrap = styled.div`
   display: flex;
   flex-flow: row nowrap;
   gap: ${margins.medium};
+  width: 100%;
 `;
 
-export const DetailSectionProgress = styled.progress`
-  color: ${color.black};
+export const DetailSectionProgress = styled.div`
   border: 1px solid ${color.grey};
-  border-radius: 2px;
-  padding: 2px;
-  &[value] {
-    color: ${color.black};
-    border: 1px solid ${color.grey};
-    border-radius: 10px;
-    padding: 2px;
-    width: 100%;
-  }
-  &::-webkit-progress-bar {
-    background-color: transparent;
-  }
-  &::-webkit-progress-value {
-    background-color: ${color.black};
-    border-radius: 10px;
-  }
-  &::-moz-progress-bar {
-    background-color: transparent;
-  }
+  border-radius: 10px;
+  width: 100%;
+  height: 20px;
+`;
+
+export const DetailSectionProgressValue = styled.div<ProgressBarProps>`
+  width: ${(props) => props.value}%;
+  background: ${color.black};
+  border-radius: 10px;
+  height: 100%;
 `;
 
 export const DetailSectionProgressDigits = styled.span`

@@ -4,6 +4,9 @@ VATS_PATH =
 KEPLR_ADDRESS =
 KEPLR_ADDRESS2 =
 KREAD_REPO =
+EVAL_PERMIT =
+EVAL_CODE =
+EVAL_CLEAN =
 
 include Makefile.paths.local
 
@@ -67,11 +70,11 @@ fund-account-atom:
 
 proposal:
 	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval scenario2-vote \
+	make scenario2-core-eval EVAL_PERMIT=$(EVAL_PERMIT) EVAL_CLEAN=$(EVAL_CLEAN) scenario2-vote \
 
 proposal-2:
 	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval scenario2-vote VOTE_PROPOSAL=2 \
+	make scenario2-core-eval EVAL_PERMIT=$(EVAL_PERMIT) EVAL_CLEAN=$(EVAL_CLEAN) scenario2-vote VOTE_PROPOSAL=2 \
 
 # note if you made changes to the contract code you must
 # copy the resulting hash from kread-bundle into the proposal

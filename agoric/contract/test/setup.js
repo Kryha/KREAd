@@ -59,7 +59,7 @@ harden(addCharacterToBootstrap);
 export const addItemToBootstrap = async (bootstrap, item) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet, publicFacet },
     contractAssets,
     purses,
     zoe,

@@ -1,14 +1,16 @@
 import { isDevelopmentMode } from "../../constants";
 import { routes } from "../../navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { ButtonText, disappear, fadeIn, fadeOut, PrimaryButton } from "../../components";
+import { ButtonText, disappear, fadeIn, fadeOut, SecondaryButton } from "../../components";
 import styled from "@emotion/styled";
-import { useDataMode, useViewport } from "../../hooks";
-import { Link } from "react-router-dom";
-import { color, margins } from "../../design";
+import { useViewport } from "../../hooks";
+import { Link, useLocation } from "react-router-dom";
+import { color, fontSize, margins } from "../../design";
 import { css } from "@emotion/react";
 import { Diamond } from "../../components/price-in-ist/styles";
 import { Tick } from "../../pages/buy/styles";
+import { DevIcon } from "../../assets";
+import { DataModeSelector } from "../../components/data-mode-selector/data-mode-selector";
 
 interface ModalProps {
   isOpen: boolean;
@@ -32,6 +34,10 @@ interface ButtonLink {
   route: string;
 }
 
+interface DevIconProps {
+  color: string;
+}
+
 const buttonLinks: ButtonLink[] = [
   { text: "Test Service UI", route: routes.test },
   { text: "Home", route: routes.root },
@@ -51,6 +57,7 @@ const buttonLinks: ButtonLink[] = [
 
 export const DevelopmentMode: React.FC<DevProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
   const handleDevModeButtonClick = () => {
     setIsModalOpen(true);
   };
@@ -65,18 +72,16 @@ export const DevelopmentMode: React.FC<DevProps> = () => {
 
   return (
     <DevModeContainer>
-      <DevModeButtonContainer>
-        <PrimaryButton onClick={handleDevModeButtonClick}>Dev Mode</PrimaryButton>
-      </DevModeButtonContainer>
+      <DevModeButton onClick={handleDevModeButtonClick}>
+        <Dev color={location.pathname === routes.test ? "white" : "black"} />
+      </DevModeButton>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} />
     </DevModeContainer>
   );
 };
 
 const DevModeContainer = styled.div`
-  position: absolute;
-  top: 40px;
-  right: 200px;
+  position: relative;
   padding: 4px;
   z-index: 100;
 `;
@@ -84,7 +89,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const { height } = useViewport();
   const modalRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState(-1);
-  const { dataModeSelector } = useDataMode();
 
   const handleButtonClick = (index: number) => {
     setSelected(index);
@@ -117,7 +121,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   return (
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
       <ModalContainer ref={modalRef} height={height}>
-        <ModalHeader>{dataModeSelector}</ModalHeader>
+        <ModalHeader>
+          <DataModeSelector />
+        </ModalHeader>
         <ModalContents>
           {buttonLinks.map((button, index) => (
             <ModalContent
@@ -143,13 +149,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 };
 
 const ModalWrapper = styled.div<ModalProps>`
-  z-index: 1000;
   ${({ isOpen }): string => {
     return isOpen
       ? `
         position: absolute;
         margin-top: 14px;
-        z-index: 1000;
+        right: 40px
         `
       : `
       display: none;
@@ -173,6 +178,7 @@ const ModalContainer = styled.div<ViewProps>`
   border-radius: ${margins.small};
   background: ${color.lightGrey};
   box-sizing: border-box;
+  opacity: 1;
   display: flex;
   flex-direction: column;
   padding: ${margins.medium};
@@ -180,7 +186,6 @@ const ModalContainer = styled.div<ViewProps>`
 
   &.open {
     opacity: 1;
-    visibility: visible;
   }
 `;
 
@@ -226,4 +231,41 @@ const ModalContent = styled.div<ModalContentProps>`
   }
 `;
 
-const DevModeButtonContainer = styled.div``;
+export const DevModeButton = styled(SecondaryButton)`
+  padding: 19px 3px;
+  border-radius: 50%;
+
+  position: relative;
+  /* Add styles for the pop-up */
+  &::before {
+    content: "Dev Mode";
+    position: absolute;
+    bottom: -2rem; /* Adjust the vertical position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${color.black};
+    color: ${color.white};
+    padding: 0.25rem 0.5rem;
+    font-size: ${fontSize.extraSmall};
+    border-radius: ${margins.mini};
+    opacity: 0;
+    width: max-content;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Show the pop-up on hover */
+  &:hover::before {
+    opacity: 1;
+  }
+`;
+
+export const Dev = styled(DevIcon)<DevIconProps>`
+  svg {
+    height: 20px;
+    width: 20px;
+    margin: 0;
+  }
+  path {
+    fill: ${({ color }) => color};
+  }
+`;

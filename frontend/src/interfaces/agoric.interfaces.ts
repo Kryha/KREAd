@@ -1,5 +1,3 @@
-import { inter } from "../util";
-
 export interface AgoricService {
   zoe: any;
   board: any;
@@ -11,7 +9,7 @@ export interface AgoricService {
 
 interface Contract {
   instance: any;
-  publicFacet: any;
+  publicFacet?: any;
 }
 
 interface Contracts {
@@ -46,9 +44,9 @@ export interface AgoricState {
   chainStorageWatcher: any;
 }
 export interface TokenInfo {
-  character: { issuer: any; brand: any; petName: string };
-  item: { issuer: any; brand: any; petName: string };
-  ist: { issuer: any; brand: any; petName: string };
+  character: { issuer: any; brand: any; petName?: string };
+  item: { issuer: any; brand: any; petName?: string };
+  ist: { issuer: any; brand: any; petName?: string };
 }
 
 export interface WalletConnection {

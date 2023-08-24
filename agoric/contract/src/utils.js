@@ -45,8 +45,8 @@ export const makeHashId = (str, seed = 42) => {
 export const makeCharacterNftObjs = (
   name,
   randomCharacterBase,
-  currentTime,
   newCharacterId,
+  currentTime,
 ) => {
   // Merge random base character with name input, id, and keyId
   // TODO: Replace Date by a valid time generator now it returns NaN
@@ -156,4 +156,48 @@ export const setupStorageNodeNotifiers = ({ storageNode, marshaller }) => {
   };
 
   return notifiers;
+};
+
+/**
+ * @template T
+ * @typedef {object} RecorderKit<T>
+ * @property {Publisher<T>} publisher
+ * @property {StoredSubscriber<T>} subscriber
+ */
+
+/**
+ * @template T
+ * @param {ERef<StorageNode>} storageNode
+ * @param {import('@agoric/zoe/src/contractSupport').MakeRecorderKit} makeRecorderKit
+ * @param {string} path
+ * @returns {Promise<import('@agoric/zoe/src/contractSupport').RecorderKit<T>>}
+ */
+export const makeStorageNodeRecorderKit = async (
+  storageNode,
+  makeRecorderKit,
+  path,
+) => {
+  const node = await E(storageNode).makeChildNode(path);
+  return makeRecorderKit(node);
+};
+
+//TODO: fix typing
+export const makeStorageNodeRecorderKits = async (
+  storageNode,
+  makeRecorderKit,
+  paths,
+) => {
+  const recorderMap = {};
+  await Promise.all(
+    Object.keys(paths).map(async (key) => {
+      const recorderKit = await makeStorageNodeRecorderKit(
+        storageNode,
+        makeRecorderKit,
+        paths[key],
+      );
+      recorderMap[key] = recorderKit;
+    }),
+  );
+
+  return recorderMap;
 };

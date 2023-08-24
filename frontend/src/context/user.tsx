@@ -142,9 +142,9 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
 };
 
 export const UserContextProvider = (props: ProviderProps): React.ReactElement => {
-  const { mockData } = useDataMode();
+  const { isMockData } = useDataMode();
 
-  const [userState, userStateDispatch] = useReducer(Reducer, mockData ? initialMockState : initialState);
+  const [userState, userStateDispatch] = useReducer(Reducer, isMockData ? initialMockState : initialState);
 
   const wallet = useWalletState();
   const agoric = useAgoricState();

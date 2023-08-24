@@ -4,6 +4,7 @@
     "board": true,
     "chainStorage": true,
     "zoe": true,
+    "startUpgradable": true,
     "agoricNamesAdmin": true,
     "agoricNames": true
   },

@@ -14,4 +14,5 @@ export const routes = {
   onboarding: "/onboarding",
   test: "/test",
   downloadCharacter: "/download-character",
+  mobileNotAvailable: "/mobile-not-available",
 };
