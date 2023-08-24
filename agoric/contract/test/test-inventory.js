@@ -14,7 +14,7 @@ test.before(async (t) => {
   t.context = bootstrap;
 });
 
-test.serial('| INVENTORY - Unequip Item', async (t) => {
+const unequipOffer = async (t) => {
   /** @type {Bootstrap} */
   const {
     instance: { publicFacet },
@@ -27,7 +27,7 @@ test.serial('| INVENTORY - Unequip Item', async (t) => {
     unequip: { message },
   } = flow.inventory;
 
-  let characterInventory = await E(publicFacet).getCharacterInventory(
+  const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
   const hairItem = characterInventory.items
@@ -73,13 +73,24 @@ test.serial('| INVENTORY - Unequip Item', async (t) => {
   });
 
   const userSeat = await E(zoe).offer(unequipInvitation, proposal, payment);
-  const result = await E(userSeat).getOfferResult();
-  // t.deepEqual(result, message, 'Unequip returns success message');
-
   const itemPayout = await E(userSeat).getPayout('Item');
   const characterPayout = await E(userSeat).getPayout('CharacterKey2');
   purses.item.deposit(itemPayout);
   purses.character.deposit(characterPayout);
+};
+
+test.serial('| INVENTORY - Unequip Item', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    purses,
+  } = t.context;
+  const {
+    characterName,
+    unequip: { message },
+  } = flow.inventory;
+
+  await unequipOffer(t);
 
   t.deepEqual(
     purses.item.getCurrentAmount().value.payload.length,
@@ -91,7 +102,7 @@ test.serial('| INVENTORY - Unequip Item', async (t) => {
     characterName,
     'CharacterKey was returned to character purse successfully',
   );
-  characterInventory = await E(publicFacet).getCharacterInventory(
+  const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
   t.deepEqual(
@@ -184,8 +195,10 @@ test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
   let characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
-  const hairItem = characterInventory.items.find((i) => i.category === 'hair');
-  const hairItemCopyBagAmount = makeCopyBag(harden([[hairItem, 1n]]));
+  const noseItem = characterInventory.items
+    .map((i) => i[0])
+    .find((i) => i.category === 'noseline');
+  const noseItemCopyBagAmount = makeCopyBag(harden([[noseItem, 1n]]));
   const characterCopyBagAmount = makeCopyBag(
     harden([[purses.character.getCurrentAmount().value.payload[0][0], 1n]]),
   );
@@ -204,7 +217,7 @@ test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
       CharacterKey1: characterKeyAmount,
     },
     want: {
-      Item: AmountMath.make(contractAssets.item.brand, hairItemCopyBagAmount),
+      Item: AmountMath.make(contractAssets.item.brand, noseItemCopyBagAmount),
       CharacterKey2: AmountMath.make(
         contractAssets.character.brand,
         makeCopyBag(
@@ -352,7 +365,24 @@ test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
   } = t.context;
   const { characterName } = flow.inventory;
 
-  await addItemToBootstrap(t.context, { name: 'New item', category: 'hair' });
+  await addItemToBootstrap(t.context, {
+    name: 'New item',
+    category: 'hair',
+    thumbnail: '',
+    rarity: 0,
+    level: 0,
+    projectDescription: '',
+    layerComplexity: 0,
+    effectiveness: 0,
+    forged: '',
+    details: { boardId: '', brand: '', artist: '', metadata: '' },
+    description: '',
+    date: {},
+    colors: [''],
+    baseMaterial: '',
+    id: 10000,
+    image: '',
+  });
 
   const hairItem = purses.item
     .getCurrentAmount()
@@ -540,7 +570,7 @@ test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
   } = t.context;
   const { characterName } = flow.inventory;
 
-  await addItemToBootstrap(t.context, { name: 'Random', category: 'other' });
+  await unequipOffer(t);
 
   const invitation = await E(publicFacet).makeItemSwapInvitation();
   const characterCopyBagAmount = makeCopyBag(
@@ -556,7 +586,7 @@ test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
       [
         purses.item
           .getCurrentAmount()
-          .value.payload.find(([item, supply]) => item.category === 'other')[0],
+          .value.payload.find(([item, supply]) => item.category === 'hair')[0],
         1n,
       ],
     ]),
@@ -612,13 +642,13 @@ test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
     'CharacterKey was returned to character purse successfully',
   );
   t.deepEqual(purses.item.getCurrentAmount().value.payload.length, 1);
-  const updatedCharactedInventory = await E(publicFacet).getCharacterInventory(
+  const updatedCharacterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
   t.deepEqual(
-    updatedCharactedInventory.items
+    updatedCharacterInventory.items
       .map((i) => i[0])
-      .find((item) => item.category === 'other'),
+      .find((item) => item.category === 'hair'),
     otherItemGive.value.payload[0][0],
     'New Item added to inventory',
   );

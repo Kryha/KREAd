@@ -12,7 +12,25 @@ import { errors } from '../src/errors.js';
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
   await addCharacterToBootstrap(bootstrap);
-  await addItemToBootstrap(bootstrap, { name: 'New Item', category: 'hair' });
+  await addItemToBootstrap(bootstrap, {
+    name: 'New item',
+    category: 'hair',
+    thumbnail: '',
+    rarity: 0,
+    level: 0,
+    projectDescription: '',
+    layerComplexity: 0,
+    effectiveness: 0,
+    forged: '',
+    details: { boardId: '', brand: '', artist: '', metadata: '' },
+    description: '',
+    date: {},
+    colors: [''],
+    baseMaterial: '',
+    id: 10000,
+    image: '',
+  });
+
   const { zoe, contractAssets, assets, purses, instance } = bootstrap;
   const bob = makeKreadUser('bob', purses);
   const alice = makeKreadUser('alice', {
@@ -127,7 +145,7 @@ test.serial(
       (c) => c.object.name === character,
     );
 
-    const copyBagAmount = makeCopyBag(harden([[characterToBuy.character, 1n]]));
+    const copyBagAmount = makeCopyBag(harden([[characterToBuy.object, 1n]]));
     const characterToBuyAmount = AmountMath.make(
       contractAssets.character.brand,
       copyBagAmount,
@@ -256,7 +274,7 @@ test.serial('---| MARKET - Buy character not on market', async (t) => {
   const characterToBuy = alice
     .getCharacters()
     .find((c) => c.name === character);
-  const copyBagAmount = makeCopyBag(harden([[characterToBuy.character, 1n]]));
+  const copyBagAmount = makeCopyBag(harden([[characterToBuy, 1n]]));
   const characterToBuyAmount = AmountMath.make(
     contractAssets.character.brand,
     copyBagAmount,
@@ -345,7 +363,9 @@ test.serial(
     const itemToBuy = itemsForSale.find(
       (itemEntry) => itemEntry.object.category === 'hair',
     );
-    const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy, 1n]]));
+    const itemToBuyCopyBagAmount = makeCopyBag(
+      harden([[itemToBuy.object, 1n]]),
+    );
     const itemToBuyAmount = AmountMath.make(
       contractAssets.item.brand,
       itemToBuyCopyBagAmount,
@@ -432,7 +452,7 @@ test.serial('---| MARKET - Buy item not on market', async (t) => {
   const initialBalance = alice.getPaymentBalance();
 
   const itemToBuy = alice.getItems().find((item) => item.category === 'hair');
-  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.object, 1n]]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy, 1n]]));
   const itemToBuyAmount = AmountMath.make(
     contractAssets.item.brand,
     itemToBuyCopyBagAmount,

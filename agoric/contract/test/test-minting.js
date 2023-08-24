@@ -44,10 +44,9 @@ test.serial('--| MINT - Expected flow', async (t) => {
   const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
 
   const result = await E(userSeat).getOfferResult();
-  // t.deepEqual(result, message, 'Offer returns success message');
+  t.deepEqual(result, message, 'Offer returns success message');
 
   const characters = await E(publicFacet).getCharacters();
-
   t.deepEqual(
     characters[0].name,
     want.name,
@@ -85,13 +84,10 @@ test.serial('--| MINT - No want in offer', async (t) => {
     },
   });
 
-  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
-
-  const result = await E(userSeat).getOfferResult();
-  t.deepEqual(
-    result.message,
-    message,
-    'Offer returns no-want-in-offer error message',
+  await t.throwsAsync(
+    E(zoe).offer(mintCharacterInvitation, proposal),
+    undefined,
+    'No-want-in-offer error message',
   );
 
   const characters = await E(publicFacet).getCharacters();
@@ -160,9 +156,11 @@ test.serial('--| MINT - No name', async (t) => {
     },
   });
 
-  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
-  const result = await E(userSeat).getOfferResult();
-  t.deepEqual(result.message, message, 'Offer returns no-name error message');
+  await t.throwsAsync(
+    E(zoe).offer(mintCharacterInvitation, proposal),
+    undefined,
+    'No-name error message',
+  );
 
   const characters = await E(publicFacet).getCharacters();
   t.deepEqual(
@@ -182,7 +180,7 @@ test.serial('--| MINT - Inventory check', async (t) => {
   const characterInventory = await E(publicFacet).getCharacterInventory(
     want.name,
   );
-  // console.log(characterInventory.items.payload.map((i) => console.log(i)));
+
   const mappedInventory = characterInventory.items.map((i) => i[0]);
 
   t.deepEqual(
@@ -190,6 +188,7 @@ test.serial('--| MINT - Inventory check', async (t) => {
     10,
     'New character inventory contains 10 items',
   );
+
   t.deepEqual(
     new Set(mappedInventory.map((i) => i.category)).size,
     10,
@@ -231,8 +230,6 @@ test.serial('--| MINT - Item - Expected flow', async (t) => {
   );
 });
 
-//FIXME: This test is not having the desired behaviour for copy_bag in my opinion
-// Should set 1n to higher and mint multiple of the same NFT
 // test.serial('--| MINT - Item - Multiple flow', async (t) => {
 //   /** @type {Bootstrap} */
 //   const {
@@ -261,6 +258,5 @@ test.serial('--| MINT - Item - Expected flow', async (t) => {
 //   const payout = await E(userSeat).getPayout('Asset');
 
 //   purses.item.deposit(payout);
-//   console.log(purses.item.getCurrentAmount().value.payload[1]);
 //   t.deepEqual(purses.item.getCurrentAmount().value.payload.length, 3);
 // });

@@ -28,6 +28,7 @@ export const bootstrapContext = async (conf) => {
     chainTimerService: buildManualTimer(),
     defaultCharacters,
     defaultItems,
+    seed: 0,
   };
 
   // Start contract instance
