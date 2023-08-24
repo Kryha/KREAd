@@ -22,8 +22,13 @@ import {
   MarketI,
   PublicI,
   CreatorI,
-  CharacterGuard,
+  CharacterGuardBagShape,
   ItemGuard,
+  ItemGuardBagShape,
+  KreadInfoGuard,
+  CharacterRecorderGuard,
+  ItemRecorderGuard,
+  MarketRecorderGuard,
 } from './type-guards.js';
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
@@ -79,10 +84,20 @@ export const prepareKreadKit = async (
       storageNode,
       makeRecorderKit,
       storageNodePaths,
+      {
+        info: KreadInfoGuard,
+        characterKit: CharacterRecorderGuard,
+        itemKit: ItemRecorderGuard,
+        marketCharacterKit: MarketRecorderGuard,
+        marketItemKit: MarketRecorderGuard,
+      },
     );
 
-  const characterShape = makeCopyBagAmountShape(characterBrand, CharacterGuard);
-  const itemShape = makeCopyBagAmountShape(itemBrand, ItemGuard);
+  const characterShape = makeCopyBagAmountShape(
+    characterBrand,
+    CharacterGuardBagShape,
+  );
+  const itemShape = makeCopyBagAmountShape(itemBrand, ItemGuardBagShape);
 
   const makeKreadKitInternal = prepareExoClassKit(
     baggage,
@@ -144,7 +159,7 @@ export const prepareKreadKit = async (
         },
         async makeInventoryRecorderKit(path) {
           const node = await E(storageNode).makeChildNode(`inventory-${path}`);
-          return makeRecorderKit(node);
+          return makeRecorderKit(node, M.arrayOf([ItemGuard, M.nat()]));
         },
         mint() {
           const handler = async (seat) => {
@@ -211,6 +226,7 @@ export const prepareKreadKit = async (
 
             characterKit.recorder.write(character);
 
+            // TODO: consider refactoring what we put in the inventory node
             inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
             );
@@ -649,7 +665,8 @@ export const prepareKreadKit = async (
 
             seat.exit();
 
-            items.forEach((i) => {
+            items.forEach((j) => {
+              const i = j[0];
               const item = {
                 id: i.id,
                 item: i,

@@ -177,9 +177,10 @@ export const makeStorageNodeRecorderKit = async (
   storageNode,
   makeRecorderKit,
   path,
+  typeMatcher,
 ) => {
   const node = await E(storageNode).makeChildNode(path);
-  return makeRecorderKit(node);
+  return makeRecorderKit(node, typeMatcher);
 };
 
 //TODO: fix typing
@@ -187,6 +188,7 @@ export const makeStorageNodeRecorderKits = async (
   storageNode,
   makeRecorderKit,
   paths,
+  typeMatchers,
 ) => {
   const recorderMap = {};
   await Promise.all(
@@ -195,6 +197,7 @@ export const makeStorageNodeRecorderKits = async (
         storageNode,
         makeRecorderKit,
         paths[key],
+        typeMatchers[key],
       );
       recorderMap[key] = recorderKit;
     }),

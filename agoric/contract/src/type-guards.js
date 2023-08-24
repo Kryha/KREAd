@@ -8,11 +8,11 @@ export const HelperI = M.interface(
   { sloppy: true },
 );
 
-export const CharacterGuard = M.bagOf({
+export const CharacterGuard = M.splitRecord({
   name: M.string(),
   title: M.string(),
   description: M.string(),
-  level: M.number(),
+  level: M.gte(0),
   details: M.splitRecord({
     boardId: M.string(), // TODO: Remove?
     standard: M.string(), //TODO: Remove?
@@ -23,49 +23,51 @@ export const CharacterGuard = M.bagOf({
   image: M.string(),
   type: M.string(),
   keyId: M.number(),
-  id: M.number(),
+  id: M.gte(0),
   date: M.record(),
 });
 
+export const CharacterGuardBagShape = M.bagOf(CharacterGuard);
+
 // This is a split record because the id and date are set after minting
 // the rest of the variables are end-user defined when calling mint invitations
-export const ItemGuard = M.bagOf(
-  M.splitRecord(
-    {
-      name: M.string(),
-      category: M.or(
-        'noseline',
-        'midBackground',
-        'mask',
-        'headPiece',
-        'hair',
-        'frontMask',
-        'liquid',
-        'background',
-        'airReservoir',
-        'clothing',
-      ),
-      description: M.string(),
-      image: M.string(),
-      thumbnail: M.string(),
-      level: M.number(),
-      rarity: M.number(),
-      effectiveness: M.number(),
-      layerComplexity: M.number(),
-      forged: M.string(),
-      baseMaterial: M.string(),
-      colors: M.arrayOf(M.string()),
-      projectDescription: M.string(),
-      details: M.splitRecord({
-        boardId: M.string(), // TODO: Remove?
-        brand: M.string(), // TODO: Remove?
-        artist: M.string(),
-        metadata: M.string(),
-      }),
-    },
-    { id: M.number(), date: M.record() },
-  ),
+export const ItemGuard = M.splitRecord(
+  {
+    name: M.string(),
+    category: M.or(
+      'noseline',
+      'midBackground',
+      'mask',
+      'headPiece',
+      'hair',
+      'frontMask',
+      'liquid',
+      'background',
+      'airReservoir',
+      'clothing',
+    ),
+    description: M.string(),
+    image: M.string(),
+    thumbnail: M.string(),
+    level: M.gte(0),
+    rarity: M.gte(0),
+    effectiveness: M.gte(0),
+    layerComplexity: M.gte(0),
+    forged: M.string(),
+    baseMaterial: M.string(),
+    colors: M.arrayOf(M.string()),
+    projectDescription: M.string(),
+    details: M.splitRecord({
+      boardId: M.string(), // TODO: Remove?
+      brand: M.string(), // TODO: Remove?
+      artist: M.string(),
+      metadata: M.string(),
+    }),
+  },
+  { id: M.gte(0), date: M.record() },
 );
+
+export const ItemGuardBagShape = M.bagOf(ItemGuard);
 
 export const PublicI = M.interface('public', {
   // Mint
@@ -127,3 +129,46 @@ export const MarketI = M.interface('market', {
   buyCharacter: M.call().returns(M.promise()),
   freeTokens: M.call().returns(M.promise()),
 });
+
+export const KreadInfoGuard = M.splitRecord({
+  instanceBoardId: M.string(),
+  characterBrandBoardId: M.string(),
+  characterIssuerBoardId: M.string(),
+  itemBrandBoardId: M.string(),
+  itemIssuerBoardId: M.string(),
+  tokenBrandBoardId: M.string(),
+  tokenIssuerBoardId: M.string(),
+});
+
+export const HistoryGuard = M.splitRecord({
+  type: M.string(),
+  data: M.any(),
+  timestamp: M.record(),
+});
+
+export const CharacterRecorderGuard = M.splitRecord({
+  name: M.string(),
+  character: CharacterGuard,
+  inventory: M.eref(M.remotable('Seat')),
+  inventoryKit: M.record(), // TODO: figure out how to type recorderkits
+  history: M.arrayOf(HistoryGuard),
+});
+
+export const ItemRecorderGuard = M.splitRecord({
+  id: M.gte(0),
+  item: ItemGuard,
+  history: M.arrayOf(HistoryGuard),
+});
+
+export const MarketRecorderGuard = M.arrayOf(
+  M.splitRecord({
+    id: M.or(M.gte(0), M.string()),
+    seat: M.eref(M.remotable('Seat')),
+    askingPrice: M.splitRecord({
+      brand: BrandShape,
+      value: M.nat(),
+    }),
+    object: M.or(CharacterGuard, ItemGuard),
+    // history: M.arrayOf(HistoryGuard),
+  }),
+);
