@@ -18,6 +18,7 @@ import { useItemsMarket } from "../items";
 import { makeCopyBag } from "@agoric/store";
 import { mintCharacter } from "../character/mint";
 import { inventoryService } from "../character/inventory";
+import { marketService } from "../character/market";
 
 export const TestServiceUI = () => {
   const [service, dispatch] = useAgoricContext();
@@ -153,92 +154,36 @@ export const TestServiceUI = () => {
     const charBrand = service.tokenInfo.character.brand;
     const character = wallet.character[0];
 
-    const spec = {
-      source: "contract",
-      instance,
-      publicInvitationMaker: "makeSellCharacterInvitation",
-    };
-
-    const give = {
-      Character: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
-    };
-
-    const want = {
-      Price: { brand: service.tokenInfo.ist.brand, value: 100n },
-    };
-
-    const offerConfig = {
-      spec,
-      proposal: {
-        want,
-        give,
-        exit: { waived: null },
+    marketService.sellCharacter({
+      character,
+      price: 100n,
+      service: {
+        kreadInstance: instance,
+        characterBrand: charBrand,
+        makeOffer: service.walletConnection.makeOffer,
+        istBrand: service.tokenInfo.ist
       },
-    };
-
-    service.walletConnection.makeOffer(
-      offerConfig.spec,
-      offerConfig.proposal,
-      undefined,
-      ({ status, data }: { status: string; data: object }) => {
-        if (status === "error") {
-          console.error("Offer error", data);
-        }
-        if (status === "refunded") {
-          console.error("Offer refunded", data);
-        }
-        if (status === "accepted") {
-          console.log("Offer accepted", data);
-        }
-      }
-    );
+      callback: async () => console.log("SELLCHARACTER ADD OFFER")
+    })
   };
 
   const buyCharacterAddOffer = async () => {
     const instance = service.contracts.kread.instance;
     const charBrand = service.tokenInfo.character.brand;
     const istBrand = service.tokenInfo.ist.brand;
-    console.log(222222, charactersMarket);
     const { sell, character } = charactersMarket[0];
 
-    const spec = {
-      source: "contract",
-      instance,
-      publicInvitationMaker: "makeBuyCharacterInvitation",
-    };
-
-    const give = {
-      Price: { brand: istBrand, value: sell.price },
-    };
-
-    const want = {
-      Character: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
-    };
-
-    const offerConfig = {
-      spec,
-      proposal: {
-        want,
-        give,
+    marketService.buyCharacter({
+      character,
+      price: sell.price,
+      service: {
+        kreadInstance: instance,
+        characterBrand: charBrand,
+        makeOffer: service.walletConnection.makeOffer,
+        istBrand,
       },
-    };
-
-    service.walletConnection.makeOffer(
-      offerConfig.spec,
-      offerConfig.proposal,
-      undefined,
-      ({ status, data }: { status: string; data: object }) => {
-        if (status === "error") {
-          console.error("Offer error", data);
-        }
-        if (status === "refunded") {
-          console.error("Offer refunded", data);
-        }
-        if (status === "accepted") {
-          console.log("Offer accepted", data);
-        }
-      }
-    );
+      callback: async () => console.log("SELLCHARACTER ADD OFFER")
+    })
   };
 
   const sellItemAddOffer = async () => {
@@ -247,45 +192,17 @@ export const TestServiceUI = () => {
     const itemBrand = service.tokenInfo.item.brand;
     const item = wallet.item[0];
 
-    const spec = {
-      source: "contract",
-      instance,
-      publicInvitationMaker: "makeSellItemInvitation",
-    };
-
-    const give = {
-      Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
-    };
-
-    const want = {
-      Price: { brand: service.tokenInfo.ist.brand, value: 100n },
-    };
-
-    const offerConfig = {
-      spec,
-      proposal: {
-        want,
-        give,
-        exit: { waived: null },
+    marketService.sellItem({
+      item,
+      price: 10n,
+      service: {
+        kreadInstance: instance,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+        istBrand: service.tokenInfo.ist
       },
-    };
-
-    service.walletConnection.makeOffer(
-      offerConfig.spec,
-      offerConfig.proposal,
-      undefined,
-      ({ status, data }: { status: string; data: object }) => {
-        if (status === "error") {
-          console.error("Offer error", data);
-        }
-        if (status === "refunded") {
-          console.error("Offer refunded", data);
-        }
-        if (status === "accepted") {
-          console.log("Offer accepted", data);
-        }
-      }
-    );
+      callback: async () => console.log("SELLCHARACTER ADD OFFER SUCCESS")
+    })
   };
 
   const buyItemAddOffer = async () => {
@@ -294,44 +211,17 @@ export const TestServiceUI = () => {
     const istBrand = service.tokenInfo.ist.brand;
     const { sell, item } = itemsMarket[0];
 
-    const spec = {
-      source: "contract",
-      instance,
-      publicInvitationMaker: "makeBuyItemInvitation",
-    };
-
-    const give = {
-      Price: { brand: istBrand, value: sell.price },
-    };
-
-    const want = {
-      Item: { brand: itemBrand, value: makeCopyBag(harden([[{ ...item, id: Number(item.id) }, 1n]])) },
-    };
-
-    const offerConfig = {
-      spec,
-      proposal: {
-        want,
-        give,
+    marketService.buyItem({
+      item,
+      price: sell.price,
+      service: {
+        kreadInstance: instance,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+        istBrand
       },
-    };
-
-    service.walletConnection.makeOffer(
-      offerConfig.spec,
-      offerConfig.proposal,
-      undefined,
-      ({ status, data }: { status: string; data: object }) => {
-        if (status === "error") {
-          console.error("Offer error", data);
-        }
-        if (status === "refunded") {
-          console.error("Offer refunded", data);
-        }
-        if (status === "accepted") {
-          console.log("Offer accepted", data);
-        }
-      }
-    );
+      callback: async () => console.log("BUYCHARACTER ADD OFFER SUCCESS")
+    })
   };
 
   const goHome = () => {

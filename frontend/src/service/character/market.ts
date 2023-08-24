@@ -3,6 +3,7 @@ import { Character, Item } from "../../interfaces";
 
 interface SellCharacter {
     character: Character;
+    price: bigint;
     service: {
       kreadInstance: any;
       characterBrand: any;
@@ -11,7 +12,7 @@ interface SellCharacter {
     };
     callback: () => Promise<void>;
   }
-const sellCharacter = async ({ character, service, callback }: SellCharacter): Promise<void> => {
+const sellCharacter = async ({ character, price, service, callback }: SellCharacter): Promise<void> => {
     const instance = service.kreadInstance;
     const charBrand = service.characterBrand;
 
@@ -26,7 +27,7 @@ const sellCharacter = async ({ character, service, callback }: SellCharacter): P
     };
 
     const want = {
-      Price: { brand: service.istBrand, value: 100n },
+      Price: { brand: service.istBrand, value: price },
     };
 
     const offerConfig = {
@@ -174,7 +175,6 @@ const sellCharacter = async ({ character, service, callback }: SellCharacter): P
   interface BuyItem {
     item: Item;
     price: BigInt;
-    
     service: {
       kreadInstance: any;
       itemBrand: any;
