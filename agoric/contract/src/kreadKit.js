@@ -3,7 +3,7 @@
 import '@agoric/zoe/exported';
 
 import { assert, details as X } from '@agoric/assert';
-import { AmountMath, AmountShape } from '@agoric/ertp';
+import { AmountMath, AmountShape, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
 import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
@@ -738,7 +738,10 @@ export const prepareKreadKit = async (
                 Item: M.splitRecord(itemShape),
               },
               want: {
-                Price: AmountShape,
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
               },
             }),
           );
@@ -780,7 +783,10 @@ export const prepareKreadKit = async (
                 Character: M.splitRecord(characterShape),
               },
               want: {
-                Price: AmountShape,
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
               },
             }),
           );
@@ -846,7 +852,10 @@ export const prepareKreadKit = async (
             undefined,
             M.splitRecord({
               give: {
-                Price: AmountShape,
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
               },
               want: {
                 Item: M.splitRecord(itemShape),
@@ -926,7 +935,10 @@ export const prepareKreadKit = async (
             undefined,
             M.splitRecord({
               give: {
-                Price: AmountShape,
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
               },
               want: {
                 Character: M.splitRecord(characterShape),
