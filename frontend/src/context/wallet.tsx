@@ -6,7 +6,7 @@ import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 import { useAgoricState } from "./agoric";
 
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
-import { CHARACTER_IDENTIFIER, IST_IDENTIFIER } from "../constants";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
 import { useUserStateDispatch } from "./user";
 
@@ -95,13 +95,14 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       offers.forEach((offer: any) => {
         const {
           proposal: { give, want },
-          invitationSpec,
+          invitationSpec: { publicInvitationMaker, instance },
         } = offer[1];
-        console.log(22222, invitationSpec, agoric.contracts.kread.instance, invitationSpec === agoric.contracts.kread.instance);
-        if (give.Item || want.Item) {
-          itemProposals.push({ want, give });
-        } else if (give.Character || want.Character) {
-          characterProposals.push({ want, give });
+        if (instance === agoric.contracts.kread.instance) {
+          if (publicInvitationMaker === SELL_ITEM_INVITATION) {
+            itemProposals.push({ want, give });
+          } else if (publicInvitationMaker === SELL_CHARACTER_INVITATION) {
+            characterProposals.push({ want, give });
+          }
         }
       });
 
