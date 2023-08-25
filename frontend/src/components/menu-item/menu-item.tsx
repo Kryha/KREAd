@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isCharacterCategory, isItemCategory, isString } from "../../interfaces";
-import { Dash, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
-import { BoldLabel, ButtonText, ImageProps, MenuItemName } from "../atoms";
+import { ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
+import { BoldLabel, ButtonText, Dash, ImageProps, MenuItemName } from "../atoms";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
