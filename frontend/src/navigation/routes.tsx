@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
 import {
@@ -23,7 +23,6 @@ import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
 import { isDevelopmentMode } from "../constants";
-import { DevelopmentMode } from "../service/test-service/development-mode";
 import { MobileNotAvailable } from "../pages/mobile-not-available";
 import { useIsMobile } from "../hooks";
 import { breakpoints } from "../design";
@@ -44,7 +43,6 @@ export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile(breakpoints.tablet);
   const [service] = useAgoricContext();
-  const location = useLocation();
 
   // TODO: Add this back once character builder is running
   // const { assembledCharacter, setAssembledCharacter } = useCharacterCanvas();

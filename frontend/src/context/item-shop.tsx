@@ -17,7 +17,7 @@ const initialState: ItemMarketContext = {
 
 const initialMockState: ItemMarketContext = {
   items: mockItemsInMarket,
-  fetched: false,
+  fetched: true,
 };
 
 const Context = createContext<ItemMarketContext | undefined>(undefined);
