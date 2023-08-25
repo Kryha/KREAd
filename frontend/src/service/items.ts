@@ -10,6 +10,7 @@ import { useItemMarketState } from "../context/item-shop";
 import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { marketService } from "./character/market";
+import { inventoryService } from "./character/inventory";
 
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   const [{ all }, isLoading] = useMyItems();
@@ -125,28 +126,20 @@ export const useSellItem = (itemId: string) => {
       try {
         const found = items.find((item) => item.id === itemId);
         if (!found) return;
-        const mediated = mediate.items.toBack([found])[0];
+        const itemToSell = {...found, id: Number(found.id)}
         const instance = service.contracts.kread.instance;
         const itemBrand = service.tokenInfo.item.brand;
-        setIsLoading(true);
-        console.log({
-          item: mediated,
-          price: BigInt(price),
-          service: {
-          kreadInstance: instance,
-          itemBrand,
-          makeOffer: service.walletConnection.makeOffer,
-          istBrand: service.tokenInfo.ist
-        }});
 
+        setIsLoading(true);
+        
         marketService.sellItem({
-          item: mediated,
+          item: itemToSell,
           price: BigInt(price),
           service: {
             kreadInstance: instance,
             itemBrand,
             makeOffer: service.walletConnection.makeOffer,
-            istBrand: service.tokenInfo.ist
+            istBrand: service.tokenInfo.ist.brand
           },
           callback: async () => {
             console.info("SellItem call settled");
@@ -180,11 +173,13 @@ export const useBuyItem = (itemId: string) => {
     try {
       const found = items.find((item) => item.id === itemId);
       if (!found) return;
-
+      const itemToBuy = {...found, id: Number(found.id)}
       const mediated = mediate.itemsMarket.toBack([found])[0];
+      
       setIsLoading(true);
+      
       return await marketService.buyItem({
-        item: mediated.item,
+        item: itemToBuy,
         price: BigInt(mediated.sell.price),
         service: {
           kreadInstance: instance,
@@ -207,30 +202,65 @@ export const useBuyItem = (itemId: string) => {
 
 export const useEquipItem = () => {
   const [service] = useAgoricContext();
-  const wallet = useWalletState();
   const { items, selected: character } = useUserState();
+  const kreadInstance = service.contracts.kread.instance;
+  const characterBrand = service.tokenInfo.character.brand;
+  const itemBrand = service.tokenInfo.item.brand;
 
+  
+  
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
-
+    const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
     const item = items.find((item) => item.id === body.itemId);
-
+    
     if (!item) return;
+    const itemToEquip = { ...item, id: Number(item.id)}
 
-    await equip(service, wallet, item, character.nft);
+    await inventoryService.equipItem({
+      character: characterToEquipTo,
+      item: itemToEquip,
+      service: {
+        kreadInstance,
+        characterBrand,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+      },
+      callback: async () => {
+        console.info("Equip call settled");
+      }
+    })
   });
 };
 
 export const useUnequipItem = () => {
   const [service] = useAgoricContext();
   const { equippedItems: equipped, selected: character } = useUserState();
-  const wallet = useWalletState();
+  const instance = service.contracts.kread.instance;
+  const charBrand = service.tokenInfo.character.brand;
+  const itemBrand = service.tokenInfo.item.brand;
 
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
     const sanitizedEquipped = equipped.filter((item) => item !== undefined);
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
+    
     if (!item) return;
-    await unequipItem(service, wallet, item, character);
+    const itemToUnEquip = { ...item, id: Number(item.id)}
+    const characterToUnequipFrom = { ...character.nft, id: Number(character.nft.id) };
+    
+    await inventoryService.unequipItem({
+      item: itemToUnEquip,
+      character: characterToUnequipFrom,
+      service: {
+        kreadInstance: instance,
+        characterBrand: charBrand,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+      },
+      callback: async () => {
+        console.info("Unequip call settled");
+      }
+    });
   });
 };

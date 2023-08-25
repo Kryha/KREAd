@@ -116,7 +116,7 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
     );
   };
   interface SellItem {
-    item: ItemBackend;
+    item: any;
     price: BigInt;
     service: {
       kreadInstance: any;
@@ -145,14 +145,14 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       Price: { brand: service.istBrand, value: price },
     };
 
-    const offerConfig = {
+    const offerConfig = harden({
       spec,
       proposal: {
         want,
         give,
         exit: { waived: null },
       },
-    };
+    });
 
     service.makeOffer(
       offerConfig.spec,
@@ -173,7 +173,7 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
     );
   };
   interface BuyItem {
-    item: ItemBackend;
+    item: any;
     price: BigInt;
     service: {
       kreadInstance: any;
