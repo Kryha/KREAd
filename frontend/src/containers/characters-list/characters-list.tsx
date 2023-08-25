@@ -6,7 +6,7 @@ import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortCon
 import { useMyCharacters } from "../../service";
 
 import { text } from "../../assets";
-import { characterCategories, sortingInventory } from "../../assets/text/filter-options";
+import { characterCategories, sortAssetsInInventory } from "../../assets/text/filter-options";
 import { color } from "../../design";
 import { PAGE_SIZE } from "../../constants";
 
@@ -54,7 +54,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
           <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
-            <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sortingInventory} />
+            <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sortAssetsInInventory} />
           </Filters>
         </SortContainer>
       </ListHeader>
