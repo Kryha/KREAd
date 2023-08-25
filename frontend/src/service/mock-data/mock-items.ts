@@ -4,7 +4,7 @@ import { Lina } from "../../assets/images/items";
 
 export const mockItems: Item[] = [
   {
-    name: "NoseLine: Fairy Dust Elite",
+    name: "Fairy Dust Elite",
     category: "noseline",
     id: "1",
     description:
@@ -61,7 +61,7 @@ export const mockItems: Item[] = [
     ],
   },
   {
-    name: "Mid Background: Fairy Dust Elite",
+    name: "Fairy Dust Elite",
     category: "background",
     id: "2",
     description:
@@ -1767,7 +1767,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[0],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(23232424),
     },
   },
   {
@@ -1775,7 +1775,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[1],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(33909023),
     },
   },
   {
@@ -1783,7 +1783,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[2],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(3430),
     },
   },
   {
@@ -1791,7 +1791,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[3],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(873090),
     },
   },
   {
@@ -1799,7 +1799,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[4],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(80909090),
     },
   },
   {
@@ -1807,7 +1807,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[5],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(10),
     },
   },
   {
@@ -1815,7 +1815,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[6],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(1000000),
     },
   },
   {
@@ -1823,7 +1823,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[7],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(105000),
     },
   },
   {
@@ -1839,7 +1839,7 @@ export const mockItemsInMarket: ItemInMarket[] = [
     item: mockItems[9],
     sell: {
       publicFacet: "",
-      price: BigInt(100),
+      price: BigInt(40000),
     },
   },
 ];

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import { ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
-import { filterItems, filterItemsMarket, ItemFilters, ItemsMarketFilters, mediate } from "../util";
+import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { buyItem, equipItem, sellItem, unequipItem } from "./item-actions";
 import { useOffers } from "./offers";
@@ -9,7 +9,6 @@ import { ITEM_PURSE_NAME } from "../constants";
 import { useItemMarketState } from "../context/item-shop";
 import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
-import { useSearchParams } from "react-router-dom";
 
 // TODO: Fix this function used during buy and sell
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
@@ -17,56 +16,18 @@ export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
   return [found, false];
 };
 
-export const useItemFromInventory = (id: string): [ItemEquip | undefined, boolean] => {
-  const [items, isLoading] = useMyItems();
+export const useGetItemInInventoryById = (id: string): [ItemEquip | undefined, boolean] => {
+  const [items, isLoading] = useGetItemsInInventory();
 
   const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
 
   return [found, isLoading];
 };
 
-export function extractExistingParams(searchParams: URLSearchParams): Record<string, string[]> {
-  const entries = Array.from(searchParams.entries());
-  return entries.reduce((acc, [key, value]) => {
-    acc[key] = acc[key] || [];
-    acc[key].push(value);
-    return acc;
-  }, {} as Record<string, string[]>);
-}
-
-export function removeExistingParamsArrayValue(searchParams: URLSearchParams, key: string, value: string): Record<string, string[]> {
-  const existingParams = extractExistingParams(searchParams);
-
-  if (existingParams[key]) {
-    existingParams[key] = existingParams[key].filter((v) => v !== value);
-  }
-
-  if (existingParams[key].length === 0) {
-    delete existingParams[key];
-  }
-
-  return existingParams;
-}
-
-export const useMyItems = (filters?: ItemFilters): [ItemEquip[], boolean] => {
+export const useGetItemsInInventory = (filters?: ItemFilters): [ItemEquip[], boolean] => {
   const { equippedItems, fetched } = useUserState();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   if (!filters) return [equippedItems, !fetched];
-
-  useEffect(() => {
-    const { categories, sorting, color } = filters;
-    setSearchParams(
-      {
-        categories: categories.join(","),
-        sorting,
-        color,
-      },
-      {
-        relative: "path",
-      }
-    );
-  }, [setSearchParams, filters]);
 
   const filtered = !filters ? equippedItems : filterItems(equippedItems, filters);
 
@@ -107,32 +68,20 @@ export const useMyItemsForSale = () => {
   return itemsForSale;
 };
 
-export const useItemFromMarket = (id: string): [ItemInMarket | undefined, boolean] => {
-  const [items, isLoading] = useItemsMarket();
+export const useGetItemInShopById = (id: string): [ItemInMarket | undefined, boolean] => {
+  const [items, isLoading] = useGetItemsInShop();
 
   const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
 
   return [found, isLoading];
 };
 
-export const useItemsMarket = (filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
+export const useGetItemsInShop = (filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
   const { items, fetched } = useItemMarketState();
-  const filtered = useMemo(() => {
-    if (!filters) return items;
-    return filterItemsMarket(items, filters);
-  }, [filters, items]);
+  if (!filters) return [items, !fetched];
 
-  return [filtered, !fetched];
-};
-
-// TODO: consider removing if unneeded
-export const useItemsMarketPage = (page: number, filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
-  const { items, fetched } = useItemMarketState();
-
-  const filtered = useMemo(() => {
-    if (!filters) return items;
-    return filterItemsMarket(items, filters);
-  }, [filters, items]);
+  const filtered = !filters ? items : filterItemsInShop(items, filters);
+  console.log("filtered", filtered);
 
   return [filtered, !fetched];
 };
@@ -166,7 +115,7 @@ export const useSellItem = (itemId: string) => {
 export const useBuyItem = (itemId: string) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
-  const [items] = useItemsMarket();
+  const [items] = useGetItemsInShop();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
