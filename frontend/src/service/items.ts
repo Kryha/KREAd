@@ -81,7 +81,6 @@ export const useGetItemsInShop = (filters?: ItemsMarketFilters): [ItemInMarket[]
   if (!filters) return [items, !fetched];
 
   const filtered = !filters ? items : filterItemsInShop(items, filters);
-  console.log("filtered", filtered);
 
   return [filtered, !fetched];
 };
