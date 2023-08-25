@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react";
 
-import { text } from "../../assets/text";
+import { text } from "../../assets";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { BoldLabel, ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
@@ -25,6 +25,8 @@ interface PriceSelectorProps {
   min: number;
   max: number;
 }
+
+// TODO: fix the min value slider
 
 export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }) => {
   const [minVal, setMinVal] = useState(min);

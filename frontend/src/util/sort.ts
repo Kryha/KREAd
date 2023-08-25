@@ -2,14 +2,12 @@ import { CharacterEquip, CharacterInMarket, ItemEquip, ItemInMarket } from "../i
 
 export const sortItems = (sorting: string, items: ItemEquip[]): ItemEquip[] => {
   switch (sorting) {
-    case "sort":
+    case "atoz":
       return items.sort((a, b) => a.name.localeCompare(b.name));
     case "rarity":
       return items.sort((a, b) => b.rarity - a.rarity);
     case "level":
       return items.sort((a, b) => b.level - a.level);
-    // case "effectiveness":
-    //   return items.sort((a, b) => b.effectiveness - a.effectiveness);
     case "latest":
       return items;
     default:

@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
-import { HorizontalDivider, Label, SecondaryButton } from "../../components";
-import { fadeUp } from "../../components/atoms/animations";
+import { fadeUp, HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { FilterOption } from "../../components/filters/styles";
 import { LoadMoreContainer } from "../../components/load-more/styles";
 import { KreadIcon } from "../../components/logo/styles";
@@ -43,13 +42,15 @@ export const FilterWrapper = styled.div`
 `;
 
 export const FilterContainer = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 0px;
   gap: 16px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const SelectorContainer = styled.div`

@@ -18,7 +18,7 @@ interface SelectProps {
   isMultiSelect?: boolean;
 }
 
-export const Select: FC<SelectProps> = ({ label, options, handleChange, isMultiSelect = false }) => {
+export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect = false }) => {
   const [selected, setSelected] = useState<string | string[]>(isMultiSelect ? [options[0].value] : "");
   const { height } = useViewport();
 
@@ -26,8 +26,8 @@ export const Select: FC<SelectProps> = ({ label, options, handleChange, isMultiS
     (index: number) => {
       const selectedValue = options[index].value;
       if (selectedValue === options[0].value) {
-        setSelected([options[0].value]);
-        handleChange([options[0].value]);
+        setSelected([selectedValue]);
+        handleChange([selectedValue]);
       } else {
         if (isMultiSelect) {
           setSelected((prevSelected) => {

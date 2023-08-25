@@ -1,7 +1,7 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 
 import { Group, SwitchButtonLeft, SwitchButtonRight } from "./styles";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 interface SwitchSelectorProps {
   selectedIndex: number;
@@ -18,32 +18,18 @@ export const SwitchSelector: FC<SwitchSelectorProps> = ({
   selectedIndex,
   setSelectedIndex,
 }) => {
+  const [, setSearchParams] = useSearchParams();
   const handleButtonOneClick = () => {
     setSelectedIndex(0);
-    toggleDevMode && window.location.reload(); // Reload the page
+    !toggleDevMode && setSearchParams({ section: "items" }, { relative: "path" });
+    toggleDevMode && window.location.reload();
   };
 
   const handleButtonTwoClick = () => {
     setSelectedIndex(1);
-    toggleDevMode && window.location.reload(); // Reload the page
+    !toggleDevMode && setSearchParams({ section: "characters" }, { relative: "path" });
+    toggleDevMode && window.location.reload();
   };
-
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!toggleDevMode) {
-      const currentURL = location.pathname;
-      const queryParams = new URLSearchParams(location.search);
-      if (selectedIndex === 0) {
-        queryParams.set("section", "items");
-      } else {
-        queryParams.set("section", "characters");
-      }
-      const newURL = `${currentURL}?${queryParams.toString()}`;
-      navigate(newURL, { replace: true });
-    }
-  }, [selectedIndex]);
 
   return (
     <Group>
