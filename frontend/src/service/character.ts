@@ -10,7 +10,7 @@ import {
 } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
+import { buyCharacter, extendCharacters } from "./character-actions";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
@@ -18,6 +18,7 @@ import { useCharacterMarketState } from "../context/character-shop";
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { mintCharacter } from "./character/mint";
+import { marketService } from "./character/market";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
@@ -43,6 +44,8 @@ export const useMyCharactersForSale = () => {
   ] = useAgoricContext();
   const offers = useOffers({ description: "seller", status: "pending" });
 
+  const wallet = useWalletState();
+  console.log(wallet);
   // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
   const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
   // const [offerCharacters, setOfferCharacters] = useState<ExtendedCharacterBackend[]>([]);
@@ -195,15 +198,30 @@ export const useSellCharacter = (characterId: string) => {
   const [characters] = useMyCharacters();
   const userDispatch = useUserStateDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const instance = service.contracts.kread.instance;
+  const charBrand = service.tokenInfo.character.brand;
+
   const callback = useCallback(
     async (price: number) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
-
-      const backendCharacter = mediate.characters.toBack([found])[0];
+      const characterToSell = {...found.nft, id: Number(found.nft.id)};
 
       setIsLoading(true);
-      const res = await sellCharacter(service, wallet, backendCharacter.nft, BigInt(price));
+      const res = await marketService.sellCharacter({
+        character: characterToSell,
+        price: BigInt(price),
+        service: {
+          kreadInstance: instance,
+          characterBrand: charBrand,
+          makeOffer: service.walletConnection.makeOffer,
+          istBrand: service.tokenInfo.ist.brand
+        },
+        callback: async () => {
+          console.info("SellCharacter call settled");
+        }
+      })
+      
       setIsLoading(false);
       userDispatch({ type: "SET_SELECTED", payload: undefined });
       return res;

@@ -132,6 +132,7 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
     const itemBrand = service.itemBrand;
 
     const spec = {
+      id: "custom-id",
       source: "contract",
       instance,
       publicInvitationMaker: "makeSellItemInvitation",

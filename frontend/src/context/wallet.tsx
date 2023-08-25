@@ -97,7 +97,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
           proposal: { give, want },
           invitationSpec,
         } = offer[1];
-        console.log(22222, invitationSpec, agoric.contracts.kread.instance, invitationSpec === agoric.contracts.kread.instance);
+        console.log(offer);
         if (give.Item || want.Item) {
           itemProposals.push({ want, give });
         } else if (give.Character || want.Character) {
