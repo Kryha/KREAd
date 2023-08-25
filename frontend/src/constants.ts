@@ -141,4 +141,7 @@ export const KREAD_IDENTIFIER = "kread";
 export const ITEM_IDENTIFIER = "KREAdITEM";
 export const CHARACTER_IDENTIFIER = "KREAdCHARACTER";
 
+export const SELL_ITEM_INVITATION = "makeSellItemInvitation";
+export const SELL_CHARACTER_INVITATION = "makeSellCharacterInvitation";
+
 export const AGORIC_RPC = import.meta.env.VITE_RPC || "http://127.0.0.1:26657";
