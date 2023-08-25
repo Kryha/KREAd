@@ -64,25 +64,16 @@ export const inventory = (zcf, getState) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    // Widthdraw Item and Key from user seat
-    seat.decrementBy({ Item: providedItemAmount });
-    seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-
-    // Deposit Item and Key to inventory seat
-    inventorySeat.incrementBy({ Item: providedItemAmount });
-    inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
-
-    // Widthdraw Key from character seat and Deposit into user seat
-    inventorySeat.decrementBy({ CharacterKey: inventoryCharacterKey });
-    seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
-
-    // Ensure staged inventory STATE is valid before reallocation
-    const updatedInventory = inventorySeat
-      .getStagedAllocation()
+    // Ensure inventory STATE will be valid before reallocation
+    let inventory = inventorySeat
+      .getCurrentAllocation()
       .Item.value.payload.map(([value, supply]) => value);
+    if (providedItemAmount.value.payload[0])
+      inventory = [...inventory, providedItemAmount.value.payload[0][0]];
+
     try {
       // @ts-ignore
-      validateInventoryState(updatedInventory);
+      validateInventoryState(inventory);
     } catch (e) {
       inventorySeat.clear();
       seat.clear();
@@ -90,7 +81,30 @@ export const inventory = (zcf, getState) => {
       return `${errors.duplicateCategoryInInventory}`;
     }
 
-    zcf.reallocate(seat, inventorySeat);
+    /** @type {TransferPart[]} */
+    const transfers = [];
+    transfers.push([seat, inventorySeat, { Item: providedItemAmount }]);
+    transfers.push([
+      seat,
+      inventorySeat,
+      { CharacterKey1: providedCharacterKeyAmount },
+      { CharacterKey: providedCharacterKeyAmount },
+    ]);
+    transfers.push([
+      inventorySeat,
+      seat,
+      { CharacterKey: inventoryCharacterKey },
+      { CharacterKey2: inventoryCharacterKey },
+    ]);
+
+    try {
+      zcf.atomicRearrange(harden(transfers));
+    } catch (e) {
+      inventorySeat.clear();
+      seat.clear();
+      seat.fail(e);
+      return;
+    }
 
     characterRecord.publisher.publish(
       inventorySeat.getAmountAllocated('Item').value.payload,
@@ -141,41 +155,29 @@ export const inventory = (zcf, getState) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    try {
-      // Inventory Key Swap
-      seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-      inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-      seat.incrementBy({ CharacterKey2: wantedCharacter });
-      inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
+    /** @type {TransferPart[]} */
+    const transfers = [];
+    transfers.push([inventorySeat, seat, { Item: requestedItems }]);
+    transfers.push([
+      seat,
+      inventorySeat,
+      { CharacterKey1: providedCharacterKeyAmount },
+      { CharacterKey: providedCharacterKeyAmount },
+    ]);
+    transfers.push([
+      inventorySeat,
+      seat,
+      { CharacterKey: wantedCharacter },
+      { CharacterKey2: wantedCharacter },
+    ]);
 
-      // Deposit item from inventory to user seat
-      seat.incrementBy(inventorySeat.decrementBy({ Item: requestedItems }));
+    try {
+      zcf.atomicRearrange(harden(transfers));
     } catch (e) {
       inventorySeat.clear();
       seat.clear();
       seat.fail(e);
       return `Swap assets error: ${e}`;
-    }
-
-    // Ensure staged inventory STATE is valid before reallocation
-    const updatedInventory = inventorySeat
-      .getStagedAllocation()
-      .Item.value.payload.map(([value, supply]) => value);
-    try {
-      // @ts-ignore
-      validateInventoryState(updatedInventory);
-    } catch (e) {
-      inventorySeat.clear();
-      seat.clear();
-      seat.fail(e);
-      return `${errors.duplicateCategoryInInventory}`;
-    }
-
-    try {
-      zcf.reallocate(seat, inventorySeat);
-    } catch (e) {
-      seat.fail(e);
-      return `Reallocation error: ${e}`;
     }
 
     characterRecord.publisher.publish(
@@ -228,32 +230,56 @@ export const inventory = (zcf, getState) => {
       X`${errors.inventoryKeyMismatch}`,
     );
 
-    // Decrement amounts
-    seat.decrementBy({ Item1: providedItemAmount });
-    seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-    inventorySeat.decrementBy({ Item: wantedItemsAmount });
-    inventorySeat.decrementBy({ CharacterKey: wantedCharacterAmount });
-
-    // Increment amounts
-    seat.incrementBy({ CharacterKey2: wantedCharacterAmount });
-    seat.incrementBy({ Item2: wantedItemsAmount });
-    inventorySeat.incrementBy({ Item: providedItemAmount });
-    inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
-
-    // Ensure staged inventory STATE is valid before reallocation
-    const updatedInventory = inventorySeat
-      .getStagedAllocation()
+    // Ensure inventory STATE is valid before reallocation
+    let inventory = inventorySeat
+      .getCurrentAllocation()
       .Item.value.payload.map(([value, supply]) => value);
+    if (wantedItemsAmount.value.payload[0])
+      inventory = inventory.filter(
+        (item) =>
+          item.category !== wantedItemsAmount.value.payload[0][0].category,
+      );
+    if (providedItemAmount.value.payload[0])
+      inventory = [...inventory, providedItemAmount.value.payload[0][0]];
+
     try {
       // @ts-ignore
-      validateInventoryState(updatedInventory);
+      validateInventoryState(inventory);
     } catch (e) {
       inventorySeat.clear();
       seat.clear();
       seat.fail(e);
       return errors.duplicateCategoryInInventory;
     }
-    zcf.reallocate(seat, inventorySeat);
+
+    /** @type {TransferPart[]} */
+    const transfers = [];
+    transfers.push([
+      seat,
+      inventorySeat,
+      { Item1: providedItemAmount },
+      { Item: providedItemAmount },
+    ]);
+    transfers.push([
+      inventorySeat,
+      seat,
+      { Item: wantedItemsAmount },
+      { Item2: wantedItemsAmount },
+    ]);
+    transfers.push([
+      seat,
+      inventorySeat,
+      { CharacterKey1: providedCharacterKeyAmount },
+      { CharacterKey: providedCharacterKeyAmount },
+    ]);
+    transfers.push([
+      inventorySeat,
+      seat,
+      { CharacterKey: wantedCharacterAmount },
+      { CharacterKey2: wantedCharacterAmount },
+    ]);
+
+    zcf.atomicRearrange(harden(transfers));
 
     characterRecord.publisher.publish(
       inventorySeat.getAmountAllocated('Item').value.payload,
@@ -302,18 +328,24 @@ export const inventory = (zcf, getState) => {
       ),
       X`${errors.inventoryKeyMismatch}`,
     );
-    // Swap Inventory Keys
-    seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-    seat.incrementBy({ CharacterKey2: wantedCharacter });
-    inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-    inventorySeat.incrementBy({ CharacterKey: providedCharacterKeyAmount });
 
-    // Move items from inventory to user set
-    seat.incrementBy(inventorySeat.decrementBy({ Item: items }));
+    /** @type {TransferPart[]} */
+    const transfers = [];
+    transfers.push([inventorySeat, seat, { Item: items }]);
+    transfers.push([
+      seat,
+      inventorySeat,
+      { CharacterKey1: providedCharacterKeyAmount },
+      { CharacterKey: providedCharacterKeyAmount },
+    ]);
+    transfers.push([
+      inventorySeat,
+      seat,
+      { CharacterKey: wantedCharacter },
+      { CharacterKey2: wantedCharacter },
+    ]);
 
-    const updatedInventory = inventorySeat.getStagedAllocation().Item.value;
-
-    zcf.reallocate(seat, inventorySeat);
+    zcf.atomicRearrange(harden(transfers));
 
     characterRecord.publisher.publish(
       inventorySeat.getAmountAllocated('Item').value.payload,

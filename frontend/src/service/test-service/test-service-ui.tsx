@@ -1,32 +1,29 @@
 /// <reference types="ses"/>
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { useAgoricContext } from "../../context/agoric";
 import { useUserState } from "../../context/user";
 import { useWalletState } from "../../context/wallet";
 import { useCharactersMarket, useCreateCharacter } from "../character";
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
-import { useDataMode } from "../../hooks/use-data-mode";
-import { routes } from "../../navigation";
-import { KreadLogo } from "../../pages/onboarding/styles";
 import StatusIndicator from "./service-status-indicator";
 import { fontSize } from "../../design";
 import { watchCharacterInventory } from "../storage-node/watch-character";
 import { useItemsMarket } from "../items";
 
 import { makeCopyBag } from "@agoric/store";
+import { KreadContainer, KreadDevelopmentContainer } from "../../components/error-view/styles";
+import { AnimatedLogo } from "../../components";
+import { DevelopmentMode } from "./development-mode";
 
 export const TestServiceUI = () => {
   const [service, dispatch] = useAgoricContext();
-  const [charactersMarket, isLoading] = useCharactersMarket();
-  const [itemsMarket, isLoadingItem] = useItemsMarket();
+  const [charactersMarket] = useCharactersMarket();
+  const [itemsMarket] = useItemsMarket();
 
   const { characters } = useUserState();
   const wallet = useWalletState();
   const createCharacter = useCreateCharacter();
-  const navigate = useNavigate();
-  const { mockData } = useDataMode();
 
   useEffect(() => {
     console.log("SERVICE:", service);
@@ -256,7 +253,7 @@ export const TestServiceUI = () => {
 
     const itemBrand = service.tokenInfo.item.brand;
     const giveItem = wallet.item[0];
-    const wantItem = service.testCharacterInventory.filter((i) => i.category === giveItem.category)[0];
+    const wantItem = service.testCharacterInventory.filter((i: { category: any }) => i.category === giveItem.category)[0];
 
     const wantKey = character.keyId == 2 ? 1 : 2;
 
@@ -491,10 +488,6 @@ export const TestServiceUI = () => {
     );
   };
 
-  const goHome = () => {
-    navigate(routes.root);
-  };
-
   const buttons = [
     { text: "STATE", onClick: () => console.log(service, wallet) },
     { text: "MINT", onClick: mintCharacterAddOffer },
@@ -512,12 +505,13 @@ export const TestServiceUI = () => {
   return (
     <>
       <Container>
-        <AppBar>
-          <LogoContainer onClick={goHome}>
-            <KreadLogo />
-          </LogoContainer>
+        <KreadContainer>
+          <AnimatedLogo iteration={1} />
           <Title>🔧 Test Service UI </Title>
-        </AppBar>
+          <KreadDevelopmentContainer>
+            <DevelopmentMode />
+          </KreadDevelopmentContainer>
+        </KreadContainer>
         <Main>
           <Section>
             <SectionTitle>Agoric Service Status:</SectionTitle>
@@ -529,17 +523,16 @@ export const TestServiceUI = () => {
           <Section>
             <SectionTitle>Controls:</SectionTitle>
             <SectionControls>
-              <ButtonContainer>
-                {buttons.map((button, index) => (
-                  <Button key={index} onClick={button.onClick}>
-                    <ButtonText>{button.text}</ButtonText>
-                  </Button>
-                ))}
-              </ButtonContainer>
+              <ButtonContainerWrapper>
+                <ButtonContainer>
+                  {buttons.map((button, index) => (
+                    <Button key={index} onClick={button.onClick}>
+                      <ButtonText>{button.text}</ButtonText>
+                    </Button>
+                  ))}
+                </ButtonContainer>
+              </ButtonContainerWrapper>
             </SectionControls>
-          </Section>
-          <Section>
-            <SectionTitle>Results:</SectionTitle>
           </Section>
         </Main>
       </Container>
@@ -552,12 +545,10 @@ const Container = styled.div`
   flex-direction: column;
   border-radius: 0;
   position: relative;
-  min-height: 100vh;
-  height: 100%;
+  height: 100vh;
   isolation: isolate;
   background: hsl(216, 17%, 17%);
   color: #fff;
-  overflow: scroll;
 `;
 
 const Section = styled.div`
@@ -581,30 +572,15 @@ const SectionControls = styled.div`
   min-height: 1.625rem;
 `;
 
-const AppBar = styled.header`
-  --color-primary: hsl(53deg, 100%, 50%);
-  display: flex;
-  flex-direction: column;
-  -moz-box-pack: justify;
-  -moz-box-align: baseline;
-  align-items: center;
-  padding: 18px;
-  border-bottom: 1px solid hsl(210deg, 15%, 20%);
-`;
-
 const Main = styled.div`
   display: flex;
   flex-direction: column;
   align-content: center;
+  justify-content: center;
   gap: 32px;
   padding: 16px;
   isolation: isolate;
-  max-width: 800px;
-`;
-const LogoContainer = styled.a`
-  width: 100px;
-  height: 24px;
-  background: white;
+  max-width: 768px;
 `;
 
 const Title = styled.h1`
@@ -622,9 +598,7 @@ const Title = styled.h1`
   margin-bottom: 0;
 `;
 
-const ButtonText = styled.span`
-  margin-top: 8px;
-`;
+const ButtonText = styled.span``;
 
 const Button = styled.button`
   display: flex;
@@ -637,15 +611,15 @@ const Button = styled.button`
   border-width: 3px;
   border-image: none 100% / 1 / 0 stretch;
   border-radius: 6px;
-  border-color: hsl(210deg, 15%, 20%);
-  color: hsl(210deg, 8%, 50%);
+  border-color: hsl(218, 13%, 33%);
+  color: hsl(194, 10%, 59%);
   background: none;
   cursor: pointer;
   user-select: none;
 
   &:hover {
-    border-color: hsl(210deg, 15%, 30%);
-    color: hsl(210deg, 8%, 80%);
+    border-color: hsl(119, 34%, 64%);
+    color: hsl(200, 6%, 90%);
   }
 
   &:active {
@@ -655,12 +629,17 @@ const Button = styled.button`
 `;
 
 const ButtonContainer = styled.ul`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   list-style-type: none;
   isolation: isolate;
+  flex-direction: column;
+`;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
+const ButtonContainerWrapper = styled.div`
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0 16px;
+  background: transparent;
 `;

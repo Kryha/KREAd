@@ -1,12 +1,25 @@
-import { useEffect, useMemo, useState } from "react";
-import { SwitchSelector } from "../components";
-import styled from "@emotion/styled";
-import { fontSize, margins } from "../design";
+import React, { useEffect, useState } from "react";
 
 export enum DataMode {
   Default = 0,
   Mock = 1,
 }
+
+export const useDataMode = () => {
+  const [isMockData, setIsMockData] = useState<DataMode>(getLocalStorageData("data-mode", DataMode.Mock));
+
+  const toggleDataMode = () => {
+    const newDataMode = isMockData === DataMode.Default ? DataMode.Mock : DataMode.Default;
+    setLocalStorageData("data-mode", newDataMode);
+    setIsMockData(newDataMode);
+  };
+
+  useEffect(() => {
+    setLocalStorageData("data-mode", isMockData);
+  }, [isMockData]);
+
+  return { isMockData, toggleDataMode };
+};
 
 const getLocalStorageData = (key: string, defaultValue: any) => {
   const storedData = localStorage.getItem(key);
@@ -16,51 +29,3 @@ const getLocalStorageData = (key: string, defaultValue: any) => {
 const setLocalStorageData = (key: string, value: any) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
-
-export const useDataMode = () => {
-  const [selectDataMode, setSelectDataMode] = useState<DataMode>(
-    getLocalStorageData('dataMode', DataMode.Mock)
-  );
-  const [mockData, setMockData] = useState<boolean>(
-    getLocalStorageData('mockData', false)
-  );
-
-  const dataModeSelector = useMemo(
-    () => (
-      <SelectDataMode>
-        <SwitchSelector
-          buttonOneText={'Default'}
-          buttonTwoText={'Mock'}
-          setSelectedIndex={setSelectDataMode}
-          selectedIndex={selectDataMode}
-        />
-        Reload page to apply data mode change
-      </SelectDataMode>
-
-    ),
-    [selectDataMode]
-  );
-
-  useEffect(() => {
-    setLocalStorageData('dataMode', selectDataMode);
-
-    if (selectDataMode === DataMode.Mock) {
-      setLocalStorageData('mockData', true);
-      setMockData(true);
-    } else {
-      setLocalStorageData('mockData', false);
-      setMockData(false);
-    }
-  }, [selectDataMode]);
-
-  return { dataModeSelector, mockData };
-};
-
-const SelectDataMode = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-size: ${fontSize.tiny};
-  align-items: center;
-  gap: ${margins.mini};
-`;

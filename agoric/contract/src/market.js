@@ -155,17 +155,16 @@ export const market = (zcf, getState) => {
       X`${errors.insufficientFunds}`,
     );
 
-    // Widthdraw Character from seller seat and deposit into buyer seat
-    buyerSeat.incrementBy(
-      sellerSeat.decrementBy({ Character: characterForSaleAmount }),
-    );
+    /** @type {TransferPart[]} */
+    const transfers = [];
+    transfers.push([
+      sellerSeat,
+      buyerSeat,
+      { Character: characterForSaleAmount },
+    ]);
+    transfers.push([buyerSeat, sellerSeat, { Price: providedMoneyAmount }]);
 
-    // Widthdraw price from buyer seat and deposit into seller seat
-    sellerSeat.incrementBy(
-      buyerSeat.decrementBy({ Price: providedMoneyAmount }),
-    );
-
-    zcf.reallocate(buyerSeat, sellerSeat);
+    zcf.atomicRearrange(harden(transfers));
 
     buyerSeat.exit();
     sellerSeat.exit();
@@ -226,15 +225,12 @@ export const market = (zcf, getState) => {
       X`${errors.insufficientFunds}`,
     );
 
-    // Widthdraw Character from seller seat and deposit into buyer seat
-    buyerSeat.incrementBy(sellerSeat.decrementBy({ Item: itemForSaleAmount }));
+    /** @type {TransferPart[]} */
+    const transfers = [];
+    transfers.push([sellerSeat, buyerSeat, { Item: itemForSaleAmount }]);
+    transfers.push([buyerSeat, sellerSeat, { Price: providedMoneyAmount }]);
 
-    // Widthdraw price from buyer seat and deposit into seller seat
-    sellerSeat.incrementBy(
-      buyerSeat.decrementBy({ Price: providedMoneyAmount }),
-    );
-
-    zcf.reallocate(buyerSeat, sellerSeat);
+    zcf.atomicRearrange(harden(transfers));
 
     buyerSeat.exit();
     sellerSeat.exit();

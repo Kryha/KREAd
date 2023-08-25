@@ -1,18 +1,27 @@
 import { useEffect, useState } from "react";
-import { useViewport } from "./use-viewport";
-import { breakpoints } from "../design";
 
-export const useMobile = () => {
-
-  const { width} = useViewport();
-  const [mobile, setMobile] = useState<boolean>(false);
+export const useIsMobile = (breakpoint: string): boolean => {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
+    const checkIsMobile = () => {
+      const breakpointValue = parseInt(breakpoint, 10);
+      const userAgent: string = window.navigator.userAgent;
+      const mobileRegex: RegExp = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+      const isMobileDevice: boolean = mobileRegex.test(userAgent);
+      const isSmallWidth: boolean = window.innerWidth <= breakpointValue;
 
-    const breakpointValue = parseInt(breakpoints.tablet, 10);
-    (width <= breakpointValue) ? setMobile(true) : setMobile(false);
+      setIsMobile(isMobileDevice || isSmallWidth);
+    };
 
-  }, [width, breakpoints.tablet])
+    checkIsMobile();
 
-  return mobile;
-}
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, [breakpoint]);
+
+  return isMobile;
+};

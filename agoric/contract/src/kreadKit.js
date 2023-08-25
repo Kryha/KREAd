@@ -282,27 +282,19 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            // Widthdraw Item and Key from user seat
-            seat.decrementBy({ Item: providedItemAmount });
-            seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-
-            // Deposit Item and Key to inventory seat
-            inventorySeat.incrementBy({ Item: providedItemAmount });
-            inventorySeat.incrementBy({
-              CharacterKey: providedCharacterKeyAmount,
-            });
-
-            // Widthdraw Key from character seat and Deposit into user seat
-            inventorySeat.decrementBy({ CharacterKey: inventoryCharacterKey });
-            seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
-
-            // Ensure staged inventory STATE is valid before reallocation
-            const updatedInventory = inventorySeat
-              .getStagedAllocation()
+            // Ensure inventory STATE will be valid before reallocation
+            let inventory = inventorySeat
+              .getCurrentAllocation()
               .Item.value.payload.map(([value, supply]) => value);
+            if (providedItemAmount.value.payload[0])
+              inventory = [
+                ...inventory,
+                providedItemAmount.value.payload[0][0],
+              ];
+
             try {
               // @ts-ignore
-              characterFacet.validateInventoryState(updatedInventory);
+              characterFacet.validateInventoryState(inventory);
             } catch (e) {
               inventorySeat.clear();
               seat.clear();
@@ -310,7 +302,30 @@ export const prepareKreadKit = async (
               return `${errors.duplicateCategoryInInventory}`;
             }
 
-            zcf.reallocate(seat, inventorySeat);
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([seat, inventorySeat, { Item: providedItemAmount }]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: inventoryCharacterKey },
+              { CharacterKey2: inventoryCharacterKey },
+            ]);
+
+            try {
+              zcf.atomicRearrange(harden(transfers));
+            } catch (e) {
+              inventorySeat.clear();
+              seat.clear();
+              seat.fail(e);
+              return;
+            }
 
             characterRecord.inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
@@ -338,7 +353,6 @@ export const prepareKreadKit = async (
         },
         unequip() {
           const handler = async (seat) => {
-            const { character: characterFacet } = this.facets;
             const { character: characterState } = this.state;
 
             // Retrieve Character key from user seat
@@ -372,46 +386,29 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            try {
-              // Inventory Key Swap
-              seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-              seat.incrementBy({ CharacterKey2: wantedCharacter });
-              inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-              inventorySeat.incrementBy({
-                CharacterKey: providedCharacterKeyAmount,
-              });
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([inventorySeat, seat, { Item: requestedItems }]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: wantedCharacter },
+              { CharacterKey2: wantedCharacter },
+            ]);
 
-              // Deposit item from inventory to user seat
-              seat.incrementBy(
-                inventorySeat.decrementBy({ Item: requestedItems }),
-              );
+            try {
+              zcf.atomicRearrange(harden(transfers));
             } catch (e) {
               inventorySeat.clear();
               seat.clear();
               seat.fail(e);
               return `Swap assets error: ${e}`;
-            }
-
-            // Ensure staged inventory STATE is valid before reallocation
-            const updatedInventory = inventorySeat
-              .getStagedAllocation()
-              .Item.value.payload.map(([value, supply]) => value);
-            try {
-              // @ts-ignore
-              characterFacet.validateInventoryState(updatedInventory);
-            } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return `${errors.duplicateCategoryInInventory}`;
-            }
-
-            try {
-              // Refactor to not use reallocate
-              zcf.reallocate(seat, inventorySeat);
-            } catch (e) {
-              seat.fail(e);
-              return `Reallocation error: ${e}`;
             }
 
             characterRecord.inventoryKit.recorder.write(
@@ -475,27 +472,26 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            // Decrement amounts
-            seat.decrementBy({ Item1: providedItemAmount });
-            seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-            inventorySeat.decrementBy({ Item: wantedItemsAmount });
-            inventorySeat.decrementBy({ CharacterKey: wantedCharacterAmount });
-
-            // Increment amounts
-            seat.incrementBy({ CharacterKey2: wantedCharacterAmount });
-            seat.incrementBy({ Item2: wantedItemsAmount });
-            inventorySeat.incrementBy({ Item: providedItemAmount });
-            inventorySeat.incrementBy({
-              CharacterKey: providedCharacterKeyAmount,
-            });
-
-            // Ensure staged inventory STATE is valid before reallocation
-            const updatedInventory = inventorySeat
-              .getStagedAllocation()
+            // Ensure inventory STATE is valid before reallocation
+            let inventory = inventorySeat
+              .getCurrentAllocation()
               .Item.value.payload.map(([value, supply]) => value);
+
+            if (wantedItemsAmount.value.payload[0])
+              inventory = inventory.filter(
+                (item) =>
+                  item.category !==
+                  wantedItemsAmount.value.payload[0][0].category,
+              );
+            if (providedItemAmount.value.payload[0])
+              inventory = [
+                ...inventory,
+                providedItemAmount.value.payload[0][0],
+              ];
+
             try {
               // @ts-ignore
-              characterFacet.validateInventoryState(updatedInventory);
+              characterFacet.validateInventoryState(inventory);
             } catch (e) {
               inventorySeat.clear();
               seat.clear();
@@ -503,7 +499,34 @@ export const prepareKreadKit = async (
               return errors.duplicateCategoryInInventory;
             }
 
-            zcf.reallocate(seat, inventorySeat);
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([
+              seat,
+              inventorySeat,
+              { Item1: providedItemAmount },
+              { Item: providedItemAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { Item: wantedItemsAmount },
+              { Item2: wantedItemsAmount },
+            ]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: wantedCharacterAmount },
+              { CharacterKey2: wantedCharacterAmount },
+            ]);
+
+            zcf.atomicRearrange(harden(transfers));
 
             characterRecord.inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
@@ -564,17 +587,23 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            // Swap Inventory Keys
-            seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-            seat.incrementBy({ CharacterKey2: wantedCharacter });
-            inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-            inventorySeat.incrementBy({
-              CharacterKey: providedCharacterKeyAmount,
-            });
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([inventorySeat, seat, { Item: items }]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: wantedCharacter },
+              { CharacterKey2: wantedCharacter },
+            ]);
 
-            // Move items from inventory to user set
-            seat.incrementBy(inventorySeat.decrementBy({ Item: items }));
-            zcf.reallocate(seat, inventorySeat);
+            zcf.atomicRearrange(harden(transfers));
             seat.exit();
 
             characterRecord.inventoryKit.recorder.write(
@@ -826,17 +855,20 @@ export const prepareKreadKit = async (
               X`${errors.insufficientFunds}`,
             );
 
-            // Widthdraw Character from seller seat and deposit into buyer seat
-            buyerSeat.incrementBy(
-              sellerSeat.decrementBy({ Item: itemForSaleAmount }),
-            );
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([
+              sellerSeat,
+              buyerSeat,
+              { Item: itemForSaleAmount },
+            ]);
+            transfers.push([
+              buyerSeat,
+              sellerSeat,
+              { Price: providedMoneyAmount },
+            ]);
 
-            // Widthdraw price from buyer seat and deposit into seller seat
-            sellerSeat.incrementBy(
-              buyerSeat.decrementBy({ Price: providedMoneyAmount }),
-            );
-
-            zcf.reallocate(buyerSeat, sellerSeat);
+            zcf.atomicRearrange(harden(transfers));
 
             buyerSeat.exit();
             sellerSeat.exit();
@@ -906,17 +938,20 @@ export const prepareKreadKit = async (
               X`${errors.insufficientFunds}`,
             );
 
-            // Widthdraw Character from seller seat and deposit into buyer seat
-            buyerSeat.incrementBy(
-              sellerSeat.decrementBy({ Character: characterForSaleAmount }),
-            );
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([
+              sellerSeat,
+              buyerSeat,
+              { Character: characterForSaleAmount },
+            ]);
+            transfers.push([
+              buyerSeat,
+              sellerSeat,
+              { Price: providedMoneyAmount },
+            ]);
 
-            // Widthdraw price from buyer seat and deposit into seller seat
-            sellerSeat.incrementBy(
-              buyerSeat.decrementBy({ Price: providedMoneyAmount }),
-            );
-
-            zcf.reallocate(buyerSeat, sellerSeat);
+            zcf.atomicRearrange(harden(transfers));
 
             buyerSeat.exit();
             sellerSeat.exit();

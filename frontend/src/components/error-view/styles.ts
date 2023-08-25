@@ -81,10 +81,23 @@ export const ArrowBack = styled(ArrowUpRightIcon)`
 `;
 
 export const KreadContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
   ${KreadIcon} {
-    padding-top: 40px;
-    padding-left: 40px;
     width: 100px;
     height: 24px;
+    text-align: center;
+    flex: 1;
+    background: ${color.white};
   }
+`;
+
+export const KreadDevelopmentContainer = styled.div`
+  flex: 0;
+  display: flex;
+  justify-items: center;
+  align-items: center;
 `;

@@ -5,10 +5,10 @@ import { Loading } from "../../assets";
 
 const spin = keyframes`
   0% {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 `;
 
@@ -68,6 +68,13 @@ export const LoadingPageContainer = styled.div<SpinnerProps>`
 interface AnimationProps {
   iteration?: number;
 }
+
+export const LoadingDevMode = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 40px;
+`;
 
 export const LogoWrap = styled.div<AnimationProps>`
   ${({ iteration }): string => `
