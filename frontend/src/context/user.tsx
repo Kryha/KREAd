@@ -11,6 +11,8 @@ import { AGORIC_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 import { useWalletState } from "./wallet";
 import { useAgoricState } from "./agoric";
+import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
+import { extendCharacters } from "../service/character-actions";
 
 export interface UserContext {
   characters: ExtendedCharacter[];
@@ -89,6 +91,7 @@ const DispatchContext = createContext<UserDispatch | undefined>(undefined);
 const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
   switch (action.type) {
     case "SET_CHARACTERS": {
+      console.log(action.payload)
       return { ...state, characters: action.payload, fetched: true };
     }
 
@@ -150,34 +153,37 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   const agoric = useAgoricState();
 
   const kreadPublicFacet = agoric.contracts.kread.publicFacet;
-  const charactersInWallet = useMemo(() => (wallet.character ? wallet.character.value : []), [wallet.character]);
-  const itemsInWallet = useMemo(() => (wallet.item ? wallet.item.value : []), [wallet.item]);
+  const charactersInWallet = useMemo(() => (wallet.character ? wallet.character : []), [wallet.character]);
+  const itemsInWallet = useMemo(() => (wallet.item ? wallet.item : []), [wallet.item]);
 
+  console.log(charactersInWallet, itemsInWallet);
   useEffect(() => {
-    const parseInventoryUpdate = (value: { character: string; inventory: ItemBackend[] }) => {
-      console.count("🎒 LOADING INVENTORY CHANGE 🎒");
-      const { character: characterName, inventory } = value;
-      userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: inventory, characterName });
-    };
+    // const parseInventoryUpdate = (value: { character: string; inventory: ItemBackend[] }) => {
+    //   console.count("🎒 LOADING INVENTORY CHANGE 🎒");
 
-    const processInventory = async (characterName: string) => {
-      if (userState.processed.includes(characterName)) {
-        return;
-      }
+    //   console.log(value)
+    //   const { character: characterName, inventory } = value;
+    //   userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: inventory, characterName });
+    // };
 
-      // Fetch inventory once
-      const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(characterName);
-      userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: equippedItems, characterName });
+    // const processInventory = async (characterName: string) => {
+    //   if (userState.processed.includes(characterName)) {
+    //     return;
+    //   }
 
-      const leader = makeLeader(AGORIC_RPC);
-      const castingSpec = makeCastingSpec(`${STORAGE_NODE_SPEC_INVENTORY}-${characterName}`);
-      const follower = makeFollower(castingSpec, leader);
+    //   // Fetch inventory once
+    //   // const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(characterName);
+    //   userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: equippedItems, characterName });
 
-      // Iterate over kread's storageNode follower on local-devnet
-      for await (const { value } of iterateLatest(follower)) {
-        parseInventoryUpdate(value.value.items);
-      }
-    };
+    //   const leader = makeLeader(AGORIC_RPC);
+    //   const castingSpec = makeCastingSpec(`${STORAGE_NODE_SPEC_INVENTORY}-${characterName}`);
+    //   const follower = makeFollower(castingSpec, leader);
+
+    //   // Iterate over kread's storageNode follower on local-devnet
+    //   for await (const { value } of iterateLatest(follower)) {
+    //     parseInventoryUpdate(value.value.items);
+    //   }
+    // };
 
     const processPurseChanges = async () => {
       console.count("👜 PROCESSING PURSE CHANGE");
@@ -219,27 +225,30 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       // Map characters to the corresponding inventory in the contract
       const extendedCharacters = await Promise.all(
         charactersToProcess.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
-          const activityHistory = await E(kreadPublicFacet).getCharacterHistory(character.name);
-          const activity = activityHistory.map((event: ItemActivityEventBackend) => ({
-            type: event.type,
-            to: "unknown",
-            date: event.timestamp,
-          }));
+          // const activityHistory = await E(kreadPublicFacet).getCharacterHistory(character.name);
+          // const activity = activityHistory.map((event: ItemActivityEventBackend) => ({
+          //   type: event.type,
+          //   to: "unknown",
+          //   date: event.timestamp,
+          // }));
 
           const equipped: { [key: string]: Item | undefined } = {};
-          const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(character.name);
-          const frontendEquippedItems = mediate.items.toFront(equippedItems);
+          // const inventoryFetchResult = await fetchFromVStorage(agoric.chainStorageWatcher.marshaller, `data/published.kread.inventory-${character.name}`);
+          const extendedCharacter = await extendCharacters([character], agoric.chainStorageWatcher.marshaller);
+          console.log(extendedCharacter);
+
+          const frontendEquippedItems = extendedCharacter.equippedItems; //mediate.items.toFront(equippedItems);
 
           equippedCharacterItems.push(...frontendEquippedItems);
           itemCategories.forEach((category) => {
             equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
           });
-          processInventory(character.name);
+          // processInventory(character.name);
 
           return {
             nft: character,
             equippedItems: equipped,
-            activity,
+            // activity,
           };
         })
       );
@@ -250,12 +259,11 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
     };
 
-    if (kreadPublicFacet) {
-      processPurseChanges().catch((err) => {
-        console.error("got watchNotifiers err", err);
-      });
-      userStateDispatch({ type: "SET_FETCHED", payload: true });
-    }
+
+    processPurseChanges().catch((err) => {
+      console.error("got watchNotifiers err", err);
+    });
+    userStateDispatch({ type: "SET_FETCHED", payload: true });
   }, [kreadPublicFacet, charactersInWallet, itemsInWallet, userState.processed]);
 
   return (

@@ -48,7 +48,6 @@ export const TestServiceUI = () => {
   };
 
   const mintCharacterAddOffer = async () => {
-    console.log("minting character")
     const instance = service.contracts.kread.instance;
     const charBrand = service.tokenInfo.character.brand;
 
@@ -59,7 +58,9 @@ export const TestServiceUI = () => {
         characterBrand: charBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => console.log("we done yoooo")
+      callback: async () => {
+        console.info("MintCharacter call settled");
+      }
     });
   };
 
@@ -79,7 +80,9 @@ export const TestServiceUI = () => {
         itemBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => console.log("unequippeddddd yo")
+      callback: async () => {
+        console.info("Unequip call settled");
+      }
     });
   };
 
@@ -95,15 +98,17 @@ export const TestServiceUI = () => {
         characterBrand: charBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => console.log("unequippeddddd yo")
+      callback: async () => {
+        console.info("UnequipAll call settled");
+      }
     })
     
   };
 
   const equipItemAddOffer = async () => {
-    const instance = service.contracts.kread.instance;
+    const kreadInstance = service.contracts.kread.instance;
 
-    const charBrand = service.tokenInfo.character.brand;
+    const characterBrand = service.tokenInfo.character.brand;
     const character = wallet.character[0];
 
     const itemBrand = service.tokenInfo.item.brand;
@@ -113,12 +118,14 @@ export const TestServiceUI = () => {
       character,
       item,
       service: {
-        kreadInstance: instance,
-        characterBrand: charBrand,
+        kreadInstance,
+        characterBrand,
         itemBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => console.log("equippeddddd yo")
+      callback: async () => {
+        console.info("Equip call settled");
+      }
     })
   };
 
@@ -142,7 +149,9 @@ export const TestServiceUI = () => {
         itemBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => console.log("unequippeddddd yo")
+      callback: async () => {
+        console.info("Swap call settled");
+      }
     })
   };
 
@@ -160,7 +169,9 @@ export const TestServiceUI = () => {
         makeOffer: service.walletConnection.makeOffer,
         istBrand: service.tokenInfo.ist
       },
-      callback: async () => console.log("SELLCHARACTER ADD OFFER")
+      callback: async () => {
+        console.info("SellCharacter call settled");
+      }
     })
   };
 
@@ -179,13 +190,14 @@ export const TestServiceUI = () => {
         makeOffer: service.walletConnection.makeOffer,
         istBrand,
       },
-      callback: async () => console.log("SELLCHARACTER ADD OFFER")
+      callback: async () => {
+        console.info("BuyCharacter call settled");
+      }
     })
   };
 
   const sellItemAddOffer = async () => {
     const instance = service.contracts.kread.instance;
-
     const itemBrand = service.tokenInfo.item.brand;
     const item = wallet.item[0];
 
@@ -198,7 +210,9 @@ export const TestServiceUI = () => {
         makeOffer: service.walletConnection.makeOffer,
         istBrand: service.tokenInfo.ist
       },
-      callback: async () => console.log("SELLCHARACTER ADD OFFER SUCCESS")
+      callback: async () => {
+        console.info("SellItem call settled");
+      }
     })
   };
 
@@ -214,10 +228,12 @@ export const TestServiceUI = () => {
       service: {
         kreadInstance: instance,
         itemBrand,
+        istBrand,
         makeOffer: service.walletConnection.makeOffer,
-        istBrand
       },
-      callback: async () => console.log("BUYCHARACTER ADD OFFER SUCCESS")
+      callback: async () => {
+        console.info("BuyItem call settled");
+      }
     })
   };
 

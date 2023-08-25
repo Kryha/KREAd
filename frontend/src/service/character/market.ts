@@ -1,5 +1,5 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, Item } from "../../interfaces";
+import { Character, Item, ItemBackend } from "../../interfaces";
 
 interface SellCharacter {
     character: Character;
@@ -116,7 +116,7 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
     );
   };
   interface SellItem {
-    item: Item;
+    item: ItemBackend;
     price: BigInt;
     service: {
       kreadInstance: any;
@@ -173,7 +173,7 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
     );
   };
   interface BuyItem {
-    item: Item;
+    item: ItemBackend;
     price: BigInt;
     service: {
       kreadInstance: any;

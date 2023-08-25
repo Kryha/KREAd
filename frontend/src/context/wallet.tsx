@@ -8,6 +8,7 @@ import { useAgoricState } from "./agoric";
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
 import { CHARACTER_IDENTIFIER, IST_IDENTIFIER } from "../constants";
 import { watchPursesNonVbank } from "../service/storage-node/watch-general";
+import { useUserStateDispatch } from "./user";
 
 const { brandBoardIds } = dappConstants;
 export interface WalletContext {
@@ -32,6 +33,7 @@ type ProviderProps = Omit<React.ProviderProps<WalletContext>, "value">;
 
 export const WalletContextProvider = (props: ProviderProps): React.ReactElement => {
   const [walletState, walletDispatch] = useState<WalletContext>(initialState);
+  // const userDispatch = useUserStateDispatch();
   const agoric = useAgoricState();
   const pursesNotifier = agoric.walletConnection.pursesNotifier;
   const chainStorageWatcher = agoric.chainStorageWatcher;
@@ -55,12 +57,23 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       const itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i) => i[0]);
       const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;
 
+      console.log({
+        token: tokenWallet,
+        character: characterWallet,
+        item: itemWallet,
+      })
       walletDispatch((prevState) => ({
         ...prevState,
         token: tokenWallet,
         character: characterWallet,
         item: itemWallet,
       }));
+
+      // userDispatch({
+      //   type: "SET_CHARACTERS",
+      //   payload: characterWallet,
+      // })
+      
     };
     const updateStateVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");

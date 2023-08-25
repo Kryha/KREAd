@@ -11,18 +11,20 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
 import { buyCharacter, extendCharacters, mintNfts, sellCharacter } from "./character-actions";
-import { useAgoricContext } from "../context/agoric";
+import { useAgoricContext, useAgoricState } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
+import { mintCharacter } from "./character/mint";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
   const userStateDispatch = useUserStateDispatch();
   useEffect(() => {
     if (!selected) {
+      console.log("setting selected", characters)
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
   }, [userStateDispatch, characters, selected]);
@@ -160,11 +162,22 @@ export const useCharactersMarketPages = (page: number, filters?: CharactersMarke
 
 // TODO: Add error management
 export const useCreateCharacter = () => {
-  const [agoricState] = useAgoricContext();
-  const wallet = useWalletState();
+  const service = useAgoricState();
+  const instance = service.contracts.kread.instance;
+  const charBrand = service.tokenInfo.character.brand;
   return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
-    await mintNfts(agoricState, wallet, body.name);
+    await mintCharacter({
+      name: body.name,
+      service: {
+        kreadInstance: instance,
+        characterBrand: charBrand,
+        makeOffer: service.walletConnection.makeOffer,
+      },
+      callback: async () => {
+        console.info("MintCharacter call settled");
+      }
+    });
   });
 };
 

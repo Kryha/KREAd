@@ -25,13 +25,14 @@ import WalletBridge from "../../context/wallet-bridge";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
-  console.log("LANDINGs");
   const [openTab, setOpenTab] = useState(false);
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const [showDetail, setShowDetail] = useState(false);
   const [closeDetail, setCloseDetail] = useState(false);
   const [showToast, setShowToast] = useState(false);
-
+  
+  console.log(selectedCharacter)
+  console.log(isLoading);
   const sell = (characterId: string) => {
     navigate(`${routes.sellCharacter}/${characterId}`);
   };
