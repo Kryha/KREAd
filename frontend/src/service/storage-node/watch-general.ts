@@ -66,7 +66,7 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
   );
 };
 
-export const watchPursesNonVbank = (chainStorageWatcher: any, walletAddress: string, updateState: any) => {
+export const watchWalletVstorage = (chainStorageWatcher: any, walletAddress: string, updateStatePurses: any, updateStateOffers: any) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = `published.wallet.${walletAddress}.current`;
 
@@ -78,7 +78,8 @@ export const watchPursesNonVbank = (chainStorageWatcher: any, walletAddress: str
         console.warn(`${path} returned undefined`);
         return;
       }
-      updateState(value.purses);
+      updateStateOffers(value.liveOffers);
+      updateStatePurses(value.purses);
     },
     (log) => {
       console.error("Error watching vbank assets", log);

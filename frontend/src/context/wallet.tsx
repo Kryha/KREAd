@@ -7,7 +7,7 @@ import { useAgoricState } from "./agoric";
 
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
 import { CHARACTER_IDENTIFIER, IST_IDENTIFIER } from "../constants";
-import { watchPursesNonVbank } from "../service/storage-node/watch-general";
+import { watchWalletVstorage } from "../service/storage-node/watch-general";
 import { useUserStateDispatch } from "./user";
 
 const { brandBoardIds } = dappConstants;
@@ -16,6 +16,8 @@ export interface WalletContext {
   money: any;
   character: any;
   item: any;
+  itemProposals: { give: Object; want: Object }[];
+  characterProposals: { give: Object; want: Object }[];
   fetched: boolean;
 }
 
@@ -24,6 +26,8 @@ const initialState: WalletContext = {
   money: undefined,
   character: undefined,
   item: undefined,
+  itemProposals: [],
+  characterProposals: [],
   fetched: false,
 };
 
@@ -61,7 +65,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         token: tokenWallet,
         character: characterWallet,
         item: itemWallet,
-      })
+      });
       walletDispatch((prevState) => ({
         ...prevState,
         token: tokenWallet,
@@ -73,7 +77,6 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       //   type: "SET_CHARACTERS",
       //   payload: characterWallet,
       // })
-      
     };
     const updateStateVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");
@@ -85,6 +88,30 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       walletDispatch((prevState) => ({
         ...prevState,
         money: moneyWallet,
+      }));
+    };
+
+    const updateStateOffers = async (offers: any) => {
+      console.count("💾 LOADING OFFER CHANGE 💾");
+      const itemProposals: { give: Object; want: Object }[] = [];
+      const characterProposals: { give: Object; want: Object }[] = [];
+      offers.forEach((offer: any) => {
+        const {
+          proposal: { give, want },
+          invitationSpec,
+        } = offer[1];
+        console.log(22222, invitationSpec, agoric.contracts.kread.instance, invitationSpec === agoric.contracts.kread.instance);
+        if (give.Item || want.Item) {
+          itemProposals.push({ want, give });
+        } else if (give.Character || want.Character) {
+          characterProposals.push({ want, give });
+        }
+      });
+
+      walletDispatch((prevState) => ({
+        ...prevState,
+        itemProposals,
+        characterProposals,
       }));
     };
 
@@ -107,7 +134,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     }
 
     if (!walletState.fetched && chainStorageWatcher) {
-      watchPursesNonVbank(chainStorageWatcher, walletAddress, updateStateNonVbank);
+      watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
     }
 
     return () => {
