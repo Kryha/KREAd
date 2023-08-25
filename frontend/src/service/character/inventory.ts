@@ -2,7 +2,7 @@ import { makeCopyBag } from "@agoric/store";
 import { Character, Item } from "../../interfaces";
 
 interface UnequipItem {
-  item: Item;
+  item: any;
   character: Character;
   service: {
     kreadInstance: any;
@@ -115,7 +115,7 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
 };
 
 interface EquipItem {
-  item: Item;
+  item: any;
   character: Character;
   service: {
     kreadInstance: any;
