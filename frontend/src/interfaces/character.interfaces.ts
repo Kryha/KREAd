@@ -30,7 +30,7 @@ export interface CharacterItems {
   clothing?: Item;
 }
 
-export interface Detail {
+export interface Details {
   boardId: string;
   brand: string;
   artist: string;
@@ -46,7 +46,7 @@ export interface Character {
   description: string;
   image: string;
   level: number;
-  detail: Detail;
+  details: Details;
   projectDescription: string;
   itemActivity: ActivityEvent[];
 }
