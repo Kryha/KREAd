@@ -28,7 +28,6 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   const { isMockData } = useDataMode();
   const [marketState, marketDispatch] = useState(isMockData ? initialMockState : initialState);
   const agoric = useAgoricState();
-  const kreadPublicFacet = agoric.contracts.kread.publicFacet;
 
   useEffect(() => {
     const parseItemMarketUpdate = async (itemsInMarket: KreadItemInMarket[]) => {
@@ -37,16 +36,16 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
     };
     const formatMarketEntry = async (marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
       const item = {
-        id: Number(marketEntry.id),
-        item: marketEntry.item,
+        id: marketEntry.id.toString(),
+        item: { ...marketEntry.object, id: marketEntry.object.id.toString() },
         sell: {
           price: marketEntry.askingPrice.value,
         },
       };
 
-      const parsedItem = mediate.itemsMarket.toFront([item]);
+      // const parsedItem = mediate.itemsMarket.toFront([item]);
 
-      return parsedItem[0];
+      return item;
     };
 
     if (agoric.chainStorageWatcher) {

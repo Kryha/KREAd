@@ -39,6 +39,9 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     };
 
+    console.log("SELL CHARACTER CALL");
+    console.log(offerConfig.spec, offerConfig.proposal)
+    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,
@@ -97,6 +100,9 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     };
 
+    console.log("BUY CHARACTER CALL");
+    console.log(offerConfig.spec, offerConfig.proposal)
+    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,
@@ -155,6 +161,9 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     });
 
+    console.log("SELL ITEM CALL");
+    console.log(offerConfig.spec, offerConfig.proposal)
+    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,
@@ -211,6 +220,9 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     };
 
+    console.log("BUY ITEM CALL");
+    console.log(offerConfig.spec, offerConfig.proposal)
+    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,

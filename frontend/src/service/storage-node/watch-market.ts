@@ -36,7 +36,6 @@ export const watchCharacterMarket = (chainStorageWatcher: any, parseCharacterMar
         console.warn(`${path} returned undefined`);
         return;
       }
-      console.log(value);
       await parseCharacterMarketUpdate(value, marshaller);
     },
     (log) => {

@@ -42,7 +42,7 @@ export interface KreadItemInMarket {
     value: bigint;
     brand: any;
   };
-  item: ItemBackend;
+  object: ItemBackend;
 }
 
 export interface ItemInMarket {

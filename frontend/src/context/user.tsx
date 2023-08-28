@@ -156,7 +156,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   const charactersInWallet = useMemo(() => (wallet.character ? wallet.character : []), [wallet.character]);
   const itemsInWallet = useMemo(() => (wallet.item ? wallet.item : []), [wallet.item]);
 
-  console.log(charactersInWallet, itemsInWallet);
+  // console.log(charactersInWallet, itemsInWallet, wallet);
   useEffect(() => {
     // const parseInventoryUpdate = (value: { character: string; inventory: ItemBackend[] }) => {
     //   console.count("🎒 LOADING INVENTORY CHANGE 🎒");

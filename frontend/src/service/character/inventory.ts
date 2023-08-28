@@ -47,6 +47,9 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     },
   };
 
+  console.log("UNEQUIP ITEM CALL");
+  console.log(offerConfig.spec, offerConfig.proposal)
+
   service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
@@ -100,6 +103,7 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
     },
   };
 
+  
   service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
@@ -157,6 +161,9 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
       give,
     },
   };
+
+  console.log("EQUIP ITEM CALL");
+  console.log(offerConfig.spec, offerConfig.proposal)
 
   service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {

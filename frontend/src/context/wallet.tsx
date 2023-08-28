@@ -58,25 +58,23 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       const characterWallet = newCharacterPurses[newCharacterPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
       //FIXME: this is not going to work when a users has more than 1 item that is the same (then it will be 2n)
       // Consider creating an array that fills an array n amount of times based onthe amount the user owns
-      const itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
+      let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
       const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;
 
-      const itemsAdjustedIdType = itemWallet.map((item: any) => ({ ...item, id: Number(item.id) }));
+      if(itemWallet){
+        itemWallet = itemWallet.map((item: any) => ({ ...item, id: Number(item.id) }));
+      }
 
       walletDispatch((prevState) => ({
         ...prevState,
         token: tokenWallet,
         character: characterWallet,
-        item: itemsAdjustedIdType,
+        item: itemWallet,
       }));
-
-      // userDispatch({
-      //   type: "SET_CHARACTERS",
-      //   payload: characterWallet,
-      // })
     };
     const updateStateVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");
+      if(!purses) return;
 
       // Load Purses
       const newMoneyPurses = purses.filter(({ brandPetname }: any) => brandPetname === IST_IDENTIFIER);

@@ -672,6 +672,9 @@ export const prepareKreadKit = async (
             assert(sellRecord, X`${errors.itemNotFound(item.id)}`);
             const sellerSeat = sellRecord.seat;
 
+            //TODO: remove log
+            console.log(sellRecord, wantedItemAmount);
+
             // Inspect Price keyword from buyer seat
             const { Price: providedMoneyAmount } = give;
             const { Item: itemForSaleAmount } = sellerSeat.getProposal().give;
@@ -685,11 +688,12 @@ export const prepareKreadKit = async (
             );
 
             const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
+            const paymentBrand = itemForSalePrice.brand;
             assert(
               AmountMath.isGTE(
                 providedMoneyAmount,
                 itemForSalePrice,
-                paymentFTBrand,
+                paymentBrand,
               ),
               X`${errors.insufficientFunds}`,
             );
@@ -750,11 +754,13 @@ export const prepareKreadKit = async (
 
             const { Price: characterForSalePrice } =
               sellerSeat.getProposal().want;
+            const paymentBrand = characterForSalePrice.brand;
+
             assert(
               AmountMath.isGTE(
                 providedMoneyAmount,
                 characterForSalePrice,
-                paymentFTBrand,
+                paymentBrand,
               ),
               X`${errors.insufficientFunds}`,
             );

@@ -173,14 +173,22 @@ export const useBuyItem = (itemId: string) => {
     try {
       const found = items.find((item) => item.id === itemId);
       if (!found) return;
-      const itemToBuy = {...found, id: Number(found.id)}
-      const mediated = mediate.itemsMarket.toBack([found])[0];
+      const itemToBuy = { ...found, id: Number(found.id), item: { ...found.item, id: Number(found.item.id) }};
       
       setIsLoading(true);
       
-      return await marketService.buyItem({
+      console.log({
         item: itemToBuy,
-        price: BigInt(mediated.sell.price),
+        price: BigInt(itemToBuy.sell.price),
+        service: {
+          kreadInstance: instance,
+          itemBrand,
+          makeOffer: service.walletConnection.makeOffer,
+          istBrand
+    }});
+      return await marketService.buyItem({
+        item: itemToBuy.item,
+        price: BigInt(itemToBuy.sell.price),
         service: {
           kreadInstance: instance,
           itemBrand,
@@ -189,6 +197,7 @@ export const useBuyItem = (itemId: string) => {
         },
         callback: async () => {
           console.info("BuyItem call settled");
+          setIsLoading(false);
         }
       })
     } catch (error) {
