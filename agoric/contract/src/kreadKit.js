@@ -3,14 +3,33 @@
 import '@agoric/zoe/exported';
 
 import { assert, details as X } from '@agoric/assert';
-import { AmountMath } from '@agoric/ertp';
-import { makeScalarBigMapStore, prepareExoClassKit } from '@agoric/vat-data';
+import { AmountMath, AmountShape, BrandShape } from '@agoric/ertp';
+import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
 import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
-import { makeCharacterNftObjs, makeStorageNodeRecorderKits } from './utils.js';
+import {
+  makeCharacterNftObjs,
+  makeStorageNodeRecorderKits,
+  makeCopyBagAmountShape,
+} from './utils.js';
 
 import { text } from './text.js';
 import { makeCopyBag } from '@agoric/store';
+import {
+  CharacterI,
+  HelperI,
+  ItemI,
+  MarketI,
+  PublicI,
+  CreatorI,
+  CharacterGuardBagShape,
+  ItemGuard,
+  ItemGuardBagShape,
+  KreadInfoGuard,
+  CharacterRecorderGuard,
+  ItemRecorderGuard,
+  MarketRecorderGuard,
+} from './type-guards.js';
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
  * Utilizes capabilities from the prepare function suchs as mints
@@ -65,12 +84,32 @@ export const prepareKreadKit = async (
       storageNode,
       makeRecorderKit,
       storageNodePaths,
+      {
+        info: KreadInfoGuard,
+        characterKit: CharacterRecorderGuard,
+        itemKit: ItemRecorderGuard,
+        marketCharacterKit: MarketRecorderGuard,
+        marketItemKit: MarketRecorderGuard,
+      },
     );
+
+  const characterShape = makeCopyBagAmountShape(
+    characterBrand,
+    CharacterGuardBagShape,
+  );
+  const itemShape = makeCopyBagAmountShape(itemBrand, ItemGuardBagShape);
 
   const makeKreadKitInternal = prepareExoClassKit(
     baggage,
     'KreadKit',
-    undefined, // Currently undefined until we implement the M pattern correctly
+    {
+      helper: HelperI,
+      character: CharacterI,
+      item: ItemI,
+      market: MarketI,
+      public: PublicI,
+      creator: CreatorI,
+    },
     () => {
       return harden({
         character: {
@@ -120,7 +159,7 @@ export const prepareKreadKit = async (
         },
         async makeInventoryRecorderKit(path) {
           const node = await E(storageNode).makeChildNode(`inventory-${path}`);
-          return makeRecorderKit(node);
+          return makeRecorderKit(node, M.arrayOf([ItemGuard, M.nat()]));
         },
         mint() {
           const handler = async (seat) => {
@@ -128,17 +167,6 @@ export const prepareKreadKit = async (
             const { character: characterState } = this.state;
 
             const { want } = seat.getProposal();
-
-            // TODO: Bring back validate format when we validate more
-            if (!want.Asset.value.payload[0][0]) {
-              seat.clear();
-              seat.fail();
-              return harden({ message: errors.noWantInOffer });
-            } else if (!want.Asset.value.payload[0][0].name) {
-              seat.clear();
-              seat.fail();
-              return harden({ message: errors.noNameArg });
-            }
 
             const newCharacterName = want.Asset.value.payload[0][0].name;
 
@@ -198,6 +226,7 @@ export const prepareKreadKit = async (
 
             characterKit.recorder.write(character);
 
+            // TODO: consider refactoring what we put in the inventory node
             inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
             );
@@ -206,7 +235,19 @@ export const prepareKreadKit = async (
 
             return text.mintCharacterReturn;
           };
-          return zcf.makeInvitation(handler, 'mintCharacterNfts');
+          return zcf.makeInvitation(
+            handler,
+            'mintCharacterNfts',
+            undefined,
+            M.splitRecord({
+              want: {
+                Asset: makeCopyBagAmountShape(
+                  characterBrand,
+                  M.bagOf({ name: M.string() }),
+                ),
+              },
+            }),
+          );
         },
         equip() {
           const handler = (seat) => {
@@ -241,27 +282,19 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            // Widthdraw Item and Key from user seat
-            seat.decrementBy({ Item: providedItemAmount });
-            seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-
-            // Deposit Item and Key to inventory seat
-            inventorySeat.incrementBy({ Item: providedItemAmount });
-            inventorySeat.incrementBy({
-              CharacterKey: providedCharacterKeyAmount,
-            });
-
-            // Widthdraw Key from character seat and Deposit into user seat
-            inventorySeat.decrementBy({ CharacterKey: inventoryCharacterKey });
-            seat.incrementBy({ CharacterKey2: inventoryCharacterKey });
-
-            // Ensure staged inventory STATE is valid before reallocation
-            const updatedInventory = inventorySeat
-              .getStagedAllocation()
+            // Ensure inventory STATE will be valid before reallocation
+            let inventory = inventorySeat
+              .getCurrentAllocation()
               .Item.value.payload.map(([value, supply]) => value);
+            if (providedItemAmount.value.payload[0])
+              inventory = [
+                ...inventory,
+                providedItemAmount.value.payload[0][0],
+              ];
+
             try {
               // @ts-ignore
-              characterFacet.validateInventoryState(updatedInventory);
+              characterFacet.validateInventoryState(inventory);
             } catch (e) {
               inventorySeat.clear();
               seat.clear();
@@ -269,7 +302,30 @@ export const prepareKreadKit = async (
               return `${errors.duplicateCategoryInInventory}`;
             }
 
-            zcf.reallocate(seat, inventorySeat);
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([seat, inventorySeat, { Item: providedItemAmount }]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: inventoryCharacterKey },
+              { CharacterKey2: inventoryCharacterKey },
+            ]);
+
+            try {
+              zcf.atomicRearrange(harden(transfers));
+            } catch (e) {
+              inventorySeat.clear();
+              seat.clear();
+              seat.fail(e);
+              return;
+            }
 
             characterRecord.inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
@@ -280,11 +336,23 @@ export const prepareKreadKit = async (
             return text.equipReturn;
           };
 
-          return zcf.makeInvitation(handler, 'addToInventory');
+          return zcf.makeInvitation(
+            handler,
+            'addToInventory',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+                Item: M.splitRecord(itemShape),
+              },
+              want: {
+                CharacterKey2: M.splitRecord(characterShape),
+              },
+            }),
+          );
         },
         unequip() {
           const handler = async (seat) => {
-            const { character: characterFacet } = this.facets;
             const { character: characterState } = this.state;
 
             // Retrieve Character key from user seat
@@ -303,7 +371,7 @@ export const prepareKreadKit = async (
             const { want } = seat.getProposal();
             const { Item: requestedItems, CharacterKey2: wantedCharacter } =
               want;
-            assert(requestedItems, X`${errors.noItemsRequested}`);
+
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
             assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
@@ -318,46 +386,29 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            try {
-              // Inventory Key Swap
-              seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-              seat.incrementBy({ CharacterKey2: wantedCharacter });
-              inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-              inventorySeat.incrementBy({
-                CharacterKey: providedCharacterKeyAmount,
-              });
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([inventorySeat, seat, { Item: requestedItems }]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: wantedCharacter },
+              { CharacterKey2: wantedCharacter },
+            ]);
 
-              // Deposit item from inventory to user seat
-              seat.incrementBy(
-                inventorySeat.decrementBy({ Item: requestedItems }),
-              );
+            try {
+              zcf.atomicRearrange(harden(transfers));
             } catch (e) {
               inventorySeat.clear();
               seat.clear();
               seat.fail(e);
               return `Swap assets error: ${e}`;
-            }
-
-            // Ensure staged inventory STATE is valid before reallocation
-            const updatedInventory = inventorySeat
-              .getStagedAllocation()
-              .Item.value.payload.map(([value, supply]) => value);
-            try {
-              // @ts-ignore
-              characterFacet.validateInventoryState(updatedInventory);
-            } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return `${errors.duplicateCategoryInInventory}`;
-            }
-
-            try {
-              // Refactor to not use reallocate
-              zcf.reallocate(seat, inventorySeat);
-            } catch (e) {
-              seat.fail(e);
-              return `Reallocation error: ${e}`;
             }
 
             characterRecord.inventoryKit.recorder.write(
@@ -368,7 +419,20 @@ export const prepareKreadKit = async (
             return text.unequipReturn;
           };
 
-          return zcf.makeInvitation(handler, 'removeFromInventory');
+          return zcf.makeInvitation(
+            handler,
+            'removeFromInventory',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+              },
+              want: {
+                CharacterKey2: M.splitRecord(characterShape),
+                Item: M.splitRecord(itemShape),
+              },
+            }),
+          );
         },
         swap() {
           const handler = (seat) => {
@@ -408,27 +472,26 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            // Decrement amounts
-            seat.decrementBy({ Item1: providedItemAmount });
-            seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-            inventorySeat.decrementBy({ Item: wantedItemsAmount });
-            inventorySeat.decrementBy({ CharacterKey: wantedCharacterAmount });
-
-            // Increment amounts
-            seat.incrementBy({ CharacterKey2: wantedCharacterAmount });
-            seat.incrementBy({ Item2: wantedItemsAmount });
-            inventorySeat.incrementBy({ Item: providedItemAmount });
-            inventorySeat.incrementBy({
-              CharacterKey: providedCharacterKeyAmount,
-            });
-
-            // Ensure staged inventory STATE is valid before reallocation
-            const updatedInventory = inventorySeat
-              .getStagedAllocation()
+            // Ensure inventory STATE is valid before reallocation
+            let inventory = inventorySeat
+              .getCurrentAllocation()
               .Item.value.payload.map(([value, supply]) => value);
+
+            if (wantedItemsAmount.value.payload[0])
+              inventory = inventory.filter(
+                (item) =>
+                  item.category !==
+                  wantedItemsAmount.value.payload[0][0].category,
+              );
+            if (providedItemAmount.value.payload[0])
+              inventory = [
+                ...inventory,
+                providedItemAmount.value.payload[0][0],
+              ];
+
             try {
               // @ts-ignore
-              characterFacet.validateInventoryState(updatedInventory);
+              characterFacet.validateInventoryState(inventory);
             } catch (e) {
               inventorySeat.clear();
               seat.clear();
@@ -436,7 +499,34 @@ export const prepareKreadKit = async (
               return errors.duplicateCategoryInInventory;
             }
 
-            zcf.reallocate(seat, inventorySeat);
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([
+              seat,
+              inventorySeat,
+              { Item1: providedItemAmount },
+              { Item: providedItemAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { Item: wantedItemsAmount },
+              { Item2: wantedItemsAmount },
+            ]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: wantedCharacterAmount },
+              { CharacterKey2: wantedCharacterAmount },
+            ]);
+
+            zcf.atomicRearrange(harden(transfers));
 
             characterRecord.inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
@@ -444,7 +534,23 @@ export const prepareKreadKit = async (
             seat.exit();
           };
 
-          return zcf.makeInvitation(handler, 'itemInventorySwap');
+          return zcf.makeInvitation(
+            handler,
+            'itemInventorySwap',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+                Item1: M.splitRecord(itemShape),
+              },
+              want: M.splitRecord(
+                {
+                  CharacterKey2: M.splitRecord(characterShape),
+                },
+                { Item2: M.splitRecord(itemShape) },
+              ),
+            }),
+          );
         },
         unequipAll() {
           const handler = (seat) => {
@@ -481,17 +587,23 @@ export const prepareKreadKit = async (
               X`${errors.inventoryKeyMismatch}`,
             );
 
-            // Swap Inventory Keys
-            seat.decrementBy({ CharacterKey1: providedCharacterKeyAmount });
-            seat.incrementBy({ CharacterKey2: wantedCharacter });
-            inventorySeat.decrementBy({ CharacterKey: wantedCharacter });
-            inventorySeat.incrementBy({
-              CharacterKey: providedCharacterKeyAmount,
-            });
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([inventorySeat, seat, { Item: items }]);
+            transfers.push([
+              seat,
+              inventorySeat,
+              { CharacterKey1: providedCharacterKeyAmount },
+              { CharacterKey: providedCharacterKeyAmount },
+            ]);
+            transfers.push([
+              inventorySeat,
+              seat,
+              { CharacterKey: wantedCharacter },
+              { CharacterKey2: wantedCharacter },
+            ]);
 
-            // Move items from inventory to user set
-            seat.incrementBy(inventorySeat.decrementBy({ Item: items }));
-            zcf.reallocate(seat, inventorySeat);
+            zcf.atomicRearrange(harden(transfers));
             seat.exit();
 
             characterRecord.inventoryKit.recorder.write(
@@ -499,7 +611,19 @@ export const prepareKreadKit = async (
             );
           };
 
-          return zcf.makeInvitation(handler, 'removeAllItemsFromInventory');
+          return zcf.makeInvitation(
+            handler,
+            'removeAllItemsFromInventory',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+              },
+              want: {
+                CharacterKey2: M.splitRecord(characterShape),
+              },
+            }),
+          );
         },
       },
       item: {
@@ -570,7 +694,8 @@ export const prepareKreadKit = async (
 
             seat.exit();
 
-            items.forEach((i) => {
+            items.forEach((j) => {
+              const i = j[0];
               const item = {
                 id: i.id,
                 item: i,
@@ -591,7 +716,16 @@ export const prepareKreadKit = async (
             return text.mintItemReturn;
           };
 
-          return zcf.makeInvitation(handler, 'mintCharacterNfts');
+          return zcf.makeInvitation(
+            handler,
+            'mintItemNfts',
+            undefined,
+            M.splitRecord({
+              want: {
+                Item: M.splitRecord(itemShape),
+              },
+            }),
+          );
         },
       },
       // TODO: figure out a way to handle the sell and buy more agnostic from the type of the amount
@@ -624,7 +758,22 @@ export const prepareKreadKit = async (
             );
           };
 
-          return zcf.makeInvitation(handler, 'Sell Item in KREAd marketplace');
+          return zcf.makeInvitation(
+            handler,
+            'Sell Item in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Item: M.splitRecord(itemShape),
+              },
+              want: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+            }),
+          );
         },
         sellCharacter() {
           const handler = (seat) => {
@@ -657,6 +806,18 @@ export const prepareKreadKit = async (
           return zcf.makeInvitation(
             handler,
             'Sell Character in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Character: M.splitRecord(characterShape),
+              },
+              want: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+            }),
           );
         },
         buyItem() {
@@ -698,17 +859,20 @@ export const prepareKreadKit = async (
               X`${errors.insufficientFunds}`,
             );
 
-            // Widthdraw Character from seller seat and deposit into buyer seat
-            buyerSeat.incrementBy(
-              sellerSeat.decrementBy({ Item: itemForSaleAmount }),
-            );
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([
+              sellerSeat,
+              buyerSeat,
+              { Item: itemForSaleAmount },
+            ]);
+            transfers.push([
+              buyerSeat,
+              sellerSeat,
+              { Price: providedMoneyAmount },
+            ]);
 
-            // Widthdraw price from buyer seat and deposit into seller seat
-            sellerSeat.incrementBy(
-              buyerSeat.decrementBy({ Price: providedMoneyAmount }),
-            );
-
-            zcf.reallocate(buyerSeat, sellerSeat);
+            zcf.atomicRearrange(harden(transfers));
 
             buyerSeat.exit();
             sellerSeat.exit();
@@ -718,7 +882,22 @@ export const prepareKreadKit = async (
               Array.from(market.itemEntries.values()),
             );
           };
-          return zcf.makeInvitation(handler, 'Buy Item in KREAd marketplace');
+          return zcf.makeInvitation(
+            handler,
+            'Buy Item in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+              want: {
+                Item: M.splitRecord(itemShape),
+              },
+            }),
+          );
         },
         buyCharacter() {
           const handler = (buyerSeat) => {
@@ -765,17 +944,20 @@ export const prepareKreadKit = async (
               X`${errors.insufficientFunds}`,
             );
 
-            // Widthdraw Character from seller seat and deposit into buyer seat
-            buyerSeat.incrementBy(
-              sellerSeat.decrementBy({ Character: characterForSaleAmount }),
-            );
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([
+              sellerSeat,
+              buyerSeat,
+              { Character: characterForSaleAmount },
+            ]);
+            transfers.push([
+              buyerSeat,
+              sellerSeat,
+              { Price: providedMoneyAmount },
+            ]);
 
-            // Widthdraw price from buyer seat and deposit into seller seat
-            sellerSeat.incrementBy(
-              buyerSeat.decrementBy({ Price: providedMoneyAmount }),
-            );
-
-            zcf.reallocate(buyerSeat, sellerSeat);
+            zcf.atomicRearrange(harden(transfers));
 
             buyerSeat.exit();
             sellerSeat.exit();
@@ -791,6 +973,18 @@ export const prepareKreadKit = async (
           return zcf.makeInvitation(
             handler,
             'Buy Character in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+              want: {
+                Character: M.splitRecord(characterShape),
+              },
+            }),
           );
         },
         freeTokens() {
