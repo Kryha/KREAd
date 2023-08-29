@@ -52,6 +52,7 @@ export const filterItems = (items: ItemEquip[], { categories, sort, color }: Ite
     );
   }, [categories, sort, color]);
 
+  // TODO: ForSale and isEquipped to be moved from categories to separate filters?
   const isInCategory = (item: ItemEquip, selectedCategories: string[] | undefined) => {
     if (!selectedCategories || selectedCategories.length === 0) return true; // Return true if no categories are selected
 
