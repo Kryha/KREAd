@@ -3,6 +3,7 @@
 import '@agoric/zoe/exported';
 
 import { AssetKind } from '@agoric/ertp';
+import { M } from '@agoric/store';
 import { prepareKreadKit } from './kreadKit.js';
 import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
@@ -12,16 +13,36 @@ import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/record
  * along with its corresponding item inventories and keys.
  * It also allows for equiping and unequiping items to
  * and from the inventory, using a token as access
+ **/
+
+/**
+ * @typedef {import('@agoric/vat-data').Baggage} Baggage
  *
- *
+ * @typedef {import('@agoric/time/src/types').TimerService} TimerService
+ */
+
+/** @type {ContractMeta} */
+export const meta = {
+  privateArgsShape: M.splitRecord({
+    defaultCharacters: M.any(), // TODO: see if these can be typed
+    defaultItems: M.any(), // TODO: see if these can be typed
+    seed: M.number(),
+    chainTimerService: M.eref(M.remotable('TimerService')),
+    powers: {
+      storageNode: M.eref(M.remotable('StorageNode')),
+      marshaller: M.eref(M.remotable('Marshaller')),
+    },
+  }),
+};
+harden(meta);
+
+/**
  * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {ZCF} zcf
  * @param {{
  *   defaultCharacters: object[],
  *   defaultItems: object[],
  *   seed: number
- *   moneyIssuer: Issuer<"nat">
- *   moneyBrand: Brand<"nat">
  *   chainTimerService: TimerService
  *   powers: { storageNode: StorageNode, marshaller: Marshaller }
  * }} privateArgs

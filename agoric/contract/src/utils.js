@@ -2,6 +2,7 @@
 import { assert, details as X } from '@agoric/assert';
 import { makeStoredPublishKit } from '@agoric/notifier';
 import { E } from '@endo/eventual-send';
+import { M } from '@agoric/vat-data';
 import { errors } from './errors.js';
 
 export const sameType = (a, b) => {
@@ -176,9 +177,10 @@ export const makeStorageNodeRecorderKit = async (
   storageNode,
   makeRecorderKit,
   path,
+  typeMatcher,
 ) => {
   const node = await E(storageNode).makeChildNode(path);
-  return makeRecorderKit(node);
+  return makeRecorderKit(node, typeMatcher);
 };
 
 //TODO: fix typing
@@ -186,6 +188,7 @@ export const makeStorageNodeRecorderKits = async (
   storageNode,
   makeRecorderKit,
   paths,
+  typeMatchers,
 ) => {
   const recorderMap = {};
   await Promise.all(
@@ -194,6 +197,7 @@ export const makeStorageNodeRecorderKits = async (
         storageNode,
         makeRecorderKit,
         paths[key],
+        typeMatchers[key],
       );
       recorderMap[key] = recorderKit;
     }),
@@ -201,3 +205,17 @@ export const makeStorageNodeRecorderKits = async (
 
   return recorderMap;
 };
+
+/**
+ * @param {Brand} brand must be a 'nat' brand, not checked
+ * @param {NatValue} [min]
+ */
+export const makeNatAmountShape = (brand, min) =>
+  harden({ brand, value: min ? M.gte(min) : M.nat() });
+
+/**
+ * @param {Brand} brand must be a 'nat' brand, not checked
+
+ */
+export const makeCopyBagAmountShape = (brand, shape) =>
+  harden({ brand, value: shape });

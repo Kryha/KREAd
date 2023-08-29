@@ -19,7 +19,7 @@ const defaultCharacters = [
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
-    detail: {
+    details: {
       boardId: '06553',
       contractAddresss: '0x0177812bsjs7998',
       standard: 'standard',
@@ -36,7 +36,7 @@ const defaultCharacters = [
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
-    detail: {
+    details: {
       boardId: '06553',
       contractAddresss: '0x0177812bsjs7998',
       standard: 'standard',
@@ -54,7 +54,7 @@ const defaultCharacters = [
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
-    detail: {
+    details: {
       boardId: '06553',
       contractAddresss: '0x0177812bsjs7998',
       standard: 'standard',
@@ -72,7 +72,7 @@ const defaultCharacters = [
     description:
       'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
     level: 1,
-    detail: {
+    details: {
       boardId: '06553',
       contractAddresss: '0x0177812bsjs7998',
       standard: 'standard',
@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-4638280b02bb446debc4999e965f7623a468669200b83e6b89f73fee85ffe211092774de40b0d30442483ee84fe7f5d6fdd5d0218c36db24e7e7bc029316ff02',
+    'b1-58c49ffa0b38a8d7fe7fdf196b8d13d74a0acfde5d579b00fb05cdc9c404789c3d9a4b6a7ae1fa3ff160372a310ab720288d33b575e0bc1bc45f374e6b20ca61',
 };
 
 const fail = (reason) => {

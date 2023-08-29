@@ -3,14 +3,33 @@
 import '@agoric/zoe/exported';
 
 import { assert, details as X } from '@agoric/assert';
-import { AmountMath } from '@agoric/ertp';
-import { makeScalarBigMapStore, prepareExoClassKit } from '@agoric/vat-data';
+import { AmountMath, AmountShape, BrandShape } from '@agoric/ertp';
+import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
 import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
-import { makeCharacterNftObjs, makeStorageNodeRecorderKits } from './utils.js';
+import {
+  makeCharacterNftObjs,
+  makeStorageNodeRecorderKits,
+  makeCopyBagAmountShape,
+} from './utils.js';
 
 import { text } from './text.js';
 import { makeCopyBag } from '@agoric/store';
+import {
+  CharacterI,
+  HelperI,
+  ItemI,
+  MarketI,
+  PublicI,
+  CreatorI,
+  CharacterGuardBagShape,
+  ItemGuard,
+  ItemGuardBagShape,
+  KreadInfoGuard,
+  CharacterRecorderGuard,
+  ItemRecorderGuard,
+  MarketRecorderGuard,
+} from './type-guards.js';
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
  * Utilizes capabilities from the prepare function suchs as mints
@@ -65,12 +84,32 @@ export const prepareKreadKit = async (
       storageNode,
       makeRecorderKit,
       storageNodePaths,
+      {
+        info: KreadInfoGuard,
+        characterKit: CharacterRecorderGuard,
+        itemKit: ItemRecorderGuard,
+        marketCharacterKit: MarketRecorderGuard,
+        marketItemKit: MarketRecorderGuard,
+      },
     );
+
+  const characterShape = makeCopyBagAmountShape(
+    characterBrand,
+    CharacterGuardBagShape,
+  );
+  const itemShape = makeCopyBagAmountShape(itemBrand, ItemGuardBagShape);
 
   const makeKreadKitInternal = prepareExoClassKit(
     baggage,
     'KreadKit',
-    undefined, // Currently undefined until we implement the M pattern correctly
+    {
+      helper: HelperI,
+      character: CharacterI,
+      item: ItemI,
+      market: MarketI,
+      public: PublicI,
+      creator: CreatorI,
+    },
     () => {
       return harden({
         character: {
@@ -120,7 +159,7 @@ export const prepareKreadKit = async (
         },
         async makeInventoryRecorderKit(path) {
           const node = await E(storageNode).makeChildNode(`inventory-${path}`);
-          return makeRecorderKit(node);
+          return makeRecorderKit(node, M.arrayOf([ItemGuard, M.nat()]));
         },
         mint() {
           const handler = async (seat) => {
@@ -128,17 +167,6 @@ export const prepareKreadKit = async (
             const { character: characterState } = this.state;
 
             const { want } = seat.getProposal();
-
-            // TODO: Bring back validate format when we validate more
-            if (!want.Asset.value.payload[0][0]) {
-              seat.clear();
-              seat.fail();
-              return harden({ message: errors.noWantInOffer });
-            } else if (!want.Asset.value.payload[0][0].name) {
-              seat.clear();
-              seat.fail();
-              return harden({ message: errors.noNameArg });
-            }
 
             const newCharacterName = want.Asset.value.payload[0][0].name;
 
@@ -198,6 +226,7 @@ export const prepareKreadKit = async (
 
             characterKit.recorder.write(character);
 
+            // TODO: consider refactoring what we put in the inventory node
             inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
             );
@@ -206,7 +235,19 @@ export const prepareKreadKit = async (
 
             return text.mintCharacterReturn;
           };
-          return zcf.makeInvitation(handler, 'mintCharacterNfts');
+          return zcf.makeInvitation(
+            handler,
+            'mintCharacterNfts',
+            undefined,
+            M.splitRecord({
+              want: {
+                Asset: makeCopyBagAmountShape(
+                  characterBrand,
+                  M.bagOf({ name: M.string() }),
+                ),
+              },
+            }),
+          );
         },
         equip() {
           const handler = (seat) => {
@@ -295,7 +336,20 @@ export const prepareKreadKit = async (
             return text.equipReturn;
           };
 
-          return zcf.makeInvitation(handler, 'addToInventory');
+          return zcf.makeInvitation(
+            handler,
+            'addToInventory',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+                Item: M.splitRecord(itemShape),
+              },
+              want: {
+                CharacterKey2: M.splitRecord(characterShape),
+              },
+            }),
+          );
         },
         unequip() {
           const handler = async (seat) => {
@@ -317,7 +371,7 @@ export const prepareKreadKit = async (
             const { want } = seat.getProposal();
             const { Item: requestedItems, CharacterKey2: wantedCharacter } =
               want;
-            assert(requestedItems, X`${errors.noItemsRequested}`);
+
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
             assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
@@ -365,7 +419,20 @@ export const prepareKreadKit = async (
             return text.unequipReturn;
           };
 
-          return zcf.makeInvitation(handler, 'removeFromInventory');
+          return zcf.makeInvitation(
+            handler,
+            'removeFromInventory',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+              },
+              want: {
+                CharacterKey2: M.splitRecord(characterShape),
+                Item: M.splitRecord(itemShape),
+              },
+            }),
+          );
         },
         swap() {
           const handler = (seat) => {
@@ -467,7 +534,23 @@ export const prepareKreadKit = async (
             seat.exit();
           };
 
-          return zcf.makeInvitation(handler, 'itemInventorySwap');
+          return zcf.makeInvitation(
+            handler,
+            'itemInventorySwap',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+                Item1: M.splitRecord(itemShape),
+              },
+              want: M.splitRecord(
+                {
+                  CharacterKey2: M.splitRecord(characterShape),
+                },
+                { Item2: M.splitRecord(itemShape) },
+              ),
+            }),
+          );
         },
         unequipAll() {
           const handler = (seat) => {
@@ -528,7 +611,19 @@ export const prepareKreadKit = async (
             );
           };
 
-          return zcf.makeInvitation(handler, 'removeAllItemsFromInventory');
+          return zcf.makeInvitation(
+            handler,
+            'removeAllItemsFromInventory',
+            undefined,
+            M.splitRecord({
+              give: {
+                CharacterKey1: M.splitRecord(characterShape),
+              },
+              want: {
+                CharacterKey2: M.splitRecord(characterShape),
+              },
+            }),
+          );
         },
       },
       item: {
@@ -599,7 +694,8 @@ export const prepareKreadKit = async (
 
             seat.exit();
 
-            items.forEach((i) => {
+            items.forEach((j) => {
+              const i = j[0];
               const item = {
                 id: i.id,
                 item: i,
@@ -620,7 +716,16 @@ export const prepareKreadKit = async (
             return text.mintItemReturn;
           };
 
-          return zcf.makeInvitation(handler, 'mintCharacterNfts');
+          return zcf.makeInvitation(
+            handler,
+            'mintItemNfts',
+            undefined,
+            M.splitRecord({
+              want: {
+                Item: M.splitRecord(itemShape),
+              },
+            }),
+          );
         },
       },
       // TODO: figure out a way to handle the sell and buy more agnostic from the type of the amount
@@ -653,7 +758,22 @@ export const prepareKreadKit = async (
             );
           };
 
-          return zcf.makeInvitation(handler, 'Sell Item in KREAd marketplace');
+          return zcf.makeInvitation(
+            handler,
+            'Sell Item in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Item: M.splitRecord(itemShape),
+              },
+              want: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+            }),
+          );
         },
         sellCharacter() {
           const handler = (seat) => {
@@ -686,6 +806,18 @@ export const prepareKreadKit = async (
           return zcf.makeInvitation(
             handler,
             'Sell Character in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Character: M.splitRecord(characterShape),
+              },
+              want: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+            }),
           );
         },
         buyItem() {
@@ -746,7 +878,22 @@ export const prepareKreadKit = async (
               Array.from(market.itemEntries.values()),
             );
           };
-          return zcf.makeInvitation(handler, 'Buy Item in KREAd marketplace');
+          return zcf.makeInvitation(
+            handler,
+            'Buy Item in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+              want: {
+                Item: M.splitRecord(itemShape),
+              },
+            }),
+          );
         },
         buyCharacter() {
           const handler = (buyerSeat) => {
@@ -820,6 +967,18 @@ export const prepareKreadKit = async (
           return zcf.makeInvitation(
             handler,
             'Buy Character in KREAd marketplace',
+            undefined,
+            M.splitRecord({
+              give: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+              want: {
+                Character: M.splitRecord(characterShape),
+              },
+            }),
           );
         },
         freeTokens() {
