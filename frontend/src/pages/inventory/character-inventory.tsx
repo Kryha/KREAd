@@ -16,6 +16,7 @@ import { DetailWrapper } from "./styles";
 interface Props {
   pageSelector: React.ReactNode;
 }
+
 export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
   const navigate = useNavigate();
 

@@ -35,29 +35,31 @@ export const AssetCards: FC<Props> = ({ assetsData, isLoading, setAssetId, secti
   // Transform and structure data based on section
   const transformedData: any[] = assetsData
     .map((asset) => {
-      if (section === SECTION.INVENTORY) {
-        return {
-          id: asset.id,
-          image: asset.thumbnail,
-          name: asset.name,
-          category: asset.category,
-          level: asset.level,
-          rarity: asset.rarity,
-          isEquipped: asset.isEquipped,
-          isForSale: asset.isForSale,
-        };
-      } else if (section === SECTION.SHOP) {
-        return {
-          id: asset.id,
-          image: asset.item.thumbnail,
-          name: asset.item.name,
-          category: asset.item.category,
-          level: asset.item.level,
-          rarity: asset.item.rarity,
-          price: asset.sell.price,
-        };
+      switch (section) {
+        case SECTION.INVENTORY:
+          return {
+            id: asset.id,
+            image: asset.thumbnail,
+            name: asset.name,
+            category: asset.category,
+            level: asset.level,
+            rarity: asset.rarity,
+            isEquipped: asset.isEquipped,
+            isForSale: asset.isForSale,
+          };
+        case SECTION.SHOP:
+          return {
+            id: asset.id,
+            image: asset.item.thumbnail,
+            name: asset.item.name,
+            category: asset.item.category,
+            level: asset.item.level,
+            rarity: asset.item.rarity,
+            price: asset.sell.price,
+          };
+        default:
+          return undefined;
       }
-      return undefined;
     })
     .filter((asset) => asset !== undefined);
 

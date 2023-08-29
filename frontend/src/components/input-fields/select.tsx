@@ -60,14 +60,20 @@ export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect =
     [handleChange]
   );
 
+  const isOptionSelected = (optionValue: string | string[]) => {
+    if (isMultiSelect) {
+      return Array.isArray(selected) ? selected.includes(optionValue as string) : false;
+    }
+    return selected === optionValue;
+  };
+
   return (
     <SelectBox height={height}>
       {options.map((option, index) => (
         <React.Fragment key={index}>
-          {option.value === ITEM_CATEGORIES.headPiece && <SelectDivider />}
-          {option.value === ITEM_CATEGORIES.equipped && <SelectDivider />}
+          {(option.value === ITEM_CATEGORIES.headPiece || option.value === ITEM_CATEGORIES.equipped) && <SelectDivider />}
           <StyledSelect
-            selected={isMultiSelect ? (Array.isArray(selected) ? selected.includes(option.value) : false) : selected === option.value}
+            selected={isOptionSelected(option.value)}
             key={index}
             onClick={() => {
               handleOptionClick(index);
@@ -76,21 +82,7 @@ export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect =
               }
             }}
           >
-            <ButtonText
-              customColor={
-                isMultiSelect
-                  ? Array.isArray(selected)
-                    ? selected.includes(option.value)
-                      ? color.black
-                      : color.darkGrey
-                    : color.darkGrey
-                  : selected === option.value
-                  ? color.black
-                  : color.darkGrey
-              }
-            >
-              {option.label}
-            </ButtonText>
+            <ButtonText customColor={isOptionSelected(option.value) ? color.black : color.darkGrey}>{option.label}</ButtonText>
             {option.value === ITEM_CATEGORIES.forSale && <Diamond />}
             <Tick />
           </StyledSelect>

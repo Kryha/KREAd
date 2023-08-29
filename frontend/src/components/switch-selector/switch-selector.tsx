@@ -19,13 +19,13 @@ export const SwitchSelector: FC<SwitchSelectorProps> = ({
   setSelectedIndex,
 }) => {
   const [, setSearchParams] = useSearchParams();
-  const handleButtonOneClick = () => {
+  const handleItemButtonClick = () => {
     setSelectedIndex(0);
     !toggleDevMode && setSearchParams({ section: "items" }, { relative: "path" });
     toggleDevMode && window.location.reload();
   };
 
-  const handleButtonTwoClick = () => {
+  const handleCharacterButtonClick = () => {
     setSelectedIndex(1);
     !toggleDevMode && setSearchParams({ section: "characters" }, { relative: "path" });
     toggleDevMode && window.location.reload();
@@ -33,10 +33,10 @@ export const SwitchSelector: FC<SwitchSelectorProps> = ({
 
   return (
     <Group>
-      <SwitchButtonLeft onClick={handleButtonOneClick} selected={selectedIndex === 0}>
+      <SwitchButtonLeft onClick={handleItemButtonClick} selected={selectedIndex === 0}>
         {buttonOneText}
       </SwitchButtonLeft>
-      <SwitchButtonRight onClick={handleButtonTwoClick} selected={selectedIndex === 1}>
+      <SwitchButtonRight onClick={handleCharacterButtonClick} selected={selectedIndex === 1}>
         {buttonTwoText}
       </SwitchButtonRight>
     </Group>

@@ -32,18 +32,17 @@ interface Props {
 export const AssetFiltersDialog: FC<Props> = ({ items, showFilter, setShowFilter, handleCategoryChange, handleSortingChange, section }) => {
   const { height, width } = useViewport();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // State for selected categories
-  const [selectedSorting, setSelectedSorting] = useState<string>(""); // State for selected sorting
+  const [selectedSorting] = useState<string>(""); // State for selected sorting
 
   // Apply filters and get filtered items
   const filteredItems = filterItems(items, {
     categories: selectedCategories,
     sort: selectedSorting,
-    color: "", // You can provide the appropriate color if needed
+    color: "",
   });
 
   const filteredItemCount = filteredItems.length;
 
-  // Toggle a category in selectedCategories
   const toggleCategory = (category: string) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(category) ? prevSelected.filter((item) => item !== category) : [...prevSelected, category]
@@ -87,7 +86,7 @@ export const AssetFiltersDialog: FC<Props> = ({ items, showFilter, setShowFilter
                   key={sortBy.value}
                   selected={selectedSorting.includes(sortBy.value)}
                   onClick={() => {
-                    handleSortingChange(sortBy.value); // Use handleCategoryToggle to toggle category selection
+                    handleSortingChange(sortBy.value);
                   }}
                 >
                   {sortBy.label}
