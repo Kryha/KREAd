@@ -833,9 +833,6 @@ export const prepareKreadKit = async (
             assert(sellRecord, X`${errors.itemNotFound(item.id)}`);
             const sellerSeat = sellRecord.seat;
 
-            //TODO: remove log
-            console.log(sellRecord, wantedItemAmount);
-
             // Inspect Price keyword from buyer seat
             const { Price: providedMoneyAmount } = give;
             const { Item: itemForSaleAmount } = sellerSeat.getProposal().give;
@@ -1016,6 +1013,8 @@ export const prepareKreadKit = async (
             tokenBrandBoardId,
             tokenIssuerBoardId,
           });
+          marketCharacterKit.recorder.write([]);
+          marketItemKit.recorder.write([]);
         },
         makeMintItemInvitation() {
           const { item } = this.facets;
