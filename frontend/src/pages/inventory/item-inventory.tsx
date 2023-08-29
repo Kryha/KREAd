@@ -43,17 +43,17 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
       />
       <AssetCards section={SECTION.INVENTORY} assetsData={items} isLoading={isLoading} setAssetId={setSelectedId} />
       <AssetDetails section={SECTION.INVENTORY} assetData={item} assetId={selectedId} setAssetId={setSelectedId} />
-      (!items?.length && (
-      <OverviewContainer>
-        <OverviewEmpty
-          headingText={text.item.noItemsInInventory}
-          descriptionText={text.item.buyItemsFromStore}
-          buttonText={text.navigation.shop}
-          redirectRoute={routes.shop}
-          secondary
-        />
-      </OverviewContainer>
-      ))
+      {!items?.length && (
+        <OverviewContainer>
+          <OverviewEmpty
+            headingText={text.item.noItemsInInventory}
+            descriptionText={text.item.buyItemsFromStore}
+            buttonText={text.navigation.shop}
+            redirectRoute={routes.shop}
+            secondary
+          />
+        </OverviewContainer>
+      )}
     </>
   );
 };
