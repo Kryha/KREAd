@@ -9,17 +9,17 @@ import styled from "@emotion/styled";
 import StatusIndicator from "./service-status-indicator";
 import { fontSize } from "../../design";
 import { watchCharacterInventory } from "../storage-node/watch-character";
-import { useItemsMarket } from "../items";
 
 import { makeCopyBag } from "@agoric/store";
 import { KreadContainer, KreadDevelopmentContainer } from "../../components/error-view/styles";
 import { AnimatedLogo } from "../../components";
 import { DevelopmentMode } from "./development-mode";
+import { useGetItemsInShop } from "../items";
 
 export const TestServiceUI = () => {
   const [service, dispatch] = useAgoricContext();
   const [charactersMarket] = useCharactersMarket();
-  const [itemsMarket] = useItemsMarket();
+  const [itemsMarket] = useGetItemsInShop();
 
   const { characters } = useUserState();
   const wallet = useWalletState();

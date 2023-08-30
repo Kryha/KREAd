@@ -1,19 +1,18 @@
 import { ExtendedCharacter } from "../../interfaces";
-import { mockCharacterItems1, mockCharacterItems2 } from "./mockCharacterItems";
-import { mockCharacters } from "./mockCharacters";
+import { mockCharacters } from "./mock-characters";
 import { UserContext } from "../../context/user";
-import { mockItems1 } from "./mockItems";
+import { mockCharacterItems, mockItems, mockItemsEquipped } from "./mock-items";
 
 export const mockedExtendedCharacters: ExtendedCharacter[] = [
   {
     nft: mockCharacters[0],
-    equippedItems: mockCharacterItems1,
+    equippedItems: mockCharacterItems,
     activity: [],
     notifier: undefined,
   },
   {
     nft: mockCharacters[1],
-    equippedItems: mockCharacterItems2,
+    equippedItems: {},
     activity: [],
     notifier: undefined,
   },
@@ -22,8 +21,8 @@ export const mockedExtendedCharacters: ExtendedCharacter[] = [
 export const mockData: UserContext = {
   characters: mockedExtendedCharacters,
   selected: undefined,
-  items: mockItems1,
-  equippedItems: [],
+  items: mockItems,
+  equippedItems: mockItemsEquipped,
   processed: [],
   fetched: true,
 };

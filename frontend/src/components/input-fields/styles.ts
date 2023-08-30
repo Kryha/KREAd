@@ -61,7 +61,7 @@ export const SelectBox = styled.div<ViewProps>`
 `;
 
 export const ColorBox = styled(SelectBox)`
-  width: 326px;
+  width: 350px;
   z-index: 10000000;
 `;
 

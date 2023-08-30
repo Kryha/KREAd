@@ -6,6 +6,8 @@ export const sortItems = (sorting: string, items: ItemEquip[]): ItemEquip[] => {
       return items.sort((a, b) => a.name.localeCompare(b.name));
     case "rarity":
       return items.sort((a, b) => b.rarity - a.rarity);
+    case "level":
+      return items.sort((a, b) => b.level - a.level);
     case "latest":
       return items;
     default:
@@ -23,6 +25,8 @@ export const sortItemsMarket = (sorting: string, items: ItemInMarket[]): ItemInM
       return items.sort((a, b) => Number(b.sell.price) - Number(a.sell.price));
     case "rarity":
       return items.sort((a, b) => b.item.rarity - a.item.rarity);
+    case "level":
+      return items.sort((a, b) => b.item.level - a.item.level);
     case "latest":
       return items;
     default:

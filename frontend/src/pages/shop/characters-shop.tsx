@@ -15,7 +15,7 @@ import {
 } from "../../components";
 import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { color } from "../../design";
-import { characterCategories, sorting } from "../../assets/text/filter-options";
+import { characterCategories, sortAssetsInShop } from "../../assets/text/filter-options";
 import { FilterContainer, FilterWrapper, NotificationContainer, SelectorContainer, SortByContainer } from "./styles";
 import { useCharactersMarket } from "../../service";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
@@ -70,7 +70,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
           <SortByContainer>
             <Label customColor={color.black}>{text.filters.sortBy}</Label>
             <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId} hasValue={!!selectedSorting}>
-              <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sorting} />
+              <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sortAssetsInShop} />
             </Filters>
           </SortByContainer>
         </FilterContainer>

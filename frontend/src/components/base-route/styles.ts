@@ -32,23 +32,18 @@ export const TopbarContainer = styled.header<AnimationProps>`
 export const Box = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0px;
+  padding: 0;
   z-index: 1;
   align-items: center;
 `;
 
 export const ChildrenContainer = styled.div<AnimationProps>`
-  display: flex;
-  ${({ isLanding }) =>
-    isLanding === true
-      ? css`
-          margin-left: ${margins.big};
-          margin-right: ${margins.big};
-        `
-      : css`
-          margin-left: auto;
-          margin-right: auto;
-        `};
+  margin-left: ${margins.big};
+  margin-right: ${margins.big};
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    margin-left: 0;
+    margin-right: 0;
+  }
 `;
 
 export const FooterContainer = styled.div<AnimationProps>`

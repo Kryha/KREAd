@@ -64,6 +64,13 @@ export const ITEM_CATEGORIES = {
   equipped: "equipped",
 };
 
+export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"];
+
+export const SECTION = {
+  SHOP: "shop",
+  INVENTORY: "inventory",
+};
+
 export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"];
 
 export const AGORIC_LINK = "https://agoric.com/";
@@ -72,6 +79,7 @@ export const KRYHA_LINK = "https://kryha.io/";
 export const MAX_CHARACTER_LENGTH = 16;
 export const SLIDER_TIME = 4.5;
 export const PAGE_SIZE = 10;
+export const ASSETS_PER_PAGE = 10;
 
 export const FIRST_TIME = "first_time";
 export const CHARACTER_PURSE_NAME = "KREA";

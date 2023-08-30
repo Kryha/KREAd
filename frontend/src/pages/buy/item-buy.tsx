@@ -5,14 +5,14 @@ import { text } from "../../assets";
 import { FadeInOut, LoadingPage } from "../../components";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { ItemInMarket } from "../../interfaces";
-import { useBuyItem, useItemFromMarket, useMyItem } from "../../service";
+import { useBuyItem, useGetItemInShopById, useMyItem } from "../../service";
 import { Buy } from "./buy";
 
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
   const idString = String(id);
 
-  const [itemInMarket, isLoadingItem] = useItemFromMarket(idString);
+  const [itemInMarket, isLoadingItem] = useGetItemInShopById(idString);
   const [boughtItem] = useMyItem(idString);
   const buyItem = useBuyItem(idString);
 

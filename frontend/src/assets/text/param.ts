@@ -1,5 +1,5 @@
 export const param = {
-  amountOfItems: (amount: number | string) => `${amount} items`,
+  amountOfAssets: (amount: number | string) => `${amount} assets`,
   id: (id: number | string) => `#${id}`,
   ownedBy: (owner: string) => `owned by ${owner}`,
   oneOutOf: (rarity: number | string) => `1 / ${rarity}`,
@@ -14,6 +14,7 @@ export const param = {
     `your item '${itemName}' has been sold. IST ${price} is transfered to your wallet.`,
   theItemIsSussfullyPurchased: (itemName: string) => `the '${itemName}' has been successfully purchased from the shop.`,
   level: (level: number) => `lvl. ${level}`,
+  rarity: (rarity: number) => `rarity ${rarity}`,
   amountOfCharacters: (amount: number | string) => `${amount} characters`,
   forSale: (price: number) => `for sale ${price}`,
   // TODO: add character categories
