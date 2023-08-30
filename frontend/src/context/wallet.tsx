@@ -1,14 +1,8 @@
-import { E } from "@endo/eventual-send";
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { observeIteration, makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
-
 import { useAgoricState } from "./agoric";
-
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
-import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
+import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
-import { useUserStateDispatch } from "./user";
 
 const { brandBoardIds } = dappConstants;
 export interface WalletContext {

@@ -4,6 +4,7 @@ import { Character, Item } from "../../interfaces";
 interface UnequipItem {
   item: any;
   character: Character;
+  // FIXME: add agoric types
   service: {
     kreadInstance: any;
     characterBrand: any;
@@ -12,6 +13,7 @@ interface UnequipItem {
   };
   callback: () => Promise<void>;
 }
+
 const unequipItem = async ({ item, character, service, callback }: UnequipItem): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -70,6 +72,7 @@ interface UnequipAllItems {
   };
   callback: () => Promise<void>;
 }
+
 const unequipAll = async ({ character, service, callback }: UnequipAllItems): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -99,7 +102,6 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
       give,
     },
   };
-
   
   service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
@@ -126,6 +128,7 @@ interface EquipItem {
   };
   callback: () => Promise<void>;
 }
+
 const equipItem = async ({ item, character, service, callback }: EquipItem): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -185,6 +188,7 @@ interface SwapItems {
   };
   callback: () => Promise<void>;
 }
+
 const swapItems = async ({ giveItem, wantItem, character, service, callback }: SwapItems): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
