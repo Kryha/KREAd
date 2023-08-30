@@ -24,7 +24,7 @@ interface Props {
   data: AssetData;
   onClick?: (assetId: string) => void;
   imageProps?: ImageProps;
-  section: typeof SECTION[keyof typeof SECTION];
+  section: (typeof SECTION)[keyof typeof SECTION];
 }
 export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
   const handleClick = () => {
@@ -49,8 +49,12 @@ export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
               <>
                 <AssetTag>
                   <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                  {data.rarity && (
+                    <>
+                      <Dash />
+                      <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                    </>
+                  )}
                 </AssetTag>
                 {data.isEquipped && <BoldLabel customColor={color.black}>{text.general.equipped}</BoldLabel>}
                 {data.isForSale && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>}
@@ -60,8 +64,12 @@ export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
               <>
                 <AssetTag>
                   <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                  {data.rarity && (
+                    <>
+                      <Dash />
+                      <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                    </>
+                  )}
                 </AssetTag>
                 <AssetTagPrice>{<PriceInIst price={Number(data.price)} />}</AssetTagPrice>
               </>

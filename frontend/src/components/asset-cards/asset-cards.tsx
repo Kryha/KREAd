@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react";
-import { ASSETS_PER_PAGE, SECTION } from "../../constants";
+import { FC, useState } from "react";
+import { ASSETS_PER_PAGE, ASSET_TYPE, SECTION } from "../../constants";
 import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more";
 import { AssetsContainer, AssetsWrapper } from "./styles";
 import { useViewport } from "../../hooks";
@@ -19,13 +19,14 @@ export interface AssetData {
 }
 
 interface Props {
+  assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
+  section: (typeof SECTION)[keyof typeof SECTION];
   assetsData: any[];
   isLoading: boolean;
   setAssetId: (assetId: string) => void;
-  section: (typeof SECTION)[keyof typeof SECTION];
 }
 
-export const AssetCards: FC<Props> = ({ assetsData, isLoading, setAssetId, section }) => {
+export const AssetCards: FC<Props> = ({ assetType, assetsData, isLoading, setAssetId, section }) => {
   const { height } = useViewport();
   const [visibleAssets, setVisibleAssets] = useState(ASSETS_PER_PAGE);
   const loadMoreAssets = () => {
@@ -35,30 +36,57 @@ export const AssetCards: FC<Props> = ({ assetsData, isLoading, setAssetId, secti
   // Transform and structure data based on section
   const transformedData: any[] = assetsData
     .map((asset) => {
-      switch (section) {
-        case SECTION.INVENTORY:
-          return {
-            id: asset.id,
-            image: asset.thumbnail,
-            name: asset.name,
-            category: asset.category,
-            level: asset.level,
-            rarity: asset.rarity,
-            isEquipped: asset.isEquipped,
-            isForSale: asset.isForSale,
-          };
-        case SECTION.SHOP:
-          return {
-            id: asset.id,
-            image: asset.item.thumbnail,
-            name: asset.item.name,
-            category: asset.item.category,
-            level: asset.item.level,
-            rarity: asset.item.rarity,
-            price: asset.sell.price,
-          };
-        default:
-          return undefined;
+      switch (assetType) {
+        case ASSET_TYPE.CHARACTER:
+          switch (section) {
+            case SECTION.INVENTORY:
+              return {
+                id: asset.id,
+                image: asset.image,
+                name: asset.name,
+                category: asset.type,
+                level: asset.level,
+                isEquipped: asset.isEquipped,
+                isForSale: asset.isForSale,
+              };
+            case SECTION.SHOP:
+              return {
+                id: asset.id,
+                image: asset.character.image,
+                name: asset.character.name,
+                category: asset.character.type,
+                level: asset.character.level,
+                price: asset.sell.price,
+              };
+            default:
+              return undefined;
+          }
+        case ASSET_TYPE.ITEM:
+          switch (section) {
+            case SECTION.INVENTORY:
+              return {
+                id: asset.id,
+                image: asset.thumbnail,
+                name: asset.name,
+                category: asset.category,
+                level: asset.level,
+                rarity: asset.rarity,
+                isEquipped: asset.isEquipped,
+                isForSale: asset.isForSale,
+              };
+            case SECTION.SHOP:
+              return {
+                id: asset.id,
+                image: asset.item.thumbnail,
+                name: asset.item.name,
+                category: asset.item.category,
+                level: asset.item.level,
+                rarity: asset.item.rarity,
+                price: asset.sell.price,
+              };
+            default:
+              return undefined;
+          }
       }
     })
     .filter((asset) => asset !== undefined);

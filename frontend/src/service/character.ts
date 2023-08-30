@@ -236,8 +236,6 @@ export const useGetCharacterInShopById = (id: string): [CharacterInMarket | unde
 export const useGetCharactersInShop = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
   if (!filters) return [characters, !fetched];
-
-  const filtered = !filters ? characters : filterCharactersMarket(characters, filters);
-
+  const filtered = filterCharactersMarket(characters, filters);
   return [filtered, !fetched];
 };

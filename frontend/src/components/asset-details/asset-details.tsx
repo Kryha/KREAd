@@ -10,10 +10,11 @@ import { useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
-import { SECTION } from "../../constants";
+import { ASSET_TYPE, SECTION } from "../../constants";
 
 interface AssetDetailsProps {
-  section: typeof SECTION[keyof typeof SECTION];
+  assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
+  section: (typeof SECTION)[keyof typeof SECTION];
   assetData: any;
   assetId: string;
   setAssetId: (assetId: string) => void;

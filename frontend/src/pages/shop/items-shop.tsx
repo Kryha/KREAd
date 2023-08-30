@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from "react";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 import { useGetItemInShopById, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
@@ -43,9 +43,15 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         setSelectedColor={setSelectedColor}
         setSelectedPrice={setSelectedPrice}
       />
-      <AssetDetails section={SECTION.SHOP} assetData={item} assetId={selectedId} setAssetId={setSelectedId} />
+      <AssetDetails assetType={ASSET_TYPE.ITEM} section={SECTION.SHOP} assetData={item} assetId={selectedId} setAssetId={setSelectedId} />
       {items.length > 0 ? (
-        <AssetCards section={SECTION.SHOP} assetsData={items} isLoading={isLoading} setAssetId={setSelectedId} />
+        <AssetCards
+          assetType={ASSET_TYPE.ITEM}
+          section={SECTION.SHOP}
+          assetsData={items}
+          isLoading={isLoading}
+          setAssetId={setSelectedId}
+        />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

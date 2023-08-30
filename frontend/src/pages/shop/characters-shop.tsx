@@ -1,6 +1,6 @@
 import { FC, ReactNode, useState } from "react";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
-import { useCharactersMarket, useGetCharacterInShopById } from "../../service";
+import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { useCharactersMarket, useGetCharacterInShopById, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
 import { AssetDetails } from "../../components/asset-details/asset-details";
@@ -15,11 +15,11 @@ interface Props {
 
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedId, setSelectedId] = useState<string>("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([""]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
 
-  const [characters, isLoading] = useCharactersMarket({
+  const [characters, isLoading] = useGetCharactersInShop({
     categories: selectedCategories,
     sort: selectedSorting,
     price: selectedPrice,
@@ -40,9 +40,21 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         setSelectedCategories={setSelectedCategories}
         setSelectedPrice={setSelectedPrice}
       />
-      <AssetDetails section={SECTION.SHOP} assetData={character} assetId={selectedId} setAssetId={setSelectedId} />
+      <AssetDetails
+        assetType={ASSET_TYPE.CHARACTER}
+        section={SECTION.SHOP}
+        assetData={character}
+        assetId={selectedId}
+        setAssetId={setSelectedId}
+      />
       {characters.length > 0 ? (
-        <AssetCards section={SECTION.SHOP} assetsData={characters} isLoading={isLoading} setAssetId={setSelectedId} />
+        <AssetCards
+          assetType={ASSET_TYPE.CHARACTER}
+          section={SECTION.SHOP}
+          assetsData={characters}
+          isLoading={isLoading}
+          setAssetId={setSelectedId}
+        />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

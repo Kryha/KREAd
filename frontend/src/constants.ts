@@ -71,6 +71,11 @@ export const SECTION = {
   INVENTORY: "inventory",
 };
 
+export const ASSET_TYPE = {
+  CHARACTER: "character",
+  ITEM: "item",
+};
+
 export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"];
 
 export const AGORIC_LINK = "https://agoric.com/";
