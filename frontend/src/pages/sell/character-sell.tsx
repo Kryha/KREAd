@@ -31,7 +31,7 @@ export const CharacterSell = () => {
 
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellCharacter.callback(data.price);
+    await sellCharacter.callback(data.price, () => setIsPlacedInShop(true));
   };
 
   if (!data || !characterCopy) return <ErrorView />;

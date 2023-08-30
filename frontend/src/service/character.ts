@@ -10,7 +10,7 @@ import {
 } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { buyCharacter, extendCharacters } from "./character-actions";
+import { buyCharacter, extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
 import { useOffers } from "./offers";
 import { CHARACTER_PURSE_NAME } from "../constants";
@@ -25,7 +25,6 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
   const userStateDispatch = useUserStateDispatch();
   useEffect(() => {
     if (!selected) {
-      console.log("setting selected", characters)
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
   }, [userStateDispatch, characters, selected]);
@@ -46,43 +45,16 @@ export const useMyCharactersForSale = () => {
   const offers = useOffers({ description: "seller", status: "pending" });
   const wallet = useWalletState();
 
-  console.log(wallet.characterProposals, offers);
   // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
   const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
-  // const [offerCharacters, setOfferCharacters] = useState<ExtendedCharacterBackend[]>([]);
-
-  // filtering character offers
-  // const characterOffers = useMemo(
-  //   () =>
-  //     offers.filter((offer) => {
-  //       try {
-  //         return offer.proposalTemplate.give.Items.pursePetname[1] === CHARACTER_PURSE_NAME;
-  //       } catch (error) {
-  //         return false;
-  //       }
-  //     }),
-  //   [offers]
-  // );
-
-  // // retrieving characters from offers
-  // const charactersFromOffers: CharacterBackend[] = useMemo(() => {
-  //   try {
-  //     const fromOffers: CharacterBackend[] = characterOffers.map((offer: any) => {
-  //       return offer.proposalTemplate.give.Items.value[0];
-  //     });
-  //     return fromOffers;
-  //   } catch (error) {
-  //     return [];
-  //   }
-  // }, [characterOffers]);
 
   // adding items to characters from offers
   useEffect(() => {
     const extend = async () => {
       const myCharactersForSale = wallet.characterProposals.map((proposal: any) => proposal.give.Character.value.payload[0]);
       console.log(myCharactersForSale);
-      // const { extendedCharacters } = await extendCharacters(myCharactersForSale, marshaller);
-      // setOfferCharacters(JSON.stringify(extendedCharacters));
+      const { extendedCharacters } = await extendCharacters(myCharactersForSale, marshaller);
+      setOfferCharacters(JSON.stringify(extendedCharacters));
     };
     extend();
   }, [wallet.characterProposals, publicFacet]);
@@ -205,7 +177,7 @@ export const useSellCharacter = (characterId: string) => {
   const charBrand = service.tokenInfo.character.brand;
 
   const callback = useCallback(
-    async (price: number) => {
+    async (price: number, successCallback: () => void) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
       const characterToSell = {...found.nft, id: Number(found.nft.id)};
@@ -223,6 +195,7 @@ export const useSellCharacter = (characterId: string) => {
         callback: async () => {
           console.info("SellCharacter call settled");
           setIsLoading(false);
+          successCallback();
           userDispatch({ type: "SET_SELECTED", payload: undefined });
         }
       })

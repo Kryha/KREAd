@@ -39,9 +39,6 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     };
 
-    console.log("SELL CHARACTER CALL");
-    console.log(offerConfig.spec, offerConfig.proposal)
-    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,
@@ -52,9 +49,10 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
         }
         if (status === "refunded") {
           console.error("Offer refunded", data);
+          callback();
         }
         if (status === "accepted") {
-          console.log("Offer accepted", data);
+          console.info("Offer accepted", data);
           callback();
         }
       }
@@ -100,9 +98,6 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     };
 
-    console.log("BUY CHARACTER CALL");
-    console.log(offerConfig.spec, offerConfig.proposal)
-    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,
@@ -113,9 +108,10 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
         }
         if (status === "refunded") {
           console.error("Offer refunded", data);
+          callback();
         }
         if (status === "accepted") {
-          console.log("Offer accepted", data);
+          console.info("Offer accepted", data);
           callback();
         }
       }
@@ -161,9 +157,6 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     });
 
-    console.log("SELL ITEM CALL");
-    console.log(offerConfig.spec, offerConfig.proposal)
-    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,
@@ -174,9 +167,10 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
         }
         if (status === "refunded") {
           console.error("Offer refunded", data);
+          callback();
         }
         if (status === "accepted") {
-          console.log("Offer accepted", data);
+          console.info("Offer accepted", data);
           callback();
         }
       }
@@ -220,9 +214,6 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
       },
     };
 
-    console.log("BUY ITEM CALL");
-    console.log(offerConfig.spec, offerConfig.proposal)
-    
     service.makeOffer(
       offerConfig.spec,
       offerConfig.proposal,
@@ -233,9 +224,10 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
         }
         if (status === "refunded") {
           console.error("Offer refunded", data);
+          callback();
         }
         if (status === "accepted") {
-          console.log("Offer accepted", data);
+          console.info("Offer accepted", data);
           callback();
         }
       }

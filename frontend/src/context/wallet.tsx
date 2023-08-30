@@ -72,19 +72,6 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         item: itemWallet,
       }));
     };
-    const updateStateVbank = async (purses: any) => {
-      console.count("💾 LOADING PURSE CHANGE 💾");
-      if(!purses) return;
-
-      // Load Purses
-      const newMoneyPurses = purses.filter(({ brandPetname }: any) => brandPetname === IST_IDENTIFIER);
-      const moneyWallet = newMoneyPurses[newMoneyPurses.length - 1]?.currentAmount;
-
-      walletDispatch((prevState) => ({
-        ...prevState,
-        money: moneyWallet,
-      }));
-    };
 
     const updateStateOffers = async (offers: any) => {
       console.count("💾 LOADING OFFER CHANGE 💾");
@@ -110,24 +97,6 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         characterProposals,
       }));
     };
-
-    const watchPurses = async () => {
-      console.info("✅ LISTENING FOR PURSE CHANGES", pursesNotifier);
-      const watch = async () => {
-        for await (const purses of iterateNotifier(pursesNotifier)) {
-          if (isCancelled) return;
-          updateStateVbank(purses);
-        }
-      };
-      watch().catch((err: Error) => {
-        console.error("got watchPurses err", err);
-      });
-    };
-    if (pursesNotifier && !walletState.fetched && chainStorageWatcher) {
-      watchPurses().catch((err) => {
-        console.error("got watchNotifiers err", err);
-      });
-    }
 
     if (!walletState.fetched && chainStorageWatcher) {
       watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);

@@ -12,7 +12,7 @@ import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util
 import { useWalletState } from "./wallet";
 import { useAgoricState } from "./agoric";
 import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
-import { extendCharacters } from "../service/character-actions";
+import { extendCharacters } from "../service/transform-character";
 
 export interface UserContext {
   characters: ExtendedCharacter[];
@@ -156,35 +156,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   const charactersInWallet = useMemo(() => (wallet.character ? wallet.character : []), [wallet.character]);
   const itemsInWallet = useMemo(() => (wallet.item ? wallet.item : []), [wallet.item]);
 
-  // console.log(charactersInWallet, itemsInWallet, wallet);
   useEffect(() => {
-    // const parseInventoryUpdate = (value: { character: string; inventory: ItemBackend[] }) => {
-    //   console.count("🎒 LOADING INVENTORY CHANGE 🎒");
-
-    //   console.log(value)
-    //   const { character: characterName, inventory } = value;
-    //   userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: inventory, characterName });
-    // };
-
-    // const processInventory = async (characterName: string) => {
-    //   if (userState.processed.includes(characterName)) {
-    //     return;
-    //   }
-
-    //   // Fetch inventory once
-    //   // const { items: equippedItems } = await E(kreadPublicFacet).getCharacterInventory(characterName);
-    //   userStateDispatch({ type: "UPDATE_CHARACTER_ITEMS", payload: equippedItems, characterName });
-
-    //   const leader = makeLeader(AGORIC_RPC);
-    //   const castingSpec = makeCastingSpec(`${STORAGE_NODE_SPEC_INVENTORY}-${characterName}`);
-    //   const follower = makeFollower(castingSpec, leader);
-
-    //   // Iterate over kread's storageNode follower on local-devnet
-    //   for await (const { value } of iterateLatest(follower)) {
-    //     parseInventoryUpdate(value.value.items);
-    //   }
-    // };
-
     const processPurseChanges = async () => {
       console.count("👜 PROCESSING PURSE CHANGE");
 
@@ -225,6 +197,8 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       // Map characters to the corresponding inventory in the contract
       const extendedCharacters = await Promise.all(
         charactersToProcess.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
+
+          // TODO: fetch activity and history from storage node
           // const activityHistory = await E(kreadPublicFacet).getCharacterHistory(character.name);
           // const activity = activityHistory.map((event: ItemActivityEventBackend) => ({
           //   type: event.type,
@@ -233,17 +207,13 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
           // }));
 
           const equipped: { [key: string]: Item | undefined } = {};
-          // const inventoryFetchResult = await fetchFromVStorage(agoric.chainStorageWatcher.marshaller, `data/published.kread.inventory-${character.name}`);
           const extendedCharacter = await extendCharacters([character], agoric.chainStorageWatcher.marshaller);
-          console.log(extendedCharacter);
-
-          const frontendEquippedItems = extendedCharacter.equippedItems; //mediate.items.toFront(equippedItems);
+          const frontendEquippedItems = extendedCharacter.equippedItems; 
 
           equippedCharacterItems.push(...frontendEquippedItems);
           itemCategories.forEach((category) => {
             equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
           });
-          // processInventory(character.name);
 
           return {
             nft: character,

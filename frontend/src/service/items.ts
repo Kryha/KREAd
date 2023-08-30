@@ -209,7 +209,7 @@ export const useBuyItem = (itemId: string) => {
   return { callback, isLoading, isError };
 };
 
-export const useEquipItem = () => {
+export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item | undefined>>) => {
   const [service] = useAgoricContext();
   const { items, selected: character } = useUserState();
   const kreadInstance = service.contracts.kread.instance;
@@ -222,7 +222,7 @@ export const useEquipItem = () => {
     if (!character) return;
     const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
     const item = items.find((item) => item.id === body.itemId);
-    
+    console.log("🤕🤕🤕🤕 EQUIPPING", item)
     if (!item) return;
     const itemToEquip = { ...item, id: Number(item.id)}
 
@@ -237,12 +237,13 @@ export const useEquipItem = () => {
       },
       callback: async () => {
         console.info("Equip call settled");
+        if(callback) callback(item);
       }
     })
   });
 };
 
-export const useUnequipItem = () => {
+export const useUnequipItem = (callback?: ()=>void) => {
   const [service] = useAgoricContext();
   const { equippedItems: equipped, selected: character } = useUserState();
   const instance = service.contracts.kread.instance;
@@ -250,9 +251,11 @@ export const useUnequipItem = () => {
   const itemBrand = service.tokenInfo.item.brand;
 
   return useMutation(async (body: { itemId: string }) => {
+    
     if (!character) return;
     const sanitizedEquipped = equipped.filter((item) => item !== undefined);
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
+    console.log("🤕🤕🤕🤕 UNEQUIPPING", item, equipped)
     
     if (!item) return;
     const itemToUnEquip = { ...item, id: Number(item.id)}
@@ -269,6 +272,7 @@ export const useUnequipItem = () => {
       },
       callback: async () => {
         console.info("Unequip call settled");
+        if(callback) callback();
       }
     });
   });

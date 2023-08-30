@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { CharacterInMarket, KreadCharacterInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
-import { extendCharacters } from "../service/character-actions";
+import { extendCharacters } from "../service/transform-character";
 import { itemArrayToObject } from "../util";
 import { watchCharacterMarket } from "../service/storage-node/watch-market";
 
