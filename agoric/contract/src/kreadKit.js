@@ -730,8 +730,37 @@ export const prepareKreadKit = async (
       },
       // TODO: figure out a way to handle the sell and buy more agnostic from the type of the amount
       market: {
+        handleExitCharacter(seat) {
+          const { market } = this.state;
+
+          const { give } = seat.getProposal();
+          const subscriber = E(seat).getSubscriber();
+          E.when(E(subscriber).getUpdateSince(), () => {
+            market.characterEntries.delete(
+              give.Character.value.payload[0][0].name,
+            );
+
+            marketCharacterKit.recorder.write(
+              Array.from(market.characterEntries.values()),
+            );
+          });
+        },
+        handleExitItem(seat) {
+          const { market } = this.state;
+
+          const { give } = seat.getProposal();
+          const subscriber = E(seat).getSubscriber();
+          E.when(E(subscriber).getUpdateSince(), () => {
+            market.itemEntries.delete(give.Item.value.payload[0][0].id);
+
+            marketItemKit.recorder.write(
+              Array.from(market.itemEntries.values()),
+            );
+          });
+        },
         sellItem() {
           const handler = (seat) => {
+            const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
             // Inspect allocation of Character keyword in seller seat
@@ -756,6 +785,8 @@ export const prepareKreadKit = async (
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
             );
+
+            marketFacet.handleExitItem(seat);
           };
 
           return zcf.makeInvitation(
@@ -777,6 +808,7 @@ export const prepareKreadKit = async (
         },
         sellCharacter() {
           const handler = (seat) => {
+            const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
             // Inspect allocation of Character keyword in seller seat
@@ -801,6 +833,8 @@ export const prepareKreadKit = async (
             marketCharacterKit.recorder.write(
               Array.from(market.characterEntries.values()),
             );
+
+            marketFacet.handleExitCharacter(seat);
           };
 
           return zcf.makeInvitation(
@@ -872,11 +906,11 @@ export const prepareKreadKit = async (
 
             buyerSeat.exit();
             sellerSeat.exit();
-            market.itemEntries.delete(item.id);
+            // market.itemEntries.delete(item.id);
 
-            marketItemKit.recorder.write(
-              Array.from(market.itemEntries.values()),
-            );
+            // marketItemKit.recorder.write(
+            //   Array.from(market.itemEntries.values()),
+            // );
           };
           return zcf.makeInvitation(
             handler,
@@ -957,11 +991,11 @@ export const prepareKreadKit = async (
             sellerSeat.exit();
 
             // Remove entry from store array
-            market.characterEntries.delete(character.name);
+            // market.characterEntries.delete(character.name);
 
-            marketCharacterKit.recorder.write(
-              Array.from(market.characterEntries.values()),
-            );
+            // marketCharacterKit.recorder.write(
+            //   Array.from(market.characterEntries.values()),
+            // );
           };
 
           return zcf.makeInvitation(

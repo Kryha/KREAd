@@ -125,6 +125,8 @@ export const ItemI = M.interface('item', {
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
   buyItem: M.call().returns(M.promise()),
+  handleExitItem: M.call(M.eref(M.remotable('Seat'))).returns(),
+  handleExitCharacter: M.call(M.eref(M.remotable('Seat'))).returns(),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
   freeTokens: M.call().returns(M.promise()),
@@ -163,7 +165,7 @@ export const ItemRecorderGuard = M.splitRecord({
 export const MarketRecorderGuard = M.arrayOf(
   M.splitRecord({
     id: M.or(M.gte(0), M.string()),
-    seat: M.eref(M.remotable('Seat')),
+    seat: M.eref(M.remotable('UserSeat')),
     askingPrice: M.splitRecord({
       brand: BrandShape,
       value: M.nat(),
