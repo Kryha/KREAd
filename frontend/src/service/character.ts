@@ -1,7 +1,6 @@
 import { useMutation } from "react-query";
 
 import {
-  CharacterBackend,
   CharacterCreation,
   CharacterEquip,
   CharacterInMarket,
@@ -10,10 +9,9 @@ import {
 } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { buyCharacter, extendCharacters } from "./transform-character";
+import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
 import { useOffers } from "./offers";
-import { CHARACTER_PURSE_NAME } from "../constants";
 import { useCharacterMarketState } from "../context/character-shop";
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
@@ -42,7 +40,6 @@ export const useMyCharactersForSale = () => {
       chainStorageWatcher: { marshaller },
     },
   ] = useAgoricContext();
-  const offers = useOffers({ description: "seller", status: "pending" });
   const wallet = useWalletState();
 
   // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array

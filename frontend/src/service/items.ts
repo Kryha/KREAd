@@ -3,7 +3,6 @@ import { useMutation } from "react-query";
 import { Item, ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
 import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
-// import { equipItem, unequipItem, sellItem, buyItem } from "./item-actions";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
 import { useItemMarketState } from "../context/item-shop";

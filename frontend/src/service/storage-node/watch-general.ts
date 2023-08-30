@@ -2,18 +2,6 @@ import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 import { AgoricDispatch, TokenInfo } from "../../interfaces";
 import { ITEM_IDENTIFIER, IST_IDENTIFIER, CHARACTER_IDENTIFIER } from "../../constants";
 
-/* TODO: SMART-WALLET SUPPPRT
-
-Use chain-storage-watcher to get updates on relevant characters,
-including inventory information. Should write to the User context
-and potentially be triggered by that same context in a useEffect.
-Alternatively it could be triggered by the first interface that
-consumes the User context
-
-Commneted code is dapp-inter's implementation
-(https://github.com/Agoric/dapp-inter/blob/main/src/service/vbank.ts)
-*/
-
 export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: AgoricDispatch) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = "published.agoricNames.brand";
