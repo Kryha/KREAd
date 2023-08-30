@@ -27,7 +27,7 @@ interface Props {
   setAssetId: (assetId: string) => void;
 }
 
-export const AssetCards: FC<Props> = ({ assetType, assetsData, isLoading, setAssetId, section }) => {
+export const AssetCards: FC<Props> = ({ assetType, section, assetsData, isLoading, setAssetId }) => {
   const { height } = useViewport();
   const [visibleAssets, setVisibleAssets] = useState(ASSETS_PER_PAGE);
   const loadMoreAssets = () => {

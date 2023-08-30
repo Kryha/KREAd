@@ -14,8 +14,7 @@ export const getSortingOptions = (valuesToInclude: string[] = []): Options[] => 
 };
 
 // Items
-export const itemInventoryCategories: Options[] = [
-  { label: "all categories", value: "allCategories" },
+const itemCategories = [
   { label: "head piece", value: "headPiece" },
   { label: "noseline", value: "noseline" },
   { label: "air reservoir", value: "airReservoir" },
@@ -26,37 +25,28 @@ export const itemInventoryCategories: Options[] = [
   { label: "hair", value: "hair" },
   { label: "background", value: "background" },
   { label: "mid background", value: "midBackground" },
+];
+
+export const itemShopCategories: Options[] = [{ label: "all categories", value: "allCategories" }, ...itemCategories];
+export const itemInventoryCategories: Options[] = [
+  { label: "all categories", value: "allCategories" },
+  ...itemCategories,
   { label: "equipped", value: "equipped" },
   { label: "for sale", value: "forSale" },
 ];
 
-export const itemShopCategories: Options[] = [
-  { label: "all categories", value: "allCategories" },
-  { label: "head piece", value: "headPiece" },
-  { label: "noseline", value: "noseline" },
-  { label: "air reservoir", value: "airReservoir" },
-  { label: "liquid", value: "liquid" },
-  { label: "mask", value: "mask" },
-  { label: "front mask", value: "frontMask" },
-  { label: "clothing", value: "clothing" },
-  { label: "hair", value: "hair" },
-  { label: "background", value: "background" },
-  { label: "mid background", value: "midBackground" },
-];
-
-export const sortItemsInShop: Options[] = getSortingOptions(["latest", "atoz", "lowestPrice", "highestPrice", "rarity", "level"]);
+export const sortItemsInShop: Options[] = getSortingOptions(); // All of them
 export const sortItemsInInventory: Options[] = getSortingOptions(["latest", "atoz", "rarity", "level"]);
 
 // Characters
+export const characterShopCategories: Options[] = [
+  { label: "all categories", value: "allCategories" },
+  { label: "Tempet Scavengers", value: "tempetScavenger" },
+];
 export const characterInventoryCategories: Options[] = [
   { label: "Tempet Scavengers", value: "tempetScavenger" },
   { label: "equipped", value: "equipped" },
   { label: "for sale", value: "forSale" },
-];
-
-export const characterShopCategories: Options[] = [
-  { label: "all categories", value: "allCategories" },
-  { label: "Tempet Scavengers", value: "tempetScavenger" },
 ];
 
 export const sortCharactersInShop: Options[] = getSortingOptions(["latest", "atoz", "lowestPrice", "highestPrice", "level"]);
