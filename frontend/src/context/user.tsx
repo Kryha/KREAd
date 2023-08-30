@@ -1,12 +1,20 @@
 import { E } from "@endo/eventual-send";
 import { iterateLatest, makeCastingSpec, makeFollower, makeLeader } from "@agoric/casting";
-import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemActivityEventBackend, ItemBackend } from "../interfaces";
-import { mockData } from "../service/mock-data/mockData";
-import { mockItemsEquipped } from "../service/mock-data/mockItems";
+import {
+  CharacterBackend,
+  ExtendedCharacter,
+  ExtendedCharacterBackend,
+  Item,
+  ItemActivityEventBackend,
+  ItemBackend,
+  ItemEquip,
+} from "../interfaces";
+import { mockData } from "../service/mock-data/mock-data";
+import { mockItemsEquipped } from "../service/mock-data/mock-items";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import { mediate } from "../util";
 import { itemCategories } from "../service/util";
-import { useDataMode } from "../hooks/use-data-mode";
+import { useDataMode } from "../hooks";
 import { AGORIC_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 import { useWalletState } from "./wallet";
@@ -18,7 +26,7 @@ export interface UserContext {
   characters: ExtendedCharacter[];
   selected: ExtendedCharacter | undefined;
   items: Item[];
-  equippedItems: Item[];
+  equippedItems: ItemEquip[];
   processed: string[];
   fetched: boolean;
 }
@@ -77,7 +85,7 @@ const initialState: UserContext = {
 const initialMockState: UserContext = {
   characters: mockData.characters,
   selected: undefined,
-  items: mockData.items,
+  items: [],
   equippedItems: mockItemsEquipped,
   processed: [],
   fetched: mockData.fetched,

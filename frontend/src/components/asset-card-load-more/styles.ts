@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { RefreshIcon } from "../../assets";
 import { color, margins } from "../../design";
 
-export const LoadMoreWrapper = styled.div`
+export const AssetCardLoadMoreWrapper = styled.div`
   position: relative;
   display: flex;
   height: 100%;
@@ -12,8 +12,9 @@ export const LoadMoreWrapper = styled.div`
   box-sizing: border-box;
   border-radius: ${margins.mini};
   align-items: center;
+  min-height: 350px;
 `;
-export const LoadMoreContainer = styled.div`
+export const AssetCardLoadMoreContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: auto;

@@ -3,7 +3,7 @@ import { Lina } from "../../assets/images/items";
 
 export const mockCharacters: Character[] = [
   {
-    title: "character 1 tot tjdnsjs sjs ss  jaja",
+    title: "Lina Character",
     image: Lina.character,
     keyId: 1,
     name: "Lina Character",

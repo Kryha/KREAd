@@ -24,7 +24,7 @@ export const mediate = {
     },
   },
   itemsMarket: {
-    toFront: (backendItems: ItemInMarketBackend[]): ItemInMarket[] => {
+    toFront: (backendItems: { item: ItemBackend; sell: { price: bigint }; id: number }[]): ItemInMarket[] => {
       return backendItems.map((backendItem) => {
         return { ...backendItem, id: String(backendItem.id), item: mediate.items.toFront([backendItem.item])[0] };
       });
@@ -73,7 +73,7 @@ export const mediate = {
 };
 
 export const itemArrayToObject = (itemsArray: Item[]): CharacterItems => {
-  const items: CharacterItems = {
+  return {
     noseline: itemsArray.find((i) => i.category === "noseline"),
     midBackground: itemsArray.find((i) => i.category === "midBackground"),
     mask: itemsArray.find((i) => i.category === "mask"),
@@ -85,5 +85,4 @@ export const itemArrayToObject = (itemsArray: Item[]): CharacterItems => {
     frontMask: itemsArray.find((i) => i.category === "frontMask"),
     clothing: itemsArray.find((i) => i.category === "clothing"),
   };
-  return items;
 };

@@ -230,33 +230,71 @@ test.serial('--| MINT - Item - Expected flow', async (t) => {
   );
 });
 
-// test.serial('--| MINT - Item - Multiple flow', async (t) => {
-//   /** @type {Bootstrap} */
-//   const {
-//     instance: { publicFacet },
-//     contractAssets,
-//     purses,
-//     zoe,
-//   } = t.context;
-//   const { want, message } = flow.mintItem.multiple;
+test.serial('--| MINT - Item - Multiple flow', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { want, message } = flow.mintItem.expected;
 
-//   const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
-//   const proposal = harden({
-//     want: {
-//       Item: AmountMath.make(
-//         contractAssets.item.brand,
-//         makeCopyBag(harden([[want, 1n]])),
-//       ),
-//     },
-//   });
+  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const proposal = harden({
+    want: {
+      Item: AmountMath.make(
+        contractAssets.item.brand,
+        makeCopyBag(harden([[want, 2n]])),
+      ),
+    },
+  });
 
-//   const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
+  const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
 
-//   const result = await E(userSeat).getOfferResult();
-//   t.deepEqual(result, message, 'Offer returns success message');
+  const result = await E(userSeat).getOfferResult();
+  t.deepEqual(result, message, 'Offer returns success message');
 
-//   const payout = await E(userSeat).getPayout('Asset');
+  const payout = await E(userSeat).getPayout('Asset');
 
-//   purses.item.deposit(payout);
-//   t.deepEqual(purses.item.getCurrentAmount().value.payload.length, 3);
-// });
+  purses.item.deposit(payout);
+
+  const totalItems = purses.item
+    .getCurrentAmount()
+    .value.payload.reduce((acc, [item, supply]) => {
+      return acc + supply;
+    }, 0n);
+  t.deepEqual(totalItems, 3n);
+  t.deepEqual(purses.item.getCurrentAmount().value.payload.length, 2);
+});
+
+test.serial('--| MINT - Item - Multiple different items flow', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { want, message } = flow.mintItem.multiple;
+
+  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const proposal = harden({
+    want: {
+      Item: AmountMath.make(
+        contractAssets.item.brand,
+        makeCopyBag(harden(want.map((item) => [item, 1n]))),
+      ),
+    },
+  });
+
+  const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
+
+  const result = await E(userSeat).getOfferResult();
+  t.deepEqual(result, message, 'Offer returns success message');
+
+  const payout = await E(userSeat).getPayout('Asset');
+
+  purses.item.deposit(payout);
+  t.deepEqual(purses.item.getCurrentAmount().value.payload.length, 4);
+});
