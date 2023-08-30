@@ -197,7 +197,7 @@ export const useSellCharacter = (characterId: string) => {
           successCallback();
           userDispatch({ type: "SET_SELECTED", payload: undefined });
         }
-      })
+      });
       
       return res;
     },

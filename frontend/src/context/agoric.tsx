@@ -165,7 +165,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchInstance = async () => {
-      const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, `data/published.agoricNames.instance`);
+      const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.instance");
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
       // TODO: remove publicFacet from state
@@ -173,7 +173,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchTokenInfo = async () => {
-      const agoricNameBrands = await fetchFromVStorage(chainStorageWatcher.marshaller, `data/published.agoricNames.brand`);
+      const agoricNameBrands = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.brand");
       const payload: TokenInfo = {
         character: {
           issuer: undefined,
@@ -211,7 +211,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
     const startWatching = async () => {
       if (state.chainStorageWatcher) {
-        // setCurrentStatus(status.storageWatcherReady);
         console.info("Storagewatcher found, skipping startWatching");
         return;
       }

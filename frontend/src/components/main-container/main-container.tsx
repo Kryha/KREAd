@@ -11,7 +11,7 @@ export const MainContainer: FC<MainContainerProps> = ({ children }) => {
   const { height } = useViewport();
   return (
     <MainWrap height={height}>
-     {children}
+      {children}
     </MainWrap>
   );
 };

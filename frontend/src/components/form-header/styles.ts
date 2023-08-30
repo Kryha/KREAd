@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { margins } from '../../design';
+import { margins } from "../../design";
 
 export const FormNavigation = styled.div`
   display: flex;

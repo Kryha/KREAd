@@ -79,7 +79,7 @@ export const useZoomCanvas = () => {
 
       const handleWheel = (event: Konva.KonvaEventObject<WheelEvent>) => {
         event.evt.preventDefault();
-        let delta = event.evt.deltaY > 0 ? -1 : 1;
+        const delta = event.evt.deltaY > 0 ? -1 : 1;
         const zoom = delta > 0 ? 1 + zoomProps.zoomSpeed : 1 - zoomProps.zoomSpeed;
         const newScale = Math.round(prevScaleRef.current * zoom * 10) * zoomProps.zoomSpeed;
         if (newScale <= zoomProps.maxScale && newScale >= 1) {

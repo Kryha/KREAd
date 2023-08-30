@@ -1,6 +1,6 @@
-import { iterateLatest, makeFollower } from '@agoric/casting';
+import { iterateLatest, makeFollower } from "@agoric/casting";
 
-import { dappConfig, KREAD_STORAGE_NODE_PATH } from '../../constants';
+import { dappConfig, KREAD_STORAGE_NODE_PATH } from "../../constants";
 
 export const watchInstanceIds = async (
   leader: any,
@@ -8,10 +8,10 @@ export const watchInstanceIds = async (
 ) => {
   const f = await makeFollower(":published.kread.info", leader, {
     unserializer: walletUnserializer,
-    proof: 'none',
+    proof: "none",
   });
 
-  console.log("watching", f.getLatestIterable())
+  console.log("watching", f.getLatestIterable());
   const watchedAnchors = new Set();
 
   for await (const { value } of iterateLatest(f)) {

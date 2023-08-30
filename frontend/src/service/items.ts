@@ -99,7 +99,7 @@ export const useSellItem = (itemId: string) => {
       try {
         const found = items.find((item) => item.id === itemId);
         if (!found) return;
-        const itemToSell = {...found, id: Number(found.id)}
+        const itemToSell = {...found, id: Number(found.id)};
         const instance = service.contracts.kread.instance;
         const itemBrand = service.tokenInfo.item.brand;
 
@@ -117,7 +117,7 @@ export const useSellItem = (itemId: string) => {
           callback: async () => {
             console.info("SellItem call settled");
           }
-        })
+        });
         return true;
       } catch (error) {
         console.warn(error);
@@ -164,7 +164,7 @@ export const useBuyItem = (itemId: string) => {
           console.info("BuyItem call settled");
           setIsLoading(false);
         }
-      })
+      });
     } catch (error) {
       console.warn(error);
       setIsError(true);
@@ -186,7 +186,7 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
     const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
     const item = items.find((item) => item.id === body.itemId);
     if (!item) return;
-    const itemToEquip = { ...item, id: Number(item.id)}
+    const itemToEquip = { ...item, id: Number(item.id)};
 
     await inventoryService.equipItem({
       character: characterToEquipTo,
@@ -201,7 +201,7 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
         console.info("Equip call settled");
         if(callback) callback(item);
       }
-    })
+    });
   });
 };
 
@@ -219,7 +219,7 @@ export const useUnequipItem = (callback?: ()=>void) => {
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
     
     if (!item) return;
-    const itemToUnEquip = { ...item, id: Number(item.id)}
+    const itemToUnEquip = { ...item, id: Number(item.id)};
     const characterToUnequipFrom = { ...character.nft, id: Number(character.nft.id) };
     
     await inventoryService.unequipItem({

@@ -35,7 +35,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
     };
     const formatMarketEntry = async (marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
 
-      const item = { ...marketEntry.object, id: marketEntry.object.id.toString() }
+      const item = { ...marketEntry.object, id: marketEntry.object.id.toString() };
 
       const itemMarketEntry = {
         id: marketEntry.id.toString(),

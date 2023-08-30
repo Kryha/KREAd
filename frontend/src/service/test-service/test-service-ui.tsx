@@ -53,7 +53,7 @@ export const TestServiceUI = () => {
     const charBrand = service.tokenInfo.character.brand;
 
     mintCharacter({
-      name: 'C-MONEY',
+      name: "C-MONEY",
       service: {
         kreadInstance: instance,
         characterBrand: charBrand,
@@ -102,7 +102,7 @@ export const TestServiceUI = () => {
       callback: async () => {
         console.info("UnequipAll call settled");
       }
-    })
+    });
     
   };
 
@@ -127,7 +127,7 @@ export const TestServiceUI = () => {
       callback: async () => {
         console.info("Equip call settled");
       }
-    })
+    });
   };
 
   const swapItemAddOffer = async () => {
@@ -153,7 +153,7 @@ export const TestServiceUI = () => {
       callback: async () => {
         console.info("Swap call settled");
       }
-    })
+    });
   };
 
   const sellCharacterAddOffer = async () => {
@@ -173,7 +173,7 @@ export const TestServiceUI = () => {
       callback: async () => {
         console.info("SellCharacter call settled");
       }
-    })
+    });
   };
 
   const buyCharacterAddOffer = async () => {
@@ -194,7 +194,7 @@ export const TestServiceUI = () => {
       callback: async () => {
         console.info("BuyCharacter call settled");
       }
-    })
+    });
   };
 
   const sellItemAddOffer = async () => {
@@ -214,7 +214,7 @@ export const TestServiceUI = () => {
       callback: async () => {
         console.info("SellItem call settled");
       }
-    })
+    });
   };
 
   const buyItemAddOffer = async () => {
@@ -235,7 +235,7 @@ export const TestServiceUI = () => {
       callback: async () => {
         console.info("BuyItem call settled");
       }
-    })
+    });
   };
 
   const buttons = [

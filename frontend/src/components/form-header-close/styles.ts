@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
-import { CloseIcon } from '../../assets';
-import { margins } from '../../design';
-import { HeaderHorizontalDivider } from '../atoms';
+import styled from "@emotion/styled";
+import { CloseIcon } from "../../assets";
+import { margins } from "../../design";
+import { HeaderHorizontalDivider } from "../atoms";
 
 export const HeaderContainer = styled.div`
   display: flex;

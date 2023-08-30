@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import { useViewport } from '../../hooks';
+import { FC } from "react";
+import { useViewport } from "../../hooks";
 
-import { ActiveLine, NavTitle } from './styles';
+import { ActiveLine, NavTitle } from "./styles";
 
 interface FormTabProps {
   active: boolean;
@@ -14,10 +14,10 @@ export const FormTab: FC<FormTabProps> = ({ active, title, amount }) => {
 
   return (
     <>
-        <NavTitle width={width} amount={amount} active={active}>
-          {title}
-        </NavTitle>
-        <ActiveLine active={active} />
+      <NavTitle width={width} amount={amount} active={active}>
+        {title}
+      </NavTitle>
+      <ActiveLine active={active} />
     </>
   );
 };

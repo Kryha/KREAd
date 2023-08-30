@@ -70,7 +70,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
           )}
         </StepWrapper>
       </StepContainer>
-        <ButtonWrapper>
+      <ButtonWrapper>
         {!sendOffer && (
           <PreviousButtonContainer onClick={() => submit(INFORMATION_STEP)}>
             <SecondaryButton>
@@ -78,11 +78,11 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
             </SecondaryButton>
           </PreviousButtonContainer>
         )}
-          <ButtonContainer>
-            <PrimaryButton onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
-              <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-              {isLoading ? <LoadingPage /> : <ArrowUp />}
-            </PrimaryButton>
+        <ButtonContainer>
+          <PrimaryButton onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
+            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+            {isLoading ? <LoadingPage /> : <ArrowUp />}
+          </PrimaryButton>
         </ButtonContainer>
       </ButtonWrapper>
     </ContentWrapper>
