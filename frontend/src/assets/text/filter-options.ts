@@ -39,12 +39,18 @@ export const sortItemsInShop: Options[] = getSortingOptions(); // All of them
 export const sortItemsInInventory: Options[] = getSortingOptions(["latest", "atoz", "rarity", "level"]);
 
 // Characters
-export const characterShopCategories: Options[] = [
-  { label: "all categories", value: "allCategories" },
-  { label: "Tempet Scavengers", value: "tempetScavenger" },
+const characterCategories = [
+  { label: "elephia", value: "elephia" },
+  { label: "arma", value: "arma" },
+  { label: "west", value: "west" },
+  { label: "farma", value: "farma" },
+  { label: "mount", value: "mount" },
+  { label: "tempet scavengers", value: "tempetScavenger" },
+  { label: "mars", value: "mars" },
 ];
+export const characterShopCategories: Options[] = [{ label: "all categories", value: "allCategories" }, ...characterCategories];
 export const characterInventoryCategories: Options[] = [
-  { label: "Tempet Scavengers", value: "tempetScavenger" },
+  ...characterCategories,
   { label: "equipped", value: "equipped" },
   { label: "for sale", value: "forSale" },
 ];
