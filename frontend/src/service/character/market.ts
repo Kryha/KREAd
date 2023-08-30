@@ -1,17 +1,18 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, Item, ItemBackend } from "../../interfaces";
+import { Character } from "../../interfaces";
+// TODO: Use makeOffer status callback for errors 
 
 interface SellCharacter {
-    character: Character;
-    price: bigint;
-    service: {
-      kreadInstance: any;
-      characterBrand: any;
-      istBrand: any;
-      makeOffer: any;
-    };
-    callback: () => Promise<void>;
-  }
+  character: Character;
+  price: bigint;
+  service: {
+    kreadInstance: any;
+    characterBrand: any;
+    istBrand: any;
+    makeOffer: any;
+  };
+  callback: () => Promise<void>;
+}
 const sellCharacter = async ({ character, price, service, callback }: SellCharacter): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -30,18 +31,15 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
     Price: { brand: service.istBrand, value: price },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
-      want,
-      give,
-      exit: { waived: null },
-    },
+  const proposal = {
+    want,
+    give,
+    exit: { waived: null },
   };
 
   service.makeOffer(
-    offerConfig.spec,
-    offerConfig.proposal,
+    spec,
+    proposal,
     undefined,
     ({ status, data }: { status: string; data: object }) => {
       if (status === "error") {
@@ -59,18 +57,18 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
   );
 };
 
-  interface BuyCharacter {
-    character: Character;
-    price: bigint;
-    
-    service: {
-      kreadInstance: any;
-      characterBrand: any;
-      istBrand: any;
-      makeOffer: any;
-    };
-    callback: () => Promise<void>;
-  }
+interface BuyCharacter {
+  character: Character;
+  price: bigint;
+  
+  service: {
+    kreadInstance: any;
+    characterBrand: any;
+    istBrand: any;
+    makeOffer: any;
+  };
+  callback: () => Promise<void>;
+}
 const buyCharacter = async ({ character, price, service, callback }: BuyCharacter): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -90,17 +88,14 @@ const buyCharacter = async ({ character, price, service, callback }: BuyCharacte
     Character: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
-      want,
-      give,
-    },
+  const proposal = {
+    want,
+    give,
   };
 
   service.makeOffer(
-    offerConfig.spec,
-    offerConfig.proposal,
+    spec,
+    proposal,
     undefined,
     ({ status, data }: { status: string; data: object }) => {
       if (status === "error") {
@@ -117,17 +112,17 @@ const buyCharacter = async ({ character, price, service, callback }: BuyCharacte
     }
   );
 };
-  interface SellItem {
-    item: any;
-    price: bigint;
-    service: {
-      kreadInstance: any;
-      itemBrand: any;
-      istBrand: any;
-      makeOffer: any;
-    };
-    callback: () => Promise<void>;
-  }
+interface SellItem {
+  item: any;
+  price: bigint;
+  service: {
+    kreadInstance: any;
+    itemBrand: any;
+    istBrand: any;
+    makeOffer: any;
+  };
+  callback: () => Promise<void>;
+}
 const sellItem = async ({ item, price, service, callback }: SellItem): Promise<void> => {
   const instance = service.kreadInstance;
 
@@ -148,18 +143,15 @@ const sellItem = async ({ item, price, service, callback }: SellItem): Promise<v
     Price: { brand: service.istBrand, value: price },
   };
 
-  const offerConfig = harden({
-    spec,
-    proposal: {
-      want,
-      give,
-      exit: { waived: null },
-    },
-  });
+  const proposal = {
+    want,
+    give,
+    exit: { waived: null },
+  };
 
   service.makeOffer(
-    offerConfig.spec,
-    offerConfig.proposal,
+    spec,
+    proposal,
     undefined,
     ({ status, data }: { status: string; data: object }) => {
       if (status === "error") {
@@ -176,17 +168,17 @@ const sellItem = async ({ item, price, service, callback }: SellItem): Promise<v
     }
   );
 };
-  interface BuyItem {
-    item: any;
-    price: bigint;
-    service: {
-      kreadInstance: any;
-      itemBrand: any;
-      istBrand: any;
-      makeOffer: any;
-    };
-    callback: () => Promise<void>;
-  }
+interface BuyItem {
+  item: any;
+  price: bigint;
+  service: {
+    kreadInstance: any;
+    itemBrand: any;
+    istBrand: any;
+    makeOffer: any;
+  };
+  callback: () => Promise<void>;
+}
 const buyItem = async ({ item, price, service, callback }: BuyItem): Promise<void> => {
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;
@@ -206,17 +198,14 @@ const buyItem = async ({ item, price, service, callback }: BuyItem): Promise<voi
     Item: { brand: itemBrand, value: makeCopyBag(harden([[{ ...item, id: Number(item.id) }, 1n]])) },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
+  const proposal = {
       want,
       give,
-    },
   };
 
   service.makeOffer(
-    offerConfig.spec,
-    offerConfig.proposal,
+    spec,
+    proposal,
     undefined,
     ({ status, data }: { status: string; data: object }) => {
       if (status === "error") {

@@ -1,4 +1,5 @@
 import { makeCopyBag } from "@agoric/store";
+// TODO: Use makeOffer status callback for errors 
 
 interface MintCharacter {
   name: string;
@@ -24,14 +25,11 @@ export const mintCharacter = async ({ name, service, callback }: MintCharacter):
     Asset: { brand: charBrand, value: makeCopyBag(harden([[{ name: name }, 1n]])) },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
-      want,
-    },
+  const proposal = {
+    want,
   };
 
-  service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
     }

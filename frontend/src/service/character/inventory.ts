@@ -1,6 +1,7 @@
 import { makeCopyBag } from "@agoric/store";
 import { Character, Item } from "../../interfaces";
 
+// TODO: Use makeOffer status callback for errors 
 interface UnequipItem {
   item: any;
   character: Character;
@@ -41,15 +42,12 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
+  const proposal = {
       want,
       give,
-    },
   };
 
-  service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
     }
@@ -95,15 +93,12 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
     },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
+  const proposal = {
       want,
       give,
-    },
   };
   
-  service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
     }
@@ -154,15 +149,12 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
+  const proposal = {
       want,
       give,
-    },
   };
 
-  service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
     }
@@ -215,15 +207,12 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
     Item2: { brand: itemBrand, value: makeCopyBag(harden([[wantItem, 1n]])) },
   };
 
-  const offerConfig = {
-    spec,
-    proposal: {
-      want,
-      give,
-    },
+  const proposal = {
+    want,
+    give,
   };
 
-  service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
     }
