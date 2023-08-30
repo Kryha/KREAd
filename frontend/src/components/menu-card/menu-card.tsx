@@ -96,7 +96,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItemProp, unequippe
           <MenuContainer>
             <MenuText>{title}</MenuText>
             <InfoContainer>
-              <Label>{text.param.amountOfItems(allItems.length)}</Label>
+              <Label>{text.param.amountOfAssets(allItems.length)}</Label>
               <Divider />
               <ArrowContainer>
                 <Close onClick={() => navigate(GO_BACK)} />

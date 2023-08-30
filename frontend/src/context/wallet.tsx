@@ -56,7 +56,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       const newCharacterPurses = purses.filter(({ brand }: any) => brand === tokenInfo.character.brand);
       const newItemPurses = purses.filter(({ brand }: any) => brand === tokenInfo.item.brand);
       const characterWallet = newCharacterPurses[newCharacterPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
-      //FIXME: this is not going to work when a users has more than 1 item that is the same (then it will be 2n)
+      // FIXME: this is not going to work when a users has more than 1 item that is the same (then it will be 2n)
       // Consider creating an array that fills an array n amount of times based onthe amount the user owns
       let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
       const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;

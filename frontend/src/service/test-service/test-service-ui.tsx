@@ -26,6 +26,7 @@ export const TestServiceUI = () => {
   const { characters } = useUserState();
   const wallet = useWalletState();
   const createCharacter = useCreateCharacter();
+  const userState = useUserState();
 
   useEffect(() => {
     console.log("SERVICE:", service);
@@ -238,7 +239,7 @@ export const TestServiceUI = () => {
   };
 
   const buttons = [
-    { text: "STATE", onClick: () => console.log(service, wallet) },
+    { text: "STATE", onClick: () => console.log(service, wallet, userState) },
     { text: "MINT", onClick: mintCharacterAddOffer },
     { text: "UNEQUIP", onClick: unequipItemAddOffer },
     { text: "UNEQUIPALL", onClick: unequipAllAddOffer },
