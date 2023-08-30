@@ -150,16 +150,7 @@ export const useBuyItem = (itemId: string) => {
       const itemToBuy = { ...found, id: Number(found.id), item: { ...found.item, id: Number(found.item.id) }};
       
       setIsLoading(true);
-      
-      console.log({
-        item: itemToBuy,
-        price: BigInt(itemToBuy.sell.price),
-        service: {
-          kreadInstance: instance,
-          itemBrand,
-          makeOffer: service.walletConnection.makeOffer,
-          istBrand
-    }});
+
       return await marketService.buyItem({
         item: itemToBuy.item,
         price: BigInt(itemToBuy.sell.price),
@@ -190,13 +181,10 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
   const characterBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  
-  
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
     const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
     const item = items.find((item) => item.id === body.itemId);
-    console.log("🤕🤕🤕🤕 EQUIPPING", item)
     if (!item) return;
     const itemToEquip = { ...item, id: Number(item.id)}
 
@@ -229,7 +217,6 @@ export const useUnequipItem = (callback?: ()=>void) => {
     if (!character) return;
     const sanitizedEquipped = equipped.filter((item) => item !== undefined);
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
-    console.log("🤕🤕🤕🤕 UNEQUIPPING", item, equipped)
     
     if (!item) return;
     const itemToUnEquip = { ...item, id: Number(item.id)}

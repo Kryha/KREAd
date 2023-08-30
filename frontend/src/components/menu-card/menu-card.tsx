@@ -84,11 +84,6 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItemProp, unequippe
 
   const isDividerShown = !!equippedItem && !!unequippedItems.length;
 
-  console.log("all", allItems);
-  console.log("equipped item", equippedItem);
-  console.log("unequipped items", unequippedItems);
-
-
   return (
     <MenuCardWrapper>
       <Menu width={viewWidth} height={viewHeight}>

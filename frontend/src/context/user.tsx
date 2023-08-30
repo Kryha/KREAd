@@ -99,7 +99,6 @@ const DispatchContext = createContext<UserDispatch | undefined>(undefined);
 const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
   switch (action.type) {
     case "SET_CHARACTERS": {
-      console.log(action.payload)
       return { ...state, characters: action.payload, fetched: true };
     }
 

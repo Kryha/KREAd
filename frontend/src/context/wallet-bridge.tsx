@@ -53,7 +53,6 @@ const WalletBridge = () => {
   const walletUIRef = walletUiHref();
 
   const showWarning = () => {
-    console.log("warning");
   };
 
   const showConnectionSuccessful = () => {

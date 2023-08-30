@@ -74,7 +74,6 @@ const Context = createContext<AgoricState | undefined>(undefined);
 const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
 const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
-  console.log(action.type);
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
@@ -149,7 +148,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         let connection = await makeAgoricWalletConnection(chainStorageWatcher);
         connection = { ...connection };
         // FIXME: remove log
-        console.log("KEPLER CONNECTION: ", connection);
         dispatch({ type: "SET_WALLET_CONNECTION", payload: connection });
         setCurrentStatus(status.keplrReady);
       } catch (e: any) {
@@ -215,7 +213,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     const startWatching = async () => {
       if (state.chainStorageWatcher) {
         // setCurrentStatus(status.storageWatcherReady);
-        console.log("STORAGEWATCHER FOUND, SKIPPING STARTWATCHING");
+        console.info("Storagewatcher found, skipping startWatching");
         return;
       }
       try {

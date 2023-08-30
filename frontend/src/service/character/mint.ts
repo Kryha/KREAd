@@ -39,7 +39,7 @@ export const mintCharacter = async ({ name, service, callback }: MintCharacter):
       console.error("Offer refunded", data);
     }
     if (status === "accepted") {
-      console.log("Offer accepted", data);
+      console.info("Offer accepted", data);
       callback();
     }
   });

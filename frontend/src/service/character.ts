@@ -52,7 +52,6 @@ export const useMyCharactersForSale = () => {
   useEffect(() => {
     const extend = async () => {
       const myCharactersForSale = wallet.characterProposals.map((proposal: any) => proposal.give.Character.value.payload[0]);
-      console.log(myCharactersForSale);
       const { extendedCharacters } = await extendCharacters(myCharactersForSale, marshaller);
       setOfferCharacters(JSON.stringify(extendedCharacters));
     };

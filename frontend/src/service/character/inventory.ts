@@ -47,9 +47,6 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     },
   };
 
-  console.log("UNEQUIP ITEM CALL");
-  console.log(offerConfig.spec, offerConfig.proposal)
-
   service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
@@ -58,7 +55,7 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
       console.error("Offer refunded", data);
     }
     if (status === "accepted") {
-      console.log("Offer accepted", data);
+      console.info("Offer accepted", data);
       callback();
     }
   });
@@ -112,7 +109,7 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
       console.error("Offer refunded", data);
     }
     if (status === "accepted") {
-      console.log("Offer accepted", data);
+      console.info("Offer accepted", data);
       callback();
     }
   });
@@ -162,9 +159,6 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     },
   };
 
-  console.log("EQUIP ITEM CALL");
-  console.log(offerConfig.spec, offerConfig.proposal)
-
   service.makeOffer(offerConfig.spec, offerConfig.proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
@@ -173,7 +167,7 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
       console.error("Offer refunded", data);
     }
     if (status === "accepted") {
-      console.log("Offer accepted", data);
+      console.info("Offer accepted", data);
       callback();
     }
   });
@@ -233,7 +227,7 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
       console.error("Offer refunded", data);
     }
     if (status === "accepted") {
-      console.log("Offer accepted", data);
+      console.info("Offer accepted", data);
       callback();
     }
   });
