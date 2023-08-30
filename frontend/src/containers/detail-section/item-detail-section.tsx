@@ -23,12 +23,6 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
   const [activity, setActivity] = useState<ActivityEvent[]>();
 
   // TODO: implement fetching activity/history
-  // useEffect(() => {
-  // const fetchActivity = async () => {
-  //   if (!item) return;
-  //   setActivity(activity);
-  // };
-  // }, [agoric, item]);
 
   if (!item) return <ErrorView />;
 

@@ -3,7 +3,6 @@ import React, { createContext, useContext, useEffect, useReducer, useState } fro
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
 import { CHARACTER_IDENTIFIER, isDevelopmentMode, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
-import WalletBridge from "./wallet-bridge";
 import { useDataMode } from "../hooks";
 import { fetchChainInfo } from "./util";
 import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
@@ -246,7 +245,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
   return (
     <Context.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
-        <WalletBridge />
         {props.children}
       </DispatchContext.Provider>
     </Context.Provider>

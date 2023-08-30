@@ -201,12 +201,6 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
         charactersToProcess.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
 
           // TODO: fetch activity and history from storage node
-          // const activityHistory = await E(kreadPublicFacet).getCharacterHistory(character.name);
-          // const activity = activityHistory.map((event: ItemActivityEventBackend) => ({
-          //   type: event.type,
-          //   to: "unknown",
-          //   date: event.timestamp,
-          // }));
 
           const equipped: { [key: string]: Item | undefined } = {};
           const extendedCharacter = await extendCharacters([character], agoric.chainStorageWatcher.marshaller);
