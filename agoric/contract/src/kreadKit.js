@@ -931,7 +931,6 @@ export const prepareKreadKit = async (
             const { Price: characterForSalePrice } =
               sellerSeat.getProposal().want;
             const paymentBrand = characterForSalePrice.brand;
-
             assert(
               AmountMath.isGTE(
                 providedMoneyAmount,
