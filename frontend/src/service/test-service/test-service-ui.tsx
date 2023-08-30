@@ -326,7 +326,6 @@ export const TestServiceUI = () => {
       proposal: {
         want,
         give,
-        exit: { waived: null },
       },
     };
 
@@ -420,7 +419,6 @@ export const TestServiceUI = () => {
       proposal: {
         want,
         give,
-        exit: { waived: null },
       },
     };
 
