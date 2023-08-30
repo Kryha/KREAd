@@ -43,8 +43,8 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
   };
 
   const proposal = {
-      want,
-      give,
+    want,
+    give,
   };
 
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
@@ -94,8 +94,8 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
   };
 
   const proposal = {
-      want,
-      give,
+    want,
+    give,
   };
   
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
@@ -150,8 +150,8 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
   };
 
   const proposal = {
-      want,
-      give,
+    want,
+    give,
   };
 
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {

@@ -199,8 +199,8 @@ const buyItem = async ({ item, price, service, callback }: BuyItem): Promise<voi
   };
 
   const proposal = {
-      want,
-      give,
+    want,
+    give,
   };
 
   service.makeOffer(
