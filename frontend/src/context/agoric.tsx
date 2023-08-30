@@ -147,7 +147,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       try {
         let connection = await makeAgoricWalletConnection(chainStorageWatcher);
         connection = { ...connection };
-        // FIXME: remove log
         dispatch({ type: "SET_WALLET_CONNECTION", payload: connection });
         setCurrentStatus(status.keplrReady);
       } catch (e: any) {
@@ -232,8 +231,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       }
     };
 
-    // FIXME: remove log
-    console.count("CONNECTING");
     const runEffects = async () => {
       await startWatching();
 

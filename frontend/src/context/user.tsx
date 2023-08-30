@@ -1,11 +1,8 @@
-import { E } from "@endo/eventual-send";
-import { iterateLatest, makeCastingSpec, makeFollower, makeLeader } from "@agoric/casting";
 import {
   CharacterBackend,
   ExtendedCharacter,
   ExtendedCharacterBackend,
   Item,
-  ItemActivityEventBackend,
   ItemBackend,
   ItemEquip,
 } from "../interfaces";
@@ -15,11 +12,9 @@ import { createContext, useContext, useEffect, useMemo, useReducer } from "react
 import { mediate } from "../util";
 import { itemCategories } from "../service/util";
 import { useDataMode } from "../hooks";
-import { AGORIC_RPC, STORAGE_NODE_SPEC_INVENTORY } from "../constants";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 import { useWalletState } from "./wallet";
 import { useAgoricState } from "./agoric";
-import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
 import { extendCharacters } from "../service/transform-character";
 
 export interface UserContext {
