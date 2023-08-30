@@ -1,5 +1,6 @@
-import { Character } from "../../interfaces";
+import { Character, CharacterInMarket } from "../../interfaces";
 import { Lina } from "../../assets/images/items";
+import { mockCharacterItems } from "./mock-items";
 
 export const mockCharacters: Character[] = [
   {
@@ -53,5 +54,98 @@ export const mockCharacters: Character[] = [
         date: 1235667272,
       },
     ],
+  },
+];
+
+export const mockCharactersInMarket: CharacterInMarket[] = [
+  {
+    id: "1",
+    character: mockCharacters[0],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(23232424),
+    },
+  },
+  {
+    id: "2",
+    character: mockCharacters[1],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(33909023),
+    },
+  },
+  {
+    id: "3",
+    character: mockCharacters[2],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(3430),
+    },
+  },
+  {
+    id: "4",
+    character: mockCharacters[3],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(873090),
+    },
+  },
+  {
+    id: "5",
+    character: mockCharacters[4],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(80909090),
+    },
+  },
+  {
+    id: "6",
+    character: mockCharacters[5],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(10),
+    },
+  },
+  {
+    id: "7",
+    character: mockCharacters[6],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(1000000),
+    },
+  },
+  {
+    id: "8",
+    character: mockCharacters[7],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(105000),
+    },
+  },
+  {
+    id: "9",
+    character: mockCharacters[8],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(100),
+    },
+  },
+  {
+    id: "10",
+    character: mockCharacters[9],
+    equippedItems: mockCharacterItems,
+    sell: {
+      publicFacet: "",
+      price: BigInt(40000),
+    },
   },
 ];

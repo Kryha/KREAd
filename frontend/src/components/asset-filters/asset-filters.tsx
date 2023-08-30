@@ -15,11 +15,12 @@ interface Props {
   selectedPrice?: { min: number; max: number };
   setSelectedCategories: (value: string[]) => void;
   setSelectedSorting: (value: string) => void;
-  setSelectedColor: (value: string) => void;
+  setSelectedColor?: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
   pageSelector: React.ReactNode;
-  section: typeof SECTION[keyof typeof SECTION];
+  section: (typeof SECTION)[keyof typeof SECTION];
 }
+
 export const AssetFilters: FC<Props> = ({
   assets,
   selectedCategories,
@@ -46,6 +47,7 @@ export const AssetFilters: FC<Props> = ({
   const openFilters = () => {
     setShowFilter(!showFilter);
   };
+
   const handleCategoryChange = (selected: string | string[]) => {
     if (Array.isArray(selected)) {
       setSelectedCategories(selected); // Handle multi-select
@@ -91,9 +93,11 @@ export const AssetFilters: FC<Props> = ({
                     {selectedPrice && <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
                   </Filters>
                 )}
-                <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
-                  <ColorSelector handleChange={setSelectedColor} />
-                </Filters>
+                {setSelectedColor && (
+                  <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
+                    <ColorSelector handleChange={setSelectedColor} />
+                  </Filters>
+                )}
                 <SortAssetsByContainer>
                   <Label customColor={color.black}>{text.filters.sortBy}</Label>
                   <Filters

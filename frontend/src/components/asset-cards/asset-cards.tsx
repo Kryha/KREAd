@@ -22,7 +22,7 @@ interface Props {
   assetsData: any[];
   isLoading: boolean;
   setAssetId: (assetId: string) => void;
-  section: typeof SECTION[keyof typeof SECTION];
+  section: (typeof SECTION)[keyof typeof SECTION];
 }
 
 export const AssetCards: FC<Props> = ({ assetsData, isLoading, setAssetId, section }) => {
