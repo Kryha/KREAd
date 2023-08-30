@@ -47,6 +47,7 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetI
     if (!assetId) return;
     navigate(`${routes.buyItem}/${assetId}`);
   };
+
   const assetDetailActions = () => {
     if (section === "inventory") {
       if (assetData?.isEquipped) {
@@ -59,12 +60,7 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetI
     }
   };
 
-  let transformedData;
-  if (section === "inventory") {
-    transformedData = assetData;
-  } else if (section === "shop") {
-    transformedData = assetData?.item;
-  }
+  const transformedData = section === "inventory" ? assetData : assetData?.item;
 
   return (
     <>

@@ -5,6 +5,7 @@ import { AssetsContainer, AssetsWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
 import { AssetCard } from "../asset-card";
+import { assetTransformer } from "./asset-transformer";
 
 export interface AssetData {
   id: string;
@@ -12,7 +13,7 @@ export interface AssetData {
   name: string;
   category: string;
   level: number;
-  rarity: number;
+  rarity?: number;
   isEquipped?: boolean;
   isForSale?: boolean;
   price?: bigint;
@@ -34,60 +35,10 @@ export const AssetCards: FC<Props> = ({ assetType, assetsData, isLoading, setAss
   };
 
   // Transform and structure data based on section
-  const transformedData: any[] = assetsData
+  const transformedData = assetsData
     .map((asset) => {
-      switch (assetType) {
-        case ASSET_TYPE.CHARACTER:
-          switch (section) {
-            case SECTION.INVENTORY:
-              return {
-                id: asset.id,
-                image: asset.image,
-                name: asset.name,
-                category: asset.type,
-                level: asset.level,
-                isEquipped: asset.isEquipped,
-                isForSale: asset.isForSale,
-              };
-            case SECTION.SHOP:
-              return {
-                id: asset.id,
-                image: asset.character.image,
-                name: asset.character.name,
-                category: asset.character.type,
-                level: asset.character.level,
-                price: asset.sell.price,
-              };
-            default:
-              return undefined;
-          }
-        case ASSET_TYPE.ITEM:
-          switch (section) {
-            case SECTION.INVENTORY:
-              return {
-                id: asset.id,
-                image: asset.thumbnail,
-                name: asset.name,
-                category: asset.category,
-                level: asset.level,
-                rarity: asset.rarity,
-                isEquipped: asset.isEquipped,
-                isForSale: asset.isForSale,
-              };
-            case SECTION.SHOP:
-              return {
-                id: asset.id,
-                image: asset.item.thumbnail,
-                name: asset.item.name,
-                category: asset.item.category,
-                level: asset.item.level,
-                rarity: asset.item.rarity,
-                price: asset.sell.price,
-              };
-            default:
-              return undefined;
-          }
-      }
+      const transform = assetTransformer[assetType]?.[section];
+      return transform && transform(asset);
     })
     .filter((asset) => asset !== undefined);
 
