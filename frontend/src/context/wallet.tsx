@@ -3,6 +3,7 @@ import { useAgoricState } from "./agoric";
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
 import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
+import { OfferProposal } from "../interfaces";
 
 const { brandBoardIds } = dappConstants;
 export interface WalletContext {
@@ -10,8 +11,8 @@ export interface WalletContext {
   money: any;
   character: any;
   item: any;
-  itemProposals: { give: Object; want: Object }[];
-  characterProposals: { give: Object; want: Object }[];
+  itemProposals: OfferProposal[];
+  characterProposals: OfferProposal[];
   fetched: boolean;
 }
 
