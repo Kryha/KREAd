@@ -1013,8 +1013,6 @@ export const prepareKreadKit = async (
             tokenBrandBoardId,
             tokenIssuerBoardId,
           });
-          marketCharacterKit.recorder.write([]);
-          marketItemKit.recorder.write([]);
         },
         makeMintItemInvitation() {
           const { item } = this.facets;
