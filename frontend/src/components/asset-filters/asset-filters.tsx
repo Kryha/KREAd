@@ -1,14 +1,25 @@
 import React, { FC, useState } from "react";
 
-import { itemInventoryCategories, itemShopCategories, sortAssetsInInventory, sortAssetsInShop } from "../../assets/text/filter-options";
+import {
+  characterInventoryCategories,
+  characterShopCategories,
+  itemInventoryCategories,
+  itemShopCategories,
+  sortCharactersInInventory,
+  sortCharactersInShop,
+  sortItemsInInventory,
+  sortItemsInShop,
+} from "../../assets/text/filter-options";
 import { breakpoints, color } from "../../design";
 import { ColorSelector, Filters, HorizontalDivider, Label, PriceSelector, Select } from "../../components";
 import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
 import { AssetFilterContainer, AssetFilterCount, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 
 interface Props {
+  assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
+  section: (typeof SECTION)[keyof typeof SECTION];
   assets: any[];
   selectedCategories: string[];
   selectedSorting: string;
@@ -18,10 +29,11 @@ interface Props {
   setSelectedColor?: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
   pageSelector: React.ReactNode;
-  section: (typeof SECTION)[keyof typeof SECTION];
 }
 
 export const AssetFilters: FC<Props> = ({
+  assetType,
+  section,
   assets,
   selectedCategories,
   selectedSorting,
@@ -31,7 +43,6 @@ export const AssetFilters: FC<Props> = ({
   setSelectedColor,
   setSelectedPrice,
   pageSelector,
-  section,
 }) => {
   const isMobile = useIsMobile(breakpoints.desktop);
   const numberOfFiltersSelected = selectedCategories.length;
@@ -47,6 +58,28 @@ export const AssetFilters: FC<Props> = ({
   const openFilters = () => {
     setShowFilter(!showFilter);
   };
+
+  const categories =
+    assetType === ASSET_TYPE.ITEM
+      ? // Items
+        section === SECTION.INVENTORY
+        ? itemInventoryCategories
+        : itemShopCategories
+      : // Characters
+      section === SECTION.INVENTORY
+      ? characterInventoryCategories
+      : characterShopCategories;
+
+  const sortOptions =
+    assetType === ASSET_TYPE.ITEM
+      ? // Items
+        section === SECTION.INVENTORY
+        ? sortItemsInInventory
+        : sortItemsInShop
+      : // Characters
+      section === SECTION.INVENTORY
+      ? sortCharactersInInventory
+      : sortCharactersInShop;
 
   const handleCategoryChange = (selected: string | string[]) => {
     if (Array.isArray(selected)) {
@@ -81,12 +114,7 @@ export const AssetFilters: FC<Props> = ({
                   id={filterId}
                   hasValue={selectedCategories.length > 0}
                 >
-                  <Select
-                    label={text.filters.allCategories}
-                    handleChange={handleCategoryChange}
-                    options={section === SECTION.INVENTORY ? itemInventoryCategories : itemShopCategories}
-                    isMultiSelect
-                  />
+                  <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} isMultiSelect />
                 </Filters>
                 {section === SECTION.SHOP && (
                   <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
@@ -106,11 +134,7 @@ export const AssetFilters: FC<Props> = ({
                     id={filterId}
                     hasValue={!!selectedSorting}
                   >
-                    <Select
-                      label={text.filters.latest}
-                      handleChange={handleSortingChange}
-                      options={section === SECTION.INVENTORY ? sortAssetsInInventory : sortAssetsInShop}
-                    />
+                    <Select label={text.filters.latest} handleChange={handleSortingChange} options={sortOptions} />
                   </Filters>
                 </SortAssetsByContainer>
               </>

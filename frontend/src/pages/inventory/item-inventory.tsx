@@ -7,7 +7,7 @@ import { OverviewContainer } from "../shop/styles";
 import { AssetCards } from "../../components/asset-cards/asset-cards";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
 import { AssetDetails } from "../../components/asset-details/asset-details";
-import { SECTION } from "../../constants";
+import { ASSET_TYPE, SECTION } from "../../constants";
 
 interface Props {
   pageSelector: React.ReactNode;
@@ -31,8 +31,9 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <AssetFilters
-        pageSelector={pageSelector}
+        assetType={ASSET_TYPE.ITEM}
         section={SECTION.INVENTORY}
+        pageSelector={pageSelector}
         assets={items}
         selectedCategories={selectedCategories}
         selectedSorting={selectedSorting}
@@ -40,8 +41,20 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
         setSelectedCategories={setSelectedCategories}
         setSelectedColor={setSelectedColor}
       />
-      <AssetCards section={SECTION.INVENTORY} assetsData={items} isLoading={isLoading} setAssetId={setSelectedId} />
-      <AssetDetails section={SECTION.INVENTORY} assetData={item} assetId={selectedId} setAssetId={setSelectedId} />
+      <AssetCards
+        assetType={ASSET_TYPE.ITEM}
+        section={SECTION.INVENTORY}
+        assetsData={items}
+        isLoading={isLoading}
+        setAssetId={setSelectedId}
+      />
+      <AssetDetails
+        assetType={ASSET_TYPE.ITEM}
+        section={SECTION.INVENTORY}
+        assetData={item}
+        assetId={selectedId}
+        setAssetId={setSelectedId}
+      />
       {!items?.length && (
         <OverviewContainer>
           <OverviewEmpty

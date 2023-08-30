@@ -30,8 +30,9 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <AssetFilters
-        pageSelector={pageSelector}
+        assetType={ASSET_TYPE.CHARACTER}
         section={SECTION.SHOP}
+        pageSelector={pageSelector}
         assets={characters}
         selectedCategories={selectedCategories}
         selectedSorting={selectedSorting}
