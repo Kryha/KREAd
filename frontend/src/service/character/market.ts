@@ -104,6 +104,7 @@ const buyCharacter = async ({ character, price, service, callback }: BuyCharacte
     }
   });
 };
+
 interface SellItem {
   item: any;
   price: bigint;
@@ -156,6 +157,7 @@ const sellItem = async ({ item, price, service, callback }: SellItem): Promise<v
     }
   });
 };
+
 interface BuyItem {
   item: any;
   price: bigint;
