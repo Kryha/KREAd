@@ -13,6 +13,7 @@ interface SellCharacter {
   };
   callback: () => Promise<void>;
 }
+
 const sellCharacter = async ({ character, price, service, callback }: SellCharacter): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -64,6 +65,7 @@ interface BuyCharacter {
   };
   callback: () => Promise<void>;
 }
+
 const buyCharacter = async ({ character, price, service, callback }: BuyCharacter): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -113,6 +115,7 @@ interface SellItem {
   };
   callback: () => Promise<void>;
 }
+
 const sellItem = async ({ item, price, service, callback }: SellItem): Promise<void> => {
   const instance = service.kreadInstance;
 
@@ -164,6 +167,7 @@ interface BuyItem {
   };
   callback: () => Promise<void>;
 }
+
 const buyItem = async ({ item, price, service, callback }: BuyItem): Promise<void> => {
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;
