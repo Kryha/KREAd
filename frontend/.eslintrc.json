@@ -3,7 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended","plugin:import/recommended", "plugin:prettier/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -12,8 +12,16 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "react-hooks"],
+  "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "$schema": "http://json.schemastore.org/prettierrc",
+        "printWidth": 140,
+        "endOfLine": "lf"
+      }
+    ],
     "indent": ["warn", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "double"],
@@ -27,22 +35,15 @@
     ],
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "error"
+    "react-hooks/exhaustive-deps": "error",
+    "import/newline-after-import": ["error", { "count": 1 }]
   },
-  "ignorePatterns": [
-    "**/*.umd.js",
-    "**/generated/*"
-  ],
+  "ignorePatterns": ["**/*.umd.js", "**/generated/*"],
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".ts",
-          ".tsx",
-          ".js"
-        ]
+        "extensions": [".ts", ".tsx", ".js"]
       }
     },
     "react": {

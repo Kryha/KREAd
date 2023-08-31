@@ -47,7 +47,7 @@
     "preview": "vite preview",
     "lint": "eslint src",
     "test": "jest",
-    "lint:fix": "npx eslint . --ext .ts,.tsx,.js --fix"
+    "lint:fix": "eslint . --ext .ts,.tsx,.js --fix"
   },
   "browserslist": {
     "production": [
@@ -86,10 +86,14 @@
     "@typescript-eslint/parser": "^5.25.0",
     "@vitejs/plugin-react": "^2.0.1",
     "customize-cra": "^1.0.0",
+    "eslint": "^8.22.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.5.0",
     "jest": "^29.5.0",
+    "prettier": "^3.0.3",
     "ts-jest": "^29.0.5",
     "vite": "^3.0.7",
     "vite-plugin-svgr": "^2.2.1",
