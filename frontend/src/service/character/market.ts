@@ -2,7 +2,7 @@ import { makeCopyBag } from "@agoric/store";
 import { Character } from "../../interfaces";
 // TODO: Use makeOffer status callback for errors
 
-interface SellCharacter {
+interface CharacterMarketAction {
   character: Character;
   price: bigint;
   service: {
@@ -14,7 +14,7 @@ interface SellCharacter {
   callback: () => Promise<void>;
 }
 
-const sellCharacter = async ({ character, price, service, callback }: SellCharacter): Promise<void> => {
+const sellCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
 
@@ -53,20 +53,8 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
   });
 };
 
-interface BuyCharacter {
-  character: Character;
-  price: bigint;
 
-  service: {
-    kreadInstance: any;
-    characterBrand: any;
-    istBrand: any;
-    makeOffer: any;
-  };
-  callback: () => Promise<void>;
-}
-
-const buyCharacter = async ({ character, price, service, callback }: BuyCharacter): Promise<void> => {
+const buyCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
   const istBrand = service.istBrand;
@@ -105,7 +93,7 @@ const buyCharacter = async ({ character, price, service, callback }: BuyCharacte
   });
 };
 
-interface SellItem {
+interface ItemMarketAction {
   item: any;
   price: bigint;
   service: {
@@ -117,7 +105,7 @@ interface SellItem {
   callback: () => Promise<void>;
 }
 
-const sellItem = async ({ item, price, service, callback }: SellItem): Promise<void> => {
+const sellItem = async ({ item, price, service, callback }: ItemMarketAction): Promise<void> => {
   const instance = service.kreadInstance;
 
   const itemBrand = service.itemBrand;
@@ -158,19 +146,7 @@ const sellItem = async ({ item, price, service, callback }: SellItem): Promise<v
   });
 };
 
-interface BuyItem {
-  item: any;
-  price: bigint;
-  service: {
-    kreadInstance: any;
-    itemBrand: any;
-    istBrand: any;
-    makeOffer: any;
-  };
-  callback: () => Promise<void>;
-}
-
-const buyItem = async ({ item, price, service, callback }: BuyItem): Promise<void> => {
+const buyItem = async ({ item, price, service, callback }: ItemMarketAction): Promise<void> => {
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;
   const istBrand = service.istBrand;
