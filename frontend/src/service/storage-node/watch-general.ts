@@ -50,7 +50,7 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
     },
     (log) => {
       console.error("Error watching vbank assets", log);
-    }
+    },
   );
 };
 
@@ -71,7 +71,7 @@ export const watchWalletVstorage = (chainStorageWatcher: any, walletAddress: str
     },
     (log) => {
       console.error("Error watching vbank assets", log);
-    }
+    },
   );
 };
 
@@ -92,6 +92,6 @@ export const watchKreadInstance = (chainStorageWatcher: any, agoricDispatch: Ago
     },
     (log) => {
       console.error("Error watching vbank assets", log);
-    }
+    },
   );
 };

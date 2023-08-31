@@ -2,10 +2,7 @@ import { iterateLatest, makeFollower } from "@agoric/casting";
 
 import { dappConfig, KREAD_STORAGE_NODE_PATH } from "../../constants";
 
-export const watchInstanceIds = async (
-  leader: any,
-  walletUnserializer: any
-) => {
+export const watchInstanceIds = async (leader: any, walletUnserializer: any) => {
   const f = await makeFollower(":published.kread.info", leader, {
     unserializer: walletUnserializer,
     proof: "none",
@@ -50,5 +47,3 @@ export const watchInstanceIds = async (
 //     console.error('got loadInstanceIds err', err)
 //   );
 // };
-
-

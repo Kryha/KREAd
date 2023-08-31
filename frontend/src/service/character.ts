@@ -1,12 +1,6 @@
 import { useMutation } from "react-query";
 
-import {
-  CharacterCreation,
-  CharacterEquip,
-  CharacterInMarket,
-  ExtendedCharacter,
-  ExtendedCharacterBackend,
-} from "../interfaces";
+import { CharacterCreation, CharacterEquip, CharacterInMarket, ExtendedCharacter, ExtendedCharacterBackend } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
 import { extendCharacters } from "./transform-character";
@@ -150,7 +144,7 @@ export const useCreateCharacter = () => {
       },
       callback: async () => {
         console.info("MintCharacter call settled");
-      }
+      },
     });
   });
 };
@@ -176,7 +170,7 @@ export const useSellCharacter = (characterId: string) => {
     async (price: number, successCallback: () => void) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
-      const characterToSell = {...found.nft, id: Number(found.nft.id)};
+      const characterToSell = { ...found.nft, id: Number(found.nft.id) };
 
       setIsLoading(true);
       const res = await marketService.sellCharacter({
@@ -186,19 +180,19 @@ export const useSellCharacter = (characterId: string) => {
           kreadInstance: instance,
           characterBrand: charBrand,
           makeOffer: service.walletConnection.makeOffer,
-          istBrand: service.tokenInfo.ist.brand
+          istBrand: service.tokenInfo.ist.brand,
         },
         callback: async () => {
           console.info("SellCharacter call settled");
           setIsLoading(false);
           successCallback();
           userDispatch({ type: "SET_SELECTED", payload: undefined });
-        }
+        },
       });
-      
+
       return res;
     },
-    [characterId, characters, wallet, service, userDispatch]
+    [characterId, characters, wallet, service, userDispatch],
   );
 
   return { callback, isLoading };
@@ -220,12 +214,12 @@ export const useBuyCharacter = (characterId: string) => {
   const callback = useCallback(async () => {
     const found = characters.find((character) => character.id === characterId);
     if (!found) return;
-    const characterToBuy = { 
-      ...found, 
+    const characterToBuy = {
+      ...found,
       character: {
         ...found.character,
-        id: Number(found.id) 
-      }
+        id: Number(found.id),
+      },
     };
 
     setIsLoading(true);
@@ -241,7 +235,7 @@ export const useBuyCharacter = (characterId: string) => {
       callback: async () => {
         console.info("BuyCharacter call settled");
         setIsLoading(false);
-      }
+      },
     });
   }, [characterId, characters, wallet, service]);
 

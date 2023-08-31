@@ -26,7 +26,7 @@ api.interceptors.response.use(
       console.warn("Response Error:", err);
     }
     return Promise.reject(err.response.data);
-  }
+  },
 );
 
 export const queryClient = new QueryClient();

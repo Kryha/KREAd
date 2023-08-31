@@ -48,7 +48,7 @@ export const getExtendedCharacter = (name: string, characters: ExtendedCharacter
 
 export const getCharacterKeys = (
   characterName: string,
-  characterPurse: CharacterBackend[]
+  characterPurse: CharacterBackend[],
 ): { ownedCharacterKey: CharacterBackend; wantedCharacterKey: CharacterBackend } => {
   const ownedCharacterKey = characterPurse.find((character) => character.name === character.name);
 

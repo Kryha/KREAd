@@ -48,7 +48,7 @@ export const useMyItemsForSale = () => {
           return false;
         }
       }),
-    [offers]
+    [offers],
   );
 
   // getting items from filtered offers
@@ -98,12 +98,12 @@ export const useSellItem = (itemId: string) => {
       try {
         const found = items.find((item) => item.id === itemId);
         if (!found) return;
-        const itemToSell = {...found, id: Number(found.id)};
+        const itemToSell = { ...found, id: Number(found.id) };
         const instance = service.contracts.kread.instance;
         const itemBrand = service.tokenInfo.item.brand;
 
         setIsLoading(true);
-        
+
         marketService.sellItem({
           item: itemToSell,
           price: BigInt(price),
@@ -111,11 +111,11 @@ export const useSellItem = (itemId: string) => {
             kreadInstance: instance,
             itemBrand,
             makeOffer: service.walletConnection.makeOffer,
-            istBrand: service.tokenInfo.ist.brand
+            istBrand: service.tokenInfo.ist.brand,
           },
           callback: async () => {
             console.info("SellItem call settled");
-          }
+          },
         });
         return true;
       } catch (error) {
@@ -123,7 +123,7 @@ export const useSellItem = (itemId: string) => {
         return false;
       }
     },
-    [itemId, wallet, items, service]
+    [itemId, wallet, items, service],
   );
 
   return { callback, isLoading };
@@ -146,8 +146,8 @@ export const useBuyItem = (itemId: string) => {
     try {
       const found = items.find((item) => item.id === itemId);
       if (!found) return;
-      const itemToBuy = { ...found, id: Number(found.id), item: { ...found.item, id: Number(found.item.id) }};
-      
+      const itemToBuy = { ...found, id: Number(found.id), item: { ...found.item, id: Number(found.item.id) } };
+
       setIsLoading(true);
 
       return await marketService.buyItem({
@@ -157,12 +157,12 @@ export const useBuyItem = (itemId: string) => {
           kreadInstance: instance,
           itemBrand,
           makeOffer: service.walletConnection.makeOffer,
-          istBrand
+          istBrand,
         },
         callback: async () => {
           console.info("BuyItem call settled");
           setIsLoading(false);
-        }
+        },
       });
     } catch (error) {
       console.warn(error);
@@ -185,7 +185,7 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
     const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
     const item = items.find((item) => item.id === body.itemId);
     if (!item) return;
-    const itemToEquip = { ...item, id: Number(item.id)};
+    const itemToEquip = { ...item, id: Number(item.id) };
 
     await inventoryService.equipItem({
       character: characterToEquipTo,
@@ -198,13 +198,13 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
       },
       callback: async () => {
         console.info("Equip call settled");
-        if(callback) callback(item);
-      }
+        if (callback) callback(item);
+      },
     });
   });
 };
 
-export const useUnequipItem = (callback?: ()=>void) => {
+export const useUnequipItem = (callback?: () => void) => {
   const [service] = useAgoricContext();
   const { equippedItems: equipped, selected: character } = useUserState();
   const instance = service.contracts.kread.instance;
@@ -212,15 +212,14 @@ export const useUnequipItem = (callback?: ()=>void) => {
   const itemBrand = service.tokenInfo.item.brand;
 
   return useMutation(async (body: { itemId: string }) => {
-    
     if (!character) return;
     const sanitizedEquipped = equipped.filter((item) => item !== undefined);
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
-    
+
     if (!item) return;
-    const itemToUnEquip = { ...item, id: Number(item.id)};
+    const itemToUnEquip = { ...item, id: Number(item.id) };
     const characterToUnequipFrom = { ...character.nft, id: Number(character.nft.id) };
-    
+
     await inventoryService.unequipItem({
       item: itemToUnEquip,
       character: characterToUnequipFrom,
@@ -232,8 +231,8 @@ export const useUnequipItem = (callback?: ()=>void) => {
       },
       callback: async () => {
         console.info("Unequip call settled");
-        if(callback) callback();
-      }
+        if (callback) callback();
+      },
     });
   });
 };

@@ -6,7 +6,7 @@ import { fetchFromVStorage } from "./storage-node/fetch-from-vstorage";
 
 export const extendCharacters = async (
   characters: CharacterBackend[],
-  marshaller: any
+  marshaller: any,
 ): Promise<{ extendedCharacters: ExtendedCharacterBackend[]; equippedItems: Item[] }> => {
   const equippedCharacterItems: Item[] = [];
 
@@ -26,7 +26,7 @@ export const extendCharacters = async (
         nft: character,
         equippedItems: equipped,
       };
-    })
+    }),
   );
 
   return { extendedCharacters: charactersWithItems, equippedItems: equippedCharacterItems };

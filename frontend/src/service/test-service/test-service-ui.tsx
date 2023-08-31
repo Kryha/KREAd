@@ -43,7 +43,7 @@ export const TestServiceUI = () => {
         () =>
           Math.random()
             .toString(36)
-            .replace(/[^a-z]+/g, "")[0]
+            .replace(/[^a-z]+/g, "")[0],
       ).join(""),
     });
   };
@@ -61,7 +61,7 @@ export const TestServiceUI = () => {
       },
       callback: async () => {
         console.info("MintCharacter call settled");
-      }
+      },
     });
   };
 
@@ -83,7 +83,7 @@ export const TestServiceUI = () => {
       },
       callback: async () => {
         console.info("Unequip call settled");
-      }
+      },
     });
   };
 
@@ -101,9 +101,8 @@ export const TestServiceUI = () => {
       },
       callback: async () => {
         console.info("UnequipAll call settled");
-      }
+      },
     });
-    
   };
 
   const equipItemAddOffer = async () => {
@@ -126,7 +125,7 @@ export const TestServiceUI = () => {
       },
       callback: async () => {
         console.info("Equip call settled");
-      }
+      },
     });
   };
 
@@ -152,7 +151,7 @@ export const TestServiceUI = () => {
       },
       callback: async () => {
         console.info("Swap call settled");
-      }
+      },
     });
   };
 
@@ -168,11 +167,11 @@ export const TestServiceUI = () => {
         kreadInstance: instance,
         characterBrand: charBrand,
         makeOffer: service.walletConnection.makeOffer,
-        istBrand: service.tokenInfo.ist
+        istBrand: service.tokenInfo.ist,
       },
       callback: async () => {
         console.info("SellCharacter call settled");
-      }
+      },
     });
   };
 
@@ -193,7 +192,7 @@ export const TestServiceUI = () => {
       },
       callback: async () => {
         console.info("BuyCharacter call settled");
-      }
+      },
     });
   };
 
@@ -209,11 +208,11 @@ export const TestServiceUI = () => {
         kreadInstance: instance,
         itemBrand,
         makeOffer: service.walletConnection.makeOffer,
-        istBrand: service.tokenInfo.ist
+        istBrand: service.tokenInfo.ist,
       },
       callback: async () => {
         console.info("SellItem call settled");
-      }
+      },
     });
   };
 
@@ -234,7 +233,7 @@ export const TestServiceUI = () => {
       },
       callback: async () => {
         console.info("BuyItem call settled");
-      }
+      },
     });
   };
 

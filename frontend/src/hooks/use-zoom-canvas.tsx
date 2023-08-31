@@ -41,7 +41,7 @@ export const useZoomCanvas = () => {
         }
       }
     },
-    [stageRef]
+    [stageRef],
   );
 
   const handleZoomIn = () => {

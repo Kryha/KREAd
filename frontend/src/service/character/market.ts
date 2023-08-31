@@ -1,6 +1,6 @@
 import { makeCopyBag } from "@agoric/store";
 import { Character } from "../../interfaces";
-// TODO: Use makeOffer status callback for errors 
+// TODO: Use makeOffer status callback for errors
 
 interface SellCharacter {
   character: Character;
@@ -37,30 +37,25 @@ const sellCharacter = async ({ character, price, service, callback }: SellCharac
     exit: { waived: null },
   };
 
-  service.makeOffer(
-    spec,
-    proposal,
-    undefined,
-    ({ status, data }: { status: string; data: object }) => {
-      if (status === "error") {
-        console.error("Offer error", data);
-      }
-      if (status === "refunded") {
-        console.error("Offer refunded", data);
-        callback();
-      }
-      if (status === "accepted") {
-        console.info("Offer accepted", data);
-        callback();
-      }
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+    if (status === "error") {
+      console.error("Offer error", data);
     }
-  );
+    if (status === "refunded") {
+      console.error("Offer refunded", data);
+      callback();
+    }
+    if (status === "accepted") {
+      console.info("Offer accepted", data);
+      callback();
+    }
+  });
 };
 
 interface BuyCharacter {
   character: Character;
   price: bigint;
-  
+
   service: {
     kreadInstance: any;
     characterBrand: any;
@@ -93,24 +88,19 @@ const buyCharacter = async ({ character, price, service, callback }: BuyCharacte
     give,
   };
 
-  service.makeOffer(
-    spec,
-    proposal,
-    undefined,
-    ({ status, data }: { status: string; data: object }) => {
-      if (status === "error") {
-        console.error("Offer error", data);
-      }
-      if (status === "refunded") {
-        console.error("Offer refunded", data);
-        callback();
-      }
-      if (status === "accepted") {
-        console.info("Offer accepted", data);
-        callback();
-      }
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+    if (status === "error") {
+      console.error("Offer error", data);
     }
-  );
+    if (status === "refunded") {
+      console.error("Offer refunded", data);
+      callback();
+    }
+    if (status === "accepted") {
+      console.info("Offer accepted", data);
+      callback();
+    }
+  });
 };
 interface SellItem {
   item: any;
@@ -149,24 +139,19 @@ const sellItem = async ({ item, price, service, callback }: SellItem): Promise<v
     exit: { waived: null },
   };
 
-  service.makeOffer(
-    spec,
-    proposal,
-    undefined,
-    ({ status, data }: { status: string; data: object }) => {
-      if (status === "error") {
-        console.error("Offer error", data);
-      }
-      if (status === "refunded") {
-        console.error("Offer refunded", data);
-        callback();
-      }
-      if (status === "accepted") {
-        console.info("Offer accepted", data);
-        callback();
-      }
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+    if (status === "error") {
+      console.error("Offer error", data);
     }
-  );
+    if (status === "refunded") {
+      console.error("Offer refunded", data);
+      callback();
+    }
+    if (status === "accepted") {
+      console.info("Offer accepted", data);
+      callback();
+    }
+  });
 };
 interface BuyItem {
   item: any;
@@ -203,24 +188,19 @@ const buyItem = async ({ item, price, service, callback }: BuyItem): Promise<voi
     give,
   };
 
-  service.makeOffer(
-    spec,
-    proposal,
-    undefined,
-    ({ status, data }: { status: string; data: object }) => {
-      if (status === "error") {
-        console.error("Offer error", data);
-      }
-      if (status === "refunded") {
-        console.error("Offer refunded", data);
-        callback();
-      }
-      if (status === "accepted") {
-        console.info("Offer accepted", data);
-        callback();
-      }
+  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+    if (status === "error") {
+      console.error("Offer error", data);
     }
-  );
+    if (status === "refunded") {
+      console.error("Offer refunded", data);
+      callback();
+    }
+    if (status === "accepted") {
+      console.info("Offer accepted", data);
+      callback();
+    }
+  });
 };
 
 export const marketService = { sellCharacter, buyCharacter, sellItem, buyItem };

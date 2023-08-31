@@ -24,7 +24,7 @@ interface Props {
   data: AssetData;
   onClick?: (assetId: string) => void;
   imageProps?: ImageProps;
-  section: typeof SECTION[keyof typeof SECTION];
+  section: (typeof SECTION)[keyof typeof SECTION];
 }
 export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
   const handleClick = () => {

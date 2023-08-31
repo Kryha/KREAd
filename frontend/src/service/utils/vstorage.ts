@@ -46,7 +46,7 @@ export const getChildren = async (path: string): Promise<string[]> => {
 
       const subPaths = await getChildren(subPath);
       allPaths.push(...subPaths);
-    })
+    }),
   );
 
   return allPaths;

@@ -1,11 +1,4 @@
-import {
-  CharacterBackend,
-  ExtendedCharacter,
-  ExtendedCharacterBackend,
-  Item,
-  ItemBackend,
-  ItemEquip,
-} from "../interfaces";
+import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend, ItemEquip } from "../interfaces";
 import { mockData } from "../service/mock-data/mock-data";
 import { mockItemsEquipped } from "../service/mock-data/mock-items";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
@@ -199,12 +192,11 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       // Map characters to the corresponding inventory in the contract
       const extendedCharacters = await Promise.all(
         charactersToProcess.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
-
           // TODO: fetch activity and history from storage node
 
           const equipped: { [key: string]: Item | undefined } = {};
           const extendedCharacter = await extendCharacters([character], agoric.chainStorageWatcher.marshaller);
-          const frontendEquippedItems = extendedCharacter.equippedItems; 
+          const frontendEquippedItems = extendedCharacter.equippedItems;
 
           equippedCharacterItems.push(...frontendEquippedItems);
           itemCategories.forEach((category) => {
@@ -216,7 +208,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
             equippedItems: equipped,
             // activity,
           };
-        })
+        }),
       );
 
       const frontendCharacters = mediate.characters.toFront(extendedCharacters);
@@ -224,7 +216,6 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       userStateDispatch({ type: "SET_CHARACTERS", payload: frontendCharacters });
       userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
     };
-
 
     processPurseChanges().catch((err) => {
       console.error("got watchNotifiers err", err);

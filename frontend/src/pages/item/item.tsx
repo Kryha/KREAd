@@ -33,7 +33,7 @@ export const ItemPage: FC = () => {
         isZoomed
         isClothing={category === "clothing"}
       />
-      <MenuCard title={text.param.categories[category]} equippedItemProp={equippedItem} unequippedItems={unequippedItems}/>
+      <MenuCard title={text.param.categories[category]} equippedItemProp={equippedItem} unequippedItems={unequippedItems} />
     </ItemWrapper>
   );
 };

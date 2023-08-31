@@ -13,7 +13,7 @@ import {
   StepContainer,
   StepText,
   StepWrapper,
-  Tick
+  Tick,
 } from "./styles";
 import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
 import { text } from "../../assets";
@@ -60,7 +60,9 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
         <Line />
         <StepWrapper active={!sendOffer}>
           <Step>
-            <NumberContainer active={sendOffer}>{isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}</NumberContainer>
+            <NumberContainer active={sendOffer}>
+              {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
+            </NumberContainer>
             <StepText>{text.mint.acceptOfferIn}</StepText>
           </Step>
           {!isOfferAccepted && sendOffer && (

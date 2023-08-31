@@ -162,6 +162,6 @@ export type AgoricStateActions =
   | SetOffers;
 
 export interface OfferProposal {
-  give: Object,
-  want: Object
+  give: Object;
+  want: Object;
 }

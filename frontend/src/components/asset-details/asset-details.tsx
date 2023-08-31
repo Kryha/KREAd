@@ -13,7 +13,7 @@ import { ErrorView } from "../error-view";
 import { SECTION } from "../../constants";
 
 interface AssetDetailsProps {
-  section: typeof SECTION[keyof typeof SECTION];
+  section: (typeof SECTION)[keyof typeof SECTION];
   assetData: any;
   assetId: string;
   setAssetId: (assetId: string) => void;

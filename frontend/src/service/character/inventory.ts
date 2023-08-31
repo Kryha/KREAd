@@ -1,7 +1,7 @@
 import { makeCopyBag } from "@agoric/store";
 import { Character, Item } from "../../interfaces";
 
-// TODO: Use makeOffer status callback for errors 
+// TODO: Use makeOffer status callback for errors
 interface UnequipItem {
   item: any;
   character: Character;
@@ -97,7 +97,7 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
     want,
     give,
   };
-  
+
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);

@@ -15,7 +15,7 @@ export const watchCharacterMarket = (chainStorageWatcher: any, parseCharacterMar
     },
     (log) => {
       console.error("Error watching kread char market", log);
-    }
+    },
   );
 };
 
@@ -35,6 +35,6 @@ export const watchItemMarket = (chainStorageWatcher: any, parseItemMarketUpdate:
     },
     (log) => {
       console.error("Error watching kread item market", log);
-    }
+    },
   );
 };

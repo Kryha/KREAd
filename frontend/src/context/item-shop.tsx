@@ -34,7 +34,6 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       marketDispatch((prevState: any) => ({ ...prevState, items, fetched: true }));
     };
     const formatMarketEntry = async (marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
-
       const item = { ...marketEntry.object, id: marketEntry.object.id.toString() };
 
       const itemMarketEntry = {

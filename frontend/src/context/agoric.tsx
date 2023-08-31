@@ -244,9 +244,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
   return (
     <Context.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>
-        {props.children}
-      </DispatchContext.Provider>
+      <DispatchContext.Provider value={dispatch}>{props.children}</DispatchContext.Provider>
     </Context.Provider>
   );
 };

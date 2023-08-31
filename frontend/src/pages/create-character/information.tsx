@@ -11,14 +11,13 @@ import {
   FormFields,
   InputWrapper,
   Tick,
-  Warning
+  Warning,
 } from "./styles";
 import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../components";
 import { text } from "../../assets";
 import { MAX_CHARACTER_LENGTH } from "../../constants";
 import { ButtonInfo } from "../../components/button-info";
 import { color } from "../../design";
-
 
 interface InformationProps {
   setData: (data: CharacterCreation) => void;
@@ -38,7 +37,7 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
   const onSubmit: SubmitHandler<CharacterCreation> = (data) => setData(data);
 
   return (
-    <ContentWrapper >
+    <ContentWrapper>
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
         <FormFields>
           <Label>{text.mint.characterName}</Label>

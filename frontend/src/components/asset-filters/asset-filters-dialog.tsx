@@ -25,7 +25,7 @@ interface Props {
   handleSortingChange: (selected: string) => void;
   showFilter: boolean;
   setShowFilter: (show: boolean) => void;
-  section: typeof SECTION[keyof typeof SECTION];
+  section: (typeof SECTION)[keyof typeof SECTION];
 }
 
 // TODO: Prototype for mobile filtering
@@ -45,7 +45,7 @@ export const AssetFiltersDialog: FC<Props> = ({ items, showFilter, setShowFilter
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prevSelected) =>
-      prevSelected.includes(category) ? prevSelected.filter((item) => item !== category) : [...prevSelected, category]
+      prevSelected.includes(category) ? prevSelected.filter((item) => item !== category) : [...prevSelected, category],
     );
   };
 

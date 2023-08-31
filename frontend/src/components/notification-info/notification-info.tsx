@@ -32,7 +32,7 @@ export const NotificationInfo: FC<NotificationInfoProps> = ({ notification, setI
                 notification.status === "sold"
                   ? text.param.yourItemHasBeenSold(notification.itemName, notification.price || 0)
                   : text.param.theItemIsSussfullyPurchased(notification.itemName),
-                notification.status === "sold" ? text.notifications.yourItemHasBeenPurchased : text.notifications.yourItemHasBeenPurchased
+                notification.status === "sold" ? text.notifications.yourItemHasBeenPurchased : text.notifications.yourItemHasBeenPurchased,
               )
             }
           >

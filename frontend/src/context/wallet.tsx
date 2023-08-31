@@ -56,7 +56,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
       const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;
 
-      if(itemWallet){
+      if (itemWallet) {
         itemWallet = itemWallet.map((item: any) => ({ ...item, id: Number(item.id) }));
       }
 

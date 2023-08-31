@@ -1,5 +1,5 @@
 import { makeCopyBag } from "@agoric/store";
-// TODO: Use makeOffer status callback for errors 
+// TODO: Use makeOffer status callback for errors
 
 interface MintCharacter {
   name: string;

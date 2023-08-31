@@ -22,7 +22,7 @@ export const CharacterSell = () => {
   useEffect(() => {
     if (
       offers.filter(
-        (offer) => offer.proposalTemplate.give.Character && offer.proposalTemplate.give.Character.value[0].id === Number(idString)
+        (offer) => offer.proposalTemplate.give.Character && offer.proposalTemplate.give.Character.value[0].id === Number(idString),
       ).length > 0
     ) {
       setIsPlacedInShop(true);

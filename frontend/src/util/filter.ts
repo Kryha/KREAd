@@ -48,7 +48,7 @@ export const filterItems = (items: ItemEquip[], { categories, sort, color }: Ite
       },
       {
         relative: "path",
-      }
+      },
     );
   }, [categories, sort, color]);
 
@@ -115,7 +115,7 @@ export const filterItemsInShop = (items: ItemInMarket[], { categories, sort, pri
       },
       {
         relative: "path",
-      }
+      },
     );
   }, [categories, sort, color]);
 
@@ -157,7 +157,7 @@ export const filterCharacters = (characters: CharacterEquip[], { category, sorti
 
 export const filterCharactersMarket = (
   characters: CharacterInMarket[],
-  { category, sorting, price }: CharactersMarketFilters
+  { category, sorting, price }: CharactersMarketFilters,
 ): CharacterInMarket[] => {
   const changedRange = price.min !== MIN_PRICE || price.max !== MAX_PRICE;
 

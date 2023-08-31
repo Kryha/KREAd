@@ -105,7 +105,7 @@ export const CharacterImageProvider: FC<Props> = ({ children }) => {
       layerRef: layerRef,
       drawCharacter,
     }),
-    [stageRef, layerRef, drawCharacter]
+    [stageRef, layerRef, drawCharacter],
   );
 
   return <ContextRef.Provider value={contextValue}>{children}</ContextRef.Provider>;
@@ -151,7 +151,7 @@ export function useCharacterDownloader(initialDownloadSize = "original") {
         console.error(text.error.downloadFailed, error);
       }
     },
-    [drawCharacter]
+    [drawCharacter],
   );
 
   return { download, downloadUrl, downloadSize, downloadOptions, setDownloadSize, characterName };

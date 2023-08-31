@@ -30,8 +30,7 @@ const { freeze } = Object; // IOU harden
 const COSMOS_UNIT = BigInt(1000000);
 
 // eslint-disable-next-line no-unused-vars
-const bigIntReplacer = (_key, val) =>
-  typeof val === "bigint" ? Number(val) : val;
+const bigIntReplacer = (_key, val) => (typeof val === "bigint" ? Number(val) : val);
 
 /**
  * zoe/ERTP types
@@ -60,13 +59,8 @@ const bigIntReplacer = (_key, val) =>
  * @returns {ProposalRecord}
  */
 const makePSMProposal = (brands, opts, fee = 0, anchor = "AUSD") => {
-  const brand =
-    "wantMinted" in opts
-      ? { in: brands[anchor], out: brands.IST }
-      : { in: brands.IST, out: brands[anchor] };
-  const value =
-    Number("wantMinted" in opts ? opts.wantMinted : opts.giveMinted) *
-    Number(COSMOS_UNIT);
+  const brand = "wantMinted" in opts ? { in: brands[anchor], out: brands.IST } : { in: brands.IST, out: brands[anchor] };
+  const value = Number("wantMinted" in opts ? opts.wantMinted : opts.giveMinted) * Number(COSMOS_UNIT);
   const adjusted = {
     in: BigInt(Math.ceil("wantMinted" in opts ? value / (1 - fee) : value)),
     out: BigInt(Math.ceil("giveMinted" in opts ? value * (1 - fee) : value)),
@@ -90,15 +84,8 @@ const makePSMProposal = (brands, opts, fee = 0, anchor = "AUSD") => {
  * @returns {BridgeAction}
  */
 const makePSMSpendAction = (instance, brands, opts, timeStamp) => {
-  const method =
-    "wantMinted" in opts
-      ? "makeWantMintedInvitation"
-      : "makeGiveMintedInvitation"; // ref psm.js
-  const proposal = makePSMProposal(
-    brands,
-    opts,
-    opts.feePct ? Number(opts.feePct) / 100 : undefined,
-  );
+  const method = "wantMinted" in opts ? "makeWantMintedInvitation" : "makeGiveMintedInvitation"; // ref psm.js
+  const proposal = makePSMProposal(brands, opts, opts.feePct ? Number(opts.feePct) / 100 : undefined);
 
   /** @type {OfferSpec} */
   const offer = {
@@ -157,11 +144,7 @@ const vstorage = {
     do {
       let values;
       try {
-        ({ blockHeight, values } = await vstorage.readAt(
-          path,
-          getJSON,
-          blockHeight && blockHeight - 1,
-        ));
+        ({ blockHeight, values } = await vstorage.readAt(path, getJSON, blockHeight && blockHeight - 1));
       } catch (err) {
         if ("log" in err && err.log.match(/unknown request/)) {
           break;
@@ -195,9 +178,9 @@ const miniMarshal = (slotToVal = (s, _i) => s) => ({
     };
     return JSON.parse(body, reviver);
   },
-  serialize: whole => {
+  serialize: (whole) => {
     const seen = new Map();
-    const slotIndex = v => {
+    const slotIndex = (v) => {
       if (seen.has(v)) {
         return seen.get(v);
       }
@@ -205,7 +188,7 @@ const miniMarshal = (slotToVal = (s, _i) => s) => ({
       seen.set(v, index);
       return { index, iface: v.iface };
     };
-    const recur = part => {
+    const recur = (part) => {
       if (part === null) return null;
       if (typeof part === "bigint") {
         return { "@qclass": "bigint", digits: `${part}` };
@@ -217,9 +200,7 @@ const miniMarshal = (slotToVal = (s, _i) => s) => ({
         if ("boardId" in part) {
           return { "@qclass": "slot", ...slotIndex(part.boardId) };
         }
-        return Object.fromEntries(
-          Object.entries(part).map(([k, v]) => [k, recur(v)]),
-        );
+        return Object.fromEntries(Object.entries(part).map(([k, v]) => [k, recur(v)]));
       }
       return part;
     };
@@ -244,7 +225,7 @@ const makeFromBoard = (slotKey = "boardId") => {
 
 const storageNode = {
   /** @param { string } txt */
-  parseCapData: txt => {
+  parseCapData: (txt) => {
     assert(typeof txt === "string", typeof txt);
     /** @type {{ value: string }} */
     const { value } = JSON.parse(txt);
@@ -255,13 +236,11 @@ const storageNode = {
   },
   unserialize: (txt, ctx) => {
     const { capDatas } = storageNode.parseCapData(txt);
-    return capDatas.map(capData =>
-      miniMarshal(ctx.convertSlotToVal).unserialze(capData),
-    );
+    return capDatas.map((capData) => miniMarshal(ctx.convertSlotToVal).unserialze(capData));
   },
-  parseMany: values => {
+  parseMany: (values) => {
     /** @type {{ body: string, slots: string[] }[]} */
-    const capDatas = values.map(s => JSON.parse(s));
+    const capDatas = values.map((s) => JSON.parse(s));
     for (const capData of capDatas) {
       assert(typeof capData === "object" && capData !== null, capData);
       assert("body" in capData && "slots" in capData, capData);
@@ -277,7 +256,7 @@ const storageNode = {
  * @typedef {[key: K, val: V]} Entry<K,V>
  */
 
-const last = xs => xs[xs.length - 1];
+const last = (xs) => xs[xs.length - 1];
 
 /**
  * @param {IdMap} ctx
@@ -286,11 +265,8 @@ const last = xs => xs[xs.length - 1];
  */
 const makeAgoricNames = async (ctx, getJSON, kinds = ["brand", "instance"]) => {
   const entries = await Promise.all(
-    kinds.map(async kind => {
-      const content = await vstorage.read(
-        `published.agoricNames.${kind}`,
-        getJSON,
-      );
+    kinds.map(async (kind) => {
+      const content = await vstorage.read(`published.agoricNames.${kind}`, getJSON);
       const parts = last(storageNode.unserialize(content, ctx));
 
       /** @type {Entry<string, Record<string, any>>} */
@@ -311,12 +287,12 @@ const exampleAsset = {
 /** @typedef {typeof exampleAsset} AssetDescriptor */
 
 /** @param {AssetDescriptor[]} assets */
-const makeAmountFormatter = assets => amt => {
+const makeAmountFormatter = (assets) => (amt) => {
   const {
     brand: { boardId },
     value,
   } = amt;
-  const asset = assets.find(a => a.brand.boardId === boardId);
+  const asset = assets.find((a) => a.brand.boardId === boardId);
   if (!asset) return [NaN, boardId];
   const {
     petname,
@@ -328,7 +304,7 @@ const makeAmountFormatter = assets => amt => {
   return scaled;
 };
 
-const asPercent = ratio => {
+const asPercent = (ratio) => {
   const { numerator, denominator } = ratio;
   assert(numerator.brand === denominator.brand);
   return (100 * Number(numerator.value)) / Number(denominator.value);
@@ -340,7 +316,7 @@ const asPercent = ratio => {
  */
 const simplePurseBalances = (balances, assets) => {
   const fmt = makeAmountFormatter(assets);
-  return balances.map(b => fmt(b));
+  return balances.map((b) => fmt(b));
 };
 
 /**
@@ -350,11 +326,8 @@ const simplePurseBalances = (balances, assets) => {
 const simpleOffers = (state, agoricNames) => {
   const { assets, offers } = state;
   const fmt = makeAmountFormatter(assets);
-  const fmtRecord = r =>
-    Object.fromEntries(
-      Object.entries(r).map(([kw, amount]) => [kw, fmt(amount)]),
-    );
-  return [...offers.keys()].sort().map(id => {
+  const fmtRecord = (r) => Object.fromEntries(Object.entries(r).map(([kw, amount]) => [kw, fmt(amount)]));
+  return [...offers.keys()].sort().map((id) => {
     const o = offers.get(id);
     assert(o);
     assert(o.invitationSpec.source === "contract");
@@ -363,9 +336,7 @@ const simpleOffers = (state, agoricNames) => {
       proposal: { give, want },
       payouts,
     } = o;
-    const entry = Object.entries(agoricNames.instance).find(
-      ([_name, candidate]) => candidate === instance,
-    );
+    const entry = Object.entries(agoricNames.instance).find(([_name, candidate]) => candidate === instance);
     const instanceName = entry ? entry[0] : "???";
     // console.log({ give: JSON.stringify(give), want: JSON.stringify(want) });
     return [
@@ -383,7 +354,7 @@ const simpleOffers = (state, agoricNames) => {
   });
 };
 
-const dieTrying = msg => {
+const dieTrying = (msg) => {
   throw Error(msg);
 };
 /**
@@ -403,7 +374,7 @@ const getWalletState = async (addr, ctx, { getJSON }) => {
   /** @type {AssetDescriptor[]} */
   const assets = [];
   const mm = miniMarshal(ctx.convertSlotToVal);
-  capDatas.forEach(capData => {
+  capDatas.forEach((capData) => {
     const update = mm.unserialze(capData);
     switch (update.updated) {
       case "offerStatus": {
@@ -432,13 +403,8 @@ const getWalletState = async (addr, ctx, { getJSON }) => {
 };
 
 const getContractState = async (fromBoard, agoricNames, { getJSON }) => {
-  const govContent = await vstorage.read(
-    "published.psm.IST.AUSD.governance",
-    getJSON,
-  );
-  const { current: governance } = last(
-    storageNode.unserialize(govContent, fromBoard),
-  );
+  const govContent = await vstorage.read("published.psm.IST.AUSD.governance", getJSON);
+  const { current: governance } = last(storageNode.unserialize(govContent, fromBoard));
   const { "psm.IST.AUSD": instance } = agoricNames.instance;
 
   return { instance, governance };
@@ -448,17 +414,12 @@ const getContractState = async (fromBoard, agoricNames, { getJSON }) => {
 //   console.error(label, x);
 //   return x;
 // };
-const log = _label => x => x;
+const log = (_label) => (x) => x;
 
-const fmtRecordOfLines = record => {
+const fmtRecordOfLines = (record) => {
   const { stringify } = JSON;
-  const groups = Object.entries(record).map(([key, items]) => [
-    key,
-    items.map(item => `    ${stringify(item)}`),
-  ]);
-  const lineEntries = groups.map(
-    ([key, lines]) => `  ${stringify(key)}: [\n${lines.join(",\n")}\n  ]`,
-  );
+  const groups = Object.entries(record).map(([key, items]) => [key, items.map((item) => `    ${stringify(item)}`)]);
+  const lineEntries = groups.map(([key, lines]) => `  ${stringify(key)}: [\n${lines.join(",\n")}\n  ]`);
   return `{\n${lineEntries.join(",\n")}\n}`;
 };
 
@@ -470,29 +431,23 @@ const fmtRecordOfLines = record => {
 const makeTool = async (opts, { fetch }) => {
   const net = networks[opts.net || "local"];
   assert(net, opts.net);
-  const getJSON = async url => (await fetch(log("url")(net.rpc + url))).json();
+  const getJSON = async (url) => (await fetch(log("url")(net.rpc + url))).json();
 
   const showPublishedChildren = async () => {
     // const status = await getJSON(`${RPC_BASE}/status?`);
     // console.log({ status });
     const raw = await getJSON(vstorage.url());
     const top = vstorage.decode(raw);
-    console.error(
-      JSON.stringify(["vstorage published.*", JSON.parse(top).children]),
-    );
+    console.error(JSON.stringify(["vstorage published.*", JSON.parse(top).children]));
   };
 
   const fromBoard = makeFromBoard();
   const agoricNames = await makeAgoricNames(fromBoard, getJSON);
 
-  const showContractId = async showFees => {
-    const { instance, governance } = await getContractState(
-      fromBoard,
-      agoricNames,
-      {
-        getJSON,
-      },
-    );
+  const showContractId = async (showFees) => {
+    const { instance, governance } = await getContractState(fromBoard, agoricNames, {
+      getJSON,
+    });
     showFees && console.error("psm", instance, Object.keys(governance));
     showFees &&
       console.error(
@@ -506,7 +461,7 @@ const makeTool = async (opts, { fetch }) => {
     console.info(instance.boardId);
   };
 
-  const showWallet = async addr => {
+  const showWallet = async (addr) => {
     const state = await getWalletState(addr, fromBoard, {
       getJSON,
     });
@@ -531,10 +486,7 @@ const makeTool = async (opts, { fetch }) => {
     }
     const { numWantsSatisfied, payouts } = offer;
     const fmt = makeAmountFormatter(assets);
-    const fmtRecord = r =>
-      Object.fromEntries(
-        Object.entries(r).map(([kw, amount]) => [kw, fmt(amount)]),
-      );
+    const fmtRecord = (r) => Object.fromEntries(Object.entries(r).map(([kw, amount]) => [kw, fmt(amount)]));
     console.error({
       numWantsSatisfied,
       ...(payouts ? { payouts: fmtRecord(payouts) } : {}),
@@ -542,7 +494,7 @@ const makeTool = async (opts, { fetch }) => {
     return typeof numWantsSatisfied === "number" ? 0 : 1;
   };
 
-  const showOffer = id => {
+  const showOffer = (id) => {
     assert(net, opts.net);
     const instance = agoricNames.instance["psm-IST-AUSD"];
     const spendAction = makePSMSpendAction(
@@ -565,9 +517,12 @@ const makeTool = async (opts, { fetch }) => {
 };
 
 // lines starting with 'export ' are stripped for use in Google Apps Scripts
-{ assert; }
-{ networks, makeTool; }
-
+{
+  assert;
+}
+{
+  networks, makeTool;
+}
 
 const USAGE = `
 Usage:
@@ -668,6 +623,6 @@ main([...process.argv], {
   fetch: typeof fetch === "function" ? fetch : undefined,
   clock: () => new Date(),
 }).then(
-  code => process.exit(code),
-  err => console.error(err),
+  (code) => process.exit(code),
+  (err) => console.error(err),
 );
