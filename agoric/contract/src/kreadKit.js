@@ -634,16 +634,10 @@ export const prepareKreadKit = async (
           const { helper } = this.facets;
           const { item: itemState } = this.state;
 
-          const allDefaultItems = Object.values(defaultItems);
+          const items = Object.values(defaultItems);
 
           const currentTime = await helper.getTimeStamp();
 
-          let id = itemState.entries.getSize();
-          // @ts-ignore
-          const items = allDefaultItems.map((item) => {
-            id += 1;
-            return { ...item, id, date: currentTime };
-          });
           const newItemAmount = AmountMath.make(
             itemBrand,
             makeCopyBag(harden(items.map((item) => [item, 1n]))),
@@ -651,9 +645,11 @@ export const prepareKreadKit = async (
 
           await itemMint.mintGains({ Item: newItemAmount }, seat);
 
+          let id = itemState.entries.getSize();
+
           items.forEach((i) => {
             const item = {
-              id: i.id,
+              id,
               item: i,
               history: [
                 {
@@ -666,6 +662,8 @@ export const prepareKreadKit = async (
 
             itemState.entries.addAll([[i.id, harden(item)]]);
             itemKit.recorder.write(item);
+
+            id += 1;
           });
 
           return text.mintItemReturn;
@@ -679,11 +677,8 @@ export const prepareKreadKit = async (
 
             const currentTime = await helper.getTimeStamp();
 
-            let id = itemState.entries.getSize();
-            // @ts-ignore
             const items = want.Item.value.payload.map(([item, supply]) => {
-              id += 1;
-              return [{ ...item, id, date: currentTime }, supply];
+              return [item, supply];
             });
             const newItemAmount = AmountMath.make(
               itemBrand,
@@ -694,10 +689,12 @@ export const prepareKreadKit = async (
 
             seat.exit();
 
+            let id = itemState.entries.getSize();
+
             items.forEach((j) => {
               const i = j[0];
               const item = {
-                id: i.id,
+                id,
                 item: i,
                 // Potentially have separate durable stores for the history
                 history: [
@@ -711,6 +708,8 @@ export const prepareKreadKit = async (
 
               itemState.entries.addAll([[i.id, harden(item)]]);
               itemKit.recorder.write(item);
+
+              id += 1;
             });
 
             return text.mintItemReturn;

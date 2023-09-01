@@ -238,7 +238,7 @@ test.serial('--| MINT - Item - Multiple flow', async (t) => {
     purses,
     zoe,
   } = t.context;
-  const { want, message } = flow.mintItem.expected;
+  const { want, message } = flow.mintItem.multiple;
 
   const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
   const proposal = harden({
@@ -276,7 +276,7 @@ test.serial('--| MINT - Item - Multiple different items flow', async (t) => {
     purses,
     zoe,
   } = t.context;
-  const { want, message } = flow.mintItem.multiple;
+  const { want, message } = flow.mintItem.multipleUnique;
 
   const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
   const proposal = harden({
