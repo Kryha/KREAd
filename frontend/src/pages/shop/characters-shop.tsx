@@ -26,6 +26,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   });
 
   const [character] = useGetCharacterInShopById(selectedId);
+  // if (!character) return <h1>No character found?!</h1>;
 
   return (
     <>

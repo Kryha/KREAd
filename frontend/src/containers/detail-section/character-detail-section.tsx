@@ -18,7 +18,7 @@ import { ErrorView } from "../../components";
 interface CharacterDetailSectionProps {
   character: ExtendedCharacter;
   actions?: DetailSectionActions;
-  showToast: () => void;
+  showToast?: () => void;
 }
 
 // TODO: Make index dynamic
@@ -49,7 +49,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
       {/* equipped items */}
       <DetailSectionSegment title={text.character.equippedItems} sectionIndex={3}>
-        <DetailSectionItems items={itemsValues} showToast={showToast} />
+        <DetailSectionItems items={itemsValues} showToast={showToast || (() => {})} />
       </DetailSectionSegment>
 
       {/* details */}

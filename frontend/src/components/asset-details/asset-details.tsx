@@ -1,8 +1,8 @@
 import { FadeInOut } from "../fade-in-out";
 import { DetailContainer } from "../../pages/shop/styles";
-import { ItemDetailSection } from "../../containers/detail-section";
+import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
 import { Overlay } from "../atoms";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { text } from "../../assets";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { routes } from "../../navigation";
@@ -19,7 +19,7 @@ interface AssetDetailsProps {
   assetId: string;
   setAssetId: (assetId: string) => void;
 }
-export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetId, setAssetId }) => {
+export const AssetDetails: FC<AssetDetailsProps> = ({ assetType, section, assetData, assetId, setAssetId }) => {
   const navigate = useNavigate();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -38,14 +38,15 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetI
     setShowToast(!showToast);
     unequipItem.mutate({ itemId: assetId });
   };
+
   const sellAsset = () => {
     if (!assetId) return;
-    navigate(`${routes.sellItem}/${assetId}`);
+    navigate(`${assetType === ASSET_TYPE.ITEM ? routes.sellItem : routes.sellCharacter}/${assetId}`);
   };
 
   const buyAsset = () => {
     if (!assetId) return;
-    navigate(`${routes.buyItem}/${assetId}`);
+    navigate(`${assetType === ASSET_TYPE.ITEM ? routes.buyItem : routes.buyCharacter}/${assetId}`);
   };
 
   const assetDetailActions = () => {
@@ -67,18 +68,31 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetI
       <FadeInOut show={!!assetId} exiting={close}>
         {!!assetId && (
           <DetailContainer>
-            <ItemDetailSection
-              item={transformedData}
-              actions={{
-                onClose: () => {
-                  setAssetId("");
-                  setClose(true);
-                },
-                price: assetDetailActions()?.price,
-                primary: assetDetailActions()?.primary,
-                secondary: assetDetailActions()?.secondary,
-              }}
-            />
+            {assetType === ASSET_TYPE.ITEM ? (
+              <ItemDetailSection
+                item={transformedData}
+                actions={{
+                  onClose: () => {
+                    setAssetId("");
+                    setClose(true);
+                  },
+                  price: assetDetailActions()?.price,
+                  primary: assetDetailActions()?.primary,
+                  secondary: assetDetailActions()?.secondary,
+                }}
+              />
+            ) : (
+              <CharacterDetailSection
+                character={transformedData}
+                actions={{
+                  onClose: () => {
+                    setAssetId("");
+                    setClose(true);
+                  },
+                  primary: { text: text.item.buy, onClick: buyAsset },
+                }}
+              />
+            )}
           </DetailContainer>
         )}
         <Overlay />
