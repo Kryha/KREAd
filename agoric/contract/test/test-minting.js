@@ -230,6 +230,47 @@ test.serial('--| MINT - Item - Expected flow', async (t) => {
   );
 });
 
+test.serial('--| MINT - Item - Mint same item (SFT)', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    purses,
+    zoe,
+  } = t.context;
+  const { want, message } = flow.mintItem.expected;
+
+  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const proposal = harden({
+    want: {
+      Item: AmountMath.make(
+        contractAssets.item.brand,
+        makeCopyBag(harden([[want, 1n]])),
+      ),
+    },
+  });
+
+  const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
+
+  const result = await E(userSeat).getOfferResult();
+  t.deepEqual(result, message, 'Offer returns success message');
+
+  const payout = await E(userSeat).getPayout('Asset');
+  purses.item.deposit(payout);
+  t.deepEqual(
+    purses.item.getCurrentAmount().value.payload[0][0].name,
+    want.name,
+    'New Item was added to character purse successfully',
+  );
+
+  t.deepEqual(
+    purses.item.getCurrentAmount().value.payload[0][1],
+    2n,
+    'Supply of item increased to 2',
+  );
+  t.deepEqual(purses.item.getCurrentAmount().value.payload.length, 1);
+});
+
 test.serial('--| MINT - Item - Multiple flow', async (t) => {
   /** @type {Bootstrap} */
   const {
@@ -264,7 +305,7 @@ test.serial('--| MINT - Item - Multiple flow', async (t) => {
     .value.payload.reduce((acc, [item, supply]) => {
       return acc + supply;
     }, 0n);
-  t.deepEqual(totalItems, 3n);
+  t.deepEqual(totalItems, 4n);
   t.deepEqual(purses.item.getCurrentAmount().value.payload.length, 2);
 });
 
