@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-eb9ca74ef1c31f74f95ddb0ee117575faf55b854d701033d0a8e6b52af9550b4081891aa5329f88fb877de6354c2f668b5b31f185e8c2613e1b1f572f6494439',
+    'b1-b1c72074e7d41ab70555af63ed01ca425df6a619b96ace81bbb800de372f9cca15ec92723824ef66534ff91e1539f0aa64b2371b739383336a843ad4374803d2',
 };
 
 const fail = (reason) => {

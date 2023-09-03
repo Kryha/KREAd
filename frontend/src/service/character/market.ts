@@ -131,6 +131,7 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
     exit: { waived: null },
   };
 
+  console.log(give)
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);

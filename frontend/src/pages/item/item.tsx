@@ -6,18 +6,20 @@ import { useGetItemsInInventory, useSelectedCharacter } from "../../service";
 import { useParams } from "react-router-dom";
 import { isItemCategory, Item } from "../../interfaces";
 import { text } from "../../assets";
+import { useWalletState } from "../../context/wallet";
 
 export const ItemPage: FC = () => {
   const { height, width } = useViewport();
   const { category } = useParams<"category">();
 
   const [items, isLoadingItems] = useGetItemsInInventory();
+  const { item: allUnequippedItems } = useWalletState();
   const [character, isLoadingCharacter] = useSelectedCharacter();
 
   const [equippedItem, unequippedItems]: [Item | undefined, Item[]] = useMemo(() => {
     if (!isItemCategory(category)) return [undefined, []];
 
-    return [character?.equippedItems[category], items.filter((item) => item.category === category)];
+    return [character?.equippedItems[category], allUnequippedItems.filter((item) => item.category === category)];
   }, [category, character?.equippedItems, items]);
 
   if (isLoadingItems || isLoadingCharacter) return <LoadingPage spinner={false} />;
@@ -33,7 +35,7 @@ export const ItemPage: FC = () => {
         isZoomed
         isClothing={category === "clothing"}
       />
-      <MenuCard title={text.param.categories[category]} equippedItemProp={equippedItem} unequippedItems={unequippedItems} />
+      <MenuCard title={text.param.categories[category]} category={category} equippedItemProp={equippedItem} unequippedItems={unequippedItems} />
     </ItemWrapper>
   );
 };

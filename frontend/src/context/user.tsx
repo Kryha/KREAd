@@ -1,4 +1,4 @@
-import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend, ItemEquip } from "../interfaces";
+import { CharacterBackend, ExtendedCharacter, Item, ItemBackend, ItemEquip } from "../interfaces";
 import { mockData } from "../service/mock-data/mock-data";
 import { mockItemsEquipped } from "../service/mock-data/mock-items";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
@@ -14,7 +14,7 @@ export interface UserContext {
   characters: ExtendedCharacter[];
   selected: ExtendedCharacter | undefined;
   items: Item[];
-  equippedItems: ItemEquip[];
+  equippedItems: Item[];
   processed: string[];
   fetched: boolean;
 }
@@ -91,8 +91,8 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     }
 
     case "SET_ITEMS": {
-      const frontendEquippedItems = mediate.items.toFront(action.payload);
-      return { ...state, items: frontendEquippedItems, fetched: true };
+      console.log(action.payload);
+      return { ...state, items: action.payload, fetched: true };
     }
 
     case "UPDATE_CHARACTER_ITEMS": {
@@ -186,35 +186,14 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
         userStateDispatch({ type: "SET_PROCESSED", payload: processedCharacters });
       }
 
-      const equippedCharacterItems: Item[] = [];
       const charactersToProcess = charactersInWallet.filter((character: { name: string }) => !processedCharacters.includes(character.name));
 
-      // Map characters to the corresponding inventory in the contract
-      const extendedCharacters = await Promise.all(
-        charactersToProcess.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
-          // TODO: fetch activity and history from storage node
+      const extendedCharacters = await extendCharacters(charactersToProcess, agoric.chainStorageWatcher.marshaller);
 
-          const equipped: { [key: string]: Item | undefined } = {};
-          const extendedCharacter = await extendCharacters([character], agoric.chainStorageWatcher.marshaller);
-          const frontendEquippedItems = extendedCharacter.equippedItems;
-
-          equippedCharacterItems.push(...frontendEquippedItems);
-          itemCategories.forEach((category) => {
-            equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
-          });
-
-          return {
-            nft: character,
-            equippedItems: equipped,
-            // activity,
-          };
-        }),
-      );
-
-      const frontendCharacters = mediate.characters.toFront(extendedCharacters);
+      const frontendCharacters = mediate.characters.toFront(extendedCharacters.extendedCharacters);
 
       userStateDispatch({ type: "SET_CHARACTERS", payload: frontendCharacters });
-      userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
+      userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: extendedCharacters.equippedItems });
     };
 
     processPurseChanges().catch((err) => {

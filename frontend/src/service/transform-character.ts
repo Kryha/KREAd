@@ -1,5 +1,4 @@
 /// <reference types="ses"/>
-import { mediate } from "../util";
 import { CharacterBackend, ExtendedCharacterBackend, Item } from "../interfaces";
 import { itemCategories } from "./util";
 import { fetchFromVStorage } from "./storage-node/fetch-from-vstorage";
@@ -13,9 +12,7 @@ export const extendCharacters = async (
   const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
     characters.map(async (character) => {
       const result = await fetchFromVStorage(marshaller, `data/published.kread.inventory-${character.name}`);
-
-      const frontendEquippedItems = mediate.items.toFront(result.map((i: any) => i[0]));
-
+      const frontendEquippedItems: Item[] = result.map((copyBag: [Item, bigint]) => ({ ...copyBag[0], isEquipped: true, forSale: false }));
       equippedCharacterItems.push(...frontendEquippedItems);
       const equipped: { [key: string]: Item | undefined } = {};
       itemCategories.forEach((category) => {

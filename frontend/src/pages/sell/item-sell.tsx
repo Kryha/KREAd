@@ -1,36 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 import { ErrorView, FadeInOut } from "../../components";
-import { SELL_ITEM_DESCRIPTION } from "../../constants";
 import { ItemDetailSection } from "../../containers/detail-section";
-import { useMyItem, useOffers, useSellItem } from "../../service";
+import { useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
+import { ItemCategory, isItemCategory } from "../../interfaces";
+import { useWalletState } from "../../context/wallet";
 
 export const ItemSell = () => {
-  const { id } = useParams<"id">();
-  const idString = String(id);
+  const { name, category } = useParams<"category" | "name">();
 
-  const sellItem = useSellItem(idString);
-  const [item] = useMyItem(idString);
-  const [itemCopy] = useState(item);
-  const offers = useOffers({ description: SELL_ITEM_DESCRIPTION, status: "pending" });
+  if(!isItemCategory(category)) {
+    return;
+  }
+
+  const { item: walletItems } = useWalletState();
+  const itemToSell = walletItems.find((item) => (item.name===name && item.category === category));
+  const sellItem = useSellItem(name, category as ItemCategory);
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
 
-  useEffect(() => {
-    if (offers.filter((offer) => offer.proposalTemplate.give.Item.value[0].id === Number(idString)).length > 0) {
-      setIsPlacedInShop(true);
-    }
-  }, [idString, offers]);
-
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellItem.callback(data.price);
+    await sellItem.callback(data.price, () => setIsPlacedInShop(true));
   };
 
-  if (!data || !itemCopy) return <ErrorView />;
+  if (!data) return <ErrorView />;
 
   return (
     <Sell
@@ -46,7 +43,7 @@ export const ItemSell = () => {
       }}
     >
       <FadeInOut show>
-        <ItemDetailSection item={itemCopy} />
+        <ItemDetailSection item={itemToSell} />
       </FadeInOut>
     </Sell>
   );

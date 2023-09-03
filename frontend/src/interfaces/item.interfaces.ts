@@ -1,5 +1,5 @@
 import { ActivityEvent } from "./activity.interfaces";
-import { Detail } from "./character.interfaces";
+import { Details } from "./character.interfaces";
 
 export type ItemCategory =
   | "noseline"
@@ -18,21 +18,21 @@ export type ItemCategory =
 export interface Item {
   name: string;
   category: ItemCategory;
-  id: string;
   description: string;
   image: string;
   thumbnail: string;
   level: number;
   rarity: number;
-  effectiveness?: number;
-  layerComplexity?: number;
+  effectiveness: number;
+  layerComplexity: number;
   forged: string;
   baseMaterial: string;
   colors: string[];
   projectDescription: string;
-  details: Detail;
-  date: string;
-  activity: ActivityEvent[];
+  details: Details;
+  activity?: ActivityEvent[];
+  isEquipped?: boolean;
+  forSale?: boolean;
 }
 
 export interface KreadItemInMarket {

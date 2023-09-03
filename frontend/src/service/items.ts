@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Item, ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
+import { Item, ItemBackend, ItemCategory, ItemEquip, ItemInMarket } from "../interfaces";
 import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -86,7 +86,7 @@ export const useGetItemsInShop = (filters?: ItemsMarketFilters): [ItemInMarket[]
   return [filtered, !fetched];
 };
 
-export const useSellItem = (itemId: string) => {
+export const useSellItem = (itemName: string | undefined, itemCategory: ItemCategory | undefined) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const { items } = useUserState();
@@ -94,11 +94,11 @@ export const useSellItem = (itemId: string) => {
   // TODO: enable listening to offer approved
 
   const callback = useCallback(
-    async (price: number) => {
+    async (price: number, setPlacedInShop: () => void) => {
       try {
-        const found = items.find((item) => item.id === itemId);
+        const found = items.find((item) => (item.name === itemName && item.category===itemCategory));
         if (!found) return;
-        const itemToSell = { ...found, id: Number(found.id) };
+        const { forSale, isEquipped, activity, ...itemToSell } = found;
         const instance = service.contracts.kread.instance;
         const itemBrand = service.tokenInfo.item.brand;
 
@@ -115,6 +115,7 @@ export const useSellItem = (itemId: string) => {
           },
           callback: async () => {
             console.info("SellItem call settled");
+            setPlacedInShop();
           },
         });
         return true;
@@ -123,13 +124,13 @@ export const useSellItem = (itemId: string) => {
         return false;
       }
     },
-    [itemId, wallet, items, service],
+    [itemName, itemCategory, wallet, items, service],
   );
 
   return { callback, isLoading };
 };
 
-export const useBuyItem = (itemId: string) => {
+export const useBuyItem = (itemToBuy: ItemInMarket) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [items] = useGetItemsInShop();
@@ -144,9 +145,9 @@ export const useBuyItem = (itemId: string) => {
 
   const callback = useCallback(async () => {
     try {
-      const found = items.find((item) => item.id === itemId);
-      if (!found) return;
-      const itemToBuy = { ...found, id: Number(found.id), item: { ...found.item, id: Number(found.item.id) } };
+      if (!itemToBuy) return;
+      const { forSale, isEquipped, activity, ...itemObject } = itemToBuy.item;
+      itemToBuy.item = itemObject;
 
       setIsLoading(true);
 
@@ -168,7 +169,7 @@ export const useBuyItem = (itemId: string) => {
       console.warn(error);
       setIsError(true);
     }
-  }, [itemId, items, wallet, service]);
+  }, [itemToBuy, items, wallet, service]);
 
   return { callback, isLoading, isError };
 };
@@ -180,12 +181,13 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
   const characterBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { itemId: string }) => {
+  return useMutation(async (body: { itemName: string }) => {
     if (!character) return;
     const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
-    const item = items.find((item) => item.id === body.itemId);
+    const item = items.find((item) => item.name === body.itemName);
     if (!item) return;
-    const itemToEquip = { ...item, id: Number(item.id) };
+
+    const { forSale, isEquipped, activity, ...itemToEquip } = item;
 
     await inventoryService.equipItem({
       character: characterToEquipTo,
@@ -206,22 +208,24 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
 
 export const useUnequipItem = (callback?: () => void) => {
   const [service] = useAgoricContext();
-  const { equippedItems: equipped, selected: character } = useUserState();
+  const { equippedItems, selected: character } = useUserState();
   const instance = service.contracts.kread.instance;
   const charBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { itemId: string }) => {
+  return useMutation(async (body: { itemName: string }) => {
     if (!character) return;
-    const sanitizedEquipped = equipped.filter((item) => item !== undefined);
-    const item = sanitizedEquipped.find((item) => item.id === body.itemId);
-
+    const sanitizedEquipped = equippedItems.filter((item) => item !== undefined);
+    const item = sanitizedEquipped.find((item) => item.name === body.itemName);
+    
     if (!item) return;
-    const itemToUnEquip = { ...item, id: Number(item.id) };
+    const { forSale, isEquipped, activity, ...itemToEquip } = item;
+    console.log("🦈", itemToEquip);
+    
     const characterToUnequipFrom = { ...character.nft, id: Number(character.nft.id) };
 
     await inventoryService.unequipItem({
-      item: itemToUnEquip,
+      item: itemToEquip,
       character: characterToUnequipFrom,
       service: {
         kreadInstance: instance,
