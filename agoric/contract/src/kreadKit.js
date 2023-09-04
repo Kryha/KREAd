@@ -660,7 +660,7 @@ export const prepareKreadKit = async (
               ],
             };
 
-            itemState.entries.addAll([[i.id, harden(item)]]);
+            itemState.entries.addAll([[id, harden(item)]]);
             itemKit.recorder.write(item);
 
             id += 1;
@@ -706,7 +706,7 @@ export const prepareKreadKit = async (
                 ],
               };
 
-              itemState.entries.addAll([[i.id, harden(item)]]);
+              itemState.entries.addAll([[id, harden(item)]]);
               itemKit.recorder.write(item);
 
               id += 1;
@@ -731,7 +731,7 @@ export const prepareKreadKit = async (
       market: {
         sellItem() {
           const handler = (seat) => {
-            const { market } = this.state;
+            const { market, item: itemState } = this.state;
 
             // Inspect allocation of Character keyword in seller seat
             const objectInSellSeat = seat.getAmountAllocated('Item');
@@ -742,11 +742,13 @@ export const prepareKreadKit = async (
             };
             const object = objectInSellSeat.value.payload[0][0];
 
+            let id = itemState.entries.getSize();
+
             // Add to store array
             const newEntry = {
               seat,
               askingPrice,
-              id: market.itemEntries.getSize()+1,
+              id,
               object,
             };
 
@@ -820,7 +822,7 @@ export const prepareKreadKit = async (
           );
         },
         buyItem() {
-          const handler = (buyerSeat) => {
+          const handler = (buyerSeat, offerArgs) => {
             const { market } = this.state;
 
             // Inspect Character keyword in buyer seat
@@ -828,8 +830,8 @@ export const prepareKreadKit = async (
             const { Item: wantedItemAmount } = want;
             const item = wantedItemAmount.value.payload[0][0];
             // Find store record based on wanted character
-            const sellRecord = market.itemEntries.get(item.id);
-            assert(sellRecord, X`${errors.itemNotFound(item.id)}`);
+            const sellRecord = market.itemEntries.get(offerArgs.entryId);
+            assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
             const sellerSeat = sellRecord.seat;
 
             // Inspect Price keyword from buyer seat
@@ -872,7 +874,7 @@ export const prepareKreadKit = async (
 
             buyerSeat.exit();
             sellerSeat.exit();
-            market.itemEntries.delete(item.id);
+            market.itemEntries.delete(offerArgs.entryId);
 
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),

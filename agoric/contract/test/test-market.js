@@ -382,8 +382,14 @@ test.serial(
       want: { Item: itemToBuyAmount },
     });
     const payment = { Price: alice.withdrawPayment(priceAmount) };
+    const offerArgs = { entryId: itemToBuy.id };
 
-    const userSeat = await E(zoe).offer(buyItemInvitation, proposal, payment);
+    const userSeat = await E(zoe).offer(
+      buyItemInvitation,
+      proposal,
+      payment,
+      offerArgs,
+    );
     await t.throwsAsync(
       E(userSeat).getOfferResult(),
       undefined,
@@ -424,8 +430,14 @@ test.serial('---| MARKET - Buy item', async (t) => {
     want: { Item: itemToBuyAmount },
   });
   const payment = { Price: alice.withdrawPayment(priceAmount) };
+  const offerArgs = { entryId: itemToBuy.id };
 
-  const userSeat = await E(zoe).offer(buyItemInvitation, proposal, payment);
+  const userSeat = await E(zoe).offer(
+    buyItemInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
   const result = await E(userSeat).getOfferResult();
   // t.deepEqual(result.itemMarket.length, 0, 'Offer returns empty market entry');
 
@@ -465,8 +477,14 @@ test.serial('---| MARKET - Buy item not on market', async (t) => {
     want: { Item: itemToBuyAmount },
   });
   const payment = { Price: alice.withdrawPayment(priceAmount) };
+  const offerArgs = { entryId: itemToBuy.id };
 
-  const userSeat = await E(zoe).offer(buyItemInvitation, proposal, payment);
+  const userSeat = await E(zoe).offer(
+    buyItemInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
   await t.throwsAsync(
     E(userSeat).getOfferResult(),
     undefined,
@@ -643,8 +661,9 @@ test.serial(
       want: { Item: itemToBuyAmount },
     });
     payment = { Price: bob.withdrawPayment(priceAmount) };
+    const offerArgs = {entryId: itemToBuy.id}
 
-    userSeat = await E(zoe).offer(buyItemInvitation, proposal, payment);
+    userSeat = await E(zoe).offer(buyItemInvitation, proposal, payment, offerArgs);
     result = await E(userSeat).getOfferResult();
     // t.deepEqual(result.itemMarket.length, 0, "Offer returns empty market entry");
 
