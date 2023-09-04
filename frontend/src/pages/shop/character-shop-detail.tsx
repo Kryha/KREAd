@@ -67,7 +67,7 @@ export const CharactersShopDetail: FC<Props> = ({
               ))}
             </ItemContainer>
             <LoadMoreWrapper>
-              {characters.length >= PAGE_SIZE * page && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
+              {characters.length >= PAGE_SIZE * page && <LoadMore isLoading={isLoading} loadMore={loadMore} />}
             </LoadMoreWrapper>
           </ItemWrapper>
         )

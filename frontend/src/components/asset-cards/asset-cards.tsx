@@ -7,18 +7,6 @@ import { LoadingPage } from "../content-loader";
 import { AssetCard } from "../asset-card";
 import { assetTransformer } from "./asset-transformer";
 
-export interface AssetData {
-  id: string;
-  image: string;
-  name: string;
-  category: string;
-  level: number;
-  rarity?: number;
-  isEquipped?: boolean;
-  isForSale?: boolean;
-  price?: bigint;
-}
-
 interface Props {
   assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
   section: (typeof SECTION)[keyof typeof SECTION];
@@ -33,22 +21,25 @@ export const AssetCards: FC<Props> = ({ assetType, section, assetsData, isLoadin
   const loadMoreAssets = () => {
     setVisibleAssets((prevVisibleAssets) => prevVisibleAssets + ASSETS_PER_PAGE);
   };
+  console.log({ assetsData });
 
   // Transform and structure data based on section
   const transformedData = assetsData
     .map((asset) => {
       const transform = assetTransformer[assetType]?.[section];
+      // return transform && transform(asset.nft || asset.character || asset.item);
       return transform && transform(asset);
     })
     .filter((asset) => asset !== undefined);
 
+  console.log({ transformedData });
   if (isLoading) return <LoadingPage spinner={false} />;
   return (
     <AssetsWrapper height={height}>
       {transformedData.length > 0 && (
         <AssetsContainer>
           {transformedData.slice(0, visibleAssets).map((asset) => (
-            <AssetCard key={asset.id} data={asset} onClick={() => setAssetId(asset.id)} section={section} />
+            <AssetCard assetType={assetType} section={section} key={asset.id} data={asset} onClick={() => setAssetId(asset.id)} />
           ))}
           {visibleAssets < transformedData.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
         </AssetsContainer>

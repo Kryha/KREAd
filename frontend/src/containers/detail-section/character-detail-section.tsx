@@ -25,8 +25,9 @@ interface CharacterDetailSectionProps {
 export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions, showToast }) => {
   const { width } = useViewport();
 
-  const itemsValues = useMemo(() => Object.values(character?.equippedItems).filter((item) => item), [character.equippedItems]);
-
+  // const itemsValues = useMemo(() => Object.values(character?.equippedItems).filter((item) => item), [character.equippedItems]);
+  console.log("character", character);
+  console.log("DETAIL", character.nft.detail);
   if (!character) return <ErrorView />;
 
   return (
@@ -49,7 +50,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
       {/* equipped items */}
       <DetailSectionSegment title={text.character.equippedItems} sectionIndex={3}>
-        <DetailSectionItems items={itemsValues} showToast={showToast || (() => {})} />
+        {/* <DetailSectionItems items={itemsValues} showToast={showToast || (() => {})} /> */}
       </DetailSectionSegment>
 
       {/* details */}

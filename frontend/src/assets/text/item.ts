@@ -37,4 +37,6 @@ export const item = {
   selectAnItemFrom: "select an item from the the store",
   noItemsInInventory: "no items in inventory",
   buyItemsFromStore: "buy items from the store",
+  noCharactersInInventory: "no characters in inventory",
+  buyCharactersFromStore: "buy characters from the store",
 };

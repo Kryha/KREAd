@@ -11,6 +11,7 @@ import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
 import { ASSET_TYPE, SECTION } from "../../constants";
+import { CharactersShopDetail } from "../../pages/shop/character-shop-detail";
 
 interface AssetDetailsProps {
   assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
@@ -61,14 +62,25 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ assetType, section, assetD
     }
   };
 
-  const transformedData = section === "inventory" ? assetData : assetData?.item;
+  let transformedData = assetData;
+  // if (assetType === ASSET_TYPE.ITEM && section === "inventory") transformedData = assetData;
+  if (assetType === ASSET_TYPE.ITEM && section === "shop") transformedData = assetData?.item;
+  // else if (assetType === ASSET_TYPE.CHARACTER && section === "inventory") transformedData = assetData;
+  if (assetType === ASSET_TYPE.CHARACTER && section === "shop") transformedData = assetData;
 
+  // const transformedData =
+  // assetType === ASSET_TYPE.ITEM && section === "inventory"
+  // ? assetData
+  // : assetType === ASSET_TYPE.CHARACTER
+  // ? assetData.character
+  // : assetData?.item;
+  console.log("transformedData", transformedData);
   return (
     <>
       <FadeInOut show={!!assetId} exiting={close}>
         {!!assetId && (
           <DetailContainer>
-            {assetType === ASSET_TYPE.ITEM ? (
+            {assetType === ASSET_TYPE.ITEM && (
               <ItemDetailSection
                 item={transformedData}
                 actions={{
@@ -81,9 +93,24 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ assetType, section, assetD
                   secondary: assetDetailActions()?.secondary,
                 }}
               />
-            ) : (
+            )}
+
+            {assetType === ASSET_TYPE.CHARACTER && section === "inventory" && (
               <CharacterDetailSection
                 character={transformedData}
+                actions={{
+                  onClose: () => {
+                    setAssetId("");
+                    setClose(true);
+                  },
+                  primary: { text: text.item.buy, onClick: buyAsset },
+                }}
+              />
+            )}
+
+            {assetType === ASSET_TYPE.CHARACTER && section === "shop" && (
+              <CharacterDetailSection
+                character={{ nft: transformedData.character, equippedItems: transformedData.equippedItems }}
                 actions={{
                   onClose: () => {
                     setAssetId("");
