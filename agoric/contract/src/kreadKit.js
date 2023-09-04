@@ -111,20 +111,21 @@ export const prepareKreadKit = async (
       creator: CreatorI,
     },
     () => {
-      return harden({
-        character: {
+      return {
+        character: harden({
           entries: makeScalarBigMapStore('characters', { durable: true }),
-        },
-        item: {
+        }),
+        item: harden({
           entries: makeScalarBigMapStore('items', { durable: true }),
-        },
-        market: {
+        }),
+        market: harden({
           characterEntries: makeScalarBigMapStore('characterMarket', {
             durable: true,
           }),
           itemEntries: makeScalarBigMapStore('itemMarket', { durable: true }),
-        },
-      });
+        }),
+        itemsPutForSaleAmount: 0,
+      };
     },
     {
       helper: {
@@ -660,7 +661,7 @@ export const prepareKreadKit = async (
               ],
             };
 
-            itemState.entries.addAll([[i.id, harden(item)]]);
+            itemState.entries.addAll([[id, harden(item)]]);
             itemKit.recorder.write(item);
 
             id += 1;
@@ -706,7 +707,7 @@ export const prepareKreadKit = async (
                 ],
               };
 
-              itemState.entries.addAll([[i.id, harden(item)]]);
+              itemState.entries.addAll([[id, harden(item)]]);
               itemKit.recorder.write(item);
 
               id += 1;
@@ -746,7 +747,7 @@ export const prepareKreadKit = async (
             const newEntry = {
               seat,
               askingPrice,
-              id: market.itemEntries.getSize()+1,
+              id: this.state.itemsPutForSaleAmount,
               object,
             };
 
@@ -755,6 +756,8 @@ export const prepareKreadKit = async (
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
             );
+
+            this.state.itemsPutForSaleAmount++;
           };
 
           return zcf.makeInvitation(
@@ -820,7 +823,7 @@ export const prepareKreadKit = async (
           );
         },
         buyItem() {
-          const handler = (buyerSeat) => {
+          const handler = (buyerSeat, offerArgs) => {
             const { market } = this.state;
 
             // Inspect Character keyword in buyer seat
@@ -828,8 +831,8 @@ export const prepareKreadKit = async (
             const { Item: wantedItemAmount } = want;
             const item = wantedItemAmount.value.payload[0][0];
             // Find store record based on wanted character
-            const sellRecord = market.itemEntries.get(item.id);
-            assert(sellRecord, X`${errors.itemNotFound(item.id)}`);
+            const sellRecord = market.itemEntries.get(offerArgs.entryId);
+            assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
             const sellerSeat = sellRecord.seat;
 
             // Inspect Price keyword from buyer seat
@@ -872,7 +875,7 @@ export const prepareKreadKit = async (
 
             buyerSeat.exit();
             sellerSeat.exit();
-            market.itemEntries.delete(item.id);
+            market.itemEntries.delete(offerArgs.entryId);
 
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
