@@ -746,7 +746,7 @@ export const prepareKreadKit = async (
             const newEntry = {
               seat,
               askingPrice,
-              id: object.id,
+              id: market.itemEntries.getSize()+1,
               object,
             };
 
