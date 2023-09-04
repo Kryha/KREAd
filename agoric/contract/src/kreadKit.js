@@ -111,20 +111,21 @@ export const prepareKreadKit = async (
       creator: CreatorI,
     },
     () => {
-      return harden({
-        character: {
+      return {
+        character: harden({
           entries: makeScalarBigMapStore('characters', { durable: true }),
-        },
-        item: {
+        }),
+        item: harden({
           entries: makeScalarBigMapStore('items', { durable: true }),
-        },
-        market: {
+        }),
+        market: harden({
           characterEntries: makeScalarBigMapStore('characterMarket', {
             durable: true,
           }),
           itemEntries: makeScalarBigMapStore('itemMarket', { durable: true }),
-        },
-      });
+        }),
+        itemsPutForSaleAmount: 0,
+      };
     },
     {
       helper: {
@@ -731,7 +732,7 @@ export const prepareKreadKit = async (
       market: {
         sellItem() {
           const handler = (seat) => {
-            const { market, item: itemState } = this.state;
+            const { market } = this.state;
 
             // Inspect allocation of Character keyword in seller seat
             const objectInSellSeat = seat.getAmountAllocated('Item');
@@ -742,13 +743,11 @@ export const prepareKreadKit = async (
             };
             const object = objectInSellSeat.value.payload[0][0];
 
-            let id = itemState.entries.getSize();
-
             // Add to store array
             const newEntry = {
               seat,
               askingPrice,
-              id,
+              id: this.state.itemsPutForSaleAmount,
               object,
             };
 
@@ -757,6 +756,8 @@ export const prepareKreadKit = async (
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
             );
+
+            this.state.itemsPutForSaleAmount++;
           };
 
           return zcf.makeInvitation(
