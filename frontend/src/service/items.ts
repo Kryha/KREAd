@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Item, ItemBackend, ItemCategory, ItemEquip, ItemInMarket } from "../interfaces";
+import { Character, Item, ItemBackend, ItemCategory, ItemEquip, ItemInMarket } from "../interfaces";
 import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
 import { useItemMarketState } from "../context/item-shop";
-import { useUserState } from "../context/user";
+import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { marketService } from "./character/market";
 import { inventoryService } from "./character/inventory";
@@ -70,11 +70,11 @@ export const useMyItemsForSale = () => {
 };
 
 export const useGetItemInShopById = (id: string): [ItemInMarket | undefined, boolean] => {
-  const [items, isLoading] = useGetItemsInShop();
+  const { items, fetched } = useItemMarketState();
 
   const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
 
-  return [found, isLoading];
+  return [found, !fetched];
 };
 
 export const useGetItemsInShop = (filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
@@ -131,6 +131,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: ItemCate
 };
 
 export const useBuyItem = (itemToBuy: ItemInMarket) => {
+  console.log("helo?")
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [items] = useGetItemsInShop();
@@ -143,7 +144,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket) => {
   const istBrand = service.tokenInfo.ist.brand;
   // TODO: enable listening to offer approved
 
-  const callback = useCallback(async () => {
+  const callback = useCallback(async (setIsAwaitingApprovalToFalse: () => void) => {
     try {
       if (!itemToBuy) return;
       const { forSale, isEquipped, activity, ...itemObject } = itemToBuy.item;
@@ -168,6 +169,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket) => {
     } catch (error) {
       console.warn(error);
       setIsError(true);
+      setIsAwaitingApprovalToFalse();
     }
   }, [itemToBuy, items, wallet, service]);
 
@@ -177,17 +179,24 @@ export const useBuyItem = (itemToBuy: ItemInMarket) => {
 export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item | undefined>>) => {
   const [service] = useAgoricContext();
   const { items, selected: character } = useUserState();
+  const { character: charactersInWallet } = useWalletState();
+  const userStateDispatch = useUserStateDispatch();
   const kreadInstance = service.contracts.kread.instance;
   const characterBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
-
-  return useMutation(async (body: { itemName: string }) => {
+  
+  return useMutation(async (body: { item: Item }) => {
     if (!character) return;
-    const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
-    const item = items.find((item) => item.name === body.itemName);
-    if (!item) return;
+    // FIXME: add character type
+    const characterInWallet = charactersInWallet.find((walletEntry: any) => walletEntry.nft.id === character.nft.id);
+    const characterToEquipTo = { ...characterInWallet.nft, id: Number(character.nft.id) };
+    // const item = items.find((item) => item.name === body.itemName);
+    if (!body.item) return;
 
-    const { forSale, isEquipped, activity, ...itemToEquip } = item;
+    userStateDispatch({ type: "START_INVENTORY_CALL" });
+
+    const { forSale, isEquipped, activity, ...itemToEquip } = body.item;
+    console.log(itemToEquip);
 
     await inventoryService.equipItem({
       character: characterToEquipTo,
@@ -200,7 +209,8 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
       },
       callback: async () => {
         console.info("Equip call settled");
-        if (callback) callback(item);
+        userStateDispatch({ type: "END_INVENTORY_CALL" });
+        if (callback) callback(body.item);
       },
     });
   });
@@ -209,23 +219,27 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
 export const useUnequipItem = (callback?: () => void) => {
   const [service] = useAgoricContext();
   const { equippedItems, selected: character } = useUserState();
+  const userStateDispatch = useUserStateDispatch();
   const instance = service.contracts.kread.instance;
   const charBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { itemName: string }) => {
+  return useMutation(async (body: { item: Item }) => {
     if (!character) return;
-    const sanitizedEquipped = equippedItems.filter((item) => item !== undefined);
-    const item = sanitizedEquipped.find((item) => item.name === body.itemName);
+    // const sanitizedEquipped = equippedItems.filter((item) => item !== undefined);
+    // const item = sanitizedEquipped.find((item) => item.name === body.itemName);
     
-    if (!item) return;
-    const { forSale, isEquipped, activity, ...itemToEquip } = item;
-    console.log("🦈", itemToEquip);
+    if (!body.item) return;
+
+    userStateDispatch({ type: "START_INVENTORY_CALL" });
+
+    const { forSale, isEquipped, activity, ...itemToUnequip } = body.item;
     
+    console.log(itemToUnequip);
     const characterToUnequipFrom = { ...character.nft, id: Number(character.nft.id) };
 
     await inventoryService.unequipItem({
-      item: itemToEquip,
+      item: itemToUnequip,
       character: characterToUnequipFrom,
       service: {
         kreadInstance: instance,
@@ -235,6 +249,7 @@ export const useUnequipItem = (callback?: () => void) => {
       },
       callback: async () => {
         console.info("Unequip call settled");
+        userStateDispatch({ type: "END_INVENTORY_CALL" });
         if (callback) callback();
       },
     });

@@ -8,6 +8,7 @@ import { AssetCards } from "../../components/asset-cards/asset-cards";
 import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";
 import { text } from "../../assets";
+import { useItemMarketState } from "../../context/item-shop";
 
 interface Props {
   pageSelector: ReactNode;
@@ -20,12 +21,14 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
 
-  const [items, isLoading] = useGetItemsInShop({
-    categories: selectedCategories,
-    sort: selectedSorting,
-    price: selectedPrice,
-    color: selectedColor,
-  });
+  const { items, fetched } = useItemMarketState();
+
+  // const [items, isLoading] = useGetItemsInShop({
+  //   categories: selectedCategories,
+  //   sort: selectedSorting,
+  //   price: selectedPrice,
+  //   color: selectedColor,
+  // });
 
   const [item] = useGetItemInShopById(selectedId);
 
@@ -45,7 +48,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
       />
       <AssetDetails section={SECTION.SHOP} assetData={item} assetId={selectedId} setAssetId={setSelectedId} />
       {items.length > 0 ? (
-        <AssetCards section={SECTION.SHOP} assetsData={items} isLoading={isLoading} setAssetId={setSelectedId} />
+        <AssetCards section={SECTION.SHOP} assetsData={items} isLoading={!fetched} setAssetId={setSelectedId} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

@@ -18,6 +18,7 @@ export const ItemPage: FC = () => {
 
   const [equippedItem, unequippedItems]: [Item | undefined, Item[]] = useMemo(() => {
     if (!isItemCategory(category)) return [undefined, []];
+    if (!allUnequippedItems) return [character?.equippedItems[category], []];
 
     return [character?.equippedItems[category], allUnequippedItems.filter((item) => item.category === category)];
   }, [category, character?.equippedItems, items]);

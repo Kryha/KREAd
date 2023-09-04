@@ -12,22 +12,19 @@ import { useWalletState } from "../../context/wallet";
 export const ItemSell = () => {
   const { name, category } = useParams<"category" | "name">();
 
-  if(!isItemCategory(category)) {
-    return;
-  }
-
+  
   const { item: walletItems } = useWalletState();
   const itemToSell = walletItems.find((item) => (item.name===name && item.category === category));
   const sellItem = useSellItem(name, category as ItemCategory);
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
-
+  
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
     await sellItem.callback(data.price, () => setIsPlacedInShop(true));
   };
-
-  if (!data) return <ErrorView />;
+  
+  if (!data || !isItemCategory(category)) return <ErrorView />;
 
   return (
     <Sell

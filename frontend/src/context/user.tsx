@@ -17,6 +17,7 @@ export interface UserContext {
   equippedItems: Item[];
   processed: string[];
   fetched: boolean;
+  inventoryCallInProgress: boolean;
 }
 
 interface SetSelected {
@@ -33,7 +34,7 @@ interface SetProcessed {
 }
 interface SetItems {
   type: "SET_ITEMS";
-  payload: ItemBackend[];
+  payload: Item[];
 }
 interface SetEquippedItems {
   type: "SET_EQUIPPED_ITEMS";
@@ -48,6 +49,12 @@ interface SetFetched {
   type: "SET_FETCHED";
   payload: boolean;
 }
+interface StartInventoryCall {
+  type: "START_INVENTORY_CALL"
+}
+interface EndInventoryCall {
+  type: "END_INVENTORY_CALL"
+}
 interface Reset {
   type: "RESET";
 }
@@ -59,6 +66,8 @@ type UserStateActions =
   | SetEquippedItems
   | UpdateCharacterItems
   | SetProcessed
+  | StartInventoryCall
+  | EndInventoryCall
   | Reset;
 
 const initialState: UserContext = {
@@ -68,6 +77,7 @@ const initialState: UserContext = {
   equippedItems: [],
   processed: [],
   fetched: false,
+  inventoryCallInProgress: false,
 };
 
 const initialMockState: UserContext = {
@@ -77,6 +87,7 @@ const initialMockState: UserContext = {
   equippedItems: mockItemsEquipped,
   processed: [],
   fetched: mockData.fetched,
+  inventoryCallInProgress: false,
 };
 
 export type UserDispatch = React.Dispatch<UserStateActions>;
@@ -131,6 +142,12 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };
 
+    case "START_INVENTORY_CALL":
+      return { ...state, inventoryCallInProgress: true };
+
+    case "END_INVENTORY_CALL":
+      return { ...state, inventoryCallInProgress: false };
+
     case "RESET":
       return initialState;
 
@@ -177,7 +194,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       }
 
       // User has at least 1 character, but less characters than before, adjust the state accordingly
-      if (charactersInWallet.length < processedCharacters.length) {
+      if ((charactersInWallet.length < processedCharacters.length) && !userState.inventoryCallInProgress) {
         processedCharacters.forEach((name) => {
           if (!ownedCharacterNames.includes(name)) {
             processedCharacters.splice(processedCharacters.indexOf(name), 1);
@@ -200,7 +217,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       console.error("got watchNotifiers err", err);
     });
     userStateDispatch({ type: "SET_FETCHED", payload: true });
-  }, [kreadPublicFacet, charactersInWallet, itemsInWallet, userState.processed]);
+  }, [charactersInWallet, itemsInWallet, userState.processed, userState.inventoryCallInProgress]);
 
   return (
     <Context.Provider value={userState}>

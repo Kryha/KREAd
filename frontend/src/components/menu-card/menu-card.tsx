@@ -54,17 +54,16 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
 
   const selectedItem = useMemo(() => allItems?.find((item) => item.name === selectedName), [allItems, selectedName]);
 
-  const equip = (event: React.MouseEvent<HTMLButtonElement>, name: string) => {
+  const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    equipItem.mutate({ itemName: name });
+    equipItem.mutate({ item: selectedItem! });
   };
 
-  const unequip = (event: React.MouseEvent<HTMLButtonElement>, name: string) => {
-    console.log("🤕")
+  const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    unequipItem.mutate({ itemName: name });
+    unequipItem.mutate({ item: equippedItem! });
   };
 
   const primaryActions = () => {
@@ -111,7 +110,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
                 onClick={() => setSelectedName(equippedItem.name)}
                 key={equippedItem.name}
                 isEquipped
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event, equippedItem.id)}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}
                 isInitial={intitial}
                 removeInitial={removeInitial}
               />
@@ -127,7 +126,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
                 imageProps={imageProps}
                 onClick={() => setSelectedName(item.name)}
                 key={item.name}
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event, item.id)}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}
                 removeInitial={removeInitial}
               />
             ))}

@@ -11,10 +11,11 @@ import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
 import { SECTION } from "../../constants";
+import { Item, ItemInMarket } from "../../interfaces";
 
 interface AssetDetailsProps {
   section: (typeof SECTION)[keyof typeof SECTION];
-  assetData: any;
+  assetData: ItemInMarket;
   assetId: string;
   setAssetId: (assetId: string) => void;
 }
@@ -27,30 +28,32 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetI
 
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
   const equipAsset = () => {
-    if (!assetId) return;
+    // if (!assetId) return;
     setShowToast(!showToast);
-    equipItem.mutate({ itemId: assetId });
+    equipItem.mutate({ item: assetData.item });
   };
 
   const unequipAsset = () => {
-    if (!assetId) return;
+    // if (!assetId) return;
     setShowToast(!showToast);
-    unequipItem.mutate({ itemId: assetId });
+    unequipItem.mutate({ item: assetData.item });
   };
+
   const sellAsset = () => {
-    if (!assetId) return;
-    navigate(`${routes.sellItem}/${assetId}`);
+    // if (!assetId) return;
+    navigate(`${routes.sellItem}/${assetData.item.category}/${assetData.item.name}`);
   };
 
   const buyAsset = () => {
-    if (!assetId) return;
-    navigate(`${routes.buyItem}/${assetId}`);
+    // if (!assetData.) return;
+    console.log(assetData)
+    navigate(`${routes.buyItem}/${assetData.item.category}/${assetData.item.name}`);
   };
   const assetDetailActions = () => {
     if (section === "inventory") {
-      if (assetData?.isEquipped) {
+      if (assetData?.item.isEquipped) {
         return { primary: { text: text.item.unequip, onClick: unequipAsset } };
-      } else if (assetData?.isForSale) {
+      } else if (assetData?.item.forSale) {
         return { primary: { text: text.item.equip, onClick: equipAsset }, secondary: { text: text.item.sell, onClick: sellAsset } };
       }
     } else {
@@ -60,7 +63,7 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetI
 
   let transformedData;
   if (section === "inventory") {
-    transformedData = assetData;
+    transformedData = assetData.item;
   } else if (section === "shop") {
     transformedData = assetData?.item;
   }

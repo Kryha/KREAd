@@ -7,42 +7,41 @@ import { ItemDetailSection } from "../../containers/detail-section";
 import { ItemInMarket } from "../../interfaces";
 import { useBuyItem, useGetItemInShopById, useMyItem } from "../../service";
 import { Buy } from "./buy";
+import { useItemMarketState } from "../../context/item-shop";
 
 export const ItemBuy = () => {
-  const { id } = useParams<"id">();
-  const idString = String(id);
 
-  const [itemInMarket, isLoadingItem] = useGetItemInShopById(idString);
-  const [boughtItem] = useMyItem(idString);
-  const buyItem = useBuyItem(idString);
+  const { category, name } = useParams<"category" | "name">();
+  const { items } = useItemMarketState();
+  const itemToBuy = items.find((marketEntry) => (marketEntry.item.name===name && marketEntry.item.category === category));
+  
+  console.log("💰", category, name, itemToBuy)
+  // const [itemInMarket, isLoadingItem] = useGetItemInShopById(idString);
+  // const [boughtItem] = useMyItem(idString);
+  const buyItem = useBuyItem(itemToBuy!);
 
-  const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
+  const [isAwaitingApproval, setIsAwaitingApproval] = useState(true);
   const [data, setData] = useState<ItemInMarket>();
 
   useEffect(() => {
     // without this, the view will error out after purchase, since the item won't be on the market anymore
-    if (itemInMarket) setData(itemInMarket);
-  }, [itemInMarket, buyItem]);
-
-  // TODO: handle declining item and error
-  useEffect(() => {
-    if (boughtItem) setIsAwaitingApproval(false);
-  }, [boughtItem]);
+    if (itemToBuy) setData(itemToBuy);
+  }, [itemToBuy, buyItem]);
 
   const handleSubmit = async () => {
-    if (!id) return;
+    // if (!itemToBuy) return;
     setIsAwaitingApproval(true);
-    await buyItem.callback();
+    await buyItem.callback(() => setIsAwaitingApproval(false));
   };
 
-  isLoadingItem && <LoadingPage />;
+  // isLoadingItem && <LoadingPage />;
 
   return (
     <Buy
       data={data && { ...data.item, price: Number(data.sell.price) }}
       onSubmit={handleSubmit}
       isLoading={isAwaitingApproval}
-      isOfferAccepted={!!boughtItem}
+      isOfferAccepted={isAwaitingApproval}
       text={{
         buy: text.store.buyItem,
         success: text.store.itemSuccessfullyBought,
