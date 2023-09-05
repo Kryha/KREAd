@@ -69,6 +69,29 @@ export const ItemGuard = M.splitRecord(
 
 export const ItemGuardBagShape = M.bagOf(ItemGuard);
 
+export const MarketMetricsGuard = M.splitRecord({
+  amountSold: M.gte(0),
+  collectionSize: M.gte(0),
+  averageLevel: M.gte(0),
+  marketplaceAverageLevel: M.gte(0),
+});
+
+export const UpdateMarketMetricsGuard = M.splitRecord(
+  {},
+  {
+    amountSold: M.boolean(),
+    collectionSize: M.boolean(),
+    averageLevel: M.splitRecord({
+      type: M.or('add', 'remove'),
+      value: M.gte(0),
+    }),
+    marketplaceAverageLevel: M.splitRecord({
+      type: M.or('add', 'remove'),
+      value: M.gte(0),
+    }),
+  },
+);
+
 export const PublicI = M.interface('public', {
   // Mint
   makeMintCharacterInvitation: M.call().returns(M.promise()),
@@ -96,11 +119,14 @@ export const PublicI = M.interface('public', {
   getCharacterInventory: M.call().returns(M.splitRecord({ items: M.array() })),
   getCharactersForSale: M.call().returns(M.array()),
   getItemsForSale: M.call().returns(M.array()),
+  getMarketMetrics: M.call().returns(M.record()),
+  getCharacterLevel: M.call(M.string()).returns(M.gte(0)),
 });
 
 export const CreatorI = M.interface('creator', {
   publishKreadInfo: M.call().returns(),
   makeMintItemInvitation: M.call().returns(M.promise()),
+  initializeMetrics: M.call().returns(),
 });
 
 export const CharacterI = M.interface('character', {
@@ -112,6 +138,7 @@ export const CharacterI = M.interface('character', {
   validateInventoryState: M.call().returns(),
   isNameUnique: M.call(M.string()).returns(M.boolean()),
   getRandomBaseCharacter: M.call().returns(M.any()),
+  calculateLevel: M.call(M.string()).returns(M.gte(0)),
   makeInventoryRecorderKit: M.call(M.string()).returns(
     M.promise(M.remotable('Notifier')),
   ),
@@ -127,6 +154,10 @@ export const MarketI = M.interface('market', {
   buyItem: M.call().returns(M.promise()),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
+  updateMetrics: M.call(
+    M.or('character', 'item'),
+    UpdateMarketMetricsGuard,
+  ).returns(),
   freeTokens: M.call().returns(M.promise()),
 });
 
