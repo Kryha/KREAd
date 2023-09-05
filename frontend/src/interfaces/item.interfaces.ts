@@ -35,16 +35,6 @@ export interface Item {
   forSale?: boolean;
 }
 
-export interface KreadItemInMarket {
-  sellerSeat: any;
-  id: string;
-  askingPrice: {
-    value: bigint;
-    brand: any;
-  };
-  object: ItemBackend;
-}
-
 export interface ItemInMarket {
   id: string;
   item: Item;
@@ -54,21 +44,5 @@ export interface ItemInMarket {
   };
 }
 
-// TODO: revisit interfaces
-export interface ItemInMarketBackend {
-  id: bigint;
-  item: ItemBackend;
-  sell: {
-    publicFacet?: any;
-    price: bigint;
-  };
-}
 
-export interface ItemBackend extends Omit<Item, "id"> {
-  id: bigint;
-}
 
-export interface ItemEquip extends Item {
-  isEquipped: boolean;
-  isForSale?: boolean;
-}

@@ -68,9 +68,9 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
 
   const primaryActions = () => {
     if (selectedItem?.name === equippedItem?.name) {
-      return { text: text.item.unequip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event, selectedName) };
+      return { text: text.item.unequip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event) };
     } else {
-      return { text: text.item.equip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event, selectedName) };
+      return { text: text.item.equip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event) };
     }
   };
 
@@ -85,6 +85,7 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
 
   const isDividerShown = !!equippedItem && !!unequippedItems.length;
 
+  console.log(allItems)
   return (
     <MenuCardWrapper>
       <Menu width={viewWidth} height={viewHeight}>
