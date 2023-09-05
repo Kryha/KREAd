@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { text } from "../../assets";
 import { FadeInOut } from "../../components";
 import { ItemDetailSection } from "../../containers/detail-section";

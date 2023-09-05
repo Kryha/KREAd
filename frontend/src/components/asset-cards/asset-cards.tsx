@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { ASSETS_PER_PAGE, SECTION } from "../../constants";
 import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more";
 import { AssetsContainer, AssetsWrapper } from "./styles";

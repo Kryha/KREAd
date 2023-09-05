@@ -1,5 +1,4 @@
 import React, { FC, useState } from "react";
-
 import { itemInventoryCategories, itemShopCategories, sortAssetsInInventory, sortAssetsInShop } from "../../assets/text/filter-options";
 import { breakpoints, color } from "../../design";
 import { ColorSelector, Filters, HorizontalDivider, Label, PriceSelector, Select } from "../../components";
