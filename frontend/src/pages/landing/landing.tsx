@@ -30,6 +30,7 @@ export const Landing: FC = () => {
   const [closeDetail, setCloseDetail] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
+  console.log(selectedCharacter)
   const sell = (characterId: string) => {
     navigate(`${routes.sellCharacter}/${characterId}`);
   };

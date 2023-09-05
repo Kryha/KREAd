@@ -5,6 +5,7 @@ import { AssetsContainer, AssetsWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
 import { AssetCard } from "../asset-card";
+import { ItemCategory } from "../../interfaces";
 
 export interface AssetData {
   id: string;
@@ -21,11 +22,11 @@ export interface AssetData {
 interface Props {
   assetsData: any[];
   isLoading: boolean;
-  setAssetId: (assetId: string) => void;
+  selectItem: (name: string, category: ItemCategory) => void;
   section: (typeof SECTION)[keyof typeof SECTION];
 }
 
-export const AssetCards: FC<Props> = ({ assetsData, isLoading, setAssetId, section }) => {
+export const AssetCards: FC<Props> = ({ assetsData, isLoading, selectItem, section }) => {
   const { height } = useViewport();
   const [visibleAssets, setVisibleAssets] = useState(ASSETS_PER_PAGE);
   const loadMoreAssets = () => {
@@ -69,7 +70,7 @@ export const AssetCards: FC<Props> = ({ assetsData, isLoading, setAssetId, secti
       {transformedData.length > 0 && (
         <AssetsContainer>
           {transformedData.slice(0, visibleAssets).map((asset) => (
-            <AssetCard key={asset.id} data={asset} onClick={() => setAssetId(asset.id)} section={section} />
+            <AssetCard key={asset.name+asset.category} data={asset} onClick={() => selectItem(asset.name, asset.category)} section={section} />
           ))}
           {visibleAssets < transformedData.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
         </AssetsContainer>

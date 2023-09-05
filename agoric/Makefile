@@ -85,6 +85,7 @@ bootstrap:
 	make kread-bundle; \
 	make proposal; \
 
-fund+provision:
+account+bundle:
 	make provision-account; \
     make fund-account; \
+	make kread-bundle; \

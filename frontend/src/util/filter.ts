@@ -1,5 +1,5 @@
 import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { CharacterEquip, CharacterInMarket, ItemEquip, ItemInMarket } from "../interfaces";
+import { CharacterEquip, CharacterInMarket, Item, ItemInMarket } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -34,7 +34,7 @@ export interface CharactersMarketFilters {
   price: { min: number; max: number };
 }
 
-export const filterItems = (items: ItemEquip[], { categories, sort, color }: ItemFilters): ItemEquip[] => {
+export const filterItems = (items: Item[], { categories, sort, color }: ItemFilters): Item[] => {
   if (items.length === 0) return []; // Return empty array if there are no items to filter
 
   const [, setSearchParams] = useSearchParams();
@@ -53,7 +53,7 @@ export const filterItems = (items: ItemEquip[], { categories, sort, color }: Ite
   }, [categories, sort, color]);
 
   // TODO: ForSale and isEquipped to be moved from categories to separate filters?
-  const isInCategory = (item: ItemEquip, selectedCategories: string[] | undefined) => {
+  const isInCategory = (item: Item, selectedCategories: string[] | undefined) => {
     if (!selectedCategories || selectedCategories.length === 0) return true; // Return true if no categories are selected
 
     if (selectedCategories.includes("allCategories")) return true; // Return true if all categories are selected
@@ -66,11 +66,11 @@ export const filterItems = (items: ItemEquip[], { categories, sort, color }: Ite
       const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
 
       if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(item.category) && item.isForSale;
+        return otherSelectedCategories.includes(item.category) && item.forSale;
       }
 
       // If only "forSale" is selected, return only for sale items
-      return item.isForSale;
+      return item.forSale;
     }
 
     if (!isForSaleSelected && isEquippedSelected) {
@@ -94,7 +94,7 @@ export const filterItems = (items: ItemEquip[], { categories, sort, color }: Ite
 
     return selectedCategories.includes(item.category);
   };
-  const hasColor = (item: ItemEquip, selectedColor: string) =>
+  const hasColor = (item: Item, selectedColor: string) =>
     selectedColor ? item.colors.some((colorElement) => colorElement === selectedColor) : true;
   const filteredItems = items.filter((item) => isInCategory(item, categories) && hasColor(item, color));
 

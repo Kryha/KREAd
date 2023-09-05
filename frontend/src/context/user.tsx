@@ -164,14 +164,13 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   const wallet = useWalletState();
   const agoric = useAgoricState();
 
-  const kreadPublicFacet = agoric.contracts.kread.publicFacet;
   const charactersInWallet = useMemo(() => (wallet.character ? wallet.character : []), [wallet.character]);
   const itemsInWallet = useMemo(() => (wallet.item ? wallet.item : []), [wallet.item]);
 
   useEffect(() => {
     const processPurseChanges = async () => {
       console.count("👜 PROCESSING PURSE CHANGE");
-
+      console.log(charactersInWallet)
       // Always run on purse updates
       userStateDispatch({ type: "SET_ITEMS", payload: itemsInWallet });
       userStateDispatch({ type: "SET_FETCHED", payload: true });
@@ -180,7 +179,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       const ownedCharacterNames: string[] = charactersInWallet.map((character: CharacterBackend) => character.name).sort();
 
       // Empty character wallet
-      if (charactersInWallet.length === 0) {
+      if (charactersInWallet.length === 0 && !userState.inventoryCallInProgress) {
         userStateDispatch({ type: "SET_CHARACTERS", payload: [] });
         userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: [] });
         userStateDispatch({ type: "SET_SELECTED", payload: undefined });

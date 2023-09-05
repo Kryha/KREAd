@@ -56,8 +56,8 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
 
 export const watchWalletVstorage = (chainStorageWatcher: any, walletAddress: string, updateStatePurses: any, updateStateOffers: any) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+  if(!walletAddress) return;
   const path = `published.wallet.${walletAddress}.current`;
-
   chainStorageWatcher.watchLatest(
     [Kind.Data, path],
     (value: any) => {

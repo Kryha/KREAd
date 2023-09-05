@@ -3,7 +3,7 @@ import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 import { useGetItemInShopById, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
-import { AssetDetails } from "../../components/asset-details/asset-details";
+import { AssetDetails } from "../../components/asset-details/asset-details-market";
 import { AssetCards } from "../../components/asset-cards/asset-cards";
 import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";

@@ -2,7 +2,7 @@ import { FadeInOut } from "../fade-in-out";
 import { DetailContainer } from "../../pages/shop/styles";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { Overlay } from "../atoms";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { text } from "../../assets";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { routes } from "../../navigation";
@@ -11,15 +11,15 @@ import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
 import { SECTION } from "../../constants";
-import { Item, ItemInMarket } from "../../interfaces";
+import { Item, ItemCategory } from "../../interfaces";
 
-interface AssetDetailsProps {
+interface AssetDetailsInventoryProps {
   section: (typeof SECTION)[keyof typeof SECTION];
-  assetData: ItemInMarket;
-  assetId: string;
-  setAssetId: (assetId: string) => void;
+  item: Item;
+  selectedItem: { name: string, category: ItemCategory | undefined };
+  selectItem: (name: string, category: ItemCategory | undefined) => void;
 }
-export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetId, setAssetId }) => {
+export const AssetDetailsInventory: FC<AssetDetailsInventoryProps> = ({ section, item, selectedItem, selectItem }) => {
   const navigate = useNavigate();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -30,57 +30,45 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, assetData, assetI
   const equipAsset = () => {
     // if (!assetId) return;
     setShowToast(!showToast);
-    equipItem.mutate({ item: assetData.item });
+    equipItem.mutate({ item });
   };
 
   const unequipAsset = () => {
     // if (!assetId) return;
     setShowToast(!showToast);
-    unequipItem.mutate({ item: assetData.item });
+    unequipItem.mutate({ item });
   };
 
   const sellAsset = () => {
     // if (!assetId) return;
-    navigate(`${routes.sellItem}/${assetData.item.category}/${assetData.item.name}`);
+    navigate(`${routes.sellItem}/${item.category}/${item.name}`);
   };
 
-  const buyAsset = () => {
-    // if (!assetData.) return;
-    console.log(assetData)
-    navigate(`${routes.buyItem}/${assetData.item.category}/${assetData.item.name}`);
-  };
   const assetDetailActions = () => {
-    if (section === "inventory") {
-      if (assetData?.item.isEquipped) {
-        return { primary: { text: text.item.unequip, onClick: unequipAsset } };
-      } else if (assetData?.item.forSale) {
-        return { primary: { text: text.item.equip, onClick: equipAsset }, secondary: { text: text.item.sell, onClick: sellAsset } };
-      }
-    } else {
-      return { primary: { text: text.item.buy, onClick: buyAsset }, price: Number(assetData.sell.price) };
+    if (item.isEquipped) {
+      return { primary: { text: text.item.unequip, onClick: unequipAsset } };
+    } else if (item.forSale) {
+      return { primary: { text: text.item.equip, onClick: equipAsset }, secondary: { text: text.item.sell, onClick: sellAsset } };
     }
   };
 
   let transformedData;
   if (section === "inventory") {
-    transformedData = assetData.item;
-  } else if (section === "shop") {
-    transformedData = assetData?.item;
-  }
+    transformedData = item;
+  };
 
   return (
     <>
-      <FadeInOut show={!!assetId} exiting={close}>
-        {!!assetId && (
+      <FadeInOut show={!!selectedItem} exiting={close}>
+        {!!selectedItem && (
           <DetailContainer>
             <ItemDetailSection
               item={transformedData}
               actions={{
                 onClose: () => {
-                  setAssetId("");
+                  selectItem("", undefined);
                   setClose(true);
                 },
-                price: assetDetailActions()?.price,
                 primary: assetDetailActions()?.primary,
                 secondary: assetDetailActions()?.secondary,
               }}

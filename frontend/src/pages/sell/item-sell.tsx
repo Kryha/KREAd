@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 import { ErrorView, FadeInOut } from "../../components";
@@ -14,7 +14,9 @@ export const ItemSell = () => {
 
   
   const { item: walletItems } = useWalletState();
-  const itemToSell = walletItems.find((item) => (item.name===name && item.category === category));
+
+  // Locking itemToSell in useMemo to prevent it from updating when it leaves the wallet
+  const itemToSell = useMemo(() => walletItems.find((item) => (item.name===name && item.category === category)),[]);
   const sellItem = useSellItem(name, category as ItemCategory);
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });

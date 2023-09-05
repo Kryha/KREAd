@@ -7,13 +7,14 @@ import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
 import { AssetFilterContainer, AssetFilterCount, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
 import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { ItemCategory } from "../../interfaces";
 
 interface Props {
   assets: any[];
   selectedCategories: string[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
-  setSelectedCategories: (value: string[]) => void;
+  setSelectedCategories: (value: ItemCategory[]) => void;
   setSelectedSorting: (value: string) => void;
   setSelectedColor: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
