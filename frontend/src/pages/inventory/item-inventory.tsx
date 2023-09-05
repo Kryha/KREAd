@@ -25,7 +25,7 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   const selectItem = (name: string, category: ItemCategory | undefined) => {
     setSelectedName(name);
     setSelectedCategory(category);
-  }
+  };
   const [items, isLoading] = useGetItemsInInventory({
     categories: selectedCategories,
     sort: selectedSorting,
@@ -35,7 +35,6 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
 
   if (isLoading) return <LoadingPage />;
 
-  console.log("🤩", items, item)
   return (
     <>
       <AssetFilters
@@ -49,7 +48,14 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
         setSelectedColor={setSelectedColor}
       />
       <AssetCards section={SECTION.INVENTORY} assetsData={items} isLoading={isLoading} selectItem={selectItem} />
-      {item && <AssetDetailsInventory section={SECTION.INVENTORY} item={item} selectedItem={{ name: selectedName, category: selectedCategory }} selectItem={selectItem} />}
+      {item && (
+        <AssetDetailsInventory
+          section={SECTION.INVENTORY}
+          item={item}
+          selectedItem={{ name: selectedName, category: selectedCategory }}
+          selectItem={selectItem}
+        />
+      )}
       {!items?.length && (
         <OverviewContainer>
           <OverviewEmpty

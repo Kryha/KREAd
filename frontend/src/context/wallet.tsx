@@ -96,7 +96,6 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       }));
     };
 
-    console.log(!walletState.fetched, chainStorageWatcher);
     if (!walletState.fetched && chainStorageWatcher) {
       console.count("🍕");
       watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);

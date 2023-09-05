@@ -96,7 +96,7 @@ export const STORAGE_NODE_SPEC_MARKET_CHARACTERS = ":published.kread.market-char
 
 export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-" as const;
 
-export const isDevelopmentMode = process.env.NODE_ENV === "development" as const;
+export const isDevelopmentMode = process.env.NODE_ENV === ("development" as const);
 
 export const DOWNLOAD_CANVAS_WIDTH = 2500 as const;
 export const DOWNLOAD_CANVAS_HEIGHT = 2500 as const;
@@ -152,6 +152,6 @@ export const CHARACTER_IDENTIFIER = "KREAdCHARACTER" as const;
 export const SELL_ITEM_INVITATION = "makeSellItemInvitation" as const;
 export const SELL_CHARACTER_INVITATION = "makeSellCharacterInvitation" as const;
 
-export const AGORIC_RPC = import.meta.env.VITE_RPC || "http://127.0.0.1:26657" as const;
+export const AGORIC_RPC = import.meta.env.VITE_RPC || ("http://127.0.0.1:26657" as const);
 
 export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;

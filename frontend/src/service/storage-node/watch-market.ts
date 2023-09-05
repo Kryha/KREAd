@@ -20,7 +20,6 @@ export const watchCharacterMarket = (chainStorageWatcher: any, parseCharacterMar
 };
 
 export const watchItemMarket = (chainStorageWatcher: any, parseItemMarketUpdate: any) => {
-  console.log("WATCHING CHARACTERS");
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = "published.kread.market-items";
   chainStorageWatcher.watchLatest(

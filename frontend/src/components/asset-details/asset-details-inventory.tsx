@@ -16,7 +16,7 @@ import { Item, ItemCategory } from "../../interfaces";
 interface AssetDetailsInventoryProps {
   section: (typeof SECTION)[keyof typeof SECTION];
   item: Item;
-  selectedItem: { name: string, category: ItemCategory | undefined };
+  selectedItem: { name: string; category: ItemCategory | undefined };
   selectItem: (name: string, category: ItemCategory | undefined) => void;
 }
 export const AssetDetailsInventory: FC<AssetDetailsInventoryProps> = ({ section, item, selectedItem, selectItem }) => {
@@ -55,7 +55,7 @@ export const AssetDetailsInventory: FC<AssetDetailsInventoryProps> = ({ section,
   let transformedData;
   if (section === "inventory") {
     transformedData = item;
-  };
+  }
 
   return (
     <>

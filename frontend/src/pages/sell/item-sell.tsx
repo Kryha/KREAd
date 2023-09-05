@@ -12,20 +12,19 @@ import { useWalletState } from "../../context/wallet";
 export const ItemSell = () => {
   const { name, category } = useParams<"category" | "name">();
 
-  
   const { item: walletItems } = useWalletState();
 
   // Locking itemToSell in useMemo to prevent it from updating when it leaves the wallet
-  const itemToSell = useMemo(() => walletItems.find((item) => (item.name===name && item.category === category)),[]);
+  const itemToSell = useMemo(() => walletItems.find((item) => item.name === name && item.category === category), []);
   const sellItem = useSellItem(name, category as ItemCategory);
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
-  
+
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
     await sellItem.callback(data.price, () => setIsPlacedInShop(true));
   };
-  
+
   if (!data || !isItemCategory(category)) return <ErrorView />;
 
   return (

@@ -58,7 +58,6 @@ export const AssetDetails: FC<AssetDetailsProps> = ({ section, itemInMarket, ass
 
   let transformedData;
   if (section === "inventory") {
-    console.log(itemInMarket)
     transformedData = itemInMarket.item;
   } else if (section === "shop") {
     transformedData = itemInMarket?.item;

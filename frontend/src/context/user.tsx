@@ -50,10 +50,10 @@ interface SetFetched {
   payload: boolean;
 }
 interface StartInventoryCall {
-  type: "START_INVENTORY_CALL"
+  type: "START_INVENTORY_CALL";
 }
 interface EndInventoryCall {
-  type: "END_INVENTORY_CALL"
+  type: "END_INVENTORY_CALL";
 }
 interface Reset {
   type: "RESET";
@@ -102,7 +102,6 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     }
 
     case "SET_ITEMS": {
-      console.log(action.payload);
       return { ...state, items: action.payload, fetched: true };
     }
 
@@ -170,7 +169,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   useEffect(() => {
     const processPurseChanges = async () => {
       console.count("👜 PROCESSING PURSE CHANGE");
-      console.log(charactersInWallet)
+
       // Always run on purse updates
       userStateDispatch({ type: "SET_ITEMS", payload: itemsInWallet });
       userStateDispatch({ type: "SET_FETCHED", payload: true });
@@ -193,7 +192,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       }
 
       // User has at least 1 character, but less characters than before, adjust the state accordingly
-      if ((charactersInWallet.length < processedCharacters.length) && !userState.inventoryCallInProgress) {
+      if (charactersInWallet.length < processedCharacters.length && !userState.inventoryCallInProgress) {
         processedCharacters.forEach((name) => {
           if (!ownedCharacterNames.includes(name)) {
             processedCharacters.splice(processedCharacters.indexOf(name), 1);

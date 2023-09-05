@@ -2,22 +2,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { text } from "../../assets";
-import { FadeInOut, LoadingPage } from "../../components";
+import { FadeInOut } from "../../components";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { ItemInMarket } from "../../interfaces";
-import { useBuyItem, useGetItemInShopById, useMyItem } from "../../service";
+import { useBuyItem } from "../../service";
 import { Buy } from "./buy";
 import { useItemMarketState } from "../../context/item-shop";
 
 export const ItemBuy = () => {
-
   const { category, name } = useParams<"category" | "name">();
   const { items } = useItemMarketState();
-  const itemToBuy = items.find((marketEntry) => (marketEntry.item.name===name && marketEntry.item.category === category));
-  
-  console.log("💰", category, name, itemToBuy)
-  // const [itemInMarket, isLoadingItem] = useGetItemInShopById(idString);
-  // const [boughtItem] = useMyItem(idString);
+  const itemToBuy = items.find((marketEntry) => marketEntry.item.name === name && marketEntry.item.category === category);
   const buyItem = useBuyItem(itemToBuy!);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(true);
@@ -33,8 +28,6 @@ export const ItemBuy = () => {
     setIsAwaitingApproval(true);
     await buyItem.callback(() => setIsAwaitingApproval(false));
   };
-
-  // isLoadingItem && <LoadingPage />;
 
   return (
     <Buy

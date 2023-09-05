@@ -70,7 +70,12 @@ export const AssetCards: FC<Props> = ({ assetsData, isLoading, selectItem, secti
       {transformedData.length > 0 && (
         <AssetsContainer>
           {transformedData.slice(0, visibleAssets).map((asset) => (
-            <AssetCard key={asset.name+asset.category} data={asset} onClick={() => selectItem(asset.name, asset.category)} section={section} />
+            <AssetCard
+              key={asset.name + asset.category}
+              data={asset}
+              onClick={() => selectItem(asset.name, asset.category)}
+              section={section}
+            />
           ))}
           {visibleAssets < transformedData.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
         </AssetsContainer>
