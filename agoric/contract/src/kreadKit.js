@@ -3,7 +3,7 @@
 import '@agoric/zoe/exported';
 import { updateCharacterMetrics, updateItemMetrics } from './market-metrics';
 import { assert, details as X } from '@agoric/assert';
-import { AmountMath, AmountShape, BrandShape } from '@agoric/ertp';
+import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
 import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
@@ -51,7 +51,7 @@ import {
  *   itemMint: ZCFMint<"copyBag">
  *   paymentFTIssuerRecord: IssuerRecord<"nat">
  *   paymentFTMint: ZCFMint<"nat">
- *   chainTimerService: TimerService
+ *   clock: import('@agoric/time/src/types.js').Clock
  *   storageNode: StorageNode
  *   makeRecorderKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit
  *   storageNodePaths: Object
@@ -68,7 +68,7 @@ export const prepareKreadKit = async (
     itemMint,
     paymentFTIssuerRecord,
     paymentFTMint,
-    chainTimerService,
+    clock,
     storageNode,
     makeRecorderKit,
     storageNodePaths,
@@ -96,8 +96,8 @@ export const prepareKreadKit = async (
       info: KreadInfoGuard,
       characterKit: CharacterRecorderGuard,
       itemKit: ItemRecorderGuard,
-      marketCharacterKit: MarketRecorderGuard,
-      marketItemKit: MarketRecorderGuard,
+      marketCharacterKit: M.arrayOf(MarketRecorderGuard),
+      marketItemKit: M.arrayOf(MarketRecorderGuard),
       marketCharacterMetricsKit: MarketMetricsGuard,
       marketItemMetricsKit: MarketMetricsGuard,
     },
@@ -123,18 +123,30 @@ export const prepareKreadKit = async (
     () => {
       return {
         character: harden({
-          entries: makeScalarBigMapStore('characters', { durable: true }),
+          entries: makeScalarBigMapStore('characters', {
+            durable: true,
+            keyShape: M.string(),
+            valueShape: CharacterRecorderGuard,
+          }),
         }),
         item: harden({
-          entries: makeScalarBigMapStore('items', { durable: true }),
+          entries: makeScalarBigMapStore('items', {
+            durable: true,
+            keyShape: M.number(),
+            valueShape: ItemRecorderGuard,
+          }),
         }),
         market: harden({
           characterEntries: makeScalarBigMapStore('characterMarket', {
             durable: true,
+            keyShape: M.string(),
+            valueShape: MarketRecorderGuard,
           }),
           itemEntries: makeScalarBigMapStore('itemMarket', {
             durable: true,
-          }),
+            keyShape: M.number(),
+            valueShape: MarketRecorderGuard,
+          })
         }),
         characterCollectionSize: 0,
         characterAverageLevel: 0,
@@ -151,7 +163,7 @@ export const prepareKreadKit = async (
     {
       helper: {
         async getTimeStamp() {
-          return E(chainTimerService).getCurrentTimestamp();
+          return E(clock).getCurrentTimestamp();
         },
         randomNumber() {
           seed |= 0;

@@ -24,9 +24,9 @@
  * Return value from setup-assets.js
  *
  * @typedef {{
- *  fts: Object.<string, AssetObject>
- *  nfts: Object.<string, AssetObject>
- *  all: Object.<string, AssetObject>
+ *  fts: {[key: string]: AssetObject}
+ *  nfts: {[key: string]: AssetObject}
+ *  all: {[key: string]: AssetObject}
  *  issuerKeywordRecord: IssuerKeywordRecord
  * }} Assets
  */

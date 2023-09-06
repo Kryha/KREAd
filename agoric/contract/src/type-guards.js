@@ -15,7 +15,7 @@ export const CharacterGuard = M.splitRecord({
   level: M.gte(0),
   details: M.splitRecord({
     boardId: M.string(), // TODO: Remove?
-    standard: M.string(), //TODO: Remove?
+    standard: M.string(), // TODO: Remove?
     artist: M.string(),
     metadata: M.string(),
   }),
@@ -191,15 +191,13 @@ export const ItemRecorderGuard = M.splitRecord({
   history: M.arrayOf(HistoryGuard),
 });
 
-export const MarketRecorderGuard = M.arrayOf(
-  M.splitRecord({
-    id: M.or(M.gte(0), M.string()),
-    seat: M.eref(M.remotable('Seat')),
-    askingPrice: M.splitRecord({
-      brand: BrandShape,
-      value: M.nat(),
-    }),
-    object: M.or(CharacterGuard, ItemGuard),
-    // history: M.arrayOf(HistoryGuard),
+export const MarketRecorderGuard = M.splitRecord({
+  id: M.or(M.gte(0), M.string()),
+  seat: M.eref(M.remotable('Seat')),
+  askingPrice: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
   }),
-);
+  object: M.or(CharacterGuard, ItemGuard),
+  // history: M.arrayOf(HistoryGuard),
+});

@@ -4,16 +4,16 @@ import '@agoric/zoe/exported';
 
 import { AssetKind } from '@agoric/ertp';
 import { M } from '@agoric/store';
-import { prepareKreadKit } from './kreadKit.js';
 import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
+import { prepareKreadKit } from './kreadKit.js';
 
 /**
  * This contract handles the mint of KREAd characters,
  * along with its corresponding item inventories and keys.
  * It also allows for equiping and unequiping items to
  * and from the inventory, using a token as access
- **/
+ */
 
 /**
  * @typedef {import('@agoric/vat-data').Baggage} Baggage
@@ -27,7 +27,7 @@ export const meta = {
     defaultCharacters: M.any(), // TODO: see if these can be typed
     defaultItems: M.any(), // TODO: see if these can be typed
     seed: M.number(),
-    chainTimerService: M.eref(M.remotable('TimerService')),
+    clock: M.eref(M.remotable('Clock')),
     powers: {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
@@ -37,18 +37,18 @@ export const meta = {
 harden(meta);
 
 /**
- * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {ZCF} zcf
  * @param {{
  *   defaultCharacters: object[],
  *   defaultItems: object[],
  *   seed: number
- *   chainTimerService: TimerService
+ *   clock: import('@agoric/time/src/types').Clock
  *   powers: { storageNode: StorageNode, marshaller: Marshaller }
  * }} privateArgs
- * */
+ * @param {import('@agoric/vat-data').Baggage} baggage
+ */
 export const start = async (zcf, privateArgs, baggage) => {
-  //TODO: move to proposal
+  // TODO: move to proposal
   const assetNames = {
     character: 'KREAdCHARACTER',
     item: 'KREAdITEM',
@@ -79,8 +79,7 @@ export const start = async (zcf, privateArgs, baggage) => {
   const itemIssuerRecord = itemMint.getIssuerRecord();
   const paymentFTIssuerRecord = paymentFTMint.getIssuerRecord();
 
-  const { defaultCharacters, defaultItems, powers, chainTimerService, seed } =
-    privateArgs;
+  const { defaultCharacters, defaultItems, powers, clock, seed } = privateArgs;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,
@@ -103,7 +102,7 @@ export const start = async (zcf, privateArgs, baggage) => {
         itemMint,
         paymentFTIssuerRecord,
         paymentFTMint,
-        chainTimerService,
+        clock,
         storageNode: powers.storageNode,
         makeRecorderKit,
         storageNodePaths,
