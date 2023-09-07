@@ -1,60 +1,56 @@
-import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { text } from "../../assets";
-import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay } from "../../components";
-import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { ErrorView, FadeInOut } from "../../components";
+import { SELL_CHARACTER_DESCRIPTION } from "../../constants";
 import { CharacterDetailSection } from "../../containers/detail-section";
-import { routes } from "../../navigation";
-import { useMyCharacter, useSellCharacter } from "../../service";
+import { useMyCharacter, useOffers, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
+import { SellData } from "./types";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
-
   const idString = String(id);
-  const [showToast, setShowToast] = useState(false);
-  const [data, isLoading] = useMyCharacter(idString);
+
   const sellCharacter = useSellCharacter(idString);
+  const [character] = useMyCharacter(idString);
+  const [characterCopy] = useState(character);
+  const offers = useOffers({ description: SELL_CHARACTER_DESCRIPTION, status: "pending" });
+  const [isPlacedInShop, setIsPlacedInShop] = useState(false);
+  const [data, setData] = useState<SellData>({ price: 0 });
 
-  const submitForm = (price: number) => {
-    sellCharacter.callback(price);
+  useEffect(() => {
+    if (
+      offers.filter(
+        (offer) => offer.proposalTemplate.give.Character && offer.proposalTemplate.give.Character.value[0].id === Number(idString),
+      ).length > 0
+    ) {
+      setIsPlacedInShop(true);
+    }
+  }, [idString, offers]);
+
+  const sendOfferHandler = async (data: SellData) => {
+    if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
+    await sellCharacter.callback(data.price, () => setIsPlacedInShop(true));
   };
 
-  if (sellCharacter.isError) return <ErrorView />;
-
-  if (sellCharacter.isSuccess) return <Navigate to={routes.shop} />;
-
-  if (isLoading) return <LoadingPage spinner={false} />;
-
-  if (!data) return <ErrorView />;
-
-  const { nft, equippedItems } = data;
-
-  const displayToast = () => {
-    setShowToast(true);
-  };
+  if (!data || !characterCopy) return <ErrorView />;
 
   return (
     <Sell
-      isLoading={sellCharacter.isLoading}
-      onSubmit={submitForm}
-      text={{ sell: text.store.sellCharacter }}
-      data={{ ...nft, image: equippedItems, category: nft.type, characterImage: nft.image }}
+      data={data}
+      setData={setData}
+      sendOfferHandler={sendOfferHandler}
+      isPlacedInShop={isPlacedInShop}
+      text={{
+        sell: text.store.sellCharacter,
+        success: text.store.characterPlacedInShop,
+        successLong: text.store.characterSuccessfullyPlacedInShop,
+        check: text.store.goToInventory,
+      }}
     >
       <FadeInOut show>
-        <CharacterDetailSection character={data} showToast={displayToast} />
-      </FadeInOut>
-      <FadeInOut show={showToast} exiting={!showToast}>
-        {showToast && <Overlay isOnTop={true} />}
-        <NotificationWrapper showNotification={showToast}>
-          <NotificationDetail
-            title={text.general.goToYourWallet}
-            info={text.general.yourActionIsPending}
-            closeToast={() => setShowToast(false)}
-            isError
-          />
-        </NotificationWrapper>
+        <CharacterDetailSection character={characterCopy} showToast={() => ({})} />
       </FadeInOut>
     </Sell>
   );

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import { text } from "../../assets";
 import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton } from "../../components";
@@ -23,15 +23,22 @@ interface BuyFormProps {
   data: BuyData;
 
   changeStep: (step: BuyStep) => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
 
   isLoading: boolean;
   isOfferAccepted: boolean;
 }
 
 export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
-  const isOnFirstStep = !isLoading;
-  const isOnSecondStep = isLoading && !isOfferAccepted;
+  const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
+  const isOfferPending = !isOnFirstStep && !isOfferAccepted;
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const onSendOfferClickHandler = async () => {
+    setIsDisabled(true);
+    await onSubmit();
+    setIsOnFirstStep(false);
+  };
 
   return (
     <ContentWrapper>
@@ -44,18 +51,18 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
             {isOnFirstStep && <PriceInIst price={data.price} />}
           </PricingContainer>
           {isOnFirstStep && (
-            <PrimaryButton onClick={() => onSubmit()}>
+            <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
               <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
             </PrimaryButton>
           )}
         </GeneralInfo>
         <Line />
-        <Step active={!isOnSecondStep}>
-          <NumberContainer active={!isOnSecondStep}>
+        <Step active={isOnFirstStep}>
+          <NumberContainer active={!isOnFirstStep}>
             {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
           </NumberContainer>
           <StepText>{text.mint.acceptOfferIn}</StepText>
-          {isOnSecondStep && (
+          {isOfferPending && (
             <Badge>
               <ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText>
             </Badge>

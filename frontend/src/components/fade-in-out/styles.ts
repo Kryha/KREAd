@@ -18,9 +18,9 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering)
       return css`
-        animation: ${fadeUp} 1.2s ease-out 0s forwards;
-        opacity: 0;
-        transform: translate3d(0, 1rem, 0);
+          animation: ${fadeUp} 1.2s ease-out 0s forwards;
+          opacity: 0;
+          transform: translate3d(0, 1rem, 0);
         `;
     if (exiting)
       return css`
@@ -53,9 +53,9 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering === true)
       return css`
-        animation: ${fadeUp} 1.2s ease-out 0s forwards;
-        opacity: 0;
-        transform: translate3d(0, 1rem, 0);
+          animation: ${fadeUp} 1.2s ease-out 0s forwards;
+          opacity: 0;
+          transform: translate3d(0, 1rem, 0);
         `;
     if (exiting === true)
       return css`
@@ -68,9 +68,9 @@ export const FadeInOutWrapper = styled.div<AnimationProps>`
     ${({ entering, exiting }) => {
     if (entering === true)
       return css`
-      animation: ${fadeUp} 1.2s ease-out 0s forwards;
-      opacity: 0;
-      transform: translate3d(0, 1rem, 0);
+          animation: ${fadeUp} 1.2s ease-out 0s forwards;
+          opacity: 0;
+          transform: translate3d(0, 1rem, 0);
         `;
     if (exiting === true)
       return css`

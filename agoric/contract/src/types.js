@@ -1,45 +1,110 @@
 // ts-check
 /**
- * @typedef {{
- *   characters: CharacterRecord[]
- *   charactersMarket: CharacterInMarket[]
- *   itemsMarket: ItemInMarket[]
- *   items: ItemRecord[]
- *   config?: Config
- *   itemCount: bigint
- *   characterCount: bigint
- *   token?: {
- *     character: {
- *       brand: Brand
- *       issuer: Issuer
- *     }
- *     item: {
- *       brand: Brand
- *       issuer: Issuer
- *     }
- *   }
- *   randomNumber?: Function
- * }} State
+ * Holds contract data
  *
  * @typedef {{
- *   baseCharacters: object[]
- *   defaultItems: object[]
- *   completed: boolean
- *   moneyIssuer: Issuer
- *   moneyBrand: Brand
- *   sellAssetsInstallation: Installation
- *   chainTimerService?: TimerService
+ *   config: Config
+ *   assetMints: AssetMints
+ *   tokenInfo: TokenInfo
+ *   notifiers: Notifiers
+ *   characters: CharacterRecord[]
+ *   items: ItemRecord[]
+ *   randomNumber?: Function
+ *   market: Market
+ *   ready: boolean
+ *   boardId?: string
+ * }} State
+ *
+ * Assets
+ * @typedef {{
+ *   character: ZCFMint<"copyBag">
+ *   item: ZCFMint<"copyBag">
+ *   paymentFT: ZCFMint<"nat">
+ * }} AssetMints
+ *
+ * @typedef {{
+ *   character: CharacterMarketRecord[]
+ *   item: ItemMarketRecord[]
+ * }} Market
+ *
+ * @typedef {{
+ *   character: {
+ *     name: string
+ *     brand: Brand
+ *     issuer: Issuer<set>
+ *   }
+ *   item: {
+ *     name: string
+ *     brand: Brand
+ *     issuer: Issuer<set>
+ *   }
+ *   paymentFT: {
+ *     name: string
+ *     brand: Brand
+ *     issuer: Issuer<nat>
+ *   }
+ * }} TokenInfo
+ *
+ * @typedef  {{
+ *   sellerSeat: ZCFSeat
+ *   name: string
+ *   character: object[]
+ *   askingPrice: any
+ * }} CharacterMarketRecord
+ *
+ * @typedef  {{
+ *   sellerSeat: ZCFSeat
+ *   id: string
+ *   item: object[]
+ *   askingPrice: any
+ * }} ItemMarketRecord
+ *
+ * @typedef {{
+ *    storageNode: StorageNode
+ *    marshaller: Marshaller
+ * }} Powers
+ *
+ * @typedef {{
+ *   tokenData: {
+ *     characters: object[]
+ *     items: object[]
+ *   }
+ *   defaultPaymentToken?: {
+ *      brand: Brand<"nat">
+ *      issuer: Issuer<"nat">
+ *   }
+ *   timerService: TimerService
+ *   powers: Powers
  * }} Config
+ *
+ * @typedef {{
+ *    market: {
+ *      characters: {
+ *        subscriber: StoredSubscriber<any>
+ *        publisher: Publisher<any>
+ *      }
+ *      items: {
+ *        subscriber: StoredSubscriber<any>
+ *        publisher: Publisher<any>
+ *      }
+ *    }
+ *    inventory: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ *    info: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ * }} Notifiers
  *
  * @typedef {{
  *   name: string
  *   character: object
  *   inventory: ZCFSeat
  *   seat?: ZCFSeat
- *   auction?: {
- *     instance: Instance,
- *     publicFacet: any,
- *   },
+ *   notifier?: Notifier
+ *   publisher: Publisher<any>
  * }} CharacterRecord
  *
  * @typedef {{
@@ -53,7 +118,7 @@
  *   background?: Item;
  *   airReservoir?: Item;
  *   clothing?: Item;
- * }} DefaultItems
+ * }} DefaultItem
  *
  * @typedef {{
  *   id: bigint
@@ -116,4 +181,91 @@
  * }} InventoryKeyRecord
  *
  * @typedef {InventoryKeyRecord[]} InventoryKeyStorage
+ *
+ *
+ * @typedef {{
+ *  isReady: () => boolean
+ *  isConfigReady: () => boolean
+ *  inventory: (name: string) => { items: Item[] }
+ *  inventoryPublisher: (name: string) => Publisher<any>
+ *  characterKey: (name: string) => { key: Amount }
+ *  characterCount: () => number
+ *  itemCount: () => number
+ *  character: (name: string) => CharacterRecord
+ *  time: () => Promise<bigint>
+ *  randomBaseCharacter: () => object
+ *  assetInfo: () => TokenInfo
+ *  defaultItems: () => any[]
+ *  powers: () => Powers
+ *  config: () => Config
+ *  randomItem: () => object
+ *  marketPublisher: () => {
+ *    characters: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ *    items: {
+ *      subscriber: StoredSubscriber<any>
+ *      publisher: Publisher<any>
+ *    }
+ * }
+ * }} KreadState_get
+ *
+ * @typedef {{
+ *     powers: (powers: Powers, notifiers: Notifiers) => void
+ *     publishKreadInfo: (boardId: string, publicFacet: object) => void
+ * }} KreadState_set
+ *
+ * @typedef {{
+ * characters: (characters: CharacterRecord[]) => void
+ *     items: (items: ItemRecord[]) => void
+ *     updateConfig: (newConfig: Config) => void
+ * }} KreadState_add
+ *
+ * @typedef {{ nameIsUnique: NameIsUniqueFn }} KreadState_validate
+ *
+ * @typedef {{
+ *     isReady: () => boolean
+ *     isValidName: () => boolean
+ *     getInventory: (name: string) => { items: Item[] }
+ *     getCharacterKey: (name: string) => { key: Amount }
+ *     getCount: () => { characters: bigint, items: bigint }
+ *     getCharacter: (name: string) => CharacterRecord
+ *     getTime: () => Promise<bigint>
+ *     getRandomBaseCharacter: () => object
+ *     getTokenInfo: () => TokenInfo
+ *     getDefaultItems: () => any[]
+ *     getPowers: () => Powers | undefined
+ *     getConfig: () => Config
+ *     getRandomItem: () => object
+ *     getCharacterCount: () => number
+ *     getItemCount: () => number
+ *     getCharacterMarket: () => CharacterMarketRecord[]
+ *     getCharacterMarketRange: () => CharacterMarketRecord[]
+ *     getItemMarket: () => ItemMarketRecord[]
+ *     getItemMarketRange: () => ItemMarketRecord[]
+ *   }} KreadState_public
+ *
+ *   @typedef {{
+ *     get: KreadState_get
+ *     set: KreadState_set
+ *     add: KreadState_add
+ *     validate: KreadState_validate
+ *     public: KreadState_public
+ * }} KreadState
+ *
+ * @typedef {(name: string) => boolean} NameIsUniqueFn
+ *
+ * @typedef {{
+ *     averageLevel: UpdateAverage
+ *     marketplaceAverageLevel: UpdateAverage
+ *     latestSalePrice: number
+ *     collectionSize: boolean
+ *     amountSold: boolean
+ * }} UpdateMetrics
+ *
+ * @typedef { {
+ *     type: ("add" | "remove")
+ *     value: number
+ * }} UpdateAverage
  */

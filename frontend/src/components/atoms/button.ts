@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { color, fontWeight, zIndex } from "../../design";
+import { breakpoints, color, fontWeight, margins, zIndex } from "../../design";
 import { ButtonText } from "./text";
 
 interface ButtonProps {
@@ -16,6 +16,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
   transition: all 0.4s ease 0s;
   display: flex;
   flex-direction: row;
+  gap: ${margins.small};
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
@@ -80,9 +81,13 @@ export const PrimaryButton = styled.button<ButtonProps>`
         `
       : "";
   }};
+
+  @media (max-width: ${breakpoints.mobile}) {
+    font-size: 12px;
+  }
 `;
 
-export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
+export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   color: ${(props): string => props.fontColor || color.black};
   border: 1px solid ${(props): string => props.borderColor || color.grey};
   background-color: ${(props): string => props.backgroundColor || "transparent"};
@@ -92,7 +97,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   }
   padding: 8px 16px;
   > svg {
-    margin: 0px 6px;
+    margin: 0 6px;
   }
   &:hover {
     border: 1px solid ${color.black};
@@ -151,7 +156,7 @@ export const SecondaryButton = styled(PrimaryButton) <ButtonProps>`
   }};
 `;
 
-export const TertiaryButton = styled(PrimaryButton) <ButtonProps>`
+export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
   background-color: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
   border: none;

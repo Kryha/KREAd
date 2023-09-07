@@ -1,0 +1,1 @@
+{"netconfig":"https://devnet.agoric.net/network-config","webport":"8000","webhost":"127.0.0.1","egresses":"cosmos","wallet":"@agoric/wallet","defaultManagerType":"xs-worker"}

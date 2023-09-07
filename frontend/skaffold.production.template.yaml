@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: character-builder-ui
+build:
+  tagPolicy:
+    sha256: {}
+  local:
+    concurrency: 0
+    push: true
+  artifacts:
+    - image: $DOCKER_REPO
+      docker:
+        dockerfile: Dockerfile.ui
+        buildArgs:
+          VITE_DAPP_CONSTANTS_JSON: "" # TODO: provide actual value
+deploy:
+  kustomize:
+    paths:
+      - ../deployment/production/workloads
+    defaultNamespace: character-builder-production

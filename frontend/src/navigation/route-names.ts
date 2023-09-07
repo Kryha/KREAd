@@ -12,4 +12,7 @@ export const routes = {
   about: "/about",
   privacy: "/privacy",
   onboarding: "/onboarding",
+  test: "/test",
+  downloadCharacter: "/download-character",
+  mobileNotAvailable: "/mobile-not-available",
 };

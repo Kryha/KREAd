@@ -8,26 +8,25 @@ import {
   ArrowDown,
   ArrowUp,
   ButtonContainer,
-  Link,
-  TextContainer,
   EndContent,
   FooterContainer,
   GeneralSectionContainer,
   InfoText,
   KreadContainer,
+  KreadLogo,
+  KryhaLink,
+  Link,
+  LogoContainer,
   MiddleContent,
   OnboardingContainer,
   OnboardingWrapper,
   ScrollContainer,
   SectionContainer,
-  KryhaLink,
-  KreadLogo,
-  LogoContainer,
+  TextContainer,
 } from "./styles";
-import { useLocalStorage, useOnScreen, useViewport } from "../../hooks";
+import { useLocalStorage, useOnScreen, useTimer, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
-import { useTimer } from "../../hooks/hooks";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();

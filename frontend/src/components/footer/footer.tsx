@@ -6,7 +6,6 @@ import { routes } from "../../navigation";
 
 import { AboutText, AgoricText, FooterContainer, FooterWrapper, Link, PrivacyText } from "./styles";
 
-
 export const Footer: FC = () => {
   const resolvedShop = useResolvedPath(routes.shop);
   const resolvedLanding = useResolvedPath(routes.root);
@@ -24,7 +23,7 @@ export const Footer: FC = () => {
         <Link to={routes.privacy}>
           <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
         </Link>
-        <AgoricText customColor={color.darkGrey}>{text.navigation.agoric2022}</AgoricText>
+        <AgoricText customColor={color.darkGrey}>{text.navigation.agoricCopyright(new Date().getFullYear())}</AgoricText>
       </FooterContainer>
     </FooterWrapper>
   );

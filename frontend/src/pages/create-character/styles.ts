@@ -1,19 +1,15 @@
+import { Badge, ButtonText, CharacterImgs, Input, MenuItemName, PrimaryButton } from "../../components";
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
-import { Badge, ButtonText, CharacterImgs, Input, MenuItemName, PrimaryButton } from "../../components";
+import { breakpoints, color, margins } from "../../design";
 import { Spinner } from "../../components/content-loader/styles";
-
-import { color, margins } from "../../design";
 
 interface ViewProps {
   height: number;
   width: number;
 }
 
-export const DefaultImage = styled(CharacterImgs) <ViewProps>`
-  margin-left: 140px;
-  top: 0;
-`;
+export const DefaultImage = styled(CharacterImgs)<ViewProps>``;
 
 export const Exclamation = styled(ExclamationIcon)`
   margin-right: 20px;
@@ -21,24 +17,40 @@ export const Exclamation = styled(ExclamationIcon)`
 `;
 
 export const Tick = styled(TickIcon)`
+  position: absolute;
+  right: 44px;
   margin-right: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  height: 10px;
+  width: 20px;
 `;
+
 interface ActiveProps {
   active: boolean;
 }
 
 export const FormCard = styled.div<ViewProps>`
-  position: relative;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: ${margins.big};
-  background: ${color.gradientLight};
-  border: 1px solid ${color.grey};
-  border-radius: ${margins.medium};
-  margin-top: ${margins.big};
-  ${({ height, width }): string => `height: ${height - 80}px; width: ${width * 0.4}px; min-width: 526px;`};
+  padding: ${margins.medium};
+  background: ${color.offWhite};
+  flex: 1 1 auto;
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+
+  @media (min-width: 768px) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid ${color.grey};
+    border-radius: ${margins.medium};
+    margin-top: ${margins.big};
+    margin-bottom: ${margins.big};
+    min-width: fit-content;
+    max-width: max-content;
+  }
 `;
 
 export const Warning = styled(WarningIcon)``;
@@ -47,15 +59,21 @@ export const ErrorContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
+  padding: 0;
   gap: 4px;
+`;
+
+export const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 
 export const FormFields = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
   margin-bottom: ${margins.big};
   position: relative;
   ${Input} {
@@ -72,19 +90,24 @@ export const FormFields = styled.div`
 
 export const ContentWrapper = styled.div`
   margin-top: ${margins.big};
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 
 export const ArrowUp = styled(ArrowUpRightIcon)`
-  padding-left: 13px;
   path {
     stroke: ${color.white};
   }
 `;
 
 export const ButtonContainer = styled.div`
-  position: absolute;
-  bottom: ${margins.big};
-  right: ${margins.big};
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: ${margins.small};
+  align-self: flex-end;
+  justify-content: flex-end;
   :hover {
     ${ArrowUp} {
       path {
@@ -93,8 +116,7 @@ export const ButtonContainer = styled.div`
     }
   }
   ${Spinner} {
-    padding-left: 13px;
-    width: 12px;
+    width: 16px;
     height: 16px;
     border: 2px solid ${color.white};
     border-top: 2px solid ${color.grey};
@@ -103,9 +125,11 @@ export const ButtonContainer = styled.div`
 `;
 
 export const InputWrapper = styled.div`
-  position: absolute;
-  right: 0;
-  top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `;
 
 export const StepContainer = styled.div`
@@ -117,22 +141,21 @@ export const StepText = styled(ButtonText)`
   line-height: 20.5px;
 `;
 
-export const Step = styled.div<ActiveProps>`
-  box-sizing: border-box;
+export const StepWrapper = styled.div<ActiveProps>`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  padding: ${margins.medium};
-  position: static;
-  width: 100%;
-  height: 88px;
-  left: 0px;
-  top: 0px;
+  gap: ${margins.mini};
+
+  @media (min-width: ${breakpoints.tablet}) {
+    flex-direction: row;
+  }
+  padding: ${margins.small};
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: 24px;
   ${StepText} {
-    margin: 0px ${margins.small};
+    margin: 0 ${margins.small};
   }
   ${PrimaryButton} {
     margin-left: ${margins.small};
@@ -157,7 +180,6 @@ export const Line = styled.div`
   transform: rotate(90deg);
   margin: ${margins.small} 20px ${margins.small} 39px;
 `;
-
 
 export const NumberContainer = styled.div<ActiveProps>`
   display: flex;
@@ -185,7 +207,7 @@ export const NumberContainer = styled.div<ActiveProps>`
       `;
   }};
   ${Tick} {
-    margin: 0px;
+    margin: 0;
     path {
       stroke: ${color.white};
     }
@@ -193,8 +215,6 @@ export const NumberContainer = styled.div<ActiveProps>`
 `;
 
 export const PreviousButtonContainer = styled.div`
-  position: absolute;
-  bottom: ${margins.big};
   :hover {
     ${ArrowUp} {
       path {
@@ -215,7 +235,7 @@ export const TickContainer = styled.div`
   height: 30px;
   border: 1px solid ${color.black};
   ${Tick} {
-    margin: 0px;
+    margin: 0;
   }
   margin-bottom: ${margins.small};
 `;
@@ -230,21 +250,18 @@ export const InfoContainer = styled.div`
 
 export const GeneralInfo = styled.div<ActiveProps>`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   box-sizing: border-box;
   flex-direction: row;
   align-items: center;
-  padding: ${margins.medium};
-  position: static;
+  padding: ${margins.small};
   width: 100%;
-  height: 88px;
-  left: 0px;
-  top: 0px;
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: 24px;
+  min-height: 88px;
   ${StepText} {
-    margin: 0px ${margins.small};
+    margin: 0 ${margins.small};
   }
   ${PrimaryButton} {
     margin-left: ${margins.small};
@@ -265,8 +282,28 @@ export const GeneralInfo = styled.div<ActiveProps>`
 
 export const PricingContainer = styled.div`
   display: flex;
-  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  gap: ${margins.mini};
+  min-height: 88px;
+  justify-content: center;
+
+  @media (min-width: ${breakpoints.tablet}) {
+    flex-direction: row;
+  }
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100%;
+  align-items: flex-end;
+  align-content: flex-end;
+`;
+
+export const Step = styled.div`
+  display: flex;
   flex-direction: row;
   align-items: center;
-  position: static;
 `;

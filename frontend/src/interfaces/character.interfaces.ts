@@ -30,7 +30,7 @@ export interface CharacterItems {
   clothing?: Item;
 }
 
-export interface Detail {
+export interface Details {
   boardId: string;
   brand: string;
   artist: string;
@@ -38,7 +38,7 @@ export interface Detail {
 }
 
 export interface Character {
-  id: string;
+  id: any;
   keyId: number;
   title: string;
   name: string;
@@ -46,7 +46,7 @@ export interface Character {
   description: string;
   image: string;
   level: number;
-  detail: Detail;
+  details: Details;
   projectDescription: string;
   itemActivity: ActivityEvent[];
 }
@@ -55,6 +55,7 @@ export interface ExtendedCharacter {
   nft: Character;
   equippedItems: CharacterItems;
   activity?: ActivityEvent[];
+  notifier?: any;
 }
 
 export interface CharacterInMarket {
@@ -62,16 +63,26 @@ export interface CharacterInMarket {
   character: Character;
   equippedItems: CharacterItems;
   sell: {
-    publicFacet: any;
+    publicFacet?: any;
     price: bigint;
   };
+}
+
+export interface KreadCharacterInMarket {
+  sellerSeat: any;
+  name: string;
+  askingPrice: {
+    value: bigint;
+    brand: any;
+  };
+  object: CharacterBackend;
 }
 
 export interface CharacterInMarketBackend {
   id: bigint;
   character: CharacterBackend;
   sell: {
-    publicFacet: any;
+    publicFacet?: any;
     price: bigint;
   };
 }

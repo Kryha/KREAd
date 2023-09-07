@@ -1,38 +1,42 @@
-import { FC, useMemo, useState } from "react";
-
+import React, { FC, useState } from "react";
 import { BaseRoute, SwitchSelector } from "../../components";
-import { text } from "../../assets/text";
+import { text } from "../../assets";
 import { Page } from "../shop";
 import { InventoryWrapper, KreadContainer } from "./styles";
 import { ItemsInventory } from "./item-inventory";
 import { CharactersInventory } from "./character-inventory";
-import { useViewport } from "../../hooks";
+import { useIsMobile, useViewport } from "../../hooks";
 import { KreadIcon } from "../../components/logo/styles";
+import { breakpoints } from "../../design";
 
 export const Inventory: FC = () => {
-  const [selectedPage, setSelectedPage] = useState<Page>(Page.Items);
+  const [inventorySection, setInventorySection] = useState<Page>(Page.Items);
   const { width, height } = useViewport();
-  const pageSelector = useMemo(
-    () => (
-      <SwitchSelector
-        buttonOneText={text.character.items}
-        buttonTwoText={text.character.characters}
-        setSelectedIndex={setSelectedPage}
-        selectedIndex={selectedPage}
-      />
-    ),
-    [selectedPage]
-  );
+  const isMobile = useIsMobile(breakpoints.desktop);
 
-  const showItemsInventory = selectedPage === Page.Items;
+  const pageSelector = (
+    <SwitchSelector
+      buttonOneText={text.character.items}
+      buttonTwoText={text.character.characters}
+      setSelectedIndex={setInventorySection}
+      selectedIndex={inventorySection}
+    />
+  );
 
   return (
     <BaseRoute sideNavigation={<></>}>
-      <InventoryWrapper>{pageSelector}</InventoryWrapper>
-      {showItemsInventory ? <ItemsInventory /> : <CharactersInventory />}
-      <KreadContainer height={height} width={width}>
-        <KreadIcon />
-      </KreadContainer>
+      <InventoryWrapper>
+        {inventorySection === Page.Items ? (
+          <ItemsInventory pageSelector={pageSelector} />
+        ) : (
+          <CharactersInventory pageSelector={pageSelector} />
+        )}
+      </InventoryWrapper>
+      {!isMobile && (
+        <KreadContainer height={height} width={width}>
+          <KreadIcon />
+        </KreadContainer>
+      )}
     </BaseRoute>
   );
 };

@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react";
 
-import { text } from "../../assets/text";
+import { text } from "../../assets";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { BoldLabel, ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
@@ -17,7 +17,7 @@ import {
   SliderTrack,
   TextLabel,
   ThumbLeft,
-  ThumbRight
+  ThumbRight,
 } from "./styles";
 
 interface PriceSelectorProps {
@@ -25,6 +25,8 @@ interface PriceSelectorProps {
   min: number;
   max: number;
 }
+
+// TODO: fix the min value slider
 
 export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }) => {
   const [minVal, setMinVal] = useState(min);
@@ -35,8 +37,7 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
   const maxValRef = useRef(max);
   const { height } = useViewport();
 
-  const getPercent = useCallback((value: number) =>
-    Math.round(((value - min) / (max - min)) * 100), [min, max]);
+  const getPercent = useCallback((value: number) => Math.round(((value - min) / (max - min)) * 100), [min, max]);
 
   useEffect(() => {
     const minPercent = getPercent(minVal);
@@ -44,7 +45,6 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
 
     setWidthRange(maxPercent - minPercent);
     setLeftRange(minPercent);
-
   }, [minVal, getPercent]);
 
   useEffect(() => {
@@ -52,16 +52,14 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
     const maxPercent = getPercent(maxVal);
 
     setWidthRange(maxPercent - minPercent);
-
   }, [maxVal, getPercent]);
 
   const setMaxValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = Math.max(Number(event.target.value), minVal + 1);
     setMaxVal(value);
     maxValRef.current = value;
-
   };
-  const setMinValue =(event: ChangeEvent<HTMLInputElement>) => {
+  const setMinValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = Math.min(Number(event.target.value), maxVal - 1);
     setMinVal(value);
     minValRef.current = value;
@@ -74,44 +72,21 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
           <InputContainer>
             <BoldLabel>{text.store.min}</BoldLabel>
             <TextLabel>
-              <MinInput
-                type="number"
-                placeholder={`${minVal}`}
-                onChange={setMinValue}
-              />
+              <MinInput type="number" placeholder={`${minVal}`} onChange={setMinValue} />
             </TextLabel>
           </InputContainer>
           <InputContainer>
             <BoldLabel>{text.store.max}</BoldLabel>
             <TextLabel>
-              <MaxInput
-                type="number"
-                placeholder={`${maxVal}`}
-                onChange={setMaxValue}
-              />
+              <MaxInput type="number" placeholder={`${maxVal}`} onChange={setMaxValue} />
             </TextLabel>
           </InputContainer>
         </InputWrapper>
-        <ThumbLeft
-          type="range"
-          min={min}
-          max={max}
-          value={minVal}
-          onChange={setMinValue}
-        />
-        <ThumbRight
-          type="range"
-          min={min}
-          max={max}
-          value={maxVal}
-          onChange={setMaxValue}
-        />
+        <ThumbLeft type="range" min={min} max={max} value={minVal} onChange={setMinValue} />
+        <ThumbRight type="range" min={min} max={max} value={maxVal} onChange={setMaxValue} />
         <SliderContainer>
           <SliderTrack />
-          <SliderRange
-            width={widthRange}
-            left={leftRange}
-          />
+          <SliderRange width={widthRange} left={leftRange} />
         </SliderContainer>
       </RangeContainer>
       <ButtonContainer>
@@ -127,7 +102,10 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
           <ButtonText>{text.filters.clearFilter}</ButtonText>
         </SecondaryButton>
         <PrimaryButton
-          onClick={() => { handleChange(minVal, maxVal); }}>
+          onClick={() => {
+            handleChange(minVal, maxVal);
+          }}
+        >
           <ButtonText customColor={color.white}>{text.filters.apply}</ButtonText>
         </PrimaryButton>
       </ButtonContainer>

@@ -9,7 +9,7 @@ interface ButtonCloseProps {
 export const ButtonClose: FC<ButtonCloseProps> = ({ onClick }) => {
   return (
     <ButtonCloseWrap>
-      <Close onClick={() => onClick()}/>
+      <Close onClick={() => onClick()} />
     </ButtonCloseWrap>
   );
 };

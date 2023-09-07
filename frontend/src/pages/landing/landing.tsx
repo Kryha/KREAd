@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { text } from "../../assets";
 import { color } from "../../design";
 import {
@@ -12,12 +11,12 @@ import {
   FadeInOut,
   LoadingPage,
   MenuText,
-  Overlay,
-  SecondaryButton,
-  OverviewEmpty,
   NotificationDetail,
+  Overlay,
+  OverviewEmpty,
+  SecondaryButton,
 } from "../../components";
-import { Close, LandingContainer, Menu, DetailContainer, ButtonContainer, CharacterCardWrapper } from "./styles";
+import { ButtonContainer, CharacterCardWrapper, Close, DetailContainer, LandingContainer, Menu } from "./styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useSelectedCharacter } from "../../service";
 import { routes } from "../../navigation";
@@ -25,7 +24,6 @@ import { NotificationWrapper } from "../../components/notification-detail/styles
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
-
   const [openTab, setOpenTab] = useState(false);
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const [showDetail, setShowDetail] = useState(false);
@@ -38,6 +36,10 @@ export const Landing: FC = () => {
 
   const displayToast = () => {
     setShowToast(true);
+  };
+
+  const displayCharacter = () => {
+    navigate(routes.downloadCharacter);
   };
 
   return (
@@ -84,6 +86,11 @@ export const Landing: FC = () => {
                   <ButtonText>{text.general.moreInfo}</ButtonText>
                 </SecondaryButton>
                 <ButtonText>{text.param.level(selectedCharacter?.nft.level)}</ButtonText>
+              </ButtonContainer>
+              <ButtonContainer>
+                <SecondaryButton onClick={displayCharacter}>
+                  <ButtonText>{text.general.viewCharacter}</ButtonText>
+                </SecondaryButton>
               </ButtonContainer>
             </DetailContainer>
           )}

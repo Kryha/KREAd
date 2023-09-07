@@ -1,0 +1,19 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: character-builder
+build:
+  tagPolicy:
+    sha256: {}
+  local:
+    concurrency: 0
+    push: true
+  artifacts:
+    - image: localhost:5000/agoric/character-builder/ui
+      docker:
+        dockerfile: Dockerfile.ui
+deploy:
+  kustomize:
+    paths:
+      - ../deployment/local/workloads
+    defaultNamespace: character-builder-local

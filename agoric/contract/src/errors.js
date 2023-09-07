@@ -1,12 +1,16 @@
 export const errors = {
   noConfig: `Configuration not found, use creatorFacet.initConfig(<config>) to enable this method`,
   noNameArg: `Name argument required`,
+  unkwonwnArgInMintOffer: `Mint Character's offer "want" must only contain property "name"`,
+  noWantInOffer: `Offer must include "want" terms in the form of { want: { name: <desired character name> }}`,
   nameTaken: (name) =>
     `Name ${name} is already in use, please select a different name`,
   depositToSeatFailed: `Could not deposit nft into Seat`,
   depositToFacetFailed: `Could not deposit nft into userFacet`,
   character404: `Character not found`,
   inventory404: `Character inventory not found`,
+  notifier404: `Character inventory notifier not found`,
+  updateMarketError: `There was a problem updating the market`,
   privateState404: `Character private state not found`,
   noKeyInInventory: `Could not find character key in inventory`,
   invalidInventoryKey: `Brand of Inventory Key does not match the correct Issuer`,
@@ -17,4 +21,8 @@ export const errors = {
   itemNotInMarket: `Could not find Item in market`,
   characterNotInMarket: `Could not find Character in market`,
   invalidArg: `Invalid Argument`,
+  missingStorageNode: `Missing Storage Node, notifications are not enabled`,
+  sellerSeatMismatch: `Wanted Item amount does not match item in sellerSeat`,
+  insufficientFunds: `Provided payment is lower than the asking price for this Item`,
+  itemNotFound: (item) => `Couldn't find item record for ${item}`,
 };

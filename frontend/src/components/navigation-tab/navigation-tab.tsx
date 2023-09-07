@@ -7,20 +7,18 @@ interface NavigationTabProps {
   title: string;
 }
 
-export const NavigationTab: FC<NavigationTabProps> = ({route, title}) => {
+export const NavigationTab: FC<NavigationTabProps> = ({ route, title }) => {
   const resolved = useResolvedPath(route);
   const match = useMatch({ path: resolved.pathname, end: true });
   return (
     <NavTabs>
       <Tab active={!!match}>
         <NavTitle>{title}</NavTitle>
-        <ActiveLine active={!!match}/>
+        <ActiveLine active={!!match} />
       </Tab>
     </NavTabs>
   );
 };
-
-
 
 interface NavigationSectionProps {
   route: string;

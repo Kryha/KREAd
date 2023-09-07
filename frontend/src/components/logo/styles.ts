@@ -6,7 +6,8 @@ interface AnimationProps {
 }
 
 export const LogoWrap = styled.div<AnimationProps>`
-${({ iteration }): string => `
+  box-sizing: content-box;
+  ${({ iteration }): string => `
     #efxcHCR325l5 {
       animation: efxcHCR325l5_c_o 5100ms linear ${iteration || "infinite"} normal forwards;
     }

@@ -1,13 +1,23 @@
-import { FC } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-
-import { text } from "../../assets";
-import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../components";
-import { ButtonInfo } from "../../components/button-info";
-import { MAX_CHARACTER_LENGTH } from "../../constants";
-import { color } from "../../design";
 import { CharacterCreation } from "../../interfaces";
-import { ArrowUp, ButtonContainer, ContentWrapper, ErrorContainer, FormFields, InputWrapper, Tick, Warning } from "./styles";
+import { FC } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  ArrowUp,
+  ButtonContainer,
+  ButtonWrapper,
+  ContentWrapper,
+  ErrorContainer,
+  FormContainer,
+  FormFields,
+  InputWrapper,
+  Tick,
+  Warning,
+} from "./styles";
+import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../components";
+import { text } from "../../assets";
+import { MAX_CHARACTER_LENGTH } from "../../constants";
+import { ButtonInfo } from "../../components/button-info";
+import { color } from "../../design";
 
 interface InformationProps {
   setData: (data: CharacterCreation) => void;
@@ -28,11 +38,11 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
 
   return (
     <ContentWrapper>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
         <FormFields>
           <Label>{text.mint.characterName}</Label>
-          <Input type="text" {...register("name", { required: true, maxLength: MAX_CHARACTER_LENGTH })} />
           <InputWrapper>
+            <Input type="text" {...register("name", { required: true, maxLength: MAX_CHARACTER_LENGTH })} />
             {Boolean(!errors.name && dirtyFields.name) && <Tick />}
             <ButtonInfo info={text.general.createACharacterInfo} />
           </InputWrapper>
@@ -50,13 +60,15 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
           )}
         </FormFields>
         <FormText>{text.mint.theCostsOfMinting}</FormText>
-        <ButtonContainer>
-          <PrimaryButton type="submit" disabled={!isValid || disabled}>
-            <ButtonText customColor={color.white}>{text.mint.next}</ButtonText>
-            <ArrowUp />
-          </PrimaryButton>
-        </ButtonContainer>
-      </form>
+        <ButtonWrapper>
+          <ButtonContainer>
+            <PrimaryButton type="submit" disabled={!isValid || disabled}>
+              <ButtonText customColor={color.white}>{text.mint.next}</ButtonText>
+              <ArrowUp />
+            </PrimaryButton>
+          </ButtonContainer>
+        </ButtonWrapper>
+      </FormContainer>
     </ContentWrapper>
   );
 };

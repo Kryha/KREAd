@@ -14,16 +14,18 @@ export const LeftItemContainer = styled.div<Animation>`
   left: ${margins.big};
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
-  ${props => (props.showItems === true ?
-    css` animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.6s, 0.8s;
-    animation-delay: 0s, 0.6s;`
-    :
-    css`
-    animation: ${fadeOut};
-    animation-duration: 0.5s;
-   `)};
-   ${({ showItems }): string => {
+  ${(props) =>
+    props.showItems === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.6s, 0.8s;
+          animation-delay: 0s, 0.6s;
+        `
+      : css`
+          animation: ${fadeOut};
+          animation-duration: 0.5s;
+        `};
+  ${({ showItems }): string => {
     return showItems
       ? `
 
@@ -42,15 +44,17 @@ export const RightItemContainer = styled.div<Animation>`
   right: 60px;
   bottom: ${margins.big};
   z-index: ${zIndex.overCharacter};
-  ${props => (props.showItems === true ?
-    css` animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.6s, 0.8s;
-    animation-delay: 0s, 0.6s;`
-    :
-    css`
-    animation: ${fadeOut};
-    animation-duration: 0.5s;
-  `)};
+  ${(props) =>
+    props.showItems === true
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.6s, 0.8s;
+          animation-delay: 0s, 0.6s;
+        `
+      : css`
+          animation: ${fadeOut};
+          animation-duration: 0.5s;
+        `};
   ${({ showItems }): string => {
     return showItems
       ? `

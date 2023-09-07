@@ -85,21 +85,20 @@ export const InfoContainer = styled.div`
 
 export const DividerContainer = styled.div``;
 
-
 interface NotificationProps {
   showNotification: boolean;
 }
 
 export const NotificationWrapper = styled.div<NotificationProps>`
- ${ToastContainer} {
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  z-index: 1002;
-  bottom: 40px;
- }
+  ${ToastContainer} {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    z-index: 1002;
+    bottom: 40px;
+  }
   ${({ showNotification }): string => {
     return showNotification
       ? ""

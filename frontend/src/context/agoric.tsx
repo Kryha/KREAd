@@ -1,27 +1,12 @@
 /// <reference types="ses"/>
-import React, { createContext, useReducer, useContext, useEffect, useRef } from "react";
-import { Far } from "@endo/marshal";
-import { makeCapTP, E } from "@endo/captp";
-import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-
-import dappConstants from "../service/conf/defaults";
-import { activateWebSocket, deactivateWebSocket, getActiveSocket } from "../service/utils/fetch-websocket";
-import { connect } from "../service/lib/connect";
-import { apiRecv } from "../service/api/receive";
-import { processOffers, processPurses } from "../service/purses/process";
-import { useCharacterStateDispatch } from "./characters";
-import { useItemStateDispatch } from "./items";
-
-import { AgoricDispatch, AgoricState, AgoricStateActions } from "../interfaces/agoric.interfaces";
-
-const {
-  INSTANCE_NFT_MAKER_BOARD_ID,
-  SELL_ASSETS_INSTALLATION_BOARD_ID,
-  INVITE_BRAND_BOARD_ID,
-  INSTALLATION_BOARD_ID,
-  issuerBoardIds: { Character: CHARACTER_ISSUER_BOARD_ID, Item: ITEM_ISSUER_BOARD_ID },
-  brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Character: CHARACTER_BRAND_BOARD_ID, Item: ITEM_BRAND_BOARD_ID },
-} = dappConstants;
+import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
+import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
+import { CHARACTER_IDENTIFIER, isDevelopmentMode, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
+import { useDataMode } from "../hooks";
+import { fetchChainInfo } from "./util";
+import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
+import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
 
 const initialState: AgoricState = {
   status: {
@@ -29,12 +14,14 @@ const initialState: AgoricState = {
     dappApproved: false,
     showApproveDappModal: false,
   },
-  purses: {
-    money: [],
-    character: [],
-    item: [],
-  },
   offers: [],
+  notifiers: {
+    shop: {
+      items: undefined,
+      characters: undefined,
+    },
+  },
+  addOffer: undefined,
   agoric: {
     zoe: undefined,
     board: undefined,
@@ -43,14 +30,41 @@ const initialState: AgoricState = {
     walletP: undefined,
     apiSend: undefined,
   },
+  walletConnection: {
+    pursesNotifier: undefined,
+    makeOffer: undefined,
+    publicSubscribersNotifier: undefined,
+    leader: undefined,
+    address: undefined,
+    chainId: "",
+    unserializer: undefined,
+    importContext: undefined,
+  },
   contracts: {
-    characterBuilder: {
+    kread: {
       instance: undefined,
-      publicFacet: undefined,
     },
   },
-  isLoading: true,
+  testCharacterInventory: {},
+  tokenInfo: {
+    character: { issuer: undefined, brand: undefined },
+    item: { issuer: undefined, brand: undefined },
+    ist: { issuer: undefined, brand: undefined },
+  },
+  isLoading: false,
+  isReady: false,
+  chainStorageWatcher: undefined,
 };
+
+type Status = "initialState" | "keplrReady" | "storageWatcherReady" | "watchingCharacters" | "ready";
+
+const status = {
+  initialState: "initialState",
+  keplrReady: "keplrReady",
+  storageWatcherReady: "storageWatcherReady",
+  watchingCharacters: "watchingCharacters",
+  ready: "ready",
+} as const;
 
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
 type ProviderProps = Omit<React.ProviderProps<AgoricState>, "value">;
@@ -69,17 +83,8 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_WALLET_CONNECTED":
       return { ...state, status: { ...state.status, walletConnected: action.payload } };
 
-    case "SET_TOKEN_PURSES":
-      return { ...state, purses: { ...state.purses, money: action.payload } };
-
     case "SET_OFFERS":
       return { ...state, offers: action.payload };
-
-    case "SET_CHARACTER_PURSES":
-      return { ...state, purses: { ...state.purses, character: action.payload } };
-
-    case "SET_ITEM_PURSES":
-      return { ...state, purses: { ...state.purses, item: action.payload } };
 
     case "SET_AGORIC":
       return { ...state, agoric: { ...state.agoric, ...action.payload } };
@@ -87,11 +92,26 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_APISEND":
       return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
 
-    case "SET_CHARACTER_CONTRACT":
-      return { ...state, contracts: { ...state.contracts, characterBuilder: action.payload } };
+    case "SET_KREAD_CONTRACT":
+      return { ...state, contracts: { ...state.contracts, kread: action.payload } };
 
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
+
+    case "SET_TOKEN_INFO":
+      return { ...state, tokenInfo: { ...action.payload } };
+
+    case "SET_TEST_CHARACTER":
+      return { ...state, testCharacterInventory: action.payload };
+
+    case "SET_ADD_OFFER":
+      return { ...state, addOffer: action.payload };
+
+    case "SET_WALLET_CONNECTION":
+      return { ...state, walletConnection: action.payload };
+
+    case "SET_CHAIN_STORAGE_WATCHER":
+      return { ...state, chainStorageWatcher: action.payload };
 
     case "RESET":
       return initialState;
@@ -103,148 +123,124 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
-  const characterDispatch = useCharacterStateDispatch();
-  const itemDispatch = useItemStateDispatch();
-  const walletPRef = useRef(undefined);
+  const [currentStatus, setCurrentStatus] = useState<Status>(status.initialState);
+  const [isCancelled, setIsCancelled] = useState<boolean>(false);
+
+  const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
+    if (!offers.length) return;
+    agoricDispatch({ type: "SET_OFFERS", payload: offers });
+  };
 
   useEffect(() => {
-    // Receive callbacks from the wallet connection.
-    const otherSide = Far("otherSide", {
-      needDappApproval(_dappOrigin: any, _suggestedDappPetname: any) {
-        dispatch({ type: "SET_DAPP_APPROVED", payload: false });
-        dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: true });
-      },
-      dappApproved(_dappOrigin: any) {
-        dispatch({ type: "SET_DAPP_APPROVED", payload: true });
-        dispatch({ type: "SET_SHOW_APPROVE_DAPP_MODAL", payload: false });
-      },
-    });
+    if (isCancelled) return;
+    // TODO: consider implementing terms agreement
+    // if (checkTerms && !areLatestTermsAgreed) {
+    //   setIsTermsDialogOpen(true);
+    //   return;
+    // }
 
-    // TODO: Implement
-    let walletAbort: () => any;
-    let walletDispatch: (arg0: any) => any;
+    let chainStorageWatcher: ChainStorageWatcher;
+    // dispatch({ type: "SET_LOADING", payload: true });
 
-    const onConnect = async () => {
-      // Set up wallet through socket
-      console.info("Connecting to wallet...");
-
-      const rawApiSend = await connect("/api/nft-maker", apiRecv, { characterDispatch });
-      dispatch({ type: "SET_APISEND", payload: rawApiSend });
-
-      const socket = getActiveSocket();
-
-      const {
-        abort: ctpAbort,
-        dispatch: ctpDispatch,
-        getBootstrap,
-      } = makeCapTP("CB", (obj: any) => socket.send(JSON.stringify(obj)), otherSide);
-
-      walletAbort = ctpAbort;
-      walletDispatch = ctpDispatch;
-      const walletP = getBootstrap();
-      walletPRef.current = walletP;
-      dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
-
-      // Initialize agoric service based on constants
-      const zoeInvitationDepositFacetId = await E(walletP).getDepositFacetId(INVITE_BRAND_BOARD_ID);
-      const zoe = E(walletP).getZoe();
-      const board = E(walletP).getBoard();
-      const instanceNft = await E(board).getValue(INSTANCE_NFT_MAKER_BOARD_ID);
-      const nftPublicFacet = await E(zoe).getPublicFacet(instanceNft);
-      const invitationIssuer = E(zoe).getInvitationIssuer(nftPublicFacet);
-
-      dispatch({ type: "SET_AGORIC", payload: { zoe, board, zoeInvitationDepositFacetId, invitationIssuer, walletP } });
-      dispatch({ type: "SET_CHARACTER_CONTRACT", payload: { instance: instanceNft, publicFacet: nftPublicFacet } });
-
-      async function watchPurses() {
-        const pn = E(walletP).getPursesNotifier();
-        // TODO: check iterateNotifier race condition on first run (when purses are not yet created in the wallet)
-        for await (const purses of iterateNotifier(pn)) {
-          console.info("🧐 CHECKING PURSES");
-          processPurses(purses, nftPublicFacet, characterDispatch, itemDispatch, dispatch, {
-            money: MONEY_BRAND_BOARD_ID,
-            character: CHARACTER_BRAND_BOARD_ID,
-            item: ITEM_BRAND_BOARD_ID,
-          });
+    const connectKeplr = async () => {
+      try {
+        let connection = await makeAgoricWalletConnection(chainStorageWatcher);
+        connection = { ...connection };
+        dispatch({ type: "SET_WALLET_CONNECTION", payload: connection });
+        setCurrentStatus(status.keplrReady);
+      } catch (e: any) {
+        switch (e.message) {
+          case Errors.enableKeplr:
+            console.error("Enable the connection in Keplr to continue.");
+            break;
+          case Errors.networkConfig:
+            console.error("Network not found.");
+            break;
+          case Errors.noSmartWallet:
+            console.error("NO SMART WALLET");
+            break;
         }
       }
-      watchPurses().catch((err) => {
-        console.error("got watchPurses err", err);
-      });
+    };
 
-      async function watchOffers() {
-        const on = E(walletP).getOffersNotifier();
-        for await (const offers of iterateNotifier(on)) {
-          console.info("📡 CHECKING OFFERS");
-          const last3 = offers.slice(-3);
-          console.info(last3);
-          processOffers(offers, dispatch);
+    const fetchInstance = async () => {
+      const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.instance");
+      const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
+
+      // TODO: remove publicFacet from state
+      dispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1], publicFacet: undefined } });
+    };
+
+    const fetchTokenInfo = async () => {
+      const agoricNameBrands = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.brand");
+      const payload: TokenInfo = {
+        character: {
+          issuer: undefined,
+          brand: undefined,
+          petName: CHARACTER_IDENTIFIER,
+        },
+        item: {
+          issuer: undefined,
+          brand: undefined,
+          petName: ITEM_IDENTIFIER,
+        },
+        ist: {
+          issuer: undefined,
+          brand: undefined,
+          petName: IST_IDENTIFIER,
+        },
+      };
+      for (const i of agoricNameBrands) {
+        switch (i[0]) {
+          case ITEM_IDENTIFIER:
+            payload.item.brand = i[1];
+            break;
+          case IST_IDENTIFIER:
+            payload.ist.brand = i[1];
+            break;
+          case CHARACTER_IDENTIFIER:
+            payload.character.brand = i[1];
+            break;
+          default:
+            break;
         }
       }
-      watchOffers().catch((err) => {
-        console.error("got watchOffers err", err);
-      });
-
-      // TODO: Check if purses already exist before suggesting installation
-      // Suggest installation and brands to wallet
-      await Promise.all([
-        E(walletP).suggestInstallation("Installation NFT", INSTANCE_NFT_MAKER_BOARD_ID),
-        E(walletP).suggestInstallation("Installation", INSTALLATION_BOARD_ID),
-        E(walletP).suggestInstallation("Installation Sell Assets", SELL_ASSETS_INSTALLATION_BOARD_ID),
-        E(walletP).suggestIssuer("KREA", CHARACTER_ISSUER_BOARD_ID),
-        E(walletP).suggestIssuer("KREAITEM", ITEM_ISSUER_BOARD_ID),
-      ]);
-
-      // TODO: Fetch owned Characters from the wallet character purse
-      // This currently returns every Minted Character
-      // {name, character: Character, inventory: inventorySeat}
-      // Fetch Characters from Wallet
-      // const characterNFTs = await E(nftPublicFacet).getCharacters();
-      // const characterNFTs = await E()
-
-      // TODO: Loop through own characters and fetch corresponding item list from itemsRepo in the contract
-      // OR update getCharacters to enrich characters with the corresponding items before returning them?
-
-      // characterDispatch({ type: "SET_CHARACTERS", payload: characterNFTs.characters });
-
-      // TODO: creaate a "SET_CHARACTER_INVENTORIES" action
-      // set up am item or character state to hold the inventory seats (we'll need to get the values from the seats )
-
-      // Fetch Items from Chain
-      // TODO: Add getMyItems() instead of global getItems
-      // const itemNFTs = await E(nftPublicFacet).getItems();
-      // itemDispatch({ type: "SET_ITEMS", payload: itemNFTs.items });
-      dispatch({ type: "SET_LOADING", payload: false });
-
-      // TODO: set up chain notifiers
-      // const availableItemsNotifier = E(
-      //   publicFacetRef.current,
-      // ).getAvailableItemsNotifier();
-
-      // for await (const cardsAvailableAmount of iterateNotifier(
-      //   availableItemsNotifier,
-      // )) {
-      //   setAvailableCards(cardsAvailableAmount.value);
-      // }
+      dispatch({ type: "SET_TOKEN_INFO", payload });
     };
 
-    const onDisconnect = () => {
-      dispatch({ type: "SET_WALLET_CONNECTED", payload: true });
-      walletAbort && walletAbort();
+    const startWatching = async () => {
+      if (state.chainStorageWatcher) {
+        console.info("Storagewatcher found, skipping startWatching");
+        return;
+      }
+      try {
+        const { rpc, chainName } = await fetchChainInfo(networkConfigs.localDevnet.url);
+        chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
+          console.error(e);
+          return;
+        });
+        dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
+        connectKeplr();
+        fetchInstance();
+        fetchTokenInfo();
+      } catch (e) {
+        if (isCancelled) return;
+        console.error(e);
+      }
     };
 
-    const onMessage = (data: string) => {
-      const obj = JSON.parse(data);
-      walletDispatch && walletDispatch(obj);
+    const runEffects = async () => {
+      await startWatching();
+
+      setCurrentStatus(status.ready);
     };
 
-    activateWebSocket({
-      onConnect,
-      onDisconnect,
-      onMessage,
-    });
-    return deactivateWebSocket;
-  }, [characterDispatch, itemDispatch]);
+    runEffects();
+
+    return () => {
+      setIsCancelled(true);
+    };
+  }, [currentStatus, isCancelled]);
 
   return (
     <Context.Provider value={state}>
@@ -255,9 +251,16 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
 export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
+  const { isMockData } = useDataMode();
+
   if (state === undefined) {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
   }
+
+  if (isDevelopmentMode && isMockData) {
+    state.isLoading = false;
+  }
+
   return state;
 };
 

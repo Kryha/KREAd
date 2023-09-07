@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 
 import { CharacterItems, isCharacterCategory, isItemCategory, isString } from "../../interfaces";
-import { ButtonContainer, Dash, ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
-import { BoldLabel, ButtonText, ImageProps, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
-import { text } from "../../assets/text";
+import { ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
+import { BoldLabel, ButtonText, Dash, ImageProps, MenuItemName } from "../atoms";
+import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
 import { ItemThumbnail } from "../item-thumbnail";
@@ -29,16 +29,7 @@ interface MenuItemProps {
   removeInitial?: () => void;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({
-  data,
-  imageProps,
-  onClick,
-  onButtonClick,
-  isInitial = false,
-  removeInitial,
-  isEquipped,
-  isForSale,
-}) => {
+export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isInitial = false, removeInitial, isEquipped, isForSale }) => {
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
@@ -82,20 +73,6 @@ export const MenuItem: FC<MenuItemProps> = ({
             )}
           </InlineDetails>
         </InfoContainer>
-
-        {!!onButtonClick && (
-          <ButtonContainer>
-            {isEquipped ? (
-              <SecondaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => onButtonClick(event)}>
-                <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
-              </SecondaryButton>
-            ) : (
-              <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => onButtonClick(event)}>
-                <ButtonText customColor={color.white}>{text.character.equip}</ButtonText>
-              </PrimaryButton>
-            )}
-          </ButtonContainer>
-        )}
       </InfoWrapper>
     </Info>
   );

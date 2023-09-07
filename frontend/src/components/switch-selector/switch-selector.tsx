@@ -1,21 +1,42 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
-import { SwitchButtonLeft, SwitchButtonRight, Group } from "./styles";
+import { Group, SwitchButtonLeft, SwitchButtonRight } from "./styles";
+import { useSearchParams } from "react-router-dom";
 
 interface SwitchSelectorProps {
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
   buttonOneText: string;
   buttonTwoText: string;
+  toggleDevMode?: boolean;
 }
 
-export const SwitchSelector: FC<SwitchSelectorProps> = ({ buttonOneText, buttonTwoText, selectedIndex, setSelectedIndex }) => {
+export const SwitchSelector: FC<SwitchSelectorProps> = ({
+  toggleDevMode = false,
+  buttonOneText,
+  buttonTwoText,
+  selectedIndex,
+  setSelectedIndex,
+}) => {
+  const [, setSearchParams] = useSearchParams();
+  const handleItemButtonClick = () => {
+    setSelectedIndex(0);
+    !toggleDevMode && setSearchParams({ section: "items" }, { relative: "path" });
+    toggleDevMode && window.location.reload();
+  };
+
+  const handleCharacterButtonClick = () => {
+    setSelectedIndex(1);
+    !toggleDevMode && setSearchParams({ section: "characters" }, { relative: "path" });
+    toggleDevMode && window.location.reload();
+  };
+
   return (
     <Group>
-      <SwitchButtonLeft onClick={() => setSelectedIndex(0)} selected={selectedIndex === 0}>
+      <SwitchButtonLeft onClick={handleItemButtonClick} selected={selectedIndex === 0}>
         {buttonOneText}
       </SwitchButtonLeft>
-      <SwitchButtonRight onClick={() => setSelectedIndex(1)} selected={selectedIndex === 1}>
+      <SwitchButtonRight onClick={handleCharacterButtonClick} selected={selectedIndex === 1}>
         {buttonTwoText}
       </SwitchButtonRight>
     </Group>

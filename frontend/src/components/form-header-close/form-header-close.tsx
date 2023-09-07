@@ -1,5 +1,5 @@
 import { FC } from "react";
-import {useNavigate,  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { MenuText } from "../atoms";
 import { ArrowContainer, Close, HeaderContainer, ReturnContainer } from "./styles";
@@ -9,7 +9,7 @@ interface FormHeaderCloseProps {
   link: string;
 }
 
-export const FormHeaderClose: FC<FormHeaderCloseProps> = ({  title, link }) => {
+export const FormHeaderClose: FC<FormHeaderCloseProps> = ({ title, link }) => {
   const navigate = useNavigate();
 
   return (

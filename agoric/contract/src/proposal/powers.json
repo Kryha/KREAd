@@ -1,0 +1,19 @@
+{
+  "consume": {
+    "chainTimerService": "timer",
+    "board": true,
+    "chainStorage": true,
+    "zoe": true,
+    "startUpgradable": true,
+    "agoricNamesAdmin": true,
+    "agoricNames": true
+  },
+  "produce": {
+    "kreadKit": true
+  },
+  "instance": {
+    "produce": {
+      "kread": true
+    }
+  }
+}
