@@ -146,7 +146,7 @@ export const prepareKreadKit = async (
             durable: true,
             keyShape: M.number(),
             valueShape: MarketRecorderGuard,
-          })
+          }),
         }),
         characterCollectionSize: 0,
         characterAverageLevel: 0,
@@ -808,28 +808,46 @@ export const prepareKreadKit = async (
       },
       // TODO: figure out a way to handle the sell and buy more agnostic from the type of the amount
       market: {
-        handleExitCharacter(seat) {
+        handleExitCharacter(entry) {
           const { market } = this.state;
+          const { market: marketFacet, character: characterFacet } =
+            this.facets;
 
-          const { give } = seat.getProposal();
+          const { seat, object } = entry;
+          const characterLevel = characterFacet.calculateLevel(object.name);
+
           const subscriber = E(seat).getSubscriber();
           E.when(E(subscriber).getUpdateSince(), () => {
-            market.characterEntries.delete(
-              give.Character.value.payload[0][0].name,
-            );
+            marketFacet.updateMetrics('character', {
+              marketplaceAverageLevel: {
+                type: 'remove',
+                value: characterLevel,
+              },
+            });
+
+            market.characterEntries.delete(object.name);
 
             marketCharacterKit.recorder.write(
               Array.from(market.characterEntries.values()),
             );
           });
         },
-        handleExitItem(seat) {
+        handleExitItem(entry) {
           const { market } = this.state;
+          const { market: marketFacet } = this.facets;
 
-          const { give } = seat.getProposal();
+          const { seat, object } = entry;
+
           const subscriber = E(seat).getSubscriber();
           E.when(E(subscriber).getUpdateSince(), () => {
-            market.itemEntries.delete(give.Item.value.payload[0][0].id);
+            marketFacet.updateMetrics('item', {
+              marketplaceAverageLevel: {
+                type: 'remove',
+                value: object.level,
+              },
+            });
+
+            market.itemEntries.delete(object.id);
 
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
@@ -883,7 +901,7 @@ export const prepareKreadKit = async (
               Array.from(market.itemEntries.values()),
             );
 
-            marketFacet.handleExitItem(seat);
+            marketFacet.handleExitItem(newEntry);
           };
 
           return zcf.makeInvitation(
@@ -905,7 +923,6 @@ export const prepareKreadKit = async (
         },
         sellCharacter() {
           const handler = (seat) => {
-            const { market: marketFacet } = this.facets;
             const { market } = this.state;
             const { character: characterFacet, market: marketFacet } =
               this.facets;
@@ -942,7 +959,7 @@ export const prepareKreadKit = async (
               Array.from(market.characterEntries.values()),
             );
 
-            marketFacet.handleExitCharacter(seat);
+            marketFacet.handleExitCharacter(newEntry);
           };
 
           return zcf.makeInvitation(
@@ -963,7 +980,7 @@ export const prepareKreadKit = async (
           );
         },
         buyItem() {
-          const handler = (buyerSeat) => {
+          const handler = async (buyerSeat) => {
             const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
@@ -1015,23 +1032,13 @@ export const prepareKreadKit = async (
             zcf.atomicRearrange(harden(transfers));
 
             buyerSeat.exit();
-            sellerSeat.exit();
+            await sellerSeat.exit();
 
             // update metrics
             marketFacet.updateMetrics('item', {
               amountSold: true,
-              marketplaceAverageLevel: {
-                type: 'remove',
-                value: sellRecord.object.level,
-              },
               latestSalePrice: Number(itemForSalePrice.value),
             });
-
-            market.itemEntries.delete(item.id);
-
-            // marketItemKit.recorder.write(
-            //   Array.from(market.itemEntries.values()),
-            // );
           };
           return zcf.makeInvitation(
             handler,
@@ -1051,7 +1058,7 @@ export const prepareKreadKit = async (
           );
         },
         buyCharacter() {
-          const handler = (buyerSeat) => {
+          const handler = async (buyerSeat) => {
             const { market: marketFacet, character: characterFacet } =
               this.facets;
             const { market, character: characterState } = this.state;
@@ -1111,28 +1118,14 @@ export const prepareKreadKit = async (
 
             zcf.atomicRearrange(harden(transfers));
 
-            buyerSeat.exit();
-            sellerSeat.exit();
-
             // update metrics
-            const characterLevel = characterFacet.calculateLevel(
-              sellRecord.object.name,
-            );
             marketFacet.updateMetrics('character', {
               amountSold: true,
-              marketplaceAverageLevel: {
-                type: 'remove',
-                value: characterLevel,
-              },
               latestSalePrice: Number(characterForSalePrice.value),
             });
 
-            // Remove entry from store array
-            // market.characterEntries.delete(character.name);
-
-            // marketCharacterKit.recorder.write(
-            //   Array.from(market.characterEntries.values()),
-            // );
+            buyerSeat.exit();
+            sellerSeat.exit();
           };
 
           return zcf.makeInvitation(
@@ -1201,6 +1194,17 @@ export const prepareKreadKit = async (
             marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
             amountSold: this.state.itemAmountSold,
           });
+        },
+        reviveMarketExitSubscribers() {
+          const { market } = this.state;
+          const { market: marketFacet } = this.facets;
+          const characters = Array.from(
+            market.characterEntries.entries.values(),
+          );
+          characters.forEach((entry) => marketFacet.handleExitCharacter(entry));
+
+          const items = Array.from(market.itemEntries.entries.values());
+          items.forEach((entry) => marketFacet.handleExitItem(entry));
         },
       },
       // Public is currently a wrapper around the other created facets and fetches from the state
@@ -1289,6 +1293,23 @@ export const prepareKreadKit = async (
           return market.freeTokens();
         },
         getMarketMetrics() {
+          console.log({
+            character: {
+              collectionSize: this.state.characterCollectionSize,
+              averageLevel: this.state.characterAverageLevel,
+              marketplaceAverageLevel:
+                this.state.characterMarketplaceAverageLevel,
+              amountSold: this.state.characterAmountSold,
+              latestSalePrice: this.state.characterLatestSalePrice,
+            },
+            item: {
+              collectionSize: this.state.itemCollectionSize,
+              averageLevel: this.state.itemAverageLevel,
+              marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
+              amountSold: this.state.itemAmountSold,
+              latestSalePrice: this.state.itemLatestSalePrice,
+            },
+          });
           return {
             character: {
               collectionSize: this.state.characterCollectionSize,

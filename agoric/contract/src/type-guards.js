@@ -127,6 +127,7 @@ export const CreatorI = M.interface('creator', {
   publishKreadInfo: M.call().returns(),
   makeMintItemInvitation: M.call().returns(M.promise()),
   initializeMetrics: M.call().returns(),
+  reviveMarketExitSubscribers: M.call().returns(),
 });
 
 export const CharacterI = M.interface('character', {
@@ -149,11 +150,22 @@ export const ItemI = M.interface('item', {
   mintDefaultBatch: M.call().returns(M.promise(M.string())),
 });
 
+export const MarketRecorderGuard = M.splitRecord({
+  id: M.or(M.gte(0), M.string()),
+  seat: M.eref(M.remotable('Seat')),
+  askingPrice: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  object: M.or(CharacterGuard, ItemGuard),
+  // history: M.arrayOf(HistoryGuard),
+});
+
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
   buyItem: M.call().returns(M.promise()),
-  handleExitItem: M.call(M.eref(M.remotable('Seat'))).returns(),
-  handleExitCharacter: M.call(M.eref(M.remotable('Seat'))).returns(),
+  handleExitItem: M.call(MarketRecorderGuard).returns(),
+  handleExitCharacter: M.call(MarketRecorderGuard).returns(),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
   updateMetrics: M.call(
@@ -193,13 +205,3 @@ export const ItemRecorderGuard = M.splitRecord({
   history: M.arrayOf(HistoryGuard),
 });
 
-export const MarketRecorderGuard = M.splitRecord({
-  id: M.or(M.gte(0), M.string()),
-  seat: M.eref(M.remotable('Seat')),
-  askingPrice: M.splitRecord({
-    brand: BrandShape,
-    value: M.nat(),
-  }),
-  object: M.or(CharacterGuard, ItemGuard),
-  // history: M.arrayOf(HistoryGuard),
-});

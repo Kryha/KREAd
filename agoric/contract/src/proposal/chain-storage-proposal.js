@@ -460,12 +460,15 @@ const executeProposal = async (powers) => {
 
   await E(creatorFacet).initializeMetrics();
 
-  // TODO Get the most recent state of metrics from the storage node and send it to the contract
+  // TODO: Get the most recent state of metrics from the storage node and send it to the contract
   // const data = {};
   // const restoreMetricsInvitation = await E(
   //   creatorFacet,
   // ).makeRestoreMetricsInvitation();
   // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
+
+  // Revive seat exit subscribers after upgrade
+  await E(creatorFacet).reviveMarketExitSubscribers();
 
   // Log board ids for use in frontend constants
   console.log(`KREAD BOARD ID: ${boardId}`);

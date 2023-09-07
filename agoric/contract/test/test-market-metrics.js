@@ -165,7 +165,6 @@ test.serial('---| METRICS - Collection size', async (t) => {
 
   const payout = await E(userSeat).getPayout('Asset');
   bob.depositCharacters(payout);
-
   const metrics = await E(publicFacet).getMarketMetrics();
   t.deepEqual(metrics.character.collectionSize, 1);
   t.deepEqual(metrics.item.collectionSize, 10);
@@ -221,6 +220,7 @@ test.serial('---| METRICS - Amount sold character', async (t) => {
   await buyCharacter(t.context, bob, characterName, bob);
 
   const metrics = await E(publicFacet).getMarketMetrics();
+  await E(publicFacet).getMarketMetrics();
 
   const character = bob.getCharacters().find((c) => c.name === characterName);
 
