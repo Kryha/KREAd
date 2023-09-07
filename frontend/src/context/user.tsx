@@ -1,4 +1,4 @@
-import { CharacterBackend, ExtendedCharacter, Item, ItemBackend, ItemEquip } from "../interfaces";
+import { CharacterBackend, ExtendedCharacter, Item } from "../interfaces";
 import { mockData } from "../service/mock-data/mock-data";
 import { mockItemsEquipped } from "../service/mock-data/mock-items";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
@@ -42,7 +42,7 @@ interface SetEquippedItems {
 }
 interface UpdateCharacterItems {
   type: "UPDATE_CHARACTER_ITEMS";
-  payload: ItemBackend[];
+  payload: Item[];
   characterName: string;
 }
 interface SetFetched {

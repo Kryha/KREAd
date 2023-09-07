@@ -1,10 +1,9 @@
-import { FC, useMemo, useState } from "react";
-import { ASSETS_PER_PAGE, ASSET_TYPE, SECTION } from "../../constants";
+import { FC, useState } from "react";
+import { ASSETS_PER_PAGE } from "../../constants";
 import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more";
 import { AssetsContainer, AssetsWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
-import { AssetCard } from "../asset-card";
 import { Item, ItemCategory } from "../../interfaces";
 import { ItemCardInventory } from "../asset-card/item-card-inventory";
 
@@ -24,10 +23,9 @@ interface Props {
   items: Item[];
   isLoading: boolean;
   selectItem: (name: string, category: ItemCategory) => void;
-  selectedItem: { name: string; category?: ItemCategory };
 }
 
-export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem, selectedItem }) => {
+export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem }) => {
   const { height } = useViewport();
   const [visibleAssets, setVisibleAssets] = useState<number>(ASSETS_PER_PAGE);
   const loadMoreAssets = () => {

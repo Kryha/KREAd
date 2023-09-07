@@ -23,7 +23,6 @@ export const ItemDetailsMarket: FC<ItemDetailsMarketProps> = ({ itemInMarket, se
     navigate(`${routes.buyItem}/${itemInMarket.id}`);
   };
 
-  console.log(itemInMarket);
   const assetDetailActions = {
     primary: { text: text.item.buy, onClick: buyAsset },
     price: Number(itemInMarket.sell.price),

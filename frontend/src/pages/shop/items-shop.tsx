@@ -24,15 +24,14 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const { items, fetched } = useItemMarketState();
   const isLoading = !fetched;
 
+  // FIXME: Leaving commented code for implementation of filter logic
   // const [items, isLoading] = useGetItemsInShop({
   //   categories: selectedCategories,
   //   sort: selectedSorting,
   //   price: selectedPrice,
   //   color: selectedColor,
   // });
-  console.log(items);
   const [item] = useGetItemInShopById(selectedId);
-  console.log("ID: ", selectedId);
 
   if (!items) return <></>;
   return (

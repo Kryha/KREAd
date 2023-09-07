@@ -54,11 +54,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       // Consider creating an array that fills an array n amount of times based onthe amount the user owns
       let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
       const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;
-
-      // console.table(characterWallet);
-      // console.table(itemWallet);
-      // console.table(tokenWallet);
-
+      
       if (itemWallet) {
         itemWallet = itemWallet.map((item: any) => ({ ...item, equippedTo: "", forSale: false }));
       }

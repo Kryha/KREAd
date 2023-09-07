@@ -172,7 +172,6 @@ const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAc
     give,
   };
 
-  console.log(proposal);
   service.makeOffer(spec, proposal, { entryId: Number(entryId) }, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);

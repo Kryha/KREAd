@@ -102,6 +102,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
           <CharacterContent>
             {sortedCharacters.map((character) => (
               <Fragment key={character.nft.id}>
+                { /* FIXME: character.isEquipped??? */ }
                 {character.isEquipped ? (
                   <CharacterItem
                     character={character}

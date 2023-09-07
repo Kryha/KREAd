@@ -10,16 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
-import { SECTION } from "../../constants";
 import { Item, ItemCategory } from "../../interfaces";
 
 interface ItemDetailsInventoryProps {
-  section: (typeof SECTION)[keyof typeof SECTION];
   item: Item;
   selectedItem: { name: string; category: ItemCategory | undefined };
   selectItem: (name: string, category: ItemCategory | undefined) => void;
 }
-export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ section, item, selectedItem, selectItem }) => {
+export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, selectedItem, selectItem }) => {
   const navigate = useNavigate();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -28,19 +26,16 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ section, i
 
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
   const equipAsset = () => {
-    // if (!assetId) return;
     setShowToast(!showToast);
     equipItem.mutate({ item });
   };
 
   const unequipAsset = () => {
-    // if (!assetId) return;
     setShowToast(!showToast);
     unequipItem.mutate({ item });
   };
 
   const sellAsset = () => {
-    // if (!assetId) return;
     navigate(`${routes.sellItem}/${item.category}/${item.name}`);
   };
 

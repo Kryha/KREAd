@@ -18,12 +18,12 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<string>("");
 
+  // FIXME: Leaving commented code for implementation of filter logic
   // const userStateDispatch = useUserStateDispatch();
   const [characters, isLoadingCharacters] = useMyCharacters();
   const [character] = useMyCharacter(selectedId);
   // const [noCharacters, setNoCharacters] = useState(false);
   // const [showToast, setShowToast] = useState(false);
-  console.log("CHARS characters", characters);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -47,7 +47,6 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
   // };
 
   // if (isLoadingCharacters || isLoading) return <LoadingPage />;
-  console.log("CHAR", character);
   // if (!character) return <ErrorView />;
 
   // const detailActions = () => {

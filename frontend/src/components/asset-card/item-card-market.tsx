@@ -22,9 +22,6 @@ interface Props {
   selectItemInMarketId: (id: string) => void;
 }
 export const ItemCardMarket: FC<Props> = ({ itemInMarket, selectItemInMarketId }) => {
-  // const handleClick = () => {
-  //   selectItem(itemInMarket..name, item.category);
-  // };
   const { item } = itemInMarket;
 
   return (

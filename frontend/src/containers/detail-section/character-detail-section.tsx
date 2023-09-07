@@ -22,12 +22,8 @@ interface CharacterDetailSectionProps {
 }
 
 // TODO: Make index dynamic
-export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions, showToast }) => {
+export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions }) => {
   const { width } = useViewport();
-
-  // const itemsValues = useMemo(() => Object.values(character?.equippedItems).filter((item) => item), [character.equippedItems]);
-  console.log("character", character);
-  console.log("DETAIL", character.nft.detail);
   if (!character) return <ErrorView />;
 
   return (
