@@ -32,9 +32,9 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   // });
   console.log(items);
   const [item] = useGetItemInShopById(selectedId);
-  console.log("ID: ", selectedId)
+  console.log("ID: ", selectedId);
 
-  if(!items) return <></>
+  if (!items) return <></>;
   return (
     <>
       <AssetFilters
@@ -52,11 +52,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
       />
       {selectedId && <ItemDetailsMarket itemInMarket={item!} selectItemInMarket={(id: string) => setSelectedId(id)} />}
       {items.length > 0 ? (
-        <ItemCardsMarket
-          itemsInMarket={items}
-          isLoading={isLoading}
-          selectItemInMarketId={(id: string) => setSelectedId(id)}
-        />
+        <ItemCardsMarket itemsInMarket={items} isLoading={isLoading} selectItemInMarketId={(id: string) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

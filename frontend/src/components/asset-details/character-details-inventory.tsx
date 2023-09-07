@@ -16,9 +16,9 @@ interface AssetDetailsInventoryProps {
 }
 
 export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character }) => {
-  if(!character) {
+  if (!character) {
     console.error("Missing character data");
-    return <ErrorView />
+    return <ErrorView />;
   }
 
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ char
 
   const sellCharacterAction = {
     text: text.character.sell,
-    onClick: sellAsset
+    onClick: sellAsset,
   };
 
   return (

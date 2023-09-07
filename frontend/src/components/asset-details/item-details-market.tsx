@@ -24,16 +24,16 @@ export const ItemDetailsMarket: FC<ItemDetailsMarketProps> = ({ itemInMarket, se
   };
 
   console.log(itemInMarket);
-  const assetDetailActions = { 
-    primary: { text: text.item.buy, onClick: buyAsset }, 
-    price: Number(itemInMarket.sell.price) 
+  const assetDetailActions = {
+    primary: { text: text.item.buy, onClick: buyAsset },
+    price: Number(itemInMarket.sell.price),
   };
-  
+
   return (
     <>
       <FadeInOut show={!!itemInMarket.id} exiting={close}>
-          <DetailContainer>
-            {/* <ItemDetailSection
+        <DetailContainer>
+          {/* <ItemDetailSection
               item={transformedData}
               actions={{
                 onClose: () => {
@@ -45,20 +45,19 @@ export const ItemDetailsMarket: FC<ItemDetailsMarketProps> = ({ itemInMarket, se
                 secondary: assetDetailActions()?.secondary,
               }}
             /> */}
-              <ItemDetailSection
-                item={itemInMarket.item}
-                actions={{
-                  onClose: () => {
-                    selectItemInMarket("");
-                    setClose(true);
-                  },
-                  price: assetDetailActions.price,
-                  primary: assetDetailActions.primary,
-                  secondary: undefined,
-                }}
-              />
-
-          </DetailContainer>
+          <ItemDetailSection
+            item={itemInMarket.item}
+            actions={{
+              onClose: () => {
+                selectItemInMarket("");
+                setClose(true);
+              },
+              price: assetDetailActions.price,
+              primary: assetDetailActions.primary,
+              secondary: undefined,
+            }}
+          />
+        </DetailContainer>
         <Overlay />
       </FadeInOut>
       <FadeInOut show={showToast} exiting={!showToast}>

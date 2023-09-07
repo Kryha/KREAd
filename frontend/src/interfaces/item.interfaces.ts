@@ -43,6 +43,3 @@ export interface ItemInMarket {
     price: bigint;
   };
 }
-
-
-

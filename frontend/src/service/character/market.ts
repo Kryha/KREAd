@@ -147,8 +147,7 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
 };
 
 const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAction): Promise<void> => {
-  
-  if(!entryId) return;
+  if (!entryId) return;
 
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;
@@ -173,7 +172,7 @@ const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAc
     give,
   };
 
-  console.log(proposal)
+  console.log(proposal);
   service.makeOffer(spec, proposal, { entryId: Number(entryId) }, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);

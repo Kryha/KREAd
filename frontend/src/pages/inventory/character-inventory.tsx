@@ -83,14 +83,9 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
         setSelectedSorting={setSelectedSorting}
         setSelectedCategories={setSelectedCategories}
       />
-      { selectedId && <CharacterDetailsInventory character={character} />
-      }
+      {selectedId && <CharacterDetailsInventory character={character} />}
       {characters.length > 0 ? (
-        <CharacterCardsInventory
-          characters={characters}
-          isLoading={isLoading}
-          selectCharacter={(id: string) => setSelectedId(id)}
-        />
+        <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: string) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

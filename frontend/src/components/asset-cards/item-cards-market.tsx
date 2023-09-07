@@ -38,11 +38,7 @@ export const ItemCardsMarket: FC<Props> = ({ isLoading, itemsInMarket, selectIte
       {itemsInMarket.length > 0 && (
         <AssetsContainer>
           {itemsInMarket.slice(0, visibleAssets).map((itemInMarket) => (
-            <ItemCardMarket
-              key={itemInMarket.id}
-              itemInMarket={itemInMarket}
-              selectItemInMarketId={selectItemInMarketId}
-            />
+            <ItemCardMarket key={itemInMarket.id} itemInMarket={itemInMarket} selectItemInMarketId={selectItemInMarketId} />
           ))}
           {visibleAssets < itemsInMarket.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
         </AssetsContainer>

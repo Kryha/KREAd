@@ -79,7 +79,7 @@ export const filterItems = (items: Item[], { categories, sort, color }: ItemFilt
       const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
 
       if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(item.category) && item.equippedTo1  ;
+        return otherSelectedCategories.includes(item.category) && item.equippedTo1;
       }
 
       // If only "equipped" is selected, return only equipped items
@@ -152,7 +152,7 @@ export const filterCharacters = (characters: CharacterEquip[], { categories, sor
       },
       {
         relative: "path",
-      }
+      },
     );
   }, [categories, sort]);
 
@@ -205,7 +205,7 @@ export const filterCharacters = (characters: CharacterEquip[], { categories, sor
 
 export const filterCharactersMarket = (
   characters: CharacterInMarket[],
-  { categories, sort, price }: CharacterFilters
+  { categories, sort, price }: CharacterFilters,
 ): CharacterInMarket[] => {
   if (characters.length === 0) return [];
 
@@ -219,7 +219,7 @@ export const filterCharactersMarket = (
       },
       {
         relative: "path",
-      }
+      },
     );
   }, [categories, sort]);
 

@@ -52,7 +52,6 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ section, i
     }
   };
 
-
   return (
     <>
       <FadeInOut show={!!selectedItem} exiting={close}>

@@ -16,9 +16,9 @@ interface Props {
   selectCharacter: (id: string) => void;
 }
 export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCharacter }) => {
-  if(!characterInMarket) {
+  if (!characterInMarket) {
     console.error("Missing character data");
-    return <ErrorView />
+    return <ErrorView />;
   }
 
   const navigate = useNavigate();
@@ -32,8 +32,8 @@ export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCha
   };
 
   const buyCharacterAction = {
-    primary: { text: text.item.buy, onClick: buyAsset }, 
-    price: Number(characterInMarket.sell.price) 
+    primary: { text: text.item.buy, onClick: buyAsset },
+    price: Number(characterInMarket.sell.price),
   };
 
   return (
@@ -41,16 +41,16 @@ export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCha
       <FadeInOut show={!!character.name} exiting={close}>
         {!!character.name && (
           <DetailContainer>
-              <CharacterDetailSection
-                character={{ nft: character, equippedItems: characterInMarket.equippedItems }}
-                actions={{
-                  onClose: () => {
-                    selectCharacter("");
-                    setClose(true);
-                  },
-                  primary: buyCharacterAction.primary
-                }}
-              />
+            <CharacterDetailSection
+              character={{ nft: character, equippedItems: characterInMarket.equippedItems }}
+              actions={{
+                onClose: () => {
+                  selectCharacter("");
+                  setClose(true);
+                },
+                primary: buyCharacterAction.primary,
+              }}
+            />
           </DetailContainer>
         )}
         <Overlay />

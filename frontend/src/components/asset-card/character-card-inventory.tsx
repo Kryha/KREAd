@@ -24,7 +24,6 @@ interface Props {
 }
 
 export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }) => {
-  
   const { nft: character } = extendedCharacter;
 
   const handleClick = () => {

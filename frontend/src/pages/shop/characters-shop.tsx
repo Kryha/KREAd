@@ -42,18 +42,9 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         setSelectedCategories={setSelectedCategories}
         setSelectedPrice={setSelectedPrice}
       />
-      { selectedId && 
-        <CharacterDetailsMarket
-          characterInMarket={character}
-          selectCharacter={(id: string) => setSelectedId(id)}
-        />
-      }
+      {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (
-        <CharacterCardsMarket
-          charactersInMarket={characters}
-          isLoading={isLoading}
-          selectCharacterId={(id: string)=>setSelectedId(id)}
-        />
+        <CharacterCardsMarket charactersInMarket={characters} isLoading={isLoading} selectCharacterId={(id: string) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

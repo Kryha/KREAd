@@ -24,8 +24,8 @@ interface Props {
   items: Item[];
   isLoading: boolean;
   selectItem: (name: string, category: ItemCategory) => void;
-  selectedItem: { name: string, category?: ItemCategory };
-};
+  selectedItem: { name: string; category?: ItemCategory };
+}
 
 export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem, selectedItem }) => {
   const { height } = useViewport();
@@ -33,20 +33,16 @@ export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem, se
   const loadMoreAssets = () => {
     setVisibleAssets((prevVisibleAssets) => prevVisibleAssets + ASSETS_PER_PAGE);
   };
-  
+
   if (isLoading) return <LoadingPage spinner={false} />;
   return (
     <AssetsWrapper height={height}>
       {items.length > 0 && (
         <AssetsContainer>
           {items.slice(0, visibleAssets).map((item, index) => (
-            <ItemCardInventory
-              key={index}
-              item={item}
-              selectItem={() => selectItem(item.name, item.category)}
-            />
+            <ItemCardInventory key={index} item={item} selectItem={() => selectItem(item.name, item.category)} />
           ))}
-          {visibleAssets <items.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
+          {visibleAssets < items.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
         </AssetsContainer>
       )}
     </AssetsWrapper>

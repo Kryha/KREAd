@@ -24,7 +24,6 @@ interface Props {
 }
 
 export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) => {
-  
   const { character } = characterInMarket;
 
   const handleClick = () => {
