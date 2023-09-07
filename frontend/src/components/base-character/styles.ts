@@ -11,7 +11,7 @@ import {
 } from "../../constants";
 import { css } from "@emotion/react";
 
-interface ImageProps {
+export interface ImageProps {
   width: number;
   height: number;
   zIndex?: number;

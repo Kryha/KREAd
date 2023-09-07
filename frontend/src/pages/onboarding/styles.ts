@@ -89,15 +89,14 @@ export const ButtonContainer = styled.div<ButtonProps>`
       `;
   }};
 
-  ${({ isVisible }) => (isVisible === true ?
-    css` `
-    :
-    css`
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.5s, 0.5s;
-    animation-delay: 0s, 0.5s;
-
-  `)};
+  ${({ isVisible }) =>
+    isVisible === true
+      ? css``
+      : css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.5s, 0.5s;
+          animation-delay: 0s, 0.5s;
+        `};
 `;
 
 export const ArrowUpRight = styled(ArrowUpRightIcon)`
@@ -149,22 +148,23 @@ export const OnboardingContainer = styled.div<ViewProps>`
   overflow-y: scroll;
   transition: all 0.4s;
   animation: ${disappear}, ${fadeIn};
-  animation-duration: 5.0s, 0.5s;
-  animation-delay: 0s, 5.0s;
-  ${({ showAnimation }) => (showAnimation ?
-    css`
-      animation: ${disappear}, ${fadeIn};
-      animation-duration: 5.0s, 0.5s;
-      animation-delay: 0s, 5.0s;
-    ` :
-    css`
-      animation: ${disappear}, ${fadeIn};
-      animation-duration: 0.8s, 0.5s;
-      animation-delay: 0s, 0.8s;
-  `)};
+  animation-duration: 5s, 0.5s;
+  animation-delay: 0s, 5s;
+  ${({ showAnimation }) =>
+    showAnimation
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 5s, 0.5s;
+          animation-delay: 0s, 5s;
+        `
+      : css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.8s, 0.5s;
+          animation-delay: 0s, 0.8s;
+        `};
 `;
 
-export const DefaultImage = styled(CharacterImgs) <ViewProps>`
+export const DefaultImage = styled(CharacterImgs)<ViewProps>`
   position: absolute;
   right: 358px;
   top: 0;
@@ -234,22 +234,23 @@ export const KreadContainer = styled.div<ViewProps>`
     animation-fill-mode: forwards;
     animation-delay: 3.8s;
   }
-  ${({ showSlider }) => (showSlider &&
+  ${({ showSlider }) =>
+    showSlider &&
     css`
-    animation: ${slideUp};
-    animation-duration: 0.7s;
-    animation-delay: 0s;
-    animation-fill-mode: forwards;
-    ${KreadIcon} {
-      position: absolute;
-      left: 0;
-      transform: translate(-45%, 0);
-      top: 50%;
-      bottom: 50%;
-      width: 100px;
-      height: 24px;
-    }
-    `)};
+      animation: ${slideUp};
+      animation-duration: 0.7s;
+      animation-delay: 0s;
+      animation-fill-mode: forwards;
+      ${KreadIcon} {
+        position: absolute;
+        left: 0;
+        transform: translate(-45%, 0);
+        top: 50%;
+        bottom: 50%;
+        width: 100px;
+        height: 24px;
+      }
+    `};
 `;
 
 export const ArrowDown = styled(ArrowDownIcon)`
@@ -289,7 +290,7 @@ export const GeneralSectionContainer = styled.div`
 `;
 
 export const ConnectContainer = styled.div<ButtonProps>`
-${({ isVisible }): string => {
+  ${({ isVisible }): string => {
     return isVisible
       ? `
         background: rgba(255, 255, 255, 0.46);
@@ -302,13 +303,12 @@ ${({ isVisible }): string => {
       `
       : "";
   }};
-  ${({ isVisible }) => (isVisible === true ?
-    css` `
-    :
-    css`
-    animation: ${disappear}, ${fadeIn};
-    animation-duration: 0.5s, 0.5s;
-    animation-delay: 0s, 0.5s;
-
-  `)};
+  ${({ isVisible }) =>
+    isVisible === true
+      ? css``
+      : css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.5s, 0.5s;
+          animation-delay: 0s, 0.5s;
+        `};
 `;

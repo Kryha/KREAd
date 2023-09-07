@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { text } from "../../assets/text";
+import { text } from "../../assets";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import {
@@ -89,38 +89,18 @@ export const PriceSelector: FC<PriceSelectorProps> = ({
           <InputContainer>
             <BoldLabel>{text.store.min}</BoldLabel>
             <TextLabel>
-              <MinInput
-                type="number"
-                placeholder={`${minVal}`}
-                onChange={setMinValue}
-              />
+              <MinInput type="number" placeholder={`${minVal}`} onChange={setMinValue} />
             </TextLabel>
           </InputContainer>
           <InputContainer>
             <BoldLabel>{text.store.max}</BoldLabel>
             <TextLabel>
-              <MaxInput
-                type="number"
-                placeholder={`${maxVal}`}
-                onChange={setMaxValue}
-              />
+              <MaxInput type="number" placeholder={`${maxVal}`} onChange={setMaxValue} />
             </TextLabel>
           </InputContainer>
         </InputWrapper>
-        <ThumbLeft
-          type="range"
-          min={min}
-          max={max}
-          value={minVal}
-          onChange={setMinValue}
-        />
-        <ThumbRight
-          type="range"
-          min={min}
-          max={max}
-          value={maxVal}
-          onChange={setMaxValue}
-        />
+        <ThumbLeft type="range" min={min} max={max} value={minVal} onChange={setMinValue} />
+        <ThumbRight type="range" min={min} max={max} value={maxVal} onChange={setMaxValue} />
         <SliderContainer>
           <SliderTrack />
           <SliderRange width={widthRange} left={leftRange} />

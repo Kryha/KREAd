@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { margins, zIndex } from "../../design";
-import { disappear, fadeIn } from "../atoms/animations";
+import { breakpoints, color, margins, zIndex } from "../../design";
+import { disappear, fadeIn } from "../atoms";
 
 interface AnimationProps {
   isLanding: boolean;
@@ -12,6 +12,7 @@ export const TopbarContainer = styled.header<AnimationProps>`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
+  z-index: 100;
   padding: ${margins.big};
   ${({ isLanding }) =>
     isLanding === true
@@ -26,17 +27,26 @@ export const TopbarContainer = styled.header<AnimationProps>`
 export const Box = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0px;
+  padding: 0;
+  z-index: 1;
+  align-items: center;
 `;
 
-export const ChildrenContainer = styled.div`
-  margin-bottom: 40px;
+export const ChildrenContainer = styled.div<AnimationProps>`
+  margin-left: ${margins.big};
+  margin-right: ${margins.big};
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    margin-left: 0;
+    margin-right: 0;
+  }
 `;
 
 export const FooterContainer = styled.div<AnimationProps>`
   position: absolute;
   bottom: 0;
   right: 0;
+  width: 100%;
+  background: ${color.white};
   z-index: ${zIndex.overCharacter};
   ${({ isLanding }) =>
     isLanding === true

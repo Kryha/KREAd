@@ -1,4 +1,7 @@
-import "./App.css";
+import "./installSesLockdown";
+import "./reset.css";
+import "./index.css";
+
 import { QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { Helmet } from "react-helmet";

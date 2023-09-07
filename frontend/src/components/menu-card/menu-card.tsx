@@ -1,5 +1,4 @@
 import { FC, useMemo, useState } from "react";
-
 import { Item } from "../../interfaces";
 import { text } from "../../assets";
 import {
@@ -39,7 +38,7 @@ import { NotificationWrapper } from "../notification-detail/styles";
 
 interface MenuCardProps {
   title: string;
-  equippedItem?: Item;
+  equippedItemProp?: Item;
   unequippedItems: Item[];
   imageProps?: ImageProps;
 }
@@ -55,9 +54,10 @@ export const MenuCard: FC<MenuCardProps> = ({
   const [selectedId, setSelectedId] = useState<string>("");
   const [intitial, setInitial] = useState(true);
   const [showToast, setShowToast] = useState(false);
+  const [equippedItem, setEquippedItem] = useState(equippedItemProp);
 
-  const equipItem = useEquipItem();
-  const unequipItem = useUnequipItem();
+  const equipItem = useEquipItem(setEquippedItem);
+  const unequipItem = useUnequipItem(() => setEquippedItem(undefined));
 
   const allItems = useMemo(() => {
     if (equippedItem) return [equippedItem, ...unequippedItems];
@@ -115,7 +115,7 @@ export const MenuCard: FC<MenuCardProps> = ({
           <MenuContainer>
             <MenuText>{title}</MenuText>
             <InfoContainer>
-              <Label>{text.param.amountOfItems(allItems.length)}</Label>
+              <Label>{text.param.amountOfAssets(allItems.length)}</Label>
               <Divider />
               <ArrowContainer>
                 <Close onClick={() => navigate(GO_BACK)} />
@@ -191,7 +191,6 @@ export const MenuCard: FC<MenuCardProps> = ({
             title={text.general.goToYourWallet}
             info={text.general.yourActionIsPending}
             closeToast={() => setShowToast(false)}
-            isError
           />
         </NotificationWrapper>
       </FadeInOut>

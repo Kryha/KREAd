@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { margins, color } from "../../design";
+import { color, margins } from "../../design";
 import { Badge, BoldLabel, MenuItemName } from "../atoms";
 import { CharacterWrapper, ExpandButton } from "../base-character/styles";
 

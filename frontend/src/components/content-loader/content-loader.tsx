@@ -1,6 +1,7 @@
-import { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { AnimatedLoading } from "./animated-loading";
-import { LoadingPageContainer, Spinner } from "./styles";
+import { LoadingDevMode, LoadingPageContainer, Spinner } from "./styles";
+import { DevelopmentMode } from "../../service/test-service/development-mode";
 
 interface ContentLoaderProps {
   loading: boolean;

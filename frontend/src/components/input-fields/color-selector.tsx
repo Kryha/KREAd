@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { text } from "../../assets/text";
+import { text } from "../../assets";
 import { DetailSectionColorPalette } from "../../containers/detail-section/detail-section-color-palette";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
 import { color as designColors } from "../../design";
@@ -11,11 +11,12 @@ import {
   ColorWrapper,
 } from "./styles";
 import { useViewport } from "../../hooks";
+import { COLORS } from "../../constants";
+
 // TODO: get actual colors for app
 
 interface ColorSelectorProps {
   handleChange: (selected: string) => void;
-  colors: string[];
 }
 
 export const ColorSelector: FC<ColorSelectorProps> = ({

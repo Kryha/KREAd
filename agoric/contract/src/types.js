@@ -19,6 +19,7 @@
  * @typedef {{
  *   character: ZCFMint<"copyBag">
  *   item: ZCFMint<"copyBag">
+ *   paymentFT: ZCFMint<"nat">
  * }} AssetMints
  *
  * @typedef {{
@@ -37,6 +38,11 @@
  *     brand: Brand
  *     issuer: Issuer<set>
  *   }
+ *   paymentFT: {
+ *     name: string
+ *     brand: Brand
+ *     issuer: Issuer<nat>
+ *   }
  * }} TokenInfo
  *
  * @typedef  {{
@@ -49,11 +55,8 @@
  * @typedef  {{
  *   sellerSeat: ZCFSeat
  *   id: string
- *   object: object[]
+ *   item: object[]
  *   askingPrice: any
- *   isFirstSale: boolean
- *   royalty: Amount<AssetKind>
- *   platformFee: Amount<AssetKind>
  * }} ItemMarketRecord
  *
  * @typedef {{
@@ -261,18 +264,8 @@
  *     amountSold: boolean
  * }} UpdateMetrics
  *
- * @typedef {{
+ * @typedef { {
  *     type: ("add" | "remove")
  *     value: number
  * }} UpdateAverage
- * 
- * @typedef {{
- *     numerator: bigint,
- *     denominator: bigint,
- *  }} RatioObject
- * 
- * @typedef {{
- *     success: boolean,
- *     error: string,
- * }} HelperFunctionReturn
  */

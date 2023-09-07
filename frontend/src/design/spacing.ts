@@ -10,7 +10,11 @@ export const margins = {
   gigantic: "120px",
 };
 
-export const zIndex = {
+export interface zIndexProps {
+  [key: string]: number;
+}
+
+export const zIndex: zIndexProps = {
   foreground: 10,
   mid: 20,
   inFront: 30,

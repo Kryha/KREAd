@@ -55,7 +55,6 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     give,
   };
 
-
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);

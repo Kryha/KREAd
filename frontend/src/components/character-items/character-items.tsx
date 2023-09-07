@@ -1,5 +1,4 @@
 import { FC } from "react";
-
 import { CharacterItems as Items } from "../../interfaces";
 import { text } from "../../assets";
 import { LeftEquippedItemCard, RightEquippedItemCard } from "../equipped-item-card";

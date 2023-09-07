@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useViewport } from "../../hooks";
 
-import { NavTabs, NavTitle, Tab, ActiveLine } from "./styles";
+import { ActiveLine, NavTitle } from "./styles";
 
 interface FormTabProps {
   active: boolean;

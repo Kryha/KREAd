@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
-import { color, margins } from "../../design";
+import { breakpoints, color, margins } from "../../design";
 
 interface ViewProps {
   width: number;
@@ -15,6 +14,7 @@ export const DetailSectionWrap = styled.div<ViewProps>`
   display: flex;
   flex-flow: column nowrap;
   overflow-y: scroll;
+  max-width: ${breakpoints.desktop};
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -38,9 +38,9 @@ export const DetailSectionWrap = styled.div<ViewProps>`
 `;
 
 export const EmptyView = styled.section`
-height: 84vh;
-width: 100 %;
-background - color: ${color.lightGrey};
-border: 1px solid ${color.grey};
-border - radius: 24px;
+  height: 84vh;
+  width: 100%;
+  background-color: ${color.lightGrey};
+  border: 1px solid ${color.grey};
+  border-radius: 24px;
 `;

@@ -1,12 +1,14 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
-import { SwitchButtonLeft, SwitchButtonRight, Group } from "./styles";
+import { Group, SwitchButtonLeft, SwitchButtonRight } from "./styles";
+import { useSearchParams } from "react-router-dom";
 
 interface SwitchSelectorProps {
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
   buttonOneText: string;
   buttonTwoText: string;
+  toggleDevMode?: boolean;
 }
 
 export const SwitchSelector: FC<SwitchSelectorProps> = ({

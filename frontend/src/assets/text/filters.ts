@@ -9,7 +9,8 @@ export const filters = {
   sortBy: "sort by",
   price: "price",
   category: "category",
-  categoriex: "categories",
-  clearFilter: "clear filter",
+  categories: "categories",
+  clearFilter: "clear all",
   apply: "apply",
+  filters: "filters",
 };

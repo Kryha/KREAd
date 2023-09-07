@@ -17,8 +17,8 @@ export const DetailSectionProgressBar: FC<DetailSectionProgressBarProps> = ({
 }) => {
   return (
     <DetailSectionProgressBarWrap>
-      <DetailSectionProgress id={title} value={amount} max="100">
-        {amount}
+      <DetailSectionProgress>
+        <DetailSectionProgressValue value={amount} max={100} />
       </DetailSectionProgress>
       <DetailSectionProgressDigits>
         {text.param.nOutOfOnehundred(amount)}

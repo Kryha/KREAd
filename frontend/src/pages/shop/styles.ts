@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { BellIcon, CloseIcon, RefreshIcon } from "../../assets";
-import { HorizontalDivider, Label, SecondaryButton } from "../../components";
-import { fadeUp } from "../../components/atoms/animations";
+import { fadeUp, HorizontalDivider, Label, SecondaryButton } from "../../components";
 import { FilterOption } from "../../components/filters/styles";
 import { LoadMoreContainer } from "../../components/load-more/styles";
 import { KreadIcon } from "../../components/logo/styles";
@@ -43,13 +42,15 @@ export const FilterWrapper = styled.div`
 `;
 
 export const FilterContainer = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 0px;
   gap: 16px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 export const SelectorContainer = styled.div`
@@ -110,7 +111,7 @@ interface NotificationProps {
   open: boolean;
 }
 
-export const NotificationButton = styled(SecondaryButton) <NotificationProps>`
+export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
   padding: ${margins.mini};
   position: relative;
   z-index: 1000;
@@ -139,7 +140,7 @@ export const Tag = styled.div`
   gap: 10px;
 
   position: absolute;
-  width:  ${margins.small};
+  width: ${margins.small};
   height: ${margins.small};
   left: 27px;
   top: -3px;
@@ -175,18 +176,14 @@ export const Card = styled.div<ViewProps>`
   ${({ width }): string => {
     if (width <= 1300) {
       return "flex: 0 1 calc(49.6% - 1em);";
-    }
-    else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
+    } else if (width >= 1300 && width <= LARGE_SCREEN_SIZE) {
       return "flex: 0 1 calc(32.4% - 1em);";
-    }
-    else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
+    } else if (width >= LARGE_SCREEN_SIZE && width <= EXTRA_LARGE_SCREEN_SIZE) {
       return "flex: 0 1 calc(24.41% - 1em);";
-    }
-    else {
+    } else {
       return "flex: 1 0 500px;";
     }
-  }
-  }
+  }}
 `;
 
 export const DetailContainer = styled.div`

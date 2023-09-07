@@ -19,3 +19,20 @@ export const VerticalDivider = styled.div`
   height: 100%;
   width: 1px;
 `;
+
+export const Dash = styled.div`
+  width: 16px;
+  height: 0px;
+  border: 0.5px solid ${color.darkGrey};
+  margin-right: 8px;
+  margin-left: 8px;
+`;
+
+export const Diagonal = styled.div`
+  border: 0.5px solid ${color.grey};
+  transform: rotate(135deg);
+  width: 126px;
+  top: 38px;
+  position: absolute;
+  left: -20px;
+`;

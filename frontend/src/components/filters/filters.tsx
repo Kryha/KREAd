@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 import {
   FiltersWrapper,
@@ -7,6 +7,7 @@ import {
   FilterOption,
 } from "./styles";
 import { ButtonText } from "../atoms";
+import { useClickAwayListener } from "../../hooks/use-click-away-listener";
 
 interface FiltersProps {
   children?: React.ReactNode;

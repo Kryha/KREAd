@@ -1,6 +1,7 @@
-import React, { FC, useState } from "react";
-import { InfoPosition } from "../../interfaces/layout.types";
 import { TooltipContent, TooltipWrap } from "./styles";
+import { InfoPosition } from "../../interfaces";
+import { FC, useRef, useState } from "react";
+import { useClickAwayListener } from "../../hooks/use-click-away-listener";
 
 interface TooltipProps {
   title?: string;
@@ -18,16 +19,17 @@ export const Tooltip: FC<TooltipProps> = ({
   children,
 }) => {
   const [active, setActive] = useState(false);
-
+  const tooltipRef = useRef<HTMLDivElement>(null);
   const showTip = () => setActive(true);
-
   const hideTip = () => setActive(false);
 
+  useClickAwayListener(tooltipRef, active, hideTip);
+
   return (
-    <TooltipWrap onMouseEnter={showTip} onMouseLeave={hideTip} onBlur={hideTip}>
+    <TooltipWrap onMouseEnter={showTip} onMouseLeave={hideTip} onClick={showTip} onBlur={hideTip}>
       {children}
       {active && (
-        <TooltipContent className={position || "left"}>
+        <TooltipContent ref={tooltipRef} className={position || "left"}>
           <h3>{title}</h3>
           <p>{content}</p>
         </TooltipContent>

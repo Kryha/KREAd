@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 
 import { text } from "../../assets";
 import { routes } from "../../navigation";
@@ -45,9 +45,12 @@ export const BaseRoute: FC<BaseRouteProps> = ({
             />
           </NavigationSection>
         </Box>
-        {sideNavigation}
+        <Box>
+          {sideNavigation}
+          <DevelopmentMode />
+        </Box>
       </TopbarContainer>
-      <ChildrenContainer>{children}</ChildrenContainer>
+      <ChildrenContainer isLanding={isLanding}>{children}</ChildrenContainer>
       <FooterContainer isLanding={isLanding}>
         <Footer />
       </FooterContainer>

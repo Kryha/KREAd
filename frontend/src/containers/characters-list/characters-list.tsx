@@ -6,7 +6,7 @@ import { CategoryContainer, ListContainer, ListHeader, SortableListWrap, SortCon
 import { useMyCharacters } from "../../service";
 
 import { text } from "../../assets";
-import { characterCategories, sortingInventory } from "../../assets/text/filter-options";
+import { characterCategories, sortAssetsInInventory } from "../../assets/text/filter-options";
 import { color } from "../../design";
 import { PAGE_SIZE } from "../../constants";
 
@@ -15,12 +15,12 @@ interface Props {
   onFilterClick: (items: boolean) => void;
 }
 
+// TODO: will soon be legacy code from Nick's changes
 export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
-  const [page, setPage] = useState(1);
 
   const [myCharacters, isLoading] = useMyCharacters({ category: selectedCategory, sorting: selectedSorting });
 
@@ -43,6 +43,8 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
   const loadMore = () => {
     setPage((prevState) => prevState + 1);
   };
+
+  // @ts-ignore
   return (
     <SortableListWrap>
       <ListHeader>
@@ -54,7 +56,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
         <SortContainer>
           <Label>{text.filters.sortBy}</Label>
           <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId}>
-            <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sortingInventory} />
+            <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sortAssetsInInventory} />
           </Filters>
         </SortContainer>
       </ListHeader>
@@ -92,7 +94,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
             isForSale={character.isForSale}
           />
         ))}
-        {myCharacters.length > PAGE_SIZE && <LoadMore isLoading={isLoading} page={page} loadMore={loadMore} />}
+        {myCharacters.length > PAGE_SIZE && <LoadMore isLoading={isLoading} loadMore={loadMore} />}
       </ListContainer>
     </SortableListWrap>
   );

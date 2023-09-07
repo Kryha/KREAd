@@ -1,15 +1,7 @@
 import { FC } from "react";
 
 import { text } from "../../assets";
-import {
-  Content,
-  BoldText,
-  BodyText,
-  NotificationHeader,
-  NotificationItemContainer,
-  BodyMessage,
-  MessageContainer,
-} from "./styles";
+import { Content, BoldText, BodyText, NotificationHeader, NotificationItemContainer, BodyMessage, MessageContainer } from "./styles";
 import { ButtonText, HorizontalDivider, SecondaryButton } from "../atoms";
 import { Notification } from "../../interfaces";
 
@@ -40,14 +32,10 @@ export const NotificationInfo: FC<NotificationInfoProps> = ({
                 : text.notifications.the}
             </BodyText>
             <BoldText>
-              {notification.status === "sold"
-                ? text.param.itemQuoted(notification.itemName)
-                : text.param.itemQuoted(notification.itemName)}
+              {notification.status === "sold" ? text.param.itemQuoted(notification.itemName) : text.param.itemQuoted(notification.itemName)}
             </BoldText>
             <BodyText>
-              {notification.status === "sold"
-                ? text.param.notificationSold(notification.price || 0)
-                : text.notifications.itemIsSuccesfully}
+              {notification.status === "sold" ? text.param.notificationSold(notification.price || 0) : text.notifications.itemIsSuccesfully}
             </BodyText>
           </MessageContainer>
           <SecondaryButton

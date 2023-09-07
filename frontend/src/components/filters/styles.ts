@@ -1,9 +1,8 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { TriangleIcon } from "../../assets";
-import { color, margins } from "../../design";
-import { ButtonText } from "../atoms";
-import { disappear, fadeIn, fadeOut } from "../atoms/animations";
+import { breakpoints, color, margins } from "../../design";
+import { ButtonText, disappear, fadeIn, fadeOut } from "../atoms";
 
 interface FilterProps {
   isOpen: boolean;
@@ -29,6 +28,10 @@ export const FiltersContainer = styled.div<FilterProps>`
   align-items: center;
   min-width: 160px;
   cursor: pointer;
+  @media (max-width: ${breakpoints.tablet}) {
+    min-width: 0;
+  }
+
   padding: ${margins.mini} ${margins.mini} ${margins.mini} ${margins.small};
   &:hover {
     border: 1px solid ${color.black};

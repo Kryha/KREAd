@@ -1,11 +1,10 @@
 import { FC } from "react";
 import { text } from "../../assets";
-import { ButtonText, SecondaryButton } from "../atoms";
-import { LoadMoreContainer, Refresh } from "./styles";
+import { ButtonText } from "../atoms";
+import { LoadMoreContainer, LoadMoreWrapper, Refresh } from "./styles";
 
 interface LoadMoreProps {
   isLoading: boolean;
-  page?: number;
   loadMore: () => void;
 }
 
@@ -22,7 +21,8 @@ export const LoadMore: FC<LoadMoreProps> = ({ isLoading, loadMore }) => {
           {isLoading ? text.general.loading : text.general.loadMore}
         </ButtonText>
         <Refresh />
-      </SecondaryButton>
-    </LoadMoreContainer>
+        <ButtonText>{isLoading ? text.general.loading : text.general.loadMore}</ButtonText>
+      </LoadMoreContainer>
+    </LoadMoreWrapper>
   );
 };

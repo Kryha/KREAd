@@ -57,6 +57,7 @@ export const general = {
   yourActionIsPending:
     "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
   loading: "loading...",
+  next: "next",
   characterCardTitle: "mint a new character",
   characterCardInfo:
     "by clicking the button you will mint a new character. The cost of it is only IST 2. Start now!",

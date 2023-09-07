@@ -3,17 +3,7 @@ import { imageSize } from "../../design";
 import { Item } from "../../interfaces";
 import { ImageProps, Img } from "../atoms";
 import { ItemStats } from "../item-stats";
-import {
-  Diagonal,
-  ElementWrapper,
-  ElementContainer,
-  ItemWrapper,
-  NoImage,
-  Card,
-  Plus,
-  PlusContainer,
-  ItemCardWrapper,
-} from "./styles";
+import { Diagonal, ElementWrapper, ElementContainer, ItemWrapper, NoImage, Card, Plus, PlusContainer, ItemCardWrapper } from "./styles";
 
 interface ItemCardProps extends ImageProps {
   image?: string;
@@ -37,14 +27,7 @@ export const EmptyItemCard = () => {
   );
 };
 
-export const ItemCard: FC<ItemCardProps> = ({
-  image,
-  width,
-  height,
-  item,
-  position = "left",
-  area = "middle",
-}) => {
+export const ItemCard: FC<ItemCardProps> = ({ image, width, height, item, position = "left", area = "middle" }) => {
   return (
     <ItemCardWrapper>
       <ItemStats item={item} position={position} area={area} />
@@ -53,11 +36,7 @@ export const ItemCard: FC<ItemCardProps> = ({
         <ElementContainer>
           <ItemWrapper>
             {image ? (
-              <Img
-                src={image}
-                width={width || imageSize.medium}
-                height={height || imageSize.small}
-              />
+              <Img src={image} width={width || imageSize.medium} height={height || imageSize.small} />
             ) : (
               <NoImage>
                 <PlusContainer>

@@ -1,5 +1,4 @@
-import { FC, useEffect, useState } from "react";
-
+import { FC, useState } from "react";
 import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
@@ -7,13 +6,10 @@ import { ItemDetailSectionSegmentStats } from "./detail-section-segment-stats";
 import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
 import { DetailSectionWrap } from "./styles";
-
 import { text, UnnamedCreator } from "../../assets";
 import { ActivityEvent, Item } from "../../interfaces";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
-import { getItemActivity } from "../../service/item-actions";
-import { useAgoricState } from "../../context/agoric";
 import { ErrorView, LoadingPage } from "../../components";
 
 interface ItemDetailSectionProps {
@@ -27,7 +23,6 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({
   actions,
 }) => {
   const { width } = useViewport();
-  const agoric = useAgoricState();
   const [activity, setActivity] = useState<ActivityEvent[]>();
 
   // TODO: Make this a hook and set store accordingly

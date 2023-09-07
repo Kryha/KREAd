@@ -5,6 +5,7 @@ import { bootstrapContext } from './bootstrap.js';
 import { flow } from './flow.js';
 import { makeCopyBag } from '@agoric/store';
 import { makeKreadUser } from './make-user.js';
+import { defaultItems } from './items.js';
 
 async function sellCharacter(context, user, characterName, askingPrice) {
   /** @type {Bootstrap} */
@@ -12,7 +13,6 @@ async function sellCharacter(context, user, characterName, askingPrice) {
     instance: { publicFacet },
     contractAssets,
     zoe,
-    paymentAsset,
   } = context;
 
   const characterToSell = user
@@ -23,7 +23,10 @@ async function sellCharacter(context, user, characterName, askingPrice) {
     contractAssets.character.brand,
     copyBagAmount,
   );
-  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, askingPrice);
+  const priceAmount = AmountMath.make(
+    contractAssets.payment.brand,
+    askingPrice,
+  );
 
   const sellCharacterInvitation = await E(
     publicFacet,
@@ -63,10 +66,7 @@ async function buyCharacter(context, user, characterName, seller) {
     contractAssets.character.brand,
     copyBagAmount,
   );
-  const priceAmount = AmountMath.add(
-    AmountMath.add(characterToBuy.askingPrice, characterToBuy.royalty),
-    characterToBuy.platformFee,
-  );
+  const priceAmount = characterToBuy.askingPrice;
 
   const buyCharacterInvitation = await E(
     publicFacet,
@@ -93,14 +93,22 @@ async function buyCharacter(context, user, characterName, seller) {
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
-  const { zoe, contractAssets, assets, purses, instance, paymentAsset } =
-    bootstrap;
+
+  const { zoe, contractAssets, assets, purses, instance } = bootstrap;
 
   const bob = makeKreadUser('bob', purses);
 
-  const payout = paymentAsset.mintMockIST.mintPayment(
-    AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
-  );
+  const topUpInvitation = await E(
+    instance.publicFacet,
+  ).makeTokenFacetInvitation();
+
+  const proposal = harden({
+    want: {
+      Asset: AmountMath.make(contractAssets.payment.brand, harden(100n)),
+    },
+  });
+  const userSeat = await E(zoe).offer(topUpInvitation, proposal);
+  const payout = await E(userSeat).getPayout('Asset');
   bob.depositPayment(payout);
 
   t.context = {
@@ -110,7 +118,6 @@ test.before(async (t) => {
     purses,
     zoe,
     users: { bob },
-    paymentAsset,
   };
 });
 
@@ -133,40 +140,35 @@ test.serial('---| METRICS - Collection size', async (t) => {
   /** @type {Bootstrap} */
   const {
     instance: { publicFacet },
-    paymentAsset,
+    contractAssets,
     zoe,
     users: { bob },
   } = t.context;
 
-  const { give, offerArgs } = flow.mintCharacter.expected;
+  const { want } = flow.mintCharacter.expected;
 
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
-  const payment = {
-    Price: paymentAsset.mintMockIST.mintPayment(
-      AmountMath.make(paymentAsset.brandMockIST, harden(30000000n)),
-    ),
-  };
-  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, give.Price);
-
+  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
   const proposal = harden({
-    give: { Price: priceAmount },
+    want: {
+      Asset: AmountMath.make(
+        contractAssets.character.brand,
+        harden(copyBagAmount),
+      ),
+    },
   });
 
-  const userSeat = await E(zoe).offer(
-    mintCharacterInvitation,
-    proposal,
-    payment,
-    offerArgs,
-  );
+  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
   await E(userSeat).getOfferResult();
 
   const payout = await E(userSeat).getPayout('Asset');
   bob.depositCharacters(payout);
+
   const metrics = await E(publicFacet).getMarketMetrics();
   t.deepEqual(metrics.character.collectionSize, 1);
-  t.deepEqual(metrics.item.collectionSize, 3);
+  t.deepEqual(metrics.item.collectionSize, 10);
 });
 
 test.serial('---| METRICS - Average levels character', async (t) => {
@@ -193,9 +195,10 @@ test.serial('---| METRICS - Average levels character', async (t) => {
 
   t.deepEqual(metrics.character.averageLevel, character.level);
   t.deepEqual(metrics.character.marketplaceAverageLevel, characterLevel);
-  t.deepEqual(metrics.character.putForSaleAmount, 1);
 
-  const defaultItemsAverageLevel = 0;
+  const defaultItemsAverageLevel =
+    Object.values(defaultItems).reduce((sum, item) => sum + item.level, 0) /
+    Object.keys(defaultItems).length;
 
   t.deepEqual(metrics.item.averageLevel, defaultItemsAverageLevel);
 });
@@ -255,7 +258,6 @@ test.serial('---| METRICS - Latest sale price character', async (t) => {
   t.deepEqual(metrics.character.averageLevel, character.level);
   t.deepEqual(metrics.character.marketplaceAverageLevel, 0);
   t.deepEqual(metrics.character.amountSold, 2);
-  t.deepEqual(metrics.character.putForSaleAmount, 2);
   t.deepEqual(metrics.character.latestSalePrice, 20);
 
   t.deepEqual(metrics.item.amountSold, 0);

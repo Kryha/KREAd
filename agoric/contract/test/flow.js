@@ -4,77 +4,40 @@ import { defaultItems } from './items.js';
 
 const mintCharacter = {
   expected: {
-    offerArgs: { name: 'TestCharacter' },
-    give: { Price: 30000000n },
+    want: { name: 'TestCharacterExpectedFlow' },
     message: text.characterMintSuccess,
   },
-  feeTooLow: {
-    offerArgs: { name: 'TestCharacterBadFlow' },
-    give: { Price: 10000000n },
-    message: errors.mintFeeTooLow,
-  },
   duplicateName: {
-    offerArgs: { name: 'TestCharacter' },
-    give: { Price: 30000000n },
-    message: errors.nameTaken('TestCharacter'),
+    want: { name: 'TestCharacterExpectedFlow' },
+    message: errors.nameTaken('TestCharacterExpectedFlow'),
   },
-  noArgs: {
-    offerArgs: undefined,
-    give: { Price: 30000000n },
-    message: errors.noNameArg,
+  noWantInOffer: {
+    want: undefined,
+    message: errors.noWantInOffer,
   },
   noName: {
-    offerArgs: { name: undefined },
-    give: { Price: 30000000n },
+    want: { name: undefined },
     message: errors.noNameArg,
   },
-  noAvailability: {
-    offerArgs: { name: 'TestCharacterBadFlow' },
-    give: { Price: 30000000n },
-    message: errors.allMinted,
-  },
   extraProperties: {
-    offerArgs: { name: 'TestCharacter', bloodType: 'blue', married: true },
-    give: { Price: 30000000n },
+    want: { name: 'TestCharacter', bloodType: 'blue', married: true },
     message: '',
-  },
-  invalidName1: {
-    offerArgs: { name: '012345678901234567890123' },
-    give: { Price: 30000000n },
-    message: errors.invalidName,
-  },
-  invalidName2: {
-    offerArgs: { name: 'TestCharacter!' },
-    give: { Price: 30000000n },
-    message: errors.invalidName,
-  },
-  invalidName3: {
-    offerArgs: { name: 'names' },
-    give: { Price: 30000000n },
-    message: errors.invalidName,
   },
 };
 
 const mintItem = {
   expected: {
-    want: defaultItems.filter(({ rarity }) => rarity > 59)[0],
+    want: defaultItems.hair,
     message: text.itemMintSuccess,
   },
   multiple: {
-    want: defaultItems.filter(({ rarity }) => rarity < 20)[0],
-    message: text.itemMintSuccess,
-  },
-  multipleUnique: {
-    want: [
-      defaultItems.filter(({ rarity }) => rarity > 39 && rarity < 60)[0],
-      defaultItems.filter(({ rarity }) => rarity > 19 && rarity < 40)[0],
-    ],
+    want: [defaultItems.airReservoir, defaultItems.background],
     message: text.itemMintSuccess,
   },
 };
 
 const inventory = {
-  characterName: 'TestCharacter',
+  characterName: 'TestCharacterExpectedFlow',
   unequip: {
     message: text.unequipSuccess,
   },
@@ -86,7 +49,7 @@ const inventory = {
 const market = {
   bob: {
     give: {
-      character: 'TestCharacter',
+      character: 'TestCharacterExpectedFlow',
     },
     want: {
       item: 'hair',
@@ -99,7 +62,7 @@ const market = {
       payment: 20n,
     },
     want: {
-      character: 'TestCharacter',
+      character: 'TestCharacterExpectedFlow',
     },
   },
 };

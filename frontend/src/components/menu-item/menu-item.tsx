@@ -50,16 +50,7 @@ interface MenuItemProps {
   removeInitial?: () => void;
 }
 
-export const MenuItem: FC<MenuItemProps> = ({
-  data,
-  imageProps,
-  onClick,
-  onButtonClick,
-  isInitial = false,
-  removeInitial,
-  isEquipped,
-  isForSale,
-}) => {
+export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isInitial = false, removeInitial, isEquipped, isForSale }) => {
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {

@@ -15,6 +15,8 @@ export const store = {
   sellCharacter: "sell character",
   setPrice: "set price",
   placeInShop: "place in shop",
+  viewInShop: "view in shop",
+  goToInventory: "go to inventory",
   noResults: "no results",
   thereAreNoItemsAvailableFilter:
     "there are no items available with the chosen filter combination. Please change it to find more items.",
