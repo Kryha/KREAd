@@ -18,7 +18,7 @@ interface Props {
   setSelectedColor: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
   pageSelector: React.ReactNode;
-  section: typeof SECTION[keyof typeof SECTION];
+  section: (typeof SECTION)[keyof typeof SECTION];
 }
 export const AssetFilters: FC<Props> = ({
   assets,

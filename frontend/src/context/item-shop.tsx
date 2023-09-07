@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { ItemInMarket, KreadItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
-import { mediate } from "../util";
 import { watchItemMarket } from "../service/storage-node/watch-market";
 import { useDataMode } from "../hooks";
 import { mockItemsInMarket } from "../service/mock-data/mock-items";
@@ -35,17 +34,17 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       marketDispatch((prevState: any) => ({ ...prevState, items, fetched: true }));
     };
     const formatMarketEntry = async (marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
-      const item = {
-        id: Number(marketEntry.id),
-        item: marketEntry.item,
+      const item = { ...marketEntry.object, id: marketEntry.object.id.toString() };
+
+      const itemMarketEntry = {
+        id: marketEntry.id.toString(),
+        item,
         sell: {
           price: marketEntry.askingPrice.value,
         },
       };
 
-      const parsedItem = mediate.itemsMarket.toFront([item]);
-
-      return parsedItem[0];
+      return itemMarketEntry;
     };
 
     if (agoric.chainStorageWatcher) {

@@ -40,7 +40,7 @@ export const DownloadImageModal: React.FC<DownloadProps> = ({ isOpen, onClose })
       }
       onClose();
     },
-    [download, downloadOptions, onClose]
+    [download, downloadOptions, onClose],
   );
 
   return (

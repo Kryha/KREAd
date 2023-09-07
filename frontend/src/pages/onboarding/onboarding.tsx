@@ -3,15 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
 import { color } from "../../design";
-import {
-  AnimatedLogo,
-  ButtonText,
-  Footer,
-  MenuText,
-  OnboardingCharacter,
-  PrimaryButton,
-  TitleText
-} from "../../components";
+import { AnimatedLogo, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowDown,
   ArrowUp,
@@ -30,7 +22,7 @@ import {
   OnboardingWrapper,
   ScrollContainer,
   SectionContainer,
-  TextContainer
+  TextContainer,
 } from "./styles";
 import { useLocalStorage, useOnScreen, useTimer, useViewport } from "../../hooks";
 import { routes } from "../../navigation";

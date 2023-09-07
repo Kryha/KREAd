@@ -17,7 +17,7 @@ export enum AgoricChainStoragePathKind {
 /** @template Slot @typedef {import('./types.js').FromCapData<Slot>} FromCapData */
 
 export const fetchFromVStorage = async (marshaller: any, path: string, blockHeight?: number) => {
-  let requestOptions = {
+  const requestOptions = {
     method: "GET",
     redirect: "follow",
   };

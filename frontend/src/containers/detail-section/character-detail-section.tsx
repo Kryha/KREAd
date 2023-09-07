@@ -54,7 +54,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
       {/* details */}
       <DetailSectionSegment title={text.character.details} sectionIndex={4}>
-        <DetailSectionSegmentDetails data={{ ...character.nft.detail, brand: character.nft.detail.brand }} />
+        <DetailSectionSegmentDetails data={{ ...character.nft.details, brand: character.nft.details.brand }} />
       </DetailSectionSegment>
 
       {/* project */}

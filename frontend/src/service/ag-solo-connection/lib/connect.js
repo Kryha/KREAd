@@ -55,7 +55,7 @@ export const connect = (endpointPath, recv, recvArgs, query = "") => {
         reject();
       },
     },
-    endpoint
+    endpoint,
   );
 
   return sendP;

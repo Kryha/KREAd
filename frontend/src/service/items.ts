@@ -1,14 +1,15 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
+import { Item, ItemBackend, ItemEquip, ItemInMarket } from "../interfaces";
 import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
-import { buyItem, equipItem, sellItem, unequipItem } from "./item-actions";
 import { useOffers } from "./offers";
 import { ITEM_PURSE_NAME } from "../constants";
 import { useItemMarketState } from "../context/item-shop";
 import { useUserState } from "../context/user";
 import { useWalletState } from "../context/wallet";
+import { marketService } from "./character/market";
+import { inventoryService } from "./character/inventory";
 
 // TODO: Fix this function used during buy and sell
 export const useMyItem = (id: string): [ItemEquip | undefined, boolean] => {
@@ -47,7 +48,7 @@ export const useMyItemsForSale = () => {
           return false;
         }
       }),
-    [offers]
+    [offers],
   );
 
   // getting items from filtered offers
@@ -97,15 +98,32 @@ export const useSellItem = (itemId: string) => {
       try {
         const found = items.find((item) => item.id === itemId);
         if (!found) return;
-        const mediated = mediate.items.toBack([found])[0];
+        const itemToSell = { ...found, id: Number(found.id) };
+        const instance = service.contracts.kread.instance;
+        const itemBrand = service.tokenInfo.item.brand;
+
         setIsLoading(true);
-        return await sellItem(service, wallet, mediated, BigInt(price));
+
+        marketService.sellItem({
+          item: itemToSell,
+          price: BigInt(price),
+          service: {
+            kreadInstance: instance,
+            itemBrand,
+            makeOffer: service.walletConnection.makeOffer,
+            istBrand: service.tokenInfo.ist.brand,
+          },
+          callback: async () => {
+            console.info("SellItem call settled");
+          },
+        });
+        return true;
       } catch (error) {
         console.warn(error);
         return false;
       }
     },
-    [itemId, wallet, items, service]
+    [itemId, wallet, items, service],
   );
 
   return { callback, isLoading };
@@ -118,16 +136,34 @@ export const useBuyItem = (itemId: string) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const instance = service.contracts.kread.instance;
+  const itemBrand = service.tokenInfo.item.brand;
+  const istBrand = service.tokenInfo.ist.brand;
   // TODO: enable listening to offer approved
 
   const callback = useCallback(async () => {
     try {
       const found = items.find((item) => item.id === itemId);
       if (!found) return;
+      const itemToBuy = { ...found, id: Number(found.id), item: { ...found.item, id: Number(found.item.id) } };
 
-      const mediated = mediate.itemsMarket.toBack([found])[0];
       setIsLoading(true);
-      return await buyItem(service, wallet, mediated.item, mediated.sell.price);
+
+      return await marketService.buyItem({
+        item: itemToBuy.item,
+        price: BigInt(itemToBuy.sell.price),
+        service: {
+          kreadInstance: instance,
+          itemBrand,
+          makeOffer: service.walletConnection.makeOffer,
+          istBrand,
+        },
+        callback: async () => {
+          console.info("BuyItem call settled");
+          setIsLoading(false);
+        },
+      });
     } catch (error) {
       console.warn(error);
       setIsError(true);
@@ -137,32 +173,66 @@ export const useBuyItem = (itemId: string) => {
   return { callback, isLoading, isError };
 };
 
-export const useEquipItem = () => {
+export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item | undefined>>) => {
   const [service] = useAgoricContext();
-  const wallet = useWalletState();
   const { items, selected: character } = useUserState();
+  const kreadInstance = service.contracts.kread.instance;
+  const characterBrand = service.tokenInfo.character.brand;
+  const itemBrand = service.tokenInfo.item.brand;
 
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
-
+    const characterToEquipTo = { ...character.nft, id: Number(character.nft.id) };
     const item = items.find((item) => item.id === body.itemId);
-
     if (!item) return;
+    const itemToEquip = { ...item, id: Number(item.id) };
 
-    await equipItem(service, wallet, item, character.nft);
+    await inventoryService.equipItem({
+      character: characterToEquipTo,
+      item: itemToEquip,
+      service: {
+        kreadInstance,
+        characterBrand,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+      },
+      callback: async () => {
+        console.info("Equip call settled");
+        if (callback) callback(item);
+      },
+    });
   });
 };
 
-export const useUnequipItem = () => {
+export const useUnequipItem = (callback?: () => void) => {
   const [service] = useAgoricContext();
   const { equippedItems: equipped, selected: character } = useUserState();
-  const wallet = useWalletState();
+  const instance = service.contracts.kread.instance;
+  const charBrand = service.tokenInfo.character.brand;
+  const itemBrand = service.tokenInfo.item.brand;
 
   return useMutation(async (body: { itemId: string }) => {
     if (!character) return;
     const sanitizedEquipped = equipped.filter((item) => item !== undefined);
     const item = sanitizedEquipped.find((item) => item.id === body.itemId);
+
     if (!item) return;
-    await unequipItem(service, wallet, item, character);
+    const itemToUnEquip = { ...item, id: Number(item.id) };
+    const characterToUnequipFrom = { ...character.nft, id: Number(character.nft.id) };
+
+    await inventoryService.unequipItem({
+      item: itemToUnEquip,
+      character: characterToUnequipFrom,
+      service: {
+        kreadInstance: instance,
+        characterBrand: charBrand,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+      },
+      callback: async () => {
+        console.info("Unequip call settled");
+        if (callback) callback();
+      },
+    });
   });
 };

@@ -255,4 +255,17 @@
  * }} KreadState
  *
  * @typedef {(name: string) => boolean} NameIsUniqueFn
+ *
+ * @typedef {{
+ *     averageLevel: UpdateAverage
+ *     marketplaceAverageLevel: UpdateAverage
+ *     latestSalePrice: number
+ *     collectionSize: boolean
+ *     amountSold: boolean
+ * }} UpdateMetrics
+ *
+ * @typedef { {
+ *     type: ("add" | "remove")
+ *     value: number
+ * }} UpdateAverage
  */

@@ -9,9 +9,5 @@ interface MainContainerProps {
 
 export const MainContainer: FC<MainContainerProps> = ({ children }) => {
   const { height } = useViewport();
-  return (
-    <MainWrap height={height}>
-     {children}
-    </MainWrap>
-  );
+  return <MainWrap height={height}>{children}</MainWrap>;
 };

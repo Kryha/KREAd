@@ -1,5 +1,4 @@
 import { FC, useMemo } from "react";
-
 import { useViewport } from "../../hooks";
 import { BaseCharacter, ErrorView, LoadingPage, MenuCard } from "../../components";
 import { ItemWrapper } from "./styles";
@@ -34,7 +33,7 @@ export const ItemPage: FC = () => {
         isZoomed
         isClothing={category === "clothing"}
       />
-      <MenuCard title={text.param.categories[category]} equippedItem={equippedItem} unequippedItems={unequippedItems} />
+      <MenuCard title={text.param.categories[category]} equippedItemProp={equippedItem} unequippedItems={unequippedItems} />
     </ItemWrapper>
   );
 };

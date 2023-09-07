@@ -52,7 +52,7 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({ statusObject }) => {
           <Status key={key}>
             <StatusText status={value}>{statusTextMap[key]}</StatusText>
           </Status>
-        )
+        ),
       )}
     </StatusIndicatorContainer>
   );

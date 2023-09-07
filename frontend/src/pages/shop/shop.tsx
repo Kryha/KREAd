@@ -27,7 +27,7 @@ export const Shop: FC = () => {
         selectedIndex={marketSection}
       />
     ),
-    [marketSection]
+    [marketSection],
   );
 
   return (

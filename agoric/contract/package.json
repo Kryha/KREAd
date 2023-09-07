@@ -1,8 +1,8 @@
 {
-  "name": "character-builder-contract",
+  "name": "KREAd-contract",
   "version": "0.1.0",
   "private": true,
-  "description": "Contract for the Agoric Dapp",
+  "description": "Contract for the KREAd nested NFTs",
   "type": "module",
   "scripts": {
     "build": "exit 0",
@@ -15,12 +15,18 @@
   },
   "devDependencies": {
     "ava": "^4.3.1",
-    "eslint": "^7.23.0",
-    "eslint-config-airbnb-base": "^14.2.1 ",
+    "@endo/eslint-plugin": "^0.4.4",
+    "@jessie.js/eslint-plugin": "^0.4.0",
+    "eslint": "^8.47.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-jessie": "^0.0.6",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-ava": "^14.0.0",
+    "eslint-plugin-github": "^4.8.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsdoc": "^46.4.3",
+    "eslint-plugin-prettier": "^5.0.0",
+    "import-meta-resolve": "^1.1.1",
     "prettier": "^2.2.1"
   },
   "dependencies": {
@@ -48,16 +54,8 @@
     "timeout": "10m"
   },
   "keywords": [],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Agoric/agoric"
-  },
-  "author": "Agoric",
+  "author": "Kryha",
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/Agoric/agoric/issues"
-  },
-  "homepage": "https://github.com/Agoric/agoric#readme",
   "eslintConfig": {
     "extends": [
       "@agoric"
@@ -68,6 +66,9 @@
     "singleQuote": true
   },
   "eslintIgnore": [
-    "dappConstants.js"
+    "characters.js",
+    "items.js",
+    "chain-storage-proposal.js",
+    "chain-storage-proposal.js-clean.js"
   ]
 }

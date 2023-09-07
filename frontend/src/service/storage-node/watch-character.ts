@@ -29,6 +29,6 @@ export const watchCharacterInventory = (chainStorageWatcher: any, characterName:
     },
     (log) => {
       console.error("Error watching vbank kread character inventory", log);
-    }
+    },
   );
 };

@@ -160,3 +160,8 @@ export type AgoricStateActions =
   | SetChainStorageWatcher
   | SetTestCharacter
   | SetOffers;
+
+export interface OfferProposal {
+  give: Object;
+  want: Object;
+}

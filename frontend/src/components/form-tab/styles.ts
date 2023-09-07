@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
-import { NavigationTitle } from '../atoms';
-import { color } from '../../design';
+import { NavigationTitle } from "../atoms";
+import { color } from "../../design";
 
 interface NavTabProps {
   active?: boolean;

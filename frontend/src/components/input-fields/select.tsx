@@ -57,7 +57,7 @@ export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect =
         }
       }
     },
-    [handleChange]
+    [handleChange],
   );
 
   const isOptionSelected = (optionValue: string | string[]) => {

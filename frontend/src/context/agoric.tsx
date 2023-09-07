@@ -3,7 +3,6 @@ import React, { createContext, useContext, useEffect, useReducer, useState } fro
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
 import { CHARACTER_IDENTIFIER, isDevelopmentMode, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
-import WalletBridge from "./wallet-bridge";
 import { useDataMode } from "../hooks";
 import { fetchChainInfo } from "./util";
 import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
@@ -74,7 +73,6 @@ const Context = createContext<AgoricState | undefined>(undefined);
 const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
 const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
-  console.log(action.type);
   switch (action.type) {
     case "SET_DAPP_APPROVED":
       return { ...state, status: { ...state.status, dappApproved: action.payload } };
@@ -148,8 +146,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       try {
         let connection = await makeAgoricWalletConnection(chainStorageWatcher);
         connection = { ...connection };
-        // FIXME: remove log
-        console.log("KEPLER CONNECTION: ", connection);
         dispatch({ type: "SET_WALLET_CONNECTION", payload: connection });
         setCurrentStatus(status.keplrReady);
       } catch (e: any) {
@@ -168,7 +164,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchInstance = async () => {
-      const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, `data/published.agoricNames.instance`);
+      const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.instance");
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
       // TODO: remove publicFacet from state
@@ -176,7 +172,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchTokenInfo = async () => {
-      const agoricNameBrands = await fetchFromVStorage(chainStorageWatcher.marshaller, `data/published.agoricNames.brand`);
+      const agoricNameBrands = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.brand");
       const payload: TokenInfo = {
         character: {
           issuer: undefined,
@@ -214,8 +210,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
     const startWatching = async () => {
       if (state.chainStorageWatcher) {
-        // setCurrentStatus(status.storageWatcherReady);
-        console.log("STORAGEWATCHER FOUND, SKIPPING STARTWATCHING");
+        console.info("Storagewatcher found, skipping startWatching");
         return;
       }
       try {
@@ -234,8 +229,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       }
     };
 
-    // FIXME: remove log
-    console.count("CONNECTING");
     const runEffects = async () => {
       await startWatching();
 
@@ -251,10 +244,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
   return (
     <Context.Provider value={state}>
-      <DispatchContext.Provider value={dispatch}>
-        <WalletBridge />
-        {props.children}
-      </DispatchContext.Provider>
+      <DispatchContext.Provider value={dispatch}>{props.children}</DispatchContext.Provider>
     </Context.Provider>
   );
 };

@@ -2,18 +2,6 @@ import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 import { AgoricDispatch, TokenInfo } from "../../interfaces";
 import { ITEM_IDENTIFIER, IST_IDENTIFIER, CHARACTER_IDENTIFIER } from "../../constants";
 
-/* TODO: SMART-WALLET SUPPPRT
-
-Use chain-storage-watcher to get updates on relevant characters,
-including inventory information. Should write to the User context
-and potentially be triggered by that same context in a useEffect.
-Alternatively it could be triggered by the first interface that
-consumes the User context
-
-Commneted code is dapp-inter's implementation
-(https://github.com/Agoric/dapp-inter/blob/main/src/service/vbank.ts)
-*/
-
 export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: AgoricDispatch) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = "published.agoricNames.brand";
@@ -62,11 +50,11 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
     },
     (log) => {
       console.error("Error watching vbank assets", log);
-    }
+    },
   );
 };
 
-export const watchPursesNonVbank = (chainStorageWatcher: any, walletAddress: string, updateState: any) => {
+export const watchWalletVstorage = (chainStorageWatcher: any, walletAddress: string, updateStatePurses: any, updateStateOffers: any) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = `published.wallet.${walletAddress}.current`;
 
@@ -78,11 +66,12 @@ export const watchPursesNonVbank = (chainStorageWatcher: any, walletAddress: str
         console.warn(`${path} returned undefined`);
         return;
       }
-      updateState(value.purses);
+      updateStateOffers(value.liveOffers);
+      updateStatePurses(value.purses);
     },
     (log) => {
       console.error("Error watching vbank assets", log);
-    }
+    },
   );
 };
 
@@ -103,6 +92,6 @@ export const watchKreadInstance = (chainStorageWatcher: any, agoricDispatch: Ago
     },
     (log) => {
       console.error("Error watching vbank assets", log);
-    }
+    },
   );
 };
