@@ -60,7 +60,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       // console.table(tokenWallet);
 
       if (itemWallet) {
-        itemWallet = itemWallet.map((item: any) => ({ ...item, isEquipped: false, forSale: false }));
+        itemWallet = itemWallet.map((item: any) => ({ ...item, equippedTo: "", forSale: false }));
       }
 
       walletDispatch((prevState) => ({

@@ -1,5 +1,5 @@
 import { ASSET_TYPE, SECTION } from "../../constants";
-import { Character, CharacterEquip, CharacterInMarket, CharacterItems, Detail } from "../../interfaces";
+import { Character, CharacterEquip, CharacterInMarket, CharacterItems, Details } from "../../interfaces";
 
 export interface AssetData {
   id: string;
@@ -9,7 +9,7 @@ export interface AssetData {
   level: number;
   rarity?: number;
   equippedItems?: CharacterItems;
-  detail?: Detail;
+  details?: Details;
   isEquipped?: boolean;
   isForSale?: boolean;
   price?: bigint;
@@ -35,7 +35,7 @@ export const assetTransformer = {
       category: asset.character.type,
       level: asset.character.level,
       equippedItems: asset.equippedItems,
-      detail: asset.character.detail,
+      detail: asset.character.details,
       price: asset.sell.price,
     }),
   },

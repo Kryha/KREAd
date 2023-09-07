@@ -60,7 +60,7 @@ export const InternalAppRoutes: FC = () => {
         <Route path={`${routes.items}/:category`} element={isMobile ? <MobileNotAvailable /> : <ItemPage />} />
         <Route path={routes.shop} element={isMobile ? <MobileNotAvailable /> : <Shop />} />
         <Route path={routes.inventory} element={<Inventory />} />
-        <Route path={`${routes.buyItem}/:category/:name`} element={isMobile ? <MobileNotAvailable /> : <ItemBuy />} />
+        <Route path={`${routes.buyItem}/:id`} element={isMobile ? <MobileNotAvailable /> : <ItemBuy />} />
         <Route path={`${routes.buyCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterBuy />} />
         <Route path={`${routes.sellItem}/:category/:name`} element={isMobile ? <MobileNotAvailable /> : <ItemSell />} />
         <Route path={`${routes.sellCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterSell />} />

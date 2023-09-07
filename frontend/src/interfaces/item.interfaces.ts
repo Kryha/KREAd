@@ -31,7 +31,7 @@ export interface Item {
   projectDescription: string;
   details: Details;
   activity?: ActivityEvent[];
-  isEquipped?: boolean;
+  equippedTo?: string;
   forSale?: boolean;
 }
 

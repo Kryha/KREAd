@@ -1,22 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import { text } from "../../assets";
-import { ErrorView, FadeInOut, LoadingPage, NotificationDetail, Overlay, OverviewEmpty } from "../../components";
-import { NotificationWrapper } from "../../components/notification-detail/styles";
-import { PageContainer } from "../../components/page-container";
-import { CharactersList } from "../../containers/characters-list";
-import { CharacterDetailSection } from "../../containers/detail-section";
-import { useUserStateDispatch } from "../../context/user";
+import { OverviewEmpty } from "../../components";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
-import { EmptyDetail } from "./empty-item-inventory";
-import { DetailWrapper } from "./styles";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
 import { ASSET_TYPE, SECTION } from "../../constants";
-import { AssetCards } from "../../components/asset-cards/asset-cards";
-import { AssetDetails } from "../../components/asset-details/asset-details";
 import { OverviewContainer } from "../shop/styles";
+import { CharacterDetailsInventory } from "../../components/asset-details/character-details-inventory";
+import { CharacterCardsInventory } from "../../components/asset-cards/character-cards-inventory";
 
 interface Props {
   pageSelector: React.ReactNode;
@@ -92,20 +83,13 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
         setSelectedSorting={setSelectedSorting}
         setSelectedCategories={setSelectedCategories}
       />
-      <AssetDetails
-        assetType={ASSET_TYPE.CHARACTER}
-        section={SECTION.INVENTORY}
-        assetData={character}
-        assetId={selectedId}
-        setAssetId={setSelectedId}
-      />
+      { selectedId && <CharacterDetailsInventory character={character} />
+      }
       {characters.length > 0 ? (
-        <AssetCards
-          assetType={ASSET_TYPE.CHARACTER}
-          section={SECTION.INVENTORY}
-          assetsData={characters}
+        <CharacterCardsInventory
+          characters={characters}
           isLoading={isLoading}
-          setAssetId={setSelectedId}
+          selectCharacter={(id: string) => setSelectedId(id)}
         />
       ) : (
         <OverviewContainer>

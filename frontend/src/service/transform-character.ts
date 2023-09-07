@@ -12,7 +12,7 @@ export const extendCharacters = async (
   const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
     characters.map(async (character) => {
       const result = await fetchFromVStorage(marshaller, `data/published.kread.inventory-${character.name}`);
-      const frontendEquippedItems: Item[] = result.map((copyBag: [Item, bigint]) => ({ ...copyBag[0], isEquipped: true, forSale: false }));
+      const frontendEquippedItems: Item[] = result.map((copyBag: [Item, bigint]) => ({ ...copyBag[0], equippedTo: character.name, forSale: false }));
       equippedCharacterItems.push(...frontendEquippedItems);
       const equipped: { [key: string]: Item | undefined } = {};
       itemCategories.forEach((category) => {

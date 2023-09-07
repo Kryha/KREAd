@@ -1,13 +1,13 @@
 import { FC, ReactNode, useState } from "react";
 import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
-import { useCharactersMarket, useGetCharacterInShopById, useGetCharactersInShop } from "../../service";
+import { useGetCharacterInShopById, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
-import { AssetDetails } from "../../components/asset-details/asset-details";
-import { AssetCards } from "../../components/asset-cards/asset-cards";
 import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";
 import { text } from "../../assets";
+import { CharacterDetailsMarket } from "../../components/asset-details/character-details-market";
+import { CharacterCardsMarket } from "../../components/asset-cards/character-cards-market";
 
 interface Props {
   pageSelector: ReactNode;
@@ -42,20 +42,17 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
         setSelectedCategories={setSelectedCategories}
         setSelectedPrice={setSelectedPrice}
       />
-      <AssetDetails
-        assetType={ASSET_TYPE.CHARACTER}
-        section={SECTION.SHOP}
-        assetData={character}
-        assetId={selectedId}
-        setAssetId={setSelectedId}
-      />
+      { selectedId && 
+        <CharacterDetailsMarket
+          characterInMarket={character}
+          selectCharacter={(id: string) => setSelectedId(id)}
+        />
+      }
       {characters.length > 0 ? (
-        <AssetCards
-          assetType={ASSET_TYPE.CHARACTER}
-          section={SECTION.SHOP}
-          assetsData={characters}
+        <CharacterCardsMarket
+          charactersInMarket={characters}
           isLoading={isLoading}
-          setAssetId={setSelectedId}
+          selectCharacterId={(id: string)=>setSelectedId(id)}
         />
       ) : (
         <OverviewContainer>

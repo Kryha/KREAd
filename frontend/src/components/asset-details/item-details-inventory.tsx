@@ -13,13 +13,13 @@ import { ErrorView } from "../error-view";
 import { SECTION } from "../../constants";
 import { Item, ItemCategory } from "../../interfaces";
 
-interface AssetDetailsInventoryProps {
+interface ItemDetailsInventoryProps {
   section: (typeof SECTION)[keyof typeof SECTION];
   item: Item;
   selectedItem: { name: string; category: ItemCategory | undefined };
   selectItem: (name: string, category: ItemCategory | undefined) => void;
 }
-export const AssetDetailsInventory: FC<AssetDetailsInventoryProps> = ({ section, item, selectedItem, selectItem }) => {
+export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ section, item, selectedItem, selectItem }) => {
   const navigate = useNavigate();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -45,17 +45,13 @@ export const AssetDetailsInventory: FC<AssetDetailsInventoryProps> = ({ section,
   };
 
   const assetDetailActions = () => {
-    if (item.isEquipped) {
+    if (item.equippedTo) {
       return { primary: { text: text.item.unequip, onClick: unequipAsset } };
     } else if (item.forSale) {
       return { primary: { text: text.item.equip, onClick: equipAsset }, secondary: { text: text.item.sell, onClick: sellAsset } };
     }
   };
 
-  let transformedData;
-  if (section === "inventory") {
-    transformedData = item;
-  }
 
   return (
     <>
@@ -63,7 +59,7 @@ export const AssetDetailsInventory: FC<AssetDetailsInventoryProps> = ({ section,
         {!!selectedItem && (
           <DetailContainer>
             <ItemDetailSection
-              item={transformedData}
+              item={item}
               actions={{
                 onClose: () => {
                   selectItem("", undefined);

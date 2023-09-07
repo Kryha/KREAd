@@ -49,6 +49,7 @@ export interface Character {
   details: Details;
   projectDescription: string;
   itemActivity: ActivityEvent[];
+  rarity?: number;
 }
 
 export interface ExtendedCharacter {

@@ -9,9 +9,9 @@ import { Buy } from "./buy";
 import { useItemMarketState } from "../../context/item-shop";
 
 export const ItemBuy = () => {
-  const { category, name } = useParams<"category" | "name">();
+  const { id } = useParams<"id">();
   const { items } = useItemMarketState();
-  const itemToBuy = items.find((marketEntry) => marketEntry.item.name === name && marketEntry.item.category === category);
+  const itemToBuy = items.find((marketEntry) => marketEntry.id === id);
   const buyItem = useBuyItem(itemToBuy!);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(true);
