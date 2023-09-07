@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
-
+import { updateCharacterMetrics, updateItemMetrics } from './market-metrics';
 import { assert, details as X } from '@agoric/assert';
-import { AmountMath, AmountShape, BrandShape } from '@agoric/ertp';
+import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
 import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
@@ -29,6 +29,7 @@ import {
   CharacterRecorderGuard,
   ItemRecorderGuard,
   MarketRecorderGuard,
+  MarketMetricsGuard,
 } from './type-guards.js';
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
@@ -50,7 +51,7 @@ import {
  *   itemMint: ZCFMint<"copyBag">
  *   paymentFTIssuerRecord: IssuerRecord<"nat">
  *   paymentFTMint: ZCFMint<"nat">
- *   chainTimerService: TimerService
+ *   clock: import('@agoric/time/src/types.js').Clock
  *   storageNode: StorageNode
  *   makeRecorderKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit
  *   storageNodePaths: Object
@@ -67,7 +68,7 @@ export const prepareKreadKit = async (
     itemMint,
     paymentFTIssuerRecord,
     paymentFTMint,
-    chainTimerService,
+    clock,
     storageNode,
     makeRecorderKit,
     storageNodePaths,
@@ -79,19 +80,28 @@ export const prepareKreadKit = async (
   const { issuer: paymentFTIssuer, brand: paymentFTBrand } =
     paymentFTIssuerRecord;
 
-  const { infoKit, characterKit, itemKit, marketCharacterKit, marketItemKit } =
-    await makeStorageNodeRecorderKits(
-      storageNode,
-      makeRecorderKit,
-      storageNodePaths,
-      {
-        info: KreadInfoGuard,
-        characterKit: CharacterRecorderGuard,
-        itemKit: ItemRecorderGuard,
-        marketCharacterKit: MarketRecorderGuard,
-        marketItemKit: MarketRecorderGuard,
-      },
-    );
+  const {
+    infoKit,
+    characterKit,
+    itemKit,
+    marketCharacterKit,
+    marketItemKit,
+    marketCharacterMetricsKit,
+    marketItemMetricsKit,
+  } = await makeStorageNodeRecorderKits(
+    storageNode,
+    makeRecorderKit,
+    storageNodePaths,
+    {
+      info: KreadInfoGuard,
+      characterKit: CharacterRecorderGuard,
+      itemKit: ItemRecorderGuard,
+      marketCharacterKit: M.arrayOf(MarketRecorderGuard),
+      marketItemKit: M.arrayOf(MarketRecorderGuard),
+      marketCharacterMetricsKit: MarketMetricsGuard,
+      marketItemMetricsKit: MarketMetricsGuard,
+    },
+  );
 
   const characterShape = makeCopyBagAmountShape(
     characterBrand,
@@ -113,24 +123,47 @@ export const prepareKreadKit = async (
     () => {
       return {
         character: harden({
-          entries: makeScalarBigMapStore('characters', { durable: true }),
+          entries: makeScalarBigMapStore('characters', {
+            durable: true,
+            keyShape: M.string(),
+            valueShape: CharacterRecorderGuard,
+          }),
         }),
         item: harden({
-          entries: makeScalarBigMapStore('items', { durable: true }),
+          entries: makeScalarBigMapStore('items', {
+            durable: true,
+            keyShape: M.number(),
+            valueShape: ItemRecorderGuard,
+          }),
         }),
         market: harden({
           characterEntries: makeScalarBigMapStore('characterMarket', {
             durable: true,
+            keyShape: M.string(),
+            valueShape: MarketRecorderGuard,
           }),
-          itemEntries: makeScalarBigMapStore('itemMarket', { durable: true }),
+          itemEntries: makeScalarBigMapStore('itemMarket', {
+            durable: true,
+            keyShape: M.number(),
+            valueShape: MarketRecorderGuard,
+          }),
         }),
-        itemsPutForSaleAmount: 0,
+        characterCollectionSize: 0,
+        characterAverageLevel: 0,
+        characterMarketplaceAverageLevel: 0,
+        characterAmountSold: 0,
+        characterLatestSalePrice: 0,
+        itemCollectionSize: 0,
+        itemAverageLevel: 0,
+        itemMarketplaceAverageLevel: 0,
+        itemAmountSold: 0,
+        itemLatestSalePrice: 0,
       };
     },
     {
       helper: {
         async getTimeStamp() {
-          return E(chainTimerService).getCurrentTimestamp();
+          return E(clock).getCurrentTimestamp();
         },
         randomNumber() {
           seed |= 0;
@@ -141,6 +174,19 @@ export const prepareKreadKit = async (
         },
       },
       character: {
+        calculateLevel(name) {
+          const character = this.state.character.entries.get(name);
+          let level = character.character.level;
+
+          const itemLevels = character.inventory
+            .getAmountAllocated('Item')
+            .value.payload.map(([value, supply]) => {
+              return value.level;
+            });
+
+          level = itemLevels.reduce((acc, value) => acc + value, level);
+          return level;
+        },
         validateInventoryState(inventoryState) {
           const itemTypes = inventoryState.map((item) => item.category);
           assert(
@@ -164,7 +210,13 @@ export const prepareKreadKit = async (
         },
         mint() {
           const handler = async (seat) => {
-            const { helper, character: characterFacet, item } = this.facets;
+            const {
+              helper,
+              character: characterFacet,
+              item,
+              market: marketFacet,
+            } = this.facets;
+
             const { character: characterState } = this.state;
 
             const { want } = seat.getProposal();
@@ -176,7 +228,6 @@ export const prepareKreadKit = async (
               seat.fail();
               return harden({ message: errors.nameTaken(newCharacterName) });
             }
-
             const currentTime = await helper.getTimeStamp();
             const [newCharacterAmount1, newCharacterAmount2] =
               makeCharacterNftObjs(
@@ -224,6 +275,15 @@ export const prepareKreadKit = async (
             characterState.entries.addAll([
               [character.name, harden(character)],
             ]);
+
+            // update metrics
+            marketFacet.updateMetrics('character', {
+              collectionSize: true,
+              averageLevel: {
+                type: 'add',
+                value: character.character.level,
+              },
+            });
 
             characterKit.recorder.write(character);
 
@@ -632,7 +692,7 @@ export const prepareKreadKit = async (
         // FIXME: change how this works with copy bag
         // define a limit of items to be able to be minted so we can generat a supply
         async mintDefaultBatch(seat) {
-          const { helper } = this.facets;
+          const { helper, market: marketFacet } = this.facets;
           const { item: itemState } = this.state;
 
           const items = Object.values(defaultItems);
@@ -665,13 +725,21 @@ export const prepareKreadKit = async (
             itemKit.recorder.write(item);
 
             id += 1;
+            // update metrics
+            marketFacet.updateMetrics('item', {
+              collectionSize: true,
+              averageLevel: {
+                type: 'add',
+                value: item.item.level,
+              },
+            });
           });
 
           return text.mintItemReturn;
         },
         mint() {
           const handler = async (seat) => {
-            const { helper } = this.facets;
+            const { helper, market: marketFacet } = this.facets;
             const { item: itemState } = this.state;
 
             const { want } = seat.getProposal();
@@ -711,6 +779,14 @@ export const prepareKreadKit = async (
               itemKit.recorder.write(item);
 
               id += 1;
+              // update metrics
+              marketFacet.updateMetrics('item', {
+                collectionSize: true,
+                averageLevel: {
+                  type: 'add',
+                  value: item.item.level,
+                },
+              });
             });
 
             return text.mintItemReturn;
@@ -730,10 +806,21 @@ export const prepareKreadKit = async (
       },
       // TODO: figure out a way to handle the sell and buy more agnostic from the type of the amount
       market: {
+        updateMetrics(collection, updateMetrics) {
+          if (collection === 'character') {
+            updateCharacterMetrics(
+              this.state,
+              updateMetrics,
+              marketCharacterMetricsKit,
+            );
+          } else if (collection === 'item') {
+            updateItemMetrics(this.state, updateMetrics, marketItemMetricsKit);
+          }
+        },
         sellItem() {
           const handler = (seat) => {
             const { market } = this.state;
-
+            const { market: marketFacet } = this.facets;
             // Inspect allocation of Character keyword in seller seat
             const objectInSellSeat = seat.getAmountAllocated('Item');
             const { want } = seat.getProposal();
@@ -750,6 +837,14 @@ export const prepareKreadKit = async (
               id: this.state.itemsPutForSaleAmount,
               object,
             };
+
+            // update metrics
+            marketFacet.updateMetrics('item', {
+              marketplaceAverageLevel: {
+                type: 'add',
+                value: object.level,
+              },
+            });
 
             market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
@@ -780,6 +875,8 @@ export const prepareKreadKit = async (
         sellCharacter() {
           const handler = (seat) => {
             const { market } = this.state;
+            const { character: characterFacet, market: marketFacet } =
+              this.facets;
 
             // Inspect allocation of Character keyword in seller seat
             const objectInSellSeat = seat.getAmountAllocated('Character');
@@ -797,6 +894,15 @@ export const prepareKreadKit = async (
               id: object.name,
               object,
             };
+
+            // update metrics
+            const characterLevel = characterFacet.calculateLevel(object.name);
+            marketFacet.updateMetrics('character', {
+              marketplaceAverageLevel: {
+                type: 'add',
+                value: characterLevel,
+              },
+            });
 
             market.characterEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
@@ -824,6 +930,7 @@ export const prepareKreadKit = async (
         },
         buyItem() {
           const handler = (buyerSeat, offerArgs) => {
+            const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
             // Inspect Character keyword in buyer seat
@@ -875,7 +982,18 @@ export const prepareKreadKit = async (
 
             buyerSeat.exit();
             sellerSeat.exit();
-            market.itemEntries.delete(offerArgs.entryId);
+
+            // update metrics
+            marketFacet.updateMetrics('item', {
+              amountSold: true,
+              marketplaceAverageLevel: {
+                type: 'remove',
+                value: sellRecord.object.level,
+              },
+              latestSalePrice: Number(itemForSalePrice.value),
+            });
+
+            market.itemEntries.delete(item.id);
 
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
@@ -900,6 +1018,8 @@ export const prepareKreadKit = async (
         },
         buyCharacter() {
           const handler = (buyerSeat) => {
+            const { market: marketFacet, character: characterFacet } =
+              this.facets;
             const { market, character: characterState } = this.state;
 
             // Inspect Character keyword in buyer seat
@@ -960,6 +1080,19 @@ export const prepareKreadKit = async (
             buyerSeat.exit();
             sellerSeat.exit();
 
+            // update metrics
+            const characterLevel = characterFacet.calculateLevel(
+              sellRecord.object.name,
+            );
+            marketFacet.updateMetrics('character', {
+              amountSold: true,
+              marketplaceAverageLevel: {
+                type: 'remove',
+                value: characterLevel,
+              },
+              latestSalePrice: Number(characterForSalePrice.value),
+            });
+
             // Remove entry from store array
             market.characterEntries.delete(character.name);
 
@@ -985,6 +1118,7 @@ export const prepareKreadKit = async (
             }),
           );
         },
+
         freeTokens() {
           const handler = (seat) => {
             const { want } = seat.getProposal();
@@ -1018,6 +1152,21 @@ export const prepareKreadKit = async (
         makeMintItemInvitation() {
           const { item } = this.facets;
           return item.mint();
+        },
+        initializeMetrics() {
+          marketCharacterMetricsKit.recorder.write({
+            collectionSize: this.state.characterCollectionSize,
+            averageLevel: this.state.characterAverageLevel,
+            marketplaceAverageLevel:
+              this.state.characterMarketplaceAverageLevel,
+            amountSold: this.state.characterAmountSold,
+          });
+          marketItemMetricsKit.recorder.write({
+            collectionSize: this.state.itemCollectionSize,
+            averageLevel: this.state.itemAverageLevel,
+            marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
+            amountSold: this.state.itemAmountSold,
+          });
         },
       },
       // Public is currently a wrapper around the other created facets and fetches from the state
@@ -1104,6 +1253,29 @@ export const prepareKreadKit = async (
         makeTokenFacetInvitation() {
           const { market } = this.facets;
           return market.freeTokens();
+        },
+        getMarketMetrics() {
+          return {
+            character: {
+              collectionSize: this.state.characterCollectionSize,
+              averageLevel: this.state.characterAverageLevel,
+              marketplaceAverageLevel:
+                this.state.characterMarketplaceAverageLevel,
+              amountSold: this.state.characterAmountSold,
+              latestSalePrice: this.state.characterLatestSalePrice,
+            },
+            item: {
+              collectionSize: this.state.itemCollectionSize,
+              averageLevel: this.state.itemAverageLevel,
+              marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
+              amountSold: this.state.itemAmountSold,
+              latestSalePrice: this.state.itemLatestSalePrice,
+            },
+          };
+        },
+        getCharacterLevel(name) {
+          const { character } = this.facets;
+          return character.calculateLevel(name);
         },
       },
     },

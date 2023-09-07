@@ -1,52 +1,46 @@
 # Baseball Card Store Dapp
 
-TL;DR:
+# KREAd deploy steps
+To succesfully run the below steps making use of the makefile, it is important to have a local file `Makefile.paths.local` filled in with the required paths and addresses, an example can be found in `Makefile.paths`.
 
-The Baseball Card Store Dapp sells baseball cards as NFT tokens in
-exchange for money.
 
-Install the
-[prerequisites](https://agoric.com/documentation/getting-started/before-using-agoric.html).
-
-Then in a first terminal in the directory where you want to put your dapp, install the dapp:
-
+Steps to run:
+ ensure you are in the agoric folder otherwise cd to agoric folder
 ```sh
-agoric init --dapp-template dapp-card-store my-card-store
-cd my-card-store
+cd agoric
+```
+
+run agoric install
+```sh
 agoric install
-# If the Agoric platform has not been started
-agoric start --reset --verbose
 ```
 
-In a second terminal, enter `agoric open` in a terminal window to open a wallet.
-
-When the UI changes from gray to white (be patient), transfer some
-funds from the **Agoric IST currency** purse to the **Zoe fees**
-purse.
-
+run chain from:
 ```sh
-agoric deploy contract/deploy.js api/deploy.js
+make local-testnet
 ```
 
-In a third terminal,
-
+run client for chain:
 ```sh
-# Navigate to the `ui` directory and start a local server
-cd ui && yarn start
+make client-local-testnet
 ```
 
-## Using the Dapp
+create kread-bundle and publish it to chain (this step requires the `client-local-testnet` otherwise it has no address to bundle and publish from):
+```sh
+make kread-bundle
+```
 
-1. `yarn start` will open a page at http://127.0.0.1:3001.
-2. A window for your wallet should open.
-3. Under "Dapps" in the wallet, enable the CardStore Dapp.
-4. Now you should be able to click on a card to make an offer to buy
-   it.
-5. Approve the offer in your wallet
-6. View the card in your wallet.
+Copy the bundle id returned from the previous step into `chain-storage-proposal.js` (located it `agoric/contract/src/proposal`) it's on line 346, `b1-YOUR_NEW_STRING`
 
-![Card Store](./readme-assets/card-store.png)
+create and vote on proposal
+```sh
+make proposal
+```
 
-To learn more about how to build Agoric Dapps, please see the [Dapp Guide](https://agoric.com/documentation/dapps/).
+The proposal logs some board_id information to chain-logs which can be used to verify it ran correctly.
 
-See the [Dapp Deployment Guide](https://github.com/Agoric/agoric-sdk/wiki/Dapp-Deployment-Guide) for how to deploy this Dapp on a public website, such as https://cardstore.testnet.agoric.com/
+Vstorage should contain the following after startup:
+- kread bundle in bundles
+- kread instance in agoricNames/instances
+- KREAdCHARACTER and KREAdITEM brands in agoricNames/brands
+- kread storage path with kread-info populated with boardIds

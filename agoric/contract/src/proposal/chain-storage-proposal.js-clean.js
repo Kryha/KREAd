@@ -390,10 +390,12 @@ const executeProposal = async (powers) => {
   const marshaller = await E(board).getReadonlyMarshaller();
   const kreadPowers = { storageNode, marshaller };
   const settledTimer = await chainTimerService;
+  const clock = await E(settledTimer).getClock();
+
   const kreadConfig = harden({
     defaultCharacters,
     defaultItems,
-    chainTimerService,
+    clock,
     seed: 303,
   });
   const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
@@ -455,6 +457,7 @@ const executeProposal = async (powers) => {
     TOKEN_BRAND_BOARD_ID,
     TOKEN_ISSUER_BOARD_ID,
   );
+
   // Log board ids for use in frontend constants
   console.log(`KREAD BOARD ID: ${boardId}`);
   for (const [key, value] of Object.entries(assetBoardIds)) {
@@ -462,7 +465,7 @@ const executeProposal = async (powers) => {
     console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
   }
 
-  //Share instance widely via E(agoricNames).lookup('instance', <instance name>)
+  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(instance);
 
   const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
