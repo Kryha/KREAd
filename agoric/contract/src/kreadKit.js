@@ -158,6 +158,7 @@ export const prepareKreadKit = async (
         itemMarketplaceAverageLevel: 0,
         itemAmountSold: 0,
         itemLatestSalePrice: 0,
+        itemsPutForSaleAmount: 0,
       };
     },
     {
@@ -993,7 +994,7 @@ export const prepareKreadKit = async (
               latestSalePrice: Number(itemForSalePrice.value),
             });
 
-            market.itemEntries.delete(item.id);
+            market.itemEntries.delete(offerArgs.entryId);
 
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
