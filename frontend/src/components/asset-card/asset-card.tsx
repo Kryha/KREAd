@@ -17,16 +17,18 @@ import {
 import { text } from "../../assets";
 import { color } from "../../design";
 import { PriceInIst } from "../price-in-ist";
-import { AssetData } from "../asset-cards/asset-cards";
-import { SECTION } from "../../constants";
+import { ASSET_TYPE, SECTION } from "../../constants";
+import { AssetData } from "../asset-cards/asset-transformer";
+import { BaseCharacter } from "../base-character";
 
 interface Props {
+  assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
+  section: (typeof SECTION)[keyof typeof SECTION];
   data: AssetData;
   onClick?: (assetId: string) => void;
   imageProps?: ImageProps;
-  section: (typeof SECTION)[keyof typeof SECTION];
 }
-export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
+export const AssetCard: FC<Props> = ({ assetType, section, data, onClick }) => {
   const handleClick = () => {
     onClick && onClick(data.id);
   };
@@ -36,8 +38,12 @@ export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
+        {data.image && assetType === ASSET_TYPE.CHARACTER && (
+          <BaseCharacter characterImage={data.image} items={data.equippedItems} isZoomed={false} size="medium" />
+        )}
         <AssetImageContainer>
-          {data.image ? <AssetImage src={data.image} category={data.category} /> : <NoAssetImage />}
+          {data.image && assetType === ASSET_TYPE.ITEM && <AssetImage src={data.image} category={data.category} />}
+          {!data.image && <NoAssetImage />}
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
@@ -49,8 +55,12 @@ export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
               <>
                 <AssetTag>
                   <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                  {data.rarity && (
+                    <>
+                      <Dash />
+                      <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                    </>
+                  )}
                 </AssetTag>
                 {data.isEquipped && <BoldLabel customColor={color.black}>{text.general.equipped}</BoldLabel>}
                 {data.isForSale && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>}
@@ -60,8 +70,12 @@ export const AssetCard: FC<Props> = ({ data, onClick, section }) => {
               <>
                 <AssetTag>
                   <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                  {data.rarity && (
+                    <>
+                      <Dash />
+                      <BoldLabel customColor={color.black}>{text.param.rarity(data.rarity)}</BoldLabel>
+                    </>
+                  )}
                 </AssetTag>
                 <AssetTagPrice>{<PriceInIst price={Number(data.price)} />}</AssetTagPrice>
               </>

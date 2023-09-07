@@ -4,11 +4,11 @@ import { routes } from "../../navigation";
 import { useGetItemInInventoryByNameAndCategory, useGetItemsInInventory } from "../../service";
 import { text } from "../../assets";
 import { OverviewContainer } from "../shop/styles";
-import { AssetCards } from "../../components/asset-cards/asset-cards";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
-import { SECTION } from "../../constants";
 import { ItemCategory } from "../../interfaces";
-import { AssetDetailsInventory } from "../../components/asset-details/asset-details-inventory";
+import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
+import { ASSET_TYPE, SECTION } from "../../constants";
+import { ItemCardsInventory } from "../../components/asset-cards/item-cards-inventory";
 
 interface Props {
   pageSelector: React.ReactNode;
@@ -30,6 +30,7 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
     sort: selectedSorting,
     color: selectedColor,
   });
+
   const [item] = useGetItemInInventoryByNameAndCategory(selectedName, selectedCategory);
 
   if (isLoading) return <LoadingPage />;
@@ -37,8 +38,9 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <AssetFilters
-        pageSelector={pageSelector}
+        assetType={ASSET_TYPE.ITEM}
         section={SECTION.INVENTORY}
+        pageSelector={pageSelector}
         assets={items}
         selectedCategories={selectedCategories}
         selectedSorting={selectedSorting}
@@ -46,9 +48,14 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
         setSelectedCategories={setSelectedCategories}
         setSelectedColor={setSelectedColor}
       />
-      <AssetCards section={SECTION.INVENTORY} assetsData={items} isLoading={isLoading} selectItem={selectItem} />
+      <ItemCardsInventory
+        items={items}
+        isLoading={isLoading}
+        selectItem={selectItem}
+        selectedItem={{ name: selectedName, category: selectedCategory }}
+      />
       {item && (
-        <AssetDetailsInventory
+        <ItemDetailsInventory
           section={SECTION.INVENTORY}
           item={item}
           selectedItem={{ name: selectedName, category: selectedCategory }}

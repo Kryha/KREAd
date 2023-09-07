@@ -73,6 +73,11 @@ export const SECTION = {
 
 export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"] as const;
 
+export const ASSET_TYPE = {
+  CHARACTER: "character",
+  ITEM: "item",
+};
+
 export const AGORIC_LINK = "https://agoric.com/" as const;
 export const KRYHA_LINK = "https://kryha.io/" as const;
 

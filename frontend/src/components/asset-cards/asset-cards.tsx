@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
-import { ASSETS_PER_PAGE, SECTION } from "../../constants";
+import { ASSETS_PER_PAGE, ASSET_TYPE, SECTION } from "../../constants";
 import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more";
 import { AssetsContainer, AssetsWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
 import { AssetCard } from "../asset-card";
 import { ItemCategory } from "../../interfaces";
+import { assetTransformer } from "./asset-transformer";
 
 export interface AssetData {
   id: string;
@@ -20,50 +21,31 @@ export interface AssetData {
 }
 
 interface Props {
+  assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
+  section: (typeof SECTION)[keyof typeof SECTION];
   assetsData: any[];
   isLoading: boolean;
   selectItem: (name: string, category: ItemCategory) => void;
-  section: (typeof SECTION)[keyof typeof SECTION];
 }
 
-export const AssetCards: FC<Props> = ({ assetsData, isLoading, selectItem, section }) => {
+export const AssetCards: FC<Props> = ({ assetsData, isLoading, selectItem, section, assetType }) => {
   const { height } = useViewport();
-  const [visibleAssets, setVisibleAssets] = useState(ASSETS_PER_PAGE);
+  const [visibleAssets, setVisibleAssets] = useState<number>(ASSETS_PER_PAGE);
   const loadMoreAssets = () => {
     setVisibleAssets((prevVisibleAssets) => prevVisibleAssets + ASSETS_PER_PAGE);
   };
+  console.log({ assetsData });
 
   // Transform and structure data based on section
-  const transformedData: any[] = assetsData
+  const transformedData = assetsData
     .map((asset) => {
-      switch (section) {
-        case SECTION.INVENTORY:
-          return {
-            id: asset.id,
-            image: asset.thumbnail,
-            name: asset.name,
-            category: asset.category,
-            level: asset.level,
-            rarity: asset.rarity,
-            isEquipped: asset.isEquipped,
-            isForSale: asset.isForSale,
-          };
-        case SECTION.SHOP:
-          return {
-            id: asset.id,
-            image: asset.item.thumbnail,
-            name: asset.item.name,
-            category: asset.item.category,
-            level: asset.item.level,
-            rarity: asset.item.rarity,
-            price: asset.sell.price,
-          };
-        default:
-          return undefined;
-      }
+      const transform = assetTransformer[assetType]?.[section];
+      // return transform && transform(asset.nft || asset.character || asset.item);
+      return transform && transform(asset);
     })
     .filter((asset) => asset !== undefined);
 
+  console.log({ transformedData });
   if (isLoading) return <LoadingPage spinner={false} />;
   return (
     <AssetsWrapper height={height}>
@@ -75,6 +57,7 @@ export const AssetCards: FC<Props> = ({ assetsData, isLoading, selectItem, secti
               data={asset}
               onClick={() => selectItem(asset.name, asset.category)}
               section={section}
+              assetType={ASSET_TYPE.ITEM}
             />
           ))}
           {visibleAssets < transformedData.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}

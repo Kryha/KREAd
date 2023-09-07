@@ -1,110 +1,73 @@
 import { FC, ReactNode, useState } from "react";
-
+import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { useCharactersMarket, useGetCharacterInShopById, useGetCharactersInShop } from "../../service";
+import { routes } from "../../navigation";
+import { AssetFilters } from "../../components/asset-filters/asset-filters";
+import { AssetDetails } from "../../components/asset-details/asset-details";
+import { AssetCards } from "../../components/asset-cards/asset-cards";
+import { OverviewContainer } from "./styles";
+import { OverviewEmpty } from "../../components";
 import { text } from "../../assets";
-import {
-  Filters,
-  HorizontalDivider,
-  Label,
-  LoadingPage,
-  Overlay,
-  PriceSelector,
-  Select,
-  ButtonText,
-  FadeInOut,
-  NotificationDetail,
-} from "../../components";
-import { MAX_PRICE, MIN_PRICE } from "../../constants";
-import { color } from "../../design";
-import { characterCategories, sortAssetsInShop } from "../../assets/text/filter-options";
-import { FilterContainer, FilterWrapper, NotificationContainer, SelectorContainer, SortByContainer } from "./styles";
-import { useCharactersMarket } from "../../service";
-import { NotificationWrapper } from "../../components/notification-detail/styles";
-import { CharactersShopDetail } from "./character-shop-detail";
 
 interface Props {
   pageSelector: ReactNode;
 }
 
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
-  const [filterId, setFilterId] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
-  const [showToast, setShowToast] = useState(false);
-  const [page, setPage] = useState(1);
 
-  const [characters, isLoading] = useCharactersMarket({
-    category: selectedCategory,
-    sorting: selectedSorting,
+  const [characters, isLoading] = useGetCharactersInShop({
+    categories: selectedCategories,
+    sort: selectedSorting,
     price: selectedPrice,
   });
 
-  const handlePriceChange = (min: number, max: number) => {
-    setSelectedPrice({ min: min, max: max });
-  };
+  const [character] = useGetCharacterInShopById(selectedId);
+  // if (!character) return <h1>No character found?!</h1>;
 
-  const openFilter = (id: string) => {
-    setFilterId(id !== filterId ? id : "");
-  };
-
-  // FIXME:  still needed?
-  const loadMore = () => {
-    setPage((prevState) => prevState + 1);
-  };
-
-  // TODO: split into more readable components
   return (
     <>
-      <FilterWrapper>
-        <FilterContainer>
-          <SelectorContainer>
-            {pageSelector}
-            <Filters label={selectedCategory || text.filters.category} openFilter={openFilter} id={filterId} hasValue={!!selectedCategory}>
-              <Select label={text.filters.allCategories} handleChange={setSelectedCategory} options={characterCategories} />
-            </Filters>
-            {/* TODO: get actual min and max values */}
-            <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-              <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />
-            </Filters>
-          </SelectorContainer>
-          <SortByContainer>
-            <Label customColor={color.black}>{text.filters.sortBy}</Label>
-            <Filters label={selectedSorting || text.filters.latest} openFilter={openFilter} id={filterId} hasValue={!!selectedSorting}>
-              <Select label={text.filters.latest} handleChange={setSelectedSorting} options={sortAssetsInShop} />
-            </Filters>
-          </SortByContainer>
-        </FilterContainer>
-        <ButtonText customColor={color.darkGrey}>{text.param.amountOfCharacters(!characters ? 0 : characters.length)}</ButtonText>
-        <HorizontalDivider />
-      </FilterWrapper>
-      {isLoading ? (
-        <LoadingPage spinner={false} />
-      ) : (
-        <CharactersShopDetail
-          characters={characters}
-          totalPages={1} // TODO: limit the notifier to the latest n characters/items and then have a getter for fetching by page thereafter
+      <AssetFilters
+        assetType={ASSET_TYPE.CHARACTER}
+        section={SECTION.SHOP}
+        pageSelector={pageSelector}
+        assets={characters}
+        selectedCategories={selectedCategories}
+        selectedSorting={selectedSorting}
+        selectedPrice={selectedPrice}
+        setSelectedSorting={setSelectedSorting}
+        setSelectedCategories={setSelectedCategories}
+        setSelectedPrice={setSelectedPrice}
+      />
+      <AssetDetails
+        assetType={ASSET_TYPE.CHARACTER}
+        section={SECTION.SHOP}
+        assetData={character}
+        assetId={selectedId}
+        setAssetId={setSelectedId}
+      />
+      {characters.length > 0 ? (
+        <AssetCards
+          assetType={ASSET_TYPE.CHARACTER}
+          section={SECTION.SHOP}
+          assetsData={characters}
           isLoading={isLoading}
-          selectedCategory={selectedCategory}
-          selectedSorting={selectedSorting}
-          selectedPrice={selectedPrice}
-          setShowToast={setShowToast}
-          page={page}
-          loadMore={loadMore}
+          setAssetId={setSelectedId}
         />
+      ) : (
+        <OverviewContainer>
+          <OverviewEmpty
+            headingText={text.store.thereAreNoCharactersInTheShop}
+            descriptionText={text.store.thereAreNoCharactersAvailable}
+            buttonText={text.navigation.goHome}
+            redirectRoute={routes.character}
+            secondary
+          />
+        </OverviewContainer>
       )}
-      <FadeInOut show={showToast} exiting={!showToast}>
-        {showToast && <Overlay isOnTop={true} />}
-        <NotificationContainer>
-          <NotificationWrapper showNotification={showToast}>
-            <NotificationDetail
-              title={text.general.goToYourWallet}
-              info={text.general.yourActionIsPending}
-              closeToast={() => setShowToast(false)}
-              isError
-            />
-          </NotificationWrapper>
-        </NotificationContainer>
-      </FadeInOut>
     </>
   );
 };
