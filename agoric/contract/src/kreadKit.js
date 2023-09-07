@@ -1198,12 +1198,11 @@ export const prepareKreadKit = async (
         reviveMarketExitSubscribers() {
           const { market } = this.state;
           const { market: marketFacet } = this.facets;
-          const characters = Array.from(
-            market.characterEntries.entries.values(),
-          );
+
+          const characters = Array.from(market.characterEntries.values());
           characters.forEach((entry) => marketFacet.handleExitCharacter(entry));
 
-          const items = Array.from(market.itemEntries.entries.values());
+          const items = Array.from(market.itemEntries.values());
           items.forEach((entry) => marketFacet.handleExitItem(entry));
         },
       },
@@ -1293,23 +1292,6 @@ export const prepareKreadKit = async (
           return market.freeTokens();
         },
         getMarketMetrics() {
-          console.log({
-            character: {
-              collectionSize: this.state.characterCollectionSize,
-              averageLevel: this.state.characterAverageLevel,
-              marketplaceAverageLevel:
-                this.state.characterMarketplaceAverageLevel,
-              amountSold: this.state.characterAmountSold,
-              latestSalePrice: this.state.characterLatestSalePrice,
-            },
-            item: {
-              collectionSize: this.state.itemCollectionSize,
-              averageLevel: this.state.itemAverageLevel,
-              marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
-              amountSold: this.state.itemAmountSold,
-              latestSalePrice: this.state.itemLatestSalePrice,
-            },
-          });
           return {
             character: {
               collectionSize: this.state.characterCollectionSize,

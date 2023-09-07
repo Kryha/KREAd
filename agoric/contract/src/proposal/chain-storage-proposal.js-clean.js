@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-eb9ca74ef1c31f74f95ddb0ee117575faf55b854d701033d0a8e6b52af9550b4081891aa5329f88fb877de6354c2f668b5b31f185e8c2613e1b1f572f6494439',
+    'b1-498a4037fdb3e34a193040428392dafb8cff348037fdb365f0abd43537bbafa2d033185c0907b1f75517693c0ad4af8eac05aa792b7d00dcc7bcb8b4c0c31464',
 };
 
 const fail = (reason) => {
@@ -458,6 +458,18 @@ const executeProposal = async (powers) => {
     TOKEN_ISSUER_BOARD_ID,
   );
 
+  await E(creatorFacet).initializeMetrics();
+
+  // TODO: Get the most recent state of metrics from the storage node and send it to the contract
+  // const data = {};
+  // const restoreMetricsInvitation = await E(
+  //   creatorFacet,
+  // ).makeRestoreMetricsInvitation();
+  // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
+
+  // Revive seat exit subscribers after upgrade
+  await E(creatorFacet).reviveMarketExitSubscribers();
+
   // Log board ids for use in frontend constants
   console.log(`KREAD BOARD ID: ${boardId}`);
   for (const [key, value] of Object.entries(assetBoardIds)) {
@@ -485,4 +497,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/wietzes/Documents/cosmos/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
