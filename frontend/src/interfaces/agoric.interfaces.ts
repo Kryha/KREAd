@@ -137,6 +137,11 @@ interface SetTestCharacter {
   payload: any;
 }
 
+interface SetMarketplaceMetricsWatcher {
+  type: "SET_MARKETPLACE_METRICS_WATCHER";
+  payload: any;
+}
+
 interface Reset {
   type: "RESET";
 }
@@ -159,6 +164,7 @@ export type AgoricStateActions =
   | SetWalletConnection
   | SetChainStorageWatcher
   | SetTestCharacter
+  | SetMarketplaceMetricsWatcher
   | SetOffers;
 
 export interface OfferProposal {

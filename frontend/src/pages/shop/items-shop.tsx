@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 import { useGetItemInShopById, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
@@ -8,6 +8,7 @@ import { AssetCards } from "../../components/asset-cards/asset-cards";
 import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";
 import { text } from "../../assets";
+import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 
 interface Props {
   pageSelector: ReactNode;
@@ -29,8 +30,12 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
 
   const [item] = useGetItemInShopById(selectedId);
 
+  const metricsLabels = ["Sales", "Collection size", "Floor price", "Avg. item price", "Avg. item rarity"];
+  const metricsValues = ["1.048", "460", "IST 0.14", "IST 0.14", "7"];
+
   return (
     <>
+      <MarketplaceMetrics header={metricsLabels} data={metricsValues} />
       <AssetFilters
         pageSelector={pageSelector}
         section={SECTION.SHOP}

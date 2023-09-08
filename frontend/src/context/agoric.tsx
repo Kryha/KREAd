@@ -7,6 +7,7 @@ import { useDataMode } from "../hooks";
 import { fetchChainInfo } from "./util";
 import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
 import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
+import { watchMarketplaceMetrics } from "../service/storage-node/watch-general";
 
 const initialState: AgoricState = {
   status: {
@@ -111,6 +112,9 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
       return { ...state, walletConnection: action.payload };
 
     case "SET_CHAIN_STORAGE_WATCHER":
+      return { ...state, chainStorageWatcher: action.payload };
+
+    case "SET_MARKETPLACE_METRICS_WATCHER":
       return { ...state, chainStorageWatcher: action.payload };
 
     case "RESET":
@@ -223,6 +227,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         connectKeplr();
         fetchInstance();
         fetchTokenInfo();
+        watchMarketplaceMetrics(chainStorageWatcher, dispatch)
       } catch (e) {
         if (isCancelled) return;
         console.error(e);

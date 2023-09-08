@@ -95,3 +95,25 @@ export const watchKreadInstance = (chainStorageWatcher: any, agoricDispatch: Ago
     },
   );
 };
+
+
+export const watchMarketplaceMetrics = (chainStorageWatcher: any, agoricDispatch: AgoricDispatch) => {
+  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+  const path = "published.agoricNames.instance";
+
+  chainStorageWatcher.watchLatest(
+    [Kind.Data, path],
+    (value: any) => {
+      console.debug("got update", path, value);
+      if (!value) {
+        console.warn(`${path} returned undefined`);
+        return;
+      }
+      const metrics = value.filter((i) => i[0] === "kread");
+      agoricDispatch({ type: "SET_MARKETPLACE_METRICS_WATCHER", payload: {} });
+    },
+    (log) => {
+      console.error("Error watching vbank assets", log);
+    },
+  );
+};
