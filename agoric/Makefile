@@ -81,10 +81,10 @@ proposal-2:
 # before running make proposal
 bootstrap:
 	make provision-account; \
-  make fund-account; \
+    make fund-account; \
 	make kread-bundle; \
 	make proposal; \
 
-account+bundle:
+fund+provision:
 	make provision-account; \
-  make fund-account; \
+    make fund-account; \
