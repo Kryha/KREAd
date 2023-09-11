@@ -1032,7 +1032,7 @@ export const prepareKreadKit = async (
             zcf.atomicRearrange(harden(transfers));
 
             buyerSeat.exit();
-            await sellerSeat.exit();
+            sellerSeat.exit();
 
             // update metrics
             marketFacet.updateMetrics('item', {
