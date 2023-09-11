@@ -1,5 +1,5 @@
 import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { CharacterEquip, CharacterInMarket, Item, ItemInMarket } from "../interfaces";
+import { CharacterEquip, CharacterInMarket, Item, ItemCategory, ItemInMarket } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ export interface OfferFilters {
 }
 
 export interface ItemFilters {
-  categories: string[];
+  categories: ItemCategory[];
   sort: string;
   color: string;
   price?: { min: number; max: number };

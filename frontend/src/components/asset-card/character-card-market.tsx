@@ -33,9 +33,7 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
-        {character.image && (
-          <BaseCharacter characterImage={character.image} items={characterInMarket.equippedItems} isZoomed={false} size="medium" />
-        )}
+        <BaseCharacter characterImage={character.image} items={characterInMarket.equippedItems} isZoomed={false} size="medium" />
         <AssetImageContainer>
           {character.image && <AssetImage src={character.image} />}
           {!character.image && <NoAssetImage />}
@@ -43,7 +41,6 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
         <AssetInfoContainer>
           <AssetTitleWrapper>
             <AssetTitleText>{character.name}</AssetTitleText>
-            {/* <BoldLabel>{text.param.categories[character.category]}</BoldLabel> */}
           </AssetTitleWrapper>
           <AssetFooter>
             <AssetTag>

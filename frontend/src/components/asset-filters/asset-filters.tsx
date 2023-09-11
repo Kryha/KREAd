@@ -16,12 +16,13 @@ import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
 import { AssetFilterContainer, AssetFilterCount, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
 import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { ItemCategory } from "../../interfaces";
 
 interface Props {
   assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
   section: (typeof SECTION)[keyof typeof SECTION];
   assets: any[];
-  selectedCategories: string[];
+  selectedCategories: ItemCategory[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
   setSelectedCategories: (value: ItemCategory[]) => void;
@@ -81,12 +82,12 @@ export const AssetFilters: FC<Props> = ({
       ? sortCharactersInInventory
       : sortCharactersInShop;
 
-  const handleCategoryChange = (selected: string | string[]) => {
-    if (Array.isArray(selected)) {
-      setSelectedCategories(selected); // Handle multi-select
-    } else {
-      setSelectedCategories([selected]); // Handle single-select
-    }
+  const handleCategoryChange = (selected: ItemCategory[]) => {
+    // if (Array.isArray(selected)) {
+    //   setSelectedCategories(selected); // Handle multi-select
+    // } else {
+      setSelectedCategories(selected); // Handle single-select
+    // }
   };
 
   const handleSortingChange = (selected: string | string[]) => {
@@ -114,7 +115,7 @@ export const AssetFilters: FC<Props> = ({
                   id={filterId}
                   hasValue={selectedCategories.length > 0}
                 >
-                  <Select label={text.filters.allCategories} handleChange={handleCategoryChange} options={categories} isMultiSelect />
+                  <Select label={text.filters.allCategories} handleChange={setSelectedCategories(selected)} options={categories} isMultiSelect />
                 </Filters>
                 {section === SECTION.SHOP && (
                   <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
