@@ -25,7 +25,8 @@ interface Props {
   selectedCategories: ItemCategory[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
-  setSelectedCategories: (value: string | string[]) => void;  setSelectedSorting: (value: string) => void;
+  setSelectedCategories: (value: string | string[]) => void;
+  setSelectedSorting: (value: string) => void;
   setSelectedColor?: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
   pageSelector: React.ReactNode;
@@ -85,7 +86,7 @@ export const AssetFilters: FC<Props> = ({
     // if (Array.isArray(selected)) {
     //   setSelectedCategories(selected); // Handle multi-select
     // } else {
-      setSelectedCategories(selected); // Handle single-select
+    setSelectedCategories(selected); // Handle single-select
     // }
   };
 
@@ -114,7 +115,12 @@ export const AssetFilters: FC<Props> = ({
                   id={filterId}
                   hasValue={selectedCategories.length > 0}
                 >
-                  <Select label={text.filters.allCategories} handleChange={setSelectedCategories(selected)} options={categories} isMultiSelect />
+                  <Select
+                    label={text.filters.allCategories}
+                    handleChange={setSelectedCategories(selected)}
+                    options={categories}
+                    isMultiSelect
+                  />
                 </Filters>
                 {section === SECTION.SHOP && (
                   <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>

@@ -40,8 +40,8 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
           <AssetFooter>
             <AssetTag>
               <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
-                <Dash />
-                <BoldLabel customColor={color.black}>{text.param.rarity(item.rarity)}</BoldLabel>
+              <Dash />
+              <BoldLabel customColor={color.black}>{text.param.rarity(item.rarity)}</BoldLabel>
             </AssetTag>
             {/* TODO: consider displaying what character the item is equipped to (item.equippedTo) */}
             {item.equippedTo && <BoldLabel customColor={color.black}>{text.general.equipped}</BoldLabel>}
