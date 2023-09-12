@@ -30,8 +30,7 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
         <AssetImageContainer>
-          {item.image && <AssetImage src={item.image} category={item.category} />}
-          {!item.image && <NoAssetImage />}
+          <AssetImage src={item.image} category={item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
@@ -41,12 +40,8 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
           <AssetFooter>
             <AssetTag>
               <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
-              {item.rarity && (
-                <>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(item.rarity)}</BoldLabel>
-                </>
-              )}
+                <Dash />
+                <BoldLabel customColor={color.black}>{text.param.rarity(item.rarity)}</BoldLabel>
             </AssetTag>
             {/* TODO: consider displaying what character the item is equipped to (item.equippedTo) */}
             {item.equippedTo && <BoldLabel customColor={color.black}>{text.general.equipped}</BoldLabel>}

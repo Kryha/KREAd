@@ -45,14 +45,8 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
           <AssetFooter>
             <AssetTag>
               <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
-              {character.rarity && (
-                <>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(character.rarity)}</BoldLabel>
-                </>
-              )}
             </AssetTag>
-            {/* TODO: figure out if we cann add this label */}
+            {/* TODO: figure out if we want to use this label for something */}
             {/*extendedCharacter. && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>*/}
           </AssetFooter>
         </AssetInfoContainer>

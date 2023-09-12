@@ -32,18 +32,6 @@ export const ItemDetailsMarket: FC<ItemDetailsMarketProps> = ({ itemInMarket, se
     <>
       <FadeInOut show={!!itemInMarket.id} exiting={close}>
         <DetailContainer>
-          {/* <ItemDetailSection
-              item={transformedData}
-              actions={{
-                onClose: () => {
-                  selectItem("", undefined);
-                  setClose(true);
-                },
-                price: assetDetailActions()?.price,
-                primary: assetDetailActions()?.primary,
-                secondary: assetDetailActions()?.secondary,
-              }}
-            /> */}
           <ItemDetailSection
             item={itemInMarket.item}
             actions={{

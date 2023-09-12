@@ -23,7 +23,6 @@ export const ItemBuy = () => {
   }, [itemToBuy, buyItem]);
 
   const handleSubmit = async () => {
-    // if (!itemToBuy) return;
     setIsAwaitingApproval(true);
     await buyItem.callback(() => setIsAwaitingApproval(false));
   };

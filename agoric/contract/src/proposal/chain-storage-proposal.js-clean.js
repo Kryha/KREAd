@@ -344,7 +344,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-cf5f92ebd916b0116c211d941bfbd7d54b5ee50631337f3acd16fdbe944abdbdf05ac5788bc564457ef3c4b6675b1d236d8a477ea6b23b3d62d3c10646e40af4',
+    'b1-bde0e4e7accc5b4c85a0adad7fadefd41ad5c045dbf320f6bc01f65c80d19a21c8908d9d93ec494251a13caa22929aeacb1ca002b4abd06a09fe92c1fcbf6c3e',
 };
 
 const fail = (reason) => {
@@ -457,6 +457,15 @@ const executeProposal = async (powers) => {
     TOKEN_BRAND_BOARD_ID,
     TOKEN_ISSUER_BOARD_ID,
   );
+
+  await E(creatorFacet).initializeMetrics();
+
+  // TODO Get the most recent state of metrics from the storage node and send it to the contract
+  // const data = {};
+  // const restoreMetricsInvitation = await E(
+  //   creatorFacet,
+  // ).makeRestoreMetricsInvitation();
+  // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
 
   // Log board ids for use in frontend constants
   console.log(`KREAD BOARD ID: ${boardId}`);

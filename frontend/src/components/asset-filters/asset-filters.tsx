@@ -25,8 +25,7 @@ interface Props {
   selectedCategories: ItemCategory[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
-  setSelectedCategories: (value: ItemCategory[]) => void;
-  setSelectedSorting: (value: string) => void;
+  setSelectedCategories: (value: string | string[]) => void;  setSelectedSorting: (value: string) => void;
   setSelectedColor?: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
   pageSelector: React.ReactNode;

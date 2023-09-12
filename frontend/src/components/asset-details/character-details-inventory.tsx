@@ -26,7 +26,6 @@ export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ char
   const [showToast, setShowToast] = useState(false);
 
   const sellAsset = () => {
-    // if (!assetId) return;
     navigate(`${routes.sellCharacter}/${character.nft.id}`);
   };
 

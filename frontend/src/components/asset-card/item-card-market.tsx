@@ -11,7 +11,6 @@ import {
   AssetTitleText,
   AssetTitleWrapper,
   AssetWrapper,
-  NoAssetImage,
 } from "./styles";
 import { text } from "../../assets";
 import { color } from "../../design";
@@ -28,8 +27,7 @@ export const ItemCardMarket: FC<Props> = ({ itemInMarket, selectItemInMarketId }
     <AssetWrapper onClick={() => selectItemInMarketId(itemInMarket.id)}>
       <AssetContent>
         <AssetImageContainer>
-          {itemInMarket.item.image && <AssetImage src={itemInMarket.item.image} category={itemInMarket.item.category} />}
-          {!item.image && <NoAssetImage />}
+          <AssetImage src={itemInMarket.item.image} category={itemInMarket.item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
