@@ -39,7 +39,7 @@ test.before(async (t) => {
     contractAssets,
     assets,
     purses,
-    instance,
+    publicFacet,
     paymentAsset,
     royaltyPurse,
     platformFeePurse,
@@ -52,6 +52,12 @@ test.before(async (t) => {
     item: contractAssets.item.issuer.makeEmptyPurse(),
     payment: paymentAsset.issuerMockIST.makeEmptyPurse(),
   });
+  const admin = makeKreadUser('admin', {
+    character: contractAssets.character.issuer.makeEmptyPurse(),
+    item: contractAssets.item.issuer.makeEmptyPurse(),
+    payment: paymentAsset.issuerMockIST.makeEmptyPurse(),
+j  });
+
   const payout = paymentAsset.mintMockIST.mintPayment(
     AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
   );
@@ -63,7 +69,7 @@ test.before(async (t) => {
   // bob.depositPayment(payoutBob);
 
   t.context = {
-    instance,
+    publicFacet,
     contractAssets,
     assets,
     purses,
@@ -80,7 +86,7 @@ test.before(async (t) => {
 test.serial('---| MARKET - Sell character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob },
@@ -143,7 +149,7 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
       users: { bob, alice },
@@ -205,7 +211,7 @@ test.serial(
 test.serial('---| MARKET - Buy character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob, alice },
@@ -297,7 +303,7 @@ test.serial('---| MARKET - Buy character', async (t) => {
 test.serial('---| MARKET - Buy character not on market', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { alice },
@@ -351,7 +357,7 @@ test.serial('---| MARKET - Buy character not on market', async (t) => {
 test.serial('---| MARKET - Sell Item', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob },
@@ -393,7 +399,7 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
       users: { bob, alice },
@@ -447,7 +453,7 @@ test.serial(
 test.serial('---| MARKET - Buy item', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob, alice },
@@ -500,7 +506,7 @@ test.serial('---| MARKET - Buy item', async (t) => {
 test.serial('---| MARKET - Buy item not on market', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { alice },
@@ -546,7 +552,7 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
       users: { bob, alice },
@@ -664,7 +670,7 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
       users: { bob, alice },

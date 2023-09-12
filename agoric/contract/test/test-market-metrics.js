@@ -9,7 +9,7 @@ import { makeKreadUser } from './make-user.js';
 async function sellCharacter(context, user, characterName, askingPrice) {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     paymentAsset,
@@ -48,7 +48,7 @@ async function sellCharacter(context, user, characterName, askingPrice) {
 async function buyCharacter(context, user, characterName, seller) {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
   } = context;
@@ -93,7 +93,7 @@ async function buyCharacter(context, user, characterName, seller) {
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
-  const { zoe, contractAssets, assets, purses, instance, paymentAsset } =
+  const { zoe, contractAssets, assets, purses, publicFacet, paymentAsset } =
     bootstrap;
 
   const bob = makeKreadUser('bob', purses);
@@ -104,7 +104,7 @@ test.before(async (t) => {
   bob.depositPayment(payout);
 
   t.context = {
-    instance,
+    publicFacet,
     contractAssets,
     assets,
     purses,
@@ -117,7 +117,7 @@ test.before(async (t) => {
 test.serial('---| METRICS - Initialization', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
   } = t.context;
 
   const metrics = await E(publicFacet).getMarketMetrics();
@@ -132,7 +132,7 @@ test.serial('---| METRICS - Initialization', async (t) => {
 test.serial('---| METRICS - Collection size', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     paymentAsset,
     zoe,
     users: { bob },
@@ -172,7 +172,7 @@ test.serial('---| METRICS - Collection size', async (t) => {
 test.serial('---| METRICS - Average levels character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     users: { bob },
   } = t.context;
 
@@ -203,7 +203,7 @@ test.serial('---| METRICS - Average levels character', async (t) => {
 test.serial('---| METRICS - Amount sold character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     users: { bob },
   } = t.context;
 
@@ -232,7 +232,7 @@ test.serial('---| METRICS - Amount sold character', async (t) => {
 test.serial('---| METRICS - Latest sale price character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     users: { bob },
   } = t.context;
 

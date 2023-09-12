@@ -26,12 +26,7 @@ harden(setupZoe);
  */
 export const addCharacterToBootstrap = async (bootstrap) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    paymentAsset,
-    purses,
-    zoe,
-  } = bootstrap;
+  const { publicFacet, paymentAsset, purses, zoe } = bootstrap;
 
   const { offerArgs, give } = flow.mintCharacter.expected;
 
@@ -67,12 +62,7 @@ harden(addCharacterToBootstrap);
  */
 export const addItemToBootstrap = async (bootstrap, item) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { creatorFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = bootstrap;
+  const { creatorFacet, contractAssets, purses, zoe } = bootstrap;
 
   const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const itemAmount = AmountMath.make(
