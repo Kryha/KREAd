@@ -17,7 +17,6 @@ import { isCharacterCategory, isItemCategory } from "../../../interfaces";
 interface Data {
   name: string;
   category: string;
-  id: string;
 }
 
 interface DetailSectionHeaderProps {

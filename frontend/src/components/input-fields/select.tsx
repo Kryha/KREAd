@@ -13,7 +13,7 @@ export interface Options {
 
 interface SelectProps {
   label: string;
-  handleChange: (selected: string | string[]) => void;
+  handleChange: (selected: string[]) => void;
   options: Options[];
   isMultiSelect?: boolean;
 }

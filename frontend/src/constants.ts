@@ -63,26 +63,31 @@ export const ITEM_CATEGORIES = {
   equipped: "equipped",
 } as const;
 
-export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"];
+export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"] as const;
 
 export const SECTION = {
   SHOP: "shop",
   INVENTORY: "inventory",
+} as const;
+
+export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"] as const;
+
+export const ASSET_TYPE = {
+  CHARACTER: "character",
+  ITEM: "item",
 };
 
-export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"];
+export const AGORIC_LINK = "https://agoric.com/" as const;
+export const KRYHA_LINK = "https://kryha.io/" as const;
 
-export const AGORIC_LINK = "https://agoric.com/";
-export const KRYHA_LINK = "https://kryha.io/";
+export const MAX_CHARACTER_LENGTH = 16 as const;
+export const SLIDER_TIME = 4.5 as const;
+export const PAGE_SIZE = 10 as const;
+export const ASSETS_PER_PAGE = 10 as const;
 
-export const MAX_CHARACTER_LENGTH = 16;
-export const SLIDER_TIME = 4.5;
-export const PAGE_SIZE = 10;
-export const ASSETS_PER_PAGE = 10;
-
-export const FIRST_TIME = "first_time";
-export const CHARACTER_PURSE_NAME = "KREA";
-export const ITEM_PURSE_NAME = "KREAITEM";
+export const FIRST_TIME = "first_time" as const;
+export const CHARACTER_PURSE_NAME = "KREA" as const;
+export const ITEM_PURSE_NAME = "KREAITEM" as const;
 
 export const EVENT_TYPE = {
   mint: "mint",

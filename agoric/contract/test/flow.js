@@ -19,6 +19,10 @@ const mintCharacter = {
     want: { name: undefined },
     message: errors.noNameArg,
   },
+  noAvailability: {
+    want: { name: 'TestCharacterBadFlow' },
+    message: errors.allMinted,
+  },
   extraProperties: {
     want: { name: 'TestCharacter', bloodType: 'blue', married: true },
     message: '',
@@ -27,11 +31,18 @@ const mintCharacter = {
 
 const mintItem = {
   expected: {
-    want: defaultItems.hair,
+    want: defaultItems.filter(({ rarity }) => rarity > 59)[0],
     message: text.itemMintSuccess,
   },
   multiple: {
-    want: [defaultItems.airReservoir, defaultItems.background],
+    want: defaultItems.filter(({ rarity }) => rarity < 20)[0],
+    message: text.itemMintSuccess,
+  },
+  multipleUnique: {
+    want: [
+      defaultItems.filter(({ rarity }) => rarity > 39 && rarity < 60)[0],
+      defaultItems.filter(({ rarity }) => rarity > 19 && rarity < 40)[0],
+    ],
     message: text.itemMintSuccess,
   },
 };

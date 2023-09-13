@@ -18,7 +18,7 @@ import { ErrorView } from "../../components";
 interface CharacterDetailSectionProps {
   character: ExtendedCharacter;
   actions?: DetailSectionActions;
-  showToast: () => void;
+  showToast?: () => void;
 }
 
 // TODO: Make index dynamic

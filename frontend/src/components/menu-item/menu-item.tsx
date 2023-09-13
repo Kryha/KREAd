@@ -36,7 +36,6 @@ export interface Data {
   name: string;
   level: number;
   category: string;
-  id: string;
 }
 
 interface MenuItemProps {

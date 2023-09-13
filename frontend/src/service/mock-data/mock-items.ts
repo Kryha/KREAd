@@ -1145,6 +1145,7 @@ export const mockItems: Item[] = [
   },
 ];
 
+// FIXME: migrate isEquipped to equippedTo
 export const mockCharacterItems: CharacterItems = {
   noseline: {
     name: mockItems[0].name,
