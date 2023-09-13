@@ -48,11 +48,11 @@ function updateAverage(type, average, size, value) {
  * @param {UpdateMetrics} updateMetrics
  * @param {import("@agoric/zoe/src/contractSupport").RecorderKit} marketCharacterMetricsKit
  */
-export function updateCharacterMetrics(
+export const updateCharacterMetrics = async (
   state,
   updateMetrics,
   marketCharacterMetricsKit,
-) {
+) => {
   if (updateMetrics.averageLevel) {
     state.characterAverageLevel = updateAverage(
       updateMetrics.averageLevel.type,
@@ -80,7 +80,7 @@ export function updateCharacterMetrics(
     marketplaceAverageLevel: state.characterMarketplaceAverageLevel,
     amountSold: state.characterAmountSold,
   });
-}
+};
 
 /**
  * Updates item metrics
@@ -89,7 +89,11 @@ export function updateCharacterMetrics(
  * @param {UpdateMetrics} updateMetrics
  * @param {import("@agoric/zoe/src/contractSupport").RecorderKit} marketItemMetricsKit
  */
-export function updateItemMetrics(state, updateMetrics, marketItemMetricsKit) {
+export const updateItemMetrics = (
+  state,
+  updateMetrics,
+  marketItemMetricsKit,
+) => {
   if (updateMetrics.averageLevel) {
     state.itemAverageLevel = updateAverage(
       updateMetrics.averageLevel.type,
@@ -117,4 +121,4 @@ export function updateItemMetrics(state, updateMetrics, marketItemMetricsKit) {
     marketplaceAverageLevel: state.itemMarketplaceAverageLevel,
     amountSold: state.itemAmountSold,
   });
-}
+};

@@ -50,4 +50,6 @@ export const character = {
   youDoNotHave: "you do not own any characters",
   createANewCharacter: "create a new character",
   youDoNotOwnACharacter: "you do not own a character. Mint a character to continue.",
+  noCharactersInInventory: "no characters in inventory",
+  buyCharactersFromStore: "buy characters from the store",
 };

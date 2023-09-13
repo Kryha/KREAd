@@ -1,5 +1,5 @@
 import { ActivityEvent } from "./activity.interfaces";
-import { Detail } from "./character.interfaces";
+import { Details } from "./character.interfaces";
 
 export type ItemCategory =
   | "noseline"
@@ -18,31 +18,21 @@ export type ItemCategory =
 export interface Item {
   name: string;
   category: ItemCategory;
-  id: string;
   description: string;
   image: string;
   thumbnail: string;
   level: number;
   rarity: number;
-  effectiveness?: number;
-  layerComplexity?: number;
+  effectiveness: number;
+  layerComplexity: number;
   forged: string;
   baseMaterial: string;
   colors: string[];
   projectDescription: string;
-  details: Detail;
-  date: string;
-  activity: ActivityEvent[];
-}
-
-export interface KreadItemInMarket {
-  sellerSeat: any;
-  id: string;
-  askingPrice: {
-    value: bigint;
-    brand: any;
-  };
-  object: ItemBackend;
+  details: Details;
+  activity?: ActivityEvent[];
+  equippedTo?: string;
+  forSale?: boolean;
 }
 
 export interface ItemInMarket {
@@ -52,23 +42,4 @@ export interface ItemInMarket {
     publicFacet?: any;
     price: bigint;
   };
-}
-
-// TODO: revisit interfaces
-export interface ItemInMarketBackend {
-  id: bigint;
-  item: ItemBackend;
-  sell: {
-    publicFacet?: any;
-    price: bigint;
-  };
-}
-
-export interface ItemBackend extends Omit<Item, "id"> {
-  id: bigint;
-}
-
-export interface ItemEquip extends Item {
-  isEquipped: boolean;
-  isForSale?: boolean;
 }

@@ -53,7 +53,6 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
   });
 };
 
-
 const buyCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
@@ -94,6 +93,7 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
 };
 
 interface ItemMarketAction {
+  entryId?: string;
   item: any;
   price: bigint;
   service: {
@@ -146,7 +146,9 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
   });
 };
 
-const buyItem = async ({ item, price, service, callback }: ItemMarketAction): Promise<void> => {
+const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAction): Promise<void> => {
+  if (!entryId) return;
+
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;
   const istBrand = service.istBrand;
@@ -162,7 +164,7 @@ const buyItem = async ({ item, price, service, callback }: ItemMarketAction): Pr
   };
 
   const want = {
-    Item: { brand: itemBrand, value: makeCopyBag(harden([[{ ...item, id: Number(item.id) }, 1n]])) },
+    Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
   };
 
   const proposal = {
@@ -170,7 +172,7 @@ const buyItem = async ({ item, price, service, callback }: ItemMarketAction): Pr
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+  service.makeOffer(spec, proposal, { entryId: Number(entryId) }, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
     }

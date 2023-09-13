@@ -1,4 +1,4 @@
-import { CharacterBackend, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemBackend, ItemEquip } from "../interfaces";
+import { CharacterBackend, ExtendedCharacter, Item } from "../interfaces";
 import { mockData } from "../service/mock-data/mock-data";
 import { mockItemsEquipped } from "../service/mock-data/mock-items";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
@@ -14,9 +14,10 @@ export interface UserContext {
   characters: ExtendedCharacter[];
   selected: ExtendedCharacter | undefined;
   items: Item[];
-  equippedItems: ItemEquip[];
+  equippedItems: Item[];
   processed: string[];
   fetched: boolean;
+  inventoryCallInProgress: boolean;
 }
 
 interface SetSelected {
@@ -33,7 +34,7 @@ interface SetProcessed {
 }
 interface SetItems {
   type: "SET_ITEMS";
-  payload: ItemBackend[];
+  payload: Item[];
 }
 interface SetEquippedItems {
   type: "SET_EQUIPPED_ITEMS";
@@ -41,12 +42,18 @@ interface SetEquippedItems {
 }
 interface UpdateCharacterItems {
   type: "UPDATE_CHARACTER_ITEMS";
-  payload: ItemBackend[];
+  payload: Item[];
   characterName: string;
 }
 interface SetFetched {
   type: "SET_FETCHED";
   payload: boolean;
+}
+interface StartInventoryCall {
+  type: "START_INVENTORY_CALL";
+}
+interface EndInventoryCall {
+  type: "END_INVENTORY_CALL";
 }
 interface Reset {
   type: "RESET";
@@ -59,6 +66,8 @@ type UserStateActions =
   | SetEquippedItems
   | UpdateCharacterItems
   | SetProcessed
+  | StartInventoryCall
+  | EndInventoryCall
   | Reset;
 
 const initialState: UserContext = {
@@ -68,6 +77,7 @@ const initialState: UserContext = {
   equippedItems: [],
   processed: [],
   fetched: false,
+  inventoryCallInProgress: false,
 };
 
 const initialMockState: UserContext = {
@@ -77,6 +87,7 @@ const initialMockState: UserContext = {
   equippedItems: mockItemsEquipped,
   processed: [],
   fetched: mockData.fetched,
+  inventoryCallInProgress: false,
 };
 
 export type UserDispatch = React.Dispatch<UserStateActions>;
@@ -91,8 +102,7 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     }
 
     case "SET_ITEMS": {
-      const frontendEquippedItems = mediate.items.toFront(action.payload);
-      return { ...state, items: frontendEquippedItems, fetched: true };
+      return { ...state, items: action.payload, fetched: true };
     }
 
     case "UPDATE_CHARACTER_ITEMS": {
@@ -131,6 +141,12 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };
 
+    case "START_INVENTORY_CALL":
+      return { ...state, inventoryCallInProgress: true };
+
+    case "END_INVENTORY_CALL":
+      return { ...state, inventoryCallInProgress: false };
+
     case "RESET":
       return initialState;
 
@@ -147,7 +163,6 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
   const wallet = useWalletState();
   const agoric = useAgoricState();
 
-  const kreadPublicFacet = agoric.contracts.kread.publicFacet;
   const charactersInWallet = useMemo(() => (wallet.character ? wallet.character : []), [wallet.character]);
   const itemsInWallet = useMemo(() => (wallet.item ? wallet.item : []), [wallet.item]);
 
@@ -163,7 +178,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       const ownedCharacterNames: string[] = charactersInWallet.map((character: CharacterBackend) => character.name).sort();
 
       // Empty character wallet
-      if (charactersInWallet.length === 0) {
+      if (charactersInWallet.length === 0 && !userState.inventoryCallInProgress) {
         userStateDispatch({ type: "SET_CHARACTERS", payload: [] });
         userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: [] });
         userStateDispatch({ type: "SET_SELECTED", payload: undefined });
@@ -177,7 +192,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       }
 
       // User has at least 1 character, but less characters than before, adjust the state accordingly
-      if (charactersInWallet.length < processedCharacters.length) {
+      if (charactersInWallet.length < processedCharacters.length && !userState.inventoryCallInProgress) {
         processedCharacters.forEach((name) => {
           if (!ownedCharacterNames.includes(name)) {
             processedCharacters.splice(processedCharacters.indexOf(name), 1);
@@ -186,42 +201,21 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
         userStateDispatch({ type: "SET_PROCESSED", payload: processedCharacters });
       }
 
-      const equippedCharacterItems: Item[] = [];
       const charactersToProcess = charactersInWallet.filter((character: { name: string }) => !processedCharacters.includes(character.name));
 
-      // Map characters to the corresponding inventory in the contract
-      const extendedCharacters = await Promise.all(
-        charactersToProcess.map(async (character: CharacterBackend): Promise<ExtendedCharacterBackend> => {
-          // TODO: fetch activity and history from storage node
+      const extendedCharacters = await extendCharacters(charactersToProcess, agoric.chainStorageWatcher.marshaller);
 
-          const equipped: { [key: string]: Item | undefined } = {};
-          const extendedCharacter = await extendCharacters([character], agoric.chainStorageWatcher.marshaller);
-          const frontendEquippedItems = extendedCharacter.equippedItems;
-
-          equippedCharacterItems.push(...frontendEquippedItems);
-          itemCategories.forEach((category) => {
-            equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
-          });
-
-          return {
-            nft: character,
-            equippedItems: equipped,
-            // activity,
-          };
-        }),
-      );
-
-      const frontendCharacters = mediate.characters.toFront(extendedCharacters);
+      const frontendCharacters = mediate.characters.toFront(extendedCharacters.extendedCharacters);
 
       userStateDispatch({ type: "SET_CHARACTERS", payload: frontendCharacters });
-      userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: equippedCharacterItems });
+      userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: extendedCharacters.equippedItems });
     };
 
     processPurseChanges().catch((err) => {
       console.error("got watchNotifiers err", err);
     });
     userStateDispatch({ type: "SET_FETCHED", payload: true });
-  }, [kreadPublicFacet, charactersInWallet, itemsInWallet, userState.processed]);
+  }, [charactersInWallet, itemsInWallet, userState.processed, userState.inventoryCallInProgress]);
 
   return (
     <Context.Provider value={userState}>

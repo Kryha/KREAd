@@ -20,6 +20,8 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
   const charBrand = service.characterBrand;
   const itemBrand = service.itemBrand;
   const wantKey = character.keyId == 2 ? 1 : 2;
+  const characterGive = { ...character, id: Number(character.id) };
+  const characterWant = { ...character, id: Number(character.id), keyId: wantKey };
 
   const spec = {
     source: "contract",
@@ -28,13 +30,13 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
   };
 
   const give = {
-    CharacterKey1: { brand: charBrand, value: makeCopyBag([[character, 1n]]) },
+    CharacterKey1: { brand: charBrand, value: makeCopyBag([[characterGive, 1n]]) },
   };
 
   const want = {
     CharacterKey2: {
       brand: charBrand,
-      value: makeCopyBag([[{ ...character, keyId: wantKey }, 1n]]),
+      value: makeCopyBag([[characterWant, 1n]]),
     },
     Item: {
       brand: itemBrand,
@@ -130,6 +132,8 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
   const itemBrand = service.itemBrand;
 
   const wantKey = character.keyId == 2 ? 1 : 2;
+  const characterGive = { ...character, id: Number(character.id) };
+  const characterWant = { ...character, id: Number(character.id), keyId: wantKey };
 
   const spec = {
     source: "contract",
@@ -138,14 +142,14 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
   };
 
   const give = {
-    CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+    CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[characterGive, 1n]])) },
     Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
   };
 
   const want = {
     CharacterKey2: {
       brand: charBrand,
-      value: makeCopyBag(harden([[{ ...character, keyId: wantKey }, 1n]])),
+      value: makeCopyBag(harden([[characterWant, 1n]])),
     },
   };
 
