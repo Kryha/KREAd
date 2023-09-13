@@ -3,10 +3,10 @@ import { ButtonContainer } from "../input-fields/styles";
 import { ButtonText, FadeInOut, Overlay, PrimaryButton, SecondaryButton } from "../index";
 import { text } from "../../assets";
 import { color } from "../../design";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { ArrowContainer, Close, Divider, DividerContainer, ReturnContainer } from "../notification-detail/styles";
 import { ItemEquip } from "../../interfaces";
-import { itemInventoryCategories, itemShopCategories, sortAssetsInInventory, sortAssetsInShop } from "../../assets/text/filter-options";
+import { itemInventoryCategories, itemShopCategories, sortItemsInInventory, sortItemsInShop } from "../../assets/text/filter-options";
 import { filterItems } from "../../util";
 import {
   AssetFilterContainer,
@@ -49,7 +49,7 @@ export const AssetFiltersDialog: FC<Props> = ({ items, showFilter, setShowFilter
     );
   };
 
-  const sortAssets = section === SECTION.INVENTORY ? sortAssetsInInventory : sortAssetsInShop;
+  const sortAssets = section === SECTION.INVENTORY ? sortItemsInInventory : sortItemsInShop;
   const categories = section === SECTION.INVENTORY ? itemInventoryCategories : itemShopCategories;
   return (
     <FadeInOut show={showFilter} exiting={!showFilter}>

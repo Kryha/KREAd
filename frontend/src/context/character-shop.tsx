@@ -4,6 +4,8 @@ import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
 import { itemArrayToObject } from "../util";
 import { watchCharacterMarket } from "../service/storage-node/watch-market";
+import { mockCharactersInMarket } from "../service/mock-data/mock-characters";
+import { useDataMode } from "../hooks";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
@@ -14,12 +16,18 @@ const initialState: CharacterMarketContext = {
   fetched: false,
 };
 
+const initialMockState: CharacterMarketContext = {
+  characters: mockCharactersInMarket,
+  fetched: true,
+};
+
 const Context = createContext<CharacterMarketContext | undefined>(undefined);
 
 type ProviderProps = Omit<React.ProviderProps<CharacterMarketContext>, "value">;
 
 export const CharacterMarketContextProvider = (props: ProviderProps): React.ReactElement => {
-  const [marketState, marketDispatch] = useState(initialState);
+  const { isMockData } = useDataMode();
+  const [marketState, marketDispatch] = useState(isMockData ? initialMockState : initialState);
   const { chainStorageWatcher } = useAgoricState();
 
   useEffect(() => {

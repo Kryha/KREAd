@@ -29,43 +29,38 @@ export const CharacterGuard = M.splitRecord({
 
 export const CharacterGuardBagShape = M.bagOf(CharacterGuard);
 
-// This is a split record because the id and date are set after minting
-// the rest of the variables are end-user defined when calling mint invitations
-export const ItemGuard = M.splitRecord(
-  {
-    name: M.string(),
-    category: M.or(
-      'noseline',
-      'midBackground',
-      'mask',
-      'headPiece',
-      'hair',
-      'frontMask',
-      'liquid',
-      'background',
-      'airReservoir',
-      'clothing',
-    ),
-    description: M.string(),
-    image: M.string(),
-    thumbnail: M.string(),
-    level: M.gte(0),
-    rarity: M.gte(0),
-    effectiveness: M.gte(0),
-    layerComplexity: M.gte(0),
-    forged: M.string(),
-    baseMaterial: M.string(),
-    colors: M.arrayOf(M.string()),
-    projectDescription: M.string(),
-    details: M.splitRecord({
-      boardId: M.string(), // TODO: Remove?
-      brand: M.string(), // TODO: Remove?
-      artist: M.string(),
-      metadata: M.string(),
-    }),
-  },
-  { id: M.gte(0), date: M.record() },
-);
+export const ItemGuard = M.splitRecord({
+  name: M.string(),
+  category: M.or(
+    'noseline',
+    'midBackground',
+    'mask',
+    'headPiece',
+    'hair',
+    'frontMask',
+    'liquid',
+    'background',
+    'airReservoir',
+    'clothing',
+  ),
+  description: M.string(),
+  image: M.string(),
+  thumbnail: M.string(),
+  level: M.gte(0),
+  rarity: M.gte(0),
+  effectiveness: M.gte(0),
+  layerComplexity: M.gte(0),
+  forged: M.string(),
+  baseMaterial: M.string(),
+  colors: M.arrayOf(M.string()),
+  projectDescription: M.string(),
+  details: M.splitRecord({
+    boardId: M.string(), // TODO: Remove?
+    brand: M.string(), // TODO: Remove?
+    artist: M.string(),
+    metadata: M.string(),
+  }),
+});
 
 export const ItemGuardBagShape = M.bagOf(ItemGuard);
 

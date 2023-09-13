@@ -31,6 +31,10 @@ const mintItem = {
     message: text.itemMintSuccess,
   },
   multiple: {
+    want: defaultItems.noseline,
+    message: text.itemMintSuccess,
+  },
+  multipleUnique: {
     want: [defaultItems.airReservoir, defaultItems.background],
     message: text.itemMintSuccess,
   },

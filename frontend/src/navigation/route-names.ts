@@ -15,4 +15,4 @@ export const routes = {
   test: "/test",
   downloadCharacter: "/download-character",
   mobileNotAvailable: "/mobile-not-available",
-};
+} as const;
