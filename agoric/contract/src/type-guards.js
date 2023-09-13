@@ -8,20 +8,25 @@ export const HelperI = M.interface(
   { sloppy: true },
 );
 
-export const CharacterGuard = M.splitRecord({
-  name: M.string(),
+export const BaseCharacterGuard = M.splitRecord({
   title: M.string(),
   description: M.string(),
+  origin: M.string(),
   level: M.gte(0),
-  details: M.splitRecord({
-    boardId: M.string(), // TODO: Remove?
-    standard: M.string(), // TODO: Remove?
-    artist: M.string(),
-    metadata: M.string(),
-  }),
-  projectDescription: M.string(),
+  artistMetadata: M.string(),
   image: M.string(),
-  type: M.string(),
+  characterTraits: M.string(),
+});
+
+export const CharacterGuard = M.splitRecord({
+  title: M.string(),
+  description: M.string(),
+  origin: M.string(),
+  level: M.gte(0),
+  artistMetadata: M.string(),
+  image: M.string(),
+  characterTraits: M.string(),
+  name: M.string(),
   keyId: M.number(),
   id: M.gte(0),
   date: M.record(),
@@ -32,35 +37,39 @@ export const CharacterGuardBagShape = M.bagOf(CharacterGuard);
 export const ItemGuard = M.splitRecord({
   name: M.string(),
   category: M.or(
-    'noseline',
-    'midBackground',
-    'mask',
-    'headPiece',
     'hair',
-    'frontMask',
-    'liquid',
+    'headPiece',
+    'mask',
+    'filter1',
+    'filter2',
+    'perk1',
+    'perk2',
+    'garment',
+    'patch',
     'background',
-    'airReservoir',
-    'clothing',
   ),
   description: M.string(),
+  functional: M.boolean(),
   image: M.string(),
   thumbnail: M.string(),
-  level: M.gte(0),
   rarity: M.gte(0),
-  effectiveness: M.gte(0),
-  layerComplexity: M.gte(0),
-  forged: M.string(),
-  baseMaterial: M.string(),
+  level: M.gte(0),
+  filtering: M.gte(0),
+  weight: M.gte(0),
+  sense: M.gte(0),
+  reserves: M.gte(0),
+  durability: M.gte(0),
   colors: M.arrayOf(M.string()),
-  projectDescription: M.string(),
-  details: M.splitRecord({
-    boardId: M.string(), // TODO: Remove?
-    brand: M.string(), // TODO: Remove?
-    artist: M.string(),
-    metadata: M.string(),
-  }),
+  artistMetadata: M.string(),
 });
+
+export const RarityGuard = M.or(
+  'common',
+  'uncommon',
+  'rare',
+  'legendary',
+  'exotic',
+);
 
 export const ItemGuardBagShape = M.bagOf(ItemGuard);
 
@@ -122,6 +131,11 @@ export const CreatorI = M.interface('creator', {
   publishKreadInfo: M.call().returns(),
   makeMintItemInvitation: M.call().returns(M.promise()),
   initializeMetrics: M.call().returns(),
+  reviveMarketExitSubscribers: M.call().returns(),
+  initializeBaseAssets: M.call(
+    M.arrayOf([M.number(), BaseCharacterGuard]),
+    M.arrayOf(ItemGuard),
+  ).returns(),
 });
 
 export const CharacterI = M.interface('character', {
@@ -132,21 +146,38 @@ export const CharacterI = M.interface('character', {
   swap: M.call().returns(M.promise()),
   validateInventoryState: M.call().returns(),
   isNameUnique: M.call(M.string()).returns(M.boolean()),
-  getRandomBaseCharacter: M.call().returns(M.any()),
+  getRandomBaseIndex: M.call().returns(M.any()),
   calculateLevel: M.call(M.string()).returns(M.gte(0)),
   makeInventoryRecorderKit: M.call(M.string()).returns(
     M.promise(M.remotable('Notifier')),
   ),
+  initializeBaseCharacters: M.call(
+    M.arrayOf([M.number(), BaseCharacterGuard]),
+  ).returns(),
 });
 
 export const ItemI = M.interface('item', {
   mint: M.call().returns(M.promise()),
   mintDefaultBatch: M.call().returns(M.promise(M.string())),
+  initializeBaseItems: M.call(M.arrayOf(ItemGuard)).returns(),
+});
+
+export const MarketRecorderGuard = M.splitRecord({
+  id: M.or(M.gte(0), M.string()),
+  seat: M.eref(M.remotable('Seat')),
+  askingPrice: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  object: M.or(CharacterGuard, ItemGuard),
+  // history: M.arrayOf(HistoryGuard),
 });
 
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
   buyItem: M.call().returns(M.promise()),
+  handleExitItem: M.call(MarketRecorderGuard).returns(),
+  handleExitCharacter: M.call(MarketRecorderGuard).returns(),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
   updateMetrics: M.call(
@@ -184,15 +215,4 @@ export const ItemRecorderGuard = M.splitRecord({
   id: M.gte(0),
   item: ItemGuard,
   history: M.arrayOf(HistoryGuard),
-});
-
-export const MarketRecorderGuard = M.splitRecord({
-  id: M.or(M.gte(0), M.string()),
-  seat: M.eref(M.remotable('Seat')),
-  askingPrice: M.splitRecord({
-    brand: BrandShape,
-    value: M.nat(),
-  }),
-  object: M.or(CharacterGuard, ItemGuard),
-  // history: M.arrayOf(HistoryGuard),
 });

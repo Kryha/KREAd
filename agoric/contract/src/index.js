@@ -24,8 +24,6 @@ import { prepareKreadKit } from './kreadKit.js';
 /** @type {ContractMeta} */
 export const meta = {
   privateArgsShape: M.splitRecord({
-    defaultCharacters: M.any(), // TODO: see if these can be typed
-    defaultItems: M.any(), // TODO: see if these can be typed
     seed: M.number(),
     clock: M.eref(M.remotable('Clock')),
     powers: {
@@ -79,7 +77,7 @@ export const start = async (zcf, privateArgs, baggage) => {
   const itemIssuerRecord = itemMint.getIssuerRecord();
   const paymentFTIssuerRecord = paymentFTMint.getIssuerRecord();
 
-  const { defaultCharacters, defaultItems, powers, clock, seed } = privateArgs;
+  const { powers, clock, seed } = privateArgs;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,
@@ -91,8 +89,6 @@ export const start = async (zcf, privateArgs, baggage) => {
       baggage,
       zcf,
       {
-        defaultCharacters,
-        defaultItems,
         seed,
       },
       harden({
