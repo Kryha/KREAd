@@ -1,13 +1,14 @@
 import React, { FC, ReactNode, useState } from "react";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 import { useGetItemInShopById, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetFilters } from "../../components/asset-filters/asset-filters";
-import { AssetDetails } from "../../components/asset-details/asset-details";
-import { AssetCards } from "../../components/asset-cards/asset-cards";
+import { ItemDetailsMarket } from "../../components/asset-details/item-details-market";
 import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";
 import { text } from "../../assets";
+import { ItemCardsMarket } from "../../components/asset-cards/item-cards-market";
+import { useItemMarketState } from "../../context/item-shop";
 
 interface Props {
   pageSelector: ReactNode;
@@ -20,20 +21,25 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
 
-  const [items, isLoading] = useGetItemsInShop({
-    categories: selectedCategories,
-    sort: selectedSorting,
-    price: selectedPrice,
-    color: selectedColor,
-  });
+  const { items, fetched } = useItemMarketState();
+  const isLoading = !fetched;
 
+  // FIXME: Leaving commented code for implementation of filter logic
+  // const [items, isLoading] = useGetItemsInShop({
+  //   categories: selectedCategories,
+  //   sort: selectedSorting,
+  //   price: selectedPrice,
+  //   color: selectedColor,
+  // });
   const [item] = useGetItemInShopById(selectedId);
 
+  if (!items) return <></>;
   return (
     <>
       <AssetFilters
-        pageSelector={pageSelector}
+        assetType={ASSET_TYPE.ITEM}
         section={SECTION.SHOP}
+        pageSelector={pageSelector}
         assets={items}
         selectedCategories={selectedCategories}
         selectedSorting={selectedSorting}
@@ -43,9 +49,9 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
         setSelectedColor={setSelectedColor}
         setSelectedPrice={setSelectedPrice}
       />
-      <AssetDetails section={SECTION.SHOP} assetData={item} assetId={selectedId} setAssetId={setSelectedId} />
+      {selectedId && <ItemDetailsMarket itemInMarket={item!} selectItemInMarket={(id: string) => setSelectedId(id)} />}
       {items.length > 0 ? (
-        <AssetCards section={SECTION.SHOP} assetsData={items} isLoading={isLoading} setAssetId={setSelectedId} />
+        <ItemCardsMarket itemsInMarket={items} isLoading={isLoading} selectItemInMarketId={(id: string) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

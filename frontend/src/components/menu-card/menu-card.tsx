@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from "react";
-import { Item } from "../../interfaces";
+import { Item, ItemCategory } from "../../interfaces";
 import { text } from "../../assets";
 import {
   ArrowContainer,
@@ -32,13 +32,14 @@ interface MenuCardProps {
   title: string;
   equippedItemProp?: Item;
   unequippedItems: Item[];
+  category: ItemCategory;
   imageProps?: ImageProps;
 }
 
-export const MenuCard: FC<MenuCardProps> = ({ title, equippedItemProp, unequippedItems, imageProps }) => {
+export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp, unequippedItems, imageProps }) => {
   const navigate = useNavigate();
   const { width: viewWidth, height: viewHeight } = useViewport();
-  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedName, setSelectedName] = useState<string>("");
   const [intitial, setInitial] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [equippedItem, setEquippedItem] = useState(equippedItemProp);
@@ -51,31 +52,31 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItemProp, unequippe
     return unequippedItems;
   }, [equippedItem, unequippedItems]);
 
-  const selectedItem = useMemo(() => allItems?.find((item) => item.id === selectedId), [allItems, selectedId]);
+  const selectedItem = useMemo(() => allItems?.find((item) => item.name === selectedName), [allItems, selectedName]);
 
-  const equip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+  const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    equipItem.mutate({ itemId: id });
+    equipItem.mutate({ item: selectedItem! });
   };
 
-  const unequip = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+  const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    unequipItem.mutate({ itemId: id });
+    unequipItem.mutate({ item: equippedItem! });
   };
 
   const primaryActions = () => {
-    if (selectedItem?.id === equippedItem?.id) {
-      return { text: text.item.unequip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event, selectedId) };
+    if (selectedItem?.name === equippedItem?.name) {
+      return { text: text.item.unequip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event) };
     } else {
-      return { text: text.item.equip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event, selectedId) };
+      return { text: text.item.equip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event) };
     }
   };
 
   const sell = () => {
-    if (!selectedId) return;
-    navigate(`${routes.sellItem}/${selectedId}`);
+    if (!selectedName) return;
+    navigate(`${routes.sellItem}/${category}/${selectedName}`);
   };
 
   const removeInitial = () => {
@@ -106,10 +107,10 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItemProp, unequippe
               <MenuItem
                 data={{ ...equippedItem, image: equippedItem.thumbnail }}
                 imageProps={imageProps}
-                onClick={() => setSelectedId(equippedItem.id)}
-                key={equippedItem.id}
+                onClick={() => setSelectedName(equippedItem.name)}
+                key={equippedItem.name}
                 isEquipped
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event, equippedItem.id)}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}
                 isInitial={intitial}
                 removeInitial={removeInitial}
               />
@@ -123,9 +124,9 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItemProp, unequippe
               <MenuItem
                 data={{ ...item, image: item.thumbnail }}
                 imageProps={imageProps}
-                onClick={() => setSelectedId(item.id)}
-                key={item.id}
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event, item.id)}
+                onClick={() => setSelectedName(item.name)}
+                key={item.name}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}
                 removeInitial={removeInitial}
               />
             ))}
@@ -139,14 +140,14 @@ export const MenuCard: FC<MenuCardProps> = ({ title, equippedItemProp, unequippe
           </SecondaryButton>
         </CardActionsContainer>
       </Menu>
-      <FadeInOut show={!!selectedId} exiting={!selectedId}>
+      <FadeInOut show={!!selectedName} exiting={!selectedName}>
         {selectedItem && (
           <ItemDetailSection
             item={selectedItem}
             actions={{
               primary: primaryActions(),
               secondary: { text: text.item.sell, onClick: sell },
-              onClose: () => setSelectedId(""),
+              onClose: () => setSelectedName(""),
             }}
           />
         )}
