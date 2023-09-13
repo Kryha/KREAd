@@ -8,6 +8,7 @@ import { makeKreadUser } from './make-user.js';
 import { addCharacterToBootstrap, addItemToBootstrap } from './setup.js';
 import { makeCopyBag } from '@agoric/store';
 import { errors } from '../src/errors.js';
+import { defaultItems } from './items.js';
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
@@ -38,6 +39,11 @@ test.before(async (t) => {
     item: contractAssets.item.issuer.makeEmptyPurse(),
     payment: contractAssets.payment.issuer.makeEmptyPurse(),
   });
+  const admin = makeKreadUser('admin', {
+    character: contractAssets.character.issuer.makeEmptyPurse(),
+    item: contractAssets.item.issuer.makeEmptyPurse(),
+    payment: contractAssets.payment.issuer.makeEmptyPurse(),
+  });
   const topUpInvitation = await E(
     instance.publicFacet,
   ).makeTokenFacetInvitation();
@@ -56,7 +62,7 @@ test.before(async (t) => {
     assets,
     purses,
     zoe,
-    users: { bob, alice },
+    users: { bob, alice, admin },
   };
 });
 
@@ -683,3 +689,38 @@ test.serial(
     );
   },
 );
+
+test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    zoe,
+    users: { bob },
+  } = t.context;
+
+  const itemCollection = Object.values(defaultItems).map(item => [item, 3n])
+  console.log("🤔🤔🤔");
+  console.log(itemCollection)
+  const itemsToSell = makeCopyBag(harden(itemCollection));
+  
+  const priceAmount = AmountMath.make(contractAssets.payment.brand, 5n);
+
+  const sellItemInvitation = await E(publicFacet).makeInternalSellItemBatchInvitation();
+  const proposal = harden({
+    give: {},
+    want: { Price: priceAmount },
+  });
+
+  console.log("🤔🤔🤔", itemsToSell.payload[0][0]);
+  const userSeat = await E(zoe).offer(sellItemInvitation, proposal, undefined, { itemsToSell });
+  const result = await E(userSeat).getOfferResult();
+  // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
+
+  const itemsForSale = await E(publicFacet).getItemsForSale();
+
+  console.log("🤔🤔🤔", itemsForSale);
+  t.deepEqual(itemsForSale.length, 1, 'Item is successfully added to market');
+
+  t.deepEqual(bob.getItems().length, 0, "Item is no longer in bob's wallet");
+});

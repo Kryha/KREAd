@@ -17,6 +17,8 @@ import { mintCharacter } from "../character/mint";
 import { inventoryService } from "../character/inventory";
 import { marketService } from "../character/market";
 import { useGetItemsInShop } from "../items";
+import { mockCharacterItems } from "../mock-data/mock-items";
+import { mockCharacterItems1 } from "../mock-data/mockCharacterItems";
 
 export const TestServiceUI = () => {
   const [service, dispatch] = useAgoricContext();
@@ -216,6 +218,35 @@ export const TestServiceUI = () => {
     });
   };
 
+  const sellItemBatchAddOffer = async () => {
+    console.log(">>>>")
+    const instance = service.contracts.kread.instance;
+    const itemBrand = service.tokenInfo.item.brand;
+    // const item = wallet.item[0];
+    // const items = [];
+    // for(var i = 0; i<10; i++){
+    //   items.push(item);
+    // }
+    const itemCollection = Object.values(mockCharacterItems1).map(item => {
+      const { activity, ...adjustedItem } = item;
+      return [adjustedItem, 3n]
+    })
+  
+    marketService.sellItemBatch({
+      itemCollection,
+      pricePerItem: 10n,
+      service: {
+        kreadInstance: instance,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+        istBrand: service.tokenInfo.ist,
+      },
+      callback: async () => {
+        console.info("SellItem call settled");
+      },
+    });
+  };
+
   const buyItemAddOffer = async () => {
     const instance = service.contracts.kread.instance;
     const itemBrand = service.tokenInfo.item.brand;
@@ -247,6 +278,7 @@ export const TestServiceUI = () => {
     { text: "SELLCHAR", onClick: sellCharacterAddOffer },
     { text: "BUYCHAR", onClick: buyCharacterAddOffer },
     { text: "SELLITEM", onClick: sellItemAddOffer },
+    { text: "SELLITEMBATCH", onClick: sellItemBatchAddOffer },
     { text: "BUYITEM", onClick: buyItemAddOffer },
     // Add more buttons here
   ];

@@ -1,5 +1,5 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character } from "../../interfaces";
+import { Character, Item } from "../../interfaces";
 // TODO: Use makeOffer status callback for errors
 
 interface CharacterMarketAction {
@@ -146,6 +146,56 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
   });
 };
 
+interface SellItemBatchAction {
+  entryId?: string;
+  itemCollection: any;
+  pricePerItem: bigint;
+  service: {
+    kreadInstance: any;
+    itemBrand: any;
+    istBrand: any;
+    makeOffer: any;
+  };
+  callback: () => Promise<void>;
+}
+
+const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }: SellItemBatchAction): Promise<void> => {
+  const instance = service.kreadInstance;
+
+  const spec = {
+    id: "custom-id",
+    source: "contract",
+    instance,
+    publicInvitationMaker: "makeInternalSellItemBatchInvitation",
+  };
+
+  const want = {
+    Price: { brand: service.istBrand.brand, value: pricePerItem },
+  };
+
+  const proposal = {
+    want,
+    give: {},
+    exit: { waived: null },
+  };
+
+  console.log(spec, proposal, harden({ itemsToSell: itemCollection }));
+
+  service.makeOffer(spec, proposal, harden({ itemsToSell: itemCollection }), ({ status, data }: { status: string; data: object }) => {
+    if (status === "error") {
+      console.error("Offer error", data);
+    }
+    if (status === "refunded") {
+      console.error("Offer refunded", data);
+      callback();
+    }
+    if (status === "accepted") {
+      console.info("Offer accepted", data);
+      callback();
+    }
+  });
+};
+
 const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAction): Promise<void> => {
   if (!entryId) return;
 
@@ -187,4 +237,4 @@ const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAc
   });
 };
 
-export const marketService = { sellCharacter, buyCharacter, sellItem, buyItem };
+export const marketService = { sellCharacter, buyCharacter, sellItem, sellItemBatch, buyItem };

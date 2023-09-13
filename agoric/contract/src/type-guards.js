@@ -101,6 +101,7 @@ export const PublicI = M.interface('public', {
   makeSellCharacterInvitation: M.call().returns(M.promise()),
   makeBuyCharacterInvitation: M.call().returns(M.promise()),
   makeSellItemInvitation: M.call().returns(M.promise()),
+  makeInternalSellItemBatchInvitation: M.call().returns(M.promise()),
   makeBuyItemInvitation: M.call().returns(M.promise()),
   // Getters
   getTokenInfo: M.call().returns(
@@ -142,10 +143,12 @@ export const CharacterI = M.interface('character', {
 export const ItemI = M.interface('item', {
   mint: M.call().returns(M.promise()),
   mintDefaultBatch: M.call().returns(M.promise(M.string())),
+  mintBatch: M.call().returns(M.promise(M.string())),
 });
 
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
+  internalSellItemBatch: M.call().returns(M.promise()),
   buyItem: M.call().returns(M.promise()),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
@@ -194,5 +197,6 @@ export const MarketRecorderGuard = M.splitRecord({
     value: M.nat(),
   }),
   object: M.or(CharacterGuard, ItemGuard),
+  isFirstSale: M.boolean(),
   // history: M.arrayOf(HistoryGuard),
 });
