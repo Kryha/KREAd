@@ -12,330 +12,264 @@
 // uncomment the following line to typecheck, for example, in vs-code.
 // import { E } from '@endo/far';
 
-const defaultCharacters = [
-  {
-    title: 'character 1',
-    type: 'tempetScavenger',
-    description:
-      'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
-    level: 1,
-    details: {
-      boardId: '06553',
-      contractAddresss: '0x0177812bsjs7998',
-      standard: 'standard',
-      artist: 'emily',
-      metadata: 'https://yourmetadata.info',
+const baseCharacters = [
+  [
+    1,
+    {
+      title: 'Citizen',
+      origin: 'Sage',
+      description:
+        'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
+      level: 1,
+      artistMetadata: '',
+      characterTraits: '',
+      image:
+        'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
     },
-    projectDescription: 'this is a project',
-    image:
-      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
-  },
-  {
-    title: 'character 2',
-    type: 'tempetScavenger',
-    description:
-      'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
-    level: 1,
-    details: {
-      boardId: '06553',
-      contractAddresss: '0x0177812bsjs7998',
-      standard: 'standard',
-      artist: 'emily',
-      metadata: 'https://yourmetadata.info',
+  ],
+  [
+    2,
+    {
+      title: 'Scavenger',
+      origin: 'Tempet',
+      description:
+        'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
+      level: 1,
+      artistMetadata: '',
+      characterTraits: '',
+      image:
+        'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
     },
-    projectDescription: 'this is a project',
-    image:
-      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
-  },
-  {
-    title: 'character 3',
-    url: 'https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png',
-    type: 'tempetScavenger',
-    description:
-      'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
-    level: 1,
-    details: {
-      boardId: '06553',
-      contractAddresss: '0x0177812bsjs7998',
-      standard: 'standard',
-      artist: 'emily',
-      metadata: 'https://yourmetadata.info',
+  ],
+  [
+    3,
+    {
+      title: 'Bounty Hunter',
+      origin: 'Mars',
+      description:
+        'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
+      level: 1,
+      artistMetadata: '',
+      characterTraits: '',
+      image:
+        'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
     },
-    projectDescription: 'this is a project',
-    image:
-      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
-  },
-  {
-    title: 'character 4',
-    url: 'https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png',
-    type: 'tempetScavenger',
-    description:
-      'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
-    level: 1,
-    details: {
-      boardId: '06553',
-      contractAddresss: '0x0177812bsjs7998',
-      standard: 'standard',
-      artist: 'emily',
-      metadata: 'https://yourmetadata.info',
+  ],
+  [
+    4,
+    {
+      title: 'State Bounty Hunter',
+      origin: 'Elphia',
+      description:
+        'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
+      level: 1,
+      artistMetadata: '',
+      characterTraits: '',
+      image:
+        'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
     },
-    projectDescription: 'this is a project',
-    image:
-      'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
-  },
+  ],
+  [
+    5,
+    {
+      title: 'Council Member',
+      origin: 'Arm',
+      url: 'https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png',
+      description:
+        'A Tempet Scavenger has Tempet technology, which is, own modification on the standard requirements and regulations on tech that is allowed. Agreed among the cities. Minimal and elegant, showcasing their water technology filtration system that is known throughout that land as having the best mask when it comes to scent tracking technology.',
+      level: 1,
+      artistMetadata: '',
+      characterTraits: '',
+      image:
+        'https://ipfs.io/ipfs/QmSkCL11goTK7qw1qLjbozUJ1M7mJtSyH1PnL1g8AB96Zg',
+    },
+  ],
 ];
-const defaultItems = {
-  noseline: {
+
+const baseItems = [
+  {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'noseline',
+    category: 'perk1',
+    functional: false,
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    origin: 'Elphia',
     image:
       'https://ipfs.io/ipfs/QmayqpgHTDQ8qQCWv8DPax2mfhtXey3kmzWqEBHdphyAZx',
     thumbnail:
       'https://ipfs.io/ipfs/QmeSU6u5jQgcjfTyQuhwjqaFgM5vZmZeoxYPBTeEev9ALs',
-    level: 5,
-    rarity: 2,
-    effectiveness: 3,
-    layerComplexity: 5,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06149',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
+    artistMetadata: '',
   },
-  midBackground: {
+  {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'midBackground',
+    category: 'patch',
+    functional: false,
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://ipfs.io/ipfs/QmTdg7MpcL3rKfLiBAfLkedBp74uPKx3CTGrYdwARspy4e',
     thumbnail:
       'https://ipfs.io/ipfs/QmS3fkmVaToE7imZn9jtMZMbSTTeeyGZBHLocUUw7u5z4T',
-    level: 54,
-    rarity: 35,
-    effectiveness: 4,
-    layerComplexity: 6,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
     colors: ['#7B5B7B'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06119',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
+    artistMetadata: '',
   },
-  mask: {
+  {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'mask',
+    category: 'perk2',
+    functional: false,
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://ipfs.io/ipfs/QmadebCRvkLSHdeSTnPJv58XHtjk5DwYbeUigNNcWPs2Vn',
     thumbnail:
       'https://ipfs.io/ipfs/QmYmyyNeoyeAQ8qPHkufum848mA1P5Q1KHZp7n6vhwGsgd',
-    level: 34,
-    rarity: 4,
-    effectiveness: 5,
-    layerComplexity: 400,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
     colors: ['#B1A2A2', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06139',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
+    artistMetadata: '',
   },
-  headPiece: {
+  {
     name: 'AirTox: Fairy Dust Elite',
     category: 'headPiece',
+    functional: false,
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://ipfs.io/ipfs/Qmb1ZXVuJifqQ28fEqiSEB7kgXXRqKfwYA7CD4aeLUbrtR',
     thumbnail:
       'https://ipfs.io/ipfs/QmciQkft6W2oZeGQuahosN5LaBawXYkJZTVq8VCEMLZVVG',
-    level: 340,
-    rarity: 4,
-    effectiveness: 404,
-    layerComplexity: 5000,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06118',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
+    artistMetadata: '',
   },
-  hair: {
+  {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'hair',
-    description:
-      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image:
-      'https://ipfs.io/ipfs/QmdMyDHeudz3RJDFbrwgAvtC2Kx6rmcMbbF85hyqnnNcfE',
-    thumbnail:
-      'https://ipfs.io/ipfs/QmPQbf3NkPbSv6HABKPeEkbGdsoXVyVnpY5kXY3mS8Q4yR',
-    level: 4555,
-    rarity: 53,
-    effectiveness: 45,
-    layerComplexity: 100,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
-    colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06117',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
-  },
-  frontMask: {
-    name: 'AirTox: Fairy Dust Elite',
-    category: 'frontMask',
-    description:
-      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image:
-      'https://ipfs.io/ipfs/QmS5TvnX9PMobuME6bLuuDWR4avhGGeuHg7eAFfZAiLLZ1',
-    thumbnail:
-      'https://ipfs.io/ipfs/QmS1X4KRtcumk4PqjowgKsbMh2uN79wwUsYYKnakqr7FZn',
-    level: 3440,
-    rarity: 30,
-    effectiveness: 3405,
-    layerComplexity: 0.12 * 50 + 100,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
-    colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06116',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
-  },
-  liquid: {
-    name: 'AirTox: Fairy Dust Elite',
-    category: 'liquid',
-    description:
-      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image:
-      'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
-    thumbnail:
-      'https://ipfs.io/ipfs/QmcVTwEMR8XzsF8hThYMpajTb6oL7TtvfuH3MEpwyvZUMi',
-    level: 455,
-    rarity: 3333,
-    effectiveness: 234,
-    layerComplexity: 3,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
-    colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06115',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
-  },
-  background: {
-    name: 'AirTox: Fairy Dust Elite',
-    category: 'background',
-    description:
-      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    image:
-      'https://ipfs.io/ipfs/QmaYb31m9CRTKJQzVgi2NaHfPqdUTYuXQq5jLzTbTa2YVx',
-    thumbnail:
-      'https://ipfs.io/ipfs/QmYRmByVnzK2D6akMDEfMj3LPLSJw15R9s9gdu9oGcEV7E',
-    level: 40,
-    rarity: 1,
-    effectiveness: 3,
-    layerComplexity: 50,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
-    colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06114',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
-  },
-  airReservoir: {
-    name: 'AirTox: Fairy Dust Elite',
-    category: 'airReservoir',
+    category: 'filter2',
+    functional: false,
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://ipfs.io/ipfs/QmdmgvWYz1bEdBH6eSTPCfkcjZQhZvbREYULGjJd4EQPZy',
     thumbnail:
       'https://ipfs.io/ipfs/QmZMyeV2dvMs9i5kjj9gCvmkvMz5nTBapmyKARk7dkbRqX',
-    level: 0.12 * 200 + 0,
-    rarity: 0.12 * 400 + 10,
-    effectiveness: 0.12 * 30 + 5,
-    layerComplexity: 0.12 * 50 + 100,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06113',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
+    artistMetadata: '',
   },
-  clothing: {
+  {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'clothing',
+    category: 'garment',
+    functional: false,
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
       'https://ipfs.io/ipfs/QmShge9z81i5sRjgHUjH5EBwtKPvSRNap5JHbp4imLgJ4H',
     thumbnail:
       'https://ipfs.io/ipfs/QmdVLuhUPRvpHzmERTSsChHBexAhc6TUK6SPHsGnqQ7QaM',
-    level: 1,
-    rarity: 2,
-    effectiveness: 35,
-    layerComplexity: 100,
-    forged: 'Tempet Section 1',
-    baseMaterial: 'Mars & Earth',
+    rarity: 65,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
     colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
-    projectDescription:
-      "In a far-future post-apocalyptic world, after multiple generations of war, we ended up with limited set of land, resources, water, and food. By leveraging decentralized technology humanity has found equilibrium in the management of global resources by decentrally managing the supply and demand based on everyone's contribution to the global ecosystem. The scavengers are the eyes and ears outside the city walls called the wildland.Carrying the most advanced technology allowed by the city counsels.Modified For: survival, traceability, stealth, and attack. Scavengers are usually promoted to bounty hunters of the state.Carrying out justice on their behalf in the wildlands.",
-    details: {
-      boardId: '06112',
-      brand: '0x0177812bsjs7998',
-      artist: 'Enmanuel',
-      metadata: 'https://yourmetadata.com',
-    },
+    artistMetadata: '',
   },
-};
+  {
+    name: 'AirTox: Fairy Dust Elite',
+    category: 'hair',
+    functional: false,
+    description:
+      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    image:
+      'https://ipfs.io/ipfs/QmdMyDHeudz3RJDFbrwgAvtC2Kx6rmcMbbF85hyqnnNcfE',
+    thumbnail:
+      'https://ipfs.io/ipfs/QmPQbf3NkPbSv6HABKPeEkbGdsoXVyVnpY5kXY3mS8Q4yR',
+    rarity: 65,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
+    colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
+    artistMetadata: '',
+  },
+  {
+    name: 'AirTox: Fairy Dust Elite',
+    category: 'filter1',
+    functional: false,
+    description:
+      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    origin: 'elphia',
+    image:
+      'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
+    thumbnail:
+      'https://ipfs.io/ipfs/QmcVTwEMR8XzsF8hThYMpajTb6oL7TtvfuH3MEpwyvZUMi',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
+    colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
+    artistMetadata: '',
+  },
+  {
+    name: 'AirTox: Fairy Dust Elite',
+    category: 'background',
+    functional: false,
+    description:
+      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    image:
+      'https://ipfs.io/ipfs/QmaYb31m9CRTKJQzVgi2NaHfPqdUTYuXQq5jLzTbTa2YVx',
+    thumbnail:
+      'https://ipfs.io/ipfs/QmYRmByVnzK2D6akMDEfMj3LPLSJw15R9s9gdu9oGcEV7E',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
+    colors: ['#B1A2A2', '#7B5B7B', '#968996', '#FFFFFF'],
+    artistMetadata: '',
+  },
+];
 
 const contractInfo = {
   storagePath: 'kread',
@@ -344,7 +278,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-04cced7d58d1632ad65444aceb9775c7d3676157cfd07b6d3d45815e6cc420f4faeeb22afcbe30857f26e115bbefad86240b0e654d9bf93ce69809854a7c64f2',
+    'b1-3c089ffa31bb785a63d871d8f6725896d45593b4bd4371336e2b785a8d258e97dbee474ce11563afc86a1245e5c2a9d6490139f13d5e8e3198f4fddc485d006a',
 };
 
 const fail = (reason) => {
@@ -393,8 +327,6 @@ const executeProposal = async (powers) => {
   const clock = await E(settledTimer).getClock();
 
   const kreadConfig = harden({
-    defaultCharacters,
-    defaultItems,
     clock,
     seed: 303,
   });
@@ -457,6 +389,8 @@ const executeProposal = async (powers) => {
     TOKEN_BRAND_BOARD_ID,
     TOKEN_ISSUER_BOARD_ID,
   );
+
+  await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
 
   await E(creatorFacet).initializeMetrics();
 

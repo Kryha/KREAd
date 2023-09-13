@@ -30,11 +30,11 @@ const unequipOffer = async (t) => {
   const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
-  const hairItem = characterInventory.items
+  const legendary = characterInventory.items
     .map((i) => i[0])
-    .find((i) => i.category === 'hair');
+    .filter((i) => i.rarity > 59)[0];
 
-  const hairItemCopyBagAmount = makeCopyBag(harden([[hairItem, 1n]]));
+  const legendaryCopyBagAmount = makeCopyBag(harden([[legendary, 1n]]));
   const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
 
   const characterCopyBagAmount = makeCopyBag(
@@ -57,7 +57,7 @@ const unequipOffer = async (t) => {
       CharacterKey1: characterKeyAmount,
     },
     want: {
-      Item: AmountMath.make(contractAssets.item.brand, hairItemCopyBagAmount),
+      Item: AmountMath.make(contractAssets.item.brand, legendaryCopyBagAmount),
       CharacterKey2: AmountMath.make(
         contractAssets.character.brand,
         makeCopyBag(
@@ -107,8 +107,8 @@ test.serial('| INVENTORY - Unequip Item', async (t) => {
   );
   t.deepEqual(
     characterInventory.items.length,
-    9,
-    'Character Inventory contains 9 items',
+    2,
+    'Character Inventory contains 2 items',
   );
 });
 
@@ -197,7 +197,7 @@ test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
   );
   const noseItem = characterInventory.items
     .map((i) => i[0])
-    .find((i) => i.category === 'noseline');
+    .filter((i) => i.rarity < 59)[0];
   const noseItemCopyBagAmount = makeCopyBag(harden([[noseItem, 1n]]));
   const characterCopyBagAmount = makeCopyBag(
     harden([[purses.character.getCurrentAmount().value.payload[0][0], 1n]]),
@@ -369,19 +369,20 @@ test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
     name: 'New item',
     category: 'hair',
     thumbnail: '',
-    rarity: 0,
-    level: 0,
-    projectDescription: '',
-    layerComplexity: 0,
-    effectiveness: 0,
-    forged: '',
-    details: { boardId: '', brand: '', artist: '', metadata: '' },
     description: '',
+    functional: false,
+    rarity: 65,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
     date: {},
     colors: [''],
-    baseMaterial: '',
     id: 10000,
     image: '',
+    artistMetadata: '',
   });
 
   const hairItem = purses.item
@@ -479,7 +480,7 @@ test.serial('| INVENTORY - Swap Items', async (t) => {
   const hairItem = purses.item
     .getCurrentAmount()
     .value.payload.map((i) => i[0])
-    .find((i) => i.category === 'hair');
+    .find(({ rarity }) => rarity > 59);
 
   const hairItemGiveCopyBagAmount = makeCopyBag(harden([[hairItem, 1n]]));
   const hairItemGive = AmountMath.make(
@@ -492,7 +493,7 @@ test.serial('| INVENTORY - Swap Items', async (t) => {
   );
   const hairItemWantValue = characterInventory.items
     .map((i) => i[0])
-    .find((i) => i.category === 'hair');
+    .find(({ rarity }) => rarity > 59);
   const hairItemWantCopyBagAmount = makeCopyBag(
     harden([[hairItemWantValue, 1n]]),
   );
@@ -557,7 +558,7 @@ test.serial('| INVENTORY - Swap Items', async (t) => {
       .find((item) => item.category === 'hair'),
     hairItemGive.value.payload[0][0],
   );
-  t.deepEqual(updatedCharacterInventory.items.length, 10);
+  t.deepEqual(updatedCharacterInventory.items.length, 3);
 });
 
 test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
@@ -586,7 +587,7 @@ test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
       [
         purses.item
           .getCurrentAmount()
-          .value.payload.find(([item, supply]) => item.category === 'hair')[0],
+          .value.payload.find(([item, supply]) => item.rarity > 59)[0],
         1n,
       ],
     ]),
@@ -678,7 +679,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
       [
         purses.item
           .getCurrentAmount()
-          .value.payload.find(([item, supply]) => item.category === 'hair')[0],
+          .value.payload.find(([item, supply]) => item.rarity > 59)[0],
         1n,
       ],
     ]),
@@ -693,7 +694,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
   );
   const clothingItemWantValue = characterInventory.items
     .map((i) => i[0])
-    .find((item) => item.category === 'clothing');
+    .find((item) => item.rarity < 79);
   const clothingItemWantCopyBagAmount = makeCopyBag(
     harden([[clothingItemWantValue, 1n]]),
   );
@@ -756,9 +757,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
     characterName,
   );
   t.deepEqual(
-    updatedInventory.items
-      .map((i) => i[0])
-      .find((item) => item.category === 'clothing'),
+    updatedInventory.items.map((i) => i[0]).find((item) => item.rarity < 79),
     clothingItemWantValue,
     'Clothing item still in inventory',
   );
