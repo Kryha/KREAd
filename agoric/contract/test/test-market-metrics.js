@@ -5,7 +5,6 @@ import { bootstrapContext } from './bootstrap.js';
 import { flow } from './flow.js';
 import { makeCopyBag } from '@agoric/store';
 import { makeKreadUser } from './make-user.js';
-import { defaultItems } from './items.js';
 
 async function sellCharacter(context, user, characterName, askingPrice) {
   /** @type {Bootstrap} */
@@ -168,7 +167,7 @@ test.serial('---| METRICS - Collection size', async (t) => {
 
   const metrics = await E(publicFacet).getMarketMetrics();
   t.deepEqual(metrics.character.collectionSize, 1);
-  t.deepEqual(metrics.item.collectionSize, 10);
+  t.deepEqual(metrics.item.collectionSize, 3);
 });
 
 test.serial('---| METRICS - Average levels character', async (t) => {
@@ -196,9 +195,7 @@ test.serial('---| METRICS - Average levels character', async (t) => {
   t.deepEqual(metrics.character.averageLevel, character.level);
   t.deepEqual(metrics.character.marketplaceAverageLevel, characterLevel);
 
-  const defaultItemsAverageLevel =
-    Object.values(defaultItems).reduce((sum, item) => sum + item.level, 0) /
-    Object.keys(defaultItems).length;
+  const defaultItemsAverageLevel = 0;
 
   t.deepEqual(metrics.item.averageLevel, defaultItemsAverageLevel);
 });

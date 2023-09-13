@@ -170,6 +170,44 @@ test.serial('--| MINT - No name', async (t) => {
   );
 });
 
+test.serial('--| MINT - No characters available', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    zoe,
+  } = t.context;
+  const { want, message } = flow.mintCharacter.noAvailability;
+
+  const mintCharacterInvitation = await E(
+    publicFacet,
+  ).makeMintCharacterInvitation();
+  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
+  const proposal = harden({
+    want: {
+      Asset: AmountMath.make(
+        contractAssets.character.brand,
+        harden(copyBagAmount),
+      ),
+    },
+  });
+
+  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+  const result = await E(userSeat).getOfferResult();
+  t.deepEqual(
+    result.message,
+    message,
+    'Offer returns all-minted error message',
+  );
+
+  const characters = await E(publicFacet).getCharacters();
+  t.deepEqual(
+    characters.length,
+    1,
+    'New character was not added to contract registry due to mint error',
+  );
+});
+
 test.serial('--| MINT - Inventory check', async (t) => {
   /** @type {Bootstrap} */
   const {
@@ -185,14 +223,26 @@ test.serial('--| MINT - Inventory check', async (t) => {
 
   t.deepEqual(
     mappedInventory.length,
-    10,
-    'New character inventory contains 10 items',
+    3,
+    'New character inventory contains 3 items',
   );
 
   t.deepEqual(
     new Set(mappedInventory.map((i) => i.category)).size,
-    10,
+    3,
     'No two items have the same category',
+  );
+
+  t.deepEqual(
+    mappedInventory.filter((i) => i.rarity < 20).length,
+    2,
+    'Two items are common',
+  );
+
+  t.deepEqual(
+    mappedInventory.filter((i) => i.rarity > 59).length,
+    1,
+    'One item is legendary',
   );
 });
 

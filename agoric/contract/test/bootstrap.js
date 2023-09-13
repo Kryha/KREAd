@@ -26,8 +26,6 @@ export const bootstrapContext = async (conf) => {
       marshaller: makeFakeBoard().getReadonlyMarshaller(),
     },
     clock: timerService.getClock(),
-    defaultCharacters,
-    defaultItems,
     seed: 0,
   };
 
@@ -38,8 +36,9 @@ export const bootstrapContext = async (conf) => {
     undefined,
     harden(privateArgs),
   );
-  const { publicFacet } = instance;
+  const { publicFacet, creatorFacet } = instance;
   const contractAssets = await E(publicFacet).getTokenInfo();
+  await E(creatorFacet).initializeBaseAssets(defaultCharacters, defaultItems);
 
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
