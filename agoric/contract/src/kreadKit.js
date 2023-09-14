@@ -816,9 +816,9 @@ export const prepareKreadKit = async (
           return text.mintItemReturn;
         },
         /**
-         * 
-         * @param {ZCFSeat} seat 
-         * @param {[Item, bigint][]} itemBatch 
+         *
+         * @param {ZCFSeat} seat
+         * @param {[Item, bigint][]} itemBatch
          * @returns {Promise<string>}
          */
         async mintBatch(seat, itemBatch) {
@@ -1057,20 +1057,20 @@ export const prepareKreadKit = async (
         },
         publishItemCollection() {
           /**
-           * 
-           * @param {ZCFSeat} seat 
-           * @param {{ 
-           *    itemsToSell: [Item, bigint][], 
-           * }} privateArgs 
+           *
+           * @param {ZCFSeat} seat
+           * @param {{
+           *    itemsToSell: [Item, bigint][],
+           * }} privateArgs
            */
           const handler = async (seat, { itemsToSell }) => {
             const { market } = this.state;
-            const { market: marketFacet, item } = this.facets;   
-            
+            const { market: marketFacet, item } = this.facets;
+
             // const { zcfSeat: internalSellSeat } = zcf.makeEmptySeatKit();
             const internalSellSeat = seat;
             await item.mintBatch(internalSellSeat, itemsToSell);
-            
+
             const { want } = seat.getProposal();
             const askingPrice = {
               brand: want.Price.brand,
@@ -1115,12 +1115,13 @@ export const prepareKreadKit = async (
             handler,
             'PublishCollection',
             undefined,
-            M.splitRecord({ 
+            M.splitRecord({
               want: {
-              Price: M.splitRecord({
-                brand: BrandShape,
-                value: M.nat()
-              })},
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
             }),
           );
         },
@@ -1194,21 +1195,21 @@ export const prepareKreadKit = async (
             // Find store record based on wanted character
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
             assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
-            
+
             const sellerSeat = sellRecord.seat;
             let itemForSaleAmount, itemForSalePrice;
 
-            if(sellRecord.isFirstSale) {
-              itemForSaleAmount = {
+            if (sellRecord.isFirstSale) {
+              itemForSaleAmount = harden({
                 brand: itemBrand,
-                value: makeCopyBag([[sellRecord.object, 1n]])
-              }
+                value: makeCopyBag([[sellRecord.object, 1n]]),
+              });
               itemForSalePrice = sellRecord.askingPrice;
             } else {
               itemForSaleAmount = sellerSeat.getProposal().give.Item;
               itemForSalePrice = sellerSeat.getProposal().want.Price;
             }
-            
+
             // Inspect Price keyword from buyer seat
             const { Price: providedMoneyAmount } = give;
             assert(

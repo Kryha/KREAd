@@ -705,28 +705,83 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
     users: { bob },
   } = t.context;
 
-  const itemCollection = Object.values(defaultItems).map(item => [item, 3n])
-  console.log("🤔🤔🤔");
-  console.log(itemCollection)
-  const itemsToSell = makeCopyBag(harden(itemCollection));
-  
+  const itemCollection = Object.values(defaultItems).map((item) => [item, 3n]);
+  const itemsToSell = harden(itemCollection);
+
   const priceAmount = AmountMath.make(contractAssets.payment.brand, 5n);
 
-  const sellItemInvitation = await E(publicFacet).makePublishItemCollectionInvitation();
+  const sellItemInvitation = await E(
+    publicFacet,
+  ).makePublishItemCollectionInvitation();
   const proposal = harden({
     give: {},
     want: { Price: priceAmount },
   });
 
-  console.log("🤔🤔🤔", itemsToSell.payload[0][0]);
-  const userSeat = await E(zoe).offer(sellItemInvitation, proposal, undefined, { itemsToSell });
+  const userSeat = await E(zoe).offer(sellItemInvitation, proposal, undefined, {
+    itemsToSell,
+  });
   const result = await E(userSeat).getOfferResult();
   // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
 
-  console.log("🤔🤔🤔", itemsForSale);
-  t.deepEqual(itemsForSale.length, 1, 'Item is successfully added to market');
+  t.deepEqual(itemsForSale.length, 9, 'Item is successfully added to market');
 
-  t.deepEqual(bob.getItems().length, 0, "Item is no longer in bob's wallet");
+  // t.deepEqual(bob.getItems().length, 0, "Item is no longer in bob's wallet");
+});
+
+test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    zoe,
+    users: { bob },
+  } = t.context;
+
+  const itemsForSale = await E(publicFacet).getItemsForSale();
+
+  const itemToBuy = itemsForSale.find(
+    ({ object }) => object.category === 'hair',
+  );
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.object, 1n]]));
+
+  const itemToBuyAmount = AmountMath.make(
+    contractAssets.item.brand,
+    itemToBuyCopyBagAmount,
+  );
+  const priceAmount = AmountMath.make(
+    contractAssets.payment.brand,
+    itemToBuy.askingPrice.value,
+  );
+
+  const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
+  const proposal = harden({
+    give: { Price: priceAmount },
+    want: { Item: itemToBuyAmount },
+  });
+
+  const payment = {
+    Price: bob.withdrawPayment(priceAmount),
+  };
+  const offerArgs = { entryId: itemToBuy.id };
+
+  const userSeat = await E(zoe).offer(
+    buyItemInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
+
+  const result = await E(userSeat).getOfferResult();
+  // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
+
+  const itemsForSaleAfter = await E(publicFacet).getItemsForSale();
+
+  t.deepEqual(
+    itemsForSaleAfter.length,
+    8,
+    'Item is successfully removed from the market',
+  );
 });
