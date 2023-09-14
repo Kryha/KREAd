@@ -1265,11 +1265,81 @@ export const prepareKreadKit = async (
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
             assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
 
-            if (sellRecord.isFirstSale) {
-              marketFacet.buyFirstSaleItem(sellRecord.seat, buyerSeat, sellRecord);
-            } else {
-              marketFacet.buySecondarySaleItem(sellRecord.seat, buyerSeat, sellRecord);
-            }
+            // Inspect Price keyword from buyer seat
+            const { Price: providedMoneyAmount } = give;
+            const { Item: itemForSaleAmount } = sellerSeat.getProposal().give;
+            assert(
+              AmountMath.isEqual(
+                wantedItemAmount,
+                itemForSaleAmount,
+                itemBrand,
+              ),
+              X`${errors.sellerSeatMismatch}`,
+            );
+
+            const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
+            assert(
+              AmountMath.isGTE(
+                providedMoneyAmount,
+                AmountMath.add(
+                  AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
+                  sellRecord.platformFee,
+                ),
+                paymentBrand,
+              ),
+              X`${errors.insufficientFunds}`,
+            );
+
+            const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
+
+            /** @type {TransferPart[]} */
+            const transfers = [];
+            transfers.push([
+              sellerSeat,
+              buyerSeat,
+              { Item: itemForSaleAmount },
+            ]);
+            transfers.push([
+              buyerSeat,
+              zcfSeat,
+              { Price: sellRecord.royalty },
+              { Royalty: sellRecord.royalty },
+            ]);
+            transfers.push([
+              buyerSeat,
+              zcfSeat,
+              { Price: sellRecord.platformFee },
+              { PlatformFee: sellRecord.platformFee },
+            ]);
+            transfers.push([
+              buyerSeat,
+              sellerSeat,
+              {
+                Price: AmountMath.subtract(
+                  providedMoneyAmount,
+                  AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+                ),
+              },
+            ]);
+
+            atomicRearrange(zcf, harden(transfers));
+
+            buyerSeat.exit();
+            sellerSeat.exit();
+            zcfSeat.exit();
+
+            const payouts = await E(userSeat).getPayouts();
+            const royaltyPayout = await payouts.Royalty;
+            const platformFeePayout = await payouts.PlatformFee;
+
+            await E(royaltyDepositFacet).receive(royaltyPayout);
+            await E(platformFeeDepositFacet).receive(platformFeePayout);
+
+            // update metrics
+            marketFacet.updateMetrics('item', {
+              amountSold: true,
+              latestSalePrice: Number(itemForSalePrice.value),
+            });
           };
 
           return zcf.makeInvitation(

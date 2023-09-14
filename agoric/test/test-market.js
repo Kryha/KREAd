@@ -52,12 +52,6 @@ test.before(async (t) => {
     item: contractAssets.item.issuer.makeEmptyPurse(),
     payment: paymentAsset.issuerMockIST.makeEmptyPurse(),
   });
-  const admin = makeKreadUser('admin', {
-    character: contractAssets.character.issuer.makeEmptyPurse(),
-    item: contractAssets.item.issuer.makeEmptyPurse(),
-    payment: paymentAsset.issuerMockIST.makeEmptyPurse(),
-  });
-
   const payout = paymentAsset.mintMockIST.mintPayment(
     AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
   );
@@ -74,7 +68,7 @@ test.before(async (t) => {
     assets,
     purses,
     zoe,
-    users: { bob, alice, admin },
+    users: { bob, alice },
     paymentAsset,
     royaltyPurse,
     platformFeePurse,

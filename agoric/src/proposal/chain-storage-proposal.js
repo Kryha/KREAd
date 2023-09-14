@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-7c3ef9e51f7b3874cf94fcda7c4ebee5b4d7066d1cffeac38321fd4ea1b78e904196821508b2b53a44beaf5d16308bcec158f2009d057b946aea000a86cba71c',
+    'b1-249d846e4b494994c3253be1288db25f5f0ac4e5ed7d39cffeefdf09d76cbd5f60da227078484b888c3fa159eead4d6fc6aed11fa56622bee68d613402ee0442',
 };
 
 const fail = (reason) => {
@@ -344,6 +344,8 @@ const executeProposal = async (powers) => {
       zoe,
       startUpgradable,
       chainTimerService,
+      agoricNamesAdmin,
+      agoricNames,
       namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
@@ -380,7 +382,7 @@ const executeProposal = async (powers) => {
     [[platformFeeAddr, 'depositFacet']],
   );
 
-  const istIssuer = await istIssuerP;
+  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
   const brand = await E(istIssuer).getBrand();
 
   const chainStorageSettled =
