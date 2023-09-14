@@ -336,13 +336,22 @@ const executeProposal = async (powers) => {
       zoe,
       startUpgradable,
       chainTimerService,
-      agoricNamesAdmin,
       namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
+    brand: {
+      produce: {
+        KREAdCHARACTER: produceCharacterBrand,
+        KREAdITEM: produceItemBrand,
+      },
+    },
     issuer: {
       consume: { IST: istIssuerP },
+      produce: {
+        KREAdCHARACTER: produceCharacterIssuer,
+        KREAdITEM: produceItemIssuer,
+      },
     },
     instance: {
       // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
@@ -459,13 +468,10 @@ const executeProposal = async (powers) => {
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(instance);
 
-  const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
-
-  await E(kindAdmin('issuer')).update('KREAdCHARACTER', characterIssuer);
-  await E(kindAdmin('brand')).update('KREAdCHARACTER', characterBrand);
-
-  await E(kindAdmin('issuer')).update('KREAdITEM', itemIssuer);
-  await E(kindAdmin('brand')).update('KREAdITEM', itemBrand);
+  produceCharacterIssuer.resolve(characterIssuer)
+  produceCharacterBrand.resolve(characterBrand)
+  produceItemIssuer.resolve(itemIssuer)
+  produceItemBrand.resolve(itemBrand)
 
   console.log('ASSETS ADDED TO AGORIC NAMES');
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
