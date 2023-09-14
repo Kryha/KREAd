@@ -37,7 +37,6 @@
  * @typedef {{
  *  character: { brand: Brand, issuer: Issuer, name: string }
  *  item: { brand: Brand, issuer: Issuer, name: string }
- *  paymentFT: { brand: Brand, issuer: Issuer, name: string }
  * }} ContractAssets
  */
 
