@@ -164,6 +164,18 @@ export const ItemI = M.interface('item', {
   initializeBaseItems: M.call(M.arrayOf(ItemGuard)).returns(),
 });
 
+export const MarketRecorderGuard = M.splitRecord({
+  id: M.or(M.gte(0), M.string()),
+  seat: M.eref(M.remotable('Seat')),
+  askingPrice: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  object: M.or(CharacterGuard, ItemGuard),
+  isFirstSale: M.boolean(),
+  // history: M.arrayOf(HistoryGuard),
+});
+
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
   internalSellItemBatch: M.call().returns(M.promise()),
@@ -207,16 +219,4 @@ export const ItemRecorderGuard = M.splitRecord({
   id: M.gte(0),
   item: ItemGuard,
   history: M.arrayOf(HistoryGuard),
-});
-
-export const MarketRecorderGuard = M.splitRecord({
-  id: M.or(M.gte(0), M.string()),
-  seat: M.eref(M.remotable('Seat')),
-  askingPrice: M.splitRecord({
-    brand: BrandShape,
-    value: M.nat(),
-  }),
-  object: M.or(CharacterGuard, ItemGuard),
-  isFirstSale: M.boolean(),
-  // history: M.arrayOf(HistoryGuard),
 });
