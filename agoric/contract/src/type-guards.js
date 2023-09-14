@@ -110,7 +110,7 @@ export const PublicI = M.interface('public', {
   makeSellCharacterInvitation: M.call().returns(M.promise()),
   makeBuyCharacterInvitation: M.call().returns(M.promise()),
   makeSellItemInvitation: M.call().returns(M.promise()),
-  makeInternalSellItemBatchInvitation: M.call().returns(M.promise()),
+  makePublishItemCollectionInvitation: M.call().returns(M.promise()),
   makeBuyItemInvitation: M.call().returns(M.promise()),
   // Getters
   getTokenInfo: M.call().returns(
@@ -178,7 +178,7 @@ export const MarketRecorderGuard = M.splitRecord({
 
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
-  internalSellItemBatch: M.call().returns(M.promise()),
+  publishItemCollection: M.call().returns(M.promise()),
   buyItem: M.call().returns(M.promise()),
   handleExitItem: M.call(MarketRecorderGuard).returns(),
   handleExitCharacter: M.call(MarketRecorderGuard).returns(),

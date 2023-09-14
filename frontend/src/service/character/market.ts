@@ -166,7 +166,7 @@ const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }
     id: "custom-id",
     source: "contract",
     instance,
-    publicInvitationMaker: "makeInternalSellItemBatchInvitation",
+    publicInvitationMaker: "makePublishItemCollectionInvitation",
   };
 
   const want = {

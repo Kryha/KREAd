@@ -712,7 +712,7 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   
   const priceAmount = AmountMath.make(contractAssets.payment.brand, 5n);
 
-  const sellItemInvitation = await E(publicFacet).makeInternalSellItemBatchInvitation();
+  const sellItemInvitation = await E(publicFacet).makePublishItemCollectionInvitation();
   const proposal = harden({
     give: {},
     want: { Price: priceAmount },

@@ -222,18 +222,18 @@ export const TestServiceUI = () => {
     console.log(">>>>")
     const instance = service.contracts.kread.instance;
     const itemBrand = service.tokenInfo.item.brand;
-    // const item = wallet.item[0];
-    // const items = [];
-    // for(var i = 0; i<10; i++){
-    //   items.push(item);
-    // }
+    const { forSale, equippedTo, ...item } = wallet.item[0];
+    const items = [];
+    for(var i = 1; i<5; i++){
+      items.push([{...item, name: i+"name"}, BigInt(i)]);
+    }
     const itemCollection = Object.values(mockCharacterItems1).map(item => {
       const { activity, ...adjustedItem } = item;
       return [adjustedItem, 3n]
     })
   
     marketService.sellItemBatch({
-      itemCollection,
+      itemCollection: items,
       pricePerItem: 10n,
       service: {
         kreadInstance: instance,

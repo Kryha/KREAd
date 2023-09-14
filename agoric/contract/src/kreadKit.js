@@ -827,6 +827,8 @@ export const prepareKreadKit = async (
 
           const currentTime = await helper.getTimeStamp();
 
+          console.log(itemBatch);
+
           const newItemAmount = AmountMath.make(
             itemBrand,
             makeCopyBag(harden(itemBatch)),
@@ -836,31 +838,35 @@ export const prepareKreadKit = async (
 
           let id = itemState.entries.getSize();
 
-          itemBatch.forEach((i) => {
-            const item = {
-              id,
-              item: i,
-              history: [
-                {
-                  type: 'mint',
-                  data: i,
-                  timestamp: currentTime,
+          itemBatch.forEach((copyBagEntry) => {
+            const [itemObject, itemSupply] = copyBagEntry;
+            
+            for(let n=0; n<itemSupply; n++){
+              const item = {
+                id,
+                item: itemObject,
+                history: [
+                  {
+                    type: 'mint',
+                    data: itemObject,
+                    timestamp: currentTime,
+                  },
+                ],
+              };
+
+              itemState.entries.addAll([[id, harden(item)]]);
+              itemKit.recorder.write(item);
+
+              id += 1;
+              // update metrics
+              marketFacet.updateMetrics('item', {
+                collectionSize: true,
+                averageLevel: {
+                  type: 'add',
+                  value: item.item.level,
                 },
-              ],
-            };
-
-            itemState.entries.addAll([[id, harden(item)]]);
-            itemKit.recorder.write(item);
-
-            id += 1;
-            // update metrics
-            marketFacet.updateMetrics('item', {
-              collectionSize: true,
-              averageLevel: {
-                type: 'add',
-                value: item.item.level,
-              },
-            });
+              });
+            }
           });
 
           return text.mintItemReturn;
@@ -1049,7 +1055,7 @@ export const prepareKreadKit = async (
             }),
           );
         },
-        internalSellItemBatch() {
+        publishItemCollection() {
           /**
            * 
            * @param {ZCFSeat} seat 
@@ -1102,7 +1108,7 @@ export const prepareKreadKit = async (
 
           return zcf.makeInvitation(
             handler,
-            'Internal SellItemBatch',
+            'PublishCollection',
             undefined,
             M.splitRecord({ 
               want: {
@@ -1235,7 +1241,10 @@ export const prepareKreadKit = async (
             zcf.atomicRearrange(harden(transfers));
 
             buyerSeat.exit();
-            sellerSeat.exit();
+
+            if(!sellRecord.isFirstSale) {
+              sellerSeat.exit();
+            }
 
             // update metrics
             marketFacet.updateMetrics('item', {
@@ -1575,9 +1584,9 @@ export const prepareKreadKit = async (
           const { market } = this.facets;
           return market.sellItem();
         },
-        makeInternalSellItemBatchInvitation() {
+        makePublishItemCollectionInvitation() {
           const { market } = this.facets;
-          return market.internalSellItemBatch();
+          return market.publishItemCollection();
         },
         makeBuyItemInvitation() {
           const { market } = this.facets;
