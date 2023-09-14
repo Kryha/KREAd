@@ -64,42 +64,47 @@ export const ITEM_CATEGORIES = {
   equipped: "equipped",
 } as const;
 
-export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"];
+export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"] as const;
 
 export const SECTION = {
   SHOP: "shop",
   INVENTORY: "inventory",
+} as const;
+
+export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"] as const;
+
+export const ASSET_TYPE = {
+  CHARACTER: "character",
+  ITEM: "item",
 };
 
-export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"];
+export const AGORIC_LINK = "https://agoric.com/" as const;
+export const KRYHA_LINK = "https://kryha.io/" as const;
 
-export const AGORIC_LINK = "https://agoric.com/";
-export const KRYHA_LINK = "https://kryha.io/";
+export const MAX_CHARACTER_LENGTH = 16 as const;
+export const SLIDER_TIME = 4.5 as const;
+export const PAGE_SIZE = 10 as const;
+export const ASSETS_PER_PAGE = 10 as const;
 
-export const MAX_CHARACTER_LENGTH = 16;
-export const SLIDER_TIME = 4.5;
-export const PAGE_SIZE = 10;
-export const ASSETS_PER_PAGE = 10;
-
-export const FIRST_TIME = "first_time";
-export const CHARACTER_PURSE_NAME = "KREA";
-export const ITEM_PURSE_NAME = "KREAITEM";
+export const FIRST_TIME = "first_time" as const;
+export const CHARACTER_PURSE_NAME = "KREA" as const;
+export const ITEM_PURSE_NAME = "KREAITEM" as const;
 
 export const EVENT_TYPE = {
   mint: "mint",
   sell: "sell",
   buy: "buy",
-};
+} as const;
 
-export const STORAGE_NODE_SPEC_MARKET_ITEMS = ":published.kread.market-items";
-export const STORAGE_NODE_SPEC_MARKET_CHARACTERS = ":published.kread.market-characters";
+export const STORAGE_NODE_SPEC_MARKET_ITEMS = ":published.kread.market-items" as const;
+export const STORAGE_NODE_SPEC_MARKET_CHARACTERS = ":published.kread.market-characters" as const;
 
-export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-";
+export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-" as const;
 
-export const isDevelopmentMode = process.env.NODE_ENV === "development";
+export const isDevelopmentMode = process.env.NODE_ENV === ("development" as const);
 
-export const DOWNLOAD_CANVAS_WIDTH = 2500;
-export const DOWNLOAD_CANVAS_HEIGHT = 2500;
+export const DOWNLOAD_CANVAS_WIDTH = 2500 as const;
+export const DOWNLOAD_CANVAS_HEIGHT = 2500 as const;
 
 export const networkConfigs = {
   mainnet: {
@@ -131,11 +136,11 @@ export const networkConfigs = {
     label: "Local Devnet",
     url: "https://wallet.agoric.app/wallet/network-config", //"https://wallet.agoric.app/wallet/network-config",
   },
-};
+} as const;
 
-export const localBridgeHref = "http://localhost:3000/wallet/bridge.html";
-export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html";
-export const devBridgeHref = "https://main.wallet-app.pages.dev/wallet/bridge.html";
+export const localBridgeHref = "http://localhost:3000/wallet/bridge.html" as const;
+export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html" as const;
+export const devBridgeHref = "https://main.wallet-app.pages.dev/wallet/bridge.html" as const;
 
 export const bridgeHref = import.meta.env.VITE_BRIDGE_HREF || localBridgeHref;
 
@@ -144,12 +149,14 @@ export const walletUiHref = () => {
   return bridgeUrl ? bridgeUrl.origin + "/wallet/" : "";
 };
 
-export const IST_IDENTIFIER = "IST";
-export const KREAD_IDENTIFIER = "kread";
-export const ITEM_IDENTIFIER = "KREAdITEM";
-export const CHARACTER_IDENTIFIER = "KREAdCHARACTER";
+export const IST_IDENTIFIER = "IST" as const;
+export const KREAD_IDENTIFIER = "kread" as const;
+export const ITEM_IDENTIFIER = "KREAdITEM" as const;
+export const CHARACTER_IDENTIFIER = "KREAdCHARACTER" as const;
 
-export const SELL_ITEM_INVITATION = "makeSellItemInvitation";
-export const SELL_CHARACTER_INVITATION = "makeSellCharacterInvitation";
+export const SELL_ITEM_INVITATION = "makeSellItemInvitation" as const;
+export const SELL_CHARACTER_INVITATION = "makeSellCharacterInvitation" as const;
 
-export const AGORIC_RPC = import.meta.env.VITE_RPC || "http://127.0.0.1:26657";
+export const AGORIC_RPC = import.meta.env.VITE_RPC || ("http://127.0.0.1:26657" as const);
+
+export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;

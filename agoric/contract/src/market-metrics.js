@@ -1,15 +1,58 @@
 /**
+ * adds a value to the average
+ *
+ * @param {number} average
+ * @param {number} size
+ * @param {number} value
+ * @returns {number}
+ */
+function addToAverage(average, size, value) {
+  return (average * size + value) / (size + 1);
+}
+
+/**
+ * Removes a value from the average
+ *
+ * @param {number} average
+ * @param {number} size
+ * @param {number} value
+ * @returns {number}
+ */
+function removeFromAverage(average, size, value) {
+  if (size === 1) {
+    return 0;
+  }
+  return (size * average - value) / (size - 1);
+}
+
+/**
+ * Updates an average based on add or remove
+ *
+ * @param {string} type
+ * @param {number} average
+ * @param {number} size
+ * @param {number} value
+ */
+function updateAverage(type, average, size, value) {
+  if (type === 'add') {
+    return addToAverage(average, size, value);
+  } else if (type === 'remove') {
+    return removeFromAverage(average, size, value);
+  }
+}
+
+/**
  * Updates character metrics
  *
- * @param state
+ * @param {object} state
  * @param {UpdateMetrics} updateMetrics
- * @param marketCharacterMetricsKit
+ * @param {import("@agoric/zoe/src/contractSupport").RecorderKit} marketCharacterMetricsKit
  */
-export function updateCharacterMetrics(
+export const updateCharacterMetrics = async (
   state,
   updateMetrics,
   marketCharacterMetricsKit,
-) {
+) => {
   if (updateMetrics.averageLevel) {
     state.characterAverageLevel = updateAverage(
       updateMetrics.averageLevel.type,
@@ -37,16 +80,20 @@ export function updateCharacterMetrics(
     marketplaceAverageLevel: state.characterMarketplaceAverageLevel,
     amountSold: state.characterAmountSold,
   });
-}
+};
 
 /**
  * Updates item metrics
  *
- * @param state
+ * @param {object} state
  * @param {UpdateMetrics} updateMetrics
- * @param marketCharacterMetricsKit
+ * @param {import("@agoric/zoe/src/contractSupport").RecorderKit} marketItemMetricsKit
  */
-export function updateItemMetrics(state, updateMetrics, marketItemMetricsKit) {
+export const updateItemMetrics = (
+  state,
+  updateMetrics,
+  marketItemMetricsKit,
+) => {
   if (updateMetrics.averageLevel) {
     state.itemAverageLevel = updateAverage(
       updateMetrics.averageLevel.type,
@@ -74,23 +121,4 @@ export function updateItemMetrics(state, updateMetrics, marketItemMetricsKit) {
     marketplaceAverageLevel: state.itemMarketplaceAverageLevel,
     amountSold: state.itemAmountSold,
   });
-}
-
-function updateAverage(type, average, size, value) {
-  if (type === 'add') {
-    return addToAverage(average, size, value);
-  } else if (type === 'remove') {
-    return removeFromAverage(average, size, value);
-  }
-}
-
-function addToAverage(average, size, value) {
-  return (average * size + value) / (size + 1);
-}
-
-function removeFromAverage(average, size, value) {
-  if (size == 1) {
-    return 0;
-  }
-  return (size * average - value) / (size - 1);
-}
+};

@@ -3,24 +3,24 @@ import { useAgoricState } from "./agoric";
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
 import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
-import { OfferProposal } from "../interfaces";
+import { Item, OfferProposal } from "../interfaces";
 
 const { brandBoardIds } = dappConstants;
 export interface WalletContext {
   token: any;
   money: any;
   character: any;
-  item: any;
+  item: Item[];
   itemProposals: OfferProposal[];
   characterProposals: OfferProposal[];
   fetched: boolean;
 }
 
 const initialState: WalletContext = {
-  token: undefined,
-  money: undefined,
-  character: undefined,
-  item: undefined,
+  token: [],
+  money: [],
+  character: [],
+  item: [],
   itemProposals: [],
   characterProposals: [],
   fetched: false,
@@ -32,7 +32,6 @@ type ProviderProps = Omit<React.ProviderProps<WalletContext>, "value">;
 
 export const WalletContextProvider = (props: ProviderProps): React.ReactElement => {
   const [walletState, walletDispatch] = useState<WalletContext>(initialState);
-  // const userDispatch = useUserStateDispatch();
   const agoric = useAgoricState();
   const pursesNotifier = agoric.walletConnection.pursesNotifier;
   const chainStorageWatcher = agoric.chainStorageWatcher;
@@ -57,7 +56,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;
 
       if (itemWallet) {
-        itemWallet = itemWallet.map((item: any) => ({ ...item, id: Number(item.id) }));
+        itemWallet = itemWallet.map((item: any) => ({ ...item, equippedTo: "", forSale: false }));
       }
 
       walletDispatch((prevState) => ({
@@ -100,7 +99,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     return () => {
       isCancelled = true;
     };
-  }, [pursesNotifier, walletState.fetched]);
+  }, [pursesNotifier, walletState.fetched, chainStorageWatcher]);
 
   return <Context.Provider value={walletState}>{props.children}</Context.Provider>;
 };

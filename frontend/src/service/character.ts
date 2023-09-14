@@ -2,10 +2,9 @@ import { useMutation } from "react-query";
 
 import { CharacterCreation, CharacterEquip, CharacterInMarket, ExtendedCharacter, ExtendedCharacterBackend } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { CharacterFilters, CharactersMarketFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
 import { extendCharacters } from "./transform-character";
-import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { useOffers } from "./offers";
+import { useAgoricState, useAgoricContext } from "../context/agoric";
+import { CharacterFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
 import { useCharacterMarketState } from "../context/character-shop";
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
@@ -54,7 +53,7 @@ export const useMyCharactersForSale = () => {
   return parsedCharacters;
 };
 
-export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolean] => {
+export const useMyCharacter = (id?: string): [ExtendedCharacter | undefined, boolean] => {
   const [owned, isLoading] = useMyCharacters();
 
   const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
@@ -62,13 +61,13 @@ export const useMyCharacter = (id?: string): [CharacterEquip | undefined, boolea
   return [found, isLoading];
 };
 
-export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], boolean] => {
+export const useMyCharacters = (filters?: CharacterFilters): [ExtendedCharacter[], boolean] => {
   const { characters, selected, fetched } = useUserState();
   const charactersForSale = useMyCharactersForSale();
   const charactersWithEquip: CharacterEquip[] = useMemo(() => {
     return characters.map((character) => {
-      if (character.nft.id === selected?.nft.id) return { ...character, isEquipped: true, isForSale: false };
-      return { ...character, isEquipped: false, isForSale: false };
+      if (character.nft.id === selected?.nft.id) return { ...character, equippedTo: character.nft.name, isForSale: false };
+      return { ...character, equippedTo: "", isForSale: false };
     });
   }, [characters, selected?.nft.id]);
 
@@ -77,7 +76,7 @@ export const useMyCharacters = (filters?: CharacterFilters): [CharacterEquip[], 
     try {
       const offerCharactersFrontend: CharacterEquip[] = mediate.characters
         .toFront(charactersForSale)
-        .map((item) => ({ ...item, isEquipped: false, isForSale: true }));
+        .map((item) => ({ ...item, equippedTo: "", isForSale: true }));
       return [...charactersWithEquip, ...offerCharactersFrontend];
     } catch (error) {
       return charactersWithEquip;
@@ -102,7 +101,7 @@ export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefin
   return [found, isLoading];
 };
 
-export const useCharactersMarket = (filters?: CharactersMarketFilters): [CharacterInMarket[], boolean] => {
+export const useCharactersMarket = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
   const filtered = useMemo(() => {
     if (!filters) return characters;
@@ -114,7 +113,7 @@ export const useCharactersMarket = (filters?: CharactersMarketFilters): [Charact
 };
 
 // TODO: consider whether fetching by range is necessary after implementing notifiers
-export const useCharactersMarketPages = (page: number, filters?: CharactersMarketFilters): [CharacterInMarket[], boolean, number] => {
+export const useCharactersMarketPages = (page: number, filters?: CharacterFilters): [CharacterInMarket[], boolean, number] => {
   const { characters, fetched } = useCharacterMarketState();
   // TODO: get total pages
   const totalPages = 20;
@@ -240,4 +239,19 @@ export const useBuyCharacter = (characterId: string) => {
   }, [characterId, characters, wallet, service]);
 
   return { callback, isLoading };
+};
+
+export const useGetCharacterInShopById = (id: string): [CharacterInMarket | undefined, boolean] => {
+  const [characters, isLoading] = useGetCharactersInShop();
+
+  const found = useMemo(() => characters.find((character) => character.id === id), [id, characters]);
+
+  return [found, isLoading];
+};
+
+export const useGetCharactersInShop = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
+  const { characters, fetched } = useCharacterMarketState();
+  if (!filters) return [characters, !fetched];
+  const filtered = filterCharactersMarket(characters, filters);
+  return [filtered, !fetched];
 };

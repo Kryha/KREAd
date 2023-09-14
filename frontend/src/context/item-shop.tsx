@@ -27,6 +27,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   const { isMockData } = useDataMode();
   const [marketState, marketDispatch] = useState(isMockData ? initialMockState : initialState);
   const agoric = useAgoricState();
+  const [watchingStore, setWatchingStore] = useState(false);
 
   useEffect(() => {
     const parseItemMarketUpdate = async (itemsInMarket: KreadItemInMarket[]) => {
@@ -34,7 +35,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       marketDispatch((prevState: any) => ({ ...prevState, items, fetched: true }));
     };
     const formatMarketEntry = async (marketEntry: KreadItemInMarket): Promise<ItemInMarket> => {
-      const item = { ...marketEntry.object, id: marketEntry.object.id.toString() };
+      const item = marketEntry.object;
 
       const itemMarketEntry = {
         id: marketEntry.id.toString(),
@@ -47,11 +48,12 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       return itemMarketEntry;
     };
 
-    if (agoric.chainStorageWatcher) {
+    if (agoric.chainStorageWatcher && !watchingStore) {
       watchItemMarket(agoric.chainStorageWatcher, parseItemMarketUpdate);
-      console.info("✅ LISTENING TO ITEM SHOP NOTIFIER");
+      setWatchingStore(true);
+      console.count("✅ LISTENING TO ITEM SHOP NOTIFIER");
     }
-  }, [agoric]);
+  }, [agoric, watchingStore]);
 
   return <Context.Provider value={marketState}>{props.children}</Context.Provider>;
 };

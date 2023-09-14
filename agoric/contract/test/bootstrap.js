@@ -16,7 +16,7 @@ export const bootstrapContext = async (conf) => {
 
   // Setup fungible and non-fungible assets
   const assets = setupAssets(conf?.assets);
-
+  const timerService = buildManualTimer();
   // Bundle and install contract
   const contractBundle = await bundleSource('./src/index.js');
   const installation = await E(zoe).install(contractBundle);
@@ -25,9 +25,7 @@ export const bootstrapContext = async (conf) => {
       storageNode: makeMockChainStorageRoot().makeChildNode('thisElectorate'),
       marshaller: makeFakeBoard().getReadonlyMarshaller(),
     },
-    chainTimerService: buildManualTimer(),
-    defaultCharacters,
-    defaultItems,
+    clock: timerService.getClock(),
     seed: 0,
   };
 
@@ -38,8 +36,9 @@ export const bootstrapContext = async (conf) => {
     undefined,
     harden(privateArgs),
   );
-  const { publicFacet } = instance;
+  const { publicFacet, creatorFacet } = instance;
   const contractAssets = await E(publicFacet).getTokenInfo();
+  await E(creatorFacet).initializeBaseAssets(defaultCharacters, defaultItems);
 
   const {
     character: { issuer: characterIssuer, brand: characterBrand },

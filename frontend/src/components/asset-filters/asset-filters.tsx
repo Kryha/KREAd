@@ -1,26 +1,40 @@
 import React, { FC, useState } from "react";
 
-import { itemInventoryCategories, itemShopCategories, sortAssetsInInventory, sortAssetsInShop } from "../../assets/text/filter-options";
+import {
+  characterInventoryCategories,
+  characterShopCategories,
+  itemInventoryCategories,
+  itemShopCategories,
+  sortCharactersInInventory,
+  sortCharactersInShop,
+  sortItemsInInventory,
+  sortItemsInShop,
+} from "../../assets/text/filter-options";
 import { breakpoints, color } from "../../design";
 import { ColorSelector, Filters, HorizontalDivider, Label, PriceSelector, Select } from "../../components";
 import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
 import { AssetFilterContainer, AssetFilterCount, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { ItemCategory } from "../../interfaces";
 
 interface Props {
+  assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
+  section: (typeof SECTION)[keyof typeof SECTION];
   assets: any[];
-  selectedCategories: string[];
+  selectedCategories: ItemCategory[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
-  setSelectedCategories: (value: string[]) => void;
+  setSelectedCategories: (value: string | string[]) => void;
   setSelectedSorting: (value: string) => void;
-  setSelectedColor: (value: string) => void;
+  setSelectedColor?: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
   pageSelector: React.ReactNode;
-  section: (typeof SECTION)[keyof typeof SECTION];
 }
+
 export const AssetFilters: FC<Props> = ({
+  assetType,
+  section,
   assets,
   selectedCategories,
   selectedSorting,
@@ -30,7 +44,6 @@ export const AssetFilters: FC<Props> = ({
   setSelectedColor,
   setSelectedPrice,
   pageSelector,
-  section,
 }) => {
   const isMobile = useIsMobile(breakpoints.desktop);
   const numberOfFiltersSelected = selectedCategories.length;
@@ -46,12 +59,35 @@ export const AssetFilters: FC<Props> = ({
   const openFilters = () => {
     setShowFilter(!showFilter);
   };
-  const handleCategoryChange = (selected: string | string[]) => {
-    if (Array.isArray(selected)) {
-      setSelectedCategories(selected); // Handle multi-select
-    } else {
-      setSelectedCategories([selected]); // Handle single-select
-    }
+
+  const categories =
+    assetType === ASSET_TYPE.ITEM
+      ? // Items
+        section === SECTION.INVENTORY
+        ? itemInventoryCategories
+        : itemShopCategories
+      : // Characters
+      section === SECTION.INVENTORY
+      ? characterInventoryCategories
+      : characterShopCategories;
+
+  const sortOptions =
+    assetType === ASSET_TYPE.ITEM
+      ? // Items
+        section === SECTION.INVENTORY
+        ? sortItemsInInventory
+        : sortItemsInShop
+      : // Characters
+      section === SECTION.INVENTORY
+      ? sortCharactersInInventory
+      : sortCharactersInShop;
+
+  const handleCategoryChange = (selected: ItemCategory[]) => {
+    // if (Array.isArray(selected)) {
+    //   setSelectedCategories(selected); // Handle multi-select
+    // } else {
+    setSelectedCategories(selected); // Handle single-select
+    // }
   };
 
   const handleSortingChange = (selected: string | string[]) => {
@@ -81,8 +117,8 @@ export const AssetFilters: FC<Props> = ({
                 >
                   <Select
                     label={text.filters.allCategories}
-                    handleChange={handleCategoryChange}
-                    options={section === SECTION.INVENTORY ? itemInventoryCategories : itemShopCategories}
+                    handleChange={() => setSelectedCategories(selectedCategories)}
+                    options={categories}
                     isMultiSelect
                   />
                 </Filters>
@@ -91,9 +127,11 @@ export const AssetFilters: FC<Props> = ({
                     {selectedPrice && <PriceSelector handleChange={handlePriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
                   </Filters>
                 )}
-                <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
-                  <ColorSelector handleChange={setSelectedColor} />
-                </Filters>
+                {setSelectedColor && (
+                  <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
+                    <ColorSelector handleChange={setSelectedColor} />
+                  </Filters>
+                )}
                 <SortAssetsByContainer>
                   <Label customColor={color.black}>{text.filters.sortBy}</Label>
                   <Filters
@@ -102,11 +140,7 @@ export const AssetFilters: FC<Props> = ({
                     id={filterId}
                     hasValue={!!selectedSorting}
                   >
-                    <Select
-                      label={text.filters.latest}
-                      handleChange={handleSortingChange}
-                      options={section === SECTION.INVENTORY ? sortAssetsInInventory : sortAssetsInShop}
-                    />
+                    <Select label={text.filters.latest} handleChange={handleSortingChange} options={sortOptions} />
                   </Filters>
                 </SortAssetsByContainer>
               </>

@@ -3,7 +3,7 @@
 import '@agoric/zoe/exported';
 import { updateCharacterMetrics, updateItemMetrics } from './market-metrics';
 import { assert, details as X } from '@agoric/assert';
-import { AmountMath, AmountShape, BrandShape } from '@agoric/ertp';
+import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
 import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
@@ -30,6 +30,8 @@ import {
   ItemRecorderGuard,
   MarketRecorderGuard,
   MarketMetricsGuard,
+  RarityGuard,
+  BaseCharacterGuard,
 } from './type-guards.js';
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
@@ -40,8 +42,6 @@ import {
  * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {ZCF} zcf
  * @param {{
- *   defaultCharacters: object[],
- *   defaultItems: object[],
  *   seed: number
  * }} privateArgs
  * @param {{
@@ -51,7 +51,7 @@ import {
  *   itemMint: ZCFMint<"copyBag">
  *   paymentFTIssuerRecord: IssuerRecord<"nat">
  *   paymentFTMint: ZCFMint<"nat">
- *   chainTimerService: TimerService
+ *   clock: import('@agoric/time/src/types.js').Clock
  *   storageNode: StorageNode
  *   makeRecorderKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit
  *   storageNodePaths: Object
@@ -60,7 +60,7 @@ import {
 export const prepareKreadKit = async (
   baggage,
   zcf,
-  { defaultCharacters, defaultItems, seed },
+  { seed },
   {
     characterIssuerRecord,
     characterMint,
@@ -68,7 +68,7 @@ export const prepareKreadKit = async (
     itemMint,
     paymentFTIssuerRecord,
     paymentFTMint,
-    chainTimerService,
+    clock,
     storageNode,
     makeRecorderKit,
     storageNodePaths,
@@ -96,8 +96,8 @@ export const prepareKreadKit = async (
       info: KreadInfoGuard,
       characterKit: CharacterRecorderGuard,
       itemKit: ItemRecorderGuard,
-      marketCharacterKit: MarketRecorderGuard,
-      marketItemKit: MarketRecorderGuard,
+      marketCharacterKit: M.arrayOf(MarketRecorderGuard),
+      marketItemKit: M.arrayOf(MarketRecorderGuard),
       marketCharacterMetricsKit: MarketMetricsGuard,
       marketItemMetricsKit: MarketMetricsGuard,
     },
@@ -123,17 +123,39 @@ export const prepareKreadKit = async (
     () => {
       return {
         character: harden({
-          entries: makeScalarBigMapStore('characters', { durable: true }),
+          entries: makeScalarBigMapStore('characters', {
+            durable: true,
+            keyShape: M.string(),
+            valueShape: CharacterRecorderGuard,
+          }),
+          bases: makeScalarBigMapStore('baseCharacters', {
+            durable: true,
+            keyShape: M.number(),
+            valueShape: BaseCharacterGuard,
+          }),
         }),
         item: harden({
-          entries: makeScalarBigMapStore('items', { durable: true }),
+          entries: makeScalarBigMapStore('items', {
+            durable: true,
+            keyShape: M.number(),
+            valueShape: ItemRecorderGuard,
+          }),
+          bases: makeScalarBigMapStore('baseItems', {
+            durable: true,
+            keyShape: RarityGuard,
+            valueShape: M.arrayOf(ItemGuard),
+          }),
         }),
         market: harden({
           characterEntries: makeScalarBigMapStore('characterMarket', {
             durable: true,
+            keyShape: M.string(),
+            valueShape: MarketRecorderGuard,
           }),
           itemEntries: makeScalarBigMapStore('itemMarket', {
             durable: true,
+            keyShape: M.number(),
+            valueShape: MarketRecorderGuard,
           }),
         }),
         characterCollectionSize: 0,
@@ -146,12 +168,13 @@ export const prepareKreadKit = async (
         itemMarketplaceAverageLevel: 0,
         itemAmountSold: 0,
         itemLatestSalePrice: 0,
+        itemsPutForSaleAmount: 0,
       };
     },
     {
       helper: {
         async getTimeStamp() {
-          return E(chainTimerService).getCurrentTimestamp();
+          return E(clock).getCurrentTimestamp();
         },
         randomNumber() {
           seed |= 0;
@@ -185,12 +208,18 @@ export const prepareKreadKit = async (
         isNameUnique(name) {
           return !this.state.character.entries.has(name);
         },
-        getRandomBaseCharacter() {
+        getRandomBaseIndex() {
           const { helper } = this.facets;
+          const { character: characterState } = this.state;
           const number = Math.floor(
-            helper.randomNumber() * defaultCharacters.length,
+            helper.randomNumber() * characterState.bases.getSize(),
           );
-          return defaultCharacters[number];
+          return Array.from(characterState.bases.keys())[number];
+        },
+        initializeBaseCharacters(baseCharacters) {
+          const { character: characterState } = this.state;
+          if (characterState.bases.getSize() > 0) return;
+          characterState.bases.addAll(baseCharacters);
         },
         async makeInventoryRecorderKit(path) {
           const node = await E(storageNode).makeChildNode(`inventory-${path}`);
@@ -216,11 +245,20 @@ export const prepareKreadKit = async (
               seat.fail();
               return harden({ message: errors.nameTaken(newCharacterName) });
             }
+
+            if (characterState.bases.getSize() === 0) {
+              seat.clear();
+              seat.fail();
+              return harden({ message: errors.allMinted });
+            }
+
             const currentTime = await helper.getTimeStamp();
+            const baseIndex = characterFacet.getRandomBaseIndex();
+            const baseCharacter = characterState.bases.get(baseIndex);
             const [newCharacterAmount1, newCharacterAmount2] =
               makeCharacterNftObjs(
                 newCharacterName,
-                characterFacet.getRandomBaseCharacter(),
+                baseCharacter,
                 characterState.entries.getSize(),
                 currentTime,
               ).map((character) =>
@@ -238,6 +276,11 @@ export const prepareKreadKit = async (
               inventorySeat,
             );
 
+            // Deleting here to ensure the base character does not get deleted before everything is minted
+            // Consideration: can this be a race condition when multiple people mint at the same time?
+            // This becomes more likely the less bases there are
+            characterState.bases.delete(baseIndex);
+
             await item.mintDefaultBatch(inventorySeat);
 
             const inventoryKit = await characterFacet.makeInventoryRecorderKit(
@@ -245,7 +288,6 @@ export const prepareKreadKit = async (
             );
 
             // Add to state
-
             const character = {
               name: newCharacterName,
               character: newCharacterAmount1.value.payload[0][0],
@@ -676,6 +718,31 @@ export const prepareKreadKit = async (
         },
       },
       item: {
+        initializeBaseItems(baseItems) {
+          const { item: itemState } = this.state;
+          if (itemState.bases.getSize() > 0) return;
+
+          const common = [];
+          const uncommon = [];
+          const rare = [];
+          const legendary = [];
+          const exotic = [];
+          baseItems.forEach((item) => {
+            if (item.rarity > 79) exotic.push(item);
+            else if (item.rarity > 59) legendary.push(item);
+            else if (item.rarity > 39) rare.push(item);
+            else if (item.rarity > 19) uncommon.push(item);
+            else common.push(item);
+          });
+
+          itemState.bases.addAll([
+            ['common', harden(common)],
+            ['uncommon', harden(uncommon)],
+            ['rare', harden(rare)],
+            ['legendary', harden(legendary)],
+            ['exotic', harden(exotic)],
+          ]);
+        },
         // Mints the default set of items to a seat that doesn't exit
         // FIXME: change how this works with copy bag
         // define a limit of items to be able to be minted so we can generat a supply
@@ -683,16 +750,33 @@ export const prepareKreadKit = async (
           const { helper, market: marketFacet } = this.facets;
           const { item: itemState } = this.state;
 
-          const allDefaultItems = Object.values(defaultItems);
+          let commonBases = itemState.bases.get('common');
+          const index1 = Math.floor(helper.randomNumber() * commonBases.length);
+          const item1 = commonBases[index1];
+
+          commonBases = commonBases.filter(
+            (item) => item.category !== item1.category,
+          );
+          const index2 = Math.floor(helper.randomNumber() * commonBases.length);
+          const item2 = commonBases[index2];
+
+          const legendaryBases = itemState.bases
+            .get('legendary')
+            .filter(
+              (item) =>
+                item.category !== item1.category &&
+                item.category !== item2.category,
+            );
+
+          const index3 = Math.floor(
+            helper.randomNumber() * legendaryBases.length,
+          );
+          const item3 = legendaryBases[index3];
+
+          const items = [item1, item2, item3];
 
           const currentTime = await helper.getTimeStamp();
 
-          let id = itemState.entries.getSize();
-          // @ts-ignore
-          const items = allDefaultItems.map((item) => {
-            id += 1;
-            return { ...item, id, date: currentTime };
-          });
           const newItemAmount = AmountMath.make(
             itemBrand,
             makeCopyBag(harden(items.map((item) => [item, 1n]))),
@@ -700,9 +784,11 @@ export const prepareKreadKit = async (
 
           await itemMint.mintGains({ Item: newItemAmount }, seat);
 
+          let id = itemState.entries.getSize();
+
           items.forEach((i) => {
             const item = {
-              id: i.id,
+              id,
               item: i,
               history: [
                 {
@@ -713,8 +799,10 @@ export const prepareKreadKit = async (
               ],
             };
 
-            itemState.entries.addAll([[i.id, harden(item)]]);
+            itemState.entries.addAll([[id, harden(item)]]);
             itemKit.recorder.write(item);
+
+            id += 1;
             // update metrics
             marketFacet.updateMetrics('item', {
               collectionSize: true,
@@ -736,11 +824,8 @@ export const prepareKreadKit = async (
 
             const currentTime = await helper.getTimeStamp();
 
-            let id = itemState.entries.getSize();
-            // @ts-ignore
             const items = want.Item.value.payload.map(([item, supply]) => {
-              id += 1;
-              return [{ ...item, id, date: currentTime }, supply];
+              return [item, supply];
             });
             const newItemAmount = AmountMath.make(
               itemBrand,
@@ -751,10 +836,12 @@ export const prepareKreadKit = async (
 
             seat.exit();
 
+            let id = itemState.entries.getSize();
+
             items.forEach((j) => {
               const i = j[0];
               const item = {
-                id: i.id,
+                id,
                 item: i,
                 // Potentially have separate durable stores for the history
                 history: [
@@ -766,9 +853,10 @@ export const prepareKreadKit = async (
                 ],
               };
 
-              itemState.entries.addAll([[i.id, harden(item)]]);
+              itemState.entries.addAll([[id, harden(item)]]);
               itemKit.recorder.write(item);
 
+              id += 1;
               // update metrics
               marketFacet.updateMetrics('item', {
                 collectionSize: true,
@@ -796,6 +884,52 @@ export const prepareKreadKit = async (
       },
       // TODO: figure out a way to handle the sell and buy more agnostic from the type of the amount
       market: {
+        handleExitCharacter(entry) {
+          const { market } = this.state;
+          const { market: marketFacet, character: characterFacet } =
+            this.facets;
+
+          const { seat, object } = entry;
+          const characterLevel = characterFacet.calculateLevel(object.name);
+
+          const subscriber = E(seat).getSubscriber();
+          E.when(E(subscriber).getUpdateSince(), () => {
+            marketFacet.updateMetrics('character', {
+              marketplaceAverageLevel: {
+                type: 'remove',
+                value: characterLevel,
+              },
+            });
+
+            market.characterEntries.delete(object.name);
+
+            marketCharacterKit.recorder.write(
+              Array.from(market.characterEntries.values()),
+            );
+          });
+        },
+        handleExitItem(entry) {
+          const { market } = this.state;
+          const { market: marketFacet } = this.facets;
+
+          const { seat, object, id } = entry;
+
+          const subscriber = E(seat).getSubscriber();
+          E.when(E(subscriber).getUpdateSince(), () => {
+            marketFacet.updateMetrics('item', {
+              marketplaceAverageLevel: {
+                type: 'remove',
+                value: object.level,
+              },
+            });
+
+            market.itemEntries.delete(id);
+
+            marketItemKit.recorder.write(
+              Array.from(market.itemEntries.values()),
+            );
+          });
+        },
         updateMetrics(collection, updateMetrics) {
           if (collection === 'character') {
             updateCharacterMetrics(
@@ -811,6 +945,7 @@ export const prepareKreadKit = async (
           const handler = (seat) => {
             const { market } = this.state;
             const { market: marketFacet } = this.facets;
+
             // Inspect allocation of Character keyword in seller seat
             const objectInSellSeat = seat.getAmountAllocated('Item');
             const { want } = seat.getProposal();
@@ -824,7 +959,7 @@ export const prepareKreadKit = async (
             const newEntry = {
               seat,
               askingPrice,
-              id: object.id,
+              id: this.state.itemsPutForSaleAmount,
               object,
             };
 
@@ -841,6 +976,9 @@ export const prepareKreadKit = async (
             marketItemKit.recorder.write(
               Array.from(market.itemEntries.values()),
             );
+
+            marketFacet.handleExitItem(newEntry);
+            this.state.itemsPutForSaleAmount++;
           };
 
           return zcf.makeInvitation(
@@ -897,6 +1035,8 @@ export const prepareKreadKit = async (
             marketCharacterKit.recorder.write(
               Array.from(market.characterEntries.values()),
             );
+
+            marketFacet.handleExitCharacter(newEntry);
           };
 
           return zcf.makeInvitation(
@@ -917,17 +1057,16 @@ export const prepareKreadKit = async (
           );
         },
         buyItem() {
-          const handler = (buyerSeat) => {
+          const handler = (buyerSeat, offerArgs) => {
             const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
             // Inspect Character keyword in buyer seat
             const { want, give } = buyerSeat.getProposal();
             const { Item: wantedItemAmount } = want;
-            const item = wantedItemAmount.value.payload[0][0];
             // Find store record based on wanted character
-            const sellRecord = market.itemEntries.get(item.id);
-            assert(sellRecord, X`${errors.itemNotFound(item.id)}`);
+            const sellRecord = market.itemEntries.get(offerArgs.entryId);
+            assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
             const sellerSeat = sellRecord.seat;
 
             // Inspect Price keyword from buyer seat
@@ -974,18 +1113,8 @@ export const prepareKreadKit = async (
             // update metrics
             marketFacet.updateMetrics('item', {
               amountSold: true,
-              marketplaceAverageLevel: {
-                type: 'remove',
-                value: sellRecord.object.level,
-              },
               latestSalePrice: Number(itemForSalePrice.value),
             });
-
-            market.itemEntries.delete(item.id);
-
-            marketItemKit.recorder.write(
-              Array.from(market.itemEntries.values()),
-            );
           };
           return zcf.makeInvitation(
             handler,
@@ -1005,7 +1134,7 @@ export const prepareKreadKit = async (
           );
         },
         buyCharacter() {
-          const handler = (buyerSeat) => {
+          const handler = async (buyerSeat) => {
             const { market: marketFacet, character: characterFacet } =
               this.facets;
             const { market, character: characterState } = this.state;
@@ -1065,28 +1194,14 @@ export const prepareKreadKit = async (
 
             zcf.atomicRearrange(harden(transfers));
 
-            buyerSeat.exit();
-            sellerSeat.exit();
-
             // update metrics
-            const characterLevel = characterFacet.calculateLevel(
-              sellRecord.object.name,
-            );
             marketFacet.updateMetrics('character', {
               amountSold: true,
-              marketplaceAverageLevel: {
-                type: 'remove',
-                value: characterLevel,
-              },
               latestSalePrice: Number(characterForSalePrice.value),
             });
 
-            // Remove entry from store array
-            market.characterEntries.delete(character.name);
-
-            marketCharacterKit.recorder.write(
-              Array.from(market.characterEntries.values()),
-            );
+            buyerSeat.exit();
+            sellerSeat.exit();
           };
 
           return zcf.makeInvitation(
@@ -1155,6 +1270,21 @@ export const prepareKreadKit = async (
             marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
             amountSold: this.state.itemAmountSold,
           });
+        },
+        reviveMarketExitSubscribers() {
+          const { market } = this.state;
+          const { market: marketFacet } = this.facets;
+
+          const characters = Array.from(market.characterEntries.values());
+          characters.forEach((entry) => marketFacet.handleExitCharacter(entry));
+
+          const items = Array.from(market.itemEntries.values());
+          items.forEach((entry) => marketFacet.handleExitItem(entry));
+        },
+        initializeBaseAssets(baseCharacters, baseItems) {
+          const { character, item } = this.facets;
+          character.initializeBaseCharacters(baseCharacters);
+          item.initializeBaseItems(baseItems);
         },
       },
       // Public is currently a wrapper around the other created facets and fetches from the state
