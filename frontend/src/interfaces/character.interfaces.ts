@@ -63,8 +63,9 @@ export interface CharacterInMarket {
   character: Character;
   equippedItems: CharacterItems;
   sell: {
-    publicFacet?: any;
     price: bigint;
+    platformFee: bigint;
+    royalty: bigint;
   };
 }
 

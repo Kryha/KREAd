@@ -278,11 +278,42 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-321c63e8123f5716c1635288065581f988055d97ee8bc1649a5707900f8dee5193b8435944b41c74ab6c6da58d56323fd8e5b656153cf15864ea75b4bc988729',
+    'b1-3c089ffa31bb785a63d871d8f6725896d45593b4bd4371336e2b785a8d258e97dbee474ce11563afc86a1245e5c2a9d6490139f13d5e8e3198f4fddc485d006a',
 };
 
 const fail = (reason) => {
   throw reason;
+};
+
+const reserveThenGetNamePaths = async (nameAdmin, paths) => {
+  /**
+   * @param {ERef<import('@agoric/vats').NameAdmin>} nextAdmin
+   * @param {string[]} path
+   */
+  const nextPath = async (nextAdmin, path) => {
+    const [nextName, ...rest] = path;
+    assert.typeof(nextName, 'string');
+
+    // Ensure we wait for the next name until it exists.
+    await E(nextAdmin).reserve(nextName);
+
+    if (rest.length === 0) {
+      // Now return the readonly lookup of the name.
+      const nameHub = E(nextAdmin).readonly();
+      return E(nameHub).lookup(nextName);
+    }
+
+    // Wait until the next admin is resolved.
+    const restAdmin = await E(nextAdmin).lookupAdmin(nextName);
+    return nextPath(restAdmin, rest);
+  };
+
+  return Promise.all(
+    paths.map(async (path) => {
+      Array.isArray(path) || Fail`path ${path} is not an array`;
+      return nextPath(nameAdmin, path);
+    }),
+  );
 };
 
 /**
@@ -307,6 +338,7 @@ const executeProposal = async (powers) => {
       chainTimerService,
       agoricNamesAdmin,
       agoricNames,
+      namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
@@ -315,6 +347,21 @@ const executeProposal = async (powers) => {
       produce: { [contractInfo.instanceName]: kread },
     },
   } = powers;
+
+  const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+  const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+
+  const [royaltyDepositFacet] = await reserveThenGetNamePaths(
+    namesByAddressAdmin,
+    [[royaltyAddr, 'depositFacet']],
+  );
+  const [platformFeeDepositFacet] = await reserveThenGetNamePaths(
+    namesByAddressAdmin,
+    [[platformFeeAddr, 'depositFacet']],
+  );
+
+  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
+  const brand = await E(istIssuer).getBrand();
 
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
@@ -327,12 +374,14 @@ const executeProposal = async (powers) => {
   const clock = await E(settledTimer).getClock();
 
   const kreadConfig = harden({
-    defaultCharacters,
-    defaultItems,
     clock,
     seed: 303,
+    royaltyRate: 0.2,
+    platformFeeRate: 0.2,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand: brand,
   });
-  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
@@ -354,7 +403,6 @@ const executeProposal = async (powers) => {
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
-    payment: { issuer: tokenIssuer, brand: tokenBrand },
   } = await E(publicFacet).getTokenInfo();
 
   const [
@@ -362,15 +410,11 @@ const executeProposal = async (powers) => {
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
     ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
   ] = await Promise.all([
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
     E(board).getId(itemBrand),
     E(board).getId(itemIssuer),
-    E(board).getId(tokenBrand),
-    E(board).getId(tokenIssuer),
   ]);
 
   const assetBoardIds = {
@@ -379,7 +423,6 @@ const executeProposal = async (powers) => {
       brand: CHARACTER_BRAND_BOARD_ID,
     },
     item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
-    paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
   };
 
   await E(creatorFacet).publishKreadInfo(
@@ -388,18 +431,21 @@ const executeProposal = async (powers) => {
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
     ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
   );
+
+  await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
 
   await E(creatorFacet).initializeMetrics();
 
-  // TODO Get the most recent state of metrics from the storage node and send it to the contract
+  // TODO: Get the most recent state of metrics from the storage node and send it to the contract
   // const data = {};
   // const restoreMetricsInvitation = await E(
   //   creatorFacet,
   // ).makeRestoreMetricsInvitation();
   // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
+
+  // Revive seat exit subscribers after upgrade
+  await E(creatorFacet).reviveMarketExitSubscribers();
 
   // Log board ids for use in frontend constants
   console.log(`KREAD BOARD ID: ${boardId}`);

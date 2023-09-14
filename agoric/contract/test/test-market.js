@@ -32,23 +32,27 @@ test.before(async (t) => {
     artistMetadata: '',
   });
 
-  const { zoe, contractAssets, assets, purses, instance } = bootstrap;
+  const {
+    zoe,
+    contractAssets,
+    assets,
+    purses,
+    instance,
+    paymentAsset,
+    royaltyPurse,
+    platformFeePurse,
+    royaltyRate,
+    platformFeeRate,
+  } = bootstrap;
   const bob = makeKreadUser('bob', purses);
   const alice = makeKreadUser('alice', {
     character: contractAssets.character.issuer.makeEmptyPurse(),
     item: contractAssets.item.issuer.makeEmptyPurse(),
-    payment: contractAssets.payment.issuer.makeEmptyPurse(),
+    payment: paymentAsset.issuerMockIST.makeEmptyPurse(),
   });
-  const topUpInvitation = await E(
-    instance.publicFacet,
-  ).makeTokenFacetInvitation();
-  const proposal = harden({
-    want: {
-      Asset: AmountMath.make(contractAssets.payment.brand, harden(100n)),
-    },
-  });
-  const userSeat = await E(zoe).offer(topUpInvitation, proposal);
-  const payout = await E(userSeat).getPayout('Asset');
+  const payout = paymentAsset.mintMockIST.mintPayment(
+    AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
+  );
   alice.depositPayment(payout);
 
   t.context = {
@@ -58,6 +62,11 @@ test.before(async (t) => {
     purses,
     zoe,
     users: { bob, alice },
+    paymentAsset,
+    royaltyPurse,
+    platformFeePurse,
+    royaltyRate,
+    platformFeeRate,
   };
 });
 
@@ -68,6 +77,7 @@ test.serial('---| MARKET - Sell character', async (t) => {
     contractAssets,
     zoe,
     users: { bob },
+    paymentAsset,
   } = t.context;
 
   const {
@@ -84,7 +94,7 @@ test.serial('---| MARKET - Sell character', async (t) => {
     contractAssets.character.brand,
     copyBagAmount,
   );
-  const priceAmount = AmountMath.make(contractAssets.payment.brand, 40n);
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 40n);
 
   const sellCharacterInvitation = await E(
     publicFacet,
@@ -130,6 +140,7 @@ test.serial(
       contractAssets,
       zoe,
       users: { bob, alice },
+      paymentAsset,
     } = t.context;
     const {
       market: {
@@ -153,7 +164,7 @@ test.serial(
     );
 
     const priceAmount = AmountMath.make(
-      contractAssets.payment.brand,
+      paymentAsset.brandMockIST,
       characterToBuy.askingPrice.value / 2n,
     );
 
@@ -191,7 +202,12 @@ test.serial('---| MARKET - Buy character', async (t) => {
     contractAssets,
     zoe,
     users: { bob, alice },
+    royaltyPurse,
+    platformFeePurse,
+    royaltyRate,
+    platformFeeRate,
   } = t.context;
+
   const {
     market: {
       bob: {
@@ -210,7 +226,10 @@ test.serial('---| MARKET - Buy character', async (t) => {
     contractAssets.character.brand,
     copyBagAmount,
   );
-  const priceAmount = characterToBuy.askingPrice;
+  const priceAmount = AmountMath.add(
+    AmountMath.add(characterToBuy.askingPrice, characterToBuy.royalty),
+    characterToBuy.platformFee,
+  );
 
   const buyCharacterInvitation = await E(
     publicFacet,
@@ -253,6 +272,15 @@ test.serial('---| MARKET - Buy character', async (t) => {
     0,
     'Character is successfully removed to market',
   );
+
+  t.deepEqual(
+    royaltyPurse.getCurrentAmount().value,
+    BigInt(Number(characterToBuy.askingPrice.value) * royaltyRate),
+  );
+  t.deepEqual(
+    platformFeePurse.getCurrentAmount().value,
+    BigInt(Number(characterToBuy.askingPrice.value) * platformFeeRate),
+  );
 });
 
 test.serial('---| MARKET - Buy character not on market', async (t) => {
@@ -262,6 +290,7 @@ test.serial('---| MARKET - Buy character not on market', async (t) => {
     contractAssets,
     zoe,
     users: { alice },
+    paymentAsset,
   } = t.context;
   const {
     market: {
@@ -280,7 +309,7 @@ test.serial('---| MARKET - Buy character not on market', async (t) => {
     contractAssets.character.brand,
     copyBagAmount,
   );
-  const priceAmount = AmountMath.make(contractAssets.payment.brand, 5n);
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
   const buyCharacterInvitation = await E(
     publicFacet,
@@ -315,6 +344,7 @@ test.serial('---| MARKET - Sell Item', async (t) => {
     contractAssets,
     zoe,
     users: { bob },
+    paymentAsset,
   } = t.context;
 
   const itemToSellValue = bob
@@ -325,7 +355,7 @@ test.serial('---| MARKET - Sell Item', async (t) => {
     contractAssets.item.brand,
     itemToSellCopyBagAmount,
   );
-  const priceAmount = AmountMath.make(contractAssets.payment.brand, 5n);
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
   const sellItemInvitation = await E(publicFacet).makeSellItemInvitation();
   const proposal = harden({
@@ -356,6 +386,7 @@ test.serial(
       contractAssets,
       zoe,
       users: { bob, alice },
+      paymentAsset,
     } = t.context;
 
     const initialBalance = alice.getPaymentBalance();
@@ -373,7 +404,7 @@ test.serial(
     );
 
     const priceAmount = AmountMath.make(
-      contractAssets.payment.brand,
+      paymentAsset.brandMockIST,
       itemToBuy.askingPrice.value / 2n,
     );
 
@@ -411,6 +442,7 @@ test.serial('---| MARKET - Buy item', async (t) => {
     contractAssets,
     zoe,
     users: { bob, alice },
+    paymentAsset,
   } = t.context;
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
@@ -422,8 +454,10 @@ test.serial('---| MARKET - Buy item', async (t) => {
     contractAssets.item.brand,
     itemToBuyCopyBagAmount,
   );
-  const priceAmount = itemToBuy.askingPrice;
-
+  const priceAmount = AmountMath.add(
+    AmountMath.add(itemToBuy.askingPrice, itemToBuy.royalty),
+    itemToBuy.platformFee,
+  );
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
 
   const proposal = harden({
@@ -461,6 +495,7 @@ test.serial('---| MARKET - Buy item not on market', async (t) => {
     contractAssets,
     zoe,
     users: { alice },
+    paymentAsset,
   } = t.context;
   const initialBalance = alice.getPaymentBalance();
 
@@ -470,7 +505,7 @@ test.serial('---| MARKET - Buy item not on market', async (t) => {
     contractAssets.item.brand,
     itemToBuyCopyBagAmount,
   );
-  const priceAmount = AmountMath.make(contractAssets.payment.brand, 5n);
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
   const proposal = harden({
@@ -507,6 +542,7 @@ test.serial(
       contractAssets,
       zoe,
       users: { bob, alice },
+      paymentAsset,
     } = t.context;
     const {
       market: {
@@ -517,6 +553,7 @@ test.serial(
     } = flow;
 
     //alice puts character for sale
+    const balanceAlice = alice.getPaymentBalance();
     const characterToSell = alice
       .getCharacters()
       .find((c) => c.name === character);
@@ -528,7 +565,7 @@ test.serial(
       contractAssets.character.brand,
       characterToSellCopyBagAmount,
     );
-    let priceAmount = AmountMath.make(contractAssets.payment.brand, 10n);
+    let priceAmount = AmountMath.make(paymentAsset.brandMockIST, 10n);
 
     const sellCharacterInvitation = await E(
       publicFacet,
@@ -569,8 +606,11 @@ test.serial(
       characterToBuyCopyBagAmount,
     );
     priceAmount = AmountMath.make(
-      contractAssets.payment.brand,
-      characterToBuy.askingPrice.value * 2n,
+      paymentAsset.brandMockIST,
+      (characterToBuy.askingPrice.value +
+        characterToBuy.royalty.value +
+        characterToBuy.platformFee.value) *
+        2n,
     );
 
     const buyCharacterInvitation = await E(
@@ -591,8 +631,16 @@ test.serial(
     t.deepEqual(bob.getCharacters().length, 1, "Character is in bob's wallet");
 
     const alicesPayout = await alice.getSeat().market.getPayout('Price');
+
     alice.depositPayment(alicesPayout);
-    t.deepEqual(alice.getPaymentBalance(), 75n, 'Alice received payout');
+    t.deepEqual(
+      alice.getPaymentBalance(),
+      balanceAlice +
+        priceAmount.value -
+        characterToBuy.royalty.value -
+        characterToBuy.platformFee.value,
+      'Alice received payout',
+    );
 
     charactersForSale = await E(publicFacet).getCharactersForSale();
     t.deepEqual(
@@ -612,9 +660,11 @@ test.serial(
       contractAssets,
       zoe,
       users: { bob, alice },
+      paymentAsset,
     } = t.context;
 
     // alice puts item for sale
+    const aliceBalance = alice.getPaymentBalance();
     const itemToSell = alice
       .getItems()
       .find((item) => item.category === 'hair');
@@ -623,7 +673,7 @@ test.serial(
       contractAssets.item.brand,
       itemToSellCopyBagAmount,
     );
-    let priceAmount = AmountMath.make(contractAssets.payment.brand, 10n);
+    let priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
     const sellItemInvitation = await E(publicFacet).makeSellItemInvitation();
     let proposal = harden({
@@ -652,7 +702,7 @@ test.serial(
       itemToBuyCopyBagAmount,
     );
     priceAmount = AmountMath.make(
-      contractAssets.payment.brand,
+      paymentAsset.brandMockIST,
       itemToBuy.askingPrice.value * 2n,
     );
 
@@ -679,7 +729,14 @@ test.serial(
 
     const alicesPayout = await alice.getSeat().market.getPayout('Price');
     alice.depositPayment(alicesPayout);
-    t.deepEqual(alice.getPaymentBalance(), 95n, 'Alice received payout');
+    t.deepEqual(
+      alice.getPaymentBalance(),
+      aliceBalance +
+        priceAmount.value -
+        itemToBuy.royalty.value -
+        itemToBuy.platformFee.value,
+      'Alice received payout',
+    );
 
     itemsForSale = await E(publicFacet).getItemsForSale();
     t.deepEqual(

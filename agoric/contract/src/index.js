@@ -30,6 +30,11 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
+    royaltyRate: M.gte(0),
+    platformFeeRate: M.gte(0),
+    royaltyDepositFacet: M.any(),
+    platformFeeDepositFacet: M.any(),
+    paymentBrand: M.any(),
   }),
 };
 harden(meta);
@@ -40,8 +45,13 @@ harden(meta);
  *   defaultCharacters: object[],
  *   defaultItems: object[],
  *   seed: number
+ *   powers: { storageNode: StorageNode, marshaller: Marshaller },
+ *   royaltyRate: number,
+ *   platformFeeRate: number,
+ *   royaltyDepositFacet: DepositFacet,
+ *   platformFeeDepositFacet: DepositFacet,
+ *   paymentBrand: Brand
  *   clock: import('@agoric/time/src/types').Clock
- *   powers: { storageNode: StorageNode, marshaller: Marshaller }
  * }} privateArgs
  * @param {import('@agoric/vat-data').Baggage} baggage
  */
@@ -50,7 +60,6 @@ export const start = async (zcf, privateArgs, baggage) => {
   const assetNames = {
     character: 'KREAdCHARACTER',
     item: 'KREAdITEM',
-    paymentFT: 'KREAdTOKEN',
   };
 
   const storageNodePaths = {
@@ -66,18 +75,25 @@ export const start = async (zcf, privateArgs, baggage) => {
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
   // durability is not a concern with these, and defining them here, passing on what's needed
   // ensures that the capabilities are where they need to be
-  const { characterMint, itemMint, paymentFTMint } = await provideAll(baggage, {
+  const { characterMint, itemMint } = await provideAll(baggage, {
     characterMint: () =>
       zcf.makeZCFMint(assetNames.character, AssetKind.COPY_BAG),
     itemMint: () => zcf.makeZCFMint(assetNames.item, AssetKind.COPY_BAG),
-    paymentFTMint: () => zcf.makeZCFMint(assetNames.paymentFT, AssetKind.NAT),
   });
 
   const characterIssuerRecord = characterMint.getIssuerRecord();
   const itemIssuerRecord = itemMint.getIssuerRecord();
-  const paymentFTIssuerRecord = paymentFTMint.getIssuerRecord();
 
-  const { powers, clock, seed } = privateArgs;
+  const {
+    powers,
+    clock,
+    seed,
+    royaltyRate,
+    platformFeeRate,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand,
+  } = privateArgs;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,
@@ -90,14 +106,17 @@ export const start = async (zcf, privateArgs, baggage) => {
       zcf,
       {
         seed,
+        royaltyRate,
+        platformFeeRate,
+        royaltyDepositFacet,
+        platformFeeDepositFacet,
+        paymentBrand,
       },
       harden({
         characterIssuerRecord,
         characterMint,
         itemIssuerRecord,
         itemMint,
-        paymentFTIssuerRecord,
-        paymentFTMint,
         clock,
         storageNode: powers.storageNode,
         makeRecorderKit,
