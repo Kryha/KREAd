@@ -12,6 +12,7 @@ async function sellCharacter(context, user, characterName, askingPrice) {
     instance: { publicFacet },
     contractAssets,
     zoe,
+    paymentAsset,
   } = context;
 
   const characterToSell = user
@@ -22,10 +23,7 @@ async function sellCharacter(context, user, characterName, askingPrice) {
     contractAssets.character.brand,
     copyBagAmount,
   );
-  const priceAmount = AmountMath.make(
-    contractAssets.payment.brand,
-    askingPrice,
-  );
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, askingPrice);
 
   const sellCharacterInvitation = await E(
     publicFacet,
@@ -65,7 +63,10 @@ async function buyCharacter(context, user, characterName, seller) {
     contractAssets.character.brand,
     copyBagAmount,
   );
-  const priceAmount = characterToBuy.askingPrice;
+  const priceAmount = AmountMath.add(
+    AmountMath.add(characterToBuy.askingPrice, characterToBuy.royalty),
+    characterToBuy.platformFee,
+  );
 
   const buyCharacterInvitation = await E(
     publicFacet,
@@ -92,22 +93,14 @@ async function buyCharacter(context, user, characterName, seller) {
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
-
-  const { zoe, contractAssets, assets, purses, instance } = bootstrap;
+  const { zoe, contractAssets, assets, purses, instance, paymentAsset } =
+    bootstrap;
 
   const bob = makeKreadUser('bob', purses);
 
-  const topUpInvitation = await E(
-    instance.publicFacet,
-  ).makeTokenFacetInvitation();
-
-  const proposal = harden({
-    want: {
-      Asset: AmountMath.make(contractAssets.payment.brand, harden(100n)),
-    },
-  });
-  const userSeat = await E(zoe).offer(topUpInvitation, proposal);
-  const payout = await E(userSeat).getPayout('Asset');
+  const payout = paymentAsset.mintMockIST.mintPayment(
+    AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
+  );
   bob.depositPayment(payout);
 
   t.context = {
@@ -117,6 +110,7 @@ test.before(async (t) => {
     purses,
     zoe,
     users: { bob },
+    paymentAsset,
   };
 });
 
@@ -213,11 +207,9 @@ test.serial('---| METRICS - Amount sold character', async (t) => {
       },
     },
   } = flow;
-
   await buyCharacter(t.context, bob, characterName, bob);
 
   const metrics = await E(publicFacet).getMarketMetrics();
-  await E(publicFacet).getMarketMetrics();
 
   const character = bob.getCharacters().find((c) => c.name === characterName);
 
