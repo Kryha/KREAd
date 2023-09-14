@@ -344,14 +344,23 @@ const executeProposal = async (powers) => {
       zoe,
       startUpgradable,
       chainTimerService,
-      agoricNamesAdmin,
       namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     // FIXME: Remove?
     produce: { kreadKit },
+    brand: {
+      produce: {
+        KREAdCHARACTER: produceCharacterBrand,
+        KREAdITEM: produceItemBrand,
+      },
+    },
     issuer: {
       consume: { IST: istIssuerP },
+      produce: {
+        KREAdCHARACTER: produceCharacterIssuer,
+        KREAdITEM: produceItemIssuer,
+      },
     },
     instance: {
       // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
@@ -474,10 +483,10 @@ const executeProposal = async (powers) => {
 
   kread.resolve(instance);
 
-  produceCharacterIssuer.resolve(characterIssuer);
-  produceCharacterBrand.resolve(characterBrand);
-  produceItemIssuer.resolve(itemIssuer);
-  produceItemBrand.resolve(itemBrand);
+  produceCharacterIssuer.resolve(characterIssuer)
+  produceCharacterBrand.resolve(characterBrand)
+  produceItemIssuer.resolve(itemIssuer)
+  produceItemBrand.resolve(itemBrand)
 
   console.log('ASSETS ADDED TO AGORIC NAMES');
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
