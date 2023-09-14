@@ -345,24 +345,13 @@ const executeProposal = async (powers) => {
       startUpgradable,
       chainTimerService,
       agoricNamesAdmin,
-      agoricNames,
       namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     // FIXME: Remove?
     produce: { kreadKit },
-    brand: {
-      produce: {
-        KREAdCHARACTER: produceCharacterBrand,
-        KREAdITEM: produceItemBrand,
-      },
-    },
     issuer: {
       consume: { IST: istIssuerP },
-      produce: {
-        KREAdCHARACTER: produceCharacterIssuer,
-        KREAdITEM: produceItemIssuer,
-      },
     },
     instance: {
       // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
@@ -382,7 +371,7 @@ const executeProposal = async (powers) => {
     [[platformFeeAddr, 'depositFacet']],
   );
 
-  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
+  const istIssuer = await istIssuerP;
   const brand = await E(istIssuer).getBrand();
 
   const chainStorageSettled =
