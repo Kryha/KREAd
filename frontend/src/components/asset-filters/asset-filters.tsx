@@ -117,7 +117,7 @@ export const AssetFilters: FC<Props> = ({
                 >
                   <Select
                     label={text.filters.allCategories}
-                    handleChange={()=>setSelectedCategories(selectedCategories)}
+                    handleChange={() => setSelectedCategories(selectedCategories)}
                     options={categories}
                     isMultiSelect
                   />

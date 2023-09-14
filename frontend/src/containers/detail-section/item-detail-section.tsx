@@ -44,7 +44,8 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
 
       {/* details */}
       <DetailSectionSegment title={text.item.details} sectionIndex={3}>
-        <DetailSectionSegmentDetails data={{ ...item.details, brand: item.details.brand }} />
+        {/* FIXME: grab brand from state */}
+        <DetailSectionSegmentDetails data={{ ...item.details, brand: "KREAdITEM" }} />
       </DetailSectionSegment>
 
       {/* project */}
