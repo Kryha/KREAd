@@ -337,11 +337,13 @@ const executeProposal = async (powers) => {
       startUpgradable,
       chainTimerService,
       agoricNamesAdmin,
-      agoricNames,
       namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
+    issuer: {
+      consume: { IST: istIssuerP },
+    },
     instance: {
       // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
       produce: { [contractInfo.instanceName]: kread },
@@ -360,7 +362,7 @@ const executeProposal = async (powers) => {
     [[platformFeeAddr, 'depositFacet']],
   );
 
-  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
+  const istIssuer = await istIssuerP;
   const brand = await E(istIssuer).getBrand();
 
   const chainStorageSettled =

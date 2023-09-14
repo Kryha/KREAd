@@ -6,11 +6,15 @@
     "zoe": true,
     "startUpgradable": true,
     "agoricNamesAdmin": true,
-    "agoricNames": true,
     "namesByAddressAdmin": true
   },
   "produce": {
     "kreadKit": true
+  },
+  "issuer": {
+    "consume": {
+      "IST": true
+    }
   },
   "instance": {
     "produce": {
