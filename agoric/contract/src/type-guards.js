@@ -100,7 +100,6 @@ export const PublicI = M.interface('public', {
   // Mint
   makeMintCharacterInvitation: M.call().returns(M.promise()),
   makeMintItemInvitation: M.call().returns(M.promise()),
-  makeTokenFacetInvitation: M.call().returns(M.promise()),
   // Inventory
   makeEquipInvitation: M.call().returns(M.promise()),
   makeUnequipInvitation: M.call().returns(M.promise()),
@@ -117,7 +116,6 @@ export const PublicI = M.interface('public', {
     M.splitRecord({
       character: { issuer: IssuerShape, brand: BrandShape },
       item: { issuer: IssuerShape, brand: BrandShape },
-      payment: { issuer: IssuerShape, brand: BrandShape },
     }),
   ),
   getCharacters: M.call().returns(M.array()),
@@ -171,6 +169,10 @@ export const MarketRecorderGuard = M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
   }),
+  platformFee: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
   object: M.or(CharacterGuard, ItemGuard),
   isFirstSale: M.boolean(),
   // history: M.arrayOf(HistoryGuard),
@@ -188,7 +190,6 @@ export const MarketI = M.interface('market', {
     M.or('character', 'item'),
     UpdateMarketMetricsGuard,
   ).returns(),
-  freeTokens: M.call().returns(M.promise()),
 });
 
 export const KreadInfoGuard = M.splitRecord({
