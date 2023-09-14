@@ -1077,32 +1077,37 @@ export const prepareKreadKit = async (
               value: want.Price.value,
             };
 
-            itemsToSell.forEach(item => {
+            itemsToSell.forEach(copyBagEntry => {
+              
+              const [itemObject, itemSupply] = copyBagEntry;
 
-              // Add to store array
-              const newEntry = {
-                seat: internalSellSeat,
-                askingPrice,
-                id: this.state.itemsPutForSaleAmount,
-                object: item[0],
-                isFirstSale: true,
-              };
+              for(let n=0; n<itemSupply; n++) {
 
-              // update metrics
-              marketFacet.updateMetrics('item', {
-                marketplaceAverageLevel: {
-                  type: 'add',
-                  value: item[0].level,
-                },
-              });
+                // Add to store array
+                const newEntry = {
+                  seat: internalSellSeat,
+                  askingPrice,
+                  id: this.state.itemsPutForSaleAmount,
+                  object: itemObject,
+                  isFirstSale: true,
+                };
 
-              market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
+                // update metrics
+                marketFacet.updateMetrics('item', {
+                  marketplaceAverageLevel: {
+                    type: 'add',
+                    value: itemObject.level,
+                  },
+                });
 
-              marketItemKit.recorder.write(
-                Array.from(market.itemEntries.values()),
-              );
+                market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
-              this.state.itemsPutForSaleAmount++;
+                marketItemKit.recorder.write(
+                  Array.from(market.itemEntries.values()),
+                );
+
+                this.state.itemsPutForSaleAmount++;
+              }
             })
           };
 
