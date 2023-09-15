@@ -1227,7 +1227,7 @@ export const prepareKreadKit = async (
             // Find store record based on wanted character
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
             assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
-  
+
             if (sellRecord.isFirstSale) {
               marketFacet.buyFirstSaleItem(sellRecord.seat, buyerSeat, sellRecord);
             } else {
@@ -1311,7 +1311,7 @@ export const prepareKreadKit = async (
             { Price: sellRecord.platformFee },
             { PlatformFee: sellRecord.platformFee },
           ]);
-          
+
           // Transfer askingPrice: buyer -> artist
           transfers.push([
             buyerSeat,
@@ -1335,7 +1335,7 @@ export const prepareKreadKit = async (
 
           await E(royaltyDepositFacet).receive(royaltyPayout);
           await E(platformFeeDepositFacet).receive(platformFeePayout);
-          
+
           const askingPricePayout = await payouts.Price;
           await E(royaltyDepositFacet).receive(askingPricePayout);
 
@@ -1352,7 +1352,7 @@ export const prepareKreadKit = async (
           marketItemKit.recorder.write(
             Array.from(market.itemEntries.values()),
           );
-          
+
           // update metrics
           marketFacet.updateMetrics('item', {
             amountSold: true,
