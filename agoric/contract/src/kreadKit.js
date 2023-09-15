@@ -1096,6 +1096,14 @@ export const prepareKreadKit = async (
               brand: want.Price.brand,
               value: want.Price.value,
             };
+            const royalty = {
+              brand: want.Price.brand,
+              value: BigInt(royaltyRate * Number(want.Price.value)),
+            };
+            const platformFee = {
+              brand: want.Price.brand,
+              value: BigInt(platformFeeRate * Number(want.Price.value)),
+            };
 
             itemsToSell.forEach((copyBagEntry) => {
               const [itemObject, itemSupply] = copyBagEntry;
@@ -1105,8 +1113,8 @@ export const prepareKreadKit = async (
                 const newEntry = {
                   seat: internalSellSeat,
                   askingPrice,
-                  royalty: AmountMath.makeEmpty(paymentBrand),
-                  platformFee: AmountMath.makeEmpty(paymentBrand),
+                  royalty,
+                  platformFee,
                   id: this.state.itemsPutForSaleAmount,
                   object: itemObject,
                   isFirstSale: true,
