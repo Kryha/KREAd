@@ -7,6 +7,8 @@ import { M } from '@agoric/store';
 import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
 import { prepareKreadKit } from './kreadKit.js';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
+import { RatioObject } from './type-guards.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -30,6 +32,11 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
+    royaltyRate: RatioObject,
+    platformFeeRate: RatioObject,
+    royaltyDepositFacet: M.any(),
+    platformFeeDepositFacet: M.any(),
+    paymentBrand: M.any(),
   }),
 };
 harden(meta);
@@ -40,8 +47,13 @@ harden(meta);
  *   defaultCharacters: object[],
  *   defaultItems: object[],
  *   seed: number
+ *   powers: { storageNode: StorageNode, marshaller: Marshaller },
+ *   royaltyRate: RatioObject,
+ *   platformFeeRate: RatioObject,
+ *   royaltyDepositFacet: DepositFacet,
+ *   platformFeeDepositFacet: DepositFacet,
+ *   paymentBrand: Brand
  *   clock: import('@agoric/time/src/types').Clock
- *   powers: { storageNode: StorageNode, marshaller: Marshaller }
  * }} privateArgs
  * @param {import('@agoric/vat-data').Baggage} baggage
  */
@@ -50,7 +62,6 @@ export const start = async (zcf, privateArgs, baggage) => {
   const assetNames = {
     character: 'KREAdCHARACTER',
     item: 'KREAdITEM',
-    paymentFT: 'KREAdTOKEN',
   };
 
   const storageNodePaths = {
@@ -66,22 +77,42 @@ export const start = async (zcf, privateArgs, baggage) => {
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
   // durability is not a concern with these, and defining them here, passing on what's needed
   // ensures that the capabilities are where they need to be
-  const { characterMint, itemMint, paymentFTMint } = await provideAll(baggage, {
+  const { characterMint, itemMint } = await provideAll(baggage, {
     characterMint: () =>
       zcf.makeZCFMint(assetNames.character, AssetKind.COPY_BAG),
     itemMint: () => zcf.makeZCFMint(assetNames.item, AssetKind.COPY_BAG),
-    paymentFTMint: () => zcf.makeZCFMint(assetNames.paymentFT, AssetKind.NAT),
   });
 
   const characterIssuerRecord = characterMint.getIssuerRecord();
   const itemIssuerRecord = itemMint.getIssuerRecord();
-  const paymentFTIssuerRecord = paymentFTMint.getIssuerRecord();
 
-  const { powers, clock, seed } = privateArgs;
+  const {
+    powers,
+    clock,
+    seed,
+    royaltyRate,
+    platformFeeRate,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand,
+  } = privateArgs;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,
     powers.marshaller,
+  );
+
+  const royaltyRateRatio = makeRatio(
+    royaltyRate.numerator,
+    paymentBrand,
+    royaltyRate.denominator,
+    paymentBrand,
+  );
+  const platformFeeRatio = makeRatio(
+    platformFeeRate.numerator,
+    paymentBrand,
+    platformFeeRate.denominator,
+    paymentBrand,
   );
 
   const kreadKit = await harden(
@@ -90,14 +121,17 @@ export const start = async (zcf, privateArgs, baggage) => {
       zcf,
       {
         seed,
+        royaltyRate: royaltyRateRatio,
+        platformFeeRate: platformFeeRatio,
+        royaltyDepositFacet,
+        platformFeeDepositFacet,
+        paymentBrand,
       },
       harden({
         characterIssuerRecord,
         characterMint,
         itemIssuerRecord,
         itemMint,
-        paymentFTIssuerRecord,
-        paymentFTMint,
         clock,
         storageNode: powers.storageNode,
         makeRecorderKit,

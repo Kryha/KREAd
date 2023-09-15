@@ -19,7 +19,6 @@
  * @typedef {{
  *   character: ZCFMint<"copyBag">
  *   item: ZCFMint<"copyBag">
- *   paymentFT: ZCFMint<"nat">
  * }} AssetMints
  *
  * @typedef {{
@@ -37,11 +36,6 @@
  *     name: string
  *     brand: Brand
  *     issuer: Issuer<set>
- *   }
- *   paymentFT: {
- *     name: string
- *     brand: Brand
- *     issuer: Issuer<nat>
  *   }
  * }} TokenInfo
  *
@@ -268,4 +262,9 @@
  *     type: ("add" | "remove")
  *     value: number
  * }} UpdateAverage
+ * 
+ * @typedef { {
+ *     numerator: bigint,
+ *     denominator: bigint,
+ *  }} RatioObject
  */

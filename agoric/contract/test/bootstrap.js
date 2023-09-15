@@ -6,6 +6,8 @@ import { makeMockChainStorageRoot } from '@agoric/internal/src/storage-test-util
 import buildManualTimer from '@agoric/zoe/tools/manualTimer.js';
 import { defaultCharacters } from './characters.js';
 import { defaultItems } from './items.js';
+import { makeIssuerKit } from '@agoric/ertp';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/index.js';
 
 /**
  * @param {BootstrapConf} [conf]
@@ -16,6 +18,27 @@ export const bootstrapContext = async (conf) => {
 
   // Setup fungible and non-fungible assets
   const assets = setupAssets(conf?.assets);
+
+  const {
+    mint: mintMockIST,
+    issuer: issuerMockIST,
+    brand: brandMockIST,
+  } = makeIssuerKit('IST-mock', 'nat');
+
+  const royaltyPurse = issuerMockIST.makeEmptyPurse();
+  const platformFeePurse = issuerMockIST.makeEmptyPurse();
+  const royaltyDepositFacet = royaltyPurse.getDepositFacet();
+  const platformFeeDepositFacet = platformFeePurse.getDepositFacet();
+
+  const royaltyRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
+  const platformFeeRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
+
   const timerService = buildManualTimer();
   // Bundle and install contract
   const contractBundle = await bundleSource('./src/index.js');
@@ -27,12 +50,17 @@ export const bootstrapContext = async (conf) => {
     },
     clock: timerService.getClock(),
     seed: 0,
+    royaltyRate,
+    platformFeeRate,
+    royaltyDepositFacet: royaltyDepositFacet,
+    platformFeeDepositFacet: platformFeeDepositFacet,
+    paymentBrand: brandMockIST,
   };
 
   // Start contract instance
   const instance = await E(zoe).startInstance(
     installation,
-    undefined,
+    { Money: issuerMockIST },
     undefined,
     harden(privateArgs),
   );
@@ -43,13 +71,12 @@ export const bootstrapContext = async (conf) => {
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
-    payment: { issuer: tokenIssuer, brand: tokenBrand },
   } = contractAssets;
 
   const purses = {
     character: characterIssuer.makeEmptyPurse(),
     item: itemIssuer.makeEmptyPurse(),
-    payment: tokenIssuer.makeEmptyPurse(),
+    payment: issuerMockIST.makeEmptyPurse(),
   };
 
   const result = {
@@ -58,6 +85,25 @@ export const bootstrapContext = async (conf) => {
     instance,
     purses,
     zoe,
+    paymentAsset: {
+      mintMockIST,
+      issuerMockIST,
+      brandMockIST,
+    },
+    royaltyPurse,
+    platformFeePurse,
+    royaltyRate: makeRatio(
+      royaltyRate.numerator,
+      brandMockIST,
+      royaltyRate.denominator,
+      brandMockIST,
+    ),
+    platformFeeRate: makeRatio(
+      platformFeeRate.numerator,
+      brandMockIST,
+      platformFeeRate.denominator,
+      brandMockIST,
+    ),
   };
 
   harden(result);
