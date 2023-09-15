@@ -278,7 +278,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-249d846e4b494994c3253be1288db25f5f0ac4e5ed7d39cffeefdf09d76cbd5f60da227078484b888c3fa159eead4d6fc6aed11fa56622bee68d613402ee0442',
+    'b1-7c3ef9e51f7b3874cf94fcda7c4ebee5b4d7066d1cffeac38321fd4ea1b78e904196821508b2b53a44beaf5d16308bcec158f2009d057b946aea000a86cba71c',
 };
 
 const fail = (reason) => {
@@ -468,10 +468,10 @@ const executeProposal = async (powers) => {
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(instance);
 
-  produceCharacterIssuer.resolve(characterIssuer)
-  produceCharacterBrand.resolve(characterBrand)
-  produceItemIssuer.resolve(itemIssuer)
-  produceItemBrand.resolve(itemBrand)
+  produceCharacterIssuer.resolve(characterIssuer);
+  produceCharacterBrand.resolve(characterBrand);
+  produceItemIssuer.resolve(itemIssuer);
+  produceItemBrand.resolve(itemBrand);
 
   console.log('ASSETS ADDED TO AGORIC NAMES');
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
