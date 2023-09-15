@@ -224,7 +224,7 @@ export const useBuyCharacter = (characterId: string) => {
     setIsLoading(true);
     await marketService.buyCharacter({
       character: characterToBuy.character,
-      price: characterToBuy.sell.price,
+      price: BigInt(characterToBuy.sell.price + characterToBuy.sell.platformFee + characterToBuy.sell.royalty),
       service: {
         kreadInstance: instance,
         characterBrand: charBrand,

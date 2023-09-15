@@ -278,11 +278,42 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-f6a58876d2b7f1a0c402a083b99c49c7a9b98981a438aba45673d533232a6001c07807a23b835525d29af8cd66851fa5f27b9173277622ba321e802606707c7f',
+    'b1-249d846e4b494994c3253be1288db25f5f0ac4e5ed7d39cffeefdf09d76cbd5f60da227078484b888c3fa159eead4d6fc6aed11fa56622bee68d613402ee0442',
 };
 
 const fail = (reason) => {
   throw reason;
+};
+
+const reserveThenGetNamePaths = async (nameAdmin, paths) => {
+  /**
+   * @param {ERef<import\('@agoric/vats').NameAdmin>} nextAdmin
+   * @param {string[]} path
+   */
+  const nextPath = async (nextAdmin, path) => {
+    const [nextName, ...rest] = path;
+    assert.typeof(nextName, 'string');
+
+    // Ensure we wait for the next name until it exists.
+    await E(nextAdmin).reserve(nextName);
+
+    if (rest.length === 0) {
+      // Now return the readonly lookup of the name.
+      const nameHub = E(nextAdmin).readonly();
+      return E(nameHub).lookup(nextName);
+    }
+
+    // Wait until the next admin is resolved.
+    const restAdmin = await E(nextAdmin).lookupAdmin(nextName);
+    return nextPath(restAdmin, rest);
+  };
+
+  return Promise.all(
+    paths.map(async (path) => {
+      Array.isArray(path) || Fail`path ${path} is not an array`;
+      return nextPath(nameAdmin, path);
+    }),
+  );
 };
 
 /**
@@ -307,6 +338,7 @@ const executeProposal = async (powers) => {
       chainTimerService,
       agoricNamesAdmin,
       agoricNames,
+      namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
@@ -315,6 +347,21 @@ const executeProposal = async (powers) => {
       produce: { [contractInfo.instanceName]: kread },
     },
   } = powers;
+
+  const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+  const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+
+  const [royaltyDepositFacet] = await reserveThenGetNamePaths(
+    namesByAddressAdmin,
+    [[royaltyAddr, 'depositFacet']],
+  );
+  const [platformFeeDepositFacet] = await reserveThenGetNamePaths(
+    namesByAddressAdmin,
+    [[platformFeeAddr, 'depositFacet']],
+  );
+
+  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
+  const brand = await E(istIssuer).getBrand();
 
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
@@ -329,8 +376,12 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
+    royaltyRate: 0.2,
+    platformFeeRate: 0.2,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand: brand,
   });
-  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
@@ -352,7 +403,6 @@ const executeProposal = async (powers) => {
   const {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
-    payment: { issuer: tokenIssuer, brand: tokenBrand },
   } = await E(publicFacet).getTokenInfo();
 
   const [
@@ -360,15 +410,11 @@ const executeProposal = async (powers) => {
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
     ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
   ] = await Promise.all([
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
     E(board).getId(itemBrand),
     E(board).getId(itemIssuer),
-    E(board).getId(tokenBrand),
-    E(board).getId(tokenIssuer),
   ]);
 
   const assetBoardIds = {
@@ -377,7 +423,6 @@ const executeProposal = async (powers) => {
       brand: CHARACTER_BRAND_BOARD_ID,
     },
     item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
-    paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
   };
 
   await E(creatorFacet).publishKreadInfo(
@@ -386,8 +431,6 @@ const executeProposal = async (powers) => {
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
     ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
   );
 
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
@@ -431,4 +474,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/wietzes/Documents/cosmos/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/pandelissymeonidis/Projects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js

@@ -26,4 +26,6 @@ export const errors = {
   sellerSeatMismatch: `Wanted Item amount does not match item in sellerSeat`,
   insufficientFunds: `Provided payment is lower than the asking price for this Item`,
   itemNotFound: (item) => `Couldn't find item record for ${item}`,
+  incorrectPaymentBrand: (paymentBrand) =>
+    `Incorrect payment brand. Please use ${paymentBrand}`,
 };
