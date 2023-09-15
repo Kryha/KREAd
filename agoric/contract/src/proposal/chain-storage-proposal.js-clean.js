@@ -482,4 +482,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/wietzes/Documents/cosmos/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/pandelissymeonidis/Projects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
