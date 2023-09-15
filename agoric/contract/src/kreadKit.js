@@ -1113,7 +1113,7 @@ export const prepareKreadKit = async (
 
           return zcf.makeInvitation(
             handler,
-            'PublishCollection',
+            'PublishItemCollection',
             undefined,
             M.splitRecord({
               want: {
@@ -1275,97 +1275,9 @@ export const prepareKreadKit = async (
             }),
           );
         },
-        // buyItemFirstSale() {
-        //   const handler = (buyerSeat, offerArgs) => {
-        //     const { market: marketFacet } = this.facets;
-        //     const { market } = this.state;
-
-        //     // Inspect Character keyword in buyer seat
-        //     const { want, give } = buyerSeat.getProposal();
-        //     const { Item: wantedItemAmount } = want;
-        //     const item = wantedItemAmount.value.payload[0][0];
-        //     // Find store record based on wanted character
-        //     const sellRecord = market.itemEntries.get(offerArgs.entryId);
-        //     assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
-        //     const sellerSeat = sellRecord.seat;
-
-        //     // Inspect Price keyword from buyer seat
-        //     const { Price: providedMoneyAmount } = give;
-        //     const { Item: itemForSaleAmount } = sellerSeat.getProposal().give;
-        //     assert(
-        //       AmountMath.isEqual(
-        //         wantedItemAmount,
-        //         itemForSaleAmount,
-        //         itemBrand,
-        //       ),
-        //       X`${errors.sellerSeatMismatch}`,
-        //     );
-
-        //     const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
-        //     const paymentBrand = itemForSalePrice.brand;
-        //     assert(
-        //       AmountMath.isGTE(
-        //         providedMoneyAmount,
-        //         itemForSalePrice,
-        //         paymentBrand,
-        //       ),
-        //       X`${errors.insufficientFunds}`,
-        //     );
-
-        //     /** @type {TransferPart[]} */
-        //     const transfers = [];
-        //     transfers.push([
-        //       sellerSeat,
-        //       buyerSeat,
-        //       { Item: itemForSaleAmount },
-        //     ]);
-        //     transfers.push([
-        //       buyerSeat,
-        //       sellerSeat,
-        //       { Price: providedMoneyAmount },
-        //     ]);
-
-        //     zcf.atomicRearrange(harden(transfers));
-
-        //     buyerSeat.exit();
-        //     sellerSeat.exit();
-
-        //     // update metrics
-        //     marketFacet.updateMetrics('item', {
-        //       amountSold: true,
-        //       marketplaceAverageLevel: {
-        //         type: 'remove',
-        //         value: sellRecord.object.level,
-        //       },
-        //       latestSalePrice: Number(itemForSalePrice.value),
-        //     });
-
-        //     market.itemEntries.delete(offerArgs.entryId);
-
-        //     marketItemKit.recorder.write(
-        //       Array.from(market.itemEntries.values()),
-        //     );
-        //   };
-        //   return zcf.makeInvitation(
-        //     handler,
-        //     'Buy Item in KREAd marketplace',
-        //     undefined,
-        //     M.splitRecord({
-        //       give: {
-        //         Price: M.splitRecord({
-        //           brand: BrandShape,
-        //           value: M.nat(),
-        //         }),
-        //       },
-        //       want: {
-        //         Item: M.splitRecord(itemShape),
-        //       },
-        //     }),
-        //   );
-        // },
         buyCharacter() {
           const handler = async (buyerSeat) => {
-            const { market: marketFacet, character: characterFacet } =
+            const { market: marketFacet } =
               this.facets;
             const { market, character: characterState } = this.state;
 
