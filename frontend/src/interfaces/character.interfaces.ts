@@ -76,6 +76,14 @@ export interface KreadCharacterInMarket {
     value: bigint;
     brand: any;
   };
+  platformFee: {
+    value: bigint;
+    brand: any;
+  };
+  royalty: {
+    value: bigint;
+    brand: any;
+  };
   object: CharacterBackend;
 }
 

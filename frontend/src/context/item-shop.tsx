@@ -42,6 +42,8 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
         item,
         sell: {
           price: marketEntry.askingPrice.value,
+          platformFee: marketEntry.platformFee.value,
+          royalty: marketEntry.royalty.value,
         },
       };
 

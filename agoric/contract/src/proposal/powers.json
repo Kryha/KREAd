@@ -5,12 +5,25 @@
     "chainStorage": true,
     "zoe": true,
     "startUpgradable": true,
-    "agoricNamesAdmin": true,
-    "agoricNames": true,
     "namesByAddressAdmin": true
   },
   "produce": {
     "kreadKit": true
+  },
+  "brand": {
+    "produce": {
+      "KREAdCHARACTER": true,
+      "KREAdITEM": true
+    }
+  },
+  "issuer": {
+    "consume":{
+      "IST": true
+    },
+    "produce": {
+      "KREAdCHARACTER": true,
+      "KREAdITEM": true
+    }
   },
   "instance": {
     "produce": {
