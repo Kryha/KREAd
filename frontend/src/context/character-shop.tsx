@@ -47,6 +47,8 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
         equippedItems,
         sell: {
           price: marketEntry.askingPrice.value,
+          platformFee: marketEntry.platformFee.value,
+          royalty: marketEntry.royalty.value,
         },
       };
     };

@@ -1,5 +1,3 @@
-# Baseball Card Store Dapp
-
 # KREAd deploy steps
 To succesfully run the below steps making use of the makefile, it is important to have a local file `Makefile.paths.local` filled in with the required paths and addresses, an example can be found in `Makefile.paths`.
 
@@ -29,6 +27,12 @@ create kread-bundle and publish it to chain (this step requires the `client-loca
 ```sh
 make kread-bundle
 ```
+
+provision the account that is in the core eval proposal ('agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu')
+```sh
+make provision-fee-collector
+```
+
 
 Copy the bundle id returned from the previous step into `chain-storage-proposal.js` (located it `agoric/contract/src/proposal`) it's on line 346, `b1-YOUR_NEW_STRING`
 
