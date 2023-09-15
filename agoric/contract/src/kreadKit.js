@@ -1274,33 +1274,51 @@ export const prepareKreadKit = async (
 
             /** @type {TransferPart[]} */
             const transfers = [];
+            // Transfer item: seller -> buyer
             transfers.push([
               sellerSeat,
               buyerSeat,
               { Item: itemForSaleAmount },
             ]);
+            // Transfer artist royalty: buyer -> artist
             transfers.push([
               buyerSeat,
               zcfSeat,
               { Price: sellRecord.royalty },
               { Royalty: sellRecord.royalty },
             ]);
+            // Transfer KREAd fees: buyer -> KREAd
             transfers.push([
               buyerSeat,
               zcfSeat,
               { Price: sellRecord.platformFee },
               { PlatformFee: sellRecord.platformFee },
             ]);
-            transfers.push([
-              buyerSeat,
-              sellerSeat,
-              {
-                Price: AmountMath.subtract(
-                  providedMoneyAmount,
-                  AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
-                ),
-              },
-            ]);
+            if (sellRecord.isFirstSale) {
+              // Transfer askingPrice: buyer -> artist
+              transfers.push([
+                buyerSeat,
+                zcfSeat,
+                {
+                  Price: AmountMath.subtract(
+                    providedMoneyAmount,
+                    AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+                  ),
+                },
+              ]);
+            } else {
+              // Transfer askingPrice: buyer -> seller
+              transfers.push([
+                buyerSeat,
+                sellerSeat,
+                {
+                  Price: AmountMath.subtract(
+                    providedMoneyAmount,
+                    AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+                  ),
+                },
+              ]);
+            }
 
             atomicRearrange(zcf, harden(transfers));
 
