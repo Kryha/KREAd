@@ -34,7 +34,6 @@ import {
   BaseCharacterGuard,
 } from './type-guards.js';
 import { atomicRearrange } from '@agoric/zoe/src/contractSupport/index.js';
-import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
  * Utilizes capabilities from the prepare function suchs as mints
@@ -45,8 +44,8 @@ import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
  * @param {ZCF} zcf
  * @param {{
  *   seed: number,
- *   royaltyRate: Ratio,
- *   platformFeeRate: Ratio,
+ *   royaltyRate: number,
+ *   platformFeeRate: number,
  *   royaltyDepositFacet: DepositFacet,
  *   platformFeeDepositFacet: DepositFacet,
  *   paymentBrand
@@ -1049,9 +1048,14 @@ export const prepareKreadKit = async (
               brand: want.Price.brand,
               value: want.Price.value,
             };
-            const royalty = multiplyBy(want.Price, royaltyRate);
-            const platformFee = multiplyBy(want.Price, platformFeeRate);
-
+            const royalty = {
+              brand: want.Price.brand,
+              value: BigInt(royaltyRate * Number(want.Price.value)),
+            };
+            const platformFee = {
+              brand: want.Price.brand,
+              value: BigInt(platformFeeRate * Number(want.Price.value)),
+            };
             const object = objectInSellSeat.value.payload[0][0];
 
             // Add to store array
@@ -1121,8 +1125,14 @@ export const prepareKreadKit = async (
               brand: want.Price.brand,
               value: want.Price.value,
             };
-            const royalty = multiplyBy(want.Price, royaltyRate);
-            const platformFee = multiplyBy(want.Price, platformFeeRate);
+            const royalty = {
+              brand: want.Price.brand,
+              value: BigInt(royaltyRate * Number(want.Price.value)),
+            };
+            const platformFee = {
+              brand: want.Price.brand,
+              value: BigInt(platformFeeRate * Number(want.Price.value)),
+            };
 
             itemsToSell.forEach((copyBagEntry) => {
               const [itemObject, itemSupply] = copyBagEntry;
@@ -1190,9 +1200,14 @@ export const prepareKreadKit = async (
               brand: want.Price.brand,
               value: want.Price.value,
             };
-            const royalty = multiplyBy(want.Price, royaltyRate);
-            const platformFee = multiplyBy(want.Price, platformFeeRate);
-
+            const royalty = {
+              brand: want.Price.brand,
+              value: BigInt(royaltyRate * Number(want.Price.value)),
+            };
+            const platformFee = {
+              brand: want.Price.brand,
+              value: BigInt(platformFeeRate * Number(want.Price.value)),
+            };
             const object = objectInSellSeat.value.payload[0][0];
 
             // Add to store array

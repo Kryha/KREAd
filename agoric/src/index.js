@@ -33,34 +33,11 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
-    royaltyRate: RatioObject,
-    platformFeeRate: RatioObject,
+    royaltyRate: M.gte(0),
+    platformFeeRate: M.gte(0),
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
     paymentBrand: M.any(),
-  }),
-  customTermsShape: M.splitRecord({
-    royaltyRate: {
-      numerator: M.lte(100n),
-      denominator: M.eq(100n),
-    },
-    platformFeeRate: {
-      numerator: M.lte(100n),
-      denominator: M.eq(100n),
-    },
-    mintFee: M.nat(),
-    mintRoyaltyRate: {
-      numerator: M.lte(100n),
-      denominator: M.eq(100n),
-    },
-    mintPlatformFeeRate: {
-      numerator: M.lte(100n),
-      denominator: M.eq(100n),
-    },
-    royaltyDepositFacet: M.any(),
-    platformFeeDepositFacet: M.any(),
-    paymentBrand: M.eref(M.remotable('Brand')),
-    assetNames: M.splitRecord({ character: M.string(), item: M.string() })
   }),
 };
 harden(meta);
@@ -70,8 +47,8 @@ harden(meta);
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
- *   royaltyRate: RatioObject,
- *   platformFeeRate: RatioObject,
+ *   royaltyRate: number,
+ *   platformFeeRate: number,
  *   royaltyDepositFacet: DepositFacet,
  *   platformFeeDepositFacet: DepositFacet,
  *   paymentBrand: Brand
@@ -159,8 +136,8 @@ export const start = async (zcf, privateArgs, baggage) => {
       zcf,
       {
         seed,
-        royaltyRate: royaltyRateRatio,
-        platformFeeRate: platformFeeRatio,
+        royaltyRate,
+        platformFeeRate,
         royaltyDepositFacet,
         platformFeeDepositFacet,
         paymentBrand,

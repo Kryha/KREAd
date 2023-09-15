@@ -175,10 +175,6 @@ export const MarketRecorderGuard = M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
   }),
-  royalty: M.splitRecord({
-    brand: BrandShape,
-    value: M.nat(),
-  }),
   platformFee: M.splitRecord({
     brand: BrandShape,
     value: M.nat(),

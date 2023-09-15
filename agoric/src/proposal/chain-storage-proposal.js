@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-f775c9a1387b41211e0f23539db25dc209728f4f300ead26c6eb1f0dc6ef30b2adfdcc3ca3040c0d914073699ce056074e0459c5bf865d5258abeb7377c04ecb',
+    'b1-7c3ef9e51f7b3874cf94fcda7c4ebee5b4d7066d1cffeac38321fd4ea1b78e904196821508b2b53a44beaf5d16308bcec158f2009d057b946aea000a86cba71c',
 };
 
 const fail = (reason) => {
@@ -368,8 +368,8 @@ const executeProposal = async (powers) => {
     },
   } = powers;
 
-  const royaltyAddr = 'agoric1secvzncpvy85e9xqr20a84j0ch9966mn96aq9g';
-  const platformFeeAddr = 'agoric1secvzncpvy85e9xqr20a84j0ch9966mn96aq9g';
+  const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+  const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
 
   const [royaltyDepositFacet] = await reserveThenGetNamePaths(
     namesByAddressAdmin,
@@ -382,15 +382,6 @@ const executeProposal = async (powers) => {
 
   const istIssuer = await istIssuerP;
   const brand = await E(istIssuer).getBrand();
-
-  const royaltyRate = {
-    numerator: 10n,
-    denominator: 100n,
-  };
-  const platformFeeRate = {
-    numerator: 3n,
-    denominator: 100n,
-  };
 
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
@@ -406,8 +397,8 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
-    royaltyRate,
-    platformFeeRate,
+    royaltyRate: 0.2,
+    platformFeeRate: 0.2,
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand: brand,
