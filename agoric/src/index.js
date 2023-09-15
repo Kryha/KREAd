@@ -8,6 +8,7 @@ import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
 import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
 import { prepareKreadKit } from './kreadKit.js';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
 import { RatioObject } from './type-guards.js';
 
 /**
@@ -32,6 +33,11 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
+    royaltyRate: RatioObject,
+    platformFeeRate: RatioObject,
+    royaltyDepositFacet: M.any(),
+    platformFeeDepositFacet: M.any(),
+    paymentBrand: M.any(),
   }),
   customTermsShape: M.splitRecord({
     royaltyRate: {
@@ -64,7 +70,12 @@ harden(meta);
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
- *   clock: Clock
+ *   royaltyRate: RatioObject,
+ *   platformFeeRate: RatioObject,
+ *   royaltyDepositFacet: DepositFacet,
+ *   platformFeeDepositFacet: DepositFacet,
+ *   paymentBrand: Brand
+ *   clock: import('@agoric/time/src/types').Clock
  * }} privateArgs
  * 
  * @param {Baggage} baggage
@@ -86,7 +97,10 @@ export const start = async (zcf, privateArgs, baggage) => {
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
-  const assetNames = terms.assetNames;
+  const assetNames = {
+    character: 'KREAdCHARACTER',
+    item: 'KREAdITEM',
+  };
 
   const storageNodePaths = {
     infoKit: 'info',
@@ -114,37 +128,18 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers,
     clock,
     seed,
-  } = privateArgs;
-
-  const {
-    mintFee,
     royaltyRate,
     platformFeeRate,
-    mintRoyaltyRate,
-    mintPlatformFeeRate,
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
-  } = terms;
+  } = privateArgs;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,
     powers.marshaller,
   );
 
-  const mintFeeAmount = AmountMath.make(paymentBrand, mintFee);
-  const mintRoyaltyRateRatio = makeRatio(
-    mintRoyaltyRate.numerator,
-    paymentBrand,
-    mintRoyaltyRate.denominator,
-    paymentBrand,
-  );
-  const mintPlatformFeeRatio = makeRatio(
-    mintPlatformFeeRate.numerator,
-    paymentBrand,
-    mintPlatformFeeRate.denominator,
-    paymentBrand,
-  );
   const royaltyRateRatio = makeRatio(
     royaltyRate.numerator,
     paymentBrand,
@@ -164,11 +159,8 @@ export const start = async (zcf, privateArgs, baggage) => {
       zcf,
       {
         seed,
-        mintFeeAmount,
         royaltyRate: royaltyRateRatio,
         platformFeeRate: platformFeeRatio,
-        mintRoyaltyRate: mintRoyaltyRateRatio,
-        mintPlatformFeeRate: mintPlatformFeeRatio,
         royaltyDepositFacet,
         platformFeeDepositFacet,
         paymentBrand,

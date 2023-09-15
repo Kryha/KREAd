@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-3610e0a646b00a307f713e02765b7bb9320c195e5bc616106cfec05b98b78881f1ece60f2738d8d7be637d6a50e6f9ea373b31c1d331985dd4f5f6ead8a09d18',
+    'b1-f775c9a1387b41211e0f23539db25dc209728f4f300ead26c6eb1f0dc6ef30b2adfdcc3ca3040c0d914073699ce056074e0459c5bf865d5258abeb7377c04ecb',
 };
 
 const fail = (reason) => {
@@ -368,8 +368,8 @@ const executeProposal = async (powers) => {
     },
   } = powers;
 
-  const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
-  const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+  const royaltyAddr = 'agoric1secvzncpvy85e9xqr20a84j0ch9966mn96aq9g';
+  const platformFeeAddr = 'agoric1secvzncpvy85e9xqr20a84j0ch9966mn96aq9g';
 
   const [royaltyDepositFacet] = await reserveThenGetNamePaths(
     namesByAddressAdmin,
@@ -392,15 +392,6 @@ const executeProposal = async (powers) => {
     denominator: 100n,
   };
 
-  const mintRoyaltyRate = {
-    numerator: 85n,
-    denominator: 100n,
-  };
-  const mintPlatformFeeRate = {
-    numerator: 15n,
-    denominator: 100n,
-  };
-
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
   const storageNode = E(chainStorageSettled).makeChildNode(
@@ -415,6 +406,11 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
+    royaltyRate,
+    platformFeeRate,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand: brand,
   });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
@@ -444,9 +440,9 @@ const executeProposal = async (powers) => {
   const boardId = await E(board).getId(instance);
   //FIXME: update this based no getTerms
   const {
-    issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
-    brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
-  } = await E(zoe).getTerms(instance);
+    character: { issuer: characterIssuer, brand: characterBrand },
+    item: { issuer: itemIssuer, brand: itemBrand },
+  } = await E(publicFacet).getTokenInfo();
 
   //FIXME: remove these infavour of terms and getting them differently
   const [
@@ -460,6 +456,14 @@ const executeProposal = async (powers) => {
     E(board).getId(itemBrand),
     E(board).getId(itemIssuer),
   ]);
+
+  const assetBoardIds = {
+    character: {
+      issuer: CHARACTER_ISSUER_BOARD_ID,
+      brand: CHARACTER_BRAND_BOARD_ID,
+    },
+    item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
+  };
 
   await E(creatorFacet).publishKreadInfo(
     boardId,
@@ -490,7 +494,8 @@ const executeProposal = async (powers) => {
   produceItemIssuer.resolve(itemIssuer);
   produceItemBrand.resolve(itemBrand);
 
-  console.log('CONTRACT INIT SUCCESS!');
+  console.log('ASSETS ADDED TO AGORIC NAMES');
+  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
 };
 
 harden(executeProposal);
