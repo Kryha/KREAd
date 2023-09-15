@@ -1336,6 +1336,24 @@ export const prepareKreadKit = async (
 
             await E(royaltyDepositFacet).receive(royaltyPayout);
             await E(platformFeeDepositFacet).receive(platformFeePayout);
+            
+            if(sellRecord.isFirstSale) {
+              const askingPricePayout = await payouts.Price;
+              await E(royaltyDepositFacet).receive(askingPricePayout);
+
+              marketFacet.updateMetrics('item', {
+                marketplaceAverageLevel: {
+                  type: 'remove',
+                  value: sellRecord.object.level,
+                },
+              });
+  
+              market.itemEntries.delete(sellRecord.id);
+  
+              marketItemKit.recorder.write(
+                Array.from(market.itemEntries.values()),
+              );
+            }
 
             // update metrics
             marketFacet.updateMetrics('item', {
