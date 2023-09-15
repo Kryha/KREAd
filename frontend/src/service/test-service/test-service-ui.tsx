@@ -17,8 +17,6 @@ import { mintCharacter } from "../character/mint";
 import { inventoryService } from "../character/inventory";
 import { marketService } from "../character/market";
 import { useGetItemsInShop } from "../items";
-import { mockCharacterItems } from "../mock-data/mock-items";
-import { mockCharacterItems1 } from "../mock-data/mockCharacterItems";
 
 export const TestServiceUI = () => {
   const [service, dispatch] = useAgoricContext();
@@ -248,10 +246,6 @@ export const TestServiceUI = () => {
     for(var i = 1; i<3; i++){
       items.push([{...item, name: item.name+" "+i}, BigInt(i)]);
     }
-    const itemCollection = Object.values(mockCharacterItems1).map(item => {
-      const { activity, ...adjustedItem } = item;
-      return [adjustedItem, 3n]
-    })
   
     marketService.sellItemBatch({
       itemCollection: items,
