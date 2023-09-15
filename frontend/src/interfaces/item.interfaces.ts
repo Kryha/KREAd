@@ -39,7 +39,8 @@ export interface ItemInMarket {
   id: string;
   item: Item;
   sell: {
-    publicFacet?: any;
     price: bigint;
+    platformFee: bigint;
+    royalty: bigint;
   };
 }
