@@ -834,8 +834,6 @@ export const prepareKreadKit = async (
 
           const currentTime = await helper.getTimeStamp();
 
-          console.log(itemBatch);
-
           const newItemAmount = AmountMath.make(
             itemBrand,
             makeCopyBag(harden(itemBatch)),
@@ -1226,141 +1224,17 @@ export const prepareKreadKit = async (
             const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
-            // Inspect Character keyword in buyer seat
-            const { want, give } = buyerSeat.getProposal();
-            const { Item: wantedItemAmount } = want;
             // Find store record based on wanted character
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
             assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
-
-            const sellerSeat = sellRecord.seat;
-            let itemForSaleAmount, itemForSalePrice;
-
-            if (sellRecord.isFirstSale) {
-              itemForSaleAmount = harden({
-                brand: itemBrand,
-                value: makeCopyBag([[sellRecord.object, 1n]]),
-              });
-              itemForSalePrice = sellRecord.askingPrice;
-            } else {
-              itemForSaleAmount = sellerSeat.getProposal().give.Item;
-              itemForSalePrice = sellerSeat.getProposal().want.Price;
-            }
-
-            // Inspect Price keyword from buyer seat
-            const { Price: providedMoneyAmount } = give;
-            assert(
-              AmountMath.isEqual(
-                wantedItemAmount,
-                itemForSaleAmount,
-                itemBrand,
-              ),
-              X`${errors.sellerSeatMismatch}`,
-            );
-
-            assert(
-              AmountMath.isGTE(
-                providedMoneyAmount,
-                AmountMath.add(
-                  AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
-                  sellRecord.platformFee,
-                ),
-                paymentBrand,
-              ),
-              X`${errors.insufficientFunds}`,
-            );
-
-            const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
-
-            /** @type {TransferPart[]} */
-            const transfers = [];
-            // Transfer item: seller -> buyer
-            transfers.push([
-              sellerSeat,
-              buyerSeat,
-              { Item: itemForSaleAmount },
-            ]);
-            // Transfer artist royalty: buyer -> artist
-            transfers.push([
-              buyerSeat,
-              zcfSeat,
-              { Price: sellRecord.royalty },
-              { Royalty: sellRecord.royalty },
-            ]);
-            // Transfer KREAd fees: buyer -> KREAd
-            transfers.push([
-              buyerSeat,
-              zcfSeat,
-              { Price: sellRecord.platformFee },
-              { PlatformFee: sellRecord.platformFee },
-            ]);
-            if (sellRecord.isFirstSale) {
-              // Transfer askingPrice: buyer -> artist
-              transfers.push([
-                buyerSeat,
-                zcfSeat,
-                {
-                  Price: AmountMath.subtract(
-                    providedMoneyAmount,
-                    AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
-                  ),
-                },
-              ]);
-            } else {
-              // Transfer askingPrice: buyer -> seller
-              transfers.push([
-                buyerSeat,
-                sellerSeat,
-                {
-                  Price: AmountMath.subtract(
-                    providedMoneyAmount,
-                    AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
-                  ),
-                },
-              ]);
-            }
-
-            atomicRearrange(zcf, harden(transfers));
-
-            buyerSeat.exit();
-
-            if (!sellRecord.isFirstSale) {
-              sellerSeat.exit();
-            }
-
-            zcfSeat.exit();
-
-            const payouts = await E(userSeat).getPayouts();
-            const royaltyPayout = await payouts.Royalty;
-            const platformFeePayout = await payouts.PlatformFee;
-
-            await E(royaltyDepositFacet).receive(royaltyPayout);
-            await E(platformFeeDepositFacet).receive(platformFeePayout);
-            
-            if(sellRecord.isFirstSale) {
-              const askingPricePayout = await payouts.Price;
-              await E(royaltyDepositFacet).receive(askingPricePayout);
-
-              marketFacet.updateMetrics('item', {
-                marketplaceAverageLevel: {
-                  type: 'remove',
-                  value: sellRecord.object.level,
-                },
-              });
   
-              market.itemEntries.delete(sellRecord.id);
-  
-              marketItemKit.recorder.write(
-                Array.from(market.itemEntries.values()),
-              );
+            if (sellRecord.isFirstSale) {
+              marketFacet.buyFirstSaleItem(sellRecord.seat, buyerSeat, sellRecord);
+            } else {
+              marketFacet.buySecondarySaleItem(sellRecord.seat, buyerSeat, sellRecord);
             }
-
-            // update metrics
-            marketFacet.updateMetrics('item', {
-              amountSold: true,
-              latestSalePrice: Number(itemForSalePrice.value),
-            });
           };
+
           return zcf.makeInvitation(
             handler,
             'Buy Item in KREAd marketplace',
@@ -1377,6 +1251,203 @@ export const prepareKreadKit = async (
               },
             }),
           );
+        },
+        async buyFirstSaleItem(sellerSeat, buyerSeat, sellRecord) {
+          const { market: marketFacet } = this.facets;
+          const { market } = this.state;
+
+          const { want, give } = buyerSeat.getProposal();
+          const { Item: wantedItemAmount } = want;
+
+          const itemForSaleAmount = harden({
+            brand: itemBrand,
+            value: makeCopyBag([[sellRecord.object, 1n]]),
+          });
+          const itemForSalePrice = sellRecord.askingPrice;
+          // Inspect Price keyword from buyer seat
+          const { Price: providedMoneyAmount } = give;
+          assert(
+            AmountMath.isEqual(
+              wantedItemAmount,
+              itemForSaleAmount,
+              itemBrand,
+            ),
+            X`${errors.sellerSeatMismatch}`,
+          );
+
+          assert(
+            AmountMath.isGTE(
+              providedMoneyAmount,
+              AmountMath.add(
+                AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
+                sellRecord.platformFee,
+              ),
+              paymentBrand,
+            ),
+            X`${errors.insufficientFunds}`,
+          );
+
+          const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
+
+          /** @type {TransferPart[]} */
+          const transfers = [];
+          // Transfer item: seller -> buyer
+          transfers.push([
+            sellerSeat,
+            buyerSeat,
+            { Item: itemForSaleAmount },
+          ]);
+          // Transfer artist royalty: buyer -> artist
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.royalty },
+            { Royalty: sellRecord.royalty },
+          ]);
+          // Transfer KREAd fees: buyer -> KREAd
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.platformFee },
+            { PlatformFee: sellRecord.platformFee },
+          ]);
+          
+          // Transfer askingPrice: buyer -> artist
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            {
+              Price: AmountMath.subtract(
+                providedMoneyAmount,
+                AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+              ),
+            },
+          ]);
+
+          atomicRearrange(zcf, harden(transfers));
+
+          buyerSeat.exit();
+          zcfSeat.exit();
+
+          const payouts = await E(userSeat).getPayouts();
+          const royaltyPayout = await payouts.Royalty;
+          const platformFeePayout = await payouts.PlatformFee;
+
+          await E(royaltyDepositFacet).receive(royaltyPayout);
+          await E(platformFeeDepositFacet).receive(platformFeePayout);
+          
+          const askingPricePayout = await payouts.Price;
+          await E(royaltyDepositFacet).receive(askingPricePayout);
+
+          // Remove entry from market
+          marketFacet.updateMetrics('item', {
+            marketplaceAverageLevel: {
+              type: 'remove',
+              value: sellRecord.object.level,
+            },
+          });
+
+          market.itemEntries.delete(sellRecord.id);
+
+          marketItemKit.recorder.write(
+            Array.from(market.itemEntries.values()),
+          );
+          
+          // update metrics
+          marketFacet.updateMetrics('item', {
+            amountSold: true,
+            latestSalePrice: Number(itemForSalePrice.value),
+          });
+        },
+        async buySecondarySaleItem(sellerSeat, buyerSeat, sellRecord) {
+          const { market: marketFacet } = this.facets;
+
+          const { want, give } = buyerSeat.getProposal();
+          const { Item: wantedItemAmount } = want;
+
+          const itemForSaleAmount = sellerSeat.getProposal().give.Item;
+          const itemForSalePrice = sellerSeat.getProposal().want.Price;
+
+          // Inspect Price keyword from buyer seat
+          const { Price: providedMoneyAmount } = give;
+          assert(
+            AmountMath.isEqual(
+              wantedItemAmount,
+              itemForSaleAmount,
+              itemBrand,
+            ),
+            X`${errors.sellerSeatMismatch}`,
+          );
+
+          assert(
+            AmountMath.isGTE(
+              providedMoneyAmount,
+              AmountMath.add(
+                AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
+                sellRecord.platformFee,
+              ),
+              paymentBrand,
+            ),
+            X`${errors.insufficientFunds}`,
+          );
+
+          const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
+
+          /** @type {TransferPart[]} */
+          const transfers = [];
+          // Transfer item: seller -> buyer
+          transfers.push([
+            sellerSeat,
+            buyerSeat,
+            { Item: itemForSaleAmount },
+          ]);
+          // Transfer artist royalty: buyer -> artist
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.royalty },
+            { Royalty: sellRecord.royalty },
+          ]);
+          // Transfer KREAd fees: buyer -> KREAd
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.platformFee },
+            { PlatformFee: sellRecord.platformFee },
+          ]);
+
+          // Transfer askingPrice: buyer -> seller
+          transfers.push([
+            buyerSeat,
+            sellerSeat,
+            {
+              Price: AmountMath.subtract(
+                providedMoneyAmount,
+                AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+              ),
+            },
+          ]);
+
+          atomicRearrange(zcf, harden(transfers));
+
+          buyerSeat.exit();
+
+          sellerSeat.exit();
+
+          zcfSeat.exit();
+
+          const payouts = await E(userSeat).getPayouts();
+          const royaltyPayout = await payouts.Royalty;
+          const platformFeePayout = await payouts.PlatformFee;
+
+          await E(royaltyDepositFacet).receive(royaltyPayout);
+          await E(platformFeeDepositFacet).receive(platformFeePayout);
+
+          // update metrics
+          marketFacet.updateMetrics('item', {
+            amountSold: true,
+            latestSalePrice: Number(itemForSalePrice.value),
+          });
         },
         buyCharacter() {
           const handler = async (buyerSeat) => {
