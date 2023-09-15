@@ -1731,18 +1731,6 @@ export const prepareKreadKit = async (
       // Public is currently a wrapper around the other created facets and fetches from the state
       // Still to be defined what exactly comes into this
       public: {
-        getTokenInfo() {
-          return harden({
-            character: {
-              issuer: characterIssuer,
-              brand: characterBrand,
-            },
-            item: {
-              issuer: itemIssuer,
-              brand: itemBrand,
-            },
-          });
-        },
         makeMintCharacterInvitation() {
           const { character } = this.facets;
           return character.mint();

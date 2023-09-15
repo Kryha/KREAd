@@ -434,9 +434,15 @@ const executeProposal = async (powers) => {
   const boardId = await E(board).getId(instance);
   //FIXME: update this based no getTerms
   const {
-    character: { issuer: characterIssuer, brand: characterBrand },
-    item: { issuer: itemIssuer, brand: itemBrand },
-  } = await E(publicFacet).getTokenInfo();
+    issuers: {
+      KREAdCHARACTER: characterIssuer,
+      KREAdITEM: itemIssuer,
+    },
+    brands: {
+      KREAdCHARACTER: characterBrand,
+      KREAdITEM: itemBrand,
+    }
+  } = await E(zoe).getTerms(instance);
 
   //FIXME: remove these infavour of terms and getting them differently
   const [

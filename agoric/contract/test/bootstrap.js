@@ -57,14 +57,25 @@ export const bootstrapContext = async (conf) => {
     undefined,
     harden(privateArgs),
   );
-  const { publicFacet, creatorFacet } = instance;
-  const contractAssets = await E(publicFacet).getTokenInfo();
+  const { creatorFacet } = instance;
+  const terms = await E(zoe).getTerms(instance.instance);
   await E(creatorFacet).initializeBaseAssets(defaultCharacters, defaultItems);
 
   const {
+    issuers: {
+      KREAdCHARACTER: characterIssuer,
+      KREAdITEM: itemIssuer,
+    },
+    brands: {
+      KREAdCHARACTER: characterBrand,
+      KREAdITEM: itemBrand,
+    }
+  } = terms;
+
+  const contractAssets = {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
-  } = contractAssets;
+  };
 
   const purses = {
     character: characterIssuer.makeEmptyPurse(),
