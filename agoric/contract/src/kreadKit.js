@@ -1451,8 +1451,7 @@ export const prepareKreadKit = async (
         },
         buyCharacter() {
           const handler = async (buyerSeat) => {
-            const { market: marketFacet } =
-              this.facets;
+            const { market: marketFacet } = this.facets;
             const { market, character: characterState } = this.state;
 
             // Inspect Character keyword in buyer seat
