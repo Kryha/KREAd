@@ -262,4 +262,9 @@
  *     type: ("add" | "remove")
  *     value: number
  * }} UpdateAverage
+ * 
+ * @typedef { {
+ *     numerator: bigint,
+ *     denominator: bigint,
+ *  }} RatioObject
  */
