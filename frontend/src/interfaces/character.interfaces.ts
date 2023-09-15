@@ -63,8 +63,9 @@ export interface CharacterInMarket {
   character: Character;
   equippedItems: CharacterItems;
   sell: {
-    publicFacet?: any;
     price: bigint;
+    platformFee: bigint;
+    royalty: bigint;
   };
 }
 
@@ -72,6 +73,14 @@ export interface KreadCharacterInMarket {
   sellerSeat: any;
   name: string;
   askingPrice: {
+    value: bigint;
+    brand: any;
+  };
+  platformFee: {
+    value: bigint;
+    brand: any;
+  };
+  royalty: {
     value: bigint;
     brand: any;
   };
