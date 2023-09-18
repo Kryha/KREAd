@@ -3,7 +3,6 @@ import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
 import { ItemDetailSectionSegmentStats } from "./detail-section-segment-stats";
-import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
 import { DetailSectionWrap } from "./styles";
 import { text, UnnamedCreator } from "../../assets";
@@ -20,7 +19,7 @@ interface ItemDetailSectionProps {
 // TODO: Make index dynamic
 export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions }) => {
   const { width } = useViewport();
-  const [activity, setActivity] = useState<ActivityEvent[]>();
+  const [activity] = useState<ActivityEvent[]>();
 
   // TODO: implement fetching activity/history
 
@@ -34,7 +33,13 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
       {/* story */}
       <DetailSectionSegment title={text.item.story} sectionIndex={1}>
         {/* TODO: fetch actual creator image */}
-        <DetailSectionSegmentStory data={{ ...item, image: item.thumbnail, creatorImage: UnnamedCreator }} />
+        <DetailSectionSegmentStory
+          data={{
+            ...item,
+            image: item.thumbnail,
+            creatorImage: UnnamedCreator,
+          }}
+        />
       </DetailSectionSegment>
 
       {/* stats */}
@@ -43,10 +48,10 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
       </DetailSectionSegment>
 
       {/* details */}
-      <DetailSectionSegment title={text.item.details} sectionIndex={3}>
-        {/* FIXME: grab brand from state */}
-        <DetailSectionSegmentDetails data={{ ...item.details, brand: "KREAdITEM" }} />
-      </DetailSectionSegment>
+      {/*<DetailSectionSegment title={text.item.details} sectionIndex={3}>*/}
+      {/*  /!* FIXME: grab brand from state *!/*/}
+      {/*  <DetailSectionSegmentDetails data={{ ...item.details, brand: "KREAdITEM" }} />*/}
+      {/*</DetailSectionSegment>*/}
 
       {/* project */}
       <DetailSectionSegment title={text.item.project} sectionIndex={4}>

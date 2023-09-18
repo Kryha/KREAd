@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { text } from "../../assets";
-import { InfoPosition } from "../../interfaces/layout.types";
+import { InfoPosition } from "../../interfaces";
 import { SecondaryButton } from "../atoms";
 import { Tooltip } from "../tooltip";
 import { ButtonInfoWrap } from "./styles";

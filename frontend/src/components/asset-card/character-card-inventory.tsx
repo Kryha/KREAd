@@ -4,7 +4,6 @@ import { FC } from "react";
 import {
   AssetContent,
   AssetFooter,
-  AssetImage,
   AssetImageContainer,
   AssetInfoContainer,
   AssetTag,
@@ -33,10 +32,12 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
-        <BaseCharacter characterImage={character.image} items={extendedCharacter.equippedItems} isZoomed={false} size="medium" />
         <AssetImageContainer>
-          {character.image && <AssetImage src={character.image} />}
-          {!character.image && <NoAssetImage />}
+          {character.image ? (
+            <BaseCharacter characterImage={character.image} items={extendedCharacter.equippedItems} isZoomed={false} size="medium" />
+          ) : (
+            <NoAssetImage />
+          )}
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
@@ -44,11 +45,12 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
           </AssetTitleWrapper>
           <AssetFooter>
             <AssetTag>
+              <BoldLabel customColor={color.black}>{character.title}</BoldLabel>
               <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
-              {character.rarity && (
+              {character.origin && (
                 <>
                   <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(character.rarity)}</BoldLabel>
+                  <BoldLabel customColor={color.black}>{character.origin}</BoldLabel>
                 </>
               )}
             </AssetTag>

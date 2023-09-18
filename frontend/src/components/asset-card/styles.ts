@@ -64,15 +64,15 @@ export const AssetWrapper = styled.div`
 export const AssetContent = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  justify-content: space-evenly;
+  height: 500px;
+  gap: 8px;
+  width: 100%;
 `;
 
 export const AssetImageContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 50%;
   box-sizing: border-box;
   margin-bottom: ${margins.medium};
   margin-left: auto;
@@ -103,7 +103,6 @@ export const AssetTitleWrapper = styled.div`
 `;
 
 export const AssetTitleText = styled.h3`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 16px;
   line-height: 20px;
@@ -126,6 +125,7 @@ export const AssetFooter = styled.div`
   flex-direction: column;
   align-items: flex-start;
   min-height: 32px;
+  margin-bottom: ${margins.small};
 `;
 
 export const AssetTag = styled.div`

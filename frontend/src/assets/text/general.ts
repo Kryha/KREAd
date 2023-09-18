@@ -5,6 +5,8 @@ export const general = {
   appName: "KREAd",
   character: "character",
   characters: "characters",
+  category: "category",
+  categories: "categories",
   shop: "shop",
   inventory: "inventory",
   items: "items",
@@ -17,7 +19,6 @@ export const general = {
   createNew: "create new",
   choose: "choose",
   sell: "sell",
-  category: "category",
   loadMore: "load more",
   info: "i",
   toolTipTitle: "tool tip title",
@@ -66,4 +67,6 @@ export const general = {
   viewCharacter: "view character",
   desktopOnly: "unfortunately, this experience can only be enjoyed on desktop devices.",
   moreAboutThisProject: "more about this project",
+  backToMain: "back to main mode",
+  backToCategories: "back to categories",
 };

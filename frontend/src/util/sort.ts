@@ -1,4 +1,4 @@
-import { CharacterEquip, CharacterInMarket, Item, ItemInMarket } from "../interfaces";
+import { CharacterInMarket, ExtendedCharacter, Item, ItemInMarket } from "../interfaces";
 
 export const sortItems = (sorting: string, items: Item[]): Item[] => {
   switch (sorting) {
@@ -34,14 +34,18 @@ export const sortItemsMarket = (sorting: string, items: ItemInMarket[]): ItemInM
   }
 };
 
-export const sortCharacters = (sorting: string, characters: CharacterEquip[]): CharacterEquip[] => {
+export const sortCharacters = (sorting: string, characters: ExtendedCharacter[]): ExtendedCharacter[] => {
   switch (sorting) {
     case "atoz":
       return characters.sort((a, b) => a.nft.name.localeCompare(b.nft.name));
-    case "rarity":
+    case "level":
       return characters.sort((a, b) => b.nft.level - a.nft.level);
+    case "title":
+      return characters.sort((a, b) => a.nft.title.localeCompare(b.nft.title));
+    case "origin":
+      return characters.sort((a, b) => a.nft.origin.localeCompare(b.nft.origin));
     case "latest":
-      return characters;
+      return characters.sort((a, b) => b.nft.date - a.nft.date);
     default:
       return characters;
   }

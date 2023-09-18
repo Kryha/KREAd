@@ -1,7 +1,7 @@
 import { FC, Fragment, useMemo, useState } from "react";
 
 import { text } from "../../assets";
-import { CardActionsContainer, CharacterWrapper, CharacterContent, ArrowUp, CharacterCardWrapper, EmptyViewContainer } from "./styles";
+import { ArrowUp, CardActionsContainer, CharacterCardWrapper, CharacterContent, CharacterWrapper, EmptyViewContainer } from "./styles";
 import { ButtonText, Overlay, PrimaryButton } from "../atoms";
 import { CharacterItem } from "../character-item";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { ExtendedCharacter } from "../../interfaces";
 import { ButtonInfo } from "../button-info";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { CharacterDetailSection } from "../../containers/detail-section/character-detail-section";
+import { CharacterDetailSection } from "../../containers/detail-section";
 import { EmptyCard } from "../empty-card";
 import { FadeInOut } from "../fade-in-out";
 import { useMyCharacters, useSelectedCharacter } from "../../service";
@@ -23,6 +23,7 @@ interface Props {
   showCard?: boolean;
 }
 
+//TODO: GOING TO BE OBSOLETE
 export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
   const navigate = useNavigate();
 

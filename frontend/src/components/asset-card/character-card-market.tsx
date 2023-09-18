@@ -1,10 +1,9 @@
 import { CharacterInMarket } from "../../interfaces";
-import { BoldLabel, Dash, ImageProps } from "../atoms";
+import { BoldLabel, ImageProps } from "../atoms";
 import { FC } from "react";
 import {
   AssetContent,
   AssetFooter,
-  AssetImage,
   AssetImageContainer,
   AssetInfoContainer,
   AssetTag,
@@ -33,10 +32,12 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
-        <BaseCharacter characterImage={character.image} items={characterInMarket.equippedItems} isZoomed={false} size="medium" />
         <AssetImageContainer>
-          {character.image && <AssetImage src={character.image} />}
-          {!character.image && <NoAssetImage />}
+          {character.image ? (
+            <BaseCharacter characterImage={character.image} items={characterInMarket.equippedItems} isZoomed={false} size="medium" />
+          ) : (
+            <NoAssetImage />
+          )}
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>

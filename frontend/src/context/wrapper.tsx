@@ -1,18 +1,18 @@
 import { FunctionComponent, PropsWithChildren } from "react";
 import { UserContextProvider } from "./user";
-import { CharacterMarketContextProvider } from "./character-shop";
-import { ItemMarketContextProvider } from "./item-shop";
 import { WalletContextProvider } from "./wallet";
-import { CharacterImageProvider } from "./character-image-provider";
+import { CharacterBuilderContextProvider } from "./character-builder-context";
+import { CharacterMarketContextProvider } from "./character-shop-context";
+import { ItemMarketContextProvider } from "./item-shop-context";
 
 export const UseWithContext: FunctionComponent<PropsWithChildren> = ({ children }) => (
   <WalletContextProvider>
     <UserContextProvider>
-      <CharacterImageProvider>
+      <CharacterBuilderContextProvider>
         <CharacterMarketContextProvider>
           <ItemMarketContextProvider>{children}</ItemMarketContextProvider>
         </CharacterMarketContextProvider>
-      </CharacterImageProvider>
+      </CharacterBuilderContextProvider>
     </UserContextProvider>
   </WalletContextProvider>
 );

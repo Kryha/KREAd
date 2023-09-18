@@ -12,7 +12,6 @@ export * from "./menu-item";
 export * from "./price-in-ist";
 export * from "./base-route";
 export * from "./equipped-item-card";
-export * from "./character-items";
 export * from "./content-loader";
 export * from "./base-character";
 export * from "./character-card";

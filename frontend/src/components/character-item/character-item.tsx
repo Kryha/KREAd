@@ -1,18 +1,18 @@
 import { FC, SyntheticEvent, useState } from "react";
 
 import {
-  ImageCard,
   ButtonContainer,
   EquippedLabel,
-  Line,
-  InfoContainer,
-  SubTitleContainer,
+  ImageCard,
   Info,
+  InfoContainer,
   InfoWrapper,
+  Line,
+  SubTitleContainer,
   TitleContainer,
 } from "./styles";
 import { ButtonText, MenuItemName, PrimaryButton, SecondaryButton } from "../atoms";
-import { text } from "../../assets/text";
+import { text } from "../../assets";
 import { BaseCharacter } from "../base-character";
 import { color } from "../../design";
 import { ExtendedCharacter, isCharacterCategory } from "../../interfaces";

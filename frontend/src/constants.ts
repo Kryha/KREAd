@@ -1,3 +1,5 @@
+import { ItemCategory } from "./interfaces";
+
 export const GO_BACK = -1 as const;
 export const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5001";
 export const MIN_PRICE = 0 as const;
@@ -34,36 +36,32 @@ export const ENTERED = "entered" as const;
 export const EXITING = "exiting" as const;
 export const MILLISECONDS = 1000 as const;
 
+/********************** ITEMS CATEGORY *********************/
+export const PERK1: ItemCategory = "perk1" as const;
+export const PATCH: ItemCategory = "patch" as const;
+export const MASK: ItemCategory = "mask";
+export const HEADPIECE: ItemCategory = "headPiece" as const;
+export const HAIR: ItemCategory = "hair" as const;
+export const PERK2: ItemCategory = "perk2" as const;
+export const FILTER1: ItemCategory = "filter1" as const;
+export const BACKGROUND: ItemCategory = "background" as const;
+export const FILTER2: ItemCategory = "filter2" as const;
+export const CLOTHING: ItemCategory = "clothing" as const;
+
 export const ITEM_CATEGORIES = {
-  all: [
-    "noseline",
-    "midBackground",
-    "mask",
-    "headPiece",
-    "hair",
-    "airReservoir",
-    "liquid",
-    "background",
-    "frontMask",
-    "clothing",
-    "forSale",
-    "equipped",
-  ],
-  allCategories: "allCategories",
-  noseline: "noseline",
-  midBackground: "midBackground",
-  mask: "mask",
-  headPiece: "headPiece",
-  hair: "hair",
-  airReservoir: "airReservoir",
-  liquid: "liquid",
-  background: "background",
-  frontMask: "frontMask",
-  clothing: "clothing",
-  forSale: "forSale",
-  equipped: "equipped",
+  all: [BACKGROUND, PATCH, HAIR, HEADPIECE, MASK, PERK1, PERK2, FILTER1, FILTER2, CLOTHING],
+  background: BACKGROUND,
+  patch: PATCH,
+  hair: HAIR,
+  mask: MASK,
+  perk1: PERK1,
+  perk2: PERK2,
+  filter1: FILTER1,
+  filter2: FILTER2,
+  clothing: CLOTHING,
 } as const;
 
+/********************** CHARACTER TYPES *********************/
 export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"] as const;
 
 export const SECTION = {
@@ -71,7 +69,7 @@ export const SECTION = {
   INVENTORY: "inventory",
 } as const;
 
-export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"] as const;
+export const CHARACTER_TITLES = ["Citizen", "Scavenger", "Bounty Hunter", "State Bounty Hunter", "Council Member"] as const;
 
 export const ASSET_TYPE = {
   CHARACTER: "character",
@@ -103,8 +101,16 @@ export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-" as cons
 
 export const isDevelopmentMode = process.env.NODE_ENV === ("development" as const);
 
-export const DOWNLOAD_CANVAS_WIDTH = 2500 as const;
-export const DOWNLOAD_CANVAS_HEIGHT = 2500 as const;
+export type Section = "items" | "characters";
+export const ITEM_MODE = "item" as const;
+export const MAIN_MODE = "main" as const;
+
+export const CHARACTER_SELECT_MODE = "character-select" as const;
+export const CATEGORY_MODE = "category" as const;
+
+export type InteractionMode = typeof ITEM_MODE | typeof MAIN_MODE | typeof CATEGORY_MODE | typeof CHARACTER_SELECT_MODE;
+export const CHARACTER_HEIGHT = 1190.5511 as const;
+export const CHARACTER_WIDTH = 841.8898 as const;
 
 export const networkConfigs = {
   mainnet: {

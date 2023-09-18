@@ -1,5 +1,4 @@
-import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { CharacterEquip, CharacterInMarket, Item, ItemCategory, ItemInMarket } from "../interfaces";
+import { Character, CharacterInMarket, ExtendedCharacter, Item, ItemCategory, ItemInMarket } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -24,7 +23,8 @@ export interface ItemsMarketFilters {
 }
 
 export interface CharacterFilters {
-  categories: string[];
+  titles: string[];
+  origins: string[];
   sort: string;
   price?: { min: number; max: number };
 }
@@ -35,6 +35,7 @@ export interface CharactersMarketFilters {
   price: { min: number; max: number };
 }
 
+// TODO: @Privilege will fix this train wreck
 export const filterItems = (items: Item[], { categories, sort, color }: ItemFilters): Item[] => {
   if (items.length === 0) return []; // Return empty array if there are no items to filter
 
@@ -79,7 +80,7 @@ export const filterItems = (items: Item[], { categories, sort, color }: ItemFilt
       const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
 
       if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(item.category) && item.equippedTo1;
+        return otherSelectedCategories.includes(item.category) && item.equippedTo;
       }
 
       // If only "equipped" is selected, return only equipped items
@@ -139,7 +140,7 @@ export const filterItemsInShop = (items: ItemInMarket[], { categories, sort, pri
   return sortItemsMarket(sort, filterItemsByPrice); // Make sure to define sortItemsMarket function
 };
 
-export const filterCharacters = (characters: CharacterEquip[], { categories, sort }: CharacterFilters): CharacterEquip[] => {
+export const filterCharacters = (characters: ExtendedCharacter[], { origins, sort, titles }: CharacterFilters): ExtendedCharacter[] => {
   if (characters.length === 0) return []; // Return empty array if there are no items to filter
 
   const [, setSearchParams] = useSearchParams();
@@ -147,65 +148,35 @@ export const filterCharacters = (characters: CharacterEquip[], { categories, sor
   useEffect(() => {
     setSearchParams(
       {
-        categories: categories.join(","),
+        titles: titles.join(","),
+        origins: origins.join(","),
         sort,
       },
       {
         relative: "path",
       },
     );
-  }, [categories, sort]);
+  }, [titles, origins, sort]);
 
-  const isInCategory = (character: CharacterEquip, selectedCategories: string[] | undefined) => {
-    if (!selectedCategories || selectedCategories.length === 0) return true; // Return true if no categories are selected
-
-    if (selectedCategories.includes("allCategories")) return true; // Return true if all categories are selected
-
-    const isForSaleSelected = selectedCategories.includes("forSale");
-    const isEquippedSelected = selectedCategories.includes("equipped");
-
-    if (isForSaleSelected && !isEquippedSelected) {
-      // If "forSale" is selected and other categories are listed
-      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-      if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(character.nft.type) && character.isForSale;
-      }
-
-      // If only "forSale" is selected, return only for sale items
-      return character.isForSale;
-    }
-
-    if (!isForSaleSelected && isEquippedSelected) {
-      // If "equipped" is selected and other categories are listed
-      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-      if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(character.nft.type) && character.isEquipped;
-      }
-
-      // If only "equipped" is selected, return only equipped items
-      return character.isEquipped;
-    }
-
-    // If only specific categories are selected (excluding "forSale" and "equipped")
-    const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-    if (otherSelectedCategories.length > 0) {
-      return otherSelectedCategories.includes(character.nft.type);
-    }
-
-    return selectedCategories.includes(character.nft.type);
+  const isInTitle = (character: Character, selectedTitles: string[] | undefined) => {
+    if (!selectedTitles || selectedTitles.length === 0) return true; // Return true if no categories are selected
+    return selectedTitles.includes(character.title);
   };
 
-  const filteredCharacters = characters.filter((character) => isInCategory(character, categories));
+  const isInOrigin = (character: Character, selectedOrigins: string[] | undefined) => {
+    if (!selectedOrigins || selectedOrigins.length === 0) return true; // Return true if no categories are selected
+    return selectedOrigins.includes(character.origin);
+  };
+
+  const filteredCharacters = characters.filter((character) => isInTitle(character.nft, titles) || isInOrigin(character.nft, origins));
 
   return sortCharacters(sort, filteredCharacters);
 };
 
+// TODO: to update
 export const filterCharactersMarket = (
   characters: CharacterInMarket[],
-  { categories, sort, price }: CharacterFilters,
+  { titles, origins, sort, price }: CharacterFilters,
 ): CharacterInMarket[] => {
   if (characters.length === 0) return [];
 
@@ -214,22 +185,30 @@ export const filterCharactersMarket = (
   useEffect(() => {
     setSearchParams(
       {
-        categories: categories?.join(",") || "",
+        titles: titles?.join(",") || "",
+        origins: origins?.join(",") || "",
         sort: sort || "",
       },
       {
         relative: "path",
       },
     );
-  }, [categories, sort]);
+  }, [titles, origins, sort]);
 
-  const isInCategory = ({ character }: CharacterInMarket, selectedCategories: string[] | undefined) => {
-    if (!character || !selectedCategories || selectedCategories.length === 0) return true;
-    if (selectedCategories.includes("allCategories")) return true;
-    return selectedCategories.includes(character.type);
+  const isInTitle = (character: Character, selectedTitles: string[] | undefined) => {
+    if (!selectedTitles || selectedTitles.length === 0) return true; // Return true if no categories are selected
+    return selectedTitles.includes(character.title);
   };
 
-  const filteredCharacters = characters.filter((character) => isInCategory(character, categories));
+  const isInOrigin = (character: Character, selectedOrigins: string[] | undefined) => {
+    if (!selectedOrigins || selectedOrigins.length === 0) return true; // Return true if no categories are selected
+    return selectedOrigins.includes(character.origin);
+  };
+
+  const filteredCharacters = characters.filter(
+    (character) => isInTitle(character.character, titles) || isInOrigin(character.character, origins),
+  );
+
   const filterCharactersByPrice = filteredCharacters.filter(({ sell }) => {
     if (!price) return true;
     return Number(sell.price) > price.min && Number(sell.price) < price.max;

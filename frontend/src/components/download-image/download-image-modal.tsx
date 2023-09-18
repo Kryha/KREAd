@@ -1,18 +1,11 @@
 import React, { useCallback, useRef, useState } from "react";
-import {
-  DownloadContainer,
-  DownloadContent,
-  DownloadContents,
-  DownloadHeader,
-  DownloadWrapper,
-} from "../../pages/download-character/styles";
-import { useViewport } from "../../hooks";
+import { useClickAwayListener, useViewport } from "../../hooks";
 import { ButtonText } from "../atoms";
 import { color } from "../../design";
-import { useCharacterDownloader } from "../../context/character-image-provider";
-import { useClickAwayListener } from "../../hooks/use-click-away-listener";
+import { useCharacterDownloader } from "../../context/character-builder-context";
 import { text } from "../../assets";
 import { FloatingSpinner } from "../content-loader/styles";
+import { DownloadContainer, DownloadContent, DownloadContents, DownloadHeader, DownloadWrapper } from "./styles";
 
 export interface DownloadProps {
   isOpen: boolean;

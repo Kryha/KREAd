@@ -3,17 +3,17 @@ import { Item, ItemCategory } from "../../interfaces";
 import { text } from "../../assets";
 import {
   ArrowContainer,
+  ArrowUpRight,
   CardActionsContainer,
   Close,
+  Content,
   Divider,
   InfoContainer,
   Menu,
+  MenuCardWrapper,
   MenuContainer,
   MenuContent,
   MenuHeader,
-  Content,
-  ArrowUpRight,
-  MenuCardWrapper,
 } from "./styles";
 import { ButtonText, HorizontalDivider, ImageProps, Label, MenuText, Overlay, SecondaryButton } from "../atoms";
 import { MenuItem } from "../menu-item";
@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { GO_BACK } from "../../constants";
 import { useViewport } from "../../hooks";
-import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
+import { ItemDetailSection } from "../../containers/detail-section";
 import { EmptyCard } from "../empty-card";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { FadeInOut } from "../fade-in-out";
@@ -57,20 +57,28 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
   const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    equipItem.mutate({ item: selectedItem! });
+    if (!selectedItem) return;
+    equipItem.mutate({ item: selectedItem });
   };
 
   const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    unequipItem.mutate({ item: equippedItem! });
+    if (!equippedItem) return;
+    unequipItem.mutate({ item: equippedItem });
   };
 
   const primaryActions = () => {
     if (selectedItem?.name === equippedItem?.name) {
-      return { text: text.item.unequip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event) };
+      return {
+        text: text.item.unequip,
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event),
+      };
     } else {
-      return { text: text.item.equip, onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event) };
+      return {
+        text: text.item.equip,
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event),
+      };
     }
   };
 

@@ -1,12 +1,11 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
-import { ErrorView, FadeInOut } from "../../components";
-import { ItemDetailSection } from "../../containers/detail-section";
+import { ErrorView } from "../../components";
 import { useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
-import { ItemCategory, isItemCategory } from "../../interfaces";
+import { isItemCategory, ItemCategory } from "../../interfaces";
 import { useWalletState } from "../../context/wallet";
 
 export const ItemSell = () => {
@@ -39,10 +38,6 @@ export const ItemSell = () => {
         successLong: text.store.itemSuccessfullyPlacedInShop,
         check: text.store.goToInventory,
       }}
-    >
-      <FadeInOut show>
-        <ItemDetailSection item={itemToSell} />
-      </FadeInOut>
-    </Sell>
+    />
   );
 };

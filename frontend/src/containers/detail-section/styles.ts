@@ -22,10 +22,6 @@ export const DetailSectionWrap = styled.div<ViewProps>`
   ::-webkit-scrollbar {
     display: none;
   }
-
-  @media only screen and (min-width: ${breakpoints.mobile}) and (max-width: ${breakpoints.tablet}) {
-    width: 50%;
-  }
 `;
 
 export const EmptyView = styled.section`

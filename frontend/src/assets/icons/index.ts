@@ -32,8 +32,18 @@ import { ReactComponent as ZoomInIcon } from "./zoom-in.svg";
 import { ReactComponent as ZoomOutIcon } from "./zoom-out.svg";
 import { ReactComponent as DownloadIcon } from "./download.svg";
 import { ReactComponent as DevIcon } from "./dev.svg";
+import { ReactComponent as HelpIcon } from "./help.svg";
+import { ReactComponent as NextIcon } from "./next.svg";
+import { ReactComponent as PreviousIcon } from "./previous.svg";
+import { ReactComponent as EquippedIcon } from "./equipped.svg";
+import { ReactComponent as DiagonalIcon } from "./diagonal.svg";
 
 export {
+  DiagonalIcon,
+  NextIcon,
+  EquippedIcon,
+  PreviousIcon,
+  HelpIcon,
   DevIcon,
   ErrorIcon,
   SelectArrowIcon,

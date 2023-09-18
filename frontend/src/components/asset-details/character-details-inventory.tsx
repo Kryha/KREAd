@@ -16,14 +16,14 @@ interface AssetDetailsInventoryProps {
 }
 
 export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character }) => {
+  const navigate = useNavigate();
+  const [close, setClose] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
   if (!character) {
     console.error("Missing character data");
     return <ErrorView />;
   }
-
-  const navigate = useNavigate();
-  const [close, setClose] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
   const sellAsset = () => {
     navigate(`${routes.sellCharacter}/${character.nft.id}`);

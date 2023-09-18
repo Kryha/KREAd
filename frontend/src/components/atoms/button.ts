@@ -20,7 +20,6 @@ export const PrimaryButton = styled.button<ButtonProps>`
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 14px;
   line-height: 18px;

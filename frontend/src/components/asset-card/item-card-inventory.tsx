@@ -1,5 +1,5 @@
 import { Item, ItemCategory } from "../../interfaces";
-import { BoldLabel, Dash, ImageProps } from "../atoms";
+import { Badge, BoldLabel, ButtonText, Dash, ImageProps } from "../atoms";
 import { FC } from "react";
 import {
   AssetContent,
@@ -11,10 +11,10 @@ import {
   AssetTitleText,
   AssetTitleWrapper,
   AssetWrapper,
-  NoAssetImage,
 } from "./styles";
 import { text } from "../../assets";
 import { color } from "../../design";
+import { getRarityString } from "../../service";
 
 interface Props {
   item: Item;
@@ -41,7 +41,9 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
             <AssetTag>
               <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
               <Dash />
-              <BoldLabel customColor={color.black}>{text.param.rarity(item.rarity)}</BoldLabel>
+              <Badge>
+                <ButtonText>{getRarityString(item?.rarity)}</ButtonText>
+              </Badge>
             </AssetTag>
             {/* TODO: consider displaying what character the item is equipped to (item.equippedTo) */}
             {item.equippedTo && <BoldLabel customColor={color.black}>{text.general.equipped}</BoldLabel>}

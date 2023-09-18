@@ -1,32 +1,31 @@
-import { ITEM_CATEGORIES, CHARACTER_CATEGORIES } from "../constants";
+import { CHARACTER_TITLES, ITEM_CATEGORIES } from "../constants";
 import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
+
+export type CharacterTitle = "Citizen" | "Scavenger" | "Bounty Hunter" | "State Bounty Hunter" | "Council Member";
+
+export type Origin = "Elphia" | "Farma" | "Mount" | "Arm" | "West" | "Sage" | "Mars" | "Tempet";
 
 export const isItemCategory = (category: unknown): category is keyof CharacterItems => {
   if (typeof category !== "string") return false;
   return ITEM_CATEGORIES.all.includes(category);
 };
 
-export const isCharacterCategory = (category: unknown): category is keyof CharacterCategories => {
-  if (typeof category !== "string") return false;
-  return CHARACTER_CATEGORIES.includes(category);
+export const isCharacterCategory = (title: unknown): title is CharacterTitle => {
+  if (typeof title !== "string") return false;
+  return (title as CharacterTitle) in CHARACTER_TITLES;
 };
 
-// TODO: decide if this is the best solution or if it's better if already in a readable format
-export interface CharacterCategories {
-  tempetScavenger: string;
-}
-
 export interface CharacterItems {
-  noseline?: Item;
-  midBackground?: Item;
+  perk1?: Item;
+  patch?: Item;
   mask?: Item;
   headPiece?: Item;
   hair?: Item;
-  airReservoir?: Item;
-  liquid?: Item;
+  filter2?: Item;
+  filter1?: Item;
   background?: Item;
-  frontMask?: Item;
+  perk2?: Item;
   clothing?: Item;
 }
 
@@ -38,16 +37,17 @@ export interface Details {
 }
 
 export interface Character {
-  id: any;
-  keyId: number;
-  title: string;
-  name: string;
-  type: string;
-  description: string;
+  id: number;
+  title: CharacterTitle;
   image: string;
+  keyId: number;
+  name: string;
+  origin: Origin;
+  description: string;
   level: number;
-  details: Details;
-  projectDescription: string;
+  artistMetadata: string;
+  characterTraits: string;
+  date: number;
   itemActivity: ActivityEvent[];
 }
 
@@ -97,7 +97,7 @@ export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft">
 }
 
 export interface CharacterEquip extends ExtendedCharacter {
-  isEquipped: boolean;
+  equippedTo: boolean;
   isForSale?: boolean;
 }
 

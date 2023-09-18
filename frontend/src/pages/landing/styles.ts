@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { CloseIcon, DownArrowIcon } from "../../assets";
-import { disappear, fadeIn } from "../../components/atoms/animations";
+import { disappear, fadeIn } from "../../components";
 import { CharacterWrapper } from "../../components/base-character/styles";
 import { color, margins } from "../../design";
 
@@ -15,12 +15,12 @@ export const LandingContainer = styled.div<ImageProps>`
 `;
 
 export const Menu = styled(DownArrowIcon)`
-  margin: 0px 0px 0px 11px !important;
+  margin: 0 0 0 11px !important;
   width: 12px;
 `;
 
 export const Close = styled(CloseIcon)`
-  margin: 0px 0px 0px 11px !important;
+  margin: 0 0 0 11px !important;
   width: 12px;
 `;
 
@@ -42,7 +42,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
+  padding: 0;
   gap: 12px;
 `;
 

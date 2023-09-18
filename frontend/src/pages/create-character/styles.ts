@@ -33,24 +33,11 @@ export const FormCard = styled.div<ViewProps>`
   display: flex;
   flex-direction: column;
   padding: ${margins.medium};
-  background: ${color.offWhite};
-  flex: 1 1 auto;
-  border: none;
-  border-radius: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-
-  @media (min-width: 768px) {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid ${color.grey};
-    border-radius: ${margins.medium};
-    margin-top: ${margins.big};
-    margin-bottom: ${margins.big};
-    min-width: fit-content;
-    max-width: max-content;
-  }
+  background: ${color.lightGrey};
+  border: 1px solid ${color.grey};
+  border-radius: ${margins.medium};
+  margin-top: ${margins.big};
+  margin-bottom: ${margins.big};
 `;
 
 export const Warning = styled(WarningIcon)``;
