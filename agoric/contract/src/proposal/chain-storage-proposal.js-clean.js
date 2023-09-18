@@ -278,7 +278,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-f775c9a1387b41211e0f23539db25dc209728f4f300ead26c6eb1f0dc6ef30b2adfdcc3ca3040c0d914073699ce056074e0459c5bf865d5258abeb7377c04ecb',
+    'b1-eafd84a744e312ef72dad6be3fbfa9e8a1d4247f8905a5cf3bb27c1270c375beafa6d69521ab8f8a4ed9151e3f4421b87b15e0797a2ca8eb822a8fb4945db6e0',
 };
 
 const fail = (reason) => {
@@ -359,8 +359,8 @@ const executeProposal = async (powers) => {
     },
   } = powers;
 
-  const royaltyAddr = 'agoric1secvzncpvy85e9xqr20a84j0ch9966mn96aq9g';
-  const platformFeeAddr = 'agoric1secvzncpvy85e9xqr20a84j0ch9966mn96aq9g';
+  const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+  const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
 
   const [royaltyDepositFacet] = await reserveThenGetNamePaths(
     namesByAddressAdmin,
@@ -401,6 +401,7 @@ const executeProposal = async (powers) => {
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand: brand,
+    mintFee: 30000000n,
   });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
@@ -410,7 +411,7 @@ const executeProposal = async (powers) => {
   // TODO: add terms indicating the keywordRecords used within our offers
   const noTerms = harden({});
 
-  const { instance, creatorFacet } = await E(startUpgradable)({
+  const { instance, creatorFacet, publicFacet } = await E(startUpgradable)({
     installation,
     label: 'KREAd',
     issuers,
@@ -421,15 +422,9 @@ const executeProposal = async (powers) => {
   // Get board ids for instance and assets
   const boardId = await E(board).getId(instance);
   const {
-    issuers: {
-      KREAdCHARACTER: characterIssuer,
-      KREAdITEM: itemIssuer,
-    },
-    brands: {
-      KREAdCHARACTER: characterBrand,
-      KREAdITEM: itemBrand,
-    }
-  } = await E(zoe).getTerms(instance);
+    character: { issuer: characterIssuer, brand: characterBrand },
+    item: { issuer: itemIssuer, brand: itemBrand },
+  } = await E(publicFacet).getTokenInfo();
 
   const [
     CHARACTER_BRAND_BOARD_ID,
@@ -497,4 +492,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/pandelissymeonidis/Projects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js

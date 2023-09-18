@@ -31,17 +31,6 @@ export const makeCharacterNftObjs = (
 };
 
 /**
- * @param {any[]} arr
- * @param {number} interval
- * @param {number} page
- * @returns {any[]}
- */
-export const getPage = (arr, interval, page) =>
-  [...Array(Math.ceil(arr.length / interval)).keys()].map((idx) =>
-    arr.slice(idx * interval, idx * interval + interval),
-  )[page - 1];
-
-/**
  * @template T
  * @typedef {object} RecorderKit<T>
  * @property {Publisher<T>} publisher
