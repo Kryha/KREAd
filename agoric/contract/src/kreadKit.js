@@ -1222,9 +1222,17 @@ export const prepareKreadKit = async (
             assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
 
             if (sellRecord.isFirstSale) {
-              marketFacet.buyFirstSaleItem(sellRecord.seat, buyerSeat, sellRecord);
+              marketFacet.buyFirstSaleItem(
+                sellRecord.seat,
+                buyerSeat,
+                sellRecord,
+              );
             } else {
-              marketFacet.buySecondarySaleItem(sellRecord.seat, buyerSeat, sellRecord);
+              marketFacet.buySecondarySaleItem(
+                sellRecord.seat,
+                buyerSeat,
+                sellRecord,
+              );
             }
           };
 
@@ -1260,11 +1268,7 @@ export const prepareKreadKit = async (
           // Inspect Price keyword from buyer seat
           const { Price: providedMoneyAmount } = give;
           assert(
-            AmountMath.isEqual(
-              wantedItemAmount,
-              itemForSaleAmount,
-              itemBrand,
-            ),
+            AmountMath.isEqual(wantedItemAmount, itemForSaleAmount, itemBrand),
             X`${errors.sellerSeatMismatch}`,
           );
 
@@ -1285,11 +1289,7 @@ export const prepareKreadKit = async (
           /** @type {TransferPart[]} */
           const transfers = [];
           // Transfer item: seller -> buyer
-          transfers.push([
-            sellerSeat,
-            buyerSeat,
-            { Item: itemForSaleAmount },
-          ]);
+          transfers.push([sellerSeat, buyerSeat, { Item: itemForSaleAmount }]);
           // Transfer artist royalty: buyer -> artist
           transfers.push([
             buyerSeat,
@@ -1342,9 +1342,7 @@ export const prepareKreadKit = async (
 
           market.itemEntries.delete(sellRecord.id);
 
-          marketItemKit.recorder.write(
-            Array.from(market.itemEntries.values()),
-          );
+          marketItemKit.recorder.write(Array.from(market.itemEntries.values()));
 
           // update metrics
           marketFacet.updateMetrics('item', {
@@ -1364,11 +1362,7 @@ export const prepareKreadKit = async (
           // Inspect Price keyword from buyer seat
           const { Price: providedMoneyAmount } = give;
           assert(
-            AmountMath.isEqual(
-              wantedItemAmount,
-              itemForSaleAmount,
-              itemBrand,
-            ),
+            AmountMath.isEqual(wantedItemAmount, itemForSaleAmount, itemBrand),
             X`${errors.sellerSeatMismatch}`,
           );
 
@@ -1389,11 +1383,7 @@ export const prepareKreadKit = async (
           /** @type {TransferPart[]} */
           const transfers = [];
           // Transfer item: seller -> buyer
-          transfers.push([
-            sellerSeat,
-            buyerSeat,
-            { Item: itemForSaleAmount },
-          ]);
+          transfers.push([sellerSeat, buyerSeat, { Item: itemForSaleAmount }]);
           // Transfer artist royalty: buyer -> artist
           transfers.push([
             buyerSeat,
@@ -1616,18 +1606,6 @@ export const prepareKreadKit = async (
       // Public is currently a wrapper around the other created facets and fetches from the state
       // Still to be defined what exactly comes into this
       public: {
-        getTokenInfo() {
-          return harden({
-            character: {
-              issuer: characterIssuer,
-              brand: characterBrand,
-            },
-            item: {
-              issuer: itemIssuer,
-              brand: itemBrand,
-            },
-          });
-        },
         makeMintCharacterInvitation() {
           const { character } = this.facets;
           return character.mint();
