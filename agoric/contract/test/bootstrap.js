@@ -32,6 +32,15 @@ export const bootstrapContext = async (conf) => {
   const royaltyRate = 0.2;
   const platformFeeRate = 0.2;
 
+  const mintRoyaltyRate = {
+    numerator: 85n,
+    denominator: 100n,
+  };
+  const mintPlatformFeeRate = {
+    numerator: 15n,
+    denominator: 100n,
+  };
+
   const timerService = buildManualTimer();
   // Bundle and install contract
   const contractBundle = await bundleSource('./src/index.js');
@@ -43,8 +52,11 @@ export const bootstrapContext = async (conf) => {
     },
     clock: timerService.getClock(),
     seed: 0,
+    mintFee: 30000000n,
     royaltyRate,
     platformFeeRate,
+    mintRoyaltyRate,
+    mintPlatformFeeRate,
     royaltyDepositFacet: royaltyDepositFacet,
     platformFeeDepositFacet: platformFeeDepositFacet,
     paymentBrand: brandMockIST,
@@ -62,14 +74,8 @@ export const bootstrapContext = async (conf) => {
   await E(creatorFacet).initializeBaseAssets(defaultCharacters, defaultItems);
 
   const {
-    issuers: {
-      KREAdCHARACTER: characterIssuer,
-      KREAdITEM: itemIssuer,
-    },
-    brands: {
-      KREAdCHARACTER: characterBrand,
-      KREAdITEM: itemBrand,
-    }
+    issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
+    brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = terms;
 
   const contractAssets = {
@@ -96,8 +102,30 @@ export const bootstrapContext = async (conf) => {
     },
     royaltyPurse,
     platformFeePurse,
-    royaltyRate,
-    platformFeeRate,
+    royaltyRate: makeRatio(
+      royaltyRate.numerator,
+      brandMockIST,
+      royaltyRate.denominator,
+      brandMockIST,
+    ),
+    platformFeeRate: makeRatio(
+      platformFeeRate.numerator,
+      brandMockIST,
+      platformFeeRate.denominator,
+      brandMockIST,
+    ),
+    mintPlatformFeeRate: makeRatio(
+      mintPlatformFeeRate.numerator,
+      brandMockIST,
+      mintPlatformFeeRate.denominator,
+      brandMockIST,
+    ),
+    mintRoyaltyRate: makeRatio(
+      mintRoyaltyRate.numerator,
+      brandMockIST,
+      mintRoyaltyRate.denominator,
+      brandMockIST,
+    ),
   };
 
   harden(result);

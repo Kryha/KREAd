@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-249d846e4b494994c3253be1288db25f5f0ac4e5ed7d39cffeefdf09d76cbd5f60da227078484b888c3fa159eead4d6fc6aed11fa56622bee68d613402ee0442',
+    'b1-eafd84a744e312ef72dad6be3fbfa9e8a1d4247f8905a5cf3bb27c1270c375beafa6d69521ab8f8a4ed9151e3f4421b87b15e0797a2ca8eb822a8fb4945db6e0',
 };
 
 const fail = (reason) => {
@@ -404,6 +404,7 @@ const executeProposal = async (powers) => {
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand: brand,
+    mintFee: 30000000n,
   });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
@@ -421,7 +422,7 @@ const executeProposal = async (powers) => {
     mintFee: 30000000n,
   });
 
-  const { instance, creatorFacet } = await E(startUpgradable)({
+  const { instance, creatorFacet, publicFacet } = await E(startUpgradable)({
     installation,
     label: 'KREAd',
     issuers,
@@ -433,15 +434,9 @@ const executeProposal = async (powers) => {
   const boardId = await E(board).getId(instance);
   //FIXME: update this based no getTerms
   const {
-    issuers: {
-      KREAdCHARACTER: characterIssuer,
-      KREAdITEM: itemIssuer,
-    },
-    brands: {
-      KREAdCHARACTER: characterBrand,
-      KREAdITEM: itemBrand,
-    }
-  } = await E(zoe).getTerms(instance);
+    character: { issuer: characterIssuer, brand: characterBrand },
+    item: { issuer: itemIssuer, brand: itemBrand },
+  } = await E(publicFacet).getTokenInfo();
 
   //FIXME: remove these infavour of terms and getting them differently
   const [

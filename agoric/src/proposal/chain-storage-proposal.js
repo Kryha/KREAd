@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-249d846e4b494994c3253be1288db25f5f0ac4e5ed7d39cffeefdf09d76cbd5f60da227078484b888c3fa159eead4d6fc6aed11fa56622bee68d613402ee0442',
+    'b1-eafd84a744e312ef72dad6be3fbfa9e8a1d4247f8905a5cf3bb27c1270c375beafa6d69521ab8f8a4ed9151e3f4421b87b15e0797a2ca8eb822a8fb4945db6e0',
 };
 
 const fail = (reason) => {
@@ -383,6 +383,24 @@ const executeProposal = async (powers) => {
   const istIssuer = await istIssuerP;
   const brand = await E(istIssuer).getBrand();
 
+  const royaltyRate = {
+    numerator: 10n,
+    denominator: 100n,
+  };
+  const platformFeeRate = {
+    numerator: 3n,
+    denominator: 100n,
+  };
+
+  const mintRoyaltyRate = {
+    numerator: 85n,
+    denominator: 100n,
+  };
+  const mintPlatformFeeRate = {
+    numerator: 15n,
+    denominator: 100n,
+  };
+
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
   const storageNode = E(chainStorageSettled).makeChildNode(
@@ -397,17 +415,6 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
-    royaltyRate: 0.2,
-    platformFeeRate: 0.2,
-    royaltyDepositFacet,
-    platformFeeDepositFacet,
-    paymentBrand: brand,
-  });
-  const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
-  
-  const installation = await E(zoe).installBundleID(contractInfo.bundleID);
-  const issuers = harden({ Money: istIssuer });
-  const terms = harden({
     royaltyRate,
     platformFeeRate,
     mintRoyaltyRate,
@@ -416,11 +423,13 @@ const executeProposal = async (powers) => {
     platformFeeDepositFacet,
     paymentBrand: brand,
     mintFee: 30000000n,
-    assetNames: {
-      character: 'KREAdCHARACTER',
-      item: 'KREAdITEM',
-    },
   });
+  const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
+  
+  const installation = await E(zoe).installBundleID(contractInfo.bundleID);
+  const issuers = harden({ Money: istIssuer });
+  //FIXME: update terms based on changes to private args
+  const noTerms = harden({});
 
   const { instance, creatorFacet } = await E(startUpgradable)({
     installation,
@@ -434,14 +443,8 @@ const executeProposal = async (powers) => {
   const boardId = await E(board).getId(instance);
   //FIXME: update this based no getTerms
   const {
-    issuers: {
-      KREAdCHARACTER: characterIssuer,
-      KREAdITEM: itemIssuer,
-    },
-    brands: {
-      KREAdCHARACTER: characterBrand,
-      KREAdITEM: itemBrand,
-    }
+    issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
+    brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
 
   //FIXME: remove these infavour of terms and getting them differently
@@ -456,14 +459,6 @@ const executeProposal = async (powers) => {
     E(board).getId(itemBrand),
     E(board).getId(itemIssuer),
   ]);
-
-  const assetBoardIds = {
-    character: {
-      issuer: CHARACTER_ISSUER_BOARD_ID,
-      brand: CHARACTER_BRAND_BOARD_ID,
-    },
-    item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
-  };
 
   await E(creatorFacet).publishKreadInfo(
     boardId,
@@ -494,8 +489,7 @@ const executeProposal = async (powers) => {
   produceItemIssuer.resolve(itemIssuer)
   produceItemBrand.resolve(itemBrand)
 
-  console.log('ASSETS ADDED TO AGORIC NAMES');
-  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
+  console.log('CONTRACT INIT SUCCESS!');
 };
 
 harden(executeProposal);

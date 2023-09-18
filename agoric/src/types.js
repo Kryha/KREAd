@@ -266,8 +266,13 @@
  *     value: number
  * }} UpdateAverage
  * 
- * @typedef { {
+ * @typedef {{
  *     numerator: bigint,
  *     denominator: bigint,
  *  }} RatioObject
+ * 
+ * @typedef {{
+ *     success: boolean,
+ *     error: string,
+ * }} HelperFunctionReturn
  */
