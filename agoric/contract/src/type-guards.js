@@ -26,7 +26,7 @@ export const CharacterGuard = M.splitRecord({
   artistMetadata: M.string(),
   image: M.string(),
   characterTraits: M.string(),
-  name: M.string(),
+  name: M.string({ stringLengthLimit: 20 }),
   keyId: M.number(),
   id: M.gte(0),
   date: M.record(),

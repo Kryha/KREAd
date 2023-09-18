@@ -253,7 +253,7 @@ export const prepareKreadKit = async (
             const { give } = seat.getProposal();
             mustMatch(
               offerArgs,
-              M.splitRecord({ name: M.string() }),
+              M.splitRecord({ name: M.string(harden({ stringLengthLimit: 20 })) }),
               'offerArgs',
             );
 
@@ -266,6 +266,9 @@ export const prepareKreadKit = async (
               assert.fail(errors.nameTaken(newCharacterName));
 
             characterState.bases.getSize() > 0 || assert.fail(errors.allMinted);
+
+            const re = /^[a-zA-Z0-9_-]*$/;
+            re.test(newCharacterName) || assert.fail(errors.invalidName);
 
             const currentTime = await helper.getTimeStamp();
             const baseIndex = characterFacet.getRandomBaseIndex();

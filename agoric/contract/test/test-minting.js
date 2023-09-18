@@ -6,6 +6,7 @@ import { bootstrapContext } from './bootstrap.js';
 import { flow } from './flow.js';
 import { makeKreadUser } from './make-user.js';
 import { makeCopyBag } from '@agoric/store';
+import { errors } from '../src/errors.js';
 
 test.before(async (t) => {
   const { zoe, contractAssets, assets, purses, instance, paymentAsset } =
@@ -30,6 +31,74 @@ test.before(async (t) => {
     paymentAsset,
     users: { alice },
   };
+});
+
+test.serial('--| MINT - Too Long Name', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    zoe,
+  } = t.context;
+  const { want, message } = flow.mintCharacter.invalidName1;
+
+  const mintCharacterInvitation = await E(
+    publicFacet,
+  ).makeMintCharacterInvitation();
+  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
+  const proposal = harden({
+    want: {
+      Asset: AmountMath.make(
+        contractAssets.character.brand,
+        harden(copyBagAmount),
+      ),
+    },
+  });
+
+  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+
+  await t.throwsAsync(E(userSeat).getOfferResult(), Error.message);
+
+  const characters = await E(publicFacet).getCharacters();
+  t.deepEqual(
+    characters.length,
+    0,
+    'New character was not added to contract registry due to mint error',
+  );
+});
+
+test.serial('--| MINT - Invalid Chars in Name', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    contractAssets,
+    zoe,
+  } = t.context;
+  const { want, message } = flow.mintCharacter.invalidName2;
+
+  const mintCharacterInvitation = await E(
+    publicFacet,
+  ).makeMintCharacterInvitation();
+  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
+  const proposal = harden({
+    want: {
+      Asset: AmountMath.make(
+        contractAssets.character.brand,
+        harden(copyBagAmount),
+      ),
+    },
+  });
+
+  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+
+  await t.throwsAsync(E(userSeat).getOfferResult(), Error.message, message);
+
+  const characters = await E(publicFacet).getCharacters();
+  t.deepEqual(
+    characters.length,
+    0,
+    'New character was not added to contract registry due to mint error',
+  );
 });
 
 test.serial('--| MINT - Expected flow', async (t) => {

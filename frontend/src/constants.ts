@@ -81,7 +81,7 @@ export const ASSET_TYPE = {
 export const AGORIC_LINK = "https://agoric.com/" as const;
 export const KRYHA_LINK = "https://kryha.io/" as const;
 
-export const MAX_CHARACTER_LENGTH = 16 as const;
+export const MAX_CHARACTER_LENGTH = 20 as const;
 export const SLIDER_TIME = 4.5 as const;
 export const PAGE_SIZE = 10 as const;
 export const ASSETS_PER_PAGE = 10 as const;
