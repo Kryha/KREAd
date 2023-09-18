@@ -133,27 +133,33 @@ test.serial('---| METRICS - Collection size', async (t) => {
   /** @type {Bootstrap} */
   const {
     instance: { publicFacet },
-    contractAssets,
+    paymentAsset,
     zoe,
     users: { bob },
   } = t.context;
 
-  const { want } = flow.mintCharacter.expected;
+  const { give, offerArgs } = flow.mintCharacter.expected;
 
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
-  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
+  const payment = {
+    Price: paymentAsset.mintMockIST.mintPayment(
+      AmountMath.make(paymentAsset.brandMockIST, harden(30000000n)),
+    ),
+  };
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, give.Price);
+
   const proposal = harden({
-    want: {
-      Asset: AmountMath.make(
-        contractAssets.character.brand,
-        harden(copyBagAmount),
-      ),
-    },
+    give: { Price: priceAmount },
   });
 
-  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+  const userSeat = await E(zoe).offer(
+    mintCharacterInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
   await E(userSeat).getOfferResult();
 
   const payout = await E(userSeat).getPayout('Asset');

@@ -15,9 +15,10 @@ test.before(async (t) => {
   const bootstrap = await bootstrapContext();
   await addCharacterToBootstrap(bootstrap);
   await addItemToBootstrap(bootstrap, {
-    name: 'New item',
+    name: 'New item2',
     category: 'hair',
     thumbnail: '',
+    origin: 'Elphia',
     description: '',
     functional: false,
     rarity: 65,
@@ -62,6 +63,11 @@ test.before(async (t) => {
     AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
   );
   alice.depositPayment(payout);
+  
+  // const payoutBob = paymentAsset.mintMockIST.mintPayment(
+  //   AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
+  // );
+  // bob.depositPayment(payoutBob);
 
   t.context = {
     instance,
@@ -229,6 +235,9 @@ test.serial('---| MARKET - Buy character', async (t) => {
     ({ object }) => object.name === character,
   );
 
+  const royaltyPursePre = royaltyPurse.getCurrentAmount().value;
+  const platformFeePursePre = platformFeePurse.getCurrentAmount().value;
+
   const copyBagAmount = makeCopyBag(harden([[characterToBuy.object, 1n]]));
   const characterToBuyAmount = AmountMath.make(
     contractAssets.character.brand,
@@ -282,12 +291,13 @@ test.serial('---| MARKET - Buy character', async (t) => {
   );
 
   t.deepEqual(
-    royaltyPurse.getCurrentAmount(),
-    multiplyBy(characterToBuy.askingPrice, royaltyRate),
+    royaltyPurse.getCurrentAmount().value,
+    royaltyPursePre + multiplyBy(characterToBuy.askingPrice, royaltyRate).value,
   );
   t.deepEqual(
-    platformFeePurse.getCurrentAmount(),
-    multiplyBy(characterToBuy.askingPrice, platformFeeRate),
+    platformFeePurse.getCurrentAmount().value,
+    platformFeePursePre +
+      multiplyBy(characterToBuy.askingPrice, platformFeeRate).value,
   );
 });
 
@@ -450,7 +460,6 @@ test.serial('---| MARKET - Buy item', async (t) => {
     contractAssets,
     zoe,
     users: { bob, alice },
-    paymentAsset,
   } = t.context;
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
@@ -462,6 +471,7 @@ test.serial('---| MARKET - Buy item', async (t) => {
     contractAssets.item.brand,
     itemToBuyCopyBagAmount,
   );
+
   const priceAmount = AmountMath.add(
     AmountMath.add(itemToBuy.askingPrice, itemToBuy.royalty),
     itemToBuy.platformFee,
@@ -481,7 +491,7 @@ test.serial('---| MARKET - Buy item', async (t) => {
     payment,
     offerArgs,
   );
-  const result = await E(userSeat).getOfferResult();
+  await E(userSeat).getOfferResult();
   // t.deepEqual(result.itemMarket.length, 0, 'Offer returns empty market entry');
 
   const itemPayout = await E(userSeat).getPayout('Item');
@@ -521,8 +531,7 @@ test.serial('---| MARKET - Buy item not on market', async (t) => {
     want: { Item: itemToBuyAmount },
   });
   const payment = { Price: alice.withdrawPayment(priceAmount) };
-  const offerArgs = { entryId: itemToBuy.id };
-
+  const offerArgs = { entryId: 66 };
   const userSeat = await E(zoe).offer(
     buyItemInvitation,
     proposal,
@@ -789,6 +798,8 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   // t.deepEqual(bob.getItems().length, 0, "Item is no longer in bob's wallet");
 });
 
+// FIXME: this case works on a local testnet setup
+// figure out why it doesn't pass here. (storageNode vs contract getters?) 
 test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   /** @type {Bootstrap} */
   const {
@@ -800,7 +811,6 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   } = t.context;
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
-
   const itemToBuy = itemsForSale.find(
     ({ object }) => object.category === 'hair',
   );
@@ -812,7 +822,7 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   );
   const priceAmount = AmountMath.make(
     paymentAsset.brandMockIST,
-    itemToBuy.askingPrice.value,
+    itemToBuy.askingPrice.value+itemToBuy.royalty.value+itemToBuy.platformFee.value,
   );
 
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
@@ -821,9 +831,11 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
     want: { Item: itemToBuyAmount },
   });
 
+  const initialItemCountBob = bob.getItems().length;
   const payment = {
     Price: bob.withdrawPayment(priceAmount),
   };
+  
   const offerArgs = { entryId: itemToBuy.id };
 
   const userSeat = await E(zoe).offer(
@@ -833,14 +845,17 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
     offerArgs,
   );
 
-  const result = await E(userSeat).getOfferResult();
-  // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
+  await E(userSeat).getOfferResult();
+  const itemPayout = await E(userSeat).getPayout('Item');
+  bob.depositItems(itemPayout);
+
+  t.deepEqual(bob.getItems().length, initialItemCountBob+1, "Item is in bob's wallet");
 
   const itemsForSaleAfter = await E(publicFacet).getItemsForSale();
 
   t.deepEqual(
     itemsForSaleAfter.length,
-    26,
+    itemsForSale.length-1,
     'Item is successfully removed from the market',
   );
 });

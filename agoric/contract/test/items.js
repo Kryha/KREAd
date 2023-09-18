@@ -24,6 +24,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'patch',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -44,6 +45,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'perk2',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -64,6 +66,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'headPiece',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -84,6 +87,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'filter2',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -104,6 +108,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'garment',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -124,6 +129,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'hair',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -144,6 +150,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'filter1',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     origin: 'elphia',
@@ -165,6 +172,7 @@ export const defaultItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'background',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:

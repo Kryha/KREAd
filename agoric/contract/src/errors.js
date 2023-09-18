@@ -2,6 +2,8 @@ export const errors = {
   noConfig: `Configuration not found, use creatorFacet.initConfig(<config>) to enable this method`,
   noNameArg: `Name argument required`,
   allMinted: `All characters have been minted`,
+  invalidName: `Invalid name. String should only contain ASCII alphanumerics, underscores, and/or dashes.`,
+  mintFeeTooLow: `Provided mint fee is too low`,
   unkwonwnArgInMintOffer: `Mint Character's offer "want" must only contain property "name"`,
   noWantInOffer: `Offer must include "want" terms in the form of { want: { name: <desired character name> }}`,
   nameTaken: (name) =>
