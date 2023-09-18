@@ -32,6 +32,11 @@ export const CharacterGuard = M.splitRecord({
   date: M.record(),
 });
 
+export const RatioObject = {
+  numerator: M.nat(),
+  denominator: M.nat(),
+};
+
 export const CharacterGuardBagShape = M.bagOf(CharacterGuard);
 
 export const ItemGuard = M.splitRecord({
@@ -166,6 +171,10 @@ export const MarketRecorderGuard = M.splitRecord({
   id: M.or(M.gte(0), M.string()),
   seat: M.eref(M.remotable('Seat')),
   askingPrice: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  royalty: M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
   }),

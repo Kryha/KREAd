@@ -7,6 +7,7 @@ import buildManualTimer from '@agoric/zoe/tools/manualTimer.js';
 import { defaultCharacters } from './characters.js';
 import { defaultItems } from './items.js';
 import { makeIssuerKit } from '@agoric/ertp';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/index.js';
 
 /**
  * @param {BootstrapConf} [conf]
@@ -29,8 +30,14 @@ export const bootstrapContext = async (conf) => {
   const royaltyDepositFacet = royaltyPurse.getDepositFacet();
   const platformFeeDepositFacet = platformFeePurse.getDepositFacet();
 
-  const royaltyRate = 0.2;
-  const platformFeeRate = 0.2;
+  const royaltyRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
+  const platformFeeRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
 
   const timerService = buildManualTimer();
   // Bundle and install contract
@@ -85,8 +92,18 @@ export const bootstrapContext = async (conf) => {
     },
     royaltyPurse,
     platformFeePurse,
-    royaltyRate,
-    platformFeeRate,
+    royaltyRate: makeRatio(
+      royaltyRate.numerator,
+      brandMockIST,
+      royaltyRate.denominator,
+      brandMockIST,
+    ),
+    platformFeeRate: makeRatio(
+      platformFeeRate.numerator,
+      brandMockIST,
+      platformFeeRate.denominator,
+      brandMockIST,
+    ),
   };
 
   harden(result);

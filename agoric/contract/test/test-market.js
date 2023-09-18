@@ -9,6 +9,7 @@ import { addCharacterToBootstrap, addItemToBootstrap } from './setup.js';
 import { makeCopyBag } from '@agoric/store';
 import { errors } from '../src/errors.js';
 import { defaultItems } from './items.js';
+import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
@@ -281,12 +282,12 @@ test.serial('---| MARKET - Buy character', async (t) => {
   );
 
   t.deepEqual(
-    royaltyPurse.getCurrentAmount().value,
-    BigInt(Number(characterToBuy.askingPrice.value) * royaltyRate),
+    royaltyPurse.getCurrentAmount(),
+    multiplyBy(characterToBuy.askingPrice, royaltyRate),
   );
   t.deepEqual(
-    platformFeePurse.getCurrentAmount().value,
-    BigInt(Number(characterToBuy.askingPrice.value) * platformFeeRate),
+    platformFeePurse.getCurrentAmount(),
+    multiplyBy(characterToBuy.askingPrice, platformFeeRate),
   );
 });
 

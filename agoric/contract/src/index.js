@@ -7,6 +7,8 @@ import { M } from '@agoric/store';
 import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
 import { prepareKreadKit } from './kreadKit.js';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
+import { RatioObject } from './type-guards.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -30,8 +32,8 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
-    royaltyRate: M.gte(0),
-    platformFeeRate: M.gte(0),
+    royaltyRate: RatioObject,
+    platformFeeRate: RatioObject,
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
     paymentBrand: M.any(),
@@ -46,8 +48,8 @@ harden(meta);
  *   defaultItems: object[],
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
- *   royaltyRate: number,
- *   platformFeeRate: number,
+ *   royaltyRate: RatioObject,
+ *   platformFeeRate: RatioObject,
  *   royaltyDepositFacet: DepositFacet,
  *   platformFeeDepositFacet: DepositFacet,
  *   paymentBrand: Brand
@@ -100,14 +102,27 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers.marshaller,
   );
 
+  const royaltyRateRatio = makeRatio(
+    royaltyRate.numerator,
+    paymentBrand,
+    royaltyRate.denominator,
+    paymentBrand,
+  );
+  const platformFeeRatio = makeRatio(
+    platformFeeRate.numerator,
+    paymentBrand,
+    platformFeeRate.denominator,
+    paymentBrand,
+  );
+
   const kreadKit = await harden(
     prepareKreadKit(
       baggage,
       zcf,
       {
         seed,
-        royaltyRate,
-        platformFeeRate,
+        royaltyRate: royaltyRateRatio,
+        platformFeeRate: platformFeeRatio,
         royaltyDepositFacet,
         platformFeeDepositFacet,
         paymentBrand,
