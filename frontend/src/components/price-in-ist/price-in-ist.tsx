@@ -2,7 +2,7 @@ import { FC } from "react";
 import { text } from "../../assets";
 
 import { color } from "../../design";
-import { toTwoDecimals } from "../../util";
+import { toTwoDecimals, uISTToIST } from "../../util";
 import { BoldLabel } from "../atoms";
 import { Diamond, PriceContainer } from "./styles";
 

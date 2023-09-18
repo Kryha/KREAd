@@ -37,6 +37,8 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({
 
   if (!item) return <ErrorView />;
 
+  {/* FIXME: update details section based on new types */}
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}

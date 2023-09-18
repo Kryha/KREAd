@@ -1,3 +1,5 @@
+import { MAX_CHARACTER_LENGTH } from "../../constants";
+
 export const general = {
   notFound: "this screen doesn't exist.",
   dataNotFound: "data not found",
@@ -24,7 +26,7 @@ export const general = {
   toolTipInfo:
     "maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.",
   thisFieldIsRequired: "this field is required",
-  mintNew: "mint new (IST 2)",
+  mintNew: "mint new (IST 30)",
   theMinimiumAmountIs: "the minimum amount is IST 1",
   moreInfo: "more info",
   thereAreNoAssetsAvailable: "there are no assets available",
@@ -52,7 +54,7 @@ export const general = {
   buy: "buy",
   comingSoon: "coming soon!",
   scroll: "scroll",
-  maxCharacterLength: "the character name cannot be longer than 16 characters",
+  maxCharacterLength: `the character name cannot be longer than ${MAX_CHARACTER_LENGTH} characters`,
   goToYourWallet: "go to your wallet to accept the action!",
   yourActionIsPending:
     "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
