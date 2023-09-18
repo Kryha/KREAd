@@ -2,12 +2,12 @@
 // @ts-check
 import '@agoric/zoe/exported';
 
-import { AssetKind } from '@agoric/ertp';
+import { AmountMath, AssetKind } from '@agoric/ertp';
 import { M } from '@agoric/store';
 import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
-import { prepareKreadKit } from './kreadKit.js';
 import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
+import { prepareKreadKit } from './kreadKit.js';
 import { RatioObject } from './type-guards.js';
 
 /**
@@ -20,7 +20,7 @@ import { RatioObject } from './type-guards.js';
 /**
  * @typedef {import('@agoric/vat-data').Baggage} Baggage
  *
- * @typedef {import('@agoric/time/src/types').TimerService} TimerService
+ * @typedef {import('@agoric/time/src/types').Clock} Clock
  */
 
 /** @type {ContractMeta} */
@@ -34,6 +34,9 @@ export const meta = {
     },
     royaltyRate: RatioObject,
     platformFeeRate: RatioObject,
+    mintFee: M.nat(),
+    mintRoyaltyRate: RatioObject,
+    mintPlatformFeeRate: RatioObject,
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
     paymentBrand: M.any(),
@@ -44,18 +47,19 @@ harden(meta);
 /**
  * @param {ZCF} zcf
  * @param {{
- *   defaultCharacters: object[],
- *   defaultItems: object[],
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
+ *   mintFee: bigint,
  *   royaltyRate: RatioObject,
  *   platformFeeRate: RatioObject,
+ *   mintRoyaltyRate: RatioObject,
+ *   mintPlatformFeeRate: RatioObject,
  *   royaltyDepositFacet: DepositFacet,
  *   platformFeeDepositFacet: DepositFacet,
  *   paymentBrand: Brand
- *   clock: import('@agoric/time/src/types').Clock
+ *   clock: Clock
  * }} privateArgs
- * @param {import('@agoric/vat-data').Baggage} baggage
+ * @param {Baggage} baggage
  */
 export const start = async (zcf, privateArgs, baggage) => {
   // TODO: move to proposal
@@ -90,8 +94,11 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers,
     clock,
     seed,
+    mintFee,
     royaltyRate,
     platformFeeRate,
+    mintRoyaltyRate,
+    mintPlatformFeeRate,
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
@@ -102,6 +109,19 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers.marshaller,
   );
 
+  const mintFeeAmount = AmountMath.make(paymentBrand, mintFee);
+  const mintRoyaltyRateRatio = makeRatio(
+    mintRoyaltyRate.numerator,
+    paymentBrand,
+    mintRoyaltyRate.denominator,
+    paymentBrand,
+  );
+  const mintPlatformFeeRatio = makeRatio(
+    mintPlatformFeeRate.numerator,
+    paymentBrand,
+    mintPlatformFeeRate.denominator,
+    paymentBrand,
+  );
   const royaltyRateRatio = makeRatio(
     royaltyRate.numerator,
     paymentBrand,
@@ -121,8 +141,11 @@ export const start = async (zcf, privateArgs, baggage) => {
       zcf,
       {
         seed,
+        mintFeeAmount,
         royaltyRate: royaltyRateRatio,
         platformFeeRate: platformFeeRatio,
+        mintRoyaltyRate: mintRoyaltyRateRatio,
+        mintPlatformFeeRate: mintPlatformFeeRatio,
         royaltyDepositFacet,
         platformFeeDepositFacet,
         paymentBrand,

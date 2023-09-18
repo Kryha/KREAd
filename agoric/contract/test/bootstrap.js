@@ -39,6 +39,15 @@ export const bootstrapContext = async (conf) => {
     denominator: 100n,
   };
 
+  const mintRoyaltyRate = {
+    numerator: 85n,
+    denominator: 100n,
+  };
+  const mintPlatformFeeRate = {
+    numerator: 15n,
+    denominator: 100n,
+  };
+
   const timerService = buildManualTimer();
   // Bundle and install contract
   const contractBundle = await bundleSource('./src/index.js');
@@ -50,8 +59,11 @@ export const bootstrapContext = async (conf) => {
     },
     clock: timerService.getClock(),
     seed: 0,
+    mintFee: 30000000n,
     royaltyRate,
     platformFeeRate,
+    mintRoyaltyRate,
+    mintPlatformFeeRate,
     royaltyDepositFacet: royaltyDepositFacet,
     platformFeeDepositFacet: platformFeeDepositFacet,
     paymentBrand: brandMockIST,
@@ -107,6 +119,18 @@ export const bootstrapContext = async (conf) => {
       platformFeeRate.numerator,
       brandMockIST,
       platformFeeRate.denominator,
+      brandMockIST,
+    ),
+    mintPlatformFeeRate: makeRatio(
+      mintPlatformFeeRate.numerator,
+      brandMockIST,
+      mintPlatformFeeRate.denominator,
+      brandMockIST,
+    ),
+    mintRoyaltyRate: makeRatio(
+      mintRoyaltyRate.numerator,
+      brandMockIST,
+      mintRoyaltyRate.denominator,
       brandMockIST,
     ),
   };

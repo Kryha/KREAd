@@ -55,6 +55,7 @@ export const ItemGuard = M.splitRecord({
   ),
   description: M.string(),
   functional: M.boolean(),
+  origin: M.string(),
   image: M.string(),
   thumbnail: M.string(),
   rarity: M.gte(0),

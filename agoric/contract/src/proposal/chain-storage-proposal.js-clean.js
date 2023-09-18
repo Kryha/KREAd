@@ -401,6 +401,7 @@ const executeProposal = async (powers) => {
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand: brand,
+    mintFee: 30000000n,
   });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });

@@ -4,27 +4,38 @@ import { defaultItems } from './items.js';
 
 const mintCharacter = {
   expected: {
-    want: { name: 'TestCharacterExpectedFlow' },
+    offerArgs: { name: 'TestCharacterExpectedFlow' },
+    give: { Price: 30000000n },
     message: text.characterMintSuccess,
   },
+  feeTooLow: {
+    offerArgs: { name: 'TestCharacterBadFlow' },
+    give: { Price: 10000000n },
+    message: errors.mintFeeTooLow,
+  },
   duplicateName: {
-    want: { name: 'TestCharacterExpectedFlow' },
+    offerArgs: { name: 'TestCharacterExpectedFlow' },
+    give: { Price: 30000000n },
     message: errors.nameTaken('TestCharacterExpectedFlow'),
   },
-  noWantInOffer: {
-    want: undefined,
-    message: errors.noWantInOffer,
+  noArgs: {
+    offerArgs: undefined,
+    give: { Price: 30000000n },
+    message: errors.noNameArg,
   },
   noName: {
-    want: { name: undefined },
+    offerArgs: { name: undefined },
+    give: { Price: 30000000n },
     message: errors.noNameArg,
   },
   noAvailability: {
-    want: { name: 'TestCharacterBadFlow' },
+    offerArgs: { name: 'TestCharacterBadFlow' },
+    give: { Price: 30000000n },
     message: errors.allMinted,
   },
   extraProperties: {
-    want: { name: 'TestCharacter', bloodType: 'blue', married: true },
+    offerArgs: { name: 'TestCharacter', bloodType: 'blue', married: true },
+    give: { Price: 30000000n },
     message: '',
   },
 };
