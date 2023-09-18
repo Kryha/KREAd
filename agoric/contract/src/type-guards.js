@@ -117,12 +117,6 @@ export const PublicI = M.interface('public', {
   makePublishItemCollectionInvitation: M.call().returns(M.promise()),
   makeBuyItemInvitation: M.call().returns(M.promise()),
   // Getters
-  getTokenInfo: M.call().returns(
-    M.splitRecord({
-      character: { issuer: IssuerShape, brand: BrandShape },
-      item: { issuer: IssuerShape, brand: BrandShape },
-    }),
-  ),
   getCharacters: M.call().returns(M.array()),
   getCharacterInventory: M.call().returns(M.splitRecord({ items: M.array() })),
   getCharactersForSale: M.call().returns(M.array()),

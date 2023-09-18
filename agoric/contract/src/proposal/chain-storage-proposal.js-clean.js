@@ -410,7 +410,7 @@ const executeProposal = async (powers) => {
   // TODO: add terms indicating the keywordRecords used within our offers
   const noTerms = harden({});
 
-  const { instance, creatorFacet, publicFacet } = await E(startUpgradable)({
+  const { instance, creatorFacet } = await E(startUpgradable)({
     installation,
     label: 'KREAd',
     issuers,
@@ -421,9 +421,15 @@ const executeProposal = async (powers) => {
   // Get board ids for instance and assets
   const boardId = await E(board).getId(instance);
   const {
-    character: { issuer: characterIssuer, brand: characterBrand },
-    item: { issuer: itemIssuer, brand: itemBrand },
-  } = await E(publicFacet).getTokenInfo();
+    issuers: {
+      KREAdCHARACTER: characterIssuer,
+      KREAdITEM: itemIssuer,
+    },
+    brands: {
+      KREAdCHARACTER: characterBrand,
+      KREAdITEM: itemBrand,
+    }
+  } = await E(zoe).getTerms(instance);
 
   const [
     CHARACTER_BRAND_BOARD_ID,
