@@ -131,14 +131,14 @@ export const useCharactersMarketPages = (page: number, filters?: CharacterFilter
 export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
-  const charBrand = service.tokenInfo.character.brand;
+  const istBrand = service.tokenInfo.ist.brand;
   return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
     await mintCharacter({
       name: body.name,
       service: {
         kreadInstance: instance,
-        characterBrand: charBrand,
+        istBrand: istBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
       callback: async () => {
