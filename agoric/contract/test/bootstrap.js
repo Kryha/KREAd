@@ -69,6 +69,10 @@ export const bootstrapContext = async (conf) => {
     royaltyDepositFacet: royaltyDepositFacet,
     platformFeeDepositFacet: platformFeeDepositFacet,
     paymentBrand: brandMockIST,
+    assetNames: harden({
+      character: 'KREAdCHARACTER',
+      item: 'KREAdITEM',
+    }),
   }
 
   // Start contract instance

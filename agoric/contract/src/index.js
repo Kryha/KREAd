@@ -34,14 +34,27 @@ export const meta = {
     },
   }),
   customTermsShape: M.splitRecord({
-    royaltyRate: RatioObject,
-    platformFeeRate: RatioObject,
+    royaltyRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    platformFeeRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
     mintFee: M.nat(),
-    mintRoyaltyRate: RatioObject,
-    mintPlatformFeeRate: RatioObject,
+    mintRoyaltyRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    mintPlatformFeeRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
-    paymentBrand: M.any(),
+    paymentBrand: M.eref(M.remotable('Brand')),
+    assetNames: M.any(),
   }),
 };
 harden(meta);
@@ -67,15 +80,13 @@ export const start = async (zcf, privateArgs, baggage) => {
   *   mintPlatformFeeRate: RatioObject,
   *   royaltyDepositFacet: DepositFacet,
   *   platformFeeDepositFacet: DepositFacet,
+  *   assetNames: { character: string, item: string },
   * }}
   */
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
-  const assetNames = {
-    character: 'KREAdCHARACTER',
-    item: 'KREAdITEM',
-  };
+  const assetNames = terms.assetNames;
 
   const storageNodePaths = {
     infoKit: 'info',

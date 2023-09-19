@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-52e35a28e9c87edc5da89ad2928414f49a4598305881d8d1be563659393d4e5add52ab8735834f00aef5314a4024ca0fbde5f65fa956442a9a66272fdf09f8bf',
+    'b1-3610e0a646b00a307f713e02765b7bb9320c195e5bc616106cfec05b98b78881f1ece60f2738d8d7be637d6a50e6f9ea373b31c1d331985dd4f5f6ead8a09d18',
 };
 
 const fail = (reason) => {
@@ -430,6 +430,10 @@ const executeProposal = async (powers) => {
     platformFeeDepositFacet,
     paymentBrand: brand,
     mintFee: 30000000n,
+    assetNames: {
+      character: 'KREAdCHARACTER',
+      item: 'KREAdITEM',
+    },
   });
 
   const { instance, creatorFacet } = await E(startUpgradable)({
