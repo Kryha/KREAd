@@ -13,7 +13,6 @@ export const mockCharacterItems1: CharacterItems = {
   noseline: {
     name: "AirTox: Fairy Dust Elite moore more info pls i beg",
     category: "noseline",
-    id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.noseline.style1,
@@ -33,7 +32,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://yourmetadata.com",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -70,7 +69,6 @@ export const mockCharacterItems1: CharacterItems = {
   background: {
     name: "AirTox: Fairy Dust Elite",
     category: "background",
-    id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.background.style1,
@@ -90,7 +88,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -127,7 +125,6 @@ export const mockCharacterItems1: CharacterItems = {
   mask: {
     name: "AirTox: Fairy Dust Elite",
     category: "mask",
-    id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.mask.style1,
@@ -147,7 +144,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -184,7 +181,6 @@ export const mockCharacterItems1: CharacterItems = {
   headPiece: {
     name: "AirTox: Fairy Dust Elite",
     category: "headPiece",
-    id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.headpiece.style1,
@@ -204,7 +200,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -241,7 +237,6 @@ export const mockCharacterItems1: CharacterItems = {
   hair: {
     name: "AirTox: Fairy Dust Elite",
     category: "hair",
-    id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.hair.style1,
@@ -261,7 +256,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -298,7 +293,6 @@ export const mockCharacterItems1: CharacterItems = {
   frontMask: {
     name: "AirTox: Fairy Dust Elite",
     category: "frontMask",
-    id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.frontmask.style1,
@@ -318,7 +312,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -355,7 +349,6 @@ export const mockCharacterItems1: CharacterItems = {
   airReservoir: {
     name: "AirTox: Fairy Dust Elite",
     category: "airReservoir",
-    id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.filter1.style1,
@@ -375,7 +368,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -412,7 +405,6 @@ export const mockCharacterItems1: CharacterItems = {
   midBackground: {
     name: "AirTox: Fairy Dust Elite",
     category: "midBackground",
-    id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: TempetBackground2,
@@ -432,7 +424,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -469,7 +461,6 @@ export const mockCharacterItems1: CharacterItems = {
   liquid: {
     name: "AirTox: Fairy Dust Elite",
     category: "liquid",
-    id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.filter2.style1,
@@ -489,7 +480,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -526,7 +517,6 @@ export const mockCharacterItems1: CharacterItems = {
   clothing: {
     name: "AirTox: Fairy Dust Elite",
     category: "clothing",
-    id: "12343",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.clothing.style1,
@@ -546,7 +536,7 @@ export const mockCharacterItems1: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -586,7 +576,6 @@ export const mockCharacterItems2: CharacterItems = {
   noseline: {
     name: "AirTox: Fairy Dust Elite moore more info pls i beg",
     category: "noseline",
-    id: "2",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.noseline.style2,
@@ -606,7 +595,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://yourmetadata.com",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -643,7 +632,6 @@ export const mockCharacterItems2: CharacterItems = {
   background: {
     name: "AirTox: Fairy Dust Elite",
     category: "background",
-    id: "3",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: TempetBackground1,
@@ -663,7 +651,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -700,7 +688,6 @@ export const mockCharacterItems2: CharacterItems = {
   mask: {
     name: "AirTox: Fairy Dust Elite",
     category: "mask",
-    id: "4",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.mask.style2,
@@ -720,7 +707,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -757,7 +744,6 @@ export const mockCharacterItems2: CharacterItems = {
   headPiece: {
     name: "AirTox: Fairy Dust Elite",
     category: "headPiece",
-    id: "5",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.headpiece.style2,
@@ -777,7 +763,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -814,7 +800,6 @@ export const mockCharacterItems2: CharacterItems = {
   hair: {
     name: "AirTox: Fairy Dust Elite",
     category: "hair",
-    id: "6",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.hair.style2,
@@ -834,7 +819,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -871,7 +856,6 @@ export const mockCharacterItems2: CharacterItems = {
   frontMask: {
     name: "AirTox: Fairy Dust Elite",
     category: "frontMask",
-    id: "7",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.frontmask.style2,
@@ -891,7 +875,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -928,7 +912,6 @@ export const mockCharacterItems2: CharacterItems = {
   airReservoir: {
     name: "AirTox: Fairy Dust Elite",
     category: "airReservoir",
-    id: "8",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.filter1.style2,
@@ -948,7 +931,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -985,7 +968,6 @@ export const mockCharacterItems2: CharacterItems = {
   midBackground: {
     name: "AirTox: Fairy Dust Elite",
     category: "midBackground",
-    id: "9",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: TempetBackground2,
@@ -1005,7 +987,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -1042,7 +1024,6 @@ export const mockCharacterItems2: CharacterItems = {
   liquid: {
     name: "AirTox: Fairy Dust Elite",
     category: "liquid",
-    id: "10",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.filter2.style2,
@@ -1062,7 +1043,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",
@@ -1099,7 +1080,6 @@ export const mockCharacterItems2: CharacterItems = {
   clothing: {
     name: "AirTox: Fairy Dust Elite",
     category: "clothing",
-    id: "12343",
     description:
       "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
     image: Lina.clothing.style2,
@@ -1119,7 +1099,7 @@ export const mockCharacterItems2: CharacterItems = {
       artist: "emily",
       metadata: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     },
-    date: "23213123",
+
     activity: [
       {
         name: "transfer",

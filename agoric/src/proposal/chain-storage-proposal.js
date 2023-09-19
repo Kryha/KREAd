@@ -415,6 +415,14 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
+    royaltyRate,
+    platformFeeRate,
+    mintRoyaltyRate,
+    mintPlatformFeeRate,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand: brand,
+    mintFee: 30000000n,
   });
   
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });

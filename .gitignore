@@ -21,6 +21,7 @@ node_modules
 */.env
 backend/.env
 frontend/.env
+.yarn
 
 ## npm deprecated in favour of yarn
 package-lock.json
@@ -57,5 +58,7 @@ yarn-error.log*
 install-state.gz
 
 agoric/_agstate/yarn-links/
+agoric/Makefile.paths.local
+
 .idea/
 .vscode/

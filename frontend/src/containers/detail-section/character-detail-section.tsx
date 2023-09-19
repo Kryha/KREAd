@@ -26,6 +26,8 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
   const { width } = useViewport();
   if (!character) return <ErrorView />;
 
+  {/* FIXME: update details section based on new types */}
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
@@ -51,8 +53,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
       {/* details */}
       <DetailSectionSegment title={text.character.details} sectionIndex={4}>
-        {/* FIXME: grab brand from state */}
-        <DetailSectionSegmentDetails data={{ ...character.nft.details, brand: "KREAdCHARACTER" }} />
+        <DetailSectionSegmentDetails data={{ ...character.nft.details }} />
       </DetailSectionSegment>
 
       {/* project */}

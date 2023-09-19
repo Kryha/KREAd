@@ -32,6 +32,14 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
+    royaltyRate: RatioObject,
+    platformFeeRate: RatioObject,
+    mintFee: M.nat(),
+    mintRoyaltyRate: RatioObject,
+    mintPlatformFeeRate: RatioObject,
+    royaltyDepositFacet: M.any(),
+    platformFeeDepositFacet: M.any(),
+    paymentBrand: M.any(),
   }),
   customTermsShape: M.splitRecord({
     royaltyRate: {

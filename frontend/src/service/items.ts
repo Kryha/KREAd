@@ -153,7 +153,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket) => {
         return await marketService.buyItem({
           entryId: itemToBuy.id,
           item: itemToBuy.item,
-          price: BigInt(itemToBuy.sell.price),
+          price: BigInt(itemToBuy.sell.price + itemToBuy.sell.platformFee + itemToBuy.sell.royalty),
           service: {
             kreadInstance: instance,
             itemBrand,

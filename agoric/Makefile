@@ -3,6 +3,7 @@ COSMIC_SWINGSET_PATH =
 VATS_PATH =
 KEPLR_ADDRESS =
 KEPLR_ADDRESS2 =
+FEE_ADDRESS = agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu
 KREAD_REPO =
 EVAL_PERMIT =
 EVAL_CODE =
@@ -54,6 +55,14 @@ client-local-testnet:
 provision-account:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS) \
+
+provision-account-2:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS2) \
+
+provision-fee-collector:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-provision-pool provision-acct ACCT_ADDR=$(FEE_ADDRESS) \
 
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \
