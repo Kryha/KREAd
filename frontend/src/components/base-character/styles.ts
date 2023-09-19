@@ -94,8 +94,8 @@ export const CharacterContainer = styled.div<ImageProps>`
       `;
     } else if (size === "medium") {
       if (width <= SMALL_SCREEN_SIZE) {
-        return `zoom: 0.42;
-        -moz-transform: scale(0.42);
+        return `zoom: 0.36;
+        -moz-transform: scale(0.36);
         -moz-transform-origin: 0 0;
         `;
       }

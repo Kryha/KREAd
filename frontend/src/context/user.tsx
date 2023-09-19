@@ -5,7 +5,7 @@ import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util
 import { useWalletState } from "./wallet";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
-import { ITEM_CATEGORIES } from "../constants";
+import { CATEGORY } from "../constants";
 
 export interface UserContext {
   characters: ExtendedCharacter[];
@@ -97,9 +97,9 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
       const equippedCharacterItems = [];
       equippedCharacterItems.push(...frontendEquippedItems);
       const equipped: { [key: string]: Item | undefined } = {};
-      ITEM_CATEGORIES.all.forEach((category) => {
+      for (const category of Object.keys(CATEGORY)) {
         equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
-      });
+      }
 
       const updatedCharacters = replaceCharacterInventoryInUserStateArray(state.characters, action.characterName, equipped);
 

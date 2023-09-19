@@ -4,15 +4,13 @@ import { useSelectedCharacter } from "../../../service";
 import { useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { CategoryCard, CategoryCardsContainer, CategoryCardsWrapper, CategoryInfo, CategoryInfoCategory } from "./style";
-import { ITEM_CATEGORIES, ITEM_MODE } from "../../../constants";
+import { CATEGORY, ITEM_MODE } from "../../../constants";
 
 export const CategoryCards: FC = () => {
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const items = useMemo(() => selectedCharacter?.equippedItems || {}, [selectedCharacter]);
   const { selectedAssetCategory, setSelectedAssetCategory, setInteractionMode } = useCharacterBuilder();
-
-  // Extract the keys from ITEM_CATEGORIES.all
-  const itemKeys = ITEM_CATEGORIES.all;
+  const itemKeys = Object.keys(CATEGORY) as (keyof typeof CATEGORY)[];
 
   const { height, width } = useViewport();
 

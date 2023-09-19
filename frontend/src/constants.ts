@@ -1,5 +1,3 @@
-import { ItemCategory } from "./interfaces";
-
 export const GO_BACK = -1 as const;
 export const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5001";
 export const MIN_PRICE = 0 as const;
@@ -36,32 +34,46 @@ export const ENTERED = "entered" as const;
 export const EXITING = "exiting" as const;
 export const MILLISECONDS = 1000 as const;
 
-/********************** ITEMS CATEGORY *********************/
-export const PERK1: ItemCategory = "perk1" as const;
-export const PATCH: ItemCategory = "patch" as const;
-export const MASK: ItemCategory = "mask";
-export const HEADPIECE: ItemCategory = "headPiece" as const;
-export const HAIR: ItemCategory = "hair" as const;
-export const PERK2: ItemCategory = "perk2" as const;
-export const FILTER1: ItemCategory = "filter1" as const;
-export const BACKGROUND: ItemCategory = "background" as const;
-export const FILTER2: ItemCategory = "filter2" as const;
-export const CLOTHING: ItemCategory = "clothing" as const;
-
-export const ITEM_CATEGORIES = {
-  all: [BACKGROUND, PATCH, HAIR, HEADPIECE, MASK, PERK1, PERK2, FILTER1, FILTER2, CLOTHING],
-  background: BACKGROUND,
-  patch: PATCH,
-  hair: HAIR,
-  mask: MASK,
-  perk1: PERK1,
-  perk2: PERK2,
-  filter1: FILTER1,
-  filter2: FILTER2,
-  clothing: CLOTHING,
+/********************** PROPERTIES *********************/
+export const ORIGIN = {
+  elphia: "Elphia",
+  farma: "Farma",
+  mount: "Mount",
+  arm: "Arm",
+  west: "West",
+  sage: "Sage",
+  mars: "Mars",
+  tempet: "Tempet",
+} as const;
+export const TITLE = {
+  citizen: "Citizen",
+  scavenger: "Scavenger",
+  bountyHunter: "Bounty Hunter",
+  stateBountyHunter: "State Bounty Hunter",
+  councilMember: "Council Member",
 } as const;
 
-/********************** CHARACTER TYPES *********************/
+export const CATEGORY = {
+  background: "background",
+  patch: "patch",
+  hair: "hair",
+  headPiece: "headPiece",
+  mask: "mask",
+  perk1: "perk1",
+  perk2: "perk2",
+  filter1: "filter1",
+  filter2: "filter2",
+  clothing: "clothing",
+} as const;
+
+export const RARITY = {
+  common: "common",
+  uncommon: "uncommon",
+  rare: "rare",
+  epic: "epic",
+  legendary: "legendary",
+} as const;
+
 export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"] as const;
 
 export const SECTION = {
@@ -69,12 +81,12 @@ export const SECTION = {
   INVENTORY: "inventory",
 } as const;
 
-export const CHARACTER_TITLES = ["Citizen", "Scavenger", "Bounty Hunter", "State Bounty Hunter", "Council Member"] as const;
-
 export const ASSET_TYPE = {
   CHARACTER: "character",
   ITEM: "item",
 };
+
+/***************************************************************************/
 
 export const AGORIC_LINK = "https://agoric.com/" as const;
 export const KRYHA_LINK = "https://kryha.io/" as const;

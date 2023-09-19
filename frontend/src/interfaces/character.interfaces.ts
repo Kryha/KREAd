@@ -1,19 +1,18 @@
-import { CHARACTER_TITLES, ITEM_CATEGORIES } from "../constants";
+import { CATEGORY, ORIGIN, TITLE } from "../constants";
 import { ActivityEvent } from "./activity.interfaces";
 import { Item } from "./item.interfaces";
 
-export type CharacterTitle = "Citizen" | "Scavenger" | "Bounty Hunter" | "State Bounty Hunter" | "Council Member";
-
-export type Origin = "Elphia" | "Farma" | "Mount" | "Arm" | "West" | "Sage" | "Mars" | "Tempet";
+export type Origin = (typeof ORIGIN)[keyof typeof ORIGIN];
+export type Title = (typeof TITLE)[keyof typeof TITLE];
 
 export const isItemCategory = (category: unknown): category is keyof CharacterItems => {
   if (typeof category !== "string") return false;
-  return ITEM_CATEGORIES.all.includes(category);
+  return Object.prototype.hasOwnProperty.call(CATEGORY, category);
 };
 
-export const isCharacterCategory = (title: unknown): title is CharacterTitle => {
+export const isCharacterCategory = (title: unknown): title is Title => {
   if (typeof title !== "string") return false;
-  return (title as CharacterTitle) in CHARACTER_TITLES;
+  return (title as Title) in TITLE;
 };
 
 export interface CharacterItems {
@@ -38,7 +37,7 @@ export interface Details {
 
 export interface Character {
   id: number;
-  title: CharacterTitle;
+  title: Title;
   image: string;
   keyId: number;
   name: string;

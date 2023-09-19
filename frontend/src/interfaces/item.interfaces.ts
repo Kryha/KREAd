@@ -1,9 +1,9 @@
 import { ActivityEvent } from "./activity.interfaces";
 import { Origin } from "./character.interfaces";
+import { CATEGORY, RARITY } from "../constants";
 
-export type ItemCategory = "perk1" | "patch" | "mask" | "headPiece" | "hair" | "perk2" | "filter1" | "background" | "filter2" | "clothing";
-
-export type Rarity = "common" | "uncommon" | "rare" | "exotic" | "legendary";
+export type Category = (typeof CATEGORY)[keyof typeof CATEGORY];
+export type Rarity = (typeof RARITY)[keyof typeof RARITY];
 export interface Stats {
   filtering: number;
   weight: number;
@@ -14,7 +14,7 @@ export interface Stats {
 
 export interface Item {
   name: string;
-  category: ItemCategory;
+  category: Category;
   origin: Origin;
   functional: boolean;
   description: string;

@@ -19,11 +19,8 @@ export const ItemCards: FC = () => {
   const characterName = selectedCharacter?.nft.name;
   const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
 
-  // Find the item with the selectedAsset name
   const equippedItem = items.find((item) => item.equippedTo === characterName);
-
   const selectedItemToEquip = items.find((item) => item.name === selectedAsset);
-
   const [equippedItemState, setEquippedItemState] = useState(equippedItem);
 
   const equipItem = useEquipItem(setEquippedItemState);

@@ -25,7 +25,7 @@ export const useMyItem = (id: string): [Item | undefined, boolean] => {
   return [found, false];
 };
 
-export const useGetItemInInventoryByNameAndCategory = (name: string, category: ItemCategory | undefined): [Item | undefined, boolean] => {
+export const useGetItemInInventoryByNameAndCategory = (name: string, category: ItemCategory[][]): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
 
   const found = useMemo(() => items.find((item) => item.category === category && item.name === name), [name, category, items]);
@@ -35,9 +35,9 @@ export const useGetItemInInventoryByNameAndCategory = (name: string, category: I
 
 export const useGetItemsInInventory = (filters?: ItemFilters): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
-  const { item } = useWalletState();
+  const { items } = useUserState();
 
-  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...item];
+  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
 
   if (!filters) return [allItems, !fetched];
 
