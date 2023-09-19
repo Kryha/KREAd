@@ -1,5 +1,5 @@
 import { Item, ItemCategory } from "../../interfaces";
-import { Badge, BoldLabel, ButtonText, Dash, ImageProps } from "../atoms";
+import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel } from "../atoms";
 import { FC } from "react";
 import {
   AssetContent,
@@ -7,14 +7,16 @@ import {
   AssetImage,
   AssetImageContainer,
   AssetInfoContainer,
+  AssetStatsContainer,
   AssetTag,
   AssetTitleText,
   AssetTitleWrapper,
   AssetWrapper,
 } from "./styles";
-import { text } from "../../assets";
+import { EquippedIcon, text } from "../../assets";
 import { color } from "../../design";
 import { getRarityString } from "../../service";
+import styled from "@emotion/styled";
 
 interface Props {
   item: Item;
@@ -30,6 +32,11 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
         <AssetImageContainer>
+          {item.equippedTo && (
+            <AssetEquippedContainer>
+              <EquippedIcon />
+            </AssetEquippedContainer>
+          )}
           <AssetImage src={item.image} category={item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>
@@ -37,20 +44,30 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
             <AssetTitleText>{item.name}</AssetTitleText>
             <BoldLabel>{item.category}</BoldLabel>
           </AssetTitleWrapper>
-          <AssetFooter>
+          <AssetStatsContainer>
             <AssetTag>
-              <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
-              <Dash />
-              <Badge>
-                <ButtonText>{getRarityString(item?.rarity)}</ButtonText>
-              </Badge>
+              <BoldLabel customColor={color.black}>lvl. </BoldLabel>
+              <LevelBoldLabel customColor={color.black}>{item.level}</LevelBoldLabel>
             </AssetTag>
-            {/* TODO: consider displaying what character the item is equipped to (item.equippedTo) */}
-            {item.equippedTo && <BoldLabel customColor={color.black}>{text.general.equipped}</BoldLabel>}
-            {item.forSale && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>}
+            <Badge>
+              <ButtonText>{item.origin}</ButtonText>
+            </Badge>
+            <Badge>
+              <ButtonText>{getRarityString(item.rarity)}</ButtonText>
+            </Badge>
+          </AssetStatsContainer>
+          <AssetFooter>
+            {item.equippedTo && <BoldLabel>equipped to: {item.equippedTo}</BoldLabel>}
+            {item.forSale && <BoldLabel>{text.general.forSale}</BoldLabel>}
           </AssetFooter>
         </AssetInfoContainer>
       </AssetContent>
     </AssetWrapper>
   );
 };
+
+export const AssetEquippedContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+`;

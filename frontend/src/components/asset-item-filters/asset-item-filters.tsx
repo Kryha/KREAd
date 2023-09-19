@@ -11,10 +11,10 @@ import {
   sortItemsInShop,
 } from "../../assets/text/filter-options";
 import { breakpoints, color } from "../../design";
-import { ColorSelector, Filters, HorizontalDivider, Label, PriceSelector, Select } from "../../components";
+import { ColorSelector, Filters, Label, PriceSelector, Select } from "../../components";
 import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
-import { AssetFilterContainer, AssetFilterCount, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
+import { AssetFilterContainer, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
 import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 import { ItemCategory } from "../../interfaces";
 
@@ -33,7 +33,7 @@ interface Props {
 }
 
 //TODO: TO FIX
-export const AssetFilters: FC<Props> = ({
+export const AssetItemFilters: FC<Props> = ({
   assetType,
   section,
   assets,
@@ -48,7 +48,6 @@ export const AssetFilters: FC<Props> = ({
 }) => {
   const isMobile = useIsMobile(breakpoints.desktop);
   const numberOfFiltersSelected = selectedCategories.length;
-  const assetsCount = assets.length;
 
   const [showFilter, setShowFilter] = useState(false);
   const [filterId, setFilterId] = useState("");
@@ -140,8 +139,6 @@ export const AssetFilters: FC<Props> = ({
             </>
           </AssetSelectorContainer>
         </AssetFilterContainer>
-        <AssetFilterCount customColor={color.darkGrey}>{text.param.amountOfAssets(assetsCount)}</AssetFilterCount>
-        <HorizontalDivider />
       </AssetFilterWrapper>
     </>
   );

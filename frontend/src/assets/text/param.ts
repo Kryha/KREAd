@@ -1,5 +1,5 @@
 export const param = {
-  amountOfAssets: (amount: number | string) => `${amount} assets`,
+  amountOfItems: (amount: number | string) => `${amount} items`,
   id: (id: number | string) => `#${id}`,
   ownedBy: (owner: string) => `owned by ${owner}`,
   oneOutOf: (rarity: number | string) => `1 / ${rarity}`,

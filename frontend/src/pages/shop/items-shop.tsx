@@ -2,7 +2,7 @@ import React, { FC, ReactNode, useState } from "react";
 import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 import { useGetItemInShopById } from "../../service";
 import { routes } from "../../navigation";
-import { AssetFilters } from "../../components/asset-item-filters/asset-filters";
+import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
 import { ItemDetailsMarket } from "../../components/asset-details/item-details-market";
 import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";
@@ -40,7 +40,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   if (!items) return <></>;
   return (
     <>
-      <AssetFilters
+      <AssetItemFilters
         assetType={ASSET_TYPE.ITEM}
         section={SECTION.SHOP}
         pageSelector={pageSelector}

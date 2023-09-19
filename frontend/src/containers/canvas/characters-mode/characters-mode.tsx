@@ -46,7 +46,7 @@ export const CharactersMode: FC = () => {
                 <CharacterCards />
                 <CardActionsContainer>
                   <CharacterActions>
-                    <ButtonInfo info={text.general.characterCardInfo} />
+                    <ButtonInfo info={text.general.characterCardInfo} infoPosition={"top"} />
                     <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
                       <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
                       <ArrowUp />

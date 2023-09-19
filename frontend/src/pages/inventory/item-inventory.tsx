@@ -1,14 +1,16 @@
 import React, { FC, useState } from "react";
-import { LoadingPage, OverviewEmpty } from "../../components";
+import { HorizontalDivider, LoadingPage, OverviewEmpty } from "../../components";
 import { routes } from "../../navigation";
 import { useGetItemInInventoryByNameAndCategory, useGetItemsInInventory } from "../../service";
 import { text } from "../../assets";
 import { OverviewContainer } from "../shop/styles";
-import { AssetFilters } from "../../components/asset-item-filters/asset-filters";
+import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
 import { ItemCategory } from "../../interfaces";
 import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
 import { ASSET_TYPE, SECTION } from "../../constants";
 import { ItemCardsInventory } from "../../components/asset-cards/item-cards-inventory";
+import { AssetFilterCount } from "../../components/asset-item-filters/styles";
+import { color } from "../../design";
 
 interface Props {
   pageSelector?: React.ReactNode;
@@ -32,12 +34,13 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   });
 
   const [item] = useGetItemInInventoryByNameAndCategory(selectedName, selectedCategory);
+  const assetsCount = items.length;
 
   if (isLoading) return <LoadingPage />;
 
   return (
     <>
-      <AssetFilters
+      <AssetItemFilters
         assetType={ASSET_TYPE.ITEM}
         section={SECTION.INVENTORY}
         pageSelector={pageSelector}
@@ -48,6 +51,8 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
         setSelectedCategories={setSelectedCategories}
         setSelectedColor={setSelectedColor}
       />
+      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
+      <HorizontalDivider />
       {item && (
         <ItemDetailsInventory item={item} selectedItem={{ name: selectedName, category: selectedCategory }} selectItem={selectItem} />
       )}

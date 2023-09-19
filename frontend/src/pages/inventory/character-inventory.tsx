@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
 import { text } from "../../assets";
-import { OverviewEmpty } from "../../components";
+import { HorizontalDivider, OverviewEmpty } from "../../components";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
 import { OverviewContainer } from "../shop/styles";
 import { CharacterDetailsInventory } from "../../components/asset-details/character-details-inventory";
 import { CharacterCardsInventory } from "../../components/asset-cards/character-cards-inventory";
+import { AssetFilterCount } from "../../components/asset-item-filters/styles";
+import { color } from "../../design";
 
 interface Props {
   pageSelector?: React.ReactNode;
@@ -23,6 +25,8 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
   // const [noCharacters, setNoCharacters] = useState(false);
   // const [showToast, setShowToast] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const assetsCount = characters.length;
 
   useEffect(() => {
     //   if (isLoadingCharacters || !!selectedId) return;
@@ -81,6 +85,8 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
       {/*  selectedSorting={selectedSorting}*/}
       {/*  setSelectedSorting={setSelectedSorting}*/}
       {/*/>*/}
+      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
+      <HorizontalDivider />
       {selectedId && <CharacterDetailsInventory character={character} />}
       {characters.length > 0 ? (
         <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: string) => setSelectedId(id)} />
