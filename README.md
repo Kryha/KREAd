@@ -1,44 +1,46 @@
-# KREAd.app
+# Kread
 
-Character builder dApp for composable NFTs.
-
-KREAd.app is using the full suite of Agoric to implement NFT composability. The NFTs are all still valid ERTP (Electronic Rights Transfer Protocol) tokens, the native implementations of Fungible, non-fungible, and even semi-fungible tokens on Agoric. This allows any smart contract utilising the implementation of ERTP to interact with them. Including the ability to transfer with Offer Safety using Zoe, to make sure users get what they expect, or get their assets returned.
-
----
-
-## Find out more about the project
-
-- [Kryha Case](https://kryha.io/cases/kread-app/)
-- [Agoric](https://agoric.com/)
-
----
+TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.
 
 ## Getting Started
 
-### Run a local AG-Solo + Wallet + Frontend
+TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
-### Terminal 0 - Agoric Config
+1. Installation process
+2. Software dependencies
+3. Latest releases
+4. API references
 
-1. Follow Agoric docs on how to setup your [local SDK](https://papers.agoric.com/documentation/getting-started/before-using-agoric.html)
-2. `cd <project-root>/agoric`
-3. `agoric install`
+## Build and Test
 
-### Terminal 1 - Agoric Start
+TODO: Describe and show how to build your code and run the tests.
+
+## Contribute
+
+TODO: Explain how other users and developers can contribute to make your code better.
+
+If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
+
+- [ASP.NET Core](https://github.com/aspnet/Home)
+- [Visual Studio Code](https://github.com/Microsoft/vscode)
+- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+
+## To Run a local AG-Solo + Wallet + frontend
+
+### Terminal 1 - agoric
 
 1. `agoric start -v --reset`
 
-### Terminal 2 - Agoric Deploy Contracts
+### Terminal 2 - agoric
 
 1. `agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js`
 2. `agoric open --repl`
 
-### Terminal 3 - Frontend start
+### Terminal 3 - frontend
 
 1. Remove `type: module` from `package.json`
 2. yarn start
 3. Remember to put back the `type: module` before commiting your changes
-
----
 
 ## Run multiuser
 

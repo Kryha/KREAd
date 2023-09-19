@@ -56,7 +56,7 @@ test.before(async (t) => {
     AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
   );
   alice.depositPayment(payout);
-  
+
   // const payoutBob = paymentAsset.mintMockIST.mintPayment(
   //   AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
   // );
@@ -760,7 +760,7 @@ test.serial(
 test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { publicFacet, creatorFacet },
     zoe,
     paymentAsset,
   } = t.context;
@@ -771,7 +771,7 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
   const sellItemInvitation = await E(
-    publicFacet,
+    creatorFacet,
   ).makePublishItemCollectionInvitation();
   const proposal = harden({
     give: {},
@@ -792,7 +792,7 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
 });
 
 // FIXME: this case works on a local testnet setup
-// figure out why it doesn't pass here. (storageNode vs contract getters?) 
+// figure out why it doesn't pass here. (storageNode vs contract getters?)
 test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   /** @type {Bootstrap} */
   const {
@@ -815,7 +815,9 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   );
   const priceAmount = AmountMath.make(
     paymentAsset.brandMockIST,
-    itemToBuy.askingPrice.value+itemToBuy.royalty.value+itemToBuy.platformFee.value,
+    itemToBuy.askingPrice.value +
+      itemToBuy.royalty.value +
+      itemToBuy.platformFee.value,
   );
 
   const buyItemInvitation = await E(publicFacet).makeBuyItemInvitation();
@@ -828,7 +830,7 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   const payment = {
     Price: bob.withdrawPayment(priceAmount),
   };
-  
+
   const offerArgs = { entryId: itemToBuy.id };
 
   const userSeat = await E(zoe).offer(
@@ -842,13 +844,17 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   const itemPayout = await E(userSeat).getPayout('Item');
   bob.depositItems(itemPayout);
 
-  t.deepEqual(bob.getItems().length, initialItemCountBob+1, "Item is in bob's wallet");
+  t.deepEqual(
+    bob.getItems().length,
+    initialItemCountBob + 1,
+    "Item is in bob's wallet",
+  );
 
   const itemsForSaleAfter = await E(publicFacet).getItemsForSale();
 
   t.deepEqual(
     itemsForSaleAfter.length,
-    itemsForSale.length-1,
+    itemsForSale.length - 1,
     'Item is successfully removed from the market',
   );
 });

@@ -170,12 +170,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     ),
   );
 
-  // currently still structuring this with just a public and creator facet
-  // TODO: think if this still makes sense or if other patterns are more useful (e.g. characterFacet)
-  return harden({
-    creatorFacet: kreadKit.creator,
-    publicFacet: kreadKit.public,
-  });
+  return harden(kreadKit);
 };
 
 harden(start);

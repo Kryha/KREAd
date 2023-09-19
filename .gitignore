@@ -21,7 +21,6 @@ node_modules
 */.env
 backend/.env
 frontend/.env
-frontend/dist
 /agoric/_agstate
 .yarn
 
@@ -60,8 +59,6 @@ yarn-error.log*
 install-state.gz
 
 agoric/_agstate/yarn-links/
-agoric/Makefile.paths.local
-
 .idea/
 .vscode/
 frontend/src/service/conf/defaults.js
