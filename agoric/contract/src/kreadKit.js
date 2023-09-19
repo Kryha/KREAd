@@ -214,10 +214,7 @@ export const prepareKreadKit = async (
         },
         validateInventoryState(inventoryState) {
           const itemTypes = inventoryState.map((item) => item.category);
-          assert(
-            itemTypes.length === new Set(itemTypes).size,
-            X`${errors.duplicateCategoryInInventory}`,
-          );
+          return itemTypes.length === new Set(itemTypes).size;
         },
         isNameUnique(name) {
           return !this.state.character.entries.has(name);
@@ -253,22 +250,24 @@ export const prepareKreadKit = async (
             const { give } = seat.getProposal();
             mustMatch(
               offerArgs,
-              M.splitRecord({ name: M.string(harden({ stringLengthLimit: 20 })) }),
+              M.splitRecord({
+                name: M.string(harden({ stringLengthLimit: 20 })),
+              }),
               'offerArgs',
             );
 
             const newCharacterName = offerArgs.name;
 
             AmountMath.isGTE(give.Price, mintFeeAmount) ||
-              assert.fail(errors.mintFeeTooLow);
+              assert.fail(X`${errors.mintFeeTooLow}`);
 
             !characterState.entries.has(newCharacterName) ||
-              assert.fail(errors.nameTaken(newCharacterName));
+              assert.fail(X`${errors.nameTaken(newCharacterName)}`);
 
-            characterState.bases.getSize() > 0 || assert.fail(errors.allMinted);
+            characterState.bases.getSize() > 0 || assert.fail(X`${errors.allMinted}`);
 
             const re = /^[a-zA-Z0-9_-]*$/;
-            re.test(newCharacterName) || assert.fail(errors.invalidName);
+            re.test(newCharacterName) || assert.fail(X`${errors.invalidName}`);
 
             const currentTime = await helper.getTimeStamp();
             const baseIndex = characterFacet.getRandomBaseIndex();
@@ -325,7 +324,11 @@ export const prepareKreadKit = async (
               { PlatformFee: platformFee },
             ]);
 
-            atomicRearrange(zcf, harden(transfers));
+            try {
+              atomicRearrange(zcf, harden(transfers));
+            } catch (e) {
+              assert.fail(X`${errors.rearrangeError}`);
+            }
 
             seat.exit();
             zcfSeat.exit();
@@ -404,15 +407,13 @@ export const prepareKreadKit = async (
             // Get current Character Key from inventorySeat
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
-            assert(
-              AmountMath.isEqual(
-                wantedCharacter,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
+
+            AmountMath.isEqual(
+              wantedCharacter,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             // Ensure inventory STATE will be valid before reallocation
             let inventory = inventorySeat
@@ -424,16 +425,8 @@ export const prepareKreadKit = async (
                 providedItemAmount.value.payload[0][0],
               ];
 
-            //FIXME: move to assert.fail here
-            try {
-              // @ts-ignore
-              characterFacet.validateInventoryState(inventory);
-            } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return `${errors.duplicateCategoryInInventory}`;
-            }
+            characterFacet.validateInventoryState(inventory) ||
+              assert.fail(X`${errors.duplicateCategoryInInventory}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -451,14 +444,10 @@ export const prepareKreadKit = async (
               { CharacterKey2: inventoryCharacterKey },
             ]);
 
-            //FIXME: move to assert.fail here
             try {
               atomicRearrange(zcf, harden(transfers));
             } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return;
+              assert.fail(X`${errors.rearrangeError}`);
             }
 
             characterRecord.inventoryKit.recorder.write(
@@ -469,7 +458,6 @@ export const prepareKreadKit = async (
 
             return text.equipReturn;
           };
-
           return zcf.makeInvitation(
             handler,
             'addToInventory',
@@ -499,7 +487,8 @@ export const prepareKreadKit = async (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
+            providedCharacterKey ||
+              assert.fail(X`${errors.invalidCharacterKey}`);
 
             // Get reference to the wanted items and key
             const { want } = seat.getProposal();
@@ -508,17 +497,15 @@ export const prepareKreadKit = async (
 
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
 
             // Ensure requested key and inventory key match
-            assert(
-              AmountMath.isEqual(
-                wantedCharacter,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+
+            AmountMath.isEqual(
+              wantedCharacter,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -536,14 +523,10 @@ export const prepareKreadKit = async (
               { CharacterKey2: wantedCharacter },
             ]);
 
-            //FIXME: move to assert.fail here ?
             try {
               atomicRearrange(zcf, harden(transfers));
             } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return `Swap assets error: ${e}`;
+              assert.fail(X`${errors.rearrangeError}`);
             }
 
             characterRecord.inventoryKit.recorder.write(
@@ -586,7 +569,8 @@ export const prepareKreadKit = async (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
+            providedCharacterKey ||
+              assert.fail(X`${errors.invalidCharacterKey}`);
 
             const { want } = seat.getProposal();
             const {
@@ -597,15 +581,13 @@ export const prepareKreadKit = async (
             // Ensure requested key and inventory key match
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
-            assert(
-              AmountMath.isEqual(
-                wantedCharacterAmount,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
+
+            AmountMath.isEqual(
+              wantedCharacterAmount,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             // Ensure inventory STATE is valid before reallocation
             let inventory = inventorySeat
@@ -624,16 +606,8 @@ export const prepareKreadKit = async (
                 providedItemAmount.value.payload[0][0],
               ];
 
-            //FIXME: move to assert.fail here
-            try {
-              // @ts-ignore
-              characterFacet.validateInventoryState(inventory);
-            } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return errors.duplicateCategoryInInventory;
-            }
+            characterFacet.validateInventoryState(inventory) ||
+              assert.fail(X`${errors.duplicateCategoryInInventory}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -662,8 +636,11 @@ export const prepareKreadKit = async (
               { CharacterKey2: wantedCharacterAmount },
             ]);
 
-            //FIXME: move to assert.fail here
-            atomicRearrange(zcf, harden(transfers));
+            try {
+              atomicRearrange(zcf, harden(transfers));
+            } catch (e) {
+              assert.fail(X`${errors.rearrangeError}`);
+            }
 
             characterRecord.inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
@@ -703,7 +680,8 @@ export const prepareKreadKit = async (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
+            providedCharacterKey ||
+              assert.fail(X`${errors.invalidCharacterKey}`);
 
             // Get reference to the wanted item
             const { want } = seat.getProposal();
@@ -712,17 +690,15 @@ export const prepareKreadKit = async (
             // Get Character Key from inventorySeat
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
 
             const items = inventorySeat.getAmountAllocated('Item', itemBrand);
-            assert(
-              AmountMath.isEqual(
-                wantedCharacter,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+
+            AmountMath.isEqual(
+              wantedCharacter,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -740,8 +716,11 @@ export const prepareKreadKit = async (
               { CharacterKey2: wantedCharacter },
             ]);
 
-            //FIXME: move to assert.fail here
-            atomicRearrange(zcf, harden(transfers));
+            try {
+              atomicRearrange(zcf, harden(transfers));
+            } catch (e) {
+              assert.fail(X`${errors.rearrangeError}`);
+            }
             seat.exit();
 
             characterRecord.inventoryKit.recorder.write(
@@ -1051,10 +1030,8 @@ export const prepareKreadKit = async (
             const objectInSellSeat = seat.getAmountAllocated('Item');
             const { want } = seat.getProposal();
 
-            assert(
-              paymentBrand === want.Price.brand,
-              X`${errors.incorrectPaymentBrand(paymentBrand)}`,
-            );
+            paymentBrand === want.Price.brand ||
+              assert.fail(X`${errors.incorrectPaymentBrand(paymentBrand)}`);
             const askingPrice = {
               brand: want.Price.brand,
               value: want.Price.value,
@@ -1192,10 +1169,8 @@ export const prepareKreadKit = async (
             const objectInSellSeat = seat.getAmountAllocated('Character');
             const { want } = seat.getProposal();
 
-            assert(
-              paymentBrand === want.Price.brand,
-              X`${errors.incorrectPaymentBrand(paymentBrand)}`,
-            );
+            paymentBrand === want.Price.brand ||
+              assert.fail(X`${errors.incorrectPaymentBrand(paymentBrand)}`);
             const askingPrice = {
               brand: want.Price.brand,
               value: want.Price.value,
@@ -1258,7 +1233,8 @@ export const prepareKreadKit = async (
 
             // Find store record based on wanted character
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
-            assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
+            sellRecord ||
+              assert.fail(X`${errors.itemNotFound(offerArgs.entryId)}`);
 
             /** @type {HelperFunctionReturn} */
             let result;
@@ -1275,7 +1251,7 @@ export const prepareKreadKit = async (
                 sellRecord,
               );
             }
-            assert(result.success, result.error);
+            result.success || assert.fail(X`${result.error}`);
           };
 
           return zcf.makeInvitation(
@@ -1375,8 +1351,11 @@ export const prepareKreadKit = async (
             },
           ]);
 
-          atomicRearrange(zcf, harden(transfers));
-
+          try {
+            atomicRearrange(zcf, harden(transfers));
+          } catch (e) {
+            assert.fail(X`${errors.rearrangeError}`);
+          }
           buyerSeat.exit();
           zcfSeat.exit();
 
@@ -1489,12 +1468,14 @@ export const prepareKreadKit = async (
             },
           ]);
 
-          atomicRearrange(zcf, harden(transfers));
+          try {
+            atomicRearrange(zcf, harden(transfers));
+          } catch (e) {
+            assert.fail(X`${errors.rearrangeError}`);
+          }
 
           buyerSeat.exit();
-
           sellerSeat.exit();
-
           zcfSeat.exit();
 
           const payouts = await E(userSeat).getPayouts();
@@ -1526,39 +1507,35 @@ export const prepareKreadKit = async (
 
             // Find characterRecord entry based on wanted character
             const characterRecord = characterState.entries.get(character.name);
-            assert(characterRecord, X`${errors.character404}`);
+            characterRecord || assert.fail(X`${errors.character404}`);
 
             // Find store record based on wanted character
             const sellRecord = market.characterEntries.get(character.name);
 
-            assert(sellRecord, X`${errors.character404}`);
+            sellRecord || assert.fail(X`${errors.character404}`);
             const sellerSeat = sellRecord.seat;
 
             // Inspect Price keyword from buyer seat
             const { Price: providedMoneyAmount } = give;
             const { Character: characterForSaleAmount } =
               sellerSeat.getProposal().give;
-            assert(
-              AmountMath.isEqual(
-                wantedCharacterAmount,
-                characterForSaleAmount,
-                characterBrand,
-              ),
-              X`${errors.sellerSeatMismatch}`,
-            );
+
+            AmountMath.isEqual(
+              wantedCharacterAmount,
+              characterForSaleAmount,
+              characterBrand,
+            ) || assert.fail(X`${errors.sellerSeatMismatch}`);
 
             const characterForSalePrice = sellRecord.askingPrice;
-            assert(
-              AmountMath.isGTE(
-                providedMoneyAmount,
-                AmountMath.add(
-                  AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
-                  sellRecord.platformFee,
-                ),
-                paymentBrand,
+
+            AmountMath.isGTE(
+              providedMoneyAmount,
+              AmountMath.add(
+                AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
+                sellRecord.platformFee,
               ),
-              X`${errors.insufficientFunds}`,
-            );
+              paymentBrand,
+            ) || assert.fail(X`${errors.insufficientFunds}`);
             const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
 
             /** @type {TransferPart[]} */
@@ -1591,8 +1568,11 @@ export const prepareKreadKit = async (
               },
             ]);
 
-            atomicRearrange(zcf, harden(transfers));
-
+            try {
+              atomicRearrange(zcf, harden(transfers));
+            } catch (e) {
+              assert.fail(X`${errors.rearrangeError}`);
+            }
             zcfSeat.exit();
 
             const payouts = await E(userSeat).getPayouts();

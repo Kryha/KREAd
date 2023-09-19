@@ -30,4 +30,5 @@ export const errors = {
   itemNotFound: (item) => `Couldn't find item record for ${item}`,
   incorrectPaymentBrand: (paymentBrand) =>
     `Incorrect payment brand. Please use ${paymentBrand}`,
+  rearrangeError: 'Reallocating assets between seats failed'
 };

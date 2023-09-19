@@ -143,7 +143,7 @@ export const CharacterI = M.interface('character', {
   unequip: M.call().returns(M.promise()),
   unequipAll: M.call().returns(M.promise()),
   swap: M.call().returns(M.promise()),
-  validateInventoryState: M.call().returns(),
+  validateInventoryState: M.call().returns(M.boolean()),
   isNameUnique: M.call(M.string()).returns(M.boolean()),
   getRandomBaseIndex: M.call().returns(M.any()),
   calculateLevel: M.call(M.string()).returns(M.gte(0)),
