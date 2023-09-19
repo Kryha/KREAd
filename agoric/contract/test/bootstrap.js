@@ -59,6 +59,8 @@ export const bootstrapContext = async (conf) => {
     },
     clock: timerService.getClock(),
     seed: 0,
+  };
+  const kreadTerms = {
     mintFee: 30000000n,
     royaltyRate,
     platformFeeRate,
@@ -67,7 +69,7 @@ export const bootstrapContext = async (conf) => {
     royaltyDepositFacet: royaltyDepositFacet,
     platformFeeDepositFacet: platformFeeDepositFacet,
     paymentBrand: brandMockIST,
-  };
+  }
 
   // Start contract instance
   const instance = await E(zoe).startInstance(
@@ -75,6 +77,7 @@ export const bootstrapContext = async (conf) => {
     { Money: issuerMockIST },
     undefined,
     harden(privateArgs),
+    kreadTerms
   );
   const { creatorFacet } = instance;
   const terms = await E(zoe).getTerms(instance.instance);

@@ -49,6 +49,10 @@ harden(meta);
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
+ *   clock: Clock
+ * }} privateArgs
+ * @param {{
+ *   paymentBrand: Brand
  *   mintFee: bigint,
  *   royaltyRate: RatioObject,
  *   platformFeeRate: RatioObject,
@@ -56,12 +60,11 @@ harden(meta);
  *   mintPlatformFeeRate: RatioObject,
  *   royaltyDepositFacet: DepositFacet,
  *   platformFeeDepositFacet: DepositFacet,
- *   paymentBrand: Brand
- *   clock: Clock
- * }} privateArgs
+ * }} terms
+ * 
  * @param {Baggage} baggage
  */
-export const start = async (zcf, privateArgs, baggage) => {
+export const start = async (zcf, privateArgs, terms, baggage) => {
   // TODO: move to proposal
   const assetNames = {
     character: 'KREAdCHARACTER',
@@ -94,6 +97,9 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers,
     clock,
     seed,
+  } = privateArgs;
+
+  const {
     mintFee,
     royaltyRate,
     platformFeeRate,
@@ -102,7 +108,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
-  } = privateArgs;
+  } = terms;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,

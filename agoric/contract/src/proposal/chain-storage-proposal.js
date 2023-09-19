@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-eafd84a744e312ef72dad6be3fbfa9e8a1d4247f8905a5cf3bb27c1270c375beafa6d69521ab8f8a4ed9151e3f4421b87b15e0797a2ca8eb822a8fb4945db6e0',
+    'b1-52e35a28e9c87edc5da89ad2928414f49a4598305881d8d1be563659393d4e5add52ab8735834f00aef5314a4024ca0fbde5f65fa956442a9a66272fdf09f8bf',
 };
 
 const fail = (reason) => {
@@ -415,6 +415,13 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
+  });
+  
+  const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
+  
+  const installation = await E(zoe).installBundleID(contractInfo.bundleID);
+  const issuers = harden({ Money: istIssuer });
+  const terms = harden({
     royaltyRate,
     platformFeeRate,
     mintRoyaltyRate,
@@ -425,19 +432,12 @@ const executeProposal = async (powers) => {
     mintFee: 30000000n,
   });
 
-  const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
-
-  const installation = await E(zoe).installBundleID(contractInfo.bundleID);
-  const issuers = harden({ Money: istIssuer });
-  //FIXME: update terms based on changes to private args
-  const noTerms = harden({});
-
   const { instance, creatorFacet } = await E(startUpgradable)({
     installation,
     label: 'KREAd',
     issuers,
     privateArgs,
-    noTerms,
+    terms,
   });
 
   // Get board ids for instance and assets
