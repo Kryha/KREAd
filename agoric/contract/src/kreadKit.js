@@ -895,7 +895,6 @@ export const prepareKreadKit = async (
 
           return text.mintItemReturn;
         },
-        //TODO: remove?
         mint() {
           const handler = async (seat) => {
             const { helper, market: marketFacet } = this.facets;
@@ -1630,7 +1629,6 @@ export const prepareKreadKit = async (
             tokenIssuerBoardId,
           });
         },
-        // FIXME: remove
         makeMintItemInvitation() {
           const { item } = this.facets;
           return item.mint();
@@ -1665,18 +1663,15 @@ export const prepareKreadKit = async (
           character.initializeBaseCharacters(baseCharacters);
           item.initializeBaseItems(baseItems);
         },
+        makePublishItemCollectionInvitation() {
+          const { market } = this.facets;
+          return market.publishItemCollection();
+        },
       },
-      // Public is currently a wrapper around the other created facets and fetches from the state
-      // Still to be defined what exactly comes into this
       public: {
         makeMintCharacterInvitation() {
           const { character } = this.facets;
           return character.mint();
-        },
-        //FIXME: remove
-        makeMintItemInvitation() {
-          const { item } = this.facets;
-          return item.mint();
         },
         getCharacters() {
           const characters = Array.from(this.state.character.entries.values());
@@ -1724,11 +1719,6 @@ export const prepareKreadKit = async (
           const { market } = this.facets;
           return market.sellItem();
         },
-        // FIXME: move to creator facet
-        makePublishItemCollectionInvitation() {
-          const { market } = this.facets;
-          return market.publishItemCollection();
-        },
         makeBuyItemInvitation() {
           const { market } = this.facets;
           return market.buyItem();
@@ -1763,8 +1753,8 @@ export const prepareKreadKit = async (
       },
     },
   );
-
-  return harden(makeKreadKitInternal());
+  const { public: publicFacet, creator: creatorFacet } = makeKreadKitInternal();
+  return harden({ publicFacet, creatorFacet });
 };
 
 harden(prepareKreadKit);

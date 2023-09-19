@@ -105,7 +105,6 @@ export const UpdateMarketMetricsGuard = M.splitRecord(
 export const PublicI = M.interface('public', {
   // Mint
   makeMintCharacterInvitation: M.call().returns(M.promise()),
-  makeMintItemInvitation: M.call().returns(M.promise()),
   // Inventory
   makeEquipInvitation: M.call().returns(M.promise()),
   makeUnequipInvitation: M.call().returns(M.promise()),
@@ -115,7 +114,6 @@ export const PublicI = M.interface('public', {
   makeSellCharacterInvitation: M.call().returns(M.promise()),
   makeBuyCharacterInvitation: M.call().returns(M.promise()),
   makeSellItemInvitation: M.call().returns(M.promise()),
-  makePublishItemCollectionInvitation: M.call().returns(M.promise()),
   makeBuyItemInvitation: M.call().returns(M.promise()),
   // Getters
   getCharacters: M.call().returns(M.array()),
@@ -135,6 +133,7 @@ export const CreatorI = M.interface('creator', {
     M.arrayOf([M.number(), BaseCharacterGuard]),
     M.arrayOf(ItemGuard),
   ).returns(),
+  makePublishItemCollectionInvitation: M.call().returns(M.promise()),
 });
 
 export const CharacterI = M.interface('character', {

@@ -392,14 +392,14 @@ test.serial('--| MINT - Inventory check', async (t) => {
 test.serial('--| MINT - Item - Expected flow', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.expected;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
@@ -426,14 +426,14 @@ test.serial('--| MINT - Item - Expected flow', async (t) => {
 test.serial('--| MINT - Item - Mint same item (SFT)', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.expected;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
@@ -467,14 +467,14 @@ test.serial('--| MINT - Item - Mint same item (SFT)', async (t) => {
 test.serial('--| MINT - Item - Multiple flow', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.multiple;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
@@ -505,14 +505,14 @@ test.serial('--| MINT - Item - Multiple flow', async (t) => {
 test.serial('--| MINT - Item - Multiple different items flow', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.multipleUnique;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
