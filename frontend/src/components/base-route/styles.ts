@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { breakpoints, color, margins, zIndex } from "../../design";
-import { disappear, fadeIn } from "../atoms";
+import { breakpoints, margins, zIndex } from "../../design";
 
 interface AnimationProps {
   isLanding: boolean;
@@ -18,15 +17,6 @@ export const TopbarContainer = styled.header<AnimationProps>`
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding: ${margins.mini};
   }
-
-  ${({ isLanding }) =>
-    isLanding === true
-      ? css`
-          // animation: ${disappear}, ${fadeIn};
-          // animation-duration: 0.8s, 2s;
-          // animation-delay: 0s, 0.8s;
-        `
-      : css``};
 `;
 
 export const Box = styled.div`
@@ -60,24 +50,9 @@ export const ChildrenContainer = styled.div<AnimationProps>`
 export const FooterContainer = styled.div<AnimationProps>`
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  //position: absolute;
-  //bottom: 0;
-  //right: 0;
+  align-items: center;
+  justify-content: flex-end;
   width: 100%;
-  background: ${color.white};
+  background: transparent;
   z-index: ${zIndex.overCharacter};
-  ${({ isLanding }) =>
-    isLanding === true
-      ? css`
-          // animation: ${disappear}, ${fadeIn};
-          // animation-duration: 0.8s, 2s;
-          // animation-delay: 0s, 0.8s;
-          display: none;
-        `
-      : css`
-          animation: ${disappear}, ${fadeIn};
-          animation-duration: 0.3s, 0.5s;
-          animation-delay: 0s, 0.3s;
-        `};
 `;
