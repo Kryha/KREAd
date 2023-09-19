@@ -28,24 +28,33 @@ export const addCharacterToBootstrap = async (bootstrap) => {
   /** @type {Bootstrap} */
   const {
     instance: { publicFacet },
-    contractAssets,
+    paymentAsset,
     purses,
     zoe,
   } = bootstrap;
 
-  const { want } = flow.mintCharacter.expected;
+  const { offerArgs, give } = flow.mintCharacter.expected;
 
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
-  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
-  const asset = AmountMath.make(contractAssets.character.brand, copyBagAmount);
+  const payment = {
+    Price: paymentAsset.mintMockIST.mintPayment(
+      AmountMath.make(paymentAsset.brandMockIST, harden(30000000n)),
+    ),
+  };
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, give.Price);
 
   const proposal = harden({
-    want: { Asset: asset },
+    give: { Price: priceAmount },
   });
 
-  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+  const userSeat = await E(zoe).offer(
+    mintCharacterInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
   const payout = await E(userSeat).getPayout('Asset');
   purses.character.deposit(payout);
 };
