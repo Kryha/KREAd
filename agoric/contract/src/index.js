@@ -54,7 +54,7 @@ export const meta = {
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
     paymentBrand: M.eref(M.remotable('Brand')),
-    assetNames: M.any(),
+    assetNames: M.splitRecord({ character: M.string(), item: M.string() })
   }),
 };
 harden(meta);
