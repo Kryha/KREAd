@@ -369,6 +369,7 @@ test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
     name: 'New item',
     category: 'hair',
     thumbnail: '',
+    origin: 'Tempet',
     description: '',
     functional: false,
     rarity: 65,
@@ -684,6 +685,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
       ],
     ]),
   );
+
   const hairItemGive = AmountMath.make(
     contractAssets.item.brand,
     hairItemGiveCopyBagAmount,
@@ -694,7 +696,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
   );
   const clothingItemWantValue = characterInventory.items
     .map((i) => i[0])
-    .find((item) => item.rarity < 79);
+    .find((item) => item.rarity < 59);
   const clothingItemWantCopyBagAmount = makeCopyBag(
     harden([[clothingItemWantValue, 1n]]),
   );
@@ -757,7 +759,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
     characterName,
   );
   t.deepEqual(
-    updatedInventory.items.map((i) => i[0]).find((item) => item.rarity < 79),
+    updatedInventory.items.map((i) => i[0]).find((item) => item.rarity < 59),
     clothingItemWantValue,
     'Clothing item still in inventory',
   );
