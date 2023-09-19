@@ -32,8 +32,6 @@ export function useAssembleCharacter(width: number, height: number) {
   const character = useMemo(() => selectedCharacter?.nft, [selectedCharacter]);
   const [itemsInventory] = useGetItemsInInventory();
 
-  console.log(selectedCharacter?.nft.name);
-
   const [assembledCharacter, setAssembledCharacter] = useState<Konva.Group | null>(null);
 
   const organizedItems: Record<string, Item[]> = {};
