@@ -37,27 +37,31 @@ test.serial('--| MINT - Too Long Name', async (t) => {
   /** @type {Bootstrap} */
   const {
     instance: { publicFacet },
-    contractAssets,
+    paymentAsset,
+    users: { alice },
     zoe,
   } = t.context;
-  const { want, message } = flow.mintCharacter.invalidName1;
+  const { message, give, offerArgs } = flow.mintCharacter.invalidName1;
 
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
-  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, give.Price);
+
+  const payment = { Price: alice.withdrawPayment(priceAmount) };
+
   const proposal = harden({
-    want: {
-      Asset: AmountMath.make(
-        contractAssets.character.brand,
-        harden(copyBagAmount),
-      ),
-    },
+    give: { Price: priceAmount },
   });
 
-  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+  const userSeat = await E(zoe).offer(
+    mintCharacterInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
 
-  await t.throwsAsync(E(userSeat).getOfferResult(), Error.message);
+  await t.throwsAsync(E(userSeat).getOfferResult(), Error.message, message);
 
   const characters = await E(publicFacet).getCharacters();
   t.deepEqual(
@@ -65,31 +69,39 @@ test.serial('--| MINT - Too Long Name', async (t) => {
     0,
     'New character was not added to contract registry due to mint error',
   );
+
+  alice.depositPayment(await E(userSeat).getPayout('Price'));
 });
 
 test.serial('--| MINT - Invalid Chars in Name', async (t) => {
   /** @type {Bootstrap} */
   const {
     instance: { publicFacet },
-    contractAssets,
+    users: { alice },
+    paymentAsset,
     zoe,
   } = t.context;
-  const { want, message } = flow.mintCharacter.invalidName2;
+  const { message, give, offerArgs } = flow.mintCharacter.invalidName2;
 
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
-  const copyBagAmount = makeCopyBag(harden([[want, 1n]]));
+
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, give.Price);
+  const payment = { Price: alice.withdrawPayment(priceAmount) };
+
   const proposal = harden({
-    want: {
-      Asset: AmountMath.make(
-        contractAssets.character.brand,
-        harden(copyBagAmount),
-      ),
+    give: {
+      Price: priceAmount,
     },
   });
 
-  const userSeat = await E(zoe).offer(mintCharacterInvitation, proposal);
+  const userSeat = await E(zoe).offer(
+    mintCharacterInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
 
   await t.throwsAsync(E(userSeat).getOfferResult(), Error.message, message);
 
@@ -380,14 +392,14 @@ test.serial('--| MINT - Inventory check', async (t) => {
 test.serial('--| MINT - Item - Expected flow', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.expected;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
@@ -414,14 +426,14 @@ test.serial('--| MINT - Item - Expected flow', async (t) => {
 test.serial('--| MINT - Item - Mint same item (SFT)', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.expected;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
@@ -455,14 +467,14 @@ test.serial('--| MINT - Item - Mint same item (SFT)', async (t) => {
 test.serial('--| MINT - Item - Multiple flow', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.multiple;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
@@ -493,14 +505,14 @@ test.serial('--| MINT - Item - Multiple flow', async (t) => {
 test.serial('--| MINT - Item - Multiple different items flow', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = t.context;
   const { want, message } = flow.mintItem.multipleUnique;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const proposal = harden({
     want: {
       Item: AmountMath.make(
