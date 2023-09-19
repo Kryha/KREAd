@@ -4,8 +4,7 @@ import { useCharacterBuilder } from "../../../context/character-builder-context"
 import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
 import { MAIN_MODE } from "../../../constants";
 import { text } from "../../../assets";
-import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper } from "../style";
-import { CardActionsContainer } from "../../../components/menu-card/styles";
+import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper, CardActionsContainer } from "../style";
 import { ArrowUpRight } from "../../../pages/onboarding/styles";
 import { routes } from "../../../navigation";
 import { ModeScroller } from "../mode-scroller/mode-scroller";

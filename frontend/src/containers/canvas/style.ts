@@ -74,3 +74,13 @@ export const CanvasContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+export const CardActionsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  margin-top: ${margins.mini};
+  box-shadow: none;
+`;

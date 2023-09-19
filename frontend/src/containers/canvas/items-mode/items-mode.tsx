@@ -5,9 +5,8 @@ import { useGetItemsInInventoryByCategory, useSelectedCharacter } from "../../..
 import { ButtonText, FadeInOut, NotificationDetail, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
 import { CATEGORY_MODE, MAIN_MODE } from "../../../constants";
 import { text } from "../../../assets";
-import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper } from "../style";
+import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper, CardActionsContainer } from "../style";
 import { ItemCards } from "../item-cards/item-cards";
-import { CardActionsContainer } from "../../../components/menu-card/styles";
 import { ArrowUpRight } from "../../../pages/onboarding/styles";
 import { routes } from "../../../navigation";
 import { ModeScroller } from "../mode-scroller/mode-scroller";
