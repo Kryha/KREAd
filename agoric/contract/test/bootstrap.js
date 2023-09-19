@@ -75,9 +75,8 @@ export const bootstrapContext = async (conf) => {
   const instance = await E(zoe).startInstance(
     installation,
     { Money: issuerMockIST },
-    undefined,
+    harden(kreadTerms),
     harden(privateArgs),
-    kreadTerms
   );
   const { creatorFacet } = instance;
   const terms = await E(zoe).getTerms(instance.instance);

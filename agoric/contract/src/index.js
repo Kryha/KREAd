@@ -32,6 +32,8 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
+  }),
+  customTermsShape: M.splitRecord({
     royaltyRate: RatioObject,
     platformFeeRate: RatioObject,
     mintFee: M.nat(),
@@ -51,20 +53,24 @@ harden(meta);
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
  *   clock: Clock
  * }} privateArgs
- * @param {{
- *   paymentBrand: Brand
- *   mintFee: bigint,
- *   royaltyRate: RatioObject,
- *   platformFeeRate: RatioObject,
- *   mintRoyaltyRate: RatioObject,
- *   mintPlatformFeeRate: RatioObject,
- *   royaltyDepositFacet: DepositFacet,
- *   platformFeeDepositFacet: DepositFacet,
- * }} terms
  * 
  * @param {Baggage} baggage
  */
-export const start = async (zcf, privateArgs, terms, baggage) => {
+export const start = async (zcf, privateArgs, baggage) => {
+/** 
+  * @type {{
+  *   paymentBrand: Brand
+  *   mintFee: bigint,
+  *   royaltyRate: RatioObject,
+  *   platformFeeRate: RatioObject,
+  *   mintRoyaltyRate: RatioObject,
+  *   mintPlatformFeeRate: RatioObject,
+  *   royaltyDepositFacet: DepositFacet,
+  *   platformFeeDepositFacet: DepositFacet,
+  * }}
+  */
+  const terms = zcf.getTerms();
+
   // TODO: move to proposal
   const assetNames = {
     character: 'KREAdCHARACTER',
