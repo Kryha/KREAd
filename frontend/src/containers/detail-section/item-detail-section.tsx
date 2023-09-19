@@ -3,6 +3,7 @@ import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
 import { ItemDetailSectionSegmentStats } from "./detail-section-segment-stats";
+import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
 import { DetailSectionWrap } from "./styles";
 import { text, UnnamedCreator } from "../../assets";
@@ -19,11 +20,13 @@ interface ItemDetailSectionProps {
 // TODO: Make index dynamic
 export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions }) => {
   const { width } = useViewport();
-  const [activity] = useState<ActivityEvent[]>();
+  const [activity, setActivity] = useState<ActivityEvent[]>();
 
   // TODO: implement fetching activity/history
 
   if (!item) return <ErrorView />;
+
+  {/* FIXME: update details section based on new types */}
 
   return (
     <DetailSectionWrap width={width}>
@@ -33,13 +36,7 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
       {/* story */}
       <DetailSectionSegment title={text.item.story} sectionIndex={1}>
         {/* TODO: fetch actual creator image */}
-        <DetailSectionSegmentStory
-          data={{
-            ...item,
-            image: item.thumbnail,
-            creatorImage: UnnamedCreator,
-          }}
-        />
+        <DetailSectionSegmentStory data={{ ...item, image: item.thumbnail, creatorImage: UnnamedCreator }} />
       </DetailSectionSegment>
 
       {/* stats */}

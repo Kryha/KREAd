@@ -7,6 +7,7 @@ import buildManualTimer from '@agoric/zoe/tools/manualTimer.js';
 import { defaultCharacters } from './characters.js';
 import { defaultItems } from './items.js';
 import { makeIssuerKit } from '@agoric/ertp';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/index.js';
 
 /**
  * @param {BootstrapConf} [conf]
@@ -29,8 +30,23 @@ export const bootstrapContext = async (conf) => {
   const royaltyDepositFacet = royaltyPurse.getDepositFacet();
   const platformFeeDepositFacet = platformFeePurse.getDepositFacet();
 
-  const royaltyRate = 0.2;
-  const platformFeeRate = 0.2;
+  const royaltyRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
+  const platformFeeRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
+
+  const mintRoyaltyRate = {
+    numerator: 85n,
+    denominator: 100n,
+  };
+  const mintPlatformFeeRate = {
+    numerator: 15n,
+    denominator: 100n,
+  };
 
   const timerService = buildManualTimer();
   // Bundle and install contract
@@ -43,8 +59,11 @@ export const bootstrapContext = async (conf) => {
     },
     clock: timerService.getClock(),
     seed: 0,
+    mintFee: 30000000n,
     royaltyRate,
     platformFeeRate,
+    mintRoyaltyRate,
+    mintPlatformFeeRate,
     royaltyDepositFacet: royaltyDepositFacet,
     platformFeeDepositFacet: platformFeeDepositFacet,
     paymentBrand: brandMockIST,
@@ -57,14 +76,19 @@ export const bootstrapContext = async (conf) => {
     undefined,
     harden(privateArgs),
   );
-  const { publicFacet, creatorFacet } = instance;
-  const contractAssets = await E(publicFacet).getTokenInfo();
+  const { creatorFacet } = instance;
+  const terms = await E(zoe).getTerms(instance.instance);
   await E(creatorFacet).initializeBaseAssets(defaultCharacters, defaultItems);
 
   const {
+    issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
+    brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
+  } = terms;
+
+  const contractAssets = {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
-  } = contractAssets;
+  };
 
   const purses = {
     character: characterIssuer.makeEmptyPurse(),
@@ -85,8 +109,30 @@ export const bootstrapContext = async (conf) => {
     },
     royaltyPurse,
     platformFeePurse,
-    royaltyRate,
-    platformFeeRate,
+    royaltyRate: makeRatio(
+      royaltyRate.numerator,
+      brandMockIST,
+      royaltyRate.denominator,
+      brandMockIST,
+    ),
+    platformFeeRate: makeRatio(
+      platformFeeRate.numerator,
+      brandMockIST,
+      platformFeeRate.denominator,
+      brandMockIST,
+    ),
+    mintPlatformFeeRate: makeRatio(
+      mintPlatformFeeRate.numerator,
+      brandMockIST,
+      mintPlatformFeeRate.denominator,
+      brandMockIST,
+    ),
+    mintRoyaltyRate: makeRatio(
+      mintRoyaltyRate.numerator,
+      brandMockIST,
+      mintRoyaltyRate.denominator,
+      brandMockIST,
+    ),
   };
 
   harden(result);

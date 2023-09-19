@@ -7,7 +7,7 @@ export const MAX_PRICE = 10000000 as const;
 export const INFORMATION_STEP = 0 as const;
 export const WALLET_INTERACTION_STEP = 1 as const;
 export const CONFIRMATION_STEP = 2 as const;
-export const MINTING_COST = 2 as const;
+export const MINTING_COST = 30000000 as const;
 export const MONEY_DECIMALS = 6 as const;
 
 export const SUCCESSFUL_MINT_REPONSE_MSG = "Character mint successful, use attached public facet to purchase" as const;
@@ -79,7 +79,7 @@ export const ASSET_TYPE = {
 export const AGORIC_LINK = "https://agoric.com/" as const;
 export const KRYHA_LINK = "https://kryha.io/" as const;
 
-export const MAX_CHARACTER_LENGTH = 16 as const;
+export const MAX_CHARACTER_LENGTH = 20 as const;
 export const SLIDER_TIME = 4.5 as const;
 export const PAGE_SIZE = 10 as const;
 export const ASSETS_PER_PAGE = 10 as const;

@@ -336,12 +336,23 @@ const executeProposal = async (powers) => {
       zoe,
       startUpgradable,
       chainTimerService,
-      agoricNamesAdmin,
-      agoricNames,
       namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { kreadKit },
+    brand: {
+      produce: {
+        KREAdCHARACTER: produceCharacterBrand,
+        KREAdITEM: produceItemBrand,
+      },
+    },
+    issuer: {
+      consume: { IST: istIssuerP },
+      produce: {
+        KREAdCHARACTER: produceCharacterIssuer,
+        KREAdITEM: produceItemIssuer,
+      },
+    },
     instance: {
       // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
       produce: { [contractInfo.instanceName]: kread },
@@ -360,8 +371,17 @@ const executeProposal = async (powers) => {
     [[platformFeeAddr, 'depositFacet']],
   );
 
-  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
+  const istIssuer = await istIssuerP;
   const brand = await E(istIssuer).getBrand();
+
+  const royaltyRate = {
+    numerator: 10n,
+    denominator: 100n,
+  };
+  const platformFeeRate = {
+    numerator: 3n,
+    denominator: 100n,
+  };
 
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
@@ -376,11 +396,12 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
-    royaltyRate: 0.2,
-    platformFeeRate: 0.2,
+    royaltyRate,
+    platformFeeRate,
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand: brand,
+    mintFee: 30000000n,
   });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
@@ -457,13 +478,10 @@ const executeProposal = async (powers) => {
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(instance);
 
-  const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
-
-  await E(kindAdmin('issuer')).update('KREAdCHARACTER', characterIssuer);
-  await E(kindAdmin('brand')).update('KREAdCHARACTER', characterBrand);
-
-  await E(kindAdmin('issuer')).update('KREAdITEM', itemIssuer);
-  await E(kindAdmin('brand')).update('KREAdITEM', itemBrand);
+  produceCharacterIssuer.resolve(characterIssuer);
+  produceCharacterBrand.resolve(characterBrand);
+  produceItemIssuer.resolve(itemIssuer);
+  produceItemBrand.resolve(itemBrand);
 
   console.log('ASSETS ADDED TO AGORIC NAMES');
   // Share instance widely via E(agoricNames).lookup('instance', <instance name>)

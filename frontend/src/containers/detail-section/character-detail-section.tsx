@@ -1,14 +1,16 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
 import { CharacterDetailSectionSegmentStats } from "./detail-section-segment-stats";
+import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
 import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
 import { ExtendedCharacter } from "../../interfaces";
+import { DetailSectionItems } from "./detail-section-items";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 import { ErrorView } from "../../components";
@@ -24,6 +26,8 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
   const { width } = useViewport();
   if (!character) return <ErrorView />;
 
+  {/* FIXME: update details section based on new types */}
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
@@ -33,12 +37,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>
         {/* TODO: fetch actual creator image */}
         <DetailSectionSegmentStory
-          data={{
-            ...character.nft,
-            creatorImage: UnnamedCreator,
-            image: character.equippedItems,
-            characterImage: character.nft.image,
-          }}
+          data={{ ...character.nft, creatorImage: UnnamedCreator, image: character.equippedItems, characterImage: character.nft.image }}
         />
       </DetailSectionSegment>
 
@@ -51,6 +50,11 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
       <DetailSectionSegment title={text.character.equippedItems} sectionIndex={3}>
         {/* <DetailSectionItems items={itemsValues} showToast={showToast || (() => {})} /> */}
       </DetailSectionSegment>
+
+      {/* details */}
+      {/*<DetailSectionSegment title={text.character.details} sectionIndex={4}>*/}
+      {/*  <DetailSectionSegmentDetails data={{ ...character.nft.details, brand: character.nft.details.brand }} />*/}
+      {/*</DetailSectionSegment>*/}
 
       {/* project */}
       <DetailSectionSegment title={text.character.project} sectionIndex={5}>
