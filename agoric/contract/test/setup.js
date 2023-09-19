@@ -68,13 +68,13 @@ harden(addCharacterToBootstrap);
 export const addItemToBootstrap = async (bootstrap, item) => {
   /** @type {Bootstrap} */
   const {
-    instance: { creatorFacet, publicFacet },
+    instance: { creatorFacet },
     contractAssets,
     purses,
     zoe,
   } = bootstrap;
 
-  const mintItemInvitation = await E(publicFacet).makeMintItemInvitation();
+  const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const itemAmount = AmountMath.make(
     contractAssets.item.brand,
     makeCopyBag(harden([[item, 1n]])),
