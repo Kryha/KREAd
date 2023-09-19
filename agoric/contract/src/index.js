@@ -32,14 +32,29 @@ export const meta = {
       storageNode: M.eref(M.remotable('StorageNode')),
       marshaller: M.eref(M.remotable('Marshaller')),
     },
-    royaltyRate: RatioObject,
-    platformFeeRate: RatioObject,
+  }),
+  customTermsShape: M.splitRecord({
+    royaltyRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    platformFeeRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
     mintFee: M.nat(),
-    mintRoyaltyRate: RatioObject,
-    mintPlatformFeeRate: RatioObject,
+    mintRoyaltyRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    mintPlatformFeeRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
-    paymentBrand: M.any(),
+    paymentBrand: M.eref(M.remotable('Brand')),
+    assetNames: M.splitRecord({ character: M.string(), item: M.string() })
   }),
 };
 harden(meta);
@@ -49,24 +64,29 @@ harden(meta);
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
- *   mintFee: bigint,
- *   royaltyRate: RatioObject,
- *   platformFeeRate: RatioObject,
- *   mintRoyaltyRate: RatioObject,
- *   mintPlatformFeeRate: RatioObject,
- *   royaltyDepositFacet: DepositFacet,
- *   platformFeeDepositFacet: DepositFacet,
- *   paymentBrand: Brand
  *   clock: Clock
  * }} privateArgs
+ * 
  * @param {Baggage} baggage
  */
 export const start = async (zcf, privateArgs, baggage) => {
+/** 
+  * @type {{
+  *   paymentBrand: Brand
+  *   mintFee: bigint,
+  *   royaltyRate: RatioObject,
+  *   platformFeeRate: RatioObject,
+  *   mintRoyaltyRate: RatioObject,
+  *   mintPlatformFeeRate: RatioObject,
+  *   royaltyDepositFacet: DepositFacet,
+  *   platformFeeDepositFacet: DepositFacet,
+  *   assetNames: { character: string, item: string },
+  * }}
+  */
+  const terms = zcf.getTerms();
+
   // TODO: move to proposal
-  const assetNames = {
-    character: 'KREAdCHARACTER',
-    item: 'KREAdITEM',
-  };
+  const assetNames = terms.assetNames;
 
   const storageNodePaths = {
     infoKit: 'info',
@@ -94,6 +114,9 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers,
     clock,
     seed,
+  } = privateArgs;
+
+  const {
     mintFee,
     royaltyRate,
     platformFeeRate,
@@ -102,7 +125,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
-  } = privateArgs;
+  } = terms;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,

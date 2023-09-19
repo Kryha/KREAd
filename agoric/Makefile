@@ -56,10 +56,6 @@ provision-account:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS) \
 
-provision-account-2:
-	cd $(COSMIC_SWINGSET_PATH); \
-	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS2) \
-
 provision-fee-collector:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-provision-pool provision-acct ACCT_ADDR=$(FEE_ADDRESS) \
