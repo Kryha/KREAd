@@ -39,11 +39,13 @@ const mintCharacter = {
     message: '',
   },
   invalidName1: {
-    want: { name: '012345678901234567890123' },
+    offerArgs: { name: '012345678901234567890123' },
+    give: { Price: 30000000n },
     message: errors.invalidName,
   },
   invalidName2: {
-    want: { name: 'TestCharacter!' },
+    offerArgs: { name: 'TestCharacter!' },
+    give: { Price: 30000000n },
     message: errors.invalidName,
   },
 };
