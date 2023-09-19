@@ -32,6 +32,8 @@ import {
   MarketMetricsGuard,
   RarityGuard,
   BaseCharacterGuard,
+  MarketEntryGuard,
+  CharacterEntryGuard,
 } from './type-guards.js';
 import { atomicRearrange } from '@agoric/zoe/src/contractSupport/index.js';
 import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
@@ -140,7 +142,7 @@ export const prepareKreadKit = async (
           entries: makeScalarBigMapStore('characters', {
             durable: true,
             keyShape: M.string(),
-            valueShape: CharacterRecorderGuard,
+            valueShape: CharacterEntryGuard,
           }),
           bases: makeScalarBigMapStore('baseCharacters', {
             durable: true,
@@ -164,12 +166,12 @@ export const prepareKreadKit = async (
           characterEntries: makeScalarBigMapStore('characterMarket', {
             durable: true,
             keyShape: M.string(),
-            valueShape: MarketRecorderGuard,
+            valueShape: MarketEntryGuard,
           }),
           itemEntries: makeScalarBigMapStore('itemMarket', {
             durable: true,
             keyShape: M.number(),
-            valueShape: MarketRecorderGuard,
+            valueShape: MarketEntryGuard,
           }),
         }),
         characterCollectionSize: 0,
@@ -264,7 +266,8 @@ export const prepareKreadKit = async (
             !characterState.entries.has(newCharacterName) ||
               assert.fail(X`${errors.nameTaken(newCharacterName)}`);
 
-            characterState.bases.getSize() > 0 || assert.fail(X`${errors.allMinted}`);
+            characterState.bases.getSize() > 0 ||
+              assert.fail(X`${errors.allMinted}`);
 
             const re = /^[a-zA-Z0-9_-]*$/;
             re.test(newCharacterName) || assert.fail(X`${errors.invalidName}`);
@@ -368,7 +371,9 @@ export const prepareKreadKit = async (
               },
             });
 
-            characterKit.recorder.write(character);
+            characterKit.recorder.write(
+              (({ seat, ...char }) => char)(character),
+            );
 
             // TODO: consider refactoring what we put in the inventory node
             inventoryKit.recorder.write(
@@ -983,7 +988,9 @@ export const prepareKreadKit = async (
             market.characterEntries.delete(object.name);
 
             marketCharacterKit.recorder.write(
-              Array.from(market.characterEntries.values()),
+              Array.from(market.characterEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
           });
         },
@@ -1005,7 +1012,9 @@ export const prepareKreadKit = async (
             market.itemEntries.delete(id);
 
             marketItemKit.recorder.write(
-              Array.from(market.itemEntries.values()),
+              Array.from(market.itemEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
           });
         },
@@ -1062,7 +1071,9 @@ export const prepareKreadKit = async (
             market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
             marketItemKit.recorder.write(
-              Array.from(market.itemEntries.values()),
+              Array.from(market.itemEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
 
             marketFacet.handleExitItem(newEntry);
@@ -1136,7 +1147,9 @@ export const prepareKreadKit = async (
                 market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
                 marketItemKit.recorder.write(
-                  Array.from(market.itemEntries.values()),
+                  Array.from(market.itemEntries.values()).map((entry) =>
+                    (({ seat, ...entry }) => entry)(entry),
+                  ),
                 );
 
                 this.state.itemsPutForSaleAmount++;
@@ -1202,7 +1215,9 @@ export const prepareKreadKit = async (
             market.characterEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
             marketCharacterKit.recorder.write(
-              Array.from(market.characterEntries.values()),
+              Array.from(market.characterEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
 
             marketFacet.handleExitCharacter(newEntry);
@@ -1378,7 +1393,11 @@ export const prepareKreadKit = async (
 
           market.itemEntries.delete(sellRecord.id);
 
-          marketItemKit.recorder.write(Array.from(market.itemEntries.values()));
+          marketItemKit.recorder.write(
+            Array.from(market.itemEntries.values()).map((entry) =>
+              (({ seat, ...entry }) => entry)(entry),
+            ),
+          );
 
           // update metrics
           marketFacet.updateMetrics('item', {

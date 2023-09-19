@@ -163,6 +163,25 @@ export const ItemI = M.interface('item', {
 
 export const MarketRecorderGuard = M.splitRecord({
   id: M.or(M.gte(0), M.string()),
+  askingPrice: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  royalty: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  platformFee: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  object: M.or(CharacterGuard, ItemGuard),
+  isFirstSale: M.boolean(),
+  // history: M.arrayOf(HistoryGuard),
+});
+
+export const MarketEntryGuard = M.splitRecord({
+  id: M.or(M.gte(0), M.string()),
   seat: M.eref(M.remotable('Seat')),
   askingPrice: M.splitRecord({
     brand: BrandShape,
@@ -188,7 +207,7 @@ export const MarketI = M.interface('market', {
   buyFirstSaleItem: M.call().returns(M.promise()),
   buySecondarySaleItem: M.call().returns(M.promise()),
   handleExitItem: M.call(MarketRecorderGuard).returns(),
-  handleExitCharacter: M.call(MarketRecorderGuard).returns(),
+  handleExitCharacter: M.call(MarketGuard).returns(),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
   updateMetrics: M.call(
@@ -213,10 +232,17 @@ export const HistoryGuard = M.splitRecord({
   timestamp: M.record(),
 });
 
-export const CharacterRecorderGuard = M.splitRecord({
+export const CharacterEntryGuard = M.splitRecord({
   name: M.string(),
   character: CharacterGuard,
   inventory: M.eref(M.remotable('Seat')),
+  inventoryKit: M.record(), // TODO: figure out how to type recorderkits
+  history: M.arrayOf(HistoryGuard),
+});
+
+export const CharacterRecorderGuard = M.splitRecord({
+  name: M.string(),
+  character: CharacterGuard,
   inventoryKit: M.record(), // TODO: figure out how to type recorderkits
   history: M.arrayOf(HistoryGuard),
 });
