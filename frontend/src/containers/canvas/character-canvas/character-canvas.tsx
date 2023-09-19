@@ -35,17 +35,15 @@ export const CharacterCanvas: FC<Props> = ({ width, height }) => {
             }
           }
 
-          if (interactionMode === ITEM_MODE) {
-            if (category.id() === selectedAssetCategory) {
-              if (item.getAttr("equipped") && !onAssetChange) {
-                item.show();
-              }
+          if (interactionMode === ITEM_MODE && category.id() === selectedAssetCategory) {
+            if (item.getAttr("equipped") && !onAssetChange) {
+              item.show();
+            }
 
-              if (item.name() === selectedAsset) {
-                item.show();
-              } else {
-                item.hide();
-              }
+            if (item.name() === selectedAsset) {
+              item.show();
+            } else {
+              item.hide();
             }
           }
         });
