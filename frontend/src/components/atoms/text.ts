@@ -46,7 +46,7 @@ export const BoldLabel = styled(Label)`
 
 export const LevelBoldLabel = styled(Label)`
   font-weight: ${fontWeight.medium};
-  font-size: ${fontSize.title};
+  font-size: ${fontSize.medium};
 `;
 
 export const MenuItemName = styled.h3<TextProps>`
