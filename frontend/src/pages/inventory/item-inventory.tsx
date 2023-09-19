@@ -61,7 +61,7 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
       ) : (
         <OverviewContainer>
           <OverviewEmpty
-            headingText={text.inventory.thereAreNoItemsInTheInventory}
+            headingText={text.inventory.noItemsTitle}
             descriptionText={text.item.buyItemsFromStore}
             buttonText={text.item.buyItemsFromStore}
             redirectRoute={routes.shop}

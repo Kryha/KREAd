@@ -93,8 +93,8 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
       ) : (
         <OverviewContainer>
           <OverviewEmpty
-            headingText={text.inventory.thereAreNoCharactersInTheInventory}
-            descriptionText={text.inventory.thereAreNoCharactersAvailable}
+            headingText={text.inventory.noCharactersTitle}
+            descriptionText={text.inventory.noCharactersDescription}
             buttonText={text.character.buyCharactersFromStore}
             redirectRoute={routes.character}
             secondary
