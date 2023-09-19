@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-eafd84a744e312ef72dad6be3fbfa9e8a1d4247f8905a5cf3bb27c1270c375beafa6d69521ab8f8a4ed9151e3f4421b87b15e0797a2ca8eb822a8fb4945db6e0',
+    'b1-39bdeba5402687d218ab1975e690929b311d6e8644b66f4c6254d401afaf183ea20e059ef3460b54ed210cac6ebd5d7c0cd2e174ba5ca5eee66142fae8f86a63',
 };
 
 const fail = (reason) => {
@@ -399,12 +399,6 @@ const executeProposal = async (powers) => {
   const kreadConfig = harden({
     clock,
     seed: 303,
-    royaltyRate: 0.2,
-    platformFeeRate: 0.2,
-    royaltyDepositFacet,
-    platformFeeDepositFacet,
-    paymentBrand: brand,
-    mintFee: 30000000n,
   });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
@@ -420,6 +414,10 @@ const executeProposal = async (powers) => {
     platformFeeDepositFacet,
     paymentBrand: brand,
     mintFee: 30000000n,
+    assetNames: {
+      character: 'KREAdCHARACTER',
+      item: 'KREAdITEM',
+    },
   });
 
   const { instance, creatorFacet, publicFacet } = await E(startUpgradable)({

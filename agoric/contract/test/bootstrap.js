@@ -7,6 +7,7 @@ import buildManualTimer from '@agoric/zoe/tools/manualTimer.js';
 import { defaultCharacters } from './characters.js';
 import { defaultItems } from './items.js';
 import { makeIssuerKit } from '@agoric/ertp';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/index.js';
 
 /**
  * @param {BootstrapConf} [conf]
@@ -29,8 +30,14 @@ export const bootstrapContext = async (conf) => {
   const royaltyDepositFacet = royaltyPurse.getDepositFacet();
   const platformFeeDepositFacet = platformFeePurse.getDepositFacet();
 
-  const royaltyRate = 0.2;
-  const platformFeeRate = 0.2;
+  const royaltyRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
+  const platformFeeRate = {
+    numerator: 20n,
+    denominator: 100n,
+  };
 
   const mintRoyaltyRate = {
     numerator: 85n,
@@ -52,6 +59,8 @@ export const bootstrapContext = async (conf) => {
     },
     clock: timerService.getClock(),
     seed: 0,
+  };
+  const kreadTerms = {
     mintFee: 30000000n,
     royaltyRate,
     platformFeeRate,
@@ -60,13 +69,17 @@ export const bootstrapContext = async (conf) => {
     royaltyDepositFacet: royaltyDepositFacet,
     platformFeeDepositFacet: platformFeeDepositFacet,
     paymentBrand: brandMockIST,
-  };
+    assetNames: harden({
+      character: 'KREAdCHARACTER',
+      item: 'KREAdITEM',
+    }),
+  }
 
   // Start contract instance
   const instance = await E(zoe).startInstance(
     installation,
     { Money: issuerMockIST },
-    undefined,
+    harden(kreadTerms),
     harden(privateArgs),
   );
   const { creatorFacet } = instance;
