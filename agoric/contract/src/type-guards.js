@@ -206,8 +206,8 @@ export const MarketI = M.interface('market', {
   buyItem: M.call().returns(M.promise()),
   buyFirstSaleItem: M.call().returns(M.promise()),
   buySecondarySaleItem: M.call().returns(M.promise()),
-  handleExitItem: M.call(MarketRecorderGuard).returns(),
-  handleExitCharacter: M.call(MarketGuard).returns(),
+  handleExitItem: M.call(MarketEntryGuard).returns(),
+  handleExitCharacter: M.call(MarketEntryGuard).returns(),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
   updateMetrics: M.call(

@@ -4,7 +4,7 @@ import { ButtonText } from "../atoms";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
 import { Diamond } from "../price-in-ist/styles";
-import { ITEM_CATEGORIES } from "../../constants";
+// import { ITEM_CATEGORIES } from "../../constants";
 
 export interface Options {
   label: string;
@@ -71,7 +71,7 @@ export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect =
     <SelectBox height={height}>
       {options.map((option, index) => (
         <React.Fragment key={index}>
-          {(option.value === ITEM_CATEGORIES.headPiece || option.value === ITEM_CATEGORIES.equipped) && <SelectDivider />}
+          {/* {(option.value === ITEM_CATEGORIES.headPiece || option.value === ITEM_CATEGORIES.equipped) && <SelectDivider />} */}
           <StyledSelect
             selected={isOptionSelected(option.value)}
             key={index}
@@ -83,7 +83,7 @@ export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect =
             }}
           >
             <ButtonText customColor={isOptionSelected(option.value) ? color.black : color.darkGrey}>{option.label}</ButtonText>
-            {option.value === ITEM_CATEGORIES.forSale && <Diamond />}
+            {/* {option.value === ITEM_CATEGORIES.forSale && <Diamond />} */}
             <Tick />
           </StyledSelect>
         </React.Fragment>
