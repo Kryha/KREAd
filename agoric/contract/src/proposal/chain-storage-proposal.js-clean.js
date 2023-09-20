@@ -131,7 +131,7 @@ const baseItems = [
   },
   {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'perk2',
+    category: 'mask',
     functional: false,
     origin: 'Elphia',
     description:
@@ -140,6 +140,27 @@ const baseItems = [
       'https://ipfs.io/ipfs/QmadebCRvkLSHdeSTnPJv58XHtjk5DwYbeUigNNcWPs2Vn',
     thumbnail:
       'https://ipfs.io/ipfs/QmYmyyNeoyeAQ8qPHkufum848mA1P5Q1KHZp7n6vhwGsgd',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
+    colors: ['#B1A2A2', '#968996', '#FFFFFF'],
+    artistMetadata: '',
+  },
+  {
+    name: 'AirTox: Fairy Dust Elite',
+    category: 'perk2',
+    functional: false,
+    origin: 'Elphia',
+    description:
+      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    image:
+      'https://ipfs.io/ipfs/QmS5TvnX9PMobuME6bLuuDWR4avhGGeuHg7eAFfZAiLLZ1',
+    thumbnail:
+      'https://ipfs.io/ipfs/QmS1X4KRtcumk4PqjowgKsbMh2uN79wwUsYYKnakqr7FZn',
     rarity: 18,
     level: 0,
     filtering: 0,
@@ -241,7 +262,6 @@ const baseItems = [
     origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    origin: 'elphia',
     image:
       'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
     thumbnail:
@@ -286,7 +306,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-a264ad760b2a5c9bc18773cb4e7b02b39e01a7e02a4442e7920957bd4689cca76cf6382c4093014e42a528972259c5617da6f0f2e1e292fbfa3f692aa25f9221',
+    'b1-300cd1ee1ce26133e9c91c77fd2b360b4037ed5d6830b938fa3a892570b2cb473912409eed678ff63f5e0465dc38e76659a9b128f2336d9911ffa21fb557e161',
 };
 
 const fail = (reason) => {
@@ -347,7 +367,6 @@ const executeProposal = async (powers) => {
       namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
-    // FIXME: Remove?
     produce: { kreadKit },
     brand: {
       produce: {
@@ -502,4 +521,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/wietzes/Documents/cosmos/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/privilegemendes/WebstormProjects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
