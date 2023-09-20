@@ -6,10 +6,8 @@ interface TextProps {
 }
 
 export const Heading = styled.h1<TextProps>`
-  font-family: "aktiv-grotesk";
   font-size: 40px;
   line-height: 44px;
-  white-space: normal;
   word-break: keep-all;
   white-space: pre-wrap;
   font-weight: ${fontWeight.light};
@@ -20,11 +18,9 @@ export const Heading = styled.h1<TextProps>`
 `;
 
 export const MenuText = styled.h1<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 32px;
   line-height: 41px;
-  white-space: normal;
   word-break: keep-all;
   white-space: pre-wrap;
   :first-letter {
@@ -34,7 +30,6 @@ export const MenuText = styled.h1<TextProps>`
 `;
 
 export const Label = styled.p<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 12px;
   line-height: 15px;
@@ -46,12 +41,15 @@ export const Label = styled.p<TextProps>`
 `;
 
 export const BoldLabel = styled(Label)`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
 `;
 
+export const LevelBoldLabel = styled(Label)`
+  font-weight: ${fontWeight.medium};
+  font-size: ${fontSize.medium};
+`;
+
 export const MenuItemName = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: ${fontSize.title};
   line-height: 22px;
@@ -62,7 +60,6 @@ export const MenuItemName = styled.h3<TextProps>`
 `;
 
 export const NavigationTitle = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: ${fontSize.subTitle};
   line-height: 18px;
@@ -73,7 +70,6 @@ export const NavigationTitle = styled.h3<TextProps>`
 `;
 
 export const TitleText = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
@@ -84,7 +80,6 @@ export const TitleText = styled.h3<TextProps>`
 `;
 
 export const BodyText = styled.p<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
@@ -96,7 +91,6 @@ export const BodyText = styled.p<TextProps>`
 
 export const PageTitle = styled.h1<TextProps>`
   color: ${color.black};
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 32px;
   line-height: 52px;
@@ -106,7 +100,6 @@ export const PageTitle = styled.h1<TextProps>`
 `;
 
 export const ButtonText = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 12px;
   line-height: 15px;

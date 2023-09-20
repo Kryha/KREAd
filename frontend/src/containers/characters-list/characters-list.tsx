@@ -15,14 +15,17 @@ interface Props {
   onFilterClick: (items: boolean) => void;
 }
 
-// TODO: will soon be legacy code from Nick's changes
+// TODO: is now legacy code. will delete after canvas merge
 export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [filterId, setFilterId] = useState("");
   const [intitial, setInitial] = useState(true);
 
-  const [myCharacters, isLoading] = useMyCharacters({ category: selectedCategory, sorting: selectedSorting });
+  const [myCharacters, isLoading] = useMyCharacters({
+    category: selectedCategory,
+    sorting: selectedSorting,
+  });
 
   useEffect(() => {
     onFilterClick(!myCharacters || !myCharacters.length);
@@ -44,7 +47,6 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
     setPage((prevState) => prevState + 1);
   };
 
-  // @ts-ignore
   return (
     <SortableListWrap>
       <ListHeader>
@@ -67,7 +69,7 @@ export const CharactersList: FC<Props> = ({ onCharacterClick, onFilterClick }) =
           data={{
             ...myCharacters[0].nft,
             image: myCharacters[0].equippedItems,
-            category: myCharacters[0].nft.type,
+            category: myCharacters[0].nft.origin,
             id: myCharacters[0].nft.id,
             characterImage: myCharacters[0].nft.image,
           }}

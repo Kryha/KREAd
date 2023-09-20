@@ -44,7 +44,7 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
           <InputWrapper>
             <Input type="text" {...register("name", { required: true, maxLength: MAX_CHARACTER_LENGTH })} />
             {Boolean(!errors.name && dirtyFields.name) && <Tick />}
-            <ButtonInfo info={text.general.createACharacterInfo} />
+            <ButtonInfo info={text.general.createACharacterInfo} infoPosition={"left"} />
           </InputWrapper>
           {errors.name && errors.name.type === "required" && (
             <ErrorContainer>

@@ -20,7 +20,7 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
   gap: 8px;
 `;
 
@@ -28,12 +28,12 @@ export const NotificationWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
+  padding: 0;
   gap: ${margins.small};
 `;
 
 export const Close = styled(CloseIcon)`
-  margin: 0px 0px 0px 11px !important;
+  margin: 0 0 0 11px !important;
   width: 12px;
 `;
 
@@ -51,7 +51,7 @@ export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
   position: relative;
   z-index: 1000;
   ${Close} {
-    margin: 0px 6px !important;
+    margin: 0 6px !important;
     width: 15px;
     height: 15px;
   }
@@ -120,17 +120,17 @@ export const KreadContainer = styled.div<ViewProps>`
   }
 `;
 export const InventoryWrapper = styled.div`
-  margin: 0px ${margins.big} 120px ${margins.big};
   position: relative;
+  width: 100%;
 
   ${DetailSectionWrap} {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     z-index: 1000;
   }
 
   @media screen and (max-width: ${breakpoints.mobile}) {
-    margin: 0px;
+    margin: 0;
   }
 `;

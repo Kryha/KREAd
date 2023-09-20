@@ -29,6 +29,6 @@ export const store = {
   thereAreNoItemsInTheShop: "there are no items in the shop",
   thereAreNoCharactersInTheShop: "there are no characters in the shop",
   thereAreNoItemsAvailable: "there are no items available in the shop. Wait for items to be placed in the shop",
-  thereAreNoCharactersAvailable: "there are no characters available in the shop. Wait for characters to be placed in the shop",
+  thereAreNoCharactersAvailable: "there are no characters available. Wait for characters to be placed in the shop",
   sellDescription: "you're listing your item for sale on the shop. To finish please go to your wallet to accept your action.",
 };

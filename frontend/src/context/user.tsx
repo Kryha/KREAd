@@ -1,14 +1,11 @@
 import { CharacterBackend, ExtendedCharacter, Item } from "../interfaces";
-import { mockData } from "../service/mock-data/mock-data";
-import { mockItemsEquipped } from "../service/mock-data/mock-items";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import { mediate } from "../util";
-import { itemCategories } from "../service/util";
-import { useDataMode } from "../hooks";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 import { useWalletState } from "./wallet";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
+import { CATEGORY } from "../constants";
 
 export interface UserContext {
   characters: ExtendedCharacter[];
@@ -80,16 +77,6 @@ const initialState: UserContext = {
   inventoryCallInProgress: false,
 };
 
-const initialMockState: UserContext = {
-  characters: mockData.characters,
-  selected: undefined,
-  items: [],
-  equippedItems: mockItemsEquipped,
-  processed: [],
-  fetched: mockData.fetched,
-  inventoryCallInProgress: false,
-};
-
 export type UserDispatch = React.Dispatch<UserStateActions>;
 type ProviderProps = Omit<React.ProviderProps<UserContext>, "value">;
 const Context = createContext<UserContext | undefined>(undefined);
@@ -110,9 +97,9 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
       const equippedCharacterItems = [];
       equippedCharacterItems.push(...frontendEquippedItems);
       const equipped: { [key: string]: Item | undefined } = {};
-      itemCategories.forEach((category) => {
+      for (const category of Object.keys(CATEGORY)) {
         equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
-      });
+      }
 
       const updatedCharacters = replaceCharacterInventoryInUserStateArray(state.characters, action.characterName, equipped);
 
@@ -156,9 +143,7 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
 };
 
 export const UserContextProvider = (props: ProviderProps): React.ReactElement => {
-  const { isMockData } = useDataMode();
-
-  const [userState, userStateDispatch] = useReducer(Reducer, isMockData ? initialMockState : initialState);
+  const [userState, userStateDispatch] = useReducer(Reducer, initialState);
 
   const wallet = useWalletState();
   const agoric = useAgoricState();
@@ -198,7 +183,10 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
             processedCharacters.splice(processedCharacters.indexOf(name), 1);
           }
         });
-        userStateDispatch({ type: "SET_PROCESSED", payload: processedCharacters });
+        userStateDispatch({
+          type: "SET_PROCESSED",
+          payload: processedCharacters,
+        });
       }
 
       const charactersToProcess = charactersInWallet.filter((character: { name: string }) => !processedCharacters.includes(character.name));

@@ -4,7 +4,6 @@ import {
   ButtonContainer,
   ButtonWrapper,
   ContentWrapper,
-  GeneralInfo,
   Line,
   NumberContainer,
   PreviousButtonContainer,
@@ -41,7 +40,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
     <ContentWrapper>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
-        <GeneralInfo active={sendOffer}>
+        <StepWrapper active={sendOffer}>
           <PricingContainer>
             <Step>
               <NumberContainer active={true}>{sendOffer ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
@@ -56,7 +55,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
               </>
             )}
           </PricingContainer>
-        </GeneralInfo>
+        </StepWrapper>
         <Line />
         <StepWrapper active={!sendOffer}>
           <Step>

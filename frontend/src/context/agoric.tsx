@@ -2,8 +2,7 @@
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
-import { CHARACTER_IDENTIFIER, isDevelopmentMode, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
-import { useDataMode } from "../hooks";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
 import { fetchChainInfo } from "./util";
 import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
 import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
@@ -251,14 +250,9 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
 export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
-  const { isMockData } = useDataMode();
 
   if (state === undefined) {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
-  }
-
-  if (isDevelopmentMode && isMockData) {
-    state.isLoading = false;
   }
 
   return state;

@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 
 import { text } from "../../assets";
-import { CharacterShopCard, OverviewEmpty, Overlay, FadeInOut, LoadMore } from "../../components";
+import { CharacterShopCard, FadeInOut, LoadMore, Overlay, OverviewEmpty } from "../../components";
 import { useViewport } from "../../hooks";
 import { DetailContainer, ItemContainer, ItemWrapper, LoadMoreWrapper } from "./styles";
 import { CharacterInMarket } from "../../interfaces";
@@ -76,7 +76,10 @@ export const CharactersShopDetail: FC<Props> = ({
         {!!selectedCharacter && (
           <DetailContainer>
             <CharacterDetailSection
-              character={{ nft: selectedCharacter.character, equippedItems: selectedCharacter.equippedItems }}
+              character={{
+                nft: selectedCharacter.character,
+                equippedItems: selectedCharacter.equippedItems,
+              }}
               actions={{
                 onClose: () => {
                   setSelectedCharacter(undefined);

@@ -1,8 +1,7 @@
 import { FC, ReactNode, useState } from "react";
-import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { MAX_PRICE, MIN_PRICE } from "../../constants";
 import { useGetCharacterInShopById, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
-import { AssetFilters } from "../../components/asset-filters/asset-filters";
 import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";
 import { text } from "../../assets";
@@ -10,17 +9,24 @@ import { CharacterDetailsMarket } from "../../components/asset-details/character
 import { CharacterCardsMarket } from "../../components/asset-cards/character-cards-market";
 
 interface Props {
-  pageSelector: ReactNode;
+  pageSelector?: ReactNode;
 }
+
+// TODO: TO FIX
 
 export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedId, setSelectedId] = useState<string>("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedOrigins, setSelectedOrigins] = useState<string[]>([]);
+  const [selectedTitles, setSelectedTitles] = useState<string[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<string>("");
-  const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
+  const [selectedPrice, setSelectedPrice] = useState<{
+    min: number;
+    max: number;
+  }>({ min: MIN_PRICE, max: MAX_PRICE });
 
   const [characters, isLoading] = useGetCharactersInShop({
-    categories: selectedCategories,
+    origins: selectedOrigins,
+    titles: selectedTitles,
     sort: selectedSorting,
     price: selectedPrice,
   });
@@ -30,18 +36,21 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   return (
     <>
-      <AssetFilters
-        assetType={ASSET_TYPE.CHARACTER}
-        section={SECTION.SHOP}
-        pageSelector={pageSelector}
-        assets={characters}
-        selectedCategories={selectedCategories}
-        selectedSorting={selectedSorting}
-        selectedPrice={selectedPrice}
-        setSelectedSorting={setSelectedSorting}
-        setSelectedCategories={setSelectedCategories}
-        setSelectedPrice={setSelectedPrice}
-      />
+      {/*// TODO: TO FIX*/}
+      {/*<AssetCharacterFilters*/}
+      {/*  assetType={ASSET_TYPE.CHARACTER}*/}
+      {/*  section={SECTION.SHOP}*/}
+      {/*  pageSelector={pageSelector}*/}
+      {/*  assets={characters}*/}
+      {/*  selectedOrigins={selectedOrigins}*/}
+      {/*  selectedTitles={selectedTitles}*/}
+      {/*  selectedSorting={selectedSorting}*/}
+      {/*  selectedPrice={selectedPrice}*/}
+      {/*  setSelectedSorting={setSelectedSorting}*/}
+      {/*  setSelectedOrigins={setSelectedOrigins}*/}
+      {/*  setSelectedTitles={setSelectedTitles}*/}
+      {/*  setSelectedPrice={setSelectedPrice}*/}
+      {/*/>*/}
       {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (
         <CharacterCardsMarket charactersInMarket={characters} isLoading={isLoading} selectCharacterId={(id: string) => setSelectedId(id)} />

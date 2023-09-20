@@ -1,47 +1,44 @@
-import { FC, useMemo, useState } from "react";
+import React, { FC, useMemo } from "react";
 
 import { text } from "../../assets";
 import { BaseRoute, SwitchSelector } from "../../components";
 import { KreadContainer, ShopWrapper } from "./styles";
 import { ItemsShop } from "./items-shop";
 import { CharactersShop } from "./characters-shop";
-import { useViewport } from "../../hooks";
+import { useIsMobile, useViewport } from "../../hooks";
 import { KreadIcon } from "../../components/logo/styles";
-import { ItemMarketContextProvider } from "../../context/item-shop";
-import { CharacterMarketContextProvider } from "../../context/character-shop";
-
-export enum Page {
-  Items = 0,
-  Characters = 1,
-}
+import { breakpoints } from "../../design";
+import { useLocation, useParams } from "react-router-dom";
+import { Section } from "../../constants";
 
 export const Shop: FC = () => {
-  const [marketSection, setMarketSection] = useState<Page>(Page.Items);
   const { width, height } = useViewport();
+  const isMobile = useIsMobile(breakpoints.desktop);
+  const { pathname } = useLocation();
+  const { section } = useParams<{ section: Section }>();
+
   const pageSelector = useMemo(
     () => (
       <SwitchSelector
         buttonOneText={text.character.items}
         buttonTwoText={text.character.characters}
-        setSelectedIndex={setMarketSection}
-        selectedIndex={marketSection}
+        selectedSection={section || "items"}
+        path={pathname}
       />
     ),
-    [marketSection],
+    [section, pathname],
   );
 
   return (
-    <CharacterMarketContextProvider>
-      <ItemMarketContextProvider>
-        <BaseRoute sideNavigation={<></>}>
-          <ShopWrapper>
-            {marketSection === Page.Items ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
-          </ShopWrapper>
-          <KreadContainer height={height} width={width}>
-            <KreadIcon />
-          </KreadContainer>
-        </BaseRoute>
-      </ItemMarketContextProvider>
-    </CharacterMarketContextProvider>
+    <BaseRoute sideNavigation={<></>}>
+      <ShopWrapper>
+        {section === "items" ? <ItemsShop pageSelector={pageSelector} /> : <CharactersShop pageSelector={pageSelector} />}
+      </ShopWrapper>
+      {!isMobile && (
+        <KreadContainer height={height} width={width}>
+          <KreadIcon />
+        </KreadContainer>
+      )}
+    </BaseRoute>
   );
 };

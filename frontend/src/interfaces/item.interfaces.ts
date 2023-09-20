@@ -1,35 +1,34 @@
 import { ActivityEvent } from "./activity.interfaces";
-import { Details } from "./character.interfaces";
+import { Origin } from "./character.interfaces";
+import { CATEGORY, RARITY } from "../constants";
 
-export type ItemCategory =
-  | "noseline"
-  | "midBackground"
-  | "mask"
-  | "headPiece"
-  | "hair"
-  | "frontMask"
-  | "liquid"
-  | "background"
-  | "airReservoir"
-  | "clothing"
-  | "forSale"
-  | "equipped";
+export type Category = (typeof CATEGORY)[keyof typeof CATEGORY];
+export type Rarity = (typeof RARITY)[keyof typeof RARITY];
+export interface Stats {
+  filtering: number;
+  weight: number;
+  sense: number;
+  reserves: number;
+  durability: number;
+}
 
 export interface Item {
   name: string;
-  category: ItemCategory;
+  category: Category;
+  origin: Origin;
+  functional: boolean;
   description: string;
   image: string;
   thumbnail: string;
-  level: number;
   rarity: number;
-  effectiveness: number;
-  layerComplexity: number;
-  forged: string;
-  baseMaterial: string;
+  level: number;
+  filtering: number;
+  weight: number;
+  sense: number;
+  reserves: number;
+  durability: number;
   colors: string[];
-  projectDescription: string;
-  details: Details;
+  artistMetadata?: string;
   activity?: ActivityEvent[];
   equippedTo?: string;
   forSale?: boolean;

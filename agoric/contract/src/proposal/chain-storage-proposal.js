@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-3610e0a646b00a307f713e02765b7bb9320c195e5bc616106cfec05b98b78881f1ece60f2738d8d7be637d6a50e6f9ea373b31c1d331985dd4f5f6ead8a09d18',
+    'b1-eafd84a744e312ef72dad6be3fbfa9e8a1d4247f8905a5cf3bb27c1270c375beafa6d69521ab8f8a4ed9151e3f4421b87b15e0797a2ca8eb822a8fb4945db6e0',
 };
 
 const fail = (reason) => {
@@ -416,9 +416,9 @@ const executeProposal = async (powers) => {
     clock,
     seed: 303,
   });
-  
+
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
-  
+
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
   const issuers = harden({ Money: istIssuer });
   const terms = harden({

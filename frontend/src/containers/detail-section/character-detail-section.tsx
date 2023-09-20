@@ -31,7 +31,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
-      <DetailSectionHeader data={{ ...character.nft, category: character.nft.type }} actions={actions} />
+      <DetailSectionHeader data={{ ...character.nft, category: character.nft.title }} actions={actions} />
 
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>
@@ -52,9 +52,9 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
       </DetailSectionSegment>
 
       {/* details */}
-      <DetailSectionSegment title={text.character.details} sectionIndex={4}>
-        <DetailSectionSegmentDetails data={{ ...character.nft.details }} />
-      </DetailSectionSegment>
+      {/*<DetailSectionSegment title={text.character.details} sectionIndex={4}>*/}
+      {/*  <DetailSectionSegmentDetails data={{ ...character.nft.details, brand: character.nft.details.brand }} />*/}
+      {/*</DetailSectionSegment>*/}
 
       {/* project */}
       <DetailSectionSegment title={text.character.project} sectionIndex={5}>

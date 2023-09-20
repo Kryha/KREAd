@@ -4,7 +4,6 @@ import { color, fontWeight } from "../../design";
 
 export const Input = styled.input`
   color: ${color.black};
-  font-family: aktiv-grotesk;
   font-weight: ${fontWeight.regular};
   font-size: 14px;
   line-height: 100%;
@@ -23,12 +22,12 @@ export const Input = styled.input`
       text-transform: capitalize;
     }
   }
+  padding: 0;
 
   box-sizing: border-box;
   outline: 0;
   border-width: 0 0 1px;
   border-color: ${color.grey};
-  padding: 2px 0 20.5px 0;
   :hover {
     border-color: ${color.black};
   }

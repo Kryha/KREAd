@@ -1,16 +1,16 @@
 import React, { FC, useEffect, useState } from "react";
 import { text } from "../../assets";
-import { OverviewEmpty } from "../../components";
+import { HorizontalDivider, OverviewEmpty } from "../../components";
 import { routes } from "../../navigation";
 import { useMyCharacter, useMyCharacters } from "../../service";
-import { AssetFilters } from "../../components/asset-filters/asset-filters";
-import { ASSET_TYPE, SECTION } from "../../constants";
 import { OverviewContainer } from "../shop/styles";
 import { CharacterDetailsInventory } from "../../components/asset-details/character-details-inventory";
 import { CharacterCardsInventory } from "../../components/asset-cards/character-cards-inventory";
+import { AssetFilterCount } from "../../components/asset-item-filters/styles";
+import { color } from "../../design";
 
 interface Props {
-  pageSelector: React.ReactNode;
+  pageSelector?: React.ReactNode;
 }
 
 export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
@@ -25,6 +25,8 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
   // const [noCharacters, setNoCharacters] = useState(false);
   // const [showToast, setShowToast] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const assetsCount = characters.length;
 
   useEffect(() => {
     //   if (isLoadingCharacters || !!selectedId) return;
@@ -72,25 +74,28 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
 
   return (
     <>
-      <AssetFilters
-        assetType={ASSET_TYPE.CHARACTER}
-        section={SECTION.INVENTORY}
-        pageSelector={pageSelector}
-        assets={characters}
-        selectedCategories={selectedCategories}
-        selectedSorting={selectedSorting}
-        setSelectedSorting={setSelectedSorting}
-        setSelectedCategories={setSelectedCategories}
-      />
+      {/*{//TODO: TO FIX}*/}
+      {/*<AssetCharacterFilters*/}
+      {/*  assetType={ASSET_TYPE.CHARACTER}*/}
+      {/*  section={SECTION.INVENTORY}*/}
+      {/*  pageSelector={pageSelector}*/}
+      {/*  assets={characters}*/}
+      {/*  selectedOrigins={[]}*/}
+      {/*  selectedTitles={[]}*/}
+      {/*  selectedSorting={selectedSorting}*/}
+      {/*  setSelectedSorting={setSelectedSorting}*/}
+      {/*/>*/}
+      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
+      <HorizontalDivider />
       {selectedId && <CharacterDetailsInventory character={character} />}
       {characters.length > 0 ? (
         <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: string) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty
-            headingText={text.store.thereAreNoCharactersInTheShop}
-            descriptionText={text.store.thereAreNoCharactersAvailable}
-            buttonText={text.navigation.goHome}
+            headingText={text.inventory.noCharactersTitle}
+            descriptionText={text.inventory.noCharactersDescription}
+            buttonText={text.character.buyCharactersFromStore}
             redirectRoute={routes.character}
             secondary
           />

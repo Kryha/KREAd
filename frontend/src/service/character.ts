@@ -1,19 +1,23 @@
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterEquip, CharacterInMarket, ExtendedCharacter, ExtendedCharacterBackend } from "../interfaces";
+import { CharacterCreation, CharacterInMarket, ExtendedCharacter, ExtendedCharacterBackend } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
-import { useAgoricState, useAgoricContext } from "../context/agoric";
-import { CharacterFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { useCharacterMarketState } from "../context/character-shop";
+import { useAgoricContext, useAgoricState } from "../context/agoric";
+import { CharacterFilters, filterCharacters, filterCharactersMarket } from "../util";
+
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { mintCharacter } from "./character/mint";
 import { marketService } from "./character/market";
+import { useCharacterMarketState } from "../context/character-shop-context";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
+
   const userStateDispatch = useUserStateDispatch();
+
+  //TODO: this is a hack to set the selected character to the first one in the list. not very efficient. if you refresh the page we lose the selected character
   useEffect(() => {
     if (!selected) {
       characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
@@ -61,33 +65,24 @@ export const useMyCharacter = (id?: string): [ExtendedCharacter | undefined, boo
   return [found, isLoading];
 };
 
-export const useMyCharacters = (filters?: CharacterFilters): [ExtendedCharacter[], boolean] => {
-  const { characters, selected, fetched } = useUserState();
-  const charactersForSale = useMyCharactersForSale();
-  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
-    return characters.map((character) => {
-      if (character.nft.id === selected?.nft.id) return { ...character, equippedTo: character.nft.name, isForSale: false };
-      return { ...character, equippedTo: "", isForSale: false };
-    });
-  }, [characters, selected?.nft.id]);
+export const useGetCharacterByName = (name: string | null): [ExtendedCharacter | undefined, boolean] => {
+  const [owned, isLoading] = useMyCharacters();
 
-  // mixing characters from wallet with characters from shop
-  const charactersWithForSale: CharacterEquip[] = useMemo(() => {
-    try {
-      const offerCharactersFrontend: CharacterEquip[] = mediate.characters
-        .toFront(charactersForSale)
-        .map((item) => ({ ...item, equippedTo: "", isForSale: true }));
-      return [...charactersWithEquip, ...offerCharactersFrontend];
-    } catch (error) {
-      return charactersWithEquip;
-    }
-  }, [charactersForSale, charactersWithEquip]);
+  const found = useMemo(() => owned.find((c) => c.nft.name === name), [name, owned]);
+
+  return [found, isLoading];
+};
+//WORKS
+export const useMyCharacters = (filters?: CharacterFilters): [ExtendedCharacter[], boolean] => {
+  const { characters, fetched } = useUserState();
+  const charactersForSale = useMyCharactersForSale();
 
   // filtering all the characters
   const filtered = useMemo(() => {
-    if (!filters) return charactersWithForSale;
-    return filterCharacters(charactersWithForSale, filters);
-  }, [charactersWithForSale, filters]);
+    const allCharacters = [...characters, ...charactersForSale];
+    if (!filters) return allCharacters;
+    return filterCharacters(allCharacters, filters);
+  }, [characters, charactersForSale, filters]);
 
   const isLoading = !fetched;
   return [filtered, isLoading];

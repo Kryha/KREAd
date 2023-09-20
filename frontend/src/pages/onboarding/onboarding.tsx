@@ -14,7 +14,6 @@ import {
   InfoText,
   KreadContainer,
   KreadLogo,
-  KryhaLink,
   Link,
   LogoContainer,
   MiddleContent,
@@ -26,7 +25,7 @@ import {
 } from "./styles";
 import { useLocalStorage, useOnScreen, useTimer, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
-import { AGORIC_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME } from "../../constants";
+import { FIRST_TIME, SLIDER_TIME } from "../../constants";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
@@ -66,9 +65,9 @@ export const Onboarding: FC = () => {
             <GeneralSectionContainer>
               <MenuText>{text.general.whoWeAre}</MenuText>
               <TextContainer>{text.general.isPartOfAgoric}</TextContainer>
-              <Link href={AGORIC_LINK}>{text.param.comma(text.general.agoric)}</Link>
+              {/*<Link href={AGORIC_LINK}>{text.param.comma(text.general.agoric)}</Link>*/}
               <TextContainer>{text.general.anOpenSource}</TextContainer>
-              <KryhaLink href={KRYHA_LINK}>{text.param.fullstop(text.general.kryha)}</KryhaLink>
+              {/*<KryhaLink href={KRYHA_LINK}>{text.param.fullstop(text.general.kryha)}</KryhaLink>*/}
               <TextContainer>{text.general.ourLeadership}</TextContainer>
             </GeneralSectionContainer>
           </MiddleContent>

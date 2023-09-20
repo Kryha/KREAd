@@ -1,13 +1,9 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { text } from "../../assets";
-import { color } from "../../design";
 import {
-  BaseCharacter,
   BaseRoute,
   ButtonText,
-  CharacterCard,
-  CharacterItems,
   FadeInOut,
   LoadingPage,
   MenuText,
@@ -16,21 +12,34 @@ import {
   OverviewEmpty,
   SecondaryButton,
 } from "../../components";
-import { ButtonContainer, CharacterCardWrapper, Close, DetailContainer, LandingContainer, Menu } from "./styles";
+import { ButtonContainer, CharacterCardWrapper, DetailContainer } from "./styles";
 import { CharacterDetailSection } from "../../containers/detail-section";
 import { useSelectedCharacter } from "../../service";
 import { routes } from "../../navigation";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { Layout } from "../../containers/canvas/character-canvas/styles";
+import { CharacterCanvas } from "../../containers/canvas/character-canvas/character-canvas";
+import { useViewport } from "../../hooks";
+import { useCharacterBuilder } from "../../context/character-builder-context";
+import { CategoryMode } from "../../containers/canvas/category-mode/category-mode";
+import { CATEGORY_MODE, CHARACTER_SELECT_MODE, ITEM_MODE, MAIN_MODE } from "../../constants";
+import { ItemsMode } from "../../containers/canvas/items-mode/items-mode";
+import { CharactersMode } from "../../containers/canvas/characters-mode/characters-mode";
+import { MainMode } from "../../containers/canvas/main-mode/main-mode";
+import { DownloadImageModal } from "../../components/download-image";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
-  const [openTab, setOpenTab] = useState(false);
+  const [openTab] = useState(false);
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const [showDetail, setShowDetail] = useState(false);
   const [closeDetail, setCloseDetail] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const { width, height } = useViewport();
+  const { interactionMode, setInteractionMode } = useCharacterBuilder();
+  const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
-  const sell = (characterId: string) => {
+  const sell = (characterId: number) => {
     navigate(`${routes.sellCharacter}/${characterId}`);
   };
 
@@ -38,18 +47,28 @@ export const Landing: FC = () => {
     setShowToast(true);
   };
 
-  const displayCharacter = () => {
-    navigate(routes.downloadCharacter);
+  //TODO: Add download functionality back
+  const handleDownloadButtonClick = () => {
+    setIsDownloadOpen(true);
+  };
+
+  const handleCloseDownload = () => {
+    setIsDownloadOpen(false);
   };
 
   return (
     <BaseRoute
       isLanding
       sideNavigation={
-        <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
-          <ButtonText>{text.navigation.myCharacters}</ButtonText>
-          {openTab ? <Close /> : <Menu />}
-        </SecondaryButton>
+        <>
+          {selectedCharacter ? (
+            <SecondaryButton onClick={() => setInteractionMode(CHARACTER_SELECT_MODE)}>
+              <ButtonText>{text.navigation.myCharacters}</ButtonText>
+            </SecondaryButton>
+          ) : (
+            <></>
+          )}
+        </>
       }
     >
       {isLoading ? (
@@ -64,21 +83,8 @@ export const Landing: FC = () => {
         />
       ) : (
         <>
-          {/* character big picture */}
-          <LandingContainer isZoomed={!openTab}>
-            <BaseCharacter
-              characterImage={selectedCharacter.nft.image}
-              items={selectedCharacter.equippedItems}
-              isZoomed={openTab}
-              size="normal"
-            />
-          </LandingContainer>
-
-          {/* equipped items under character */}
-          <CharacterItems items={selectedCharacter.equippedItems} showItems={!openTab} />
-
           {/* character info */}
-          {!openTab && (
+          {!openTab && interactionMode === MAIN_MODE && (
             <DetailContainer>
               <MenuText>{selectedCharacter?.nft.name}</MenuText>
               <ButtonContainer>
@@ -87,11 +93,6 @@ export const Landing: FC = () => {
                 </SecondaryButton>
                 <ButtonText>{text.param.level(selectedCharacter?.nft.level)}</ButtonText>
               </ButtonContainer>
-              <ButtonContainer>
-                <SecondaryButton onClick={displayCharacter}>
-                  <ButtonText>{text.general.viewCharacter}</ButtonText>
-                </SecondaryButton>
-              </ButtonContainer>
             </DetailContainer>
           )}
           <CharacterCardWrapper>
@@ -99,7 +100,10 @@ export const Landing: FC = () => {
               <CharacterDetailSection
                 character={selectedCharacter}
                 actions={{
-                  secondary: { text: text.character.sell, onClick: () => sell(selectedCharacter.nft.id) },
+                  secondary: {
+                    text: text.character.sell,
+                    onClick: () => sell(selectedCharacter.nft.id),
+                  },
                   onClose: () => {
                     setShowDetail(false);
                     setCloseDetail(true);
@@ -124,8 +128,14 @@ export const Landing: FC = () => {
               />
             </NotificationWrapper>
           </FadeInOut>
-          {/* my characters list */}
-          <CharacterCard id={selectedCharacter.nft.id} showCard={openTab} />
+          <Layout width={width} height={height}>
+            <CharacterCanvas width={width} height={height} />
+            {interactionMode === CATEGORY_MODE && <CategoryMode />}
+            {interactionMode === ITEM_MODE && <ItemsMode />}
+            {interactionMode === CHARACTER_SELECT_MODE && <CharactersMode />}
+            {interactionMode === MAIN_MODE && <MainMode items={selectedCharacter.equippedItems} showItems={!!MAIN_MODE} />}
+            <DownloadImageModal isOpen={isDownloadOpen} onClose={handleCloseDownload} />
+          </Layout>
         </>
       )}
     </BaseRoute>

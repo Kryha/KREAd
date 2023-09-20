@@ -278,7 +278,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-eafd84a744e312ef72dad6be3fbfa9e8a1d4247f8905a5cf3bb27c1270c375beafa6d69521ab8f8a4ed9151e3f4421b87b15e0797a2ca8eb822a8fb4945db6e0',
+    'b1-7c3ef9e51f7b3874cf94fcda7c4ebee5b4d7066d1cffeac38321fd4ea1b78e904196821508b2b53a44beaf5d16308bcec158f2009d057b946aea000a86cba71c',
 };
 
 const fail = (reason) => {
@@ -492,4 +492,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/pandelissymeonidis/Projects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/privilegemendes/WebstormProjects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js

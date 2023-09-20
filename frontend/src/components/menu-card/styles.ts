@@ -2,8 +2,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon, CloseIcon } from "../../assets";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { color, margins } from "../../design";
-import { fadeIn, Label } from "../atoms";
-import { HeaderHorizontalDivider, HorizontalDivider } from "../atoms/lines";
+import { fadeIn, HeaderHorizontalDivider, HorizontalDivider, Label } from "../atoms";
 
 export const Content = styled.div`
   padding: 0px ${margins.small};
@@ -58,7 +57,7 @@ export const InfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
   ${Label} {
     margin-top: 2px;
   }
@@ -87,13 +86,14 @@ export const MenuItemContainer = styled.div`
 `;
 
 export const ArrowUpRight = styled(ArrowUpRightIcon)`
-  margin: 0px 0px 0px 13px !important;
+  margin: 0 0 0 13px !important;
 `;
 
 export const CardActionsContainer = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
+  flex-direction: column;
+  gap: 16px;
   justify-content: center;
   margin-bottom: ${margins.big};
   margin-right: ${margins.large};

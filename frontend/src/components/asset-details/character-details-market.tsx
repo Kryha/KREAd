@@ -16,14 +16,14 @@ interface Props {
   selectCharacter: (id: string) => void;
 }
 export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCharacter }) => {
+  const navigate = useNavigate();
+  const [close, setClose] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
   if (!characterInMarket) {
     console.error("Missing character data");
     return <ErrorView />;
   }
-
-  const navigate = useNavigate();
-  const [close, setClose] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
   const character = characterInMarket.character;
 
@@ -42,7 +42,10 @@ export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCha
         {!!character.name && (
           <DetailContainer>
             <CharacterDetailSection
-              character={{ nft: character, equippedItems: characterInMarket.equippedItems }}
+              character={{
+                nft: character,
+                equippedItems: characterInMarket.equippedItems,
+              }}
               actions={{
                 onClose: () => {
                   selectCharacter("");

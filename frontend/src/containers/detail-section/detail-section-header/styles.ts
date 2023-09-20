@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { SecondaryButton } from "../../../components";
 
-import { color, margins, fontWeight, fontSize, zIndex } from "../../../design";
+import { color, fontSize, fontWeight, margins, zIndex } from "../../../design";
 
 export const DetailSectionHeaderWrap = styled.header`
   position: sticky;
@@ -27,6 +27,8 @@ export const DetailSectionHeaderDetails = styled.div`
   flex-flow: row nowrap;
   gap: ${margins.mini};
   align-items: baseline;
+  margin-top: ${margins.small};
+  margin-bottom: ${margins.small};
 `;
 
 export const DetailSectionHeaderId = styled.p`

@@ -1,15 +1,23 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Item, ItemCategory, ItemInMarket } from "../interfaces";
+import { Item, ItemCategory, ItemInMarket, Rarity } from "../interfaces";
 import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { INVENTORY_CALL_FETCH_DELAY, ITEM_PURSE_NAME } from "../constants";
-import { useItemMarketState } from "../context/item-shop";
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { marketService } from "./character/market";
 import { inventoryService } from "./character/inventory";
+import { useItemMarketState } from "../context/item-shop-context";
+
+export function getRarityString(rarity: number) {
+  if (rarity > 79) return "exotic" as Rarity;
+  else if (rarity > 59) return "legendary" as Rarity;
+  else if (rarity > 39) return "rare" as Rarity;
+  else if (rarity > 19) return "uncommon" as Rarity;
+  else return "common" as Rarity;
+}
 
 // TODO: Fix this function used during buy and sell
 export const useMyItem = (id: string): [Item | undefined, boolean] => {
@@ -17,7 +25,7 @@ export const useMyItem = (id: string): [Item | undefined, boolean] => {
   return [found, false];
 };
 
-export const useGetItemInInventoryByNameAndCategory = (name: string, category: ItemCategory | undefined): [Item | undefined, boolean] => {
+export const useGetItemInInventoryByNameAndCategory = (name: string, category: ItemCategory[][]): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
 
   const found = useMemo(() => items.find((item) => item.category === category && item.name === name), [name, category, items]);
@@ -27,13 +35,31 @@ export const useGetItemInInventoryByNameAndCategory = (name: string, category: I
 
 export const useGetItemsInInventory = (filters?: ItemFilters): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
-  const allEquippedItems = characters.flatMap((character) => Object.values(character.equippedItems)).filter((item) => item !== undefined);
+  const { items } = useUserState();
 
-  if (!filters) return [allEquippedItems, !fetched];
+  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
 
-  const filtered = !filters ? allEquippedItems : filterItems(allEquippedItems, filters);
+  if (!filters) return [allItems, !fetched];
+
+  const filtered = !filters ? allItems : filterItems(allItems, filters);
 
   return [filtered, !fetched];
+};
+
+export const useGetItemsInInventoryByCategory = (category: string | null): [Item[], boolean] => {
+  const [items, isLoading] = useGetItemsInInventory();
+
+  const filtered = useMemo(() => items.filter((item) => item.category === category), [category, items]);
+
+  return [filtered, isLoading];
+};
+
+export const useGetItemInInventoryByName = (category: string | null, itemName: string | null): Item | undefined => {
+  const [items] = useGetItemsInInventory();
+
+  return items.find((item) => {
+    return item.category === category && item.name === itemName;
+  });
 };
 
 export const useMyItemsForSale = () => {
@@ -53,12 +79,12 @@ export const useMyItemsForSale = () => {
   );
 
   // getting items from filtered offers
-  const itemsForSale: ItemEquip[] = useMemo(() => {
+  const itemsForSale: Item[] = useMemo(() => {
     try {
-      const itemsFromOffers: ItemBackend[] = itemOffers.map((offer: any) => {
+      const itemsFromOffers: Item[] = itemOffers.map((offer: any) => {
         return offer.proposalTemplate.give.Items.value[0];
       });
-      const itemsFromOffersFrontend: ItemEquip[] = mediate.items
+      const itemsFromOffersFrontend: Item[] = mediate.items
         .toFront(itemsFromOffers)
         .map((item) => ({ ...item, equippedTo: "", isForSale: true }));
       return itemsFromOffersFrontend;
@@ -123,7 +149,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: ItemCate
         return false;
       }
     },
-    [itemName, itemCategory, wallet, items, service],
+    [itemName, itemCategory, items, service],
   );
 
   return { callback, isLoading };

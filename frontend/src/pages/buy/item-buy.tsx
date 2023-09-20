@@ -6,7 +6,7 @@ import { ItemDetailSection } from "../../containers/detail-section";
 import { ItemInMarket } from "../../interfaces";
 import { useBuyItem } from "../../service";
 import { Buy } from "./buy";
-import { useItemMarketState } from "../../context/item-shop";
+import { useItemMarketState } from "../../context/item-shop-context";
 
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
