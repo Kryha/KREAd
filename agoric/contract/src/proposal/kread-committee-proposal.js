@@ -91,7 +91,11 @@ const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
  */
 export const inviteCommitteeMembers = async (
   {
-    consume: { namesByAddressAdmin, kreadCommitteeCreatorFacet, ...consume },
+    consume: {
+      namesByAddressAdmin,
+      kreadCommitteeCreatorFacet,
+      highPrioritySendersManager,
+    },
   },
   { options: { voterAddresses } },
 ) => {
@@ -100,7 +104,6 @@ export const inviteCommitteeMembers = async (
   ).getVoterInvitations();
   assert.equal(invitations.length, values(voterAddresses).length);
 
-  const highPrioritySendersManager = await consume.highPrioritySendersManager;
 
   /** @param {[string, Promise<Invitation>][]} addrInvitations */
   const distributeInvitations = async addrInvitations => {
@@ -228,6 +231,7 @@ export const getManifestForInviteCommittee = async (
       consume: {
         namesByAddressAdmin: true,
         kreadCommitteeCreatorFacet: true,
+        highPrioritySendersManager: true,
       },
     },
     [startKreadCharter.name]: {

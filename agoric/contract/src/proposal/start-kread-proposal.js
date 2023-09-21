@@ -88,7 +88,6 @@ const startGovernedInstance = async ({
   },
   installation: { consume: { kreadKit: installP, contractGovernor: govP }},
   instance: {
-    // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
     produce: { [contractInfo.instanceName]: kread },
   },
 }, { kreadConfig, }) => {
@@ -116,6 +115,7 @@ const startGovernedInstance = async ({
       E(istIssuerP).getBrand(),
     ]);
 
+  // XX These should be looked up in start-kread-script and passed in
   const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
   const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
 

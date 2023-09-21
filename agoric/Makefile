@@ -91,10 +91,6 @@ fund-pool:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-provision-pool \
 
-fund-large-contract:
-	cd $(COSMIC_SWINGSET_PATH); \
-	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=10000000000000000uist; \
-
 fund-account-atom:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=100000000ibc/toyatom; \

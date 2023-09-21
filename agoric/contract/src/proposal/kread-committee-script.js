@@ -15,7 +15,6 @@ export const defaultProposalBuilder = async (
     voterAddresses = JSON.parse(KREAD_COMMITTEE_ADDRESSES),
   } = options;
 
-  console.log(`SCRIPT`, voterAddresses, committeeName);
   assert(voterAddresses, 'KREAD_COMMITTEE_ADDRESSES is required');
 
   return harden({
