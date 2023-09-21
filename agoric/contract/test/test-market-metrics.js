@@ -193,6 +193,7 @@ test.serial('---| METRICS - Average levels character', async (t) => {
 
   t.deepEqual(metrics.character.averageLevel, character.level);
   t.deepEqual(metrics.character.marketplaceAverageLevel, characterLevel);
+  t.deepEqual(metrics.character.putForSaleAmount, 1);
 
   const defaultItemsAverageLevel = 0;
 
@@ -254,6 +255,7 @@ test.serial('---| METRICS - Latest sale price character', async (t) => {
   t.deepEqual(metrics.character.averageLevel, character.level);
   t.deepEqual(metrics.character.marketplaceAverageLevel, 0);
   t.deepEqual(metrics.character.amountSold, 2);
+  t.deepEqual(metrics.character.putForSaleAmount, 2);
   t.deepEqual(metrics.character.latestSalePrice, 20);
 
   t.deepEqual(metrics.item.amountSold, 0);

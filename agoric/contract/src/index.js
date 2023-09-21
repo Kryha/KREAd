@@ -54,7 +54,7 @@ export const meta = {
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
     paymentBrand: M.eref(M.remotable('Brand')),
-    assetNames: M.splitRecord({ character: M.string(), item: M.string() })
+    assetNames: M.splitRecord({ character: M.string(), item: M.string() }),
   }),
 };
 harden(meta);
@@ -66,23 +66,24 @@ harden(meta);
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
  *   clock: Clock
  * }} privateArgs
- * 
+ *
  * @param {Baggage} baggage
  */
 export const start = async (zcf, privateArgs, baggage) => {
-/** 
-  * @type {{
-  *   paymentBrand: Brand
-  *   mintFee: bigint,
-  *   royaltyRate: RatioObject,
-  *   platformFeeRate: RatioObject,
-  *   mintRoyaltyRate: RatioObject,
-  *   mintPlatformFeeRate: RatioObject,
-  *   royaltyDepositFacet: DepositFacet,
-  *   platformFeeDepositFacet: DepositFacet,
-  *   assetNames: { character: string, item: string },
-  * }}
-  */
+  /**
+   * @type {{
+   *   paymentBrand: Brand
+   *   mintFee: bigint,
+   *   royaltyRate: RatioObject,
+   *   platformFeeRate: RatioObject,
+   *   mintRoyaltyRate: RatioObject,
+   *   mintPlatformFeeRate: RatioObject,
+   *   royaltyDepositFacet: DepositFacet,
+   *   platformFeeDepositFacet: DepositFacet,
+   *   assetNames: { character: string, item: string },
+   *   minUncommonRating: number
+   * }}
+   */
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
@@ -94,8 +95,8 @@ export const start = async (zcf, privateArgs, baggage) => {
     itemKit: 'item',
     marketCharacterKit: 'market-characters',
     marketItemKit: 'market-items',
-    marketCharacterMetricsKit: 'market-character-metrics',
-    marketItemMetricsKit: 'market-item-metrics',
+    marketCharacterMetricsKit: 'market-metrics-character',
+    marketItemMetricsKit: 'market-metrics-item',
   };
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
@@ -110,11 +111,7 @@ export const start = async (zcf, privateArgs, baggage) => {
   const characterIssuerRecord = characterMint.getIssuerRecord();
   const itemIssuerRecord = itemMint.getIssuerRecord();
 
-  const {
-    powers,
-    clock,
-    seed,
-  } = privateArgs;
+  const { powers, clock, seed } = privateArgs;
 
   const {
     mintFee,
@@ -125,6 +122,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
+    minUncommonRating,
   } = terms;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
@@ -172,6 +170,7 @@ export const start = async (zcf, privateArgs, baggage) => {
         royaltyDepositFacet,
         platformFeeDepositFacet,
         paymentBrand,
+        minUncommonRating,
       },
       harden({
         characterIssuerRecord,

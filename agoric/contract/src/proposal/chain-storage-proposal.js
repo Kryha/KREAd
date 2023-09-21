@@ -131,7 +131,7 @@ const baseItems = [
   },
   {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'perk2',
+    category: 'mask',
     functional: false,
     origin: 'Elphia',
     description:
@@ -140,6 +140,27 @@ const baseItems = [
       'https://ipfs.io/ipfs/QmadebCRvkLSHdeSTnPJv58XHtjk5DwYbeUigNNcWPs2Vn',
     thumbnail:
       'https://ipfs.io/ipfs/QmYmyyNeoyeAQ8qPHkufum848mA1P5Q1KHZp7n6vhwGsgd',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
+    colors: ['#B1A2A2', '#968996', '#FFFFFF'],
+    artistMetadata: '',
+  },
+  {
+    name: 'AirTox: Fairy Dust Elite',
+    category: 'perk2',
+    functional: false,
+    origin: 'Elphia',
+    description:
+      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    image:
+      'https://ipfs.io/ipfs/QmS5TvnX9PMobuME6bLuuDWR4avhGGeuHg7eAFfZAiLLZ1',
+    thumbnail:
+      'https://ipfs.io/ipfs/QmS1X4KRtcumk4PqjowgKsbMh2uN79wwUsYYKnakqr7FZn',
     rarity: 18,
     level: 0,
     filtering: 0,
@@ -241,7 +262,6 @@ const baseItems = [
     origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    origin: 'elphia',
     image:
       'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
     thumbnail:
@@ -286,7 +306,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-3610e0a646b00a307f713e02765b7bb9320c195e5bc616106cfec05b98b78881f1ece60f2738d8d7be637d6a50e6f9ea373b31c1d331985dd4f5f6ead8a09d18',
+    'b1-f8e879e8a013902510174f72cc310d74eb5297a4c27b33cd85b7415cb39bb977b3d89997fa05ba8bc6229de6556b5f9718df86d26b5920e93b88424612c77454',
 };
 
 const fail = (reason) => {
@@ -416,9 +436,9 @@ const executeProposal = async (powers) => {
     clock,
     seed: 303,
   });
-  
+
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
-  
+
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
   const issuers = harden({ Money: istIssuer });
   const terms = harden({
@@ -434,6 +454,7 @@ const executeProposal = async (powers) => {
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
     },
+    minUncommonRating: 20,
   });
 
   const { instance, creatorFacet } = await E(startUpgradable)({
@@ -474,15 +495,8 @@ const executeProposal = async (powers) => {
   );
 
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
-
+  await E(creatorFacet).initializeCharacterNamesEntries();
   await E(creatorFacet).initializeMetrics();
-
-  // FIXME: Get the most recent state of metrics from the storage node and send it to the contract
-  // const data = {};
-  // const restoreMetricsInvitation = await E(
-  //   creatorFacet,
-  // ).makeRestoreMetricsInvitation();
-  // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
 
   // Revive seat exit subscribers after upgrade
   await E(creatorFacet).reviveMarketExitSubscribers();

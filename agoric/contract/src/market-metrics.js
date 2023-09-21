@@ -44,81 +44,35 @@ function updateAverage(type, average, size, value) {
 /**
  * Updates character metrics
  *
+ * @param {string} collection
  * @param {object} state
  * @param {UpdateMetrics} updateMetrics
  * @param {import("@agoric/zoe/src/contractSupport").RecorderKit} marketCharacterMetricsKit
  */
-export const updateCharacterMetrics = async (
-  state,
-  updateMetrics,
-  marketCharacterMetricsKit,
-) => {
+export const updateCollectionMetrics = (collection, state, updateMetrics) => {
+  const metrics = { ...state.market.metrics.get(collection) };
   if (updateMetrics.averageLevel) {
-    state.characterAverageLevel = updateAverage(
+    metrics.averageLevel = updateAverage(
       updateMetrics.averageLevel.type,
-      state.characterAverageLevel,
-      state.characterCollectionSize,
+      metrics.averageLevel,
+      metrics.collectionSize,
       updateMetrics.averageLevel.value,
     );
   }
   if (updateMetrics.marketplaceAverageLevel) {
-    state.characterMarketplaceAverageLevel = updateAverage(
+    metrics.marketplaceAverageLevel = updateAverage(
       updateMetrics.marketplaceAverageLevel.type,
-      state.characterMarketplaceAverageLevel,
+      metrics.marketplaceAverageLevel,
       state.market.characterEntries.getSize(),
       updateMetrics.marketplaceAverageLevel.value,
     );
   }
   if (updateMetrics.latestSalePrice)
-    state.characterLatestSalePrice = updateMetrics.latestSalePrice;
-  if (updateMetrics.collectionSize) state.characterCollectionSize += 1;
-  if (updateMetrics.amountSold) state.characterAmountSold += 1;
+    metrics.latestSalePrice = updateMetrics.latestSalePrice;
+  if (updateMetrics.collectionSize) metrics.collectionSize += 1;
+  if (updateMetrics.amountSold) metrics.amountSold += 1;
+  if (updateMetrics.putForSaleAmount) metrics.putForSaleAmount += 1;
 
-  marketCharacterMetricsKit.recorder.write({
-    collectionSize: state.characterCollectionSize,
-    averageLevel: state.characterAverageLevel,
-    marketplaceAverageLevel: state.characterMarketplaceAverageLevel,
-    amountSold: state.characterAmountSold,
-  });
-};
-
-/**
- * Updates item metrics
- *
- * @param {object} state
- * @param {UpdateMetrics} updateMetrics
- * @param {import("@agoric/zoe/src/contractSupport").RecorderKit} marketItemMetricsKit
- */
-export const updateItemMetrics = (
-  state,
-  updateMetrics,
-  marketItemMetricsKit,
-) => {
-  if (updateMetrics.averageLevel) {
-    state.itemAverageLevel = updateAverage(
-      updateMetrics.averageLevel.type,
-      state.itemAverageLevel,
-      state.itemCollectionSize,
-      updateMetrics.averageLevel.value,
-    );
-  }
-  if (updateMetrics.marketplaceAverageLevel) {
-    state.itemMarketplaceAverageLevel = updateAverage(
-      updateMetrics.marketplaceAverageLevel.type,
-      state.itemMarketplaceAverageLevel,
-      state.market.itemEntries.getSize(),
-      updateMetrics.marketplaceAverageLevel.value,
-    );
-  }
-  if (updateMetrics.latestSalePrice)
-    state.itemLatestSalePrice = updateMetrics.latestSalePrice;
-  if (updateMetrics.collectionSize) state.itemCollectionSize += 1;
-  if (updateMetrics.amountSold) state.itemAmountSold += 1;
-
-  marketItemMetricsKit.recorder.write({
-    collectionSize: state.itemCollectionSize,
-    averageLevel: state.itemAverageLevel,
-    marketplaceAverageLevel: state.itemMarketplaceAverageLevel,
-    amountSold: state.itemAmountSold,
-  });
+  state.market.metrics.set(collection, metrics);
+  return metrics;
 };
