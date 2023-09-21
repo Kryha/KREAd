@@ -14,7 +14,6 @@ export * from "./base-route";
 export * from "./equipped-item-card";
 export * from "./content-loader";
 export * from "./base-character";
-export * from "./character-card";
 export * from "./character-detail";
 export * from "./character-item";
 export * from "./filters";

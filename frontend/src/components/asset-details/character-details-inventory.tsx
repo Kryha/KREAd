@@ -13,9 +13,10 @@ import { ErrorView } from "../error-view";
 
 interface AssetDetailsInventoryProps {
   character?: ExtendedCharacter;
+  selectedId: (id: string) => void;
 }
 
-export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character }) => {
+export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character, selectedId }) => {
   const navigate = useNavigate();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -43,6 +44,7 @@ export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ char
               character={character}
               actions={{
                 onClose: () => {
+                  selectedId("");
                   setClose(true);
                 },
                 secondary: sellCharacterAction,

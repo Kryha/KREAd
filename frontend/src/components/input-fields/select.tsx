@@ -1,10 +1,8 @@
-import React, { FC, useCallback, useState } from "react";
-import { SelectBox, SelectDivider, StyledSelect, Tick } from "./styles";
+import React, { FC, useCallback, useEffect, useState } from "react";
+import { SelectBox, StyledSelect, Tick } from "./styles";
 import { ButtonText } from "../atoms";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import { Diamond } from "../price-in-ist/styles";
-// import { ITEM_CATEGORIES } from "../../constants";
 
 export interface Options {
   label: string;
@@ -13,77 +11,79 @@ export interface Options {
 
 interface SelectProps {
   label: string;
-  handleChange: (selected: string[]) => void;
+  onArrayChange?: (selected: any[]) => void;
+  onChange?: (selected: string) => void;
   options: Options[];
   isMultiSelect?: boolean;
+  reset: boolean; // Add a reset prop to signal when to reset the component
 }
 
-export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect = false }) => {
-  const [selected, setSelected] = useState<string | string[]>(isMultiSelect ? [options[0].value] : "");
+export const Select: FC<SelectProps> = ({ options, onChange, onArrayChange, isMultiSelect = false, reset }) => {
   const { height } = useViewport();
+
+  const [selected, setSelected] = useState<string[]>(isMultiSelect ? [] : [options.length > 0 ? options[0].value : ""]);
+
+  // Function to reset the component's state to its initial state
+  const resetComponent = () => {
+    setSelected(isMultiSelect ? [] : [options.length > 0 ? options[0].value : ""]);
+  };
+
+  useEffect(() => {
+    // Check if the reset prop is true and reset the component's state
+    if (reset) {
+      resetComponent();
+    }
+  }, [reset]);
 
   const handleOptionClick = useCallback(
     (index: number) => {
       const selectedValue = options[index].value;
-      if (selectedValue === options[0].value) {
-        setSelected([selectedValue]);
-        handleChange([selectedValue]);
-      } else {
-        if (isMultiSelect) {
-          setSelected((prevSelected) => {
-            if (Array.isArray(prevSelected)) {
-              if (prevSelected.includes(options[0].value)) {
-                // Remove the first option and add the selected option
-                handleChange([selectedValue]);
-                return [selectedValue];
-              } else if (prevSelected.includes(selectedValue)) {
-                // Deselect the currently selected option
-                handleChange(prevSelected.filter((val) => val !== selectedValue));
-                return prevSelected.filter((val) => val !== selectedValue);
-              } else {
-                // Add the selected option
-                handleChange([...prevSelected, selectedValue]);
-                return [...prevSelected, selectedValue];
-              }
-            } else {
-              // Single select
-              handleChange([selectedValue]);
-              return [selectedValue];
+      if (isMultiSelect) {
+        setSelected((prevSelected) => {
+          if (prevSelected.includes(selectedValue)) {
+            // Remove the selected option
+            const updatedSelected = prevSelected.filter((val) => val !== selectedValue);
+            if (onArrayChange) {
+              onArrayChange(updatedSelected);
             }
-          });
-        } else {
-          setSelected(selectedValue);
-          handleChange(selectedValue);
+            return updatedSelected;
+          } else {
+            // Add the selected option
+            const updatedSelected = [...prevSelected, selectedValue];
+            if (onArrayChange) {
+              onArrayChange(updatedSelected);
+            }
+            return updatedSelected;
+          }
+        });
+      } else {
+        setSelected([selectedValue]);
+        if (onChange) {
+          onChange(selectedValue);
         }
       }
     },
-    [handleChange],
+    [isMultiSelect, onChange, onArrayChange, options],
   );
 
-  const isOptionSelected = (optionValue: string | string[]) => {
+  const isOptionSelected = (optionValue: string) => {
     if (isMultiSelect) {
-      return Array.isArray(selected) ? selected.includes(optionValue as string) : false;
+      return selected.includes(optionValue);
     }
-    return selected === optionValue;
+    return selected[0] === optionValue;
   };
 
   return (
     <SelectBox height={height}>
       {options.map((option, index) => (
         <React.Fragment key={index}>
-          {/* {(option.value === ITEM_CATEGORIES.headPiece || option.value === ITEM_CATEGORIES.equipped) && <SelectDivider />} */}
           <StyledSelect
             selected={isOptionSelected(option.value)}
-            key={index}
             onClick={() => {
               handleOptionClick(index);
-              if (!isMultiSelect) {
-                handleChange(option.value);
-              }
             }}
           >
             <ButtonText customColor={isOptionSelected(option.value) ? color.black : color.darkGrey}>{option.label}</ButtonText>
-            {/* {option.value === ITEM_CATEGORIES.forSale && <Diamond />} */}
             <Tick />
           </StyledSelect>
         </React.Fragment>

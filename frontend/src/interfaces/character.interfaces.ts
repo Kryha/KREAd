@@ -36,7 +36,7 @@ export interface Details {
 }
 
 export interface Character {
-  id: number;
+  id: string;
   title: Title;
   image: string;
   keyId: number;

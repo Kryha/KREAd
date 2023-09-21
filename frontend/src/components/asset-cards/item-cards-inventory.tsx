@@ -4,7 +4,7 @@ import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more"
 import { AssetsContainer, AssetsWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
-import { Item, ItemCategory } from "../../interfaces";
+import { Category, Item } from "../../interfaces";
 import { ItemCardInventory } from "../asset-card/item-card-inventory";
 
 export interface AssetData {
@@ -22,7 +22,7 @@ export interface AssetData {
 interface Props {
   items: Item[];
   isLoading: boolean;
-  selectItem: (name: string, category: ItemCategory) => void;
+  selectItem: (name: string, category: Category, characterName: string) => void;
 }
 
 export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem }) => {
@@ -38,7 +38,7 @@ export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem }) 
       {items.length > 0 && (
         <AssetsContainer>
           {items.slice(0, visibleAssets).map((item, index) => (
-            <ItemCardInventory key={index} item={item} selectItem={() => selectItem(item.name, item.category)} />
+            <ItemCardInventory key={index} item={item} selectItem={() => selectItem(item.name, item.category, item.equippedTo)} />
           ))}
           {visibleAssets < items.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
         </AssetsContainer>

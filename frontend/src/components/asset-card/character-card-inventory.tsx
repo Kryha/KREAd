@@ -1,24 +1,24 @@
 import { ExtendedCharacter } from "../../interfaces";
-import { BoldLabel, Dash, ImageProps } from "../atoms";
+import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel } from "../atoms";
 import { FC } from "react";
 import {
   AssetContent,
   AssetFooter,
   AssetImageContainer,
   AssetInfoContainer,
+  AssetStatsContainer,
   AssetTag,
   AssetTitleText,
   AssetTitleWrapper,
   AssetWrapper,
   NoAssetImage,
 } from "./styles";
-import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
 
 interface Props {
   extendedCharacter: ExtendedCharacter;
-  onClick?: (assetId: string) => void;
+  onClick?: (assetId: number) => void;
   imageProps?: ImageProps;
 }
 
@@ -42,21 +42,18 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
         <AssetInfoContainer>
           <AssetTitleWrapper>
             <AssetTitleText>{character.name}</AssetTitleText>
+            <BoldLabel>{character.title}</BoldLabel>
           </AssetTitleWrapper>
-          <AssetFooter>
+          <AssetStatsContainer>
             <AssetTag>
-              <BoldLabel customColor={color.black}>{character.title}</BoldLabel>
-              <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
-              {character.origin && (
-                <>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{character.origin}</BoldLabel>
-                </>
-              )}
+              <BoldLabel customColor={color.black}>lvl. </BoldLabel>
+              <LevelBoldLabel customColor={color.black}>{character.level}</LevelBoldLabel>
             </AssetTag>
-            {/* TODO: figure out if we cann add this label */}
-            {/*extendedCharacter. && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>*/}
-          </AssetFooter>
+            <Badge>
+              <ButtonText>{character.origin}</ButtonText>
+            </Badge>
+          </AssetStatsContainer>
+          <AssetFooter></AssetFooter>
         </AssetInfoContainer>
       </AssetContent>
     </AssetWrapper>

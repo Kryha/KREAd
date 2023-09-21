@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Item, ItemCategory, ItemInMarket, Rarity } from "../interfaces";
-import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
+import { Category, Item, ItemInMarket, Rarity } from "../interfaces";
+import { mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { INVENTORY_CALL_FETCH_DELAY, ITEM_PURSE_NAME } from "../constants";
@@ -25,23 +25,27 @@ export const useMyItem = (id: string): [Item | undefined, boolean] => {
   return [found, false];
 };
 
-export const useGetItemInInventoryByNameAndCategory = (name: string, category: ItemCategory[][]): [Item | undefined, boolean] => {
+export const useGetItemInInventoryByNameAndCategory = (
+  name: string,
+  category: string,
+  characterName: string | null,
+): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
 
-  const found = useMemo(() => items.find((item) => item.category === category && item.name === name), [name, category, items]);
+  const found = useMemo(
+    () => items.find((item) => item.category === category && item.name === name && item.equippedTo === characterName),
+    [items, category, name, characterName],
+  );
 
   return [found, isLoading];
 };
 
-export const useGetItemsInInventory = (filters?: ItemFilters): [Item[], boolean] => {
+export const useGetItemsInInventory = (): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
   const { items } = useUserState();
 
   const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
-
-  if (!filters) return [allItems, !fetched];
-
-  const filtered = !filters ? allItems : filterItems(allItems, filters);
+  const filtered = useFilterItems(allItems);
 
   return [filtered, !fetched];
 };
@@ -99,22 +103,21 @@ export const useMyItemsForSale = () => {
 export const useGetItemInShopById = (id: string): [ItemInMarket | undefined, boolean] => {
   const { items, fetched } = useItemMarketState();
 
-  const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
+  const filteredItems = useFilterItemsInShop(items);
+  const found = useMemo(() => filteredItems.find((item) => item.id === id), [id, filteredItems]);
 
   return [found, !fetched];
 };
 
-export const useGetItemsInShop = (filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
+export const useGetItemsInShop = (): [ItemInMarket[], boolean] => {
   const { items, fetched } = useItemMarketState();
-  if (!filters) return [items, !fetched];
-  const filtered = !filters ? items : filterItemsInShop(items, filters);
+  const filtered = useFilterItemsInShop(items);
 
   return [filtered, !fetched];
 };
 
-export const useSellItem = (itemName: string | undefined, itemCategory: ItemCategory | undefined) => {
+export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {
   const [service] = useAgoricContext();
-  const wallet = useWalletState();
   const { items } = useUserState();
   const [isLoading, setIsLoading] = useState(false);
 

@@ -4,7 +4,7 @@ import { CharacterCreation, CharacterInMarket, ExtendedCharacter, ExtendedCharac
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { CharacterFilters, filterCharacters, filterCharactersMarket } from "../util";
+import { CharacterFilters, filterCharactersMarket, useFilterCharacters } from "../util";
 
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
@@ -17,15 +17,27 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
 
   const userStateDispatch = useUserStateDispatch();
 
-  //TODO: this is a hack to set the selected character to the first one in the list. not very efficient. if you refresh the page we lose the selected character
   useEffect(() => {
-    if (!selected) {
-      characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+    const storedName = localStorage.getItem("selectedCharacter");
+    if (storedName) {
+      const selectedCharacter = characters.find((char) => char.nft.name === storedName);
+      if (selectedCharacter) {
+        userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter });
+      }
+    } else if (!selected && characters.length > 0) {
+      // If selected character is not found in localStorage and characters array is not empty, set the first character as selected
+      userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
     }
   }, [userStateDispatch, characters, selected]);
 
-  const isLoading = !fetched;
-  return [selected, isLoading];
+  // Save the selected character's name to localStorage whenever it changes
+  useEffect(() => {
+    if (selected && selected.nft.name) {
+      localStorage.setItem("selectedCharacter", selected.nft.name);
+    }
+  }, [selected]);
+
+  return [selected, !fetched];
 };
 
 export const useMyCharactersForSale = () => {
@@ -72,17 +84,19 @@ export const useGetCharacterByName = (name: string | null): [ExtendedCharacter |
 
   return [found, isLoading];
 };
-//WORKS
-export const useMyCharacters = (filters?: CharacterFilters): [ExtendedCharacter[], boolean] => {
+
+export const useGetCharacterNames = (): [string[]] => {
+  const [owned] = useMyCharacters();
+  const names = useMemo(() => owned.map((c) => c.nft.name), [owned]);
+  return [names];
+};
+
+export const useMyCharacters = (): [ExtendedCharacter[], boolean] => {
   const { characters, fetched } = useUserState();
   const charactersForSale = useMyCharactersForSale();
 
-  // filtering all the characters
-  const filtered = useMemo(() => {
-    const allCharacters = [...characters, ...charactersForSale];
-    if (!filters) return allCharacters;
-    return filterCharacters(allCharacters, filters);
-  }, [characters, charactersForSale, filters]);
+  const allCharacters = [...characters, ...charactersForSale];
+  const filtered = useFilterCharacters(allCharacters);
 
   const isLoading = !fetched;
   return [filtered, isLoading];

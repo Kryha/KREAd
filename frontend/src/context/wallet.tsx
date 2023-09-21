@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAgoricState } from "./agoric";
 import dappConstants from "../service/ag-solo-connection/conf/defaults";
-import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
+import { SELL_CHARACTER_INVITATION, SELL_ITEM_INVITATION } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
 import { Item, OfferProposal } from "../interfaces";
 
@@ -69,8 +69,8 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
 
     const updateStateOffers = async (offers: any) => {
       console.count("💾 LOADING OFFER CHANGE 💾");
-      const itemProposals: { give: Object; want: Object }[] = [];
-      const characterProposals: { give: Object; want: Object }[] = [];
+      const itemProposals: { give: Record<string, unknown>; want: Record<string, unknown> }[] = [];
+      const characterProposals: { give: Record<string, unknown>; want: Record<string, unknown> }[] = [];
       offers.forEach((offer: any) => {
         const {
           proposal: { give, want },

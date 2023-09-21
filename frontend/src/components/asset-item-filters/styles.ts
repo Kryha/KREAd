@@ -21,8 +21,9 @@ export const AssetFilterCount = styled(ButtonText)`
   margin-left: ${margins.mini};
 `;
 export const AssetFilterWrapper = styled.div`
-  position: sticky;
+  position: relative;
   display: flex;
+  justify-content: flex-start;
   flex-direction: column;
   padding: 0;
   z-index: 30;
@@ -42,8 +43,6 @@ export const AssetFilterContainer = styled.div`
   align-items: flex-start;
   padding: 0;
   gap: 16px;
-  margin-left: auto;
-  margin-right: auto;
 `;
 
 export const AssetSelectorContainer = styled.div`
