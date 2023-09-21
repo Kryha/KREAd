@@ -54,7 +54,8 @@ const reserveThenGetNamePaths = async (nameAdmin, paths) => {
 };
 
 /**
- * Generalized from basic-behaviors.js to take an arbitrary committee.
+ * Variant of startGovernedInstance from basic-behaviors.js, modified for
+ * KREAd's needs. Takes an arbitrary committee. Could it be generalized more?
  *
  * @template {GovernableStartFn} SF
  * @param {BootstrapPowers} powers

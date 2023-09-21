@@ -1,5 +1,4 @@
 import { E } from '@endo/far';
-import { reserveThenDeposit } from '@agoric/inter-protocol/src/proposals/utils.js';
 
 const { Fail } = assert;
 
@@ -85,6 +84,33 @@ harden(startKreadCommittee);
 
 /** @type {<X, Y>(xs: X[], ys: Y[]) => [X, Y][]} */
 const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
+
+/**
+ * @param {string} debugName
+ * @param {ERef<import('@agoric/vats').NameAdmin>} namesByAddressAdmin
+ * @param {string} addr
+ * @param {ERef<Payment>[]} payments
+ */
+export const reserveThenDeposit = async (
+  debugName,
+  namesByAddressAdmin,
+  addr,
+  payments,
+) => {
+  const [depositFacet] = await reserveThenGetNamePaths(namesByAddressAdmin, [
+    [addr, WalletName.depositFacet],
+  ]);
+  await Promise.allSettled(
+    payments.map(async (paymentP, i) => {
+      const payment = await paymentP;
+      await E(depositFacet).receive(payment);
+      console.info(
+        `confirmed deposit ${i + 1}/${payments.length} for`,
+        debugName,
+      );
+    }),
+  );
+};
 
 /**
  * @param {import('@agoric/inter-protocol/src/proposals/econ-behaviors').EconomyBootstrapPowers} powers

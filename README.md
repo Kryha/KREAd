@@ -87,3 +87,20 @@ To run the application for more than one user follow these steps:
    3. `yarn start`
    4. Navigate to `localhost:3000` on each session and approve the app in both wallets
 10. Enjoy!
+
+
+
+## to start up the backend on a local chain
+
+1. Start the chain
+   a. make local-testnet
+2. Update KEPLR_ADDRESS in Makefile.paths
+   a. TBD ...  better instructions coming
+3. fund the account
+   a. make fund-account
+4. make the committee
+   a. KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make kread-committee
+5. provision the fee collector wallet
+   a. make provision-fee-collector
+6. start the KREAd contract
+   a. make start-kread
