@@ -16,16 +16,16 @@ export const isCharacterCategory = (title: unknown): title is Title => {
 };
 
 export interface CharacterItems {
-  perk1?: Item;
-  patch?: Item;
-  mask?: Item;
-  headPiece?: Item;
-  hair?: Item;
-  filter2?: Item;
-  filter1?: Item;
   background?: Item;
+  patch?: Item;
+  hair?: Item;
+  headPiece?: Item;
+  mask?: Item;
+  perk1?: Item;
   perk2?: Item;
-  clothing?: Item;
+  filter1?: Item;
+  filter2?: Item;
+  garment?: Item;
 }
 
 export interface Details {
@@ -102,12 +102,6 @@ export interface CharacterBackend extends Omit<Character, "id"> {
 export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft"> {
   nft: CharacterBackend;
 }
-
-export interface CharacterEquip extends ExtendedCharacter {
-  equippedTo: boolean;
-  isForSale?: boolean;
-}
-
 export interface CharacterCreation {
   name: string;
 }
