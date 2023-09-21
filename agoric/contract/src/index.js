@@ -12,6 +12,7 @@ import { handleParamGovernance } from '@agoric/governance';
 
 import { prepareKreadKit } from './kreadKit.js';
 
+
 /**
  * This contract handles the mint of KREAd characters,
  * along with its corresponding item inventories and keys.
@@ -19,11 +20,9 @@ import { prepareKreadKit } from './kreadKit.js';
  * and from the inventory, using a token as access
  */
 
-/**
- * @typedef {import('@agoric/vat-data').Baggage} Baggage
- *
- * @typedef {import('@agoric/time/src/types').Clock} Clock
- */
+/** @typedef {import('@agoric/vat-data').Baggage} Baggage */
+/** @typedef {import('@agoric/time/src/types').Clock} Clock */
+/** @typedef {import('./type-guards.js').RatioObject} RatioObject */
 
 /** @type {ContractMeta} */
 export const meta = {
@@ -143,30 +142,14 @@ export const start = async (zcf, privateArgs, baggage) => {
   );
 
   const mintFeeAmount = AmountMath.make(paymentBrand, mintFee);
-  const mintRoyaltyRateRatio = makeRatio(
-    mintRoyaltyRate.numerator,
-    paymentBrand,
-    mintRoyaltyRate.denominator,
-    paymentBrand,
-  );
-  const mintPlatformFeeRatio = makeRatio(
-    mintPlatformFeeRate.numerator,
-    paymentBrand,
-    mintPlatformFeeRate.denominator,
-    paymentBrand,
-  );
-  const royaltyRateRatio = makeRatio(
-    royaltyRate.numerator,
-    paymentBrand,
-    royaltyRate.denominator,
-    paymentBrand,
-  );
-  const platformFeeRatio = makeRatio(
-    platformFeeRate.numerator,
-    paymentBrand,
-    platformFeeRate.denominator,
-    paymentBrand,
-  );
+
+  const objectToRatio = (brand, { numerator, denominator }) => {
+    return makeRatio(numerator, brand, denominator, brand);
+  };
+  const mintRoyaltyRateRatio = objectToRatio(paymentBrand, mintRoyaltyRate);
+  const mintPlatformFeeRatio = objectToRatio(paymentBrand, mintPlatformFeeRate);
+  const royaltyRateRatio = objectToRatio(paymentBrand, royaltyRate);
+  const platformFeeRatio = objectToRatio(paymentBrand, platformFeeRate);
 
   const kreadKit = await harden(
     prepareKreadKit(
