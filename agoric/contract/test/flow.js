@@ -48,6 +48,11 @@ const mintCharacter = {
     give: { Price: 30000000n },
     message: errors.invalidName,
   },
+  invalidName3: {
+    offerArgs: { name: 'names' },
+    give: { Price: 30000000n },
+    message: errors.invalidName,
+  },
 };
 
 const mintItem = {

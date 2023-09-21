@@ -6,7 +6,6 @@ import { bootstrapContext } from './bootstrap.js';
 import { flow } from './flow.js';
 import { makeKreadUser } from './make-user.js';
 import { makeCopyBag } from '@agoric/store';
-import { errors } from '../src/errors.js';
 
 test.before(async (t) => {
   const { zoe, contractAssets, assets, purses, instance, paymentAsset } =
@@ -82,6 +81,46 @@ test.serial('--| MINT - Invalid Chars in Name', async (t) => {
     zoe,
   } = t.context;
   const { message, give, offerArgs } = flow.mintCharacter.invalidName2;
+
+  const mintCharacterInvitation = await E(
+    publicFacet,
+  ).makeMintCharacterInvitation();
+
+  const priceAmount = AmountMath.make(paymentAsset.brandMockIST, give.Price);
+  const payment = { Price: alice.withdrawPayment(priceAmount) };
+
+  const proposal = harden({
+    give: {
+      Price: priceAmount,
+    },
+  });
+
+  const userSeat = await E(zoe).offer(
+    mintCharacterInvitation,
+    proposal,
+    payment,
+    offerArgs,
+  );
+
+  await t.throwsAsync(E(userSeat).getOfferResult(), Error.message, message);
+
+  const characters = await E(publicFacet).getCharacters();
+  t.deepEqual(
+    characters.length,
+    0,
+    'New character was not added to contract registry due to mint error',
+  );
+});
+
+test.serial('--| MINT - Forbidden name: "names"', async (t) => {
+  /** @type {Bootstrap} */
+  const {
+    instance: { publicFacet },
+    users: { alice },
+    paymentAsset,
+    zoe,
+  } = t.context;
+  const { message, give, offerArgs } = flow.mintCharacter.invalidName3;
 
   const mintCharacterInvitation = await E(
     publicFacet,

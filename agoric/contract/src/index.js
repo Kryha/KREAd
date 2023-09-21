@@ -33,6 +33,29 @@ export const meta = {
       marshaller: M.eref(M.remotable('Marshaller')),
     },
   }),
+  customTermsShape: M.splitRecord({
+    royaltyRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    platformFeeRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    mintFee: M.nat(),
+    mintRoyaltyRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    mintPlatformFeeRate: {
+      numerator: M.lte(100n),
+      denominator: M.eq(100n),
+    },
+    royaltyDepositFacet: M.any(),
+    platformFeeDepositFacet: M.any(),
+    paymentBrand: M.eref(M.remotable('Brand')),
+    assetNames: M.splitRecord({ character: M.string(), item: M.string() }),
+  }),
 };
 harden(meta);
 
@@ -51,22 +74,24 @@ harden(meta);
  *   paymentBrand: Brand
  *   clock: Clock
  * }} privateArgs
+ *
  * @param {Baggage} baggage
  */
 export const start = async (zcf, privateArgs, baggage) => {
-/** 
-  * @type {{
-  *   paymentBrand: Brand
-  *   mintFee: bigint,
-  *   royaltyRate: RatioObject,
-  *   platformFeeRate: RatioObject,
-  *   mintRoyaltyRate: RatioObject,
-  *   mintPlatformFeeRate: RatioObject,
-  *   royaltyDepositFacet: DepositFacet,
-  *   platformFeeDepositFacet: DepositFacet,
-  *   assetNames: { character: string, item: string },
-  * }}
-  */
+  /**
+   * @type {{
+   *   paymentBrand: Brand
+   *   mintFee: bigint,
+   *   royaltyRate: RatioObject,
+   *   platformFeeRate: RatioObject,
+   *   mintRoyaltyRate: RatioObject,
+   *   mintPlatformFeeRate: RatioObject,
+   *   royaltyDepositFacet: DepositFacet,
+   *   platformFeeDepositFacet: DepositFacet,
+   *   assetNames: { character: string, item: string },
+   *   minUncommonRating: number
+   * }}
+   */
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
@@ -81,8 +106,8 @@ export const start = async (zcf, privateArgs, baggage) => {
     itemKit: 'item',
     marketCharacterKit: 'market-characters',
     marketItemKit: 'market-items',
-    marketCharacterMetricsKit: 'market-character-metrics',
-    marketItemMetricsKit: 'market-item-metrics',
+    marketCharacterMetricsKit: 'market-metrics-character',
+    marketItemMetricsKit: 'market-metrics-item',
   };
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
@@ -97,10 +122,9 @@ export const start = async (zcf, privateArgs, baggage) => {
   const characterIssuerRecord = characterMint.getIssuerRecord();
   const itemIssuerRecord = itemMint.getIssuerRecord();
 
+  const { powers, clock, seed } = privateArgs;
+
   const {
-    powers,
-    clock,
-    seed,
     mintFee,
     royaltyRate,
     platformFeeRate,
@@ -109,7 +133,8 @@ export const start = async (zcf, privateArgs, baggage) => {
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
-  } = privateArgs;
+    minUncommonRating,
+  } = terms;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
     baggage,
@@ -156,6 +181,7 @@ export const start = async (zcf, privateArgs, baggage) => {
         royaltyDepositFacet,
         platformFeeDepositFacet,
         paymentBrand,
+        minUncommonRating,
       },
       harden({
         characterIssuerRecord,
