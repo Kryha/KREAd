@@ -20,7 +20,6 @@ interface Props {
   pageSelector: React.ReactNode;
 }
 
-//TODO: TO FIX
 export const AssetItemFilters: FC<Props> = ({ section, pageSelector }) => {
   const { categories, origin, sort, rarity, reset, price, setOrigin, setCategories, setRarity, setSort, setColors, setPrice, onReset } =
     useFilters();

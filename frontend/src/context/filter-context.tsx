@@ -55,6 +55,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
     setTitle([]);
     setSort("");
     setColors("");
+    setReset(!reset);
   };
 
   const [, setSearchParams] = useSearchParams();
