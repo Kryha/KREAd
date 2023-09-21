@@ -87,6 +87,7 @@ export const bootstrapContext = async (conf) => {
   const terms = await E(zoe).getTerms(instance.instance);
   await E(creatorFacet).initializeBaseAssets(defaultCharacters, defaultItems);
   await E(creatorFacet).initializeCharacterNamesEntries();
+  await E(creatorFacet).initializeMetrics();
 
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },

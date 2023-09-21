@@ -78,6 +78,8 @@ export const MarketMetricsGuard = M.splitRecord({
   collectionSize: M.gte(0),
   averageLevel: M.gte(0),
   marketplaceAverageLevel: M.gte(0),
+  latestSalePrice: M.gte(0),
+  putForSaleAmount: M.gte(0),
 });
 
 export const UpdateMarketMetricsGuard = M.splitRecord(
@@ -93,6 +95,8 @@ export const UpdateMarketMetricsGuard = M.splitRecord(
       type: M.or('add', 'remove'),
       value: M.gte(0),
     }),
+    latestSalePrice: M.gte(0),
+    putForSaleAmount: M.boolean(),
   },
 );
 

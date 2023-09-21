@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
-import { updateCharacterMetrics, updateItemMetrics } from './market-metrics';
+import { updateCollectionMetrics } from './market-metrics';
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
@@ -175,18 +175,12 @@ export const prepareKreadKit = async (
             keyShape: M.number(),
             valueShape: MarketEntryGuard,
           }),
+          metrics: makeScalarBigMapStore('marketMetrics', {
+            durable: true,
+            keyShape: M.or('character', 'item'),
+            valueShape: MarketMetricsGuard,
+          }),
         }),
-        characterCollectionSize: 0,
-        characterAverageLevel: 0,
-        characterMarketplaceAverageLevel: 0,
-        characterAmountSold: 0,
-        characterLatestSalePrice: 0,
-        itemCollectionSize: 0,
-        itemAverageLevel: 0,
-        itemMarketplaceAverageLevel: 0,
-        itemAmountSold: 0,
-        itemLatestSalePrice: 0,
-        itemsPutForSaleAmount: 0,
       };
     },
     {
@@ -1031,14 +1025,15 @@ export const prepareKreadKit = async (
           });
         },
         updateMetrics(collection, updateMetrics) {
+          const updatedMetrics = updateCollectionMetrics(
+            collection,
+            this.state,
+            updateMetrics,
+          );
           if (collection === 'character') {
-            updateCharacterMetrics(
-              this.state,
-              updateMetrics,
-              marketCharacterMetricsKit,
-            );
+            marketCharacterMetricsKit.recorder.write(updatedMetrics);
           } else if (collection === 'item') {
-            updateItemMetrics(this.state, updateMetrics, marketItemMetricsKit);
+            marketItemMetricsKit.recorder.write(updatedMetrics);
           }
         },
         sellItem() {
@@ -1067,7 +1062,7 @@ export const prepareKreadKit = async (
               askingPrice,
               royalty,
               platformFee,
-              id: this.state.itemsPutForSaleAmount,
+              id: this.state.market.metrics.get('item').putForSaleAmount,
               object,
               isFirstSale: false,
             };
@@ -1087,9 +1082,8 @@ export const prepareKreadKit = async (
                 (({ seat, ...entry }) => entry)(entry),
               ),
             );
-
+            marketFacet.updateMetrics('item', { putForSaleAmount: true });
             marketFacet.handleExitItem(newEntry);
-            this.state.itemsPutForSaleAmount++;
           };
 
           return zcf.makeInvitation(
@@ -1143,7 +1137,7 @@ export const prepareKreadKit = async (
                   askingPrice,
                   royalty,
                   platformFee,
-                  id: this.state.itemsPutForSaleAmount,
+                  id: this.state.market.metrics.get('item').putForSaleAmount,
                   object: itemObject,
                   isFirstSale: true,
                 };
@@ -1164,7 +1158,7 @@ export const prepareKreadKit = async (
                   ),
                 );
 
-                this.state.itemsPutForSaleAmount++;
+                marketFacet.updateMetrics('item', { putForSaleAmount: true });
               }
             });
           };
@@ -1231,7 +1225,7 @@ export const prepareKreadKit = async (
                 (({ seat, ...entry }) => entry)(entry),
               ),
             );
-
+            marketFacet.updateMetrics('character', { putForSaleAmount: true });
             marketFacet.handleExitCharacter(newEntry);
           };
 
@@ -1665,19 +1659,27 @@ export const prepareKreadKit = async (
           return item.mint();
         },
         initializeMetrics() {
-          marketCharacterMetricsKit.recorder.write({
-            collectionSize: this.state.characterCollectionSize,
-            averageLevel: this.state.characterAverageLevel,
-            marketplaceAverageLevel:
-              this.state.characterMarketplaceAverageLevel,
-            amountSold: this.state.characterAmountSold,
-          });
-          marketItemMetricsKit.recorder.write({
-            collectionSize: this.state.itemCollectionSize,
-            averageLevel: this.state.itemAverageLevel,
-            marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
-            amountSold: this.state.itemAmountSold,
-          });
+          const { market } = this.state;
+          if (market.metrics.getSize() > 0) return;
+
+          market.metrics.addAll(
+            ['character', 'item'].map((key) => [
+              key,
+              harden({
+                collectionSize: 0,
+                averageLevel: 0,
+                marketplaceAverageLevel: 0,
+                amountSold: 0,
+                latestSalePrice: 0,
+                putForSaleAmount: 0,
+              }),
+            ]),
+          );
+
+          marketCharacterMetricsKit.recorder.write(
+            market.metrics.get('character'),
+          );
+          marketItemMetricsKit.recorder.write(market.metrics.get('item'));
         },
         reviveMarketExitSubscribers() {
           const { market } = this.state;
@@ -1767,22 +1769,10 @@ export const prepareKreadKit = async (
           return items;
         },
         getMarketMetrics() {
+          const { market } = this.state;
           return {
-            character: {
-              collectionSize: this.state.characterCollectionSize,
-              averageLevel: this.state.characterAverageLevel,
-              marketplaceAverageLevel:
-                this.state.characterMarketplaceAverageLevel,
-              amountSold: this.state.characterAmountSold,
-              latestSalePrice: this.state.characterLatestSalePrice,
-            },
-            item: {
-              collectionSize: this.state.itemCollectionSize,
-              averageLevel: this.state.itemAverageLevel,
-              marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
-              amountSold: this.state.itemAmountSold,
-              latestSalePrice: this.state.itemLatestSalePrice,
-            },
+            character: market.metrics.get('character'),
+            item: market.metrics.get('item'),
           };
         },
         getCharacterLevel(name) {

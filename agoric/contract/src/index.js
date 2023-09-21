@@ -95,8 +95,8 @@ export const start = async (zcf, privateArgs, baggage) => {
     itemKit: 'item',
     marketCharacterKit: 'market-characters',
     marketItemKit: 'market-items',
-    marketCharacterMetricsKit: 'market-character-metrics',
-    marketItemMetricsKit: 'market-item-metrics',
+    marketCharacterMetricsKit: 'market-metrics-character',
+    marketItemMetricsKit: 'market-metrics-item',
   };
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
