@@ -127,6 +127,7 @@ export const CreatorI = M.interface('creator', {
     M.arrayOf([M.number(), BaseCharacterGuard]),
     M.arrayOf(ItemGuard),
   ).returns(),
+  initializeCharacterNamesEntries: M.call().returns(),
   makePublishItemCollectionInvitation: M.call().returns(M.promise()),
 });
 

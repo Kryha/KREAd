@@ -475,7 +475,7 @@ const executeProposal = async (powers) => {
   );
 
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
-
+  await E(creatorFacet).initializeCharacterNamesEntries();
   await E(creatorFacet).initializeMetrics();
 
   // FIXME: Get the most recent state of metrics from the storage node and send it to the contract

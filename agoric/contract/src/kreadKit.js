@@ -144,7 +144,7 @@ export const prepareKreadKit = async (
           entries: makeScalarBigMapStore('characters', {
             durable: true,
             keyShape: M.string(),
-            valueShape: CharacterEntryGuard,
+            valueShape: M.or(CharacterEntryGuard, M.arrayOf(M.string())),
           }),
           bases: makeScalarBigMapStore('baseCharacters', {
             durable: true,
@@ -265,124 +265,145 @@ export const prepareKreadKit = async (
             AmountMath.isGTE(give.Price, mintFeeAmount) ||
               assert.fail(X`${errors.mintFeeTooLow}`);
 
-            !characterState.entries.has(newCharacterName) ||
+            !characterState.entries.get('names').includes(newCharacterName) ||
               assert.fail(X`${errors.nameTaken(newCharacterName)}`);
 
             characterState.bases.getSize() > 0 ||
               assert.fail(X`${errors.allMinted}`);
 
             const re = /^[a-zA-Z0-9_-]*$/;
-            re.test(newCharacterName) || assert.fail(X`${errors.invalidName}`);
+            (re.test(newCharacterName) && newCharacterName != 'names') ||
+              assert.fail(X`${errors.invalidName}`);
 
-            const currentTime = await helper.getTimeStamp();
             const baseIndex = characterFacet.getRandomBaseIndex();
             const baseCharacter = characterState.bases.get(baseIndex);
-            const [newCharacterAmount1, newCharacterAmount2] =
-              makeCharacterNftObjs(
-                newCharacterName,
-                baseCharacter,
-                characterState.entries.getSize(),
-                currentTime,
-              ).map((character) =>
-                AmountMath.make(
-                  characterBrand,
-                  makeCopyBag(harden([[character, 1n]])),
-                ),
-              );
 
-            const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
-
-            const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
-            // Mint character to user seat & inventorySeat
-            characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
-            characterMint.mintGains(
-              { CharacterKey: newCharacterAmount2 },
-              inventorySeat,
-            );
-
-            // Deleting here to ensure the base character does not get deleted before everything is minted
-            // Consideration: can this be a race condition when multiple people mint at the same time?
-            // This becomes more likely the less bases there are
             characterState.bases.delete(baseIndex);
 
-            const inventoryKit = await characterFacet.makeInventoryRecorderKit(
-              newCharacterName,
+            characterState.entries.set(
+              'names',
+              harden([
+                ...characterState.entries.get('names'),
+                newCharacterName,
+              ]),
             );
-
-            await item.mintDefaultBatch(inventorySeat);
-
-            const royaltyFee = multiplyBy(give.Price, mintRoyaltyRate);
-            const platformFee = multiplyBy(give.Price, mintPlatformFeeRate);
-
-            /** @type {TransferPart[]} */
-            const transfers = [];
-            transfers.push([
-              seat,
-              zcfSeat,
-              { Price: royaltyFee },
-              { Royalty: royaltyFee },
-            ]);
-            transfers.push([
-              seat,
-              zcfSeat,
-              { Price: platformFee },
-              { PlatformFee: platformFee },
-            ]);
 
             try {
-              atomicRearrange(zcf, harden(transfers));
-            } catch (e) {
-              assert.fail(X`${errors.rearrangeError}`);
-            }
+              const currentTime = await helper.getTimeStamp();
 
-            seat.exit();
-            zcfSeat.exit();
+              const [newCharacterAmount1, newCharacterAmount2] =
+                makeCharacterNftObjs(
+                  newCharacterName,
+                  baseCharacter,
+                  characterState.entries.getSize(),
+                  currentTime,
+                ).map((character) =>
+                  AmountMath.make(
+                    characterBrand,
+                    makeCopyBag(harden([[character, 1n]])),
+                  ),
+                );
 
-            const payouts = await E(userSeat).getPayouts();
-            const royaltyPayout = await payouts.Royalty;
-            const platformFeePayout = await payouts.PlatformFee;
+              const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
 
-            await E(royaltyDepositFacet).receive(royaltyPayout);
-            await E(platformFeeDepositFacet).receive(platformFeePayout);
+              const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
+              // Mint character to user seat & inventorySeat
+              characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
+              characterMint.mintGains(
+                { CharacterKey: newCharacterAmount2 },
+                inventorySeat,
+              );
 
-            // Add to state
-            const character = {
-              name: newCharacterName,
-              character: newCharacterAmount1.value.payload[0][0],
-              inventory: inventorySeat,
-              inventoryKit,
-              history: [
-                {
-                  type: 'mint',
-                  data: newCharacterAmount1.value[0],
-                  timestamp: currentTime,
+              const inventoryKit =
+                await characterFacet.makeInventoryRecorderKit(newCharacterName);
+
+              await item.mintDefaultBatch(inventorySeat);
+
+              const royaltyFee = multiplyBy(give.Price, mintRoyaltyRate);
+              const platformFee = multiplyBy(give.Price, mintPlatformFeeRate);
+
+              /** @type {TransferPart[]} */
+              const transfers = [];
+              transfers.push([
+                seat,
+                zcfSeat,
+                { Price: royaltyFee },
+                { Royalty: royaltyFee },
+              ]);
+              transfers.push([
+                seat,
+                zcfSeat,
+                { Price: platformFee },
+                { PlatformFee: platformFee },
+              ]);
+
+              try {
+                atomicRearrange(zcf, harden(transfers));
+              } catch (e) {
+                assert.fail(X`${errors.rearrangeError}`);
+              }
+
+              seat.exit();
+              zcfSeat.exit();
+
+              const payouts = await E(userSeat).getPayouts();
+              const royaltyPayout = await payouts.Royalty;
+              const platformFeePayout = await payouts.PlatformFee;
+
+              await E(royaltyDepositFacet).receive(royaltyPayout);
+              await E(platformFeeDepositFacet).receive(platformFeePayout);
+
+              // Add to state
+              const character = {
+                name: newCharacterName,
+                character: newCharacterAmount1.value.payload[0][0],
+                inventory: inventorySeat,
+                inventoryKit,
+                history: [
+                  {
+                    type: 'mint',
+                    data: newCharacterAmount1.value[0],
+                    timestamp: currentTime,
+                  },
+                ],
+              };
+
+              characterState.entries.addAll([
+                [character.name, harden(character)],
+              ]);
+
+              // update metrics
+              marketFacet.updateMetrics('character', {
+                collectionSize: true,
+                averageLevel: {
+                  type: 'add',
+                  value: character.character.level,
                 },
-              ],
-            };
+              });
 
-            characterState.entries.addAll([
-              [character.name, harden(character)],
-            ]);
+              characterKit.recorder.write(
+                (({ seat, ...char }) => char)(character),
+              );
 
-            // update metrics
-            marketFacet.updateMetrics('character', {
-              collectionSize: true,
-              averageLevel: {
-                type: 'add',
-                value: character.character.level,
-              },
-            });
+              // TODO: consider refactoring what we put in the inventory node
+              inventoryKit.recorder.write(
+                inventorySeat.getAmountAllocated('Item').value.payload,
+              );
 
-            characterKit.recorder.write(
-              (({ seat, ...char }) => char)(character),
-            );
-
-            // TODO: consider refactoring what we put in the inventory node
-            inventoryKit.recorder.write(
-              inventorySeat.getAmountAllocated('Item').value.payload,
-            );
-
-            return text.mintCharacterReturn;
+              return text.mintCharacterReturn;
+            } catch (e) {
+              //restore base char deletion and and name entry
+              characterState.bases.addAll([[baseIndex, baseCharacter]]);
+              characterState.entries.set(
+                'names',
+                harden(
+                  characterState.entries
+                    .get('names')
+                    .filter((name) => name != newCharacterName),
+                ),
+              );
+              return e;
+            }
           };
           return zcf.makeInvitation(
             handler,
@@ -1673,6 +1694,12 @@ export const prepareKreadKit = async (
           character.initializeBaseCharacters(baseCharacters);
           item.initializeBaseItems(baseItems);
         },
+        initializeCharacterNamesEntries() {
+          const { character } = this.state;
+          if (!character.entries.has('names')) {
+            character.entries.init('names', harden([]));
+          }
+        },
         makePublishItemCollectionInvitation() {
           const { market } = this.facets;
           return market.publishItemCollection();
@@ -1684,7 +1711,9 @@ export const prepareKreadKit = async (
           return character.mint();
         },
         getCharacters() {
-          const characters = Array.from(this.state.character.entries.values());
+          const characters = Array.from(
+            this.state.character.entries.values(),
+          ).filter((x) => !Array.isArray(x));
           return characters;
         },
         getCharacterInventory(name) {
