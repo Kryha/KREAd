@@ -36,6 +36,7 @@ test.before(async (t) => {
     zoe,
     paymentAsset,
     users: { alice },
+    creatorFacet,
   };
 });
 
