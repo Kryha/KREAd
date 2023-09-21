@@ -431,7 +431,6 @@ const executeProposal = async (powers) => {
   const settledTimer = await chainTimerService;
   const clock = await E(settledTimer).getClock();
 
-  //FIXME: update this based privageargs/terms
   const kreadConfig = harden({
     clock,
     seed: 303,
@@ -467,32 +466,10 @@ const executeProposal = async (powers) => {
 
   // Get board ids for instance and assets
   const boardId = await E(board).getId(instance);
-  //FIXME: update this based no getTerms
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
-
-  //FIXME: remove these infavour of terms and getting them differently
-  const [
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  ] = await Promise.all([
-    E(board).getId(characterBrand),
-    E(board).getId(characterIssuer),
-    E(board).getId(itemBrand),
-    E(board).getId(itemIssuer),
-  ]);
-
-  await E(creatorFacet).publishKreadInfo(
-    boardId,
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  );
 
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
   await E(creatorFacet).initializeCharacterNamesEntries();
