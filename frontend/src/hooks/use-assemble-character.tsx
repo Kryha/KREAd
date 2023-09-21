@@ -3,10 +3,10 @@ import Konva from "konva";
 import { Empty } from "../assets";
 import { useGetItemsInInventory, useSelectedCharacter } from "../service";
 import { CHARACTER_HEIGHT, CHARACTER_WIDTH } from "../constants";
-import { ItemCategory } from "../interfaces";
+import { Category } from "../interfaces";
 
 interface Item {
-  category: ItemCategory;
+  category: Category;
   image: string;
   name: string;
   equippedTo: string | undefined;
@@ -23,7 +23,7 @@ const assembledCharacterOrder = [
   "perk2",
   "filter1",
   "filter2",
-  "clothing",
+  "garment",
 ];
 
 export function useAssembleCharacter(width: number, height: number) {
