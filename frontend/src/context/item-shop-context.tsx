@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { ItemInMarket } from "../interfaces";
+import { Item, ItemInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { watchItemMarket } from "../service/storage-node/watch-market";
 
@@ -21,12 +21,19 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
   const agoric = useAgoricState();
   const [watchingStore, setWatchingStore] = useState(false);
 
+  type ContractMarketEntry = {
+    id: number;
+    object: Item;
+    askingPrice: { value: bigint };
+    platformFee: { value: bigint };
+    royalty: { value: bigint };
+  };
   useEffect(() => {
-    const parseItemMarketUpdate = async (itemsInMarket: ItemInMarket[]) => {
+    const parseItemMarketUpdate = async (itemsInMarket: ContractMarketEntry[]) => {
       const items = await Promise.all(itemsInMarket.map((item) => formatMarketEntry(item)));
       marketDispatch((prevState: any) => ({ ...prevState, items, fetched: true }));
     };
-    const formatMarketEntry = async (marketEntry: ItemInMarket): Promise<ItemInMarket> => {
+    const formatMarketEntry = async (marketEntry: ContractMarketEntry): Promise<ItemInMarket> => {
       const item = marketEntry.object;
 
       return {

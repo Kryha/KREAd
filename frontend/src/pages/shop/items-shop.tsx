@@ -8,7 +8,7 @@ import { OverviewContainer } from "./styles";
 import { OverviewEmpty } from "../../components";
 import { text } from "../../assets";
 import { ItemCardsMarket } from "../../components/asset-cards/item-cards-market";
-import { ItemCategory } from "../../interfaces";
+import { Category } from "../../interfaces";
 import { useItemMarketState } from "../../context/item-shop-context";
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 
 export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [selectedId, setSelectedId] = useState<string>("");
-  const [selectedCategories, setSelectedCategories] = useState<ItemCategory[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{

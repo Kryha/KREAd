@@ -18,7 +18,7 @@ import { BaseCharacter } from "../base-character";
 
 interface Props {
   characterInMarket: CharacterInMarket;
-  onClick?: (assetId: string) => void;
+  onClick?: () => void;
   imageProps?: ImageProps;
 }
 
@@ -26,7 +26,7 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
   const { character } = characterInMarket;
 
   const handleClick = () => {
-    onClick && onClick(character.id);
+    onClick && onClick();
   };
 
   return (

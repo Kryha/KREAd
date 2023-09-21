@@ -17,6 +17,7 @@ import {
   AssetHeader,
 } from "./styles";
 import { SECTION } from "../../constants";
+import { Item } from "../../interfaces";
 
 interface Props {
   items: Item[];

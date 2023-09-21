@@ -4,7 +4,7 @@ import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more"
 import { AssetsContainer, AssetsWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
-import { Item, ItemCategory } from "../../interfaces";
+import { Item, Category } from "../../interfaces";
 import { ItemCardInventory } from "../asset-card/item-card-inventory";
 
 export interface AssetData {
@@ -22,7 +22,7 @@ export interface AssetData {
 interface Props {
   items: Item[];
   isLoading: boolean;
-  selectItem: (name: string, category: ItemCategory) => void;
+  selectItem: (name: string, category: Category) => void;
 }
 
 export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem }) => {

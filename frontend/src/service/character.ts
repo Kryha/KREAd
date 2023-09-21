@@ -60,7 +60,7 @@ export const useMyCharactersForSale = () => {
 export const useMyCharacter = (id?: string): [ExtendedCharacter | undefined, boolean] => {
   const [owned, isLoading] = useMyCharacters();
 
-  const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
+  const found = useMemo(() => owned.find((c) => c.nft.id.toString() === id), [id, owned]);
 
   return [found, isLoading];
 };
@@ -73,16 +73,18 @@ export const useGetCharacterByName = (name: string | null): [ExtendedCharacter |
   return [found, isLoading];
 };
 //WORKS
+// nope
 export const useMyCharacters = (filters?: CharacterFilters): [ExtendedCharacter[], boolean] => {
   const { characters, fetched } = useUserState();
-  const charactersForSale = useMyCharactersForSale();
+  // const charactersForSaleEntries = useMyCharactersForSale();
 
   // filtering all the characters
   const filtered = useMemo(() => {
-    const allCharacters = [...characters, ...charactersForSale];
-    if (!filters) return allCharacters;
-    return filterCharacters(allCharacters, filters);
-  }, [characters, charactersForSale, filters]);
+    // const charactersForSale = charactersForSaleEntries.map(c=>c.nft);
+    // const allCharacters = [...characters, ...charactersForSale];
+    if (!filters) return characters; //allCharacters;
+    return filterCharacters(characters, filters);
+  }, [characters, filters]);
 
   const isLoading = !fetched;
   return [filtered, isLoading];
@@ -162,9 +164,9 @@ export const useSellCharacter = (characterId: string) => {
 
   const callback = useCallback(
     async (price: number, successCallback: () => void) => {
-      const found = characters.find((character) => character.nft.id === characterId);
+      const found = characters.find((character) => character.nft.id.toString() === characterId);
       if (!found) return;
-      const characterToSell = { ...found.nft, id: Number(found.nft.id) };
+      const characterToSell = found.nft;
 
       setIsLoading(true);
       const res = await marketService.sellCharacter({
@@ -210,10 +212,7 @@ export const useBuyCharacter = (characterId: string) => {
     if (!found) return;
     const characterToBuy = {
       ...found,
-      character: {
-        ...found.character,
-        id: Number(found.id),
-      },
+      character: found.character,
     };
 
     setIsLoading(true);

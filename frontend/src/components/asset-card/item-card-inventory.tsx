@@ -1,4 +1,4 @@
-import { Item, ItemCategory } from "../../interfaces";
+import { Item, Category } from "../../interfaces";
 import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel } from "../atoms";
 import { FC } from "react";
 import {
@@ -20,7 +20,7 @@ import styled from "@emotion/styled";
 
 interface Props {
   item: Item;
-  selectItem: (name: string, category: ItemCategory) => void;
+  selectItem: (name: string, category: Category) => void;
   imageProps?: ImageProps;
 }
 export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {

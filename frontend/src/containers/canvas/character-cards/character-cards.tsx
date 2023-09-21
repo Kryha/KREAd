@@ -78,9 +78,10 @@ export const CharacterCards: FC = () => {
           <CharacterInformation character={selectedCharacter} selectedCharacterName={selectedCharacter?.nft.name} />
         </CharacterCardContainer>
       ) : null}
-      <AssetFilterCount customColor={color.darkGrey}>
+      {/* FIXME: wrong type */}
+      {/* <AssetFilterCount customColor={color.darkGrey}>
         {itemsCount} {text.param.assetCategories[selectedAssetCategory]} in inventory
-      </AssetFilterCount>
+      </AssetFilterCount> */}
       <HorizontalDivider />
       <CharacterCardsWrapper height={height}>
         {filteredCharacters.map((character, index) => (

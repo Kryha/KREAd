@@ -39,6 +39,7 @@ export const Landing: FC = () => {
   const { interactionMode, setInteractionMode } = useCharacterBuilder();
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
+  console.log(selectedCharacter)
   const sell = (characterId: number) => {
     navigate(`${routes.sellCharacter}/${characterId}`);
   };
@@ -102,7 +103,7 @@ export const Landing: FC = () => {
                 actions={{
                   secondary: {
                     text: text.character.sell,
-                    onClick: () => sell(selectedCharacter.nft.id),
+                    onClick: () => sell(Number(selectedCharacter.nft.id)),
                   },
                   onClose: () => {
                     setShowDetail(false);

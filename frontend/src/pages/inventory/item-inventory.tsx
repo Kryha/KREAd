@@ -5,7 +5,7 @@ import { useGetItemInInventoryByNameAndCategory, useGetItemsInInventory } from "
 import { text } from "../../assets";
 import { OverviewContainer } from "../shop/styles";
 import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
-import { ItemCategory } from "../../interfaces";
+import { Category } from "../../interfaces";
 import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
 import { ASSET_TYPE, SECTION } from "../../constants";
 import { ItemCardsInventory } from "../../components/asset-cards/item-cards-inventory";
@@ -18,12 +18,12 @@ interface Props {
 
 export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   const [selectedName, setSelectedName] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<ItemCategory | undefined>();
-  const [selectedCategories, setSelectedCategories] = useState<ItemCategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category | undefined>();
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
 
-  const selectItem = (name: string, category: ItemCategory | undefined) => {
+  const selectItem = (name: string, category: Category | undefined) => {
     setSelectedName(name);
     setSelectedCategory(category);
   };

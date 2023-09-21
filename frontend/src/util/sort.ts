@@ -34,6 +34,8 @@ export const sortItemsMarket = (sorting: string, items: ItemInMarket[]): ItemInM
   }
 };
 
+// TODO: fix type
+export type SortType = "atoz" | "level" | "title" | "origin" | "latest";
 export const sortCharacters = (sorting: string, characters: ExtendedCharacter[]): ExtendedCharacter[] => {
   switch (sorting) {
     case "atoz":

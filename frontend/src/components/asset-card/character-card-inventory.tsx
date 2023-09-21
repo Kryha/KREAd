@@ -18,7 +18,7 @@ import { BaseCharacter } from "../base-character";
 
 interface Props {
   extendedCharacter: ExtendedCharacter;
-  onClick?: (assetId: string) => void;
+  onClick?: () => void;
   imageProps?: ImageProps;
 }
 
@@ -26,7 +26,7 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
   const { nft: character } = extendedCharacter;
 
   const handleClick = () => {
-    onClick && onClick(character.id);
+    onClick && onClick();
   };
 
   return (

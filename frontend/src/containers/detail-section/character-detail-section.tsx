@@ -26,7 +26,9 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
   const { width } = useViewport();
   if (!character) return <ErrorView />;
 
-  {/* FIXME: update details section based on new types */}
+  {
+    /* FIXME: update details section based on new types */
+  }
 
   return (
     <DetailSectionWrap width={width}>

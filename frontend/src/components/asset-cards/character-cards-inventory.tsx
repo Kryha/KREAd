@@ -41,7 +41,7 @@ export const CharacterCardsInventory: FC<Props> = ({ characters, isLoading, sele
             <CharacterCardInventory
               key={character.nft.name}
               extendedCharacter={character}
-              onClick={() => selectCharacter(character.nft.id)}
+              onClick={() => selectCharacter(character.nft.id.toString())}
             />
           ))}
           {visibleAssets < characters.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}

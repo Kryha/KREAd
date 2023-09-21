@@ -53,7 +53,7 @@ export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect =
           });
         } else {
           setSelected(selectedValue);
-          handleChange(selectedValue);
+          handleChange([selectedValue]);
         }
       }
     },
@@ -78,7 +78,7 @@ export const Select: FC<SelectProps> = ({ options, handleChange, isMultiSelect =
             onClick={() => {
               handleOptionClick(index);
               if (!isMultiSelect) {
-                handleChange(option.value);
+                handleChange([option.value]);
               }
             }}
           >

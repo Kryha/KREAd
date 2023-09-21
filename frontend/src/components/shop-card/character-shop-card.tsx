@@ -17,7 +17,10 @@ interface CharacterShopCardProps {
 export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onClick }) => {
   const { width, height } = useViewport();
 
-  if (!isCharacterCategory(character.character.type)) return <></>;
+  {
+    /* FIXME: character type is not a thing */
+  }
+  // if (!isCharacterCategory(character.character.type)) return <></>;
 
   return (
     <Product onClick={() => onClick && onClick(character)} width={width} height={height}>
@@ -29,7 +32,8 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
         <InfoContainer>
           <TitleWrapper>
             <TitleText>{character.character.name}</TitleText>
-            <BoldLabel>{text.param.categories[character.character.type]}</BoldLabel>
+            {/* FIXME: wrong type */}
+            {/* <BoldLabel>{text.param.categories[character.character.type]}</BoldLabel> */}
           </TitleWrapper>
           <Footer>
             <Tag>

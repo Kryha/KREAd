@@ -10,12 +10,12 @@ import { useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
-import { Item, ItemCategory } from "../../interfaces";
+import { Item, Category } from "../../interfaces";
 
 interface ItemDetailsInventoryProps {
   item: Item;
-  selectedItem: { name: string; category: ItemCategory | undefined };
-  selectItem: (name: string, category: ItemCategory | undefined) => void;
+  selectedItem: { name: string; category: Category | undefined };
+  selectItem: (name: string, category: Category | undefined) => void;
 }
 export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, selectedItem, selectItem }) => {
   const navigate = useNavigate();

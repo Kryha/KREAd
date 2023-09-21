@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Item, ItemCategory, ItemInMarket, Rarity } from "../interfaces";
+import { Item, Category, ItemInMarket, Rarity } from "../interfaces";
 import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -25,7 +25,9 @@ export const useMyItem = (id: string): [Item | undefined, boolean] => {
   return [found, false];
 };
 
-export const useGetItemInInventoryByNameAndCategory = (name: string, category: ItemCategory[][]): [Item | undefined, boolean] => {
+export const useGetItemInInventoryByNameAndCategory = (name: string, category: Category | undefined): [Item | undefined, boolean] => {
+  if (!category) return [undefined, false];
+
   const [items, isLoading] = useGetItemsInInventory();
 
   const found = useMemo(() => items.find((item) => item.category === category && item.name === name), [name, category, items]);
@@ -112,7 +114,7 @@ export const useGetItemsInShop = (filters?: ItemsMarketFilters): [ItemInMarket[]
   return [filtered, !fetched];
 };
 
-export const useSellItem = (itemName: string | undefined, itemCategory: ItemCategory | undefined) => {
+export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const { items } = useUserState();

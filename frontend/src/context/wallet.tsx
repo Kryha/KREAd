@@ -1,11 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAgoricState } from "./agoric";
-import dappConstants from "../service/ag-solo-connection/conf/defaults";
 import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
 import { Item, OfferProposal } from "../interfaces";
 
-const { brandBoardIds } = dappConstants;
 export interface WalletContext {
   token: any;
   money: any;
@@ -45,15 +43,13 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       console.count("💾 LOADING PURSE CHANGE 💾");
 
       // Load Purses
-      // TODO: remove token
-      const newTokenPurses = purses.filter(({ brand }: any) => brand === brandBoardIds.Token);
+      // TODO: Read IST balance
       const newCharacterPurses = purses.filter(({ brand }: any) => brand === tokenInfo.character.brand);
       const newItemPurses = purses.filter(({ brand }: any) => brand === tokenInfo.item.brand);
       const characterWallet = newCharacterPurses[newCharacterPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
       // FIXME: this is not going to work when a users has more than 1 item that is the same (then it will be 2n)
       // Consider creating an array that fills an array n amount of times based onthe amount the user owns
       let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
-      const tokenWallet = newTokenPurses[newTokenPurses.length - 1]?.balance.value;
 
       if (itemWallet) {
         itemWallet = itemWallet.map((item: any) => ({ ...item, equippedTo: "", forSale: false }));
@@ -61,7 +57,6 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
 
       walletDispatch((prevState) => ({
         ...prevState,
-        token: tokenWallet,
         character: characterWallet,
         item: itemWallet,
       }));

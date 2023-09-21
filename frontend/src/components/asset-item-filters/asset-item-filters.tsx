@@ -16,16 +16,16 @@ import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
 import { AssetFilterContainer, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
 import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
-import { ItemCategory } from "../../interfaces";
+import { Category } from "../../interfaces";
 
 interface Props {
   assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
   section: (typeof SECTION)[keyof typeof SECTION];
   assets: any[];
-  selectedCategories: ItemCategory[];
+  selectedCategories: Category[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
-  setSelectedCategories: (value: ItemCategory[]) => void;
+  setSelectedCategories: (value: Category[]) => void;
   setSelectedSorting: (value: string) => void;
   setSelectedColor?: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
@@ -82,7 +82,7 @@ export const AssetItemFilters: FC<Props> = ({
       ? sortCharactersInInventory
       : sortCharactersInShop;
 
-  const handleCategoryChange = (selected: ItemCategory[]) => {
+  const handleCategoryChange = (selected: Category[]) => {
     // if (Array.isArray(selected)) {
     //   setSelectedCategories(selected); // Handle multi-select
     // } else {

@@ -61,7 +61,8 @@ export const ItemCards: FC = () => {
     <ItemCardsContainer>
       {equippedItem ? (
         <>
-          <AssetFilterCount customColor={color.darkGrey}>Equipped {text.param.categories[selectedAssetCategory]}</AssetFilterCount>
+          {/* FIXME: wrong type */}
+          {/* <AssetFilterCount customColor={color.darkGrey}>Equipped {text.param.categories[selectedAssetCategory]}</AssetFilterCount> */}
           <HorizontalDivider />
           <ItemCardContainer
             isSelected={selectedAsset === equippedItem.name}
@@ -76,11 +77,13 @@ export const ItemCards: FC = () => {
         </>
       ) : (
         <EmptyItemCardContainer>
-          <ButtonText>No {text.param.categories[selectedAssetCategory]} equipped</ButtonText>
+          {/* FIXME: wrong type */}
+          {/* <ButtonText>No {text.param.categories[selectedAssetCategory]} equipped</ButtonText> */}
         </EmptyItemCardContainer>
       )}
       <AssetFilterCount customColor={color.darkGrey}>
-        {itemsCount} {text.param.assetCategories[selectedAssetCategory]} in inventory
+        {/* FIXME: wrong type */}
+        {/* {itemsCount} {text.param.assetCategories[selectedAssetCategory]} in inventory */}
       </AssetFilterCount>
       <HorizontalDivider />
       <ItemCardsWrapper height={height}>

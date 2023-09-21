@@ -16,18 +16,20 @@ import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
 import { AssetFilterContainer, AssetFilterCount, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
 import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
-import { CharacterTitle, Origin } from "../../interfaces";
+import { Origin, Title } from "../../interfaces";
 
 interface Props {
   assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
   section: (typeof SECTION)[keyof typeof SECTION];
   assets: any[];
   selectedOrigins: Origin[];
-  selectedTitles: CharacterTitle[];
+  selectedTitles: Title[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
   setSelectedSorting: (value: string) => void;
   setSelectedPrice?: (value: { min: number; max: number }) => void;
+  setSelectedColor?: (value: string) => void;
+  setSelectedTitles: (value: Title[]) => void;
   pageSelector: React.ReactNode;
 }
 
@@ -41,12 +43,16 @@ export const AssetCharacterFilters: FC<Props> = ({
   selectedSorting,
   selectedPrice,
   setSelectedSorting,
+  setSelectedColor,
   setSelectedPrice,
+  setSelectedTitles,
   pageSelector,
 }) => {
   const isMobile = useIsMobile(breakpoints.desktop);
   const numberOfFiltersSelected = selectedOrigins.length;
   const assetsCount = assets.length;
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const [showFilter, setShowFilter] = useState(false);
   const [filterId, setFilterId] = useState("");
@@ -130,7 +136,8 @@ export const AssetCharacterFilters: FC<Props> = ({
             </>
           </AssetSelectorContainer>
         </AssetFilterContainer>
-        <AssetFilterCount customColor={color.darkGrey}>{text.param.amountOfAssets(assetsCount)}</AssetFilterCount>
+        {/* FIXME: add text.param.amountOfAssets(assetsCount)  */}
+        <AssetFilterCount customColor={color.darkGrey}>{assetsCount}</AssetFilterCount>
         <HorizontalDivider />
       </AssetFilterWrapper>
     </>

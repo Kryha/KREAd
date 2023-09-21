@@ -1,4 +1,4 @@
-import { Character, CharacterInMarket, ExtendedCharacter, Item, ItemCategory, ItemInMarket } from "../interfaces";
+import { Character, CharacterInMarket, ExtendedCharacter, Item, Category, ItemInMarket } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -9,23 +9,24 @@ export interface OfferFilters {
 }
 
 export interface ItemFilters {
-  categories: ItemCategory[];
+  categories: string[];
   sort: string;
   color: string;
   price?: { min: number; max: number };
 }
 
 export interface ItemsMarketFilters {
-  categories: string[];
+  categories: Category[];
   sort: string;
   price: { min: number; max: number };
   color: string;
 }
 
 export interface CharacterFilters {
-  titles: string[];
-  origins: string[];
+  titles?: string[];
+  origins?: string[];
   sort: string;
+  category?: Category[];
   price?: { min: number; max: number };
 }
 
@@ -146,16 +147,18 @@ export const filterCharacters = (characters: ExtendedCharacter[], { origins, sor
   const [, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    setSearchParams(
-      {
-        titles: titles.join(","),
-        origins: origins.join(","),
-        sort,
-      },
-      {
-        relative: "path",
-      },
-    );
+    if (titles && origins) {
+      setSearchParams(
+        {
+          titles: titles.join(","),
+          origins: origins.join(","),
+          sort,
+        },
+        {
+          relative: "path",
+        },
+      );
+    }
   }, [titles, origins, sort]);
 
   const isInTitle = (character: Character, selectedTitles: string[] | undefined) => {

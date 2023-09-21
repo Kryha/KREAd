@@ -13,7 +13,7 @@ export const watchCharacterMarket = (chainStorageWatcher: any, parseCharacterMar
       }
       await parseCharacterMarketUpdate(value, marshaller);
     },
-    (log) => {
+    (log: any) => {
       console.error("Error watching kread char market", log);
     },
   );
@@ -32,7 +32,7 @@ export const watchItemMarket = (chainStorageWatcher: any, parseItemMarketUpdate:
       }
       await parseItemMarketUpdate(value);
     },
-    (log) => {
+    (log: any) => {
       console.error("Error watching kread item market", log);
     },
   );

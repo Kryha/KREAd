@@ -71,7 +71,9 @@ export const ModeScroller: React.FC = () => {
   const pageTitle = () => {
     switch (interactionMode) {
       case ITEM_MODE:
-        return text.param.categories[categories[currentIndex]] as string;
+        return "";
+      /* FIXME: wrong type */
+      // return text.param.categories[categories[currentIndex]] as string;
       case CATEGORY_MODE:
         return text.general.categories;
       case CHARACTER_SELECT_MODE:

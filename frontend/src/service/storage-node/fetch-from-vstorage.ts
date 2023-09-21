@@ -19,7 +19,7 @@ export enum AgoricChainStoragePathKind {
 export const fetchFromVStorage = async (marshaller: any, path: string, blockHeight?: number) => {
   const requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: "follow" as const,
   };
 
   const url = `${AGORIC_RPC}/${VSTORAGE_PATH}/`;

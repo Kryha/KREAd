@@ -40,7 +40,7 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
 
   const sortedCharacters = useMemo(() => {
     const allItems = [...characters];
-    const fromIndex = characters.findIndex((character) => character.nft.id === id);
+    const fromIndex = characters.findIndex((character) => character.nft.id.toString() === id);
     allItems.splice(0, 0, ...allItems.splice(fromIndex, 1));
     return allItems;
   }, [characters, id]);
@@ -104,24 +104,13 @@ export const CharacterCard: FC<Props> = ({ id, showCard = false }) => {
             {sortedCharacters.map((character) => (
               <Fragment key={character.nft.id}>
                 {/* FIXME: character.isEquipped??? */}
-                {character.isEquipped ? (
-                  <CharacterItem
-                    character={character}
-                    onClick={showInfo}
-                    onButtonClick={select}
-                    id={id}
-                    removeInitial={() => setInitial(false)}
-                    isInitial={initial}
-                  />
-                ) : (
-                  <CharacterItem
-                    character={character}
-                    onClick={showInfo}
-                    onButtonClick={select}
-                    id={id}
-                    removeInitial={() => setInitial(false)}
-                  />
-                )}
+                <CharacterItem
+                  character={character}
+                  onClick={showInfo}
+                  onButtonClick={select}
+                  id={id}
+                  removeInitial={() => setInitial(false)}
+                />
               </Fragment>
             ))}
           </CharacterContent>
