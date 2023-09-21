@@ -40,6 +40,7 @@ test.before(async (t) => {
     assets,
     purses,
     publicFacet,
+    creatorFacet,
     paymentAsset,
     royaltyPurse,
     platformFeePurse,
@@ -70,6 +71,7 @@ test.before(async (t) => {
 
   t.context = {
     publicFacet,
+    creatorFacet,
     contractAssets,
     assets,
     purses,
