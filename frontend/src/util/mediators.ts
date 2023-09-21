@@ -6,6 +6,7 @@ import {
   ExtendedCharacterBackend,
   Item,
   ItemInMarket,
+  KreadCharacterInMarket,
 } from "../interfaces";
 
 //TODO: ARE WE STILL USING THIS FOR ITEMS?
@@ -14,39 +15,40 @@ export const mediate = {
   items: {
     toFront: (backendItems: Item[]): Item[] => {
       return backendItems.map((backendItem) => {
-        return { ...backendItem, id: String(backendItem.id) };
+        return { ...backendItem, id: String(backendItem.name) };
       });
     },
     toBack: (frontendItems: Item[]): Item[] => {
       return frontendItems.map((frontendItem) => {
-        return { ...frontendItem, id: BigInt(frontendItem.id) };
+        return { ...frontendItem, id: BigInt(frontendItem.name) };
       });
     },
   },
   itemsMarket: {
     toFront: (
       backendItems: {
-        item: ItemBackend;
+        item: Item;
         sell: { price: bigint };
-        id: number;
       }[],
     ): ItemInMarket[] => {
-      return backendItems.map((backendItem) => {
-        return {
-          ...backendItem,
-          id: String(backendItem.id),
-          item: mediate.items.toFront([backendItem.item])[0],
-        };
-      });
+      return [];
+      // backendItems.map((backendItem) => {
+      //   return {
+      //     ...backendItem,
+      //     id: String(backendItem.name),
+      //     item: mediate.items.toFront([backendItem.item])[0],
+      //   };
+      // });
     },
-    toBack: (frontendItems: ItemInMarket[]): ItemInMarketBackend[] => {
-      return frontendItems.map((frontendItem) => {
-        return {
-          ...frontendItem,
-          id: BigInt(frontendItem.id),
-          item: mediate.items.toBack([frontendItem.item])[0],
-        };
-      });
+    toBack: (frontendItems: ItemInMarket[]): ItemInMarket[] => {
+      return [];
+      // frontendItems.map((frontendItem) => {
+      //   return {
+      //     ...frontendItem,
+      //     id: BigInt(frontendItem.id),
+      //     item: mediate.items.toBack([frontendItem.item])[0],
+      //   };
+      // });
     },
   },
   characters: {
@@ -64,40 +66,43 @@ export const mediate = {
           ...frontendCharacter,
           nft: {
             ...frontendCharacter.nft,
-            id: BigInt(frontendCharacter.nft.id),
+            id: Number(frontendCharacter.nft.id),
           },
         };
       });
     },
   },
-  charactersMarket: {
-    toFront: (
-      backendCharacters: {
-        character: CharacterInMarketBackend;
-        equippedItems: CharacterItems;
-      }[],
-    ): CharacterInMarket[] => {
-      return backendCharacters.map(({ character, equippedItems }) => {
-        return {
-          ...character,
-          id: String(character.id),
-          character: { ...character.character, id: String(character.id) },
-          equippedItems,
-        };
-      });
-    },
-    toBack: (frontendCharacters: CharacterInMarket[]): CharacterInMarketBackend[] => {
-      return frontendCharacters.map((frontendCharacter) => {
-        const { equippedItems: _, ...rest } = frontendCharacter;
+  // charactersMarket: {
+  //   toFront: (
+  //     backendCharacters: {
+  //       character: KreadCharacterInMarket;
+  //       equippedItems: CharacterItems;
+  //     }[],
+  //   ): CharacterInMarket[] => {
+  //     return backendCharacters.map(({ character, equippedItems }) => {
+  //       return {
+  //         ...character,
+  //         id: String(character.id),
+  //         character: { ...character.object, id: String(character.object.id) },
+  //         equippedItems,
+  //         sell: {
+  //           ask:
+  //         }
+  //       };
+  //     });
+  //   },
+  //   toBack: (frontendCharacters: CharacterInMarket[]): CharacterInMarketBackend[] => {
+  //     return frontendCharacters.map((frontendCharacter) => {
+  //       const { equippedItems: _, ...rest } = frontendCharacter;
 
-        return {
-          ...rest,
-          id: BigInt(rest.id),
-          character: { ...rest.character, id: BigInt(rest.id) },
-        };
-      });
-    },
-  },
+  //       return {
+  //         ...rest,
+  //         id: BigInt(rest.id),
+  //         character: { ...rest.character, id: BigInt(rest.id) },
+  //       };
+  //     });
+  //   },
+  // },
 };
 
 export const itemArrayToObject = (itemsArray: Item[]): CharacterItems => {

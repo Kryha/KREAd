@@ -5,7 +5,7 @@ import { ErrorView } from "../../components";
 import { useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
-import { isItemCategory, ItemCategory } from "../../interfaces";
+import { isItemCategory, Category } from "../../interfaces";
 import { useWalletState } from "../../context/wallet";
 
 export const ItemSell = () => {
@@ -15,7 +15,7 @@ export const ItemSell = () => {
 
   // Locking itemToSell in useMemo to prevent it from updating when it leaves the wallet
   const itemToSell = useMemo(() => walletItems.find((item) => item.name === name && item.category === category), []);
-  const sellItem = useSellItem(name, category as ItemCategory);
+  const sellItem = useSellItem(name, category as Category);
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
 

@@ -1,5 +1,5 @@
 import { ExtendedCharacter } from "../../interfaces";
-import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel } from "../atoms";
+import { BoldLabel, Dash, ImageProps } from "../atoms";
 import { FC } from "react";
 import {
   AssetContent,
@@ -18,7 +18,7 @@ import { BaseCharacter } from "../base-character";
 
 interface Props {
   extendedCharacter: ExtendedCharacter;
-  onClick?: (assetId: number) => void;
+  onClick?: (assetId: string) => void;
   imageProps?: ImageProps;
 }
 

@@ -15,8 +15,6 @@ interface Props {
   pageSelector?: React.ReactNode;
 }
 
-//TODO: you cannot open an items details that is unequipped
-
 export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   const [selectedName, setSelectedName] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");

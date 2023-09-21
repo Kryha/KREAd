@@ -19,7 +19,7 @@ export interface Data {
 
 interface MenuItemProps {
   data: Data;
-  onClick?: (id: string) => void;
+  onClick?: () => void;
   onButtonClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   isEquipped?: boolean;
   isForSale?: boolean;
@@ -32,7 +32,7 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isIniti
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
-    onClick && onClick(data.id);
+    onClick && onClick();
     removeInitial && removeInitial();
     setSelected(true);
   };
@@ -55,7 +55,8 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isIniti
             <MenuItemName>{data.name}</MenuItemName>
           </TitleContainer>
           <InlineDetails>
-            <ButtonText customColor={color.darkGrey}>{text.param.categories[data.category]}</ButtonText>
+            {/* FIXME: type mismatch */}
+            {/* <ButtonText customColor={color.darkGrey}>{text.param.categories[data.category]}</ButtonText> */}
             <Dash />
             <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
             {isEquipped && (

@@ -28,14 +28,14 @@ interface CharacterItemProps {
 
 export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onButtonClick, id, isInitial = false, removeInitial }) => {
   const [selected, setSelected] = useState(false);
-  const isCharacterEquipped = character.nft.id === id;
+  const isCharacterEquipped = character.nft.id.toString() === id;
 
   const handleButtonClick = (e: SyntheticEvent) => {
     e.stopPropagation();
     onButtonClick(character);
   };
 
-  if (!isCharacterCategory(character.nft.type)) return <></>;
+  // if (!isCharacterCategory(character.nft.type)) return <></>;
 
   return (
     <Info
@@ -58,7 +58,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character, onClick, onBu
             {isCharacterEquipped && <EquippedLabel customColor={color.black}>{text.character.selected}</EquippedLabel>}
           </TitleContainer>
           <SubTitleContainer>
-            <ButtonText customColor={color.darkGrey}>{text.param.categories[character.nft.type]}</ButtonText>
+            {/* <ButtonText customColor={color.darkGrey}>{text.param.categories[character.nft]}</ButtonText> */}
             <Line />
             <ButtonText>{text.param.level(character.nft.level)}</ButtonText>
           </SubTitleContainer>

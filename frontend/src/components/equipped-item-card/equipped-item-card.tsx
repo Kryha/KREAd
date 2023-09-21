@@ -1,4 +1,4 @@
-import { Item, ItemCategory } from "../../interfaces";
+import { Item, Category } from "../../interfaces";
 import { FC } from "react";
 
 import { ItemCard } from "../item-card";
@@ -16,7 +16,7 @@ interface EquippedItemCardProps {
   marginLeft?: string;
   marginRight?: string;
   marginBottom?: string;
-  category: ItemCategory;
+  category: Category;
   area: "top" | "middle" | "bottom";
 }
 

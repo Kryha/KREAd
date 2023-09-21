@@ -69,6 +69,7 @@ export interface CharacterInMarket {
 }
 
 export interface KreadCharacterInMarket {
+  id: number;
   sellerSeat: any;
   name: string;
   askingPrice: {
@@ -96,7 +97,7 @@ export interface CharacterInMarketBackend {
 }
 
 export interface CharacterBackend extends Omit<Character, "id"> {
-  id: bigint;
+  id: number;
 }
 
 export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft"> {

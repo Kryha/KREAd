@@ -224,10 +224,7 @@ export const useBuyCharacter = (characterId: string) => {
     if (!found) return;
     const characterToBuy = {
       ...found,
-      character: {
-        ...found.character,
-        id: Number(found.id),
-      },
+      character: found.character,
     };
 
     setIsLoading(true);

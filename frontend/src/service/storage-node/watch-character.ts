@@ -25,9 +25,9 @@ export const watchCharacterInventory = (chainStorageWatcher: any, characterName:
         return;
       }
 
-      agoricDispatch({ type: "SET_TEST_CHARACTER", payload: value.map((i) => i[0]) });
+      agoricDispatch({ type: "SET_TEST_CHARACTER", payload: value.map((i: any) => i[0]) });
     },
-    (log) => {
+    (log: any) => {
       console.error("Error watching vbank kread character inventory", log);
     },
   );

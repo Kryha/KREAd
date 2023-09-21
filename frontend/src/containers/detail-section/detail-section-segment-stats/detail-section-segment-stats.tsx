@@ -23,22 +23,24 @@ export const DetailSectionSegmentStats: FC<DetailSectionSegmentStatsProps> = ({ 
           <DetailSectionBodyBigBold>{item.level}</DetailSectionBodyBigBold>
         </DetailSectionElement>
         <FlexColumn>
-          <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo} infoPosition="left">
+          {/* FIXME: wrong properties */}
+          {/* <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo} infoPosition="left">
             <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness || 0} />
           </DetailSectionElement>
           <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo} infoPosition="left">
             <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity || 0} />
-          </DetailSectionElement>
+          </DetailSectionElement> */}
         </FlexColumn>
       </FlexRow>
 
       <FlexRow>
-        <DetailSectionElement title={text.item.forged}>
+        {/* FIXME: wrong property */}
+        {/* <DetailSectionElement title={text.item.forged}>
           <DetailSectionBody>{item.forged}</DetailSectionBody>
         </DetailSectionElement>
         <DetailSectionElement title={text.item.baseMaterial}>
           <DetailSectionBody>{item.baseMaterial}</DetailSectionBody>
-        </DetailSectionElement>
+        </DetailSectionElement> */}
       </FlexRow>
 
       <DetailSectionElement title={text.item.colors}>

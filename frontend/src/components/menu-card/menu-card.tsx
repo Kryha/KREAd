@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from "react";
-import { Item, ItemCategory } from "../../interfaces";
+import { Item, Category } from "../../interfaces";
 import { text } from "../../assets";
 import {
   ArrowContainer,
@@ -32,7 +32,7 @@ interface MenuCardProps {
   title: string;
   equippedItemProp?: Item;
   unequippedItems: Item[];
-  category: ItemCategory;
+  category: Category;
   imageProps?: ImageProps;
 }
 
@@ -100,7 +100,8 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
           <MenuContainer>
             <MenuText>{title}</MenuText>
             <InfoContainer>
-              <Label>{text.param.amountOfAssets(allItems.length)}</Label>
+              {/* FIXME: missinf fn */}
+              {/* <Label>{text.param.amountOfAssets(allItems.length)}</Label> */}
               <Divider />
               <ArrowContainer>
                 <Close onClick={() => navigate(GO_BACK)} />

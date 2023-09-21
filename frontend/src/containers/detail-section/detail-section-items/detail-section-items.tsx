@@ -28,9 +28,9 @@ const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
   const [selected, setSelected] = useState(false);
   const unequipItem = useUnequipItem();
 
-  const unequip = (id: string) => {
+  const unequip = () => {
     showToast();
-    unequipItem.mutate({ itemId: id });
+    unequipItem.mutate({ item });
   };
 
   return (
@@ -48,7 +48,7 @@ const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
             <LevelLabel>{text.param.level(item.level)}</LevelLabel>
           </InlineDetails>
         </InfoContainer>
-        <PrimaryButton onClick={() => unequip(item.id)}>
+        <PrimaryButton onClick={() => unequip()}>
           <ButtonText customColor={color.white}>{text.character.unequip}</ButtonText>
         </PrimaryButton>
       </InfoWrapper>

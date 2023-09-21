@@ -27,7 +27,7 @@ export const formOfferForCharacter = (characterBrand: any, character: any, money
   // },
 });
 
-export const formatIdAsNumber = (obj: Character | Item) => ({
+export const formatIdAsNumber = (obj: { [key: string]: any }) => ({
   ...obj,
   id: BigInt(obj.id),
 });

@@ -48,7 +48,7 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
       }
       agoricDispatch({ type: "SET_TOKEN_INFO", payload });
     },
-    (log) => {
+    (log: any) => {
       console.error("Error watching vbank assets", log);
     },
   );
@@ -69,7 +69,7 @@ export const watchWalletVstorage = (chainStorageWatcher: any, walletAddress: str
       updateStateOffers(value.liveOffers);
       updateStatePurses(value.purses);
     },
-    (log) => {
+    (log: any) => {
       console.error("Error watching vbank assets", log);
     },
   );
@@ -87,10 +87,10 @@ export const watchKreadInstance = (chainStorageWatcher: any, agoricDispatch: Ago
         console.warn(`${path} returned undefined`);
         return;
       }
-      const instance = value.filter((i) => i[0] === "kread");
+      const instance = value.filter((i: any) => i[0] === "kread");
       agoricDispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1], publicFacet: undefined } });
     },
-    (log) => {
+    (log: any) => {
       console.error("Error watching vbank assets", log);
     },
   );
