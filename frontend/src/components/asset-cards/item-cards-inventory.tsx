@@ -22,7 +22,7 @@ export interface AssetData {
 interface Props {
   items: Item[];
   isLoading: boolean;
-  selectItem: (name: string, category: Category, characterName: string) => void;
+  selectItem: (name: string, category: Category, characterName: string | undefined) => void;
 }
 
 export const ItemCardsInventory: FC<Props> = ({ items, isLoading, selectItem }) => {

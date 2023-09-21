@@ -19,8 +19,6 @@ interface ItemInfoProps {
 export const ItemCardInfo: FC<ItemInfoProps> = ({ item, sell, unequip, equip }) => {
   const { setShowDetails } = useCharacterBuilder();
 
-  console.log(item);
-
   return (
     <ItemInfo>
       <ButtonText customColor={color.black}>{item?.name}</ButtonText>

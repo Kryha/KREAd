@@ -39,7 +39,6 @@ export const Landing: FC = () => {
   const { interactionMode, setInteractionMode } = useCharacterBuilder();
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
-  console.log(selectedCharacter)
   const sell = (characterId: number) => {
     navigate(`${routes.sellCharacter}/${characterId}`);
   };

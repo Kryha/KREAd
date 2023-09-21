@@ -44,9 +44,9 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
   };
 
   const assetDetailActions = () => {
-    if (item.equippedTo) {
+    if (item.equippedTo !== "") {
       return { primary: { text: text.item.unequip, onClick: unequipAsset } };
-    } else if (item.forSale) {
+    } else {
       return {
         primary: { text: text.item.equip, onClick: equipAsset },
         secondary: { text: text.item.sell, onClick: sellAsset },

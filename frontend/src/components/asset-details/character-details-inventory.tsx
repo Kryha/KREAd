@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ExtendedCharacter } from "../../interfaces";
-import { ErrorView } from "../error-view";
 
 interface AssetDetailsInventoryProps {
   character?: ExtendedCharacter;
@@ -21,13 +20,8 @@ export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ char
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  if (!character) {
-    console.error("Missing character data");
-    return <ErrorView />;
-  }
-
   const sellAsset = () => {
-    navigate(`${routes.sellCharacter}/${character.nft.id}`);
+    navigate(`${routes.sellCharacter}/${character?.nft.id}`);
   };
 
   const sellCharacterAction = {
