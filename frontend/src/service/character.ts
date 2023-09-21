@@ -4,7 +4,7 @@ import { CharacterCreation, CharacterInMarket, ExtendedCharacter } from "../inte
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { CharacterFilters, filterCharactersMarket, useFilterCharacters } from "../util";
+import { CharacterFilters, filterCharactersMarket, ISTTouIST, useFilterCharacters } from "../util";
 
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
@@ -179,11 +179,12 @@ export const useSellCharacter = (characterId: number) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
       const characterToSell = { ...found.nft, id: Number(found.nft.id) };
+      const uISTPrice = ISTTouIST(price);
 
       setIsLoading(true);
-      const res = await marketService.sellCharacter({
+      return await marketService.sellCharacter({
         character: characterToSell,
-        price: BigInt(price),
+        price: BigInt(uISTPrice),
         service: {
           kreadInstance: instance,
           characterBrand: charBrand,
@@ -197,8 +198,6 @@ export const useSellCharacter = (characterId: number) => {
           userDispatch({ type: "SET_SELECTED", payload: undefined });
         },
       });
-
-      return res;
     },
     [characterId, characters, wallet, service, userDispatch],
   );

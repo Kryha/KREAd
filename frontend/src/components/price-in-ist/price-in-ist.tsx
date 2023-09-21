@@ -3,8 +3,9 @@ import { text } from "../../assets";
 
 import { color } from "../../design";
 import { toTwoDecimals, uISTToIST } from "../../util";
-import { BoldLabel } from "../atoms";
-import { Diamond, PriceContainer } from "./styles";
+import { AssetTag } from "../asset-card/styles";
+import { BoldLabel, LevelBoldLabel } from "../atoms";
+import { Diamond } from "./styles";
 
 interface PriceInIstProps {
   price: number;
@@ -12,9 +13,12 @@ interface PriceInIstProps {
 
 export const PriceInIst: FC<PriceInIstProps> = ({ price }) => {
   return (
-    <PriceContainer>
+    <>
       <Diamond />
-      <BoldLabel customColor={color.black}>{text.param.istPrice(toTwoDecimals(Number(uISTToIST(price))))}</BoldLabel>
-    </PriceContainer>
+      <AssetTag>
+        <BoldLabel customColor={color.black}>{text.param.istPrice}</BoldLabel>
+        <LevelBoldLabel customColor={color.black}>{toTwoDecimals(Number(uISTToIST(price)))}</LevelBoldLabel>
+      </AssetTag>
+    </>
   );
 };

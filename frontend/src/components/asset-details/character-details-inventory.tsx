@@ -5,7 +5,7 @@ import { Overlay } from "../atoms";
 import { FC, useState } from "react";
 import { text } from "../../assets";
 import { routes } from "../../navigation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ExtendedCharacter } from "../../interfaces";
@@ -17,11 +17,12 @@ interface AssetDetailsInventoryProps {
 
 export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character, selectedId }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const sellAsset = () => {
-    navigate(`${routes.sellCharacter}/${character?.nft.id}`);
+    navigate(`${routes.sellCharacter}/${character?.nft.id}`, { state: location });
   };
 
   const sellCharacterAction = {

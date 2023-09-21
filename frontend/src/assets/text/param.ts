@@ -3,7 +3,7 @@ export const param = {
   id: (id: number | string) => `#${id}`,
   ownedBy: (owner: string) => `owned by ${owner}`,
   oneOutOf: (rarity: number | string) => `1 / ${rarity}`,
-  istPrice: (ist: number | string) => `IST ${ist}`,
+  istPrice: "IST",
   nOutOfOnehundred: (n: number | string) => `${n} / 100`,
   withZeroPrefix: (n: number) => (n.toString().length === 1 ? `0${n}` : n),
   notificationSold: (price: number) => `has been sold. IST ${price} is transfered to your wallet.`,
@@ -44,9 +44,20 @@ export const param = {
     clothing: "clothing",
   },
   titles: {
-    // FIXME: add titles
+    citizen: "Citizen",
+    bountyHunter: "Bounty Hunter",
+    stateBountyHunter: "State Bounty Hunter",
+    scavenger: "Scavenger",
+    councilMember: "Council Member",
   },
   origins: {
-    // TODO: add titles
-  }
+    elphia: "Elphia",
+    farma: "Farma",
+    mount: "Mount",
+    arm: "Arm",
+    west: "West",
+    sage: "Sage",
+    mars: "Mars",
+    tempet: "Tempet",
+  },
 };

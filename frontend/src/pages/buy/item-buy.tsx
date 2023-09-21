@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
-import { FadeInOut } from "../../components";
-import { ItemDetailSection } from "../../containers/detail-section";
 import { ItemInMarket } from "../../interfaces";
 import { useBuyItem } from "../../service";
 import { Buy } from "./buy";
@@ -39,10 +37,6 @@ export const ItemBuy = () => {
         successLong: text.store.yourNewItemIs,
         check: text.store.checkItem,
       }}
-    >
-      <FadeInOut show>
-        <ItemDetailSection item={data && data.item} />
-      </FadeInOut>
-    </Buy>
+    />
   );
 };

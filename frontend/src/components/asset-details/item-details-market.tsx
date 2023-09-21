@@ -5,7 +5,7 @@ import { Overlay } from "../atoms";
 import { FC, useState } from "react";
 import { text } from "../../assets";
 import { routes } from "../../navigation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ItemInMarket } from "../../interfaces";
@@ -16,11 +16,12 @@ interface ItemDetailsMarketProps {
 }
 export const ItemDetailsMarket: FC<ItemDetailsMarketProps> = ({ itemInMarket, selectItemInMarket }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const buyAsset = () => {
-    navigate(`${routes.buyItem}/${itemInMarket.id}`);
+    navigate(`${routes.buyItem}/${itemInMarket.id}`, { state: location });
   };
 
   const assetDetailActions = {

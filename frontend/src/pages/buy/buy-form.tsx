@@ -18,6 +18,7 @@ import {
   Tick,
 } from "./styles";
 import { BuyData, BuyStep } from "./types";
+import { useViewport } from "../../hooks";
 
 interface BuyFormProps {
   data: BuyData;
@@ -33,7 +34,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
   const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
   const isOfferPending = !isOnFirstStep && !isOfferAccepted;
   const [isDisabled, setIsDisabled] = useState(false);
-
+  const { width, height } = useViewport();
   const onSendOfferClickHandler = async () => {
     setIsDisabled(true);
     await onSubmit();
@@ -41,7 +42,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
   };
 
   return (
-    <ContentWrapper>
+    <ContentWrapper width={width} height={height}>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
       <StepContainer>
         <GeneralInfo active={!isOnFirstStep}>

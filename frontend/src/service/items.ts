@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import { Category, Item, ItemInMarket, Rarity } from "../interfaces";
-import { mediate, useFilterItems, useFilterItemsInShop } from "../util";
+import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { INVENTORY_CALL_FETCH_DELAY, ITEM_PURSE_NAME } from "../constants";
@@ -129,12 +129,13 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
         const { forSale, equippedTo, activity, ...itemToSell } = found;
         const instance = service.contracts.kread.instance;
         const itemBrand = service.tokenInfo.item.brand;
+        const uISTPrice = ISTTouIST(price);
 
         setIsLoading(true);
 
         marketService.sellItem({
           item: itemToSell,
-          price: BigInt(price),
+          price: BigInt(uISTPrice),
           service: {
             kreadInstance: instance,
             itemBrand,
