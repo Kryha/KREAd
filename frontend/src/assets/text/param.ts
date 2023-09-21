@@ -29,7 +29,7 @@ export const param = {
     filter2: "filter 2",
     background: "background",
     perk2: "perk 2",
-    clothing: "clothing",
+    garment: "garment",
   },
   assetCategories: {
     perk1: "perks",
@@ -43,4 +43,10 @@ export const param = {
     perk2: "perks",
     clothing: "clothing",
   },
+  titles: {
+    // FIXME: add titles
+  },
+  origins: {
+    // TODO: add titles
+  }
 };

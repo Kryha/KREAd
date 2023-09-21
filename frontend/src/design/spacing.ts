@@ -29,6 +29,6 @@ export const zIndex: zIndexProps = {
   liquid: 6,
   frontMask: 7,
   airReservoir: 8,
-  clothing: 9,
+  garment: 9,
   headPiece: 10,
 } as const;

@@ -1,6 +1,6 @@
 import { AmountMath } from "@agoric/ertp";
 import { E } from "@endo/eventual-send";
-import { Character, CharacterBackend, ExtendedCharacter, Item, Purses, TokenInfo } from "../interfaces";
+import { Character, ExtendedCharacter, Purses, TokenInfo } from "../interfaces";
 import { makeCastingSpec, makeFollower, makeLeader } from "@agoric/casting";
 
 //TODO: THIS FILE NOT BEING USED??
@@ -38,16 +38,16 @@ export const getExtendedCharacter = (name: string, characters: ExtendedCharacter
 
 export const getCharacterKeys = (
   characterName: string,
-  characterPurse: CharacterBackend[],
+  characterPurse: Character[],
 ): {
-  ownedCharacterKey: CharacterBackend;
-  wantedCharacterKey: CharacterBackend;
+  ownedCharacterKey: Character;
+  wantedCharacterKey: Character;
 } => {
   const ownedCharacterKey = characterPurse.find((character) => character.name === character.name);
 
   if (!ownedCharacterKey) throw `Could not find character (${characterName}) in wallet`;
 
-  const wantedCharacterKey: CharacterBackend = {
+  const wantedCharacterKey: Character = {
     ...ownedCharacterKey,
     keyId: ownedCharacterKey.keyId === 1 ? 2 : 1,
   };

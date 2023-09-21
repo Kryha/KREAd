@@ -1,4 +1,4 @@
-import { CharacterInMarket, ExtendedCharacter, ExtendedCharacterBackend, Item, ItemInMarket } from "../interfaces";
+import { CharacterInMarket, ExtendedCharacter, Item, ItemInMarket } from "../interfaces";
 import { getRarityString } from "../service";
 
 export const sortItems = (sorting: string, items: Item[]): Item[] => {
@@ -37,7 +37,7 @@ export const sortItemsMarket = (sorting: string, items: ItemInMarket[]): ItemInM
   }
 };
 
-export const sortCharacters = (sorting: string, characters: (ExtendedCharacter | ExtendedCharacterBackend)[]): ExtendedCharacter[] => {
+export const sortCharacters = (sorting: string, characters: (ExtendedCharacter | ExtendedCharacter)[]): ExtendedCharacter[] => {
   switch (sorting) {
     case "atoz":
       return characters.sort((a, b) => a.nft.name.localeCompare(b.nft.name));

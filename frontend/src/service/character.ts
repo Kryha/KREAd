@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterInMarket, ExtendedCharacter, ExtendedCharacterBackend } from "../interfaces";
+import { CharacterCreation, CharacterInMarket, ExtendedCharacter } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
@@ -64,12 +64,12 @@ export const useMyCharactersForSale = () => {
     extend();
   }, [wallet.characterProposals, publicFacet]);
 
-  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacterBackend[], [offerCharacters]);
+  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
 
   return parsedCharacters;
 };
 
-export const useMyCharacter = (id?: string): [ExtendedCharacter | undefined, boolean] => {
+export const useMyCharacter = (id?: number): [ExtendedCharacter | undefined, boolean] => {
   const [owned, isLoading] = useMyCharacters();
 
   const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
@@ -165,7 +165,7 @@ export const useEquipCharacter = () => {
 };
 
 // TODO: test after merge with equip/unequip fix
-export const useSellCharacter = (characterId: string) => {
+export const useSellCharacter = (characterId: number) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [characters] = useMyCharacters();

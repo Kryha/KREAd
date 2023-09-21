@@ -12,7 +12,7 @@ import { ExtendedCharacter } from "../../interfaces";
 
 interface AssetDetailsInventoryProps {
   character?: ExtendedCharacter;
-  selectedId: (id: string) => void;
+  selectedId: (id: number | undefined) => void;
 }
 
 export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character, selectedId }) => {
@@ -38,7 +38,7 @@ export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ char
               character={character}
               actions={{
                 onClose: () => {
-                  selectedId("");
+                  selectedId(undefined);
                   setClose(true);
                 },
                 secondary: sellCharacterAction,

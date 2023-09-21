@@ -35,7 +35,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
 
       return {
         id: character.id.toString(),
-        character: { ...marketEntry.object, id: marketEntry.object.id.toString() },
+        character: { ...marketEntry.object, id: marketEntry.object.id },
         equippedItems,
         sell: {
           price: marketEntry.askingPrice.value,

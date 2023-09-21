@@ -1,4 +1,4 @@
-import { CharacterBackend, ExtendedCharacter, Item } from "../interfaces";
+import { Character, ExtendedCharacter, Item } from "../interfaces";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import { mediate } from "../util";
 import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
@@ -160,7 +160,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       userStateDispatch({ type: "SET_FETCHED", payload: true });
 
       const processedCharacters = [...userState.processed].sort();
-      const ownedCharacterNames: string[] = charactersInWallet.map((character: CharacterBackend) => character.name).sort();
+      const ownedCharacterNames: string[] = charactersInWallet.map((character: Character) => character.name).sort();
 
       // Empty character wallet
       if (charactersInWallet.length === 0 && !userState.inventoryCallInProgress) {

@@ -3,7 +3,6 @@ import {
   Character,
   CharacterInMarket,
   ExtendedCharacter,
-  ExtendedCharacterBackend,
   Item,
   ItemInMarket,
   Origin,
@@ -102,7 +101,7 @@ export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
   return sortItemsMarket(sort, filteredItems); // Make sure to define sortItemsMarket function
 };
 
-export const useFilterCharacters = (characters: (ExtendedCharacter | ExtendedCharacterBackend)[]): ExtendedCharacter[] => {
+export const useFilterCharacters = (characters: (ExtendedCharacter | ExtendedCharacter)[]): ExtendedCharacter[] => {
   const { origin, title, sort } = useFilters();
   if (characters.length === 0) return []; // Return empty array if there are no items to filter
 

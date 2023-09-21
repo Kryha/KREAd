@@ -36,7 +36,7 @@ export interface Details {
 }
 
 export interface Character {
-  id: string;
+  id: number;
   title: Title;
   image: string;
   keyId: number;
@@ -84,25 +84,18 @@ export interface KreadCharacterInMarket {
     value: bigint;
     brand: any;
   };
-  object: CharacterBackend;
+  object: Character;
 }
 
 export interface CharacterInMarketBackend {
   id: bigint;
-  character: CharacterBackend;
+  character: Character;
   sell: {
     publicFacet?: any;
     price: bigint;
   };
 }
 
-export interface CharacterBackend extends Omit<Character, "id"> {
-  id: number;
-}
-
-export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft"> {
-  nft: CharacterBackend;
-}
 export interface CharacterCreation {
   name: string;
 }

@@ -22,7 +22,7 @@ export interface AssetData {
 interface Props {
   characters: ExtendedCharacter[];
   isLoading: boolean;
-  selectCharacter: (name: string) => void;
+  selectCharacter: (id: number) => void;
 }
 
 export const CharacterCardsInventory: FC<Props> = ({ characters, isLoading, selectCharacter }) => {
@@ -41,7 +41,7 @@ export const CharacterCardsInventory: FC<Props> = ({ characters, isLoading, sele
             <CharacterCardInventory
               key={character.nft.id}
               extendedCharacter={character}
-              onClick={() => selectCharacter(character.nft.id.toString())}
+              onClick={() => selectCharacter(character.nft.id)}
             />
           ))}
           {visibleAssets < characters.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}

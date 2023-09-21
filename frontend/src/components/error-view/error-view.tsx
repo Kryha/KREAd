@@ -63,7 +63,7 @@ export const ErrorView: FC<ErrorViewProps> = ({ redirectRoute, headingText, navi
         </InformationContainer>
       </ErrorContainer>
       <ImageConatiner>
-        <ErrorIcon src={ErrorImage} alt={text.character.clothing} />
+        <ErrorIcon src={ErrorImage} alt={text.character.garment} />
       </ImageConatiner>
     </>
   );

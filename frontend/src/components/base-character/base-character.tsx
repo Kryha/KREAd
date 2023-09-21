@@ -89,7 +89,7 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, i
           alt={items?.garment?.name || text.character.garment}
           width={width}
           height={height}
-          zIndex={zIndex.clothing}
+          zIndex={zIndex.garment}
         />
       </CharacterContainer>
     </CharacterWrapper>

@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
-  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<number>();
 
   const [characters, isLoadingCharacters] = useMyCharacters();
   const [character] = useMyCharacter(selectedId);
@@ -33,9 +33,9 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
       <AssetCharacterFilters section={SECTION.INVENTORY} pageSelector={pageSelector} />
       <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
-      {character && <CharacterDetailsInventory character={character} selectedId={(id: string) => setSelectedId(id)} />}
+      {character && <CharacterDetailsInventory character={character} selectedId={(id: number | undefined) => setSelectedId(id)} />}
       {characters.length > 0 ? (
-        <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: string) => setSelectedId(id)} />
+        <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: number) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty

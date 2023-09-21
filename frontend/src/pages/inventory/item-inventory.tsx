@@ -18,9 +18,9 @@ interface Props {
 export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   const [selectedName, setSelectedName] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedCharacterName, setSelectedCharacterName] = useState<string | null>(null);
+  const [selectedCharacterName, setSelectedCharacterName] = useState<string>();
 
-  const selectItem = (itemName: string, category: string, characterName: string | null) => {
+  const selectItem = (itemName: string, category: string, characterName: string | undefined) => {
     setSelectedName(itemName);
     setSelectedCategory(category);
     setSelectedCharacterName(characterName);

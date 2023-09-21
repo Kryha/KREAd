@@ -18,7 +18,7 @@ import { BaseCharacter } from "../base-character";
 
 interface Props {
   extendedCharacter: ExtendedCharacter;
-  onClick?: (assetId: string) => void;
+  onClick?: (assetId: number) => void;
   imageProps?: ImageProps;
 }
 

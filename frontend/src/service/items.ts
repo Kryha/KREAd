@@ -28,7 +28,7 @@ export const useMyItem = (id: string): [Item | undefined, boolean] => {
 export const useGetItemInInventoryByNameAndCategory = (
   name: string,
   category: string,
-  characterName: string | null,
+  characterName: string | undefined,
 ): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
 

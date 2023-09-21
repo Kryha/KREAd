@@ -17,9 +17,9 @@ interface ItemDetailsInventoryProps {
   selectedItem: {
     name: string;
     category: string;
-    characterName: string | null;
+    characterName: string | undefined;
   };
-  selectItem: (name: string, category: string, characterName: string | null) => void;
+  selectItem: (name: string, category: string, characterName: string | undefined) => void;
 }
 export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, selectedItem, selectItem }) => {
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
               item={item}
               actions={{
                 onClose: () => {
-                  selectItem("", "", null);
+                  selectItem("", "", undefined);
                   setClose(true);
                 },
                 primary: assetDetailActions()?.primary,
