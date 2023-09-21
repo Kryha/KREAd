@@ -36,7 +36,6 @@
     "@agoric/deploy-script-support": "beta",
     "@agoric/ertp": "beta",
     "@agoric/governance": "beta",
-    "@agoric/inter-protocol": "beta",
     "@agoric/nat": "dev",
     "@agoric/notifier": "beta",
     "@agoric/store": "beta",
