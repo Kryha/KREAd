@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 
 import { breakpoints, color, fontWeight, margins } from "../../design";
-import { BoldLabel, disappear, fadeIn, Img, PrimaryButton } from "../atoms";
-import { PriceContainer as Price } from "../price-in-ist/styles";
+import { BoldLabel, Img } from "../atoms";
 
 interface ImageProps {
   category?: string;
@@ -42,22 +41,8 @@ export const AssetWrapper = styled.div`
   align-items: center;
   cursor: pointer;
 
-  ${Price} {
-    align-items: center;
-  }
   :hover {
     border: 1px solid ${color.black};
-    ${PrimaryButton} {
-      animation: ${disappear}, ${fadeIn};
-      animation-duration: 0.3s, 0.3s;
-      animation-delay: 0s, 0.3s;
-    }
-  }
-
-  :not(:hover) {
-    ${PrimaryButton} {
-      opacity: 0;
-    }
   }
 `;
 
@@ -136,6 +121,7 @@ export const AssetTag = styled.div`
   flex-direction: row;
   align-items: baseline;
   flex: 1 1 auto;
+  gap: 6px;
 `;
 
 export const AssetTagPrice = styled.div`

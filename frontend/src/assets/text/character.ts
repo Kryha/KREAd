@@ -8,7 +8,7 @@ export const character = {
   liquid: "liquid",
   background: "background",
   airReservoir: "air reservoir",
-  clothing: "clothing",
+  garment: "garment",
   equip: "equip",
   sell: "sell",
   choose: "choose",

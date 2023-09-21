@@ -5,7 +5,7 @@ import { Overlay } from "../atoms";
 import { FC, useState } from "react";
 import { text } from "../../assets";
 import { routes } from "../../navigation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { CharacterInMarket } from "../../interfaces";
@@ -17,6 +17,7 @@ interface Props {
 }
 export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCharacter }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
@@ -28,7 +29,7 @@ export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCha
   const character = characterInMarket.character;
 
   const buyAsset = () => {
-    navigate(`${routes.buyCharacter}/${characterInMarket.id}`);
+    navigate(`${routes.buyCharacter}/${characterInMarket.id}`, { state: location });
   };
 
   const buyCharacterAction = {

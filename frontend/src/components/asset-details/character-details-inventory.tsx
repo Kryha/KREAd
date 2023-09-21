@@ -5,28 +5,24 @@ import { Overlay } from "../atoms";
 import { FC, useState } from "react";
 import { text } from "../../assets";
 import { routes } from "../../navigation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ExtendedCharacter } from "../../interfaces";
-import { ErrorView } from "../error-view";
 
 interface AssetDetailsInventoryProps {
   character?: ExtendedCharacter;
+  selectedId: (id: number | undefined) => void;
 }
 
-export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character }) => {
+export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ character, selectedId }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  if (!character) {
-    console.error("Missing character data");
-    return <ErrorView />;
-  }
-
   const sellAsset = () => {
-    navigate(`${routes.sellCharacter}/${character.nft.id}`);
+    navigate(`${routes.sellCharacter}/${character?.nft.id}`, { state: location });
   };
 
   const sellCharacterAction = {
@@ -43,6 +39,7 @@ export const CharacterDetailsInventory: FC<AssetDetailsInventoryProps> = ({ char
               character={character}
               actions={{
                 onClose: () => {
+                  selectedId(undefined);
                   setClose(true);
                 },
                 secondary: sellCharacterAction,

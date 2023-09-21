@@ -1,16 +1,14 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 
 import { DetailSectionSegment } from "./detail-section-segment";
 import { DetailSectionHeader } from "./detail-section-header";
 import { DetailSectionSegmentStory } from "./detail-section-segment-story";
 import { CharacterDetailSectionSegmentStats } from "./detail-section-segment-stats";
-import { DetailSectionSegmentDetails } from "./detail-section-segment-details";
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
 import { DetailSectionWrap } from "./styles";
 
 import { text, UnnamedCreator } from "../../assets";
 import { ExtendedCharacter } from "../../interfaces";
-import { DetailSectionItems } from "./detail-section-items";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 import { ErrorView } from "../../components";

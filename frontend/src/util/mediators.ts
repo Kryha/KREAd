@@ -1,12 +1,8 @@
 import {
-  CharacterInMarket,
-  CharacterInMarketBackend,
   CharacterItems,
   ExtendedCharacter,
-  ExtendedCharacterBackend,
   Item,
   ItemInMarket,
-  KreadCharacterInMarket,
 } from "../interfaces";
 
 //TODO: ARE WE STILL USING THIS FOR ITEMS?
@@ -52,15 +48,15 @@ export const mediate = {
     },
   },
   characters: {
-    toFront: (backendCharacters: ExtendedCharacterBackend[]): ExtendedCharacter[] => {
+    toFront: (backendCharacters: ExtendedCharacter[]): ExtendedCharacter[] => {
       return backendCharacters.map((backendCharacter) => {
         return {
           ...backendCharacter,
-          nft: { ...backendCharacter.nft, id: String(backendCharacter.nft.id) },
+          nft: { ...backendCharacter.nft, id: backendCharacter.nft.id },
         };
       });
     },
-    toBack: (frontendCharacters: ExtendedCharacter[]): ExtendedCharacterBackend[] => {
+    toBack: (frontendCharacters: ExtendedCharacter[]): ExtendedCharacter[] => {
       return frontendCharacters.map((frontendCharacter) => {
         return {
           ...frontendCharacter,
@@ -116,6 +112,6 @@ export const itemArrayToObject = (itemsArray: Item[]): CharacterItems => {
     filter2: itemsArray.find((i) => i.category === "filter2"),
     background: itemsArray.find((i) => i.category === "background"),
     perk2: itemsArray.find((i) => i.category === "perk2"),
-    clothing: itemsArray.find((i) => i.category === "clothing"),
+    garment: itemsArray.find((i) => i.category === "garment"),
   };
 };

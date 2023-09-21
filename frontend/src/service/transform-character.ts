@@ -1,18 +1,18 @@
 /// <reference types="ses"/>
-import { CharacterBackend, ExtendedCharacterBackend, Item } from "../interfaces";
+import { Character, ExtendedCharacter, Item } from "../interfaces";
 import { fetchFromVStorage } from "./storage-node/fetch-from-vstorage";
 import { CATEGORY } from "../constants";
 
 export const extendCharacters = async (
-  characters: CharacterBackend[],
+  characters: Character[],
   marshaller: any,
 ): Promise<{
-  extendedCharacters: ExtendedCharacterBackend[];
+  extendedCharacters: ExtendedCharacter[];
   equippedItems: Item[];
 }> => {
   const equippedCharacterItems: Item[] = [];
 
-  const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
+  const charactersWithItems: ExtendedCharacter[] = await Promise.all(
     characters.map(async (character) => {
       const result = await fetchFromVStorage(marshaller, `data/published.kread.inventory-${character.name}`);
       const frontendEquippedItems: Item[] = result.map((copyBag: [Item, bigint]) => ({

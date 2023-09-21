@@ -90,53 +90,7 @@ export const CharacterBuilderContextProvider: FC<Props> = ({ children }) => {
 };
 
 export function useCharacterBuilder() {
-  const selectedAsset = useAndRequireContext(ContextRef, "selectedAsset", "CharacterBuilderProvider").selectedAsset;
-  const setSelectedAsset = useAndRequireContext(ContextRef, "setSelectedAsset", "CharacterBuilderProvider").setSelectedAsset;
-  const selectedAssetCategory = useAndRequireContext(ContextRef, "useCharacterBuilder", "CharacterBuilderProvider").selectedAssetCategory;
-  const setSelectedAssetCategory = useAndRequireContext(
-    ContextRef,
-    "useCharacterBuilder",
-    "CharacterBuilderProvider",
-  ).setSelectedAssetCategory;
-  const interactionMode = useAndRequireContext(ContextRef, "useCharacterBuilder", "CharacterBuilderProvider").interactionMode;
-  const setInteractionMode = useAndRequireContext(ContextRef, "useCharacterBuilder", "CharacterBuilderProvider").setInteractionMode;
-  const scale = useAndRequireContext(ContextRef, "useCharacterBuilder", "CharacterBuilderProvider").scale;
-  const setScale = useAndRequireContext(ContextRef, "useCharacterBuilder", "CharacterBuilderProvider").setScale;
-  const position = useAndRequireContext(ContextRef, "useCharacterBuilder", "CharacterBuilderProvider").position;
-  const setPosition = useAndRequireContext(ContextRef, "useCharacterBuilder", "CharacterBuilderProvider").setPosition;
-  const showDetails = useAndRequireContext(ContextRef, "showDetails", "CharacterBuilderProvider").showDetails;
-  const setShowDetails = useAndRequireContext(ContextRef, "setShowDetails", "CharacterBuilderProvider").setShowDetails;
-  const onAssetChange = useAndRequireContext(ContextRef, "onAssetChange", "CharacterBuilderProvider").onAssetChange;
-  const setOnAssetChange = useAndRequireContext(ContextRef, "setOnAssetChange", "CharacterBuilderProvider").setOnAssetChange;
-  const onCategoryChange = useAndRequireContext(ContextRef, "onCategoryChange", "CharacterBuilderProvider").onCategoryChange;
-  const setOnCategoryChange = useAndRequireContext(ContextRef, "setOnCategoryChange", "CharacterBuilderProvider").setOnCategoryChange;
-  const showWarning = useAndRequireContext(ContextRef, "showWarning, CharacterBuilderProvider").showWarning;
-  const setShowWarning = useAndRequireContext(ContextRef, "showWarning, CharacterBuilderProvider").setShowWarning;
-  const setShowToast = useAndRequireContext(ContextRef, "showToast, CharacterBuilderProvider").setShowToast;
-  const showToast = useAndRequireContext(ContextRef, "showToast, CharacterBuilderProvider").showToast;
-
-  return {
-    showToast,
-    setShowToast,
-    showWarning,
-    setShowWarning,
-    selectedAsset,
-    setSelectedAsset,
-    selectedAssetCategory,
-    setSelectedAssetCategory,
-    interactionMode,
-    setInteractionMode,
-    position,
-    setPosition,
-    scale,
-    setScale,
-    showDetails,
-    setShowDetails,
-    onAssetChange,
-    setOnAssetChange,
-    onCategoryChange,
-    setOnCategoryChange,
-  };
+  return useAndRequireContext(ContextRef, "CharacterBuilderProvider");
 }
 
 const downloadOptions = [

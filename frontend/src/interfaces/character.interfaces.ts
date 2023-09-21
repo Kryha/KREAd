@@ -16,16 +16,16 @@ export const isCharacterCategory = (title: unknown): title is Title => {
 };
 
 export interface CharacterItems {
-  perk1?: Item;
-  patch?: Item;
-  mask?: Item;
-  headPiece?: Item;
-  hair?: Item;
-  filter2?: Item;
-  filter1?: Item;
   background?: Item;
+  patch?: Item;
+  hair?: Item;
+  headPiece?: Item;
+  mask?: Item;
+  perk1?: Item;
   perk2?: Item;
-  clothing?: Item;
+  filter1?: Item;
+  filter2?: Item;
+  garment?: Item;
 }
 
 export interface Details {
@@ -36,7 +36,7 @@ export interface Details {
 }
 
 export interface Character {
-  id: string;
+  id: number;
   title: Title;
   image: string;
   keyId: number;
@@ -84,29 +84,16 @@ export interface KreadCharacterInMarket {
     value: bigint;
     brand: any;
   };
-  object: CharacterBackend;
+  object: Character;
 }
 
 export interface CharacterInMarketBackend {
   id: bigint;
-  character: CharacterBackend;
+  character: Character;
   sell: {
     publicFacet?: any;
     price: bigint;
   };
-}
-
-export interface CharacterBackend extends Omit<Character, "id"> {
-  id: number;
-}
-
-export interface ExtendedCharacterBackend extends Omit<ExtendedCharacter, "nft"> {
-  nft: CharacterBackend;
-}
-
-export interface CharacterEquip extends ExtendedCharacter {
-  equippedTo: boolean;
-  isForSale?: boolean;
 }
 
 export interface CharacterCreation {

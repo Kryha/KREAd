@@ -26,7 +26,7 @@ export const FiltersContainer = styled.div<FilterProps>`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-width: 160px;
+  min-width: 120px;
   cursor: pointer;
   @media (max-width: ${breakpoints.tablet}) {
     min-width: 0;

@@ -1,12 +1,13 @@
 import { ItemInMarket } from "../../interfaces";
-import { BoldLabel, Dash, ImageProps } from "../atoms";
-import { FC } from "react";
+import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel, PrimaryButton } from "../atoms";
+import React, { FC } from "react";
 import {
   AssetContent,
   AssetFooter,
   AssetImage,
   AssetImageContainer,
   AssetInfoContainer,
+  AssetStatsContainer,
   AssetTag,
   AssetTitleText,
   AssetTitleWrapper,
@@ -14,6 +15,11 @@ import {
 } from "./styles";
 import { text } from "../../assets";
 import { color } from "../../design";
+import { getRarityString } from "../../service";
+import { PriceInIst } from "../price-in-ist";
+import { PriceContainer } from "../price-in-ist/styles";
+import { routes } from "../../navigation";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   itemInMarket: ItemInMarket;
@@ -22,6 +28,12 @@ interface Props {
 }
 export const ItemCardMarket: FC<Props> = ({ itemInMarket, selectItemInMarketId }) => {
   const { item } = itemInMarket;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const buyAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    navigate(`${routes.buyItem}/${itemInMarket.id}`, { state: location });
+  };
 
   return (
     <AssetWrapper onClick={() => selectItemInMarketId(itemInMarket.id)}>
@@ -34,18 +46,25 @@ export const ItemCardMarket: FC<Props> = ({ itemInMarket, selectItemInMarketId }
             <AssetTitleText>{item.name}</AssetTitleText>
             <BoldLabel>{item.category}</BoldLabel>
           </AssetTitleWrapper>
-          <AssetFooter>
+          <AssetStatsContainer>
             <AssetTag>
-              <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
-              {item.rarity && (
-                <>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(item.rarity)}</BoldLabel>
-                </>
-              )}
+              <BoldLabel customColor={color.black}>lvl. </BoldLabel>
+              <LevelBoldLabel customColor={color.black}>{item.level}</LevelBoldLabel>
             </AssetTag>
-            {item.equippedTo && <BoldLabel customColor={color.black}>{text.general.equipped}</BoldLabel>}
-            {item.forSale && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>}
+            <Badge>
+              <ButtonText>{item.origin}</ButtonText>
+            </Badge>
+            <Badge>
+              <ButtonText>{getRarityString(item.rarity)}</ButtonText>
+            </Badge>
+          </AssetStatsContainer>
+          <AssetFooter>
+            <PriceContainer>
+              <PriceInIst price={Number(itemInMarket.sell.price)} />
+              <PrimaryButton onClick={(event) => buyAsset(event)}>
+                <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
+              </PrimaryButton>
+            </PriceContainer>
           </AssetFooter>
         </AssetInfoContainer>
       </AssetContent>

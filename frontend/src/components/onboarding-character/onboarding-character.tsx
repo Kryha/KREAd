@@ -59,10 +59,10 @@ export const OnboardingCharacter: FC = () => {
         />
         <FirstIcon
           src={clothingImages[currentIndex] || Empty}
-          alt={text.character.clothing}
+          alt={text.character.garment}
           width={width}
           height={height}
-          zIndex={zIndex.clothing}
+          zIndex={zIndex.garment}
         />
       </CharacterContainer>
     </CharacterWrapper>

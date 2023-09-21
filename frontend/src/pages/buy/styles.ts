@@ -1,10 +1,8 @@
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, TickIcon } from "../../assets";
-import { ButtonText, PrimaryButton, MenuItemName, Badge, FormText, fadeUp } from "../../components";
-import { Spinner, LoadingPageContainer } from "../../components/content-loader/styles";
-import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
-import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { margins, color } from "../../design";
+import { Badge, ButtonText, fadeUp, MenuItemName, PrimaryButton } from "../../components";
+import { LoadingPageContainer, Spinner } from "../../components/content-loader/styles";
+import { color, margins } from "../../design";
 import { FormCard } from "../create-character/styles";
 
 export const Tick = styled(TickIcon)`
@@ -23,35 +21,24 @@ export const TickContainer = styled.div`
   height: 30px;
   border: 1px solid ${color.black};
   ${Tick} {
-    margin: 0px;
+    margin: 0;
   }
   margin-bottom: ${margins.small};
 `;
 
-export const ContentWrapper = styled.div`
+interface ViewProps {
+  height: number;
+  width: number;
+}
+export const ContentWrapper = styled.div<ViewProps>`
+  margin: auto;
   ${FormCard} {
-    position: absolute;
-    bottom: 40px;
-    right: 40px;
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
+    width: 100%;
+    max-width: 500px;
+    height: ${({ height }): string => `${height - 200}px`};
     transform: translate3d(0, 1rem, 0);
-  }
-  ${DetailSectionWrap} {
-    margin-top: 40px;
-    position: absolute;
-    bottom: 40px;
-    left: 40px;
-    height: 80vh;
-  }
-  ${DetailSectionHeaderNavigationWrap} {
-    display: none;
-  }
-  ${FormText} {
-    margin-top: ${margins.big};
-  }
-  ${TickContainer} {
-    margin-top: ${margins.big};
   }
 `;
 
@@ -114,13 +101,13 @@ export const Step = styled.div<ActiveProps>`
   position: static;
   width: 100%;
   height: 88px;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: ${margins.medium};
   ${StepText} {
-    margin: 0px ${margins.small};
+    margin: 0 ${margins.small};
   }
   ${PrimaryButton} {
     margin-left: ${margins.small};
@@ -172,7 +159,7 @@ export const NumberContainer = styled.div<ActiveProps>`
       `;
   }};
   ${Tick} {
-    margin: 0px;
+    margin: 0;
     path {
       stroke: ${color.white};
     }
@@ -209,13 +196,13 @@ export const GeneralInfo = styled.div<ActiveProps>`
   position: static;
   width: 100%;
   height: 88px;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: 24px;
   ${StepText} {
-    margin: 0px ${margins.small};
+    margin: 0 ${margins.small};
   }
   ${PrimaryButton} {
     margin-left: ${margins.small};

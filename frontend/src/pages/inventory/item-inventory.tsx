@@ -5,12 +5,11 @@ import { useGetItemInInventoryByNameAndCategory, useGetItemsInInventory } from "
 import { text } from "../../assets";
 import { OverviewContainer } from "../shop/styles";
 import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
-import { Category } from "../../interfaces";
-import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
-import { ASSET_TYPE, SECTION } from "../../constants";
 import { ItemCardsInventory } from "../../components/asset-cards/item-cards-inventory";
 import { AssetFilterCount } from "../../components/asset-item-filters/styles";
 import { color } from "../../design";
+import { SECTION } from "../../constants";
+import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
 
 interface Props {
   pageSelector?: React.ReactNode;
@@ -18,43 +17,33 @@ interface Props {
 
 export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   const [selectedName, setSelectedName] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<Category | undefined>();
-  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [selectedSorting, setSelectedSorting] = useState<string>("");
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCharacterName, setSelectedCharacterName] = useState<string>();
 
-  const selectItem = (name: string, category: Category | undefined) => {
-    setSelectedName(name);
+  const selectItem = (itemName: string, category: string, characterName: string | undefined) => {
+    setSelectedName(itemName);
     setSelectedCategory(category);
+    setSelectedCharacterName(characterName);
   };
-  const [items, isLoading] = useGetItemsInInventory({
-    categories: selectedCategories,
-    sort: selectedSorting,
-    color: selectedColor,
-  });
 
-  const [item] = useGetItemInInventoryByNameAndCategory(selectedName, selectedCategory);
+  const [items, isLoading] = useGetItemsInInventory();
+
+  const [item] = useGetItemInInventoryByNameAndCategory(selectedName, selectedCategory, selectedCharacterName);
   const assetsCount = items.length;
 
   if (isLoading) return <LoadingPage />;
 
   return (
     <>
-      <AssetItemFilters
-        assetType={ASSET_TYPE.ITEM}
-        section={SECTION.INVENTORY}
-        pageSelector={pageSelector}
-        assets={items}
-        selectedCategories={selectedCategories}
-        selectedSorting={selectedSorting}
-        setSelectedSorting={setSelectedSorting}
-        setSelectedCategories={setSelectedCategories}
-        setSelectedColor={setSelectedColor}
-      />
+      <AssetItemFilters section={SECTION.INVENTORY} pageSelector={pageSelector} />
       <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
       {item && (
-        <ItemDetailsInventory item={item} selectedItem={{ name: selectedName, category: selectedCategory }} selectItem={selectItem} />
+        <ItemDetailsInventory
+          item={item}
+          selectedItem={{ name: selectedName, category: selectedCategory, characterName: selectedCharacterName }}
+          selectItem={selectItem}
+        />
       )}
       {items.length > 0 ? (
         <ItemCardsInventory items={items} isLoading={isLoading} selectItem={selectItem} />

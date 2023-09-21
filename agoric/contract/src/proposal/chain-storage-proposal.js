@@ -131,7 +131,7 @@ const baseItems = [
   },
   {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'perk2',
+    category: 'mask',
     functional: false,
     origin: 'Elphia',
     description:
@@ -140,6 +140,27 @@ const baseItems = [
       'https://ipfs.io/ipfs/QmadebCRvkLSHdeSTnPJv58XHtjk5DwYbeUigNNcWPs2Vn',
     thumbnail:
       'https://ipfs.io/ipfs/QmYmyyNeoyeAQ8qPHkufum848mA1P5Q1KHZp7n6vhwGsgd',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
+    colors: ['#B1A2A2', '#968996', '#FFFFFF'],
+    artistMetadata: '',
+  },
+  {
+    name: 'AirTox: Fairy Dust Elite',
+    category: 'perk2',
+    functional: false,
+    origin: 'Elphia',
+    description:
+      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    image:
+      'https://ipfs.io/ipfs/QmS5TvnX9PMobuME6bLuuDWR4avhGGeuHg7eAFfZAiLLZ1',
+    thumbnail:
+      'https://ipfs.io/ipfs/QmS1X4KRtcumk4PqjowgKsbMh2uN79wwUsYYKnakqr7FZn',
     rarity: 18,
     level: 0,
     filtering: 0,
@@ -241,7 +262,6 @@ const baseItems = [
     origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    origin: 'elphia',
     image:
       'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
     thumbnail:

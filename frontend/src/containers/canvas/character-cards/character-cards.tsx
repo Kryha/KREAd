@@ -75,7 +75,7 @@ export const CharacterCards: FC = () => {
               size="mini"
             />
           </ImageCard>
-          <CharacterInformation character={selectedCharacter} selectedCharacterName={selectedCharacter?.nft.name} />
+          <CharacterInformation character={selectedCharacter} selectedCharacterName={selectedCharacter?.nft.name} sell={sell} />
         </CharacterCardContainer>
       ) : null}
       {/* FIXME: wrong type */}
@@ -129,13 +129,13 @@ const CharacterInformation: FC<CharacterInfo> = ({ character, sell, selectCharac
         <ButtonInfoWrap onClick={() => setShowDetails(true)}>
           <SecondaryButton>{text.general.info}</SecondaryButton>
         </ButtonInfoWrap>
+        <PrimaryButton onClick={() => (sell ? sell(character) : null)}>
+          <ButtonText customColor={color.white}>Sell</ButtonText>
+        </PrimaryButton>
         {character.nft.name !== selectedCharacterName ? (
           <>
             <PrimaryButton onClick={() => (selectCharacter ? selectCharacter(character) : null)}>
               <ButtonText customColor={color.white}>select</ButtonText>
-            </PrimaryButton>
-            <PrimaryButton onClick={() => (sell ? sell(character) : null)}>
-              <ButtonText customColor={color.white}>Sell</ButtonText>
             </PrimaryButton>
           </>
         ) : null}

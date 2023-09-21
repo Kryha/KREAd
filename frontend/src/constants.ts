@@ -63,7 +63,7 @@ export const CATEGORY = {
   perk2: "perk2",
   filter1: "filter1",
   filter2: "filter2",
-  clothing: "clothing",
+  garment: "garment",
 } as const;
 
 export const RARITY = {

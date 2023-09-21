@@ -11,8 +11,8 @@ export const CharacterSell = () => {
   const { id } = useParams<"id">();
   const idString = String(id);
 
-  const sellCharacter = useSellCharacter(idString);
-  const [character] = useMyCharacter(idString);
+  const sellCharacter = useSellCharacter(Number(idString));
+  const [character] = useMyCharacter(Number(idString));
   const [characterCopy] = useState(character);
   const offers = useOffers({
     description: SELL_CHARACTER_DESCRIPTION,

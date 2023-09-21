@@ -23,7 +23,7 @@ const assembledCharacterOrder = [
   "perk2",
   "filter1",
   "filter2",
-  "clothing",
+  "garment",
 ];
 
 export function useAssembleCharacter(width: number, height: number) {

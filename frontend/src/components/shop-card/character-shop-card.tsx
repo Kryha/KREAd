@@ -6,7 +6,7 @@ import { color } from "../../design";
 import { BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { BaseCharacter } from "../base-character";
-import { Content, ImageContainer, Product, Element, TitleWrapper, Footer, Tag, PriceContainer, InfoContainer } from "./styles";
+import { Content, Element, Footer, ImageContainer, InfoContainer, PriceContainer, Product, Tag, TitleWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 
 interface CharacterShopCardProps {
@@ -17,10 +17,7 @@ interface CharacterShopCardProps {
 export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onClick }) => {
   const { width, height } = useViewport();
 
-  {
-    /* FIXME: character type is not a thing */
-  }
-  // if (!isCharacterCategory(character.character.type)) return <></>;
+  if (!isCharacterCategory(character.character.title)) return <></>;
 
   return (
     <Product onClick={() => onClick && onClick(character)} width={width} height={height}>
@@ -32,8 +29,8 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
         <InfoContainer>
           <TitleWrapper>
             <TitleText>{character.character.name}</TitleText>
-            {/* FIXME: wrong type */}
-            {/* <BoldLabel>{text.param.categories[character.character.type]}</BoldLabel> */}
+            {/* FIXME: add titles*/}
+            <BoldLabel>{"text.param.titles"/*[character.character.title]*/}</BoldLabel>
           </TitleWrapper>
           <Footer>
             <Tag>

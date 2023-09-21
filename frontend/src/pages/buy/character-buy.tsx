@@ -15,7 +15,7 @@ export const CharacterBuy = () => {
   const idString = String(id);
 
   const [characterInMarket, isLoadingCharacter] = useCharacterFromMarket(idString);
-  const [boughtCharacter] = useMyCharacter(idString);
+  const [boughtCharacter] = useMyCharacter(Number(idString));
   const buyCharacter = useBuyCharacter(idString);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);

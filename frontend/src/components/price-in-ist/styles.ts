@@ -6,8 +6,10 @@ export const PriceContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   position: relative;
   z-index: ${zIndex.background};
+  width: 100%;
 `;
 
 export const Diamond = styled.div`
@@ -19,5 +21,5 @@ export const Diamond = styled.div`
   min-height: 10px;
   background: ${color.black};
   transform: rotate(45deg);
-  margin: 0px ${margins.mini};
+  margin: 0 ${margins.mini};
 `;
