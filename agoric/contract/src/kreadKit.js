@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
-import { updateCharacterMetrics, updateItemMetrics } from './market-metrics';
+import { updateCollectionMetrics } from './market-metrics';
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
@@ -54,7 +54,8 @@ import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
  *   mintPlatformFeeRate: Ratio,
  *   royaltyDepositFacet: DepositFacet,
  *   platformFeeDepositFacet: DepositFacet,
- *   paymentBrand
+ *   paymentBrand: Brand,
+ *   minUncommonRating: number
  * }} privateArgs
  * @param {{
  *   characterIssuerRecord: IssuerRecord<"copyBag">
@@ -80,6 +81,7 @@ export const prepareKreadKit = async (
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
+    minUncommonRating,
   },
   {
     characterIssuerRecord,
@@ -142,7 +144,7 @@ export const prepareKreadKit = async (
           entries: makeScalarBigMapStore('characters', {
             durable: true,
             keyShape: M.string(),
-            valueShape: CharacterEntryGuard,
+            valueShape: M.or(CharacterEntryGuard, M.arrayOf(M.string())),
           }),
           bases: makeScalarBigMapStore('baseCharacters', {
             durable: true,
@@ -173,18 +175,12 @@ export const prepareKreadKit = async (
             keyShape: M.number(),
             valueShape: MarketEntryGuard,
           }),
+          metrics: makeScalarBigMapStore('marketMetrics', {
+            durable: true,
+            keyShape: M.or('character', 'item'),
+            valueShape: MarketMetricsGuard,
+          }),
         }),
-        characterCollectionSize: 0,
-        characterAverageLevel: 0,
-        characterMarketplaceAverageLevel: 0,
-        characterAmountSold: 0,
-        characterLatestSalePrice: 0,
-        itemCollectionSize: 0,
-        itemAverageLevel: 0,
-        itemMarketplaceAverageLevel: 0,
-        itemAmountSold: 0,
-        itemLatestSalePrice: 0,
-        itemsPutForSaleAmount: 0,
       };
     },
     {
@@ -263,124 +259,145 @@ export const prepareKreadKit = async (
             AmountMath.isGTE(give.Price, mintFeeAmount) ||
               assert.fail(X`${errors.mintFeeTooLow}`);
 
-            !characterState.entries.has(newCharacterName) ||
+            !characterState.entries.get('names').includes(newCharacterName) ||
               assert.fail(X`${errors.nameTaken(newCharacterName)}`);
 
             characterState.bases.getSize() > 0 ||
               assert.fail(X`${errors.allMinted}`);
 
             const re = /^[a-zA-Z0-9_-]*$/;
-            re.test(newCharacterName) || assert.fail(X`${errors.invalidName}`);
+            (re.test(newCharacterName) && newCharacterName != 'names') ||
+              assert.fail(X`${errors.invalidName}`);
 
-            const currentTime = await helper.getTimeStamp();
             const baseIndex = characterFacet.getRandomBaseIndex();
             const baseCharacter = characterState.bases.get(baseIndex);
-            const [newCharacterAmount1, newCharacterAmount2] =
-              makeCharacterNftObjs(
-                newCharacterName,
-                baseCharacter,
-                characterState.entries.getSize(),
-                currentTime,
-              ).map((character) =>
-                AmountMath.make(
-                  characterBrand,
-                  makeCopyBag(harden([[character, 1n]])),
-                ),
-              );
 
-            const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
-
-            const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
-            // Mint character to user seat & inventorySeat
-            characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
-            characterMint.mintGains(
-              { CharacterKey: newCharacterAmount2 },
-              inventorySeat,
-            );
-
-            // Deleting here to ensure the base character does not get deleted before everything is minted
-            // Consideration: can this be a race condition when multiple people mint at the same time?
-            // This becomes more likely the less bases there are
             characterState.bases.delete(baseIndex);
 
-            const inventoryKit = await characterFacet.makeInventoryRecorderKit(
-              newCharacterName,
+            characterState.entries.set(
+              'names',
+              harden([
+                ...characterState.entries.get('names'),
+                newCharacterName,
+              ]),
             );
-
-            await item.mintDefaultBatch(inventorySeat);
-
-            const royaltyFee = multiplyBy(give.Price, mintRoyaltyRate);
-            const platformFee = multiplyBy(give.Price, mintPlatformFeeRate);
-
-            /** @type {TransferPart[]} */
-            const transfers = [];
-            transfers.push([
-              seat,
-              zcfSeat,
-              { Price: royaltyFee },
-              { Royalty: royaltyFee },
-            ]);
-            transfers.push([
-              seat,
-              zcfSeat,
-              { Price: platformFee },
-              { PlatformFee: platformFee },
-            ]);
 
             try {
-              atomicRearrange(zcf, harden(transfers));
-            } catch (e) {
-              assert.fail(X`${errors.rearrangeError}`);
-            }
+              const currentTime = await helper.getTimeStamp();
 
-            seat.exit();
-            zcfSeat.exit();
+              const [newCharacterAmount1, newCharacterAmount2] =
+                makeCharacterNftObjs(
+                  newCharacterName,
+                  baseCharacter,
+                  characterState.entries.getSize(),
+                  currentTime,
+                ).map((character) =>
+                  AmountMath.make(
+                    characterBrand,
+                    makeCopyBag(harden([[character, 1n]])),
+                  ),
+                );
 
-            const payouts = await E(userSeat).getPayouts();
-            const royaltyPayout = await payouts.Royalty;
-            const platformFeePayout = await payouts.PlatformFee;
+              const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
 
-            await E(royaltyDepositFacet).receive(royaltyPayout);
-            await E(platformFeeDepositFacet).receive(platformFeePayout);
+              const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
+              // Mint character to user seat & inventorySeat
+              characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
+              characterMint.mintGains(
+                { CharacterKey: newCharacterAmount2 },
+                inventorySeat,
+              );
 
-            // Add to state
-            const character = {
-              name: newCharacterName,
-              character: newCharacterAmount1.value.payload[0][0],
-              inventory: inventorySeat,
-              inventoryKit,
-              history: [
-                {
-                  type: 'mint',
-                  data: newCharacterAmount1.value[0],
-                  timestamp: currentTime,
+              const inventoryKit =
+                await characterFacet.makeInventoryRecorderKit(newCharacterName);
+
+              await item.mintDefaultBatch(inventorySeat);
+
+              const royaltyFee = multiplyBy(give.Price, mintRoyaltyRate);
+              const platformFee = multiplyBy(give.Price, mintPlatformFeeRate);
+
+              /** @type {TransferPart[]} */
+              const transfers = [];
+              transfers.push([
+                seat,
+                zcfSeat,
+                { Price: royaltyFee },
+                { Royalty: royaltyFee },
+              ]);
+              transfers.push([
+                seat,
+                zcfSeat,
+                { Price: platformFee },
+                { PlatformFee: platformFee },
+              ]);
+
+              try {
+                atomicRearrange(zcf, harden(transfers));
+              } catch (e) {
+                assert.fail(X`${errors.rearrangeError}`);
+              }
+
+              seat.exit();
+              zcfSeat.exit();
+
+              const payouts = await E(userSeat).getPayouts();
+              const royaltyPayout = await payouts.Royalty;
+              const platformFeePayout = await payouts.PlatformFee;
+
+              await E(royaltyDepositFacet).receive(royaltyPayout);
+              await E(platformFeeDepositFacet).receive(platformFeePayout);
+
+              // Add to state
+              const character = {
+                name: newCharacterName,
+                character: newCharacterAmount1.value.payload[0][0],
+                inventory: inventorySeat,
+                inventoryKit,
+                history: [
+                  {
+                    type: 'mint',
+                    data: newCharacterAmount1.value[0],
+                    timestamp: currentTime,
+                  },
+                ],
+              };
+
+              characterState.entries.addAll([
+                [character.name, harden(character)],
+              ]);
+
+              // update metrics
+              marketFacet.updateMetrics('character', {
+                collectionSize: true,
+                averageLevel: {
+                  type: 'add',
+                  value: character.character.level,
                 },
-              ],
-            };
+              });
 
-            characterState.entries.addAll([
-              [character.name, harden(character)],
-            ]);
+              characterKit.recorder.write(
+                (({ seat, ...char }) => char)(character),
+              );
 
-            // update metrics
-            marketFacet.updateMetrics('character', {
-              collectionSize: true,
-              averageLevel: {
-                type: 'add',
-                value: character.character.level,
-              },
-            });
+              // TODO: consider refactoring what we put in the inventory node
+              inventoryKit.recorder.write(
+                inventorySeat.getAmountAllocated('Item').value.payload,
+              );
 
-            characterKit.recorder.write(
-              (({ seat, ...char }) => char)(character),
-            );
-
-            // TODO: consider refactoring what we put in the inventory node
-            inventoryKit.recorder.write(
-              inventorySeat.getAmountAllocated('Item').value.payload,
-            );
-
-            return text.mintCharacterReturn;
+              return text.mintCharacterReturn;
+            } catch (e) {
+              //restore base char deletion and and name entry
+              characterState.bases.addAll([[baseIndex, baseCharacter]]);
+              characterState.entries.set(
+                'names',
+                harden(
+                  characterState.entries
+                    .get('names')
+                    .filter((name) => name != newCharacterName),
+                ),
+              );
+              return e;
+            }
           };
           return zcf.makeInvitation(
             handler,
@@ -754,26 +771,16 @@ export const prepareKreadKit = async (
           if (itemState.bases.getSize() > 0) return;
 
           const common = [];
-          const uncommon = [];
-          const rare = [];
-          const legendary = [];
-          const exotic = [];
+          const uncommonToLegendary = [];
 
-          //FIXME: get these magic numbers from terms
           baseItems.forEach((item) => {
-            if (item.rarity > 79) exotic.push(item);
-            else if (item.rarity > 59) legendary.push(item);
-            else if (item.rarity > 39) rare.push(item);
-            else if (item.rarity > 19) uncommon.push(item);
-            else common.push(item);
+            if (item.rarity < minUncommonRating) common.push(item);
+            else uncommonToLegendary.push(item);
           });
 
           itemState.bases.addAll([
             ['common', harden(common)],
-            ['uncommon', harden(uncommon)],
-            ['rare', harden(rare)],
-            ['legendary', harden(legendary)],
-            ['exotic', harden(exotic)],
+            ['uncommonToLegendary', harden(uncommonToLegendary)],
           ]);
         },
         // Mints the default set of items to a seat that doesn't exit
@@ -791,18 +798,17 @@ export const prepareKreadKit = async (
           const index2 = Math.floor(helper.randomNumber() * commonBases.length);
           const item2 = commonBases[index2];
 
-          const legendaryBases = itemState.bases
-            .get('legendary')
+          const uncommonToLegendary = itemState.bases
+            .get('uncommonToLegendary')
             .filter(
               (item) =>
                 item.category !== item1.category &&
                 item.category !== item2.category,
             );
-
           const index3 = Math.floor(
-            helper.randomNumber() * legendaryBases.length,
+            helper.randomNumber() * uncommonToLegendary.length,
           );
-          const item3 = legendaryBases[index3];
+          const item3 = uncommonToLegendary[index3];
 
           const items = [item1, item2, item3];
 
@@ -1019,14 +1025,15 @@ export const prepareKreadKit = async (
           });
         },
         updateMetrics(collection, updateMetrics) {
+          const updatedMetrics = updateCollectionMetrics(
+            collection,
+            this.state,
+            updateMetrics,
+          );
           if (collection === 'character') {
-            updateCharacterMetrics(
-              this.state,
-              updateMetrics,
-              marketCharacterMetricsKit,
-            );
+            marketCharacterMetricsKit.recorder.write(updatedMetrics);
           } else if (collection === 'item') {
-            updateItemMetrics(this.state, updateMetrics, marketItemMetricsKit);
+            marketItemMetricsKit.recorder.write(updatedMetrics);
           }
         },
         sellItem() {
@@ -1055,7 +1062,7 @@ export const prepareKreadKit = async (
               askingPrice,
               royalty,
               platformFee,
-              id: this.state.itemsPutForSaleAmount,
+              id: this.state.market.metrics.get('item').putForSaleAmount,
               object,
               isFirstSale: false,
             };
@@ -1075,9 +1082,8 @@ export const prepareKreadKit = async (
                 (({ seat, ...entry }) => entry)(entry),
               ),
             );
-
+            marketFacet.updateMetrics('item', { putForSaleAmount: true });
             marketFacet.handleExitItem(newEntry);
-            this.state.itemsPutForSaleAmount++;
           };
 
           return zcf.makeInvitation(
@@ -1131,7 +1137,7 @@ export const prepareKreadKit = async (
                   askingPrice,
                   royalty,
                   platformFee,
-                  id: this.state.itemsPutForSaleAmount,
+                  id: this.state.market.metrics.get('item').putForSaleAmount,
                   object: itemObject,
                   isFirstSale: true,
                 };
@@ -1152,7 +1158,7 @@ export const prepareKreadKit = async (
                   ),
                 );
 
-                this.state.itemsPutForSaleAmount++;
+                marketFacet.updateMetrics('item', { putForSaleAmount: true });
               }
             });
           };
@@ -1219,7 +1225,7 @@ export const prepareKreadKit = async (
                 (({ seat, ...entry }) => entry)(entry),
               ),
             );
-
+            marketFacet.updateMetrics('character', { putForSaleAmount: true });
             marketFacet.handleExitCharacter(newEntry);
           };
 
@@ -1653,19 +1659,27 @@ export const prepareKreadKit = async (
           return item.mint();
         },
         initializeMetrics() {
-          marketCharacterMetricsKit.recorder.write({
-            collectionSize: this.state.characterCollectionSize,
-            averageLevel: this.state.characterAverageLevel,
-            marketplaceAverageLevel:
-              this.state.characterMarketplaceAverageLevel,
-            amountSold: this.state.characterAmountSold,
-          });
-          marketItemMetricsKit.recorder.write({
-            collectionSize: this.state.itemCollectionSize,
-            averageLevel: this.state.itemAverageLevel,
-            marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
-            amountSold: this.state.itemAmountSold,
-          });
+          const { market } = this.state;
+          if (market.metrics.getSize() > 0) return;
+
+          market.metrics.addAll(
+            ['character', 'item'].map((key) => [
+              key,
+              harden({
+                collectionSize: 0,
+                averageLevel: 0,
+                marketplaceAverageLevel: 0,
+                amountSold: 0,
+                latestSalePrice: 0,
+                putForSaleAmount: 0,
+              }),
+            ]),
+          );
+
+          marketCharacterMetricsKit.recorder.write(
+            market.metrics.get('character'),
+          );
+          marketItemMetricsKit.recorder.write(market.metrics.get('item'));
         },
         reviveMarketExitSubscribers() {
           const { market } = this.state;
@@ -1682,6 +1696,12 @@ export const prepareKreadKit = async (
           character.initializeBaseCharacters(baseCharacters);
           item.initializeBaseItems(baseItems);
         },
+        initializeCharacterNamesEntries() {
+          const { character } = this.state;
+          if (!character.entries.has('names')) {
+            character.entries.init('names', harden([]));
+          }
+        },
         makePublishItemCollectionInvitation() {
           const { market } = this.facets;
           return market.publishItemCollection();
@@ -1693,7 +1713,9 @@ export const prepareKreadKit = async (
           return character.mint();
         },
         getCharacters() {
-          const characters = Array.from(this.state.character.entries.values());
+          const characters = Array.from(
+            this.state.character.entries.values(),
+          ).filter((x) => !Array.isArray(x));
           return characters;
         },
         getCharacterInventory(name) {
@@ -1747,22 +1769,10 @@ export const prepareKreadKit = async (
           return items;
         },
         getMarketMetrics() {
+          const { market } = this.state;
           return {
-            character: {
-              collectionSize: this.state.characterCollectionSize,
-              averageLevel: this.state.characterAverageLevel,
-              marketplaceAverageLevel:
-                this.state.characterMarketplaceAverageLevel,
-              amountSold: this.state.characterAmountSold,
-              latestSalePrice: this.state.characterLatestSalePrice,
-            },
-            item: {
-              collectionSize: this.state.itemCollectionSize,
-              averageLevel: this.state.itemAverageLevel,
-              marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
-              amountSold: this.state.itemAmountSold,
-              latestSalePrice: this.state.itemLatestSalePrice,
-            },
+            character: market.metrics.get('character'),
+            item: market.metrics.get('item'),
           };
         },
         getCharacterLevel(name) {

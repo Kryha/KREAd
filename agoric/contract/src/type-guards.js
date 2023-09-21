@@ -69,13 +69,7 @@ export const ItemGuard = M.splitRecord({
   artistMetadata: M.string(),
 });
 
-export const RarityGuard = M.or(
-  'common',
-  'uncommon',
-  'rare',
-  'legendary',
-  'exotic',
-);
+export const RarityGuard = M.or('common', 'uncommonToLegendary');
 
 export const ItemGuardBagShape = M.bagOf(ItemGuard);
 
@@ -84,6 +78,8 @@ export const MarketMetricsGuard = M.splitRecord({
   collectionSize: M.gte(0),
   averageLevel: M.gte(0),
   marketplaceAverageLevel: M.gte(0),
+  latestSalePrice: M.gte(0),
+  putForSaleAmount: M.gte(0),
 });
 
 export const UpdateMarketMetricsGuard = M.splitRecord(
@@ -99,6 +95,8 @@ export const UpdateMarketMetricsGuard = M.splitRecord(
       type: M.or('add', 'remove'),
       value: M.gte(0),
     }),
+    latestSalePrice: M.gte(0),
+    putForSaleAmount: M.boolean(),
   },
 );
 
@@ -133,6 +131,7 @@ export const CreatorI = M.interface('creator', {
     M.arrayOf([M.number(), BaseCharacterGuard]),
     M.arrayOf(ItemGuard),
   ).returns(),
+  initializeCharacterNamesEntries: M.call().returns(),
   makePublishItemCollectionInvitation: M.call().returns(M.promise()),
 });
 

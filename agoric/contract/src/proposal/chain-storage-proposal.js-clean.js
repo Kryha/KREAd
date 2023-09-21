@@ -454,6 +454,7 @@ const executeProposal = async (powers) => {
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
     },
+    minUncommonRating: 20,
   });
 
   const { instance, creatorFacet } = await E(startUpgradable)({
@@ -494,15 +495,8 @@ const executeProposal = async (powers) => {
   );
 
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
-
+  await E(creatorFacet).initializeCharacterNamesEntries();
   await E(creatorFacet).initializeMetrics();
-
-  // FIXME: Get the most recent state of metrics from the storage node and send it to the contract
-  // const data = {};
-  // const restoreMetricsInvitation = await E(
-  //   creatorFacet,
-  // ).makeRestoreMetricsInvitation();
-  // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
 
   // Revive seat exit subscribers after upgrade
   await E(creatorFacet).reviveMarketExitSubscribers();

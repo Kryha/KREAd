@@ -73,7 +73,8 @@ export const bootstrapContext = async (conf) => {
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
     }),
-  }
+    minUncommonRating: 20,
+  };
 
   // Start contract instance
   const instance = await E(zoe).startInstance(
@@ -85,6 +86,8 @@ export const bootstrapContext = async (conf) => {
   const { creatorFacet } = instance;
   const terms = await E(zoe).getTerms(instance.instance);
   await E(creatorFacet).initializeBaseAssets(defaultCharacters, defaultItems);
+  await E(creatorFacet).initializeCharacterNamesEntries();
+  await E(creatorFacet).initializeMetrics();
 
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
