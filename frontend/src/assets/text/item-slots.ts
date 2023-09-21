@@ -8,5 +8,5 @@ export const itemSlots = {
   perk2: "perk 2",
   filter1: "filter 1",
   filter2: "filter 2",
-  clothing: "clothing",
+  garment: "garment",
 };
