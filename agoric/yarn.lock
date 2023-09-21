@@ -234,7 +234,7 @@
     "@endo/marshal" "^0.6.7"
     "@endo/promise-kit" "^0.2.41"
 
-"@agoric/governance@^0.7.0":
+"@agoric/governance@^0.7.0", "@agoric/governance@beta":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@agoric/governance/-/governance-0.7.0.tgz#15ee226b4ee27a3dbf4f9b02c4b5fe74aca1d902"
   integrity sha512-46lMphbXPl47CNwFqgLXFyI9L716dbl0IvdufxixUYv5K308iVydiZhaFOgGgRQY+oRJ7oTHekPDO78GVlPOCw==

@@ -12,7 +12,7 @@
 // uncomment the following line to typecheck, for example, in vs-code.
 // import { E } from '@endo/far';
 
-const baseCharacters = [
+export const baseCharacters = [
   [
     1,
     {
@@ -86,7 +86,7 @@ const baseCharacters = [
   ],
 ];
 
-const baseItems = [
+export const baseItems = [
   {
     name: 'AirTox: Fairy Dust Elite',
     category: 'perk1',
@@ -356,7 +356,7 @@ const reserveThenGetNamePaths = async (nameAdmin, paths) => {
  */
 const executeProposal = async (powers) => {
   // Destructure the powers that we use.
-  // See also bakeSale-permit.json
+  // See also powers.json
   const {
     consume: {
       board,
@@ -380,7 +380,7 @@ const executeProposal = async (powers) => {
       },
     },
     instance: {
-      // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
+      // @ts-expect-error kreadKit isn't declared in vats/src/core/types.js
       produce: { [contractInfo.instanceName]: kread },
     },
   } = powers;
