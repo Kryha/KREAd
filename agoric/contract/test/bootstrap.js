@@ -73,7 +73,8 @@ export const bootstrapContext = async (conf) => {
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
     }),
-  }
+    minUncommonRating: 20,
+  };
 
   // Start contract instance
   const instance = await E(zoe).startInstance(

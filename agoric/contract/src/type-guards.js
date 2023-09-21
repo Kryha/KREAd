@@ -69,13 +69,7 @@ export const ItemGuard = M.splitRecord({
   artistMetadata: M.string(),
 });
 
-export const RarityGuard = M.or(
-  'common',
-  'uncommon',
-  'rare',
-  'legendary',
-  'exotic',
-);
+export const RarityGuard = M.or('common', 'uncommonToLegendary');
 
 export const ItemGuardBagShape = M.bagOf(ItemGuard);
 

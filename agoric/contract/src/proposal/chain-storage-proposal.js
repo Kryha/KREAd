@@ -286,7 +286,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-a264ad760b2a5c9bc18773cb4e7b02b39e01a7e02a4442e7920957bd4689cca76cf6382c4093014e42a528972259c5617da6f0f2e1e292fbfa3f692aa25f9221',
+    'b1-f8e879e8a013902510174f72cc310d74eb5297a4c27b33cd85b7415cb39bb977b3d89997fa05ba8bc6229de6556b5f9718df86d26b5920e93b88424612c77454',
 };
 
 const fail = (reason) => {
@@ -434,6 +434,7 @@ const executeProposal = async (powers) => {
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
     },
+    minUncommonRating: 20,
   });
 
   const { instance, creatorFacet } = await E(startUpgradable)({

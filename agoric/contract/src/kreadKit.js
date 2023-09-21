@@ -54,7 +54,8 @@ import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
  *   mintPlatformFeeRate: Ratio,
  *   royaltyDepositFacet: DepositFacet,
  *   platformFeeDepositFacet: DepositFacet,
- *   paymentBrand
+ *   paymentBrand: Brand,
+ *   minUncommonRating: number
  * }} privateArgs
  * @param {{
  *   characterIssuerRecord: IssuerRecord<"copyBag">
@@ -80,6 +81,7 @@ export const prepareKreadKit = async (
     royaltyDepositFacet,
     platformFeeDepositFacet,
     paymentBrand,
+    minUncommonRating,
   },
   {
     characterIssuerRecord,
@@ -754,26 +756,16 @@ export const prepareKreadKit = async (
           if (itemState.bases.getSize() > 0) return;
 
           const common = [];
-          const uncommon = [];
-          const rare = [];
-          const legendary = [];
-          const exotic = [];
+          const uncommonToLegendary = [];
 
-          //FIXME: get these magic numbers from terms
           baseItems.forEach((item) => {
-            if (item.rarity > 79) exotic.push(item);
-            else if (item.rarity > 59) legendary.push(item);
-            else if (item.rarity > 39) rare.push(item);
-            else if (item.rarity > 19) uncommon.push(item);
-            else common.push(item);
+            if (item.rarity < minUncommonRating) common.push(item);
+            else uncommonToLegendary.push(item);
           });
 
           itemState.bases.addAll([
             ['common', harden(common)],
-            ['uncommon', harden(uncommon)],
-            ['rare', harden(rare)],
-            ['legendary', harden(legendary)],
-            ['exotic', harden(exotic)],
+            ['uncommonToLegendary', harden(uncommonToLegendary)],
           ]);
         },
         // Mints the default set of items to a seat that doesn't exit
@@ -791,18 +783,17 @@ export const prepareKreadKit = async (
           const index2 = Math.floor(helper.randomNumber() * commonBases.length);
           const item2 = commonBases[index2];
 
-          const legendaryBases = itemState.bases
-            .get('legendary')
+          const uncommonToLegendary = itemState.bases
+            .get('uncommonToLegendary')
             .filter(
               (item) =>
                 item.category !== item1.category &&
                 item.category !== item2.category,
             );
-
           const index3 = Math.floor(
-            helper.randomNumber() * legendaryBases.length,
+            helper.randomNumber() * uncommonToLegendary.length,
           );
-          const item3 = legendaryBases[index3];
+          const item3 = uncommonToLegendary[index3];
 
           const items = [item1, item2, item3];
 
