@@ -1817,8 +1817,8 @@ export const prepareKreadKit = async (
       },
     },
   );
-  const { public: publicFacet, creator: creatorFacet } = makeKreadKitInternal();
-  return harden({ publicFacet, creatorFacet });
+  const facets = makeKreadKitInternal();
+  return harden({ public: facets.public, creator: facets.creator });
 };
 
 harden(prepareKreadKit);

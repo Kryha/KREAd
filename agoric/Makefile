@@ -8,6 +8,8 @@ KREAD_REPO =
 EVAL_PERMIT =
 EVAL_CODE =
 EVAL_CLEAN =
+KR_AG_DIR =
+PROP_DIR = $(KR_AG_DIR)/contract/src/proposal
 
 include Makefile.paths.local
 
@@ -38,6 +40,26 @@ wallet1:
 deploy:
 	agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js
 
+kread-committee:
+	agoric run contract/src/proposal/kread-committee-script.js | tee kread-committee.out
+	node contract/scripts/parseProposals.js < kread-committee.out | jq -r '.bundles[]' | sort -u > kread-committee-bundles.out
+	for b in `cat kread-committee-bundles.out` ; do \
+	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
+	done
+	cd $(COSMIC_SWINGSET_PATH); \
+	make scenario2-core-eval EVAL_PERMIT=$(KR_AG_DIR)/kread-invite-committee-permit.json \
+	   EVAL_CODE=$(KR_AG_DIR)/kread-invite-committee.js EVAL_CLEAN=$(KR_AG_DIR)/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=3 \
+
+start-kread:
+	agoric run contract/src/proposal/start-kread-script.js | tee start-kread.out
+	node contract/scripts/parseProposals.js < start-kread.out | jq -r '.bundles[]' | sort -u > start-kread-bundles.out
+	for b in `cat start-kread-bundles.out` ; do \
+	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
+	done
+	cd $(COSMIC_SWINGSET_PATH); \
+	make scenario2-core-eval EVAL_PERMIT=$(KR_AG_DIR)/start-kread-permit.json \
+	   EVAL_CODE=$(KR_AG_DIR)/start-kread.js EVAL_CLEAN=$(KR_AG_DIR)/start-kread.js.t scenario2-vote VOTE_PROPOSAL=4 \
+
 kread-bundle:
 	cd $(VATS_PATH); \
     yarn bundle-source --cache-json bundles/ ${KREAD_REPO} kread; \
@@ -63,11 +85,15 @@ provision-fee-collector:
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000uist; \
-    make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000ubld; \
+	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000ubld; \
 
 fund-pool:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-provision-pool \
+
+fund-large-contract:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=10000000000000000uist; \
 
 fund-account-atom:
 	cd $(COSMIC_SWINGSET_PATH); \
@@ -86,10 +112,10 @@ proposal-2:
 # before running make proposal
 bootstrap:
 	make provision-account; \
-    make fund-account; \
+	make fund-account; \
 	make kread-bundle; \
 	make proposal; \
 
 fund+provision:
 	make provision-account; \
-    make fund-account; \
+	make fund-account; \

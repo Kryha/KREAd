@@ -7,3 +7,4 @@ KREAD_REPO = /Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/ind
 EVAL_PERMIT = /Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/proposal/powers.json
 EVAL_CODE = /Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
 EVAL_CLEAN = $(EVAL_CODE)-clean.js
+KR_AG_DIR = /Users/carlostrigo/agoric-kread/agoric

@@ -57,7 +57,7 @@ test.before(async (t) => {
     character: contractAssets.character.issuer.makeEmptyPurse(),
     item: contractAssets.item.issuer.makeEmptyPurse(),
     payment: paymentAsset.issuerMockIST.makeEmptyPurse(),
-j  });
+  });
 
   const payout = paymentAsset.mintMockIST.mintPayment(
     AmountMath.make(paymentAsset.brandMockIST, harden(100n)),
@@ -762,11 +762,7 @@ test.serial(
 
 test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet, creatorFacet },
-    zoe,
-    paymentAsset,
-  } = t.context;
+  const { publicFacet, creatorFacet, zoe, paymentAsset } = t.context;
 
   const itemCollection = Object.values(defaultItems).map((item) => [item, 3n]);
   const itemsToSell = harden(itemCollection);
@@ -797,7 +793,7 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
 test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob },

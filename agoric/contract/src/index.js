@@ -7,8 +7,10 @@ import { M } from '@agoric/store';
 import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
 import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
+import { InvitationShape } from '@agoric/zoe/src/typeGuards.js';
+import { handleParamGovernance } from '@agoric/governance';
+
 import { prepareKreadKit } from './kreadKit.js';
-import { RatioObject } from './type-guards.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -26,6 +28,7 @@ import { RatioObject } from './type-guards.js';
 /** @type {ContractMeta} */
 export const meta = {
   privateArgsShape: M.splitRecord({
+    initialPoserInvitation: InvitationShape,
     seed: M.number(),
     clock: M.eref(M.remotable('Clock')),
     powers: {
@@ -60,11 +63,14 @@ export const meta = {
 harden(meta);
 
 /**
- * @param {ZCF} zcf
+ * @param {ZCF<GovernanceTerms<{}>>} zcf
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
  *   clock: Clock
+ *   defaultCharacters: object[],
+ *   defaultItems: object[],
+ *   initialPoserInvitation: Invitation
  * }} privateArgs
  *
  * @param {Baggage} baggage
@@ -98,6 +104,12 @@ export const start = async (zcf, privateArgs, baggage) => {
     marketCharacterMetricsKit: 'market-metrics-character',
     marketItemMetricsKit: 'market-metrics-item',
   };
+
+  const { makeGovernorFacet } = await handleParamGovernance(
+    zcf,
+    privateArgs.initialPoserInvitation,
+    {},
+  );
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
   // durability is not a concern with these, and defining them here, passing on what's needed
@@ -185,7 +197,11 @@ export const start = async (zcf, privateArgs, baggage) => {
     ),
   );
 
-  return harden(kreadKit);
+  return harden({
+    creatorFacet: makeGovernorFacet(kreadKit.creator),
+    // no governed parameters, so no need to augment.
+    publicFacet: kreadKit.public,
+  });
 };
 
 harden(start);
