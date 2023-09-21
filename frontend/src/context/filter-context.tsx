@@ -47,9 +47,11 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
   const [sort, setSort] = useState<string>("");
   const [colors, setColors] = useState<string>("");
   const [reset, setReset] = useState<boolean>(false);
+  const [character, setCharacter] = useState<string>("");
 
   const onReset = () => {
     setCategories([]);
+    setCharacter("");
     setOrigin([]);
     setRarity([]);
     setTitle([]);
@@ -63,6 +65,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
   useEffect(() => {
     setSearchParams(
       {
+        character,
         categories,
         origin,
         rarity,
@@ -75,11 +78,12 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
         relative: "path",
       },
     );
-  }, [categories, origin, rarity, colors, equippedTo, forSale, sort]);
+  }, [character, categories, origin, rarity, colors, equippedTo, forSale, sort]);
 
   const contextValue = useMemo(
     () => ({
       origin,
+      character,
       title,
       rarity,
       categories,
@@ -90,6 +94,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
       equippedTo,
       price,
       setTitle,
+      setCharacter,
       setEquippedTo,
       setOrigin,
       setCategories,
