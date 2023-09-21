@@ -46,7 +46,7 @@ export const MainMode: FC<Props> = ({ items, showItems }) => {
           </Row>
           <Row>
             <RightEquippedItemCard area="bottom" item={items.filter2} code={text.itemSlots.filter2} category={CATEGORY.filter2} />
-            <RightEquippedItemCard area="bottom" item={items.clothing} code={text.itemSlots.clothing} category={CATEGORY.clothing} />
+            <RightEquippedItemCard area="bottom" item={items.garment} code={text.itemSlots.garment} category={CATEGORY.garment} />
           </Row>
         </RightItemContainer>
       </RightPane>
