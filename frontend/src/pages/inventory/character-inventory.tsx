@@ -33,7 +33,7 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
       <AssetCharacterFilters section={SECTION.INVENTORY} pageSelector={pageSelector} />
       <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
-      {selectedId && <CharacterDetailsInventory character={character} selectedId={(id: string) => setSelectedId(id)} />}
+      {character && <CharacterDetailsInventory character={character} selectedId={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (
         <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: string) => setSelectedId(id)} />
       ) : (

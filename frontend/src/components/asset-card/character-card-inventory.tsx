@@ -1,5 +1,5 @@
 import { ExtendedCharacter } from "../../interfaces";
-import { BoldLabel, Dash, ImageProps } from "../atoms";
+import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel } from "../atoms";
 import { FC } from "react";
 import {
   AssetContent,
