@@ -2,11 +2,8 @@
 
 /** @file  This is a module for use with swingset.CoreEval. */
 
-import {E} from '@endo/far';
-import {
-  baseCharacters,
-  baseItems,
-} from './chain-storage-proposal.js';
+import { E } from '@endo/far';
+import { baseCharacters, baseItems } from './chain-storage-proposal.js';
 
 const KREAD_LABEL = 'KREAd';
 
@@ -22,7 +19,6 @@ const fail = (reason) => {
 /** @typedef {import('@agoric/deploy-script-support/src/coreProposalBehavior.js').BootstrapPowers} BootstrapPowers */
 /** @typedef {import('@agoric/governance/src/types-ambient.js').GovernanceFacetKit} GovernanceFacetKit */
 
-// copied from chain-storage-proposal because that file is a script, and this uses E.
 const reserveThenGetNamePaths = async (nameAdmin, paths) => {
   /**
    * @param {ERef<import('@agoric/vats').NameAdmin>} nextAdmin
@@ -62,35 +58,40 @@ const reserveThenGetNamePaths = async (nameAdmin, paths) => {
  * @param {{object}} kreadConfig
  * @returns {Promise<GovernanceFacetKit<SF>>}
  */
-const startGovernedInstance = async ({
-  consume: {
-    zoe,
-    chainTimerService: chainTimerServiceP,
-    chainStorage,
-    board,
-    kreadCommitteeCreatorFacet,
-    agoricNames,
-    namesByAddressAdmin,
-  },
-  produce: { kreadKit },
-  brand: {
-    produce: {
-      KREAdCHARACTER: produceCharacterBrand,
-      KREAdITEM: produceItemBrand,
+// TODO rename to startGovernedKread
+const startGovernedInstance = async (
+  {
+    consume: {
+      zoe,
+      chainTimerService: chainTimerServiceP,
+      chainStorage,
+      board,
+      kreadCommitteeCreatorFacet,
+      namesByAddressAdmin,
+    },
+    produce: { kreadKit },
+    brand: {
+      produce: {
+        KREAdCHARACTER: produceCharacterBrand,
+        KREAdITEM: produceItemBrand,
+      },
+    },
+    issuer: {
+      consume: { IST: istIssuerP },
+      produce: {
+        KREAdCHARACTER: produceCharacterIssuer,
+        KREAdITEM: produceItemIssuer,
+      },
+    },
+    installation: {
+      consume: { kreadKit: installP, contractGovernor: govP },
+    },
+    instance: {
+      produce: { [contractInfo.instanceName]: produceKreadInstance },
     },
   },
-  issuer: {
-    consume: { IST: istIssuerP },
-    produce: {
-      KREAdCHARACTER: produceCharacterIssuer,
-      KREAdITEM: produceItemIssuer,
-    },
-  },
-  installation: { consume: { kreadKit: installP, contractGovernor: govP }},
-  instance: {
-    produce: { [contractInfo.instanceName]: kread },
-  },
-}, { kreadConfig, }) => {
+  { kreadConfig },
+) => {
   const poserInvitationP = E(kreadCommitteeCreatorFacet).getPoserInvitation();
   const [
     initialPoserInvitation,
@@ -102,18 +103,17 @@ const startGovernedInstance = async ({
     kreadKitInstallation,
     contractGovernor,
     brand,
-  ] =
-    await Promise.all([
-      poserInvitationP,
-      chainTimerServiceP,
-      E(E(zoe).getInvitationIssuer()).getAmountOf(poserInvitationP),
-      E(board).getReadonlyMarshaller(),
-      istIssuerP,
-      chainStorage,
-      installP,
-      govP,
-      E(istIssuerP).getBrand(),
-    ]);
+  ] = await Promise.all([
+    poserInvitationP,
+    chainTimerServiceP,
+    E(E(zoe).getInvitationIssuer()).getAmountOf(poserInvitationP),
+    E(board).getReadonlyMarshaller(),
+    istIssuerP,
+    chainStorage,
+    installP,
+    govP,
+    E(istIssuerP).getBrand(),
+  ]);
 
   // XX These should be looked up in start-kread-script and passed in
   const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
@@ -165,6 +165,7 @@ const startGovernedInstance = async ({
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
     },
+    minUncommonRating: 20,
     governedParams: {
       Electorate: {
         type: 'invitation',
@@ -173,21 +174,19 @@ const startGovernedInstance = async ({
     },
   });
 
-  const governorTerms =
-    harden({
-      timer,
-      governedContractInstallation: kreadKitInstallation,
-      governed: {
-        terms: governedTerms,
-        issuerKeywordRecord: harden({ Money: istIssuer }),
-        label: KREAD_LABEL,
-      },
+  const governorTerms = harden({
+    timer,
+    governedContractInstallation: kreadKitInstallation,
+    governed: {
+      terms: governedTerms,
+      issuerKeywordRecord: harden({ Money: istIssuer }),
+      label: KREAD_LABEL,
     },
-  );
+  });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
-  const g = await  E(zoe).startInstance(
+  const g = await E(zoe).startInstance(
     contractGovernor,
     {},
     governorTerms,
@@ -208,6 +207,7 @@ const startGovernedInstance = async ({
     E(g.creatorFacet).getAdminFacet(),
   ]);
 
+  // FIXME make sure this ends up in durable storage
   kreadKit.resolve(
     harden({
       label: KREAD_LABEL,
@@ -223,43 +223,21 @@ const startGovernedInstance = async ({
     }),
   );
 
-
-  // Get board ids for instance and assets
-  const boardId = await E(board).getId(instance);
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
 
-  //FIXME: remove these infavour of terms and getting them differently
-  const [
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  ] = await Promise.all([
-    E(board).getId(characterBrand),
-    E(board).getId(characterIssuer),
-    E(board).getId(itemBrand),
-    E(board).getId(itemIssuer),
-  ]);
-
-  await E(creatorFacet).publishKreadInfo(
-    boardId,
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  );
-
   await Promise.all([
     E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems),
     E(creatorFacet).initializeMetrics(),
+    E(creatorFacet).initializeCharacterNamesEntries(),
     E(creatorFacet).reviveMarketExitSubscribers(),
   ]);
 
-  kread.resolve(instance);
+  produceKreadInstance.resolve(instance);
 
+  // resolving these publishes into agoricNames for `issuer` and `brand`
   produceCharacterIssuer.resolve(characterIssuer);
   produceCharacterBrand.resolve(characterBrand);
   produceItemIssuer.resolve(itemIssuer);
@@ -271,6 +249,7 @@ const startGovernedInstance = async ({
 
 /**
  * Execute a proposal to start a contract that publishes the KREAd dapp.
+ * Starts the contractGoverner contract which itself starts the KREAd instance.
  *
  * See also:
  * BLDer DAO governance using arbitrary code injection: swingset.CoreEval
@@ -278,9 +257,15 @@ const startGovernedInstance = async ({
  *
  * @param {BootstrapPowers} powers
  */
-export const startKread = async powers => {
+// TODO rename to startKreadGovernor
+export const startKread = async (powers) => {
   const {
-    consume: { board, agoricNamesAdmin, chainTimerService: clock },
+    consume: {
+      board,
+      // FIXME `clock` should be E(chainTimerService).getClock()
+      chainTimerService: clock,
+      zoe,
+    },
     instance: {
       produce: { [contractInfo.instanceName]: kread },
     },
@@ -293,101 +278,26 @@ export const startKread = async powers => {
     seed: 303,
   });
 
-  const { publicFacet, creatorFacet, instance } = await startGovernedInstance(
-    powers,
-    { kreadConfig },
-  );
-
-  // Get board ids for instance and assets
-  const boardId = await E(board).getId(instance);
-  const {
-    character: { issuer: characterIssuer, brand: characterBrand },
-    item: { issuer: itemIssuer, brand: itemBrand },
-    payment: { issuer: tokenIssuer, brand: tokenBrand },
-  } = await E(publicFacet).getTokenInfo();
-
-  const [
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
-  ] = await Promise.all([
-    E(board).getId(characterBrand),
-    E(board).getId(characterIssuer),
-    E(board).getId(itemBrand),
-    E(board).getId(itemIssuer),
-    E(board).getId(tokenBrand),
-    E(board).getId(tokenIssuer),
-  ]);
-
-  const assetBoardIds = {
-    character: {
-      issuer: CHARACTER_ISSUER_BOARD_ID,
-      brand: CHARACTER_BRAND_BOARD_ID,
-    },
-    item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
-    paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
-  };
-
-  await E(creatorFacet).publishKreadInfo(
-    boardId,
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
-  );
-
-  await E(creatorFacet).initializeMetrics();
-
-  // TODO Get the most recent state of metrics from the storage node and send it to the contract
-  // const data = {};
-  // const restoreMetricsInvitation = await E(
-  //   creatorFacet,
-  // ).makeRestoreMetricsInvitation();
-  // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
-
-  // Log board ids for use in frontend constants
-  console.log(`KREAD BOARD ID: ${boardId}`);
-  for (const [key, value] of Object.entries(assetBoardIds)) {
-    console.log(`${key.toUpperCase()} BRAND BOARD ID: ${value.brand}`);
-    console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
-  }
-
-  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
-  kread.resolve(instance);
-
-  const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
-
-  await E(kindAdmin('issuer')).update('KREAdCHARACTER', characterIssuer);
-  await E(kindAdmin('brand')).update('KREAdCHARACTER', characterBrand);
-
-  await E(kindAdmin('issuer')).update('KREAdITEM', itemIssuer);
-  await E(kindAdmin('brand')).update('KREAdITEM', itemBrand);
-
-  console.log('ASSETS ADDED TO AGORIC NAMES');
-  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
+  // FIXME save the results durably
+  await startGovernedInstance(powers, { kreadConfig });
 };
 harden(startKread);
 
 export const getManifestForStartKread = async (
   { restoreRef },
-  { kreadKitRef }
+  { kreadKitRef },
 ) => ({
   manifest: {
     [startKread.name]: {
       consume: {
         board: true,
-        agoricNamesAdmin: true,
         zoe: true,
         chainTimerService: true,
         chainStorage: true,
         kreadCommitteeCreatorFacet: true,
         agoricNames: true,
         namesByAddressAdmin: true,
+        zoe: true,
       },
       instance: {
         produce: { [contractInfo.instanceName]: true },
@@ -396,17 +306,21 @@ export const getManifestForStartKread = async (
         consume: {
           kreadKit: true,
           contractGovernor: true,
-      }},
-      brand: { produce: {
-        KREAdCHARACTER: true,
-        KREAdITEM: true,
-      }},
+        },
+      },
+      brand: {
+        produce: {
+          KREAdCHARACTER: true,
+          KREAdITEM: true,
+        },
+      },
       issuer: {
         consume: { IST: true },
         produce: {
           KREAdCHARACTER: true,
           KREAdITEM: true,
-        }      },
+        },
+      },
       produce: { kreadKit: true },
     },
   },

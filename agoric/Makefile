@@ -2,12 +2,8 @@ SDK_PATH =
 COSMIC_SWINGSET_PATH =
 VATS_PATH =
 KEPLR_ADDRESS =
-KEPLR_ADDRESS2 =
 FEE_ADDRESS = agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu
 KREAD_REPO =
-EVAL_PERMIT =
-EVAL_CODE =
-EVAL_CLEAN =
 KR_AG_DIR =
 PROP_DIR = $(KR_AG_DIR)/contract/src/proposal
 
@@ -39,6 +35,14 @@ wallet1:
 
 deploy:
 	agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js
+
+# To start the KREAd contract:
+# 1. start the chain using `make local-testnet'
+# 2.  TBD ...  update KEPLR_ADDRESS in Makefile.paths
+# 3. fund the account using `make fund-account`
+# 4. make the committee using 'KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make kread-committee'
+# 5. make provision-fee-collector
+# 6. start the KREAd contract using 'KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make start-kread'
 
 kread-committee:
 	agoric run contract/src/proposal/kread-committee-script.js | tee kread-committee.out
@@ -94,14 +98,6 @@ fund-pool:
 fund-account-atom:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=100000000ibc/toyatom; \
-
-proposal:
-	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval EVAL_PERMIT=$(EVAL_PERMIT) EVAL_CLEAN=$(EVAL_CLEAN) scenario2-vote \
-
-proposal-2:
-	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval EVAL_PERMIT=$(EVAL_PERMIT) EVAL_CLEAN=$(EVAL_CLEAN) scenario2-vote VOTE_PROPOSAL=2 \
 
 # note if you made changes to the contract code you must
 # copy the resulting hash from kread-bundle into the proposal
