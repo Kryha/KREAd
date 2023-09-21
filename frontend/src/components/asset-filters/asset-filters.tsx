@@ -14,7 +14,14 @@ import { breakpoints, color } from "../../design";
 import { ColorSelector, Filters, HorizontalDivider, Label, PriceSelector, Select } from "../../components";
 import { text } from "../../assets";
 import { useIsMobile } from "../../hooks";
-import { AssetFilterContainer, AssetFilterCount, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
+import {
+  AssetFilterContainer,
+  AssetFilterCount,
+  AssetFilterWrapper,
+  AssetSelectorContainer,
+  PageMetricsWrapper,
+  SortAssetsByContainer,
+} from "./styles";
 import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
 import { ItemCategory } from "../../interfaces";
 
@@ -22,6 +29,7 @@ interface Props {
   assetType: (typeof ASSET_TYPE)[keyof typeof ASSET_TYPE];
   section: (typeof SECTION)[keyof typeof SECTION];
   assets: any[];
+  metrics?: React.ReactNode;
   selectedCategories: ItemCategory[];
   selectedSorting: string;
   selectedPrice?: { min: number; max: number };
@@ -36,6 +44,7 @@ export const AssetFilters: FC<Props> = ({
   assetType,
   section,
   assets,
+  metrics,
   selectedCategories,
   selectedSorting,
   selectedPrice,
@@ -63,24 +72,24 @@ export const AssetFilters: FC<Props> = ({
   const categories =
     assetType === ASSET_TYPE.ITEM
       ? // Items
-        section === SECTION.INVENTORY
+      section === SECTION.INVENTORY
         ? itemInventoryCategories
         : itemShopCategories
       : // Characters
       section === SECTION.INVENTORY
-      ? characterInventoryCategories
-      : characterShopCategories;
+        ? characterInventoryCategories
+        : characterShopCategories;
 
   const sortOptions =
     assetType === ASSET_TYPE.ITEM
       ? // Items
-        section === SECTION.INVENTORY
+      section === SECTION.INVENTORY
         ? sortItemsInInventory
         : sortItemsInShop
       : // Characters
       section === SECTION.INVENTORY
-      ? sortCharactersInInventory
-      : sortCharactersInShop;
+        ? sortCharactersInInventory
+        : sortCharactersInShop;
 
   const handleCategoryChange = (selected: ItemCategory[]) => {
     // if (Array.isArray(selected)) {
@@ -105,7 +114,10 @@ export const AssetFilters: FC<Props> = ({
       <AssetFilterWrapper>
         <AssetFilterContainer>
           <AssetSelectorContainer>
-            {pageSelector}
+            <PageMetricsWrapper>
+              {pageSelector}
+              {metrics}
+            </PageMetricsWrapper>
             {isMobile && <Filters label={`${text.filters.filters}: ${numberOfFiltersSelected}`} openFilter={openFilters} id={filterId} />}
             {!isMobile && (
               <>

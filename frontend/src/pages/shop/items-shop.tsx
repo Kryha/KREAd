@@ -40,12 +40,12 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   if (!items) return <></>;
   return (
     <>
-      <MarketplaceMetrics header={metricsLabels} data={metricsValues} />
       <AssetFilters
         assetType={ASSET_TYPE.ITEM}
         section={SECTION.SHOP}
         pageSelector={pageSelector}
         assets={items}
+        metrics={<MarketplaceMetrics header={metricsLabels} data={metricsValues} />}
         selectedCategories={selectedCategories}
         selectedSorting={selectedSorting}
         selectedPrice={selectedPrice}

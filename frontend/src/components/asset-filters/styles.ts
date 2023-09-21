@@ -49,6 +49,15 @@ export const AssetFilterContainer = styled.div`
 export const AssetSelectorContainer = styled.div`
   display: flex;
   gap: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+export const PageMetricsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const SortAssetsByContainer = styled.div`
