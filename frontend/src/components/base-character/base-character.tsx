@@ -85,8 +85,8 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, i
           zIndex={zIndex.frontMask}
         />
         <ItemIcon
-          src={items?.clothing?.image || Empty}
-          alt={items?.clothing?.name || text.character.clothing}
+          src={items?.garment?.image || Empty}
+          alt={items?.garment?.name || text.character.garment}
           width={width}
           height={height}
           zIndex={zIndex.clothing}
