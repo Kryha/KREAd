@@ -366,9 +366,6 @@ const executeProposal = async (powers) => {
       chainTimerService,
       namesByAddressAdmin,
     },
-    // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
-    // FIXME: Remove?
-    produce: { kreadKit },
     brand: {
       produce: {
         KREAdCHARACTER: produceCharacterBrand,
@@ -431,7 +428,6 @@ const executeProposal = async (powers) => {
   const settledTimer = await chainTimerService;
   const clock = await E(settledTimer).getClock();
 
-  //FIXME: update this based privageargs/terms
   const kreadConfig = harden({
     clock,
     seed: 303,
@@ -465,9 +461,6 @@ const executeProposal = async (powers) => {
     terms,
   });
 
-  // Get board ids for instance and assets
-  const boardId = await E(board).getId(instance);
-  //FIXME: update this based no getTerms
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
