@@ -306,7 +306,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-f8e879e8a013902510174f72cc310d74eb5297a4c27b33cd85b7415cb39bb977b3d89997fa05ba8bc6229de6556b5f9718df86d26b5920e93b88424612c77454',
+    'b1-2a8bcce2e041d96b474bedebb7f2a014a6ae18a483c6a0d2d0d49d05b6ba2d21ccf4be62880c7ec7d02feb00ea9d986be0dfa4d9885110ee45020973875e81b3',
 };
 
 const fail = (reason) => {
@@ -431,6 +431,7 @@ const executeProposal = async (powers) => {
   const settledTimer = await chainTimerService;
   const clock = await E(settledTimer).getClock();
 
+  //FIXME: update this based privageargs/terms
   const kreadConfig = harden({
     clock,
     seed: 303,
@@ -466,6 +467,7 @@ const executeProposal = async (powers) => {
 
   // Get board ids for instance and assets
   const boardId = await E(board).getId(instance);
+  //FIXME: update this based no getTerms
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
