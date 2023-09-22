@@ -1,5 +1,5 @@
-// eslint-disable-next-line import/order
 import { test } from './prepare-test-env-ava.js';
+
 import { E } from '@endo/eventual-send';
 import { AmountMath } from '@agoric/ertp';
 import { bootstrapContext } from './bootstrap.js';
