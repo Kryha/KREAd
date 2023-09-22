@@ -54,8 +54,97 @@ export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
 };
 
 /**
- * Variant of startGovernedInstance from basic-behaviors.js, modified for
- * KREAd's needs. Takes an arbitrary committee. Could it be generalized more?
+ * @template {GovernableStartFn} SF
+ * @param {{
+ *   zoe: ERef<ZoeService>;
+ *   governedContractInstallation: ERef<Installation<SF>>;
+ *   issuerKeywordRecord?: IssuerKeywordRecord;
+ *   terms: Record<string, unknown>;
+ *   privateArgs: any; // TODO: connect with Installation type
+ *   label: string;
+ * }} zoeArgs
+ * @param {{
+ *   governedParams: Record<string, unknown>;
+ *   timer: ERef<import('@agoric/time/src/types').TimerService>;
+ *   contractGovernor: ERef<Installation>;
+ *   economicCommitteeCreatorFacet: import('@agoric/inter-protocol/src/proposals/econ-behaviors.js').EconomyBootstrapPowers['consume']['economicCommitteeCreatorFacet'];
+ * }} govArgs
+ * @returns {Promise<GovernanceFacetKit<SF>>}
+ */
+const startGovernedInstance = async (
+  {
+    zoe,
+    governedContractInstallation,
+    issuerKeywordRecord,
+    terms,
+    privateArgs,
+    label,
+  },
+  { governedParams, timer, contractGovernor, economicCommitteeCreatorFacet },
+) => {
+  const poserInvitationP = E(
+    economicCommitteeCreatorFacet,
+  ).getPoserInvitation();
+  const [initialPoserInvitation, electorateInvitationAmount] =
+    await Promise.all([
+      poserInvitationP,
+      E(E(zoe).getInvitationIssuer()).getAmountOf(poserInvitationP),
+    ]);
+
+  const governorTerms = await deeplyFulfilledObject(
+    harden({
+      timer,
+      governedContractInstallation,
+      governed: {
+        terms: {
+          ...terms,
+          governedParams: {
+            [CONTRACT_ELECTORATE]: {
+              type: ParamTypes.INVITATION,
+              value: electorateInvitationAmount,
+            },
+            ...governedParams,
+          },
+        },
+        issuerKeywordRecord,
+        label,
+      },
+    }),
+  );
+  const governorFacets = await E(zoe).startInstance(
+    contractGovernor,
+    {},
+    governorTerms,
+    harden({
+      economicCommitteeCreatorFacet,
+      governed: {
+        ...privateArgs,
+        initialPoserInvitation,
+      },
+    }),
+    `${label}-governor`,
+  );
+  const [instance, publicFacet, creatorFacet, adminFacet] = await Promise.all([
+    E(governorFacets.creatorFacet).getInstance(),
+    E(governorFacets.creatorFacet).getPublicFacet(),
+    E(governorFacets.creatorFacet).getCreatorFacet(),
+    E(governorFacets.creatorFacet).getAdminFacet(),
+  ]);
+  /** @type {GovernanceFacetKit<SF>} */
+  const facets = harden({
+    instance,
+    publicFacet,
+    governor: governorFacets.instance,
+    creatorFacet,
+    adminFacet,
+    governorCreatorFacet: governorFacets.creatorFacet,
+    governorAdminFacet: governorFacets.adminFacet,
+  });
+  return facets;
+};
+
+/**
+ * Generalized from basic-behaviors.js to take an arbitrary committee.
  *
  * @template {GovernableStartFn} SF
  * @param {BootstrapPowers} powers
