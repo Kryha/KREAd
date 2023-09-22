@@ -1171,10 +1171,10 @@ export const prepareKreadKit = async (
             const platformFee = multiplyBy(want.Price, platformFeeRate);
 
             const claimedIdAndRecorder = await Promise.all(
-              itemsToSell.map(async (copyBagEntry) => {
+              itemsToSell.map((copyBagEntry) => {
                 const [_, itemSupply] = copyBagEntry;
                 const supplyRange = Array(Number(itemSupply));
-                const idAndRecorder = await Promise.all(
+                return Promise.all(
                   supplyRange.map(async () => {
                     // putForSaleCount is incremented by updateMetrics() with each iteration of this loop
                     const id =
@@ -1188,7 +1188,6 @@ export const prepareKreadKit = async (
                     return [id, entryRecorder];
                   }),
                 );
-                return idAndRecorder;
               }),
             );
 
