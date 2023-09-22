@@ -49,11 +49,12 @@
  * @typedef  {{
  *   sellerSeat: ZCFSeat
  *   id: string
- *   object: object[]
+ *   asset: object[]
  *   askingPrice: any
  *   isFirstSale: boolean
  *   royalty: Amount<AssetKind>
  *   platformFee: Amount<AssetKind>
+ *   recorderKit: import("./utils.js").RecorderKit
  * }} ItemMarketRecord
  *
  * @typedef {{
@@ -265,12 +266,12 @@
  *     type: ("add" | "remove")
  *     value: number
  * }} UpdateAverage
- * 
+ *
  * @typedef {{
  *     numerator: bigint,
  *     denominator: bigint,
  *  }} RatioObject
- * 
+ *
  * @typedef {{
  *     success: boolean,
  *     error: string,

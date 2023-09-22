@@ -79,7 +79,7 @@ export const MarketMetricsGuard = M.splitRecord({
   averageLevel: M.gte(0),
   marketplaceAverageLevel: M.gte(0),
   latestSalePrice: M.gte(0),
-  putForSaleAmount: M.gte(0),
+  putForSaleCount: M.gte(0),
 });
 
 export const UpdateMarketMetricsGuard = M.splitRecord(
@@ -96,7 +96,7 @@ export const UpdateMarketMetricsGuard = M.splitRecord(
       value: M.gte(0),
     }),
     latestSalePrice: M.gte(0),
-    putForSaleAmount: M.boolean(),
+    putForSaleCount: M.boolean(),
   },
 );
 
@@ -123,7 +123,6 @@ export const PublicI = M.interface('public', {
 });
 
 export const CreatorI = M.interface('creator', {
-  publishKreadInfo: M.call().returns(),
   makeMintItemInvitation: M.call().returns(M.promise()),
   initializeMetrics: M.call().returns(),
   reviveMarketExitSubscribers: M.call().returns(),
@@ -160,28 +159,32 @@ export const ItemI = M.interface('item', {
   initializeBaseItems: M.call(M.arrayOf(ItemGuard)).returns(),
 });
 
-export const MarketRecorderGuard = M.splitRecord({
-  id: M.or(M.gte(0), M.string()),
-  askingPrice: M.splitRecord({
-    brand: BrandShape,
-    value: M.nat(),
+export const MarketRecorderGuard = M.or(
+  M.splitRecord({
+    id: M.or(M.gte(0), M.string()),
+    askingPrice: M.splitRecord({
+      brand: BrandShape,
+      value: M.nat(),
+    }),
+    royalty: M.splitRecord({
+      brand: BrandShape,
+      value: M.nat(),
+    }),
+    platformFee: M.splitRecord({
+      brand: BrandShape,
+      value: M.nat(),
+    }),
+    asset: M.or(CharacterGuard, ItemGuard),
+    isFirstSale: M.boolean(),
+    // history: M.arrayOf(HistoryGuard),
   }),
-  royalty: M.splitRecord({
-    brand: BrandShape,
-    value: M.nat(),
-  }),
-  platformFee: M.splitRecord({
-    brand: BrandShape,
-    value: M.nat(),
-  }),
-  object: M.or(CharacterGuard, ItemGuard),
-  isFirstSale: M.boolean(),
-  // history: M.arrayOf(HistoryGuard),
-});
+  M.string(''),
+);
 
 export const MarketEntryGuard = M.splitRecord({
   id: M.or(M.gte(0), M.string()),
   seat: M.eref(M.remotable('Seat')),
+  recorderKit: M.record(), // TODO: figure out how to type recorderkits
   askingPrice: M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
@@ -194,7 +197,7 @@ export const MarketEntryGuard = M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
   }),
-  object: M.or(CharacterGuard, ItemGuard),
+  asset: M.or(CharacterGuard, ItemGuard),
   isFirstSale: M.boolean(),
   // history: M.arrayOf(HistoryGuard),
 });
@@ -207,22 +210,15 @@ export const MarketI = M.interface('market', {
   buySecondarySaleItem: M.call().returns(M.promise()),
   handleExitItem: M.call(MarketEntryGuard).returns(),
   handleExitCharacter: M.call(MarketEntryGuard).returns(),
+  makeMarketItemRecorderKit: M.call(M.number()).returns(M.promise()),
+  makeMarketCharacterRecorderKit: M.call(M.string()).returns(M.promise()),
+  deleteNode: M.call(M.remotable('StorageNode')).returns(M.promise(/* void */)),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
   updateMetrics: M.call(
     M.or('character', 'item'),
     UpdateMarketMetricsGuard,
   ).returns(),
-});
-
-export const KreadInfoGuard = M.splitRecord({
-  instanceBoardId: M.string(),
-  characterBrandBoardId: M.string(),
-  characterIssuerBoardId: M.string(),
-  itemBrandBoardId: M.string(),
-  itemIssuerBoardId: M.string(),
-  tokenBrandBoardId: M.string(),
-  tokenIssuerBoardId: M.string(),
 });
 
 export const HistoryGuard = M.splitRecord({

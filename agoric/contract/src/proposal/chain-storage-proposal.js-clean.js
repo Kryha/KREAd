@@ -306,7 +306,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-a264ad760b2a5c9bc18773cb4e7b02b39e01a7e02a4442e7920957bd4689cca76cf6382c4093014e42a528972259c5617da6f0f2e1e292fbfa3f692aa25f9221',
+    'b1-e94a7e516c644841498f5bdb875d03c1e3f05bd48e4d3d7f365dc1ba9e48d0354ddeda56edbe11edc3987fdd96c493307758878fdc9af96dd70cab51761ef3ee',
 };
 
 const fail = (reason) => {
@@ -366,9 +366,6 @@ const executeProposal = async (powers) => {
       chainTimerService,
       namesByAddressAdmin,
     },
-    // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
-    // FIXME: Remove?
-    produce: { kreadKit },
     brand: {
       produce: {
         KREAdCHARACTER: produceCharacterBrand,
@@ -431,7 +428,6 @@ const executeProposal = async (powers) => {
   const settledTimer = await chainTimerService;
   const clock = await E(settledTimer).getClock();
 
-  //FIXME: update this based privageargs/terms
   const kreadConfig = harden({
     clock,
     seed: 303,
@@ -465,34 +461,10 @@ const executeProposal = async (powers) => {
     terms,
   });
 
-  // Get board ids for instance and assets
-  const boardId = await E(board).getId(instance);
-  //FIXME: update this based no getTerms
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
-
-  //FIXME: remove these infavour of terms and getting them differently
-  const [
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  ] = await Promise.all([
-    E(board).getId(characterBrand),
-    E(board).getId(characterIssuer),
-    E(board).getId(itemBrand),
-    E(board).getId(itemIssuer),
-  ]);
-
-  await E(creatorFacet).publishKreadInfo(
-    boardId,
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  );
 
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
   await E(creatorFacet).initializeCharacterNamesEntries();
@@ -516,4 +488,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/privilegemendes/WebstormProjects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/wietzes/Documents/cosmos/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js

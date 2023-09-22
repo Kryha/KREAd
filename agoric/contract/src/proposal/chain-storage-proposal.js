@@ -306,7 +306,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-f8e879e8a013902510174f72cc310d74eb5297a4c27b33cd85b7415cb39bb977b3d89997fa05ba8bc6229de6556b5f9718df86d26b5920e93b88424612c77454',
+    'b1-e94a7e516c644841498f5bdb875d03c1e3f05bd48e4d3d7f365dc1ba9e48d0354ddeda56edbe11edc3987fdd96c493307758878fdc9af96dd70cab51761ef3ee',
 };
 
 const fail = (reason) => {
@@ -366,9 +366,6 @@ const executeProposal = async (powers) => {
       chainTimerService,
       namesByAddressAdmin,
     },
-    // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
-    // FIXME: Remove?
-    produce: { kreadKit },
     brand: {
       produce: {
         KREAdCHARACTER: produceCharacterBrand,
@@ -464,8 +461,6 @@ const executeProposal = async (powers) => {
     terms,
   });
 
-  // Get board ids for instance and assets
-  const boardId = await E(board).getId(instance);
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
