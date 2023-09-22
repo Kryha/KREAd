@@ -67,8 +67,8 @@ export const bootstrapContext = async (conf = undefined) => {
     platformFeeRate,
     mintRoyaltyRate,
     mintPlatformFeeRate,
-    royaltyDepositFacet: royaltyDepositFacet,
-    platformFeeDepositFacet: platformFeeDepositFacet,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
     paymentBrand: brandMockIST,
     assetNames: harden({
       character: 'KREAdCHARACTER',

@@ -1,5 +1,5 @@
 import { M } from '@agoric/store';
-import { BrandShape, IssuerShape } from '@agoric/ertp';
+import { BrandShape } from '@agoric/ertp';
 
 export const HelperI = M.interface(
   'helper',

@@ -17,10 +17,7 @@ test.before(async (t) => {
 const unequipOffer = async (t) => {
   /** @type {Bootstrap} */
   const { publicFacet, contractAssets, purses, zoe } = t.context;
-  const {
-    characterName,
-    unequip: { message },
-  } = flow.inventory;
+  const { characterName } = flow.inventory;
 
   const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
@@ -77,10 +74,7 @@ const unequipOffer = async (t) => {
 test.serial('| INVENTORY - Unequip Item', async (t) => {
   /** @type {Bootstrap} */
   const { publicFacet, purses } = t.context;
-  const {
-    characterName,
-    unequip: { message },
-  } = flow.inventory;
+  const { characterName } = flow.inventory;
 
   await unequipOffer(t);
 
@@ -169,14 +163,11 @@ test.serial('| INVENTORY - Unequip already unequipped item', async (t) => {
 test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
   /** @type {Bootstrap} */
   const { publicFacet, contractAssets, purses, zoe } = t.context;
-  const {
-    characterName,
-    unequip: { message },
-  } = flow.inventory;
+  const { characterName } = flow.inventory;
   const initialItemsInPurse =
     purses.item.getCurrentAmount().value.payload.length;
 
-  let characterInventory = await E(publicFacet).getCharacterInventory(
+  const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
   const noseItem = characterInventory.items
@@ -192,7 +183,7 @@ test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
   );
   const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
 
-  //incorrectly calculate wantedKeyId
+  // incorrectly calculate wantedKeyId
   const wantedKeyId =
     characterKeyAmount.value.payload[0][0].keyId === 1 ? 1 : 2;
 
@@ -554,7 +545,7 @@ test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
       [
         purses.item
           .getCurrentAmount()
-          .value.payload.find(([item, supply]) => item.rarity > 59)[0],
+          .value.payload.find(([item, _supply]) => item.rarity > 59)[0],
         1n,
       ],
     ]),
@@ -641,7 +632,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
       [
         purses.item
           .getCurrentAmount()
-          .value.payload.find(([item, supply]) => item.rarity > 59)[0],
+          .value.payload.find(([item, _supply]) => item.rarity > 59)[0],
         1n,
       ],
     ]),

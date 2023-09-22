@@ -1,16 +1,17 @@
 // @jessie-check
 
-import '@agoric/governance/exported.js';
 import { M } from '@agoric/store';
 import { TimestampShape } from '@agoric/time';
 import { prepareExo, provideDurableMapStore } from '@agoric/vat-data';
 import '@agoric/zoe/exported.js';
-import '@agoric/zoe/src/contracts/exported.js';
 import {
   InstallationShape,
   InstanceHandleShape,
 } from '@agoric/zoe/src/typeGuards.js';
 import { E } from '@endo/far';
+
+import '@agoric/governance/exported.js';
+import '@agoric/zoe/src/contracts/exported.js';
 
 /**
  * @file This contract makes it possible for those who govern the KREAd contract
@@ -42,7 +43,7 @@ export const start = async (zcf, privateArgs, baggage) => {
   );
 
   const makeOfferFilterInvitation = (instance, strings, deadline) => {
-    const voteOnOfferFilterHandler = seat => {
+    const voteOnOfferFilterHandler = (seat) => {
       seat.exit();
 
       const governor = instanceToGovernor.get(instance);
@@ -71,7 +72,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     },
   );
 
-  const charterMemberHandler = seat => {
+  const charterMemberHandler = (seat) => {
     seat.exit();
     return harden({ invitationMakers });
   };

@@ -5,6 +5,8 @@
 import { E } from '@endo/far';
 import { baseCharacters, baseItems } from './base-inventory.js';
 
+import '@agoric/governance/src/types-ambient.js';
+
 const KREAD_LABEL = 'KREAd';
 
 const contractInfo = {
@@ -12,12 +14,13 @@ const contractInfo = {
   instanceName: 'kread',
 };
 
+const { Fail } = assert;
+
 const fail = (reason) => {
   throw reason;
 };
 
 /** @typedef {import('@agoric/deploy-script-support/src/coreProposalBehavior.js').BootstrapPowers} BootstrapPowers */
-/** @typedef {import('@agoric/governance/src/types-ambient.js').GovernanceFacetKit} GovernanceFacetKit */
 
 const reserveThenGetNamePaths = async (nameAdmin, paths) => {
   /**
@@ -261,13 +264,8 @@ const startGovernedInstance = async (
 export const startKread = async (powers) => {
   const {
     consume: {
-      board,
       // FIXME `clock` should be E(chainTimerService).getClock()
       chainTimerService: clock,
-      zoe,
-    },
-    instance: {
-      produce: { [contractInfo.instanceName]: kread },
     },
   } = powers;
 
@@ -297,7 +295,6 @@ export const getManifestForStartKread = async (
         kreadCommitteeCreatorFacet: true,
         agoricNames: true,
         namesByAddressAdmin: true,
-        zoe: true,
       },
       instance: {
         produce: { [contractInfo.instanceName]: true },

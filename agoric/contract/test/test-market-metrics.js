@@ -113,7 +113,7 @@ test.serial('---| METRICS - Initialization', async (t) => {
   const metrics = await E(publicFacet).getMarketMetrics();
 
   for (const collection of Object.values(metrics)) {
-    for (let value of Object.values(collection)) {
+    for (const value of Object.values(collection)) {
       t.deepEqual(value, 0);
     }
   }
