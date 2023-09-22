@@ -10,6 +10,9 @@ node_modules
 
 # production
 /build
+bundles
+dist
+*.out
 
 # misc
 .DS_Store

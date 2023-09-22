@@ -93,17 +93,18 @@ To run the application for more than one user follow these steps:
 ## to start up the backend on a local chain
 
 1. Start the chain
-   a. make local-testnet
+   1. make local-testnet
 2. Update KEPLR_ADDRESS in Makefile.paths
-   a. TBD ...  better instructions coming
+   1. try to make the committee below, but it'll give you an aswer that some account doesn't exist
+   2. copy that address into Makefile.paths.local
 3. fund the account
-   a. make fund-account
+   1. make fund-account
 4. make the committee
-   a. KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make kread-committee
+   1. KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make kread-committee
 5. provision the fee collector wallet
-   a. make provision-fee-collector
+   1. make provision-fee-collector
 6. start the KREAd contract
-   a. make start-kread
+   1. make clean start-kread
 
 To confirm it started,
 - in chain log you should see "CONTRACT INIT SUCCESS"

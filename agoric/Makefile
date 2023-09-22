@@ -12,10 +12,10 @@ VATS_PATH = $(SDK_PATH)/packages/vats
 EVAL_PERMIT = $(KREAD_REPO)/agoric/contract/src/proposal/powers.json
 EVAL_CODE = $(KREAD_REPO)/agoric/contract/src/proposal/chain-storage-proposal.js
 EVAL_CLEAN = $(EVAL_CODE)-clean.js
-KR_AG_DIR = $(KREAD_REPO)/agoric
-PROP_DIR = $(KR_AG_DIR)/contract/src/proposal
+AG_DIR = $(KREAD_REPO)/agoric
+PROP_DIR = $(AG_DIR)/contract/src/proposal
 
-LAST_PROPOSAL=`agd query gov proposals --output json | jq -cr '.proposals[-1] | [.proposal_id][0]'`
+NEXT_PROPOSAL=$$((`agd query gov proposals --output json | jq -cr '.proposals[-1] | [.proposal_id][0]'`+1))
 
 chain-reset:
 	agoric start local-chain --reset --verbose
@@ -61,7 +61,7 @@ dist/kread-invite-committee-permit.json dist/kread-invite-committee.js dist/krea
 
 dist/start-kread-permit.json dist/start-kread.js dist/start-kread-info.json: dist/.keep \
 		contract/src/proposal/start-kread-script.js
-	cd dist && agoric run ../contract/src/proposal/start-kread-script.js >start-kread-info.txt
+	cd dist && KREAD_ROYALTY_ADDRESS=$(FEE_ADDRESS) KREAD_PLATFORM_ADDRESS=$(FEE_ADDRESS) agoric run ../contract/src/proposal/start-kread-script.js >start-kread-info.txt
 	node contract/scripts/parseProposals.js <dist/start-kread-info.txt >dist/start-kread-info.json \
 		|| rm dist/start-kread-info.json
 
@@ -82,8 +82,8 @@ kread-committee: dist/kread-committee-info.json
 	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval EVAL_PERMIT=dist/kread-invite-committee-permit.json \
-	   EVAL_CODE=$(PWD)/dist/kread-invite-committee.js EVAL_CLEAN=$(PWD)/dist/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
+	make scenario2-core-eval EVAL_PERMIT=$(AG_DIR)/dist/kread-invite-committee-permit.json \
+	   EVAL_CODE=$(AG_DIR)/dist/kread-invite-committee.js EVAL_CLEAN=$(AG_DIR)/dist/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=$(NEXT_PROPOSAL) \
 
 start-kread: dist/start-kread-info.json
 	jq -r '.bundles[]' dist/start-kread-info.json | sort -u > start-kread-bundles.out
@@ -91,8 +91,8 @@ start-kread: dist/start-kread-info.json
 	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval EVAL_PERMIT=$(PWD/dist/start-kread-permit.json \
-	   EVAL_CODE=$(PWD)/dist/start-kread.js EVAL_CLEAN=$(PWD)/dist/start-kread.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
+	make scenario2-core-eval EVAL_PERMIT=$(AG_DIR)/dist/start-kread-permit.json \
+	   EVAL_CODE=$(AG_DIR)/dist/start-kread.js EVAL_CLEAN=$(AG_DIR)/dist/start-kread.js.t scenario2-vote VOTE_PROPOSAL=$(NEXT_PROPOSAL) \
 
 kread-bundle:
 	cd $(VATS_PATH); \
