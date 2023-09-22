@@ -1045,14 +1045,16 @@ export const prepareKreadKit = async (
           return makeRecorderKit(node, MarketRecorderGuard);
         },
         /**
+         * Caveat assumes parent is either `marketCharacterNode` or
+         * `marketItemNode` and only the latter has 'character' anywhere in its
+         * path.
          *
          * @param {StorageNode} node
          */
+        // STOPGAP until https://github.com/Agoric/agoric-sdk/issues/7405 is available in Mainnet
         async deleteNode(node) {
           const path = await E(node).getPath();
           const segments = path.split('.');
-          const parentSegment = segments.at(-2);
-          // XXX should work for any parent
           const parent = path.includes('character')
             ? marketCharacterNode
             : marketItemNode;
