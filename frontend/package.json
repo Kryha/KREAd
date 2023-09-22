@@ -98,5 +98,8 @@
     "vite": "^3.0.7",
     "vite-plugin-svgr": "^2.2.1",
     "vite-tsconfig-paths": "^3.5.0"
+  },
+  "resolutions": {
+    "**/@agoric/xsnap": "0.14.3-dev-57802f9.0"
   }
 }
