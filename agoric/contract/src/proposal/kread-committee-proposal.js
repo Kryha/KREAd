@@ -1,5 +1,7 @@
 import { E } from '@endo/far';
 
+import { reserveThenGetNamePaths } from './start-kread-proposal.js';
+
 const { Fail } = assert;
 
 // These should be exported by Agoric, somewhere.
@@ -98,7 +100,7 @@ export const reserveThenDeposit = async (
   payments,
 ) => {
   const [depositFacet] = await reserveThenGetNamePaths(namesByAddressAdmin, [
-    [addr, WalletName.depositFacet],
+    [addr, 'depositFacet'],
   ]);
   await Promise.allSettled(
     payments.map(async (paymentP, i) => {
@@ -178,12 +180,10 @@ harden(startKreadCharter);
  * @param {import('@agoric/inter-protocol/src/proposals/econ-behaviors').EconomyBootstrapPowers} powers
  */
 export const addGovernorToKreadCharter = async ({
-  consume: { kreadKit },
-  instance: {
-    consume: { kread },
-  },
+  consume: { kreadCharterKit, kreadKit },
+  instance: { consume: { kread } },
 }) => {
-  const { creatorFacet } = E.get(kreadKit);
+  const { creatorFacet } = E.get(kreadCharterKit);
 
   await Promise.all(
     [
