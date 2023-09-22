@@ -148,19 +148,21 @@ const startGovernedInstance = async (
 };
 
 /**
- * Generalized from basic-behaviors.js to take an arbitrary committee.
+ * Execute a proposal to start a contract that publishes the KREAd dapp.
+ * Starts the contractGoverner contract which itself starts the KREAd instance.
  *
- * @template {GovernableStartFn} SF
+ * See also:
+ * BLDer DAO governance using arbitrary code injection: swingset.CoreEval
+ * https://community.agoric.com/t/blder-dao-governance-using-arbitrary-code-injection-swingset-coreeval/99
+ *
  * @param {BootstrapPowers} powers
- * @param {{object}} kreadConfig
- * @returns {Promise<GovernanceFacetKit<SF>>}
  */
-// TODO rename to startGovernedKread
-const startGovernedInstance = async (
-  {
+// TODO rename to startKreadGovernor
+export const startKread = async (powers) => {
+  const {
     consume: {
       zoe,
-      chainTimerService: chainTimerServiceP,
+      chainTimerService,
       chainStorage,
       board,
       kreadCommitteeCreatorFacet,
@@ -181,38 +183,12 @@ const startGovernedInstance = async (
       },
     },
     installation: {
-      consume: { kreadKit: installP, contractGovernor: govP },
+      consume: { kreadKit: installation, contractGovernor },
     },
     instance: {
       produce: { [contractInfo.instanceName]: produceKreadInstance },
     },
-  },
-  { kreadConfig },
-) => {
-  const poserInvitationP = E(kreadCommitteeCreatorFacet).getPoserInvitation();
-  const [
-    initialPoserInvitation,
-    timer,
-    electorateInvitationAmount,
-    marshaller,
-    istIssuer,
-    chainStorageSettled,
-    kreadKitInstallation,
-    contractGovernor,
-    brand,
-    storageNode,
-  ] = await Promise.all([
-    poserInvitationP,
-    chainTimerServiceP,
-    E(E(zoe).getInvitationIssuer()).getAmountOf(poserInvitationP),
-    E(board).getReadonlyMarshaller(),
-    istIssuerP,
-    chainStorage,
-    installP,
-    govP,
-    E(istIssuerP).getBrand(),
-    E(chainStorage).makeChildNode(contractInfo.storagePath),
-  ]);
+  } = powers;
 
   // XX These should be looked up in start-kread-script and passed in
   const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
@@ -245,80 +221,62 @@ const startGovernedInstance = async (
     denominator: 100n,
   };
 
-  chainStorageSettled || fail(Error('no chainStorage - sim chain?'));
-  const kreadPowers = { storageNode, marshaller };
+  const storageNode = E(chainStorage).makeChildNode(contractInfo.storagePath);
+  const kreadPowers = {
+    storageNode,
+    marshaller: await E(board).getReadonlyMarshaller(),
+  };
 
-  const governedTerms = harden({
+  const terms = harden({
     royaltyRate,
     platformFeeRate,
     mintRoyaltyRate,
     mintPlatformFeeRate,
     royaltyDepositFacet,
     platformFeeDepositFacet,
-    paymentBrand: brand,
     mintFee: 30000000n,
     assetNames: {
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
     },
     minUncommonRating: 20,
-    governedParams: {
-      Electorate: {
-        type: 'invitation',
-        value: electorateInvitationAmount,
-      },
-    },
   });
 
-  const governorTerms = harden({
-    timer,
-    governedContractInstallation: kreadKitInstallation,
-    governed: {
-      terms: governedTerms,
-      issuerKeywordRecord: harden({ Money: istIssuer }),
-      label: KREAD_LABEL,
-    },
+  const clock = await E(chainTimerService).getClock();
+  const kreadConfig = harden({
+    clock,
+    seed: 303,
   });
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
-  const g = await E(zoe).startInstance(
-    contractGovernor,
-    {},
-    governorTerms,
-    harden({
-      committeeCreatorFacet: kreadCommitteeCreatorFacet,
-      governed: {
-        ...privateArgs,
-        initialPoserInvitation,
-      },
-    }),
-    `${KREAD_LABEL}-governor`,
+  const facets = await startGovernedInstance(
+    {
+      zoe,
+      governedContractInstallation: installation,
+      issuerKeywordRecord: harden({ Money: await istIssuerP }),
+      terms,
+      privateArgs,
+      label: KREAD_LABEL,
+    },
+    {
+      governedParams: {},
+      timer: chainTimerService,
+      contractGovernor,
+      committeeCreator: kreadCommitteeCreatorFacet,
+    },
   );
-
-  const [instance, publicFacet, creatorFacet, adminFacet] = await Promise.all([
-    E(g.creatorFacet).getInstance(),
-    E(g.creatorFacet).getPublicFacet(),
-    E(g.creatorFacet).getCreatorFacet(),
-    E(g.creatorFacet).getAdminFacet(),
-  ]);
 
   // FIXME make sure this ends up in durable storage
   kreadKit.resolve(
     harden({
+      ...facets,
       label: KREAD_LABEL,
-      instance,
-      publicFacet,
-      creatorFacet,
-      adminFacet,
-
-      governor: g.instance,
-      governorCreatorFacet: g.creatorFacet,
-      governorAdminFacet: g.adminFacet,
       privateArgs,
     }),
   );
 
+  const { creatorFacet, instance } = facets;
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
@@ -340,37 +298,6 @@ const startGovernedInstance = async (
   produceItemBrand.resolve(itemBrand);
 
   console.log('CONTRACT INIT SUCCESS!');
-  return { publicFacet, creatorFacet, instance };
-};
-
-/**
- * Execute a proposal to start a contract that publishes the KREAd dapp.
- * Starts the contractGoverner contract which itself starts the KREAd instance.
- *
- * See also:
- * BLDer DAO governance using arbitrary code injection: swingset.CoreEval
- * https://community.agoric.com/t/blder-dao-governance-using-arbitrary-code-injection-swingset-coreeval/99
- *
- * @param {BootstrapPowers} powers
- */
-// TODO rename to startKreadGovernor
-export const startKread = async (powers) => {
-  const {
-    consume: {
-      // FIXME `clock` should be E(chainTimerService).getClock()
-      chainTimerService: clock,
-    },
-  } = powers;
-
-  const kreadConfig = harden({
-    baseCharacters,
-    baseItems,
-    clock,
-    seed: 303,
-  });
-
-  // FIXME save the results durably
-  await startGovernedInstance(powers, { kreadConfig });
 };
 harden(startKread);
 
