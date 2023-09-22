@@ -17,10 +17,6 @@ const contractInfo = {
 
 const { Fail } = assert;
 
-const fail = (reason) => {
-  throw reason;
-};
-
 /** @typedef {import('@agoric/deploy-script-support/src/coreProposalBehavior.js').BootstrapPowers} BootstrapPowers */
 
 export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
@@ -162,6 +158,9 @@ const startGovernedInstance = async (
 // TODO rename to startKreadGovernor
 export const startKread = async (powers, config) => {
   const {
+    // Extremely powerful. Must be attenuated immediately.
+    // The APIs will be changed to not require this of the proposal.
+    zone: rootZone,
     consume: {
       zoe,
       chainTimerService,
@@ -170,7 +169,7 @@ export const startKread = async (powers, config) => {
       kreadCommitteeCreatorFacet,
       namesByAddressAdmin,
     },
-    produce: { kreadKit },
+    produce: { kreadKit: produceKreadKit },
     brand: {
       produce: {
         KREAdCHARACTER: produceCharacterBrand,
@@ -191,6 +190,8 @@ export const startKread = async (powers, config) => {
       produce: { [contractInfo.instanceName]: produceKreadInstance },
     },
   } = powers;
+
+  const zone = rootZone.subZone(contractInfo.storagePath);
 
   const { royaltyAddr, platformFeeAddr } = config.options;
 
@@ -221,11 +222,12 @@ export const startKread = async (powers, config) => {
     denominator: 100n,
   };
 
-  const storageNode = E(chainStorage).makeChildNode(contractInfo.storagePath);
-  const kreadPowers = {
-    storageNode,
-    marshaller: await E(board).getReadonlyMarshaller(),
-  };
+  const kreadPowers = await deeplyFulfilled(
+    harden({
+      storageNode: E(chainStorage).makeChildNode(contractInfo.storagePath),
+      marshaller: E(board).getReadonlyMarshaller(),
+    }),
+  );
 
   const terms = harden({
     royaltyRate,
@@ -267,14 +269,14 @@ export const startKread = async (powers, config) => {
     },
   );
 
-  // FIXME make sure this ends up in durable storage
-  kreadKit.resolve(
-    harden({
-      ...facets,
-      label: KREAD_LABEL,
-      privateArgs,
-    }),
-  );
+  const kreadKit = harden({
+    ...facets,
+    label: KREAD_LABEL,
+    privateArgs,
+  });
+  produceKreadKit.resolve(kreadKit);
+  const ck = zone.mapStore('ContractKits');
+  ck.init(facets.instance, kreadKit);
 
   const { creatorFacet, instance } = facets;
   const {
@@ -307,6 +309,7 @@ export const getManifestForStartKread = async (
 ) => ({
   manifest: {
     [startKread.name]: {
+      zone: true,
       consume: {
         board: true,
         zoe: true,
