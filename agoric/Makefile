@@ -44,25 +44,60 @@ wallet1:
 deploy:
 	agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js
 
-kread-committee:
-	agoric run contract/src/proposal/kread-committee-script.js | tee kread-committee.out
-	node contract/scripts/parseProposals.js < kread-committee.out | jq -r '.bundles[]' | sort -u > kread-committee-bundles.out
+dist/.keep dist/bundles/.keep:
+	mkdir -p dist/bundles
+	touch dist/.keep dist/bundles/.keep
+	@echo bundles will actually be stored in $(PWD)/dist/bundles
+	rm -rf $(HOME)/.agoric/cache
+	ln -s $(PWD)/dist/bundles $(HOME)/.agoric/cache
+
+build-proposals: dist/kread-committee-info.json dist/start-kread-info.json
+
+dist/kread-invite-committee-permit.json dist/kread-invite-committee.js dist/kread-committee-info.json: dist/.keep \
+		contract/src/proposal/kread-committee-script.js
+	cd dist && agoric run ../contract/src/proposal/kread-committee-script.js >kread-committee-info.txt
+	node contract/scripts/parseProposals.js <dist/kread-committee-info.txt >dist/kread-committee-info.json \
+		|| rm dist/kread-committee-info.json
+
+dist/start-kread-permit.json dist/start-kread.js dist/start-kread-info.json: dist/.keep \
+		contract/src/proposal/start-kread-script.js
+	cd dist && agoric run ../contract/src/proposal/start-kread-script.js >start-kread-info.txt
+	node contract/scripts/parseProposals.js <dist/start-kread-info.txt >dist/start-kread-info.json \
+		|| rm dist/start-kread-info.json
+
+clean:
+	rm -rf dist
+
+# To start the KREAd contract:
+# 1. start the chain using `make local-testnet'
+# 2.  TBD ...  update KEPLR_ADDRESS in Makefile.paths
+# 3. fund the account using `make fund-account`
+# 4. make the committee using 'KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make kread-committee'
+# 5. make provision-fee-collector
+# 6. start the KREAd contract using 'KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make start-kread'
+
+kread-committee: dist/kread-committee-info.json
+	jq -r '.bundles[]' dist/kread-committee-info.json | sort -u > kread-committee-bundles.out
 	for b in `cat kread-committee-bundles.out` ; do \
 	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval EVAL_PERMIT=$(KR_AG_DIR)/kread-invite-committee-permit.json \
-	   EVAL_CODE=$(KR_AG_DIR)/kread-invite-committee.js EVAL_CLEAN=$(KR_AG_DIR)/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
+	make scenario2-core-eval EVAL_PERMIT=dist/kread-invite-committee-permit.json \
+	   EVAL_CODE=$(PWD)/dist/kread-invite-committee.js EVAL_CLEAN=$(PWD)/dist/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
 
-start-kread:
-	agoric run contract/src/proposal/start-kread-script.js | tee start-kread.out
-	node contract/scripts/parseProposals.js < start-kread.out | jq -r '.bundles[]' | sort -u > start-kread-bundles.out
+start-kread: dist/start-kread-info.json
+	jq -r '.bundles[]' dist/start-kread-info.json | sort -u > start-kread-bundles.out
 	for b in `cat start-kread-bundles.out` ; do \
 	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
-	make scenario2-core-eval EVAL_PERMIT=$(KR_AG_DIR)/start-kread-permit.json \
-	   EVAL_CODE=$(KR_AG_DIR)/start-kread.js EVAL_CLEAN=$(KR_AG_DIR)/start-kread.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
+	make scenario2-core-eval EVAL_PERMIT=$(PWD/dist/start-kread-permit.json \
+	   EVAL_CODE=$(PWD)/dist/start-kread.js EVAL_CLEAN=$(PWD)/dist/start-kread.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
+
+kread-bundle:
+	cd $(VATS_PATH); \
+    yarn bundle-source --cache-json bundles/ ${KREAD_REPO} kread; \
+	agoric publish --node 127.0.0.1:26657 bundles/bundle-kread.json --chain-id agoriclocal --home ../cosmic-swingset/t1/8000; \
 
 local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
