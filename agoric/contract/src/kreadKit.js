@@ -5,6 +5,8 @@ import { updateCollectionMetrics } from './market-metrics.js';
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
+import { makeDurableZone } from '@agoric/zone/durable.js';
+
 import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
 import {
@@ -142,44 +144,38 @@ export const prepareKreadKit = async (
       creator: CreatorI,
     },
     () => {
+      const zone = makeDurableZone(baggage);
       return {
         character: harden({
-          entries: makeScalarBigMapStore('characters', {
-            durable: true,
+          entries: zone.mapStore('characters', {
             keyShape: M.string(),
             valueShape: M.or(CharacterEntryGuard, M.arrayOf(M.string())),
           }),
-          bases: makeScalarBigMapStore('baseCharacters', {
-            durable: true,
+          bases: zone.mapStore('baseCharacters', {
             keyShape: M.number(),
             valueShape: BaseCharacterGuard,
           }),
         }),
         item: harden({
-          entries: makeScalarBigMapStore('items', {
-            durable: true,
+          entries: zone.mapStore('items', {
             keyShape: M.number(),
             valueShape: ItemRecorderGuard,
           }),
-          bases: makeScalarBigMapStore('baseItems', {
-            durable: true,
+          bases: zone.mapStore('baseItems', {
             keyShape: RarityGuard,
             valueShape: M.arrayOf(ItemGuard),
           }),
         }),
         market: harden({
-          characterEntries: makeScalarBigMapStore('characterMarket', {
-            durable: true,
+          characterEntries: zone.mapStore('characterMarket', {
             keyShape: M.string(),
             valueShape: MarketEntryGuard,
           }),
-          itemEntries: makeScalarBigMapStore('itemMarket', {
-            durable: true,
+          itemEntries: zone.mapStore('itemMarket', {
             keyShape: M.number(),
             valueShape: MarketEntryGuard,
           }),
-          metrics: makeScalarBigMapStore('marketMetrics', {
-            durable: true,
+          metrics: zone.mapStore('marketMetrics', {
             keyShape: M.or('character', 'item'),
             valueShape: MarketMetricsGuard,
           }),
