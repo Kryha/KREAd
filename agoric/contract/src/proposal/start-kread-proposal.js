@@ -156,9 +156,11 @@ const startGovernedInstance = async (
  * https://community.agoric.com/t/blder-dao-governance-using-arbitrary-code-injection-swingset-coreeval/99
  *
  * @param {BootstrapPowers} powers
+ * @param {object} config
+ * @param {{ royaltyAddr: string, platformFeeAddr: string }} config.options
  */
 // TODO rename to startKreadGovernor
-export const startKread = async (powers) => {
+export const startKread = async (powers, config) => {
   const {
     consume: {
       zoe,
@@ -190,9 +192,7 @@ export const startKread = async (powers) => {
     },
   } = powers;
 
-  // XX These should be looked up in start-kread-script and passed in
-  const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
-  const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+  const { royaltyAddr, platformFeeAddr } = config.options;
 
   const [royaltyDepositFacet] = await reserveThenGetNamePaths(
     namesByAddressAdmin,
@@ -303,7 +303,7 @@ harden(startKread);
 
 export const getManifestForStartKread = async (
   { restoreRef },
-  { kreadKitRef },
+  { royaltyAddr, platformFeeAddr, kreadKitRef },
 ) => ({
   manifest: {
     [startKread.name]: {
@@ -344,4 +344,5 @@ export const getManifestForStartKread = async (
   installations: {
     kreadKit: restoreRef(kreadKitRef),
   },
+  options: { royaltyAddr, platformFeeAddr },
 });
