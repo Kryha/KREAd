@@ -22,7 +22,7 @@ const fail = (reason) => {
 
 /** @typedef {import('@agoric/deploy-script-support/src/coreProposalBehavior.js').BootstrapPowers} BootstrapPowers */
 
-const reserveThenGetNamePaths = async (nameAdmin, paths) => {
+export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
   /**
    * @param {ERef<import('@agoric/vats').NameAdmin>} nextAdmin
    * @param {string[]} path
@@ -107,6 +107,7 @@ const startGovernedInstance = async (
     kreadKitInstallation,
     contractGovernor,
     brand,
+    storageNode,
   ] = await Promise.all([
     poserInvitationP,
     chainTimerServiceP,
@@ -117,6 +118,7 @@ const startGovernedInstance = async (
     installP,
     govP,
     E(istIssuerP).getBrand(),
+    E(chainStorage).makeChildNode(contractInfo.storagePath),
   ]);
 
   // XX These should be looked up in start-kread-script and passed in
@@ -151,9 +153,6 @@ const startGovernedInstance = async (
   };
 
   chainStorageSettled || fail(Error('no chainStorage - sim chain?'));
-  const storageNode = E(chainStorageSettled).makeChildNode(
-    contractInfo.storagePath,
-  );
   const kreadPowers = { storageNode, marshaller };
 
   const governedTerms = harden({
