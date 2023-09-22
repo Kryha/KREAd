@@ -72,7 +72,6 @@
   "eslintIgnore": [
     "characters.js",
     "items.js",
-    "chain-storage-proposal.js",
-    "chain-storage-proposal.js-clean.js"
+    "*-clean.js"
   ]
 }

@@ -3,7 +3,7 @@
 /** @file  This is a module for use with swingset.CoreEval. */
 
 import { E } from '@endo/far';
-import { baseCharacters, baseItems } from './chain-storage-proposal.js';
+import { baseCharacters, baseItems } from './base-inventory.js';
 
 const KREAD_LABEL = 'KREAd';
 
