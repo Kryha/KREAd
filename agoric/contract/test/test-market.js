@@ -153,7 +153,7 @@ test.serial(
       publicFacet,
       contractAssets,
       zoe,
-      users: { bob, alice },
+      users: { alice },
       paymentAsset,
     } = t.context;
     const {
@@ -166,7 +166,7 @@ test.serial(
 
     const initialBalance = alice.getPaymentBalance();
 
-    let charactersForSale = await E(publicFacet).getCharactersForSale();
+    const charactersForSale = await E(publicFacet).getCharactersForSale();
     const characterToBuy = charactersForSale.find(
       (c) => c.asset.name === character,
     );
@@ -396,13 +396,13 @@ test.serial(
       publicFacet,
       contractAssets,
       zoe,
-      users: { bob, alice },
+      users: { alice },
       paymentAsset,
     } = t.context;
 
     const initialBalance = alice.getPaymentBalance();
 
-    let itemsForSale = await E(publicFacet).getItemsForSale();
+    const itemsForSale = await E(publicFacet).getItemsForSale();
     const itemToBuy = itemsForSale.find(
       (itemEntry) => itemEntry.asset.category === 'hair',
     );
@@ -560,7 +560,7 @@ test.serial(
       },
     } = flow;
 
-    //alice puts character for sale
+    // alice puts character for sale
     const balanceAlice = alice.getPaymentBalance();
     const characterToSell = alice
       .getCharacters()
@@ -602,7 +602,7 @@ test.serial(
       'Character is successfully added to market',
     );
 
-    //bob buys character
+    // bob buys character
     const characterToBuy = charactersForSale.find(
       ({ asset }) => asset.name === character,
     );
@@ -697,7 +697,7 @@ test.serial(
     let itemsForSale = await E(publicFacet).getItemsForSale();
     t.deepEqual(itemsForSale.length, 1, 'Item is successfully added to market');
 
-    //bob attempts to buy item
+    // bob attempts to buy item
     const itemToBuy = itemsForSale.find(
       ({ asset }) => asset.category === 'hair',
     );

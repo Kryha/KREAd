@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-
+/* global process */
 import fs from 'fs';
 
 const Fail = (template, ...args) => {
-  throw Error(String.raw(template, ...args.map(val => String(val))));
+  throw Error(String.raw(template, ...args.map((val) => String(val))));
 };
 
 /**
@@ -13,10 +13,10 @@ const Fail = (template, ...args) => {
  *
  * adapted from packages/boot/test/bootstrapTests/supports.js
  */
-const parseProposalParts = txt => {
+const parseProposalParts = (txt) => {
   const evals = [
     ...txt.matchAll(/swingset-core-eval (?<permit>\S+) (?<script>\S+)/g),
-  ].map(m => {
+  ].map((m) => {
     if (!m.groups) throw Fail`Invalid proposal output ${m[0]}`;
     const { permit, script } = m.groups;
     return { permit, script };

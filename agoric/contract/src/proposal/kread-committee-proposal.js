@@ -1,21 +1,21 @@
 import { E } from '@endo/far';
 import { reserveThenDeposit } from '@agoric/inter-protocol/src/proposals/utils.js';
 
-/** @type {(name: string) => string} */
-const sanitizePathSegment = name => {
-  const candidate = name.replace(/[ ,]/g, '_');
-  assertPathSegment(candidate);
-  return candidate;
-};
-
 const { Fail } = assert;
 
 // These should be exported by Agoric, somewhere.
 const pathSegmentPattern = /^[a-zA-Z0-9_-]{1,100}$/;
 /** @type {(name: string) => void} */
-const assertPathSegment = name => {
+const assertPathSegment = (name) => {
   pathSegmentPattern.test(name) ||
-  Fail`Path segment names must consist of 1 to 100 characters limited to ASCII alphanumerics, underscores, and/or dashes: ${name}`;
+    Fail`Path segment names must consist of 1 to 100 characters limited to ASCII alphanumerics, underscores, and/or dashes: ${name}`;
+};
+
+/** @type {(name: string) => string} */
+const sanitizePathSegment = (name) => {
+  const candidate = name.replace(/[ ,]/g, '_');
+  assertPathSegment(candidate);
+  return candidate;
 };
 
 const { values } = Object;
@@ -56,7 +56,8 @@ export const startKreadCommittee = async (
 
   const [storageNode, marshaller] = await Promise.all([
     E(E(chainStorage).makeChildNode(COMMITTEES_ROOT)).makeChildNode(
-      sanitizePathSegment(committeeName)),
+      sanitizePathSegment(committeeName),
+    ),
     E(board).getPublishingMarshaller(),
   ]);
 
@@ -90,29 +91,20 @@ const zip = (xs, ys) => xs.map((x, i) => [x, ys[i]]);
  * @param {{ options: { voterAddresses: Record<string, string> } }} param1
  */
 export const inviteCommitteeMembers = async (
-  {
-    consume: {
-      namesByAddressAdmin,
-      kreadCommitteeCreatorFacet,
-      highPrioritySendersManager,
-    },
-  },
+  { consume: { namesByAddressAdmin, kreadCommitteeCreatorFacet } },
   { options: { voterAddresses } },
 ) => {
-  const invitations = await E(
-    kreadCommitteeCreatorFacet,
-  ).getVoterInvitations();
+  const invitations = await E(kreadCommitteeCreatorFacet).getVoterInvitations();
   assert.equal(invitations.length, values(voterAddresses).length);
 
-
   /** @param {[string, Promise<Invitation>][]} addrInvitations */
-  const distributeInvitations = async addrInvitations => {
+  const distributeInvitations = async (addrInvitations) => {
     await Promise.all(
       addrInvitations.map(async ([addr, invitationP]) => {
         const debugName = `kread committee member ${addr}`;
         await reserveThenDeposit(debugName, namesByAddressAdmin, addr, [
           invitationP,
-        ]).catch(err => console.error(`failed deposit to ${debugName}`, err));
+        ]).catch((err) => console.error(`failed deposit to ${debugName}`, err));
       }),
     );
   };
@@ -161,7 +153,9 @@ harden(startKreadCharter);
  */
 export const addGovernorToKreadCharter = async ({
   consume: { kreadKit },
-  instance: { consume: { kread } },
+  instance: {
+    consume: { kread },
+  },
 }) => {
   const { creatorFacet } = E.get(kreadKit);
 
@@ -194,11 +188,11 @@ export const inviteToKreadCharter = async (
   // This doesn't resolve until the committee members create their smart wallets.
   // Don't block bootstrap on it.
   void Promise.all(
-    values(voterAddresses).map(async addr => {
+    values(voterAddresses).map(async (addr) => {
       const debugName = `KREAd charter member ${addr}`;
       reserveThenDeposit(debugName, namesByAddressAdmin, addr, [
         E(creatorFacet).makeCharterMemberInvitation(),
-      ]).catch(err => console.error(`failed deposit to ${debugName}`, err));
+      ]).catch((err) => console.error(`failed deposit to ${debugName}`, err));
     }),
   );
 };

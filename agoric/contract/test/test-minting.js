@@ -525,7 +525,7 @@ test.serial('--| MINT - Item - Multiple flow', async (t) => {
 
   const totalItems = purses.item
     .getCurrentAmount()
-    .value.payload.reduce((acc, [item, supply]) => {
+    .value.payload.reduce((acc, [_item, supply]) => {
       return acc + supply;
     }, 0n);
   t.deepEqual(totalItems, 4n);

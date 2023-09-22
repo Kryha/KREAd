@@ -1,7 +1,7 @@
+/* eslint-disable no-bitwise */
 /* eslint-disable no-undef */
 // @ts-check
-import '@agoric/zoe/exported';
-import { updateCollectionMetrics } from './market-metrics';
+import { updateCollectionMetrics } from './market-metrics.js';
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
@@ -35,7 +35,9 @@ import {
   CharacterEntryGuard,
 } from './type-guards.js';
 import { atomicRearrange } from '@agoric/zoe/src/contractSupport/index.js';
-import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
+import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
+
+import '@agoric/zoe/exported.js';
 
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
@@ -47,7 +49,7 @@ import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
  * @param {ZCF} zcf
  * @param {{
  *   seed: number,
- *   mintFeeAmount: Amount<nat>,
+ *   mintFeeAmount: Amount<'nat'>,
  *   royaltyRate: Ratio,
  *   platformFeeRate: Ratio,
  *   mintRoyaltyRate: Ratio,
@@ -64,10 +66,10 @@ import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
  *   itemMint: ZCFMint<"copyBag">
  *   clock: import('@agoric/time/src/types.js').Clock
  *   storageNode: StorageNode
- *   makeRecorderKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit
+ *   makeRecorderKit: import('@agoric/zoe/src/contractSupport').MakeRecorderKit
  *   storageNodePaths: Object
  * }} powers
- * */
+ */
 export const prepareKreadKit = async (
   baggage,
   zcf,
@@ -94,9 +96,8 @@ export const prepareKreadKit = async (
     storageNodePaths,
   },
 ) => {
-  const { issuer: characterIssuer, brand: characterBrand } =
-    characterIssuerRecord;
-  const { issuer: itemIssuer, brand: itemBrand } = itemIssuerRecord;
+  const { brand: characterBrand } = characterIssuerRecord;
+  const { brand: itemBrand } = itemIssuerRecord;
 
   const {
     characterKit,
@@ -193,7 +194,8 @@ export const prepareKreadKit = async (
         randomNumber() {
           seed |= 0;
           seed = (seed + 0x6d2b79f5) | 0;
-          var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          // eslint-disable-next-line operator-assignment
           t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
           return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
         },
@@ -205,7 +207,7 @@ export const prepareKreadKit = async (
 
           const itemLevels = character.inventory
             .getAmountAllocated('Item')
-            .value.payload.map(([value, supply]) => {
+            .value.payload.map(([value, _supply]) => {
               return value.level;
             });
 
@@ -270,7 +272,7 @@ export const prepareKreadKit = async (
               assert.fail(X`${errors.allMinted}`);
 
             const re = /^[a-zA-Z0-9_-]*$/;
-            (re.test(newCharacterName) && newCharacterName != 'names') ||
+            (re.test(newCharacterName) && newCharacterName !== 'names') ||
               assert.fail(X`${errors.invalidName}`);
 
             const baseIndex = characterFacet.getRandomBaseIndex();
@@ -380,7 +382,8 @@ export const prepareKreadKit = async (
               });
 
               characterKit.recorder.write(
-                (({ seat, ...char }) => char)(character),
+                // write `character` minus `seat` prop
+                (({ seat: _omitSeat, ...char }) => char)(character),
               );
 
               // TODO: consider refactoring what we put in the inventory node
@@ -390,14 +393,14 @@ export const prepareKreadKit = async (
 
               return text.mintCharacterReturn;
             } catch (e) {
-              //restore base char deletion and and name entry
+              // restore base char deletion and and name entry
               characterState.bases.addAll([[baseIndex, baseCharacter]]);
               characterState.entries.set(
                 'names',
                 harden(
                   characterState.entries
                     .get('names')
-                    .filter((name) => name != newCharacterName),
+                    .filter((name) => name !== newCharacterName),
                 ),
               );
               return e;
@@ -880,7 +883,7 @@ export const prepareKreadKit = async (
           itemBatch.forEach((copyBagEntry) => {
             const [itemAsset, itemSupply] = copyBagEntry;
 
-            for (let n = 0; n < itemSupply; n++) {
+            for (let n = 0; n < itemSupply; n += 1) {
               const item = {
                 id,
                 item: itemAsset,
@@ -1108,9 +1111,9 @@ export const prepareKreadKit = async (
             market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
             const {
-              seat: omitSeat,
+              seat: _omitSeat,
               recorderKit,
-              recorderNode,
+              recorderNode: _omitNode,
               ...entry
             } = newEntry;
             recorderKit.recorder.write(entry);
@@ -1167,6 +1170,7 @@ export const prepareKreadKit = async (
                   Array(Number(itemSupply)).keys(),
                 );
                 const idAndRecorder = await Promise.all(
+                  // FIXME why is this mapping over a value it ignores?
                   supplyRange.map(async (_) => {
                     const id =
                       this.state.market.metrics.get('item').putForSaleCount;
@@ -1186,7 +1190,7 @@ export const prepareKreadKit = async (
             itemsToSell.forEach(async (copyBagEntry, i) => {
               const [itemAsset, itemSupply] = copyBagEntry;
 
-              for (let n = 0; n < itemSupply; n++) {
+              for (let n = 0; n < itemSupply; n += 1) {
                 const [id, entryRecorder] = claimedIdAndRecorder[i][n];
 
                 // Add to store array
@@ -1210,7 +1214,7 @@ export const prepareKreadKit = async (
                 });
 
                 market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
-                const { seat: omitSeat, recorderKit, ...entry } = newEntry;
+                const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
                 recorderKit.recorder.write(entry);
               }
             });
@@ -1279,7 +1283,7 @@ export const prepareKreadKit = async (
 
             market.characterEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
-            const { seat: omitSeat, recorderKit, ...entry } = newEntry;
+            const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
             recorderKit.recorder.write(entry);
             marketFacet.updateMetrics('character', { putForSaleCount: true });
 
@@ -1758,7 +1762,6 @@ export const prepareKreadKit = async (
           const { inventory } = character;
           const items = inventory.getAmountAllocated('Item', itemBrand).value
             .payload;
-          // @ts-ignore
           return { items };
         },
         makeEquipInvitation() {
