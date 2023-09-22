@@ -6,6 +6,7 @@ import { E } from '@endo/far';
 import { baseCharacters, baseItems } from './base-inventory.js';
 
 import '@agoric/governance/src/types-ambient.js';
+import { deeplyFulfilled } from '@endo/marshal';
 
 const KREAD_LABEL = 'KREAd';
 
@@ -53,6 +54,11 @@ export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
   );
 };
 
+const CONTRACT_ELECTORATE = 'Electorate';
+const ParamTypes = {
+  INVITATION: 'invitation',
+};
+
 /**
  * @template {GovernableStartFn} SF
  * @param {{
@@ -67,7 +73,7 @@ export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
  *   governedParams: Record<string, unknown>;
  *   timer: ERef<import('@agoric/time/src/types').TimerService>;
  *   contractGovernor: ERef<Installation>;
- *   economicCommitteeCreatorFacet: import('@agoric/inter-protocol/src/proposals/econ-behaviors.js').EconomyBootstrapPowers['consume']['economicCommitteeCreatorFacet'];
+ *   committeeCreator: import('@agoric/inter-protocol/src/proposals/econ-behaviors.js').EconomyBootstrapPowers['consume']['economicCommitteeCreatorFacet'];
  * }} govArgs
  * @returns {Promise<GovernanceFacetKit<SF>>}
  */
@@ -80,18 +86,16 @@ const startGovernedInstance = async (
     privateArgs,
     label,
   },
-  { governedParams, timer, contractGovernor, economicCommitteeCreatorFacet },
+  { governedParams, timer, contractGovernor, committeeCreator },
 ) => {
-  const poserInvitationP = E(
-    economicCommitteeCreatorFacet,
-  ).getPoserInvitation();
+  const poserInvitationP = E(committeeCreator).getPoserInvitation();
   const [initialPoserInvitation, electorateInvitationAmount] =
     await Promise.all([
       poserInvitationP,
       E(E(zoe).getInvitationIssuer()).getAmountOf(poserInvitationP),
     ]);
 
-  const governorTerms = await deeplyFulfilledObject(
+  const governorTerms = await deeplyFulfilled(
     harden({
       timer,
       governedContractInstallation,
@@ -116,7 +120,7 @@ const startGovernedInstance = async (
     {},
     governorTerms,
     harden({
-      economicCommitteeCreatorFacet,
+      economicCommitteeCreatorFacet: committeeCreator,
       governed: {
         ...privateArgs,
         initialPoserInvitation,
