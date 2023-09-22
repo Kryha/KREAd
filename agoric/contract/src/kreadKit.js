@@ -288,6 +288,8 @@ export const prepareKreadKit = async (
               ]),
             );
 
+            // for @jessie.js/safe-await-operator
+            await null;
             try {
               const currentTime = await helper.getTimeStamp();
 
@@ -1321,21 +1323,17 @@ export const prepareKreadKit = async (
             sellRecord ||
               assert.fail(X`${errors.itemNotFound(offerArgs.entryId)}`);
 
-            /** @type {HelperFunctionReturn} */
-            let result;
-            if (sellRecord.isFirstSale) {
-              result = await marketFacet.buyFirstSaleItem(
-                sellRecord.seat,
-                buyerSeat,
-                sellRecord,
-              );
-            } else {
-              result = await marketFacet.buySecondarySaleItem(
-                sellRecord.seat,
-                buyerSeat,
-                sellRecord,
-              );
-            }
+            const result = await (sellRecord.isFirstSale
+              ? marketFacet.buyFirstSaleItem(
+                  sellRecord.seat,
+                  buyerSeat,
+                  sellRecord,
+                )
+              : marketFacet.buySecondarySaleItem(
+                  sellRecord.seat,
+                  buyerSeat,
+                  sellRecord,
+                ));
             result.success || assert.fail(X`${result.error}`);
           };
 
