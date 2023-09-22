@@ -71,7 +71,7 @@ export const updateCollectionMetrics = (collection, state, updateMetrics) => {
     metrics.latestSalePrice = updateMetrics.latestSalePrice;
   if (updateMetrics.collectionSize) metrics.collectionSize += 1;
   if (updateMetrics.amountSold) metrics.amountSold += 1;
-  if (updateMetrics.putForSaleAmount) metrics.putForSaleAmount += 1;
+  if (updateMetrics.putForSaleCount) metrics.putForSaleCount += 1;
 
   state.market.metrics.set(collection, metrics);
   return metrics;
