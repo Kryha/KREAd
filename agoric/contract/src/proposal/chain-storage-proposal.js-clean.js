@@ -306,7 +306,7 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-a264ad760b2a5c9bc18773cb4e7b02b39e01a7e02a4442e7920957bd4689cca76cf6382c4093014e42a528972259c5617da6f0f2e1e292fbfa3f692aa25f9221',
+    'b1-2a8bcce2e041d96b474bedebb7f2a014a6ae18a483c6a0d2d0d49d05b6ba2d21ccf4be62880c7ec7d02feb00ea9d986be0dfa4d9885110ee45020973875e81b3',
 };
 
 const fail = (reason) => {
@@ -475,27 +475,6 @@ const executeProposal = async (powers) => {
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
 
-  //FIXME: remove these infavour of terms and getting them differently
-  const [
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  ] = await Promise.all([
-    E(board).getId(characterBrand),
-    E(board).getId(characterIssuer),
-    E(board).getId(itemBrand),
-    E(board).getId(itemIssuer),
-  ]);
-
-  await E(creatorFacet).publishKreadInfo(
-    boardId,
-    CHARACTER_BRAND_BOARD_ID,
-    CHARACTER_ISSUER_BOARD_ID,
-    ITEM_BRAND_BOARD_ID,
-    ITEM_ISSUER_BOARD_ID,
-  );
-
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
   await E(creatorFacet).initializeCharacterNamesEntries();
   await E(creatorFacet).initializeMetrics();
@@ -518,4 +497,4 @@ harden(executeProposal);
 // "export" the function as the script completion value
 executeProposal;
 
-//# sourceURL=/Users/privilegemendes/WebstormProjects/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
+//# sourceURL=/Users/wietzes/Documents/cosmos/Agoric/agoric/contract/src/proposal/chain-storage-proposal.js
