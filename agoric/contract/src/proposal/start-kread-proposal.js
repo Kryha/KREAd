@@ -229,6 +229,7 @@ export const startKread = async (powers, config) => {
     }),
   );
 
+  /** @type {KREAdTerms} */
   const terms = harden({
     royaltyRate,
     platformFeeRate,

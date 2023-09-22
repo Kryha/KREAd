@@ -12,7 +12,6 @@ import { handleParamGovernance } from '@agoric/governance';
 
 import { prepareKreadKit } from './kreadKit.js';
 
-
 /**
  * This contract handles the mint of KREAd characters,
  * along with its corresponding item inventories and keys.
@@ -55,14 +54,13 @@ export const meta = {
     },
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
-    paymentBrand: M.eref(M.remotable('Brand')),
     assetNames: M.splitRecord({ character: M.string(), item: M.string() }),
   }),
 };
 harden(meta);
 
 /**
- * @param {ZCF<GovernanceTerms<{}>>} zcf
+ * @param {ZCF<KREAdTerms & GovernanceTerms<{}>>} zcf
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
@@ -83,20 +81,6 @@ harden(meta);
  * @param {Baggage} baggage
  */
 export const start = async (zcf, privateArgs, baggage) => {
-  /**
-   * @type {{
-   *   paymentBrand: Brand
-   *   mintFee: bigint,
-   *   royaltyRate: RatioObject,
-   *   platformFeeRate: RatioObject,
-   *   mintRoyaltyRate: RatioObject,
-   *   mintPlatformFeeRate: RatioObject,
-   *   royaltyDepositFacet: DepositFacet,
-   *   platformFeeDepositFacet: DepositFacet,
-   *   assetNames: { character: string, item: string },
-   *   minUncommonRating: number
-   * }}
-   */
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
@@ -143,8 +127,8 @@ export const start = async (zcf, privateArgs, baggage) => {
     mintPlatformFeeRate,
     royaltyDepositFacet,
     platformFeeDepositFacet,
-    paymentBrand,
     minUncommonRating,
+    brands: { Money: paymentBrand },
   } = terms;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
