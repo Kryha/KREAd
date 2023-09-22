@@ -60,11 +60,6 @@
   "keywords": [],
   "author": "Kryha",
   "license": "Apache-2.0",
-  "eslintConfig": {
-    "extends": [
-      "@agoric"
-    ]
-  },
   "prettier": {
     "trailingComma": "all",
     "singleQuote": true
