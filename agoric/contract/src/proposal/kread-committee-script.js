@@ -3,15 +3,20 @@ import { makeHelpers } from '@agoric/deploy-script-support';
 
 import { getManifestForInviteCommittee } from './kread-committee-proposal.js';
 
+const fail = msg => {
+  throw Error(msg)
+}
+
 // Build proposal for sim-chain etc.
 /** @type {import('@agoric/deploy-script-support/src/externalTypes.js').ProposalBuilder} */
 export const defaultProposalBuilder = async (
   { publishRef, install },
   options = {},
 ) => {
+  const config = name => process.env[name] || fail(`$${name} required`);
   const {
-    KREAD_COMMITTEE_ADDRESSES = process.env.KREAD_COMMITTEE_ADDRESSES,
-    committeeName = process.env.KREAD_COMMITTEE_NAME,
+    KREAD_COMMITTEE_ADDRESSES = config('KREAD_COMMITTEE_ADDRESSES'),
+    committeeName = config('KREAD_COMMITTEE_NAME'),
     voterAddresses = JSON.parse(KREAD_COMMITTEE_ADDRESSES),
   } = options;
 
