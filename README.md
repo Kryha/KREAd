@@ -104,3 +104,7 @@ To run the application for more than one user follow these steps:
    a. make provision-fee-collector
 6. start the KREAd contract
    a. make start-kread
+
+To confirm it started,
+- in chain log you should see "CONTRACT INIT SUCCESS"
+- after that `agd query vstorage children published` should include "kread"

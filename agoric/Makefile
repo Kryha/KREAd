@@ -15,6 +15,7 @@ EVAL_CLEAN = $(EVAL_CODE)-clean.js
 KR_AG_DIR = $(KREAD_REPO)/agoric
 PROP_DIR = $(KR_AG_DIR)/contract/src/proposal
 
+LAST_PROPOSAL=`agd query gov proposals --output json | jq -cr '.proposals[-1] | [.proposal_id][0]'`
 
 chain-reset:
 	agoric start local-chain --reset --verbose
@@ -51,7 +52,7 @@ kread-committee:
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval EVAL_PERMIT=$(KR_AG_DIR)/kread-invite-committee-permit.json \
-	   EVAL_CODE=$(KR_AG_DIR)/kread-invite-committee.js EVAL_CLEAN=$(KR_AG_DIR)/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=3 \
+	   EVAL_CODE=$(KR_AG_DIR)/kread-invite-committee.js EVAL_CLEAN=$(KR_AG_DIR)/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
 
 start-kread:
 	agoric run contract/src/proposal/start-kread-script.js | tee start-kread.out
@@ -61,8 +62,7 @@ start-kread:
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval EVAL_PERMIT=$(KR_AG_DIR)/start-kread-permit.json \
-	   EVAL_CODE=$(KR_AG_DIR)/start-kread.js EVAL_CLEAN=$(KR_AG_DIR)/start-kread.js.t scenario2-vote VOTE_PROPOSAL=4 \
-	   EVAL_CODE=$(KR_AG_DIR)/start-kread.js EVAL_CLEAN=$(KR_AG_DIR)/start-kread.js.t scenario2-vote VOTE_PROPOSAL=16 \
+	   EVAL_CODE=$(KR_AG_DIR)/start-kread.js EVAL_CLEAN=$(KR_AG_DIR)/start-kread.js.t scenario2-vote VOTE_PROPOSAL=$(($LAST_PROPOSAL+1)) \
 
 local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
