@@ -1,13 +1,20 @@
-SDK_PATH =
-COSMIC_SWINGSET_PATH =
-VATS_PATH =
-KEPLR_ADDRESS =
 FEE_ADDRESS = agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu
+
+# config options
 KREAD_REPO =
-KR_AG_DIR =
+SDK_PATH =
+KEPLR_ADDRESS =
+include Makefile.paths.local
+
+COSMIC_SWINGSET_PATH = $(SDK_PATH)/packages/cosmic-swingset
+VATS_PATH = $(SDK_PATH)/packages/vats
+
+EVAL_PERMIT = $(KREAD_REPO)/agoric/contract/src/proposal/powers.json
+EVAL_CODE = $(KREAD_REPO)/agoric/contract/src/proposal/chain-storage-proposal.js
+EVAL_CLEAN = $(EVAL_CODE)-clean.js
+KR_AG_DIR = $(KREAD_REPO)/agoric
 PROP_DIR = $(KR_AG_DIR)/contract/src/proposal
 
-include Makefile.paths.local
 
 chain-reset:
 	agoric start local-chain --reset --verbose

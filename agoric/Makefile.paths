@@ -1,6 +1,5 @@
 SDK_PATH = /Users/carlostrigo/kryha/agoric/agoric-sdk
-COSMIC_SWINGSET_PATH = /Users/carlostrigo/kryha/agoric/agoric-sdk/packages/cosmic-swingset
-VATS_PATH = /Users/carlostrigo/kryha/agoric/agoric-sdk/packages/vats
-KEPLR_ADDRESS = agoric1tq3v943uaycqp90qvuyaqzwdc3eh52xzrcl4p6
 KREAD_REPO = /Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/index.js
-KR_AG_DIR = /Users/carlostrigo/agoric-kread/agoric
+
+# changes by making scenario2
+KEPLR_ADDRESS = agoric1tq3v943uaycqp90qvuyaqzwdc3eh52xzrcl4p6
