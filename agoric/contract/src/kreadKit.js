@@ -878,16 +878,16 @@ export const prepareKreadKit = async (
           let id = itemState.entries.getSize();
 
           itemBatch.forEach((copyBagEntry) => {
-            const [itemObject, itemSupply] = copyBagEntry;
+            const [itemAsset, itemSupply] = copyBagEntry;
 
             for (let n = 0; n < itemSupply; n++) {
               const item = {
                 id,
-                item: itemObject,
+                item: itemAsset,
                 history: [
                   {
                     type: 'mint',
-                    data: itemObject,
+                    data: itemAsset,
                     timestamp: currentTime,
                   },
                 ],
@@ -983,8 +983,8 @@ export const prepareKreadKit = async (
           const { market: marketFacet, character: characterFacet } =
             this.facets;
 
-          const { seat, object, recorderKit } = entry;
-          const characterLevel = characterFacet.calculateLevel(object.name);
+          const { seat, asset, recorderKit } = entry;
+          const characterLevel = characterFacet.calculateLevel(asset.name);
 
           const subscriber = E(seat).getSubscriber();
           void E.when(E(subscriber).getUpdateSince(), () => {
@@ -995,7 +995,7 @@ export const prepareKreadKit = async (
               },
             });
 
-            market.characterEntries.delete(object.name);
+            market.characterEntries.delete(asset.name);
 
             void marketFacet.deleteNode(recorderKit.recorder.getStorageNode());
           });
@@ -1004,14 +1004,14 @@ export const prepareKreadKit = async (
           const { market } = this.state;
           const { market: marketFacet } = this.facets;
 
-          const { seat, object, id, recorderKit } = entry;
+          const { seat, asset, id, recorderKit } = entry;
 
           const subscriber = E(seat).getSubscriber();
           E.when(E(subscriber).getUpdateSince(), () => {
             marketFacet.updateMetrics('item', {
               marketplaceAverageLevel: {
                 type: 'remove',
-                value: object.level,
+                value: asset.level,
               },
             });
 
@@ -1066,7 +1066,7 @@ export const prepareKreadKit = async (
             const { market: marketFacet } = this.facets;
 
             // Inspect allocation of Character keyword in seller seat
-            const objectInSellSeat = seat.getAmountAllocated('Item');
+            const itemInSellSeat = seat.getAmountAllocated('Item');
             const { want } = seat.getProposal();
 
             paymentBrand === want.Price.brand ||
@@ -1075,16 +1075,11 @@ export const prepareKreadKit = async (
               brand: want.Price.brand,
               value: want.Price.value,
             };
-            const royalty = {
-              brand: want.Price.brand,
-              value: BigInt(royaltyRate * Number(want.Price.value)),
-            };
-            const platformFee = {
-              brand: want.Price.brand,
-              value: BigInt(platformFeeRate * Number(want.Price.value)),
-            };
-            const object = objectInSellSeat.value.payload[0][0];
-            const id = this.state.market.metrics.get('item').putForSaleAmount;
+            const royalty = multiplyBy(want.Price, royaltyRate);
+            const platformFee = multiplyBy(want.Price, platformFeeRate);
+
+            const item = itemInSellSeat.value.payload[0][0];
+            const id = this.state.market.metrics.get('item').putForSaleCount;
 
             const entryRecorder = await marketFacet.makeMarketItemRecorderKit(
               id,
@@ -1097,7 +1092,7 @@ export const prepareKreadKit = async (
               royalty,
               platformFee,
               id,
-              object,
+              asset: item,
               recorderKit: entryRecorder,
               isFirstSale: false,
             };
@@ -1106,7 +1101,7 @@ export const prepareKreadKit = async (
             marketFacet.updateMetrics('item', {
               marketplaceAverageLevel: {
                 type: 'add',
-                value: object.level,
+                value: item.level,
               },
             });
 
@@ -1119,7 +1114,7 @@ export const prepareKreadKit = async (
               ...entry
             } = newEntry;
             recorderKit.recorder.write(entry);
-            marketFacet.updateMetrics('item', { putForSaleAmount: true });
+            marketFacet.updateMetrics('item', { putForSaleCount: true });
 
             marketFacet.handleExitItem(newEntry);
           };
@@ -1174,13 +1169,15 @@ export const prepareKreadKit = async (
             const claimedIdAndRecorder = await Promise.all(
               itemsToSell.map(async (copyBagEntry) => {
                 const [_, itemSupply] = copyBagEntry;
-                const array = Array.from(Array(Number(itemSupply)).keys());
+                const supplyRange = Array.from(
+                  Array(Number(itemSupply)).keys(),
+                );
                 const idAndRecorder = await Promise.all(
-                  array.map(async (i) => {
+                  supplyRange.map(async (_) => {
                     const id =
-                      this.state.market.metrics.get('item').putForSaleAmount;
-                    marketFacet.updateMetrics('item', {
-                      putForSaleAmount: true,
+                      this.state.market.metrics.get('item').putForSaleCount;
+                    await marketFacet.updateMetrics('item', {
+                      putForSaleCount: true,
                     });
                     const entryRecorder =
                       await marketFacet.makeMarketItemRecorderKit(id);
@@ -1192,12 +1189,11 @@ export const prepareKreadKit = async (
               }),
             );
 
-            let count = 0;
-            itemsToSell.forEach(async (copyBagEntry) => {
-              const [itemObject, itemSupply] = copyBagEntry;
+            itemsToSell.forEach(async (copyBagEntry, i) => {
+              const [itemAsset, itemSupply] = copyBagEntry;
 
               for (let n = 0; n < itemSupply; n++) {
-                const [id, entryRecorder] = claimedIdAndRecorder.flat()[count];
+                const [id, entryRecorder] = claimedIdAndRecorder[i][n];
 
                 // Add to store array
                 const newEntry = {
@@ -1206,7 +1202,7 @@ export const prepareKreadKit = async (
                   royalty,
                   platformFee,
                   id,
-                  object: itemObject,
+                  asset: itemAsset,
                   recorderKit: entryRecorder,
                   isFirstSale: true,
                 };
@@ -1215,16 +1211,13 @@ export const prepareKreadKit = async (
                 marketFacet.updateMetrics('item', {
                   marketplaceAverageLevel: {
                     type: 'add',
-                    value: itemObject.level,
+                    value: itemAsset.level,
                   },
                 });
 
                 market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
-
                 const { seat: omitSeat, recorderKit, ...entry } = newEntry;
                 recorderKit.recorder.write(entry);
-
-                count++;
               }
             });
           };
@@ -1250,7 +1243,7 @@ export const prepareKreadKit = async (
               this.facets;
 
             // Inspect allocation of Character keyword in seller seat
-            const objectInSellSeat = seat.getAmountAllocated('Character');
+            const characterInSellSeat = seat.getAmountAllocated('Character');
             const { want } = seat.getProposal();
 
             paymentBrand === want.Price.brand ||
@@ -1259,18 +1252,13 @@ export const prepareKreadKit = async (
               brand: want.Price.brand,
               value: want.Price.value,
             };
-            const royalty = {
-              brand: want.Price.brand,
-              value: BigInt(royaltyRate * Number(want.Price.value)),
-            };
-            const platformFee = {
-              brand: want.Price.brand,
-              value: BigInt(platformFeeRate * Number(want.Price.value)),
-            };
-            const object = objectInSellSeat.value.payload[0][0];
+            const royalty = multiplyBy(want.Price, royaltyRate);
+            const platformFee = multiplyBy(want.Price, platformFeeRate);
+
+            const character = characterInSellSeat.value.payload[0][0];
 
             const entryRecorder =
-              await marketFacet.makeMarketCharacterRecorderKit(object.name);
+              await marketFacet.makeMarketCharacterRecorderKit(character.name);
 
             // Add to store array
             const newEntry = {
@@ -1278,14 +1266,16 @@ export const prepareKreadKit = async (
               askingPrice,
               royalty,
               platformFee,
-              id: object.name,
-              object,
+              id: character.name,
+              asset: character,
               recorderKit: entryRecorder,
               isFirstSale: false,
             };
 
             // update metrics
-            const characterLevel = characterFacet.calculateLevel(object.name);
+            const characterLevel = characterFacet.calculateLevel(
+              character.name,
+            );
             marketFacet.updateMetrics('character', {
               marketplaceAverageLevel: {
                 type: 'add',
@@ -1297,7 +1287,7 @@ export const prepareKreadKit = async (
 
             const { seat: omitSeat, recorderKit, ...entry } = newEntry;
             recorderKit.recorder.write(entry);
-            marketFacet.updateMetrics('character', { putForSaleAmount: true });
+            marketFacet.updateMetrics('character', { putForSaleCount: true });
 
             marketFacet.handleExitCharacter(newEntry);
           };
@@ -1380,7 +1370,7 @@ export const prepareKreadKit = async (
 
           const itemForSaleAmount = harden({
             brand: itemBrand,
-            value: makeCopyBag([[sellRecord.object, 1n]]),
+            value: makeCopyBag([[sellRecord.asset, 1n]]),
           });
           const itemForSalePrice = sellRecord.askingPrice;
           // Inspect Price keyword from buyer seat
@@ -1466,7 +1456,7 @@ export const prepareKreadKit = async (
           marketFacet.updateMetrics('item', {
             marketplaceAverageLevel: {
               type: 'remove',
-              value: sellRecord.object.level,
+              value: sellRecord.asset.level,
             },
           });
 
@@ -1722,7 +1712,7 @@ export const prepareKreadKit = async (
                 marketplaceAverageLevel: 0,
                 amountSold: 0,
                 latestSalePrice: 0,
-                putForSaleAmount: 0,
+                putForSaleCount: 0,
               }),
             ]),
           );

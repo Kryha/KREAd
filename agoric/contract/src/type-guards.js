@@ -79,7 +79,7 @@ export const MarketMetricsGuard = M.splitRecord({
   averageLevel: M.gte(0),
   marketplaceAverageLevel: M.gte(0),
   latestSalePrice: M.gte(0),
-  putForSaleAmount: M.gte(0),
+  putForSaleCount: M.gte(0),
 });
 
 export const UpdateMarketMetricsGuard = M.splitRecord(
@@ -96,7 +96,7 @@ export const UpdateMarketMetricsGuard = M.splitRecord(
       value: M.gte(0),
     }),
     latestSalePrice: M.gte(0),
-    putForSaleAmount: M.boolean(),
+    putForSaleCount: M.boolean(),
   },
 );
 
@@ -174,7 +174,7 @@ export const MarketRecorderGuard = M.or(
       brand: BrandShape,
       value: M.nat(),
     }),
-    object: M.or(CharacterGuard, ItemGuard),
+    asset: M.or(CharacterGuard, ItemGuard),
     isFirstSale: M.boolean(),
     // history: M.arrayOf(HistoryGuard),
   }),
@@ -193,7 +193,7 @@ export const MarketEntryGuard = M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
   }),
-  object: M.or(CharacterGuard, ItemGuard),
+  asset: M.or(CharacterGuard, ItemGuard),
   isFirstSale: M.boolean(),
   // history: M.arrayOf(HistoryGuard),
 });

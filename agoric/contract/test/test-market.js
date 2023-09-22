@@ -161,10 +161,10 @@ test.serial(
 
     let charactersForSale = await E(publicFacet).getCharactersForSale();
     const characterToBuy = charactersForSale.find(
-      (c) => c.object.name === character,
+      (c) => c.asset.name === character,
     );
 
-    const copyBagAmount = makeCopyBag(harden([[characterToBuy.object, 1n]]));
+    const copyBagAmount = makeCopyBag(harden([[characterToBuy.asset, 1n]]));
     const characterToBuyAmount = AmountMath.make(
       contractAssets.character.brand,
       copyBagAmount,
@@ -225,13 +225,13 @@ test.serial('---| MARKET - Buy character', async (t) => {
 
   let charactersForSale = await E(publicFacet).getCharactersForSale();
   const characterToBuy = charactersForSale.find(
-    ({ object }) => object.name === character,
+    ({ asset }) => asset.name === character,
   );
 
   const royaltyPursePre = royaltyPurse.getCurrentAmount().value;
   const platformFeePursePre = platformFeePurse.getCurrentAmount().value;
 
-  const copyBagAmount = makeCopyBag(harden([[characterToBuy.object, 1n]]));
+  const copyBagAmount = makeCopyBag(harden([[characterToBuy.asset, 1n]]));
   const characterToBuyAmount = AmountMath.make(
     contractAssets.character.brand,
     copyBagAmount,
@@ -404,11 +404,9 @@ test.serial(
 
     let itemsForSale = await E(publicFacet).getItemsForSale();
     const itemToBuy = itemsForSale.find(
-      (itemEntry) => itemEntry.object.category === 'hair',
+      (itemEntry) => itemEntry.asset.category === 'hair',
     );
-    const itemToBuyCopyBagAmount = makeCopyBag(
-      harden([[itemToBuy.object, 1n]]),
-    );
+    const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
     const itemToBuyAmount = AmountMath.make(
       contractAssets.item.brand,
       itemToBuyCopyBagAmount,
@@ -457,9 +455,9 @@ test.serial('---| MARKET - Buy item', async (t) => {
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
   const itemToBuy = itemsForSale.find(
-    (itemEntry) => itemEntry.object.category === 'hair',
+    (itemEntry) => itemEntry.asset.category === 'hair',
   );
-  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.object, 1n]]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
   const itemToBuyAmount = AmountMath.make(
     contractAssets.item.brand,
     itemToBuyCopyBagAmount,
@@ -606,10 +604,10 @@ test.serial(
 
     //bob buys character
     const characterToBuy = charactersForSale.find(
-      ({ object }) => object.name === character,
+      ({ asset }) => asset.name === character,
     );
     const characterToBuyCopyBagAmount = makeCopyBag(
-      harden([[characterToBuy.object, 1n]]),
+      harden([[characterToBuy.asset, 1n]]),
     );
     const characterToBuyAmount = AmountMath.make(
       contractAssets.character.brand,
@@ -702,11 +700,9 @@ test.serial(
 
     //bob attempts to buy item
     const itemToBuy = itemsForSale.find(
-      ({ object }) => object.category === 'hair',
+      ({ asset }) => asset.category === 'hair',
     );
-    const itemToBuyCopyBagAmount = makeCopyBag(
-      harden([[itemToBuy.object, 1n]]),
-    );
+    const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
     const itemToBuyAmount = AmountMath.make(
       contractAssets.item.brand,
       itemToBuyCopyBagAmount,
@@ -767,7 +763,6 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
 
   const itemCollection = Object.values(defaultItems).map((item) => [item, 3n]);
   const itemsToSell = harden(itemCollection);
-
   const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
   const sellItemInvitation = await E(
@@ -785,7 +780,6 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
-
   t.deepEqual(itemsForSale.length, 27, 'Item is successfully added to market');
 
   // t.deepEqual(bob.getItems().length, 0, "Item is no longer in bob's wallet");
@@ -805,9 +799,9 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
   const itemToBuy = itemsForSale.find(
-    ({ object }) => object.category === 'hair',
+    ({ asset }) => asset.category === 'background',
   );
-  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.object, 1n]]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
 
   const itemToBuyAmount = AmountMath.make(
     contractAssets.item.brand,

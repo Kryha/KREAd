@@ -49,7 +49,7 @@
  * @typedef  {{
  *   sellerSeat: ZCFSeat
  *   id: string
- *   object: object[]
+ *   asset: object[]
  *   askingPrice: any
  *   isFirstSale: boolean
  *   royalty: Amount<AssetKind>
