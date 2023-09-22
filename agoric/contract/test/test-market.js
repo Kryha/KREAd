@@ -126,9 +126,7 @@ test.serial('---| MARKET - Sell character', async (t) => {
     payment,
   );
 
-  const result = await E(userSeat).getOfferResult();
-  // TODO: Discuss to delete this check and omit the return
-  // t.deepEqual(result.characterMarket.length, 1, 'Offer returns market entry');
+  await E(userSeat).getOfferResult();
 
   bob.setMarketSeat(userSeat);
 
@@ -264,13 +262,7 @@ test.serial('---| MARKET - Buy character', async (t) => {
     payment,
   );
 
-  const result = await E(userSeat).getOfferResult();
-  // TODO: Discuss to delete this check and omit the return
-  // t.deepEqual(
-  //   result.characterMarket.length,
-  //   0,
-  //   'Offer returns empty market entry',
-  // );
+  await E(userSeat).getOfferResult();
 
   const characterPayout = await E(userSeat).getPayout('Character');
   alice.depositCharacters(characterPayout);
@@ -385,8 +377,7 @@ test.serial('---| MARKET - Sell Item', async (t) => {
   const payment = { Item: bob.withdrawItems(itemToSell) };
 
   const userSeat = await E(zoe).offer(sellItemInvitation, proposal, payment);
-  const result = await E(userSeat).getOfferResult();
-  // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
+  await E(userSeat).getOfferResult();
 
   bob.setMarketSeat(userSeat);
 
@@ -599,7 +590,7 @@ test.serial(
       proposal,
       payment,
     );
-    let result = await E(userSeat).getOfferResult();
+    await E(userSeat).getOfferResult();
 
     alice.setMarketSeat(userSeat);
 
@@ -639,8 +630,7 @@ test.serial(
     payment = { Price: bob.withdrawPayment(priceAmount) };
 
     userSeat = await E(zoe).offer(buyCharacterInvitation, proposal, payment);
-    result = await E(userSeat).getOfferResult();
-    // t.deepEqual(result.characterMarket.length, 0, "Offer returns empty market entry");
+    await E(userSeat).getOfferResult();
 
     const characterPayout = await E(userSeat).getPayout('Character');
     bob.depositCharacters(characterPayout);
@@ -699,7 +689,7 @@ test.serial(
     let payment = { Item: alice.withdrawItems(itemToSellAmount) };
 
     let userSeat = await E(zoe).offer(sellItemInvitation, proposal, payment);
-    let result = await E(userSeat).getOfferResult();
+    await E(userSeat).getOfferResult();
 
     alice.setMarketSeat(userSeat);
 
@@ -734,8 +724,7 @@ test.serial(
       payment,
       offerArgs,
     );
-    result = await E(userSeat).getOfferResult();
-    // t.deepEqual(result.itemMarket.length, 0, "Offer returns empty market entry");
+    await E(userSeat).getOfferResult();
 
     const itemPayout = await E(userSeat).getPayout('Item');
     bob.depositItems(itemPayout);
@@ -780,8 +769,7 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   const userSeat = await E(zoe).offer(sellItemInvitation, proposal, undefined, {
     itemsToSell,
   });
-  const result = await E(userSeat).getOfferResult();
-  // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
+  await E(userSeat).getOfferResult();
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
   t.deepEqual(itemsForSale.length, 27, 'Item is successfully added to market');
