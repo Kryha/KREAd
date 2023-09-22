@@ -254,13 +254,14 @@
  *
  * @typedef {(name: string) => boolean} NameIsUniqueFn
  *
- * @typedef {{
+ * @typedef {Partial<{
  *     averageLevel: UpdateAverage
  *     marketplaceAverageLevel: UpdateAverage
  *     latestSalePrice: number
  *     collectionSize: boolean
- *     amountSold: boolean
- * }} UpdateMetrics
+ *     amountSold: boolean,
+ *     putForSaleCount: boolean
+ * }>} UpdateMetrics
  *
  * @typedef {{
  *     type: ("add" | "remove")

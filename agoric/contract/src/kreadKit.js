@@ -1022,6 +1022,11 @@ export const prepareKreadKit = async (
             void marketFacet.deleteNode(recorderKit.recorder.getStorageNode());
           });
         },
+        /**
+         * @param {string} collection
+         * @param {UpdateMetrics} updateMetrics
+         * @returns {void}
+         */
         updateMetrics(collection, updateMetrics) {
           const updatedMetrics = updateCollectionMetrics(
             collection,
@@ -1029,9 +1034,9 @@ export const prepareKreadKit = async (
             updateMetrics,
           );
           if (collection === 'character') {
-            marketCharacterMetricsKit.recorder.write(updatedMetrics);
+            void marketCharacterMetricsKit.recorder.write(updatedMetrics);
           } else if (collection === 'item') {
-            marketItemMetricsKit.recorder.write(updatedMetrics);
+            void marketItemMetricsKit.recorder.write(updatedMetrics);
           }
         },
         async makeMarketItemRecorderKit(id) {
@@ -1168,15 +1173,13 @@ export const prepareKreadKit = async (
             const claimedIdAndRecorder = await Promise.all(
               itemsToSell.map(async (copyBagEntry) => {
                 const [_, itemSupply] = copyBagEntry;
-                const supplyRange = Array.from(
-                  Array(Number(itemSupply)).keys(),
-                );
+                const supplyRange = Array(Number(itemSupply));
                 const idAndRecorder = await Promise.all(
-                  // FIXME why is this mapping over a value it ignores?
-                  supplyRange.map(async (_) => {
+                  supplyRange.map(async () => {
+                    // putForSaleCount is incremented by updateMetrics() with each iteration of this loop
                     const id =
                       this.state.market.metrics.get('item').putForSaleCount;
-                    await marketFacet.updateMetrics('item', {
+                    marketFacet.updateMetrics('item', {
                       putForSaleCount: true,
                     });
                     const entryRecorder =
