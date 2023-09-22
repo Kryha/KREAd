@@ -1090,41 +1090,36 @@ export const prepareKreadKit = async (
             const royalty = multiplyBy(want.Price, royaltyRate);
             const platformFee = multiplyBy(want.Price, platformFeeRate);
 
-            const item = itemInSellSeat.value.payload[0][0];
             const id = this.state.market.metrics.get('item').putForSaleCount;
 
             const entryRecorder = await marketFacet.makeMarketItemRecorderKit(
               id,
             );
 
+            const asset = itemInSellSeat.value.payload[0][0];
             // Add to store array
-            const newEntry = {
+            const newEntry = harden({
               seat,
               askingPrice,
               royalty,
               platformFee,
               id,
-              asset: item,
+              asset,
               recorderKit: entryRecorder,
               isFirstSale: false,
-            };
+            });
 
             // update metrics
             marketFacet.updateMetrics('item', {
               marketplaceAverageLevel: {
                 type: 'add',
-                value: item.level,
+                value: asset.level,
               },
             });
 
-            market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
+            market.itemEntries.addAll([[newEntry.id, newEntry]]);
 
-            const {
-              seat: _omitSeat,
-              recorderKit,
-              recorderNode: _omitNode,
-              ...entry
-            } = newEntry;
+            const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
             recorderKit.recorder.write(entry);
             marketFacet.updateMetrics('item', { putForSaleCount: true });
 
