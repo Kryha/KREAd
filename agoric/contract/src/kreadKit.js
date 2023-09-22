@@ -447,7 +447,7 @@ export const prepareKreadKit = async (
             // Ensure inventory STATE will be valid before reallocation
             let inventory = inventorySeat
               .getCurrentAllocation()
-              .Item.value.payload.map(([value, supply]) => value);
+              .Item.value.payload.map(([value, _supply]) => value);
             if (providedItemAmount.value.payload[0])
               inventory = [
                 ...inventory,
@@ -621,7 +621,7 @@ export const prepareKreadKit = async (
             // Ensure inventory STATE is valid before reallocation
             let inventory = inventorySeat
               .getCurrentAllocation()
-              .Item.value.payload.map(([value, supply]) => value);
+              .Item.value.payload.map(([value, _supply]) => value);
 
             if (wantedItemsAmount.value.payload[0])
               inventory = inventory.filter(
