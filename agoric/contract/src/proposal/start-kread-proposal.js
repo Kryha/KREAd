@@ -2,13 +2,18 @@
 
 /** @file  This is a module for use with swingset.CoreEval. */
 
+// XXX this is unsupported, but it's already included in the bundle (statically linked)
+import { makeTracer } from '@agoric/internal';
 import { E } from '@endo/far';
+import { deeplyFulfilled } from '@endo/marshal';
+
 import { baseCharacters, baseItems } from './base-inventory.js';
 
 import '@agoric/governance/src/types-ambient.js';
-import { deeplyFulfilled } from '@endo/marshal';
 
 const KREAD_LABEL = 'KREAd';
+
+const trace = makeTracer(KREAD_LABEL);
 
 const contractInfo = {
   storagePath: 'kread',
@@ -91,6 +96,7 @@ const startGovernedInstance = async (
       E(E(zoe).getInvitationIssuer()).getAmountOf(poserInvitationP),
     ]);
 
+  trace('awaiting governorTerms');
   const governorTerms = await deeplyFulfilled(
     harden({
       timer,
@@ -111,6 +117,8 @@ const startGovernedInstance = async (
       },
     }),
   );
+
+  trace('awaiting startInstance');
   const governorFacets = await E(zoe).startInstance(
     contractGovernor,
     {},
@@ -124,6 +132,8 @@ const startGovernedInstance = async (
     }),
     `${label}-governor`,
   );
+
+  trace('awaiting facets');
   const [instance, publicFacet, creatorFacet, adminFacet] = await Promise.all([
     E(governorFacets.creatorFacet).getInstance(),
     E(governorFacets.creatorFacet).getPublicFacet(),
@@ -195,10 +205,12 @@ export const startKread = async (powers, config) => {
 
   const { royaltyAddr, platformFeeAddr } = config.options;
 
+  trace('awaiting royaltyDepositFacet');
   const [royaltyDepositFacet] = await reserveThenGetNamePaths(
     namesByAddressAdmin,
     [[royaltyAddr, 'depositFacet']],
   );
+  trace('awaiting platformFeeDepositFacet');
   const [platformFeeDepositFacet] = await reserveThenGetNamePaths(
     namesByAddressAdmin,
     [[platformFeeAddr, 'depositFacet']],
@@ -253,6 +265,7 @@ export const startKread = async (powers, config) => {
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
+  trace('awaiting startGovernedInstance');
   const facets = await startGovernedInstance(
     {
       zoe,
@@ -285,6 +298,7 @@ export const startKread = async (powers, config) => {
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
 
+  trace('awaiting KREAd initialization');
   await Promise.all([
     E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems),
     E(creatorFacet).initializeMetrics(),
@@ -300,7 +314,7 @@ export const startKread = async (powers, config) => {
   produceItemIssuer.resolve(itemIssuer);
   produceItemBrand.resolve(itemBrand);
 
-  console.log('CONTRACT INIT SUCCESS!');
+  trace('CONTRACT INIT SUCCESS!');
 };
 harden(startKread);
 

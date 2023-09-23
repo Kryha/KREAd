@@ -28,7 +28,8 @@
     "@agoric/cosmic-swingset": "agoric-upgrade-11"
   },
   "dependencies": {
-    "agoric": "agoric-upgrade-11"
+    "agoric": "agoric-upgrade-11",
+    "@agoric/internal": "agoric-upgrade-11"
   },
   "scripts": {
     "preinstall": "node -e \"process.env.AGORIC_INSTALL && process.exit(0); console.warn('please use: agoric install . For details, see https://agoric.com/documentation/'); process.exit(1)\"",
