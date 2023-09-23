@@ -1,4 +1,19 @@
-// ts-check
+// @ts-check
+
+/**
+ * @typedef {{
+ *   mintFee: bigint,
+ *   royaltyRate: RatioObject,
+ *   platformFeeRate: RatioObject,
+ *   mintRoyaltyRate: RatioObject,
+ *   mintPlatformFeeRate: RatioObject,
+ *   royaltyDepositFacet: DepositFacet,
+ *   platformFeeDepositFacet: DepositFacet,
+ *   assetNames: { character: string, item: string },
+ *   minUncommonRating: number
+ * }} KREAdTerms
+ */
+
 /**
  * Holds contract data
  *
@@ -30,12 +45,12 @@
  *   character: {
  *     name: string
  *     brand: Brand
- *     issuer: Issuer<set>
+ *     issuer: Issuer<'set'>
  *   }
  *   item: {
  *     name: string
  *     brand: Brand
- *     issuer: Issuer<set>
+ *     issuer: Issuer<'set'>
  *   }
  * }} TokenInfo
  *
@@ -71,7 +86,7 @@
  *      brand: Brand<"nat">
  *      issuer: Issuer<"nat">
  *   }
- *   timerService: TimerService
+ *   timerService: import('@agoric/time/src/types').TimerService
  *   powers: Powers
  * }} Config
  *
@@ -254,13 +269,14 @@
  *
  * @typedef {(name: string) => boolean} NameIsUniqueFn
  *
- * @typedef {{
+ * @typedef {Partial<{
  *     averageLevel: UpdateAverage
  *     marketplaceAverageLevel: UpdateAverage
  *     latestSalePrice: number
  *     collectionSize: boolean
- *     amountSold: boolean
- * }} UpdateMetrics
+ *     amountSold: boolean,
+ *     putForSaleCount: boolean
+ * }>} UpdateMetrics
  *
  * @typedef {{
  *     type: ("add" | "remove")

@@ -1,4 +1,5 @@
 import { test } from './prepare-test-env-ava.js';
+
 import { E } from '@endo/eventual-send';
 import { AmountMath } from '@agoric/ertp';
 import { bootstrapContext } from './bootstrap.js';
@@ -8,12 +9,7 @@ import { makeKreadUser } from './make-user.js';
 
 async function sellCharacter(context, user, characterName, askingPrice) {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    zoe,
-    paymentAsset,
-  } = context;
+  const { publicFacet, contractAssets, zoe, paymentAsset } = context;
 
   const characterToSell = user
     .getCharacters()
@@ -47,11 +43,7 @@ async function sellCharacter(context, user, characterName, askingPrice) {
 
 async function buyCharacter(context, user, characterName, seller) {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    zoe,
-  } = context;
+  const { publicFacet, contractAssets, zoe } = context;
 
   const charactersForSale = await E(publicFacet).getCharactersForSale();
   const characterToBuy = charactersForSale.find(
@@ -93,7 +85,7 @@ async function buyCharacter(context, user, characterName, seller) {
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
-  const { zoe, contractAssets, assets, purses, instance, paymentAsset } =
+  const { zoe, contractAssets, assets, purses, publicFacet, paymentAsset } =
     bootstrap;
 
   const bob = makeKreadUser('bob', purses);
@@ -104,7 +96,7 @@ test.before(async (t) => {
   bob.depositPayment(payout);
 
   t.context = {
-    instance,
+    publicFacet,
     contractAssets,
     assets,
     purses,
@@ -116,14 +108,12 @@ test.before(async (t) => {
 
 test.serial('---| METRICS - Initialization', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-  } = t.context;
+  const { publicFacet } = t.context;
 
   const metrics = await E(publicFacet).getMarketMetrics();
 
   for (const collection of Object.values(metrics)) {
-    for (let value of Object.values(collection)) {
+    for (const value of Object.values(collection)) {
       t.deepEqual(value, 0);
     }
   }
@@ -132,7 +122,7 @@ test.serial('---| METRICS - Initialization', async (t) => {
 test.serial('---| METRICS - Collection size', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     paymentAsset,
     zoe,
     users: { bob },
@@ -172,7 +162,7 @@ test.serial('---| METRICS - Collection size', async (t) => {
 test.serial('---| METRICS - Average levels character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     users: { bob },
   } = t.context;
 
@@ -203,7 +193,7 @@ test.serial('---| METRICS - Average levels character', async (t) => {
 test.serial('---| METRICS - Amount sold character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     users: { bob },
   } = t.context;
 
@@ -232,7 +222,7 @@ test.serial('---| METRICS - Amount sold character', async (t) => {
 test.serial('---| METRICS - Latest sale price character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     users: { bob },
   } = t.context;
 

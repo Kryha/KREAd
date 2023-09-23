@@ -1,5 +1,5 @@
 {
-  "name": "KREAd-contract",
+  "name": "kread-contract",
   "version": "0.1.0",
   "private": true,
   "description": "Contract for the KREAd nested NFTs",
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "ava": "^4.3.1",
+    "@agoric/internal": "agoric-upgrade-11",
     "@endo/eslint-plugin": "^0.4.4",
     "@jessie.js/eslint-plugin": "^0.4.0",
     "eslint": "^8.47.0",
@@ -30,18 +31,22 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "@agoric/assert": "beta",
+    "@agoric/assert": "agoric-upgrade-11",
     "@agoric/babel-parser": "^7.6.4",
-    "@agoric/deploy-script-support": "beta",
-    "@agoric/ertp": "beta",
+    "@agoric/deploy-script-support": "agoric-upgrade-11",
+    "@agoric/ertp": "agoric-upgrade-11",
+    "@agoric/governance": "agoric-upgrade-11",
     "@agoric/nat": "dev",
-    "@agoric/notifier": "beta",
-    "@agoric/store": "beta",
-    "@agoric/vat-data": "^0.5.2",
-    "@agoric/zoe": "beta",
-    "@agoric/vats": "beta",
+    "@agoric/notifier": "agoric-upgrade-11",
+    "@agoric/store": "agoric-upgrade-11",
+    "@agoric/time": "agoric-upgrade-11",
+    "@agoric/vat-data": "agoric-upgrade-11",
+    "@agoric/zoe": "agoric-upgrade-11",
+    "@agoric/zone": "agoric-upgrade-11",
+    "@agoric/vats": "agoric-upgrade-11",
     "@endo/bundle-source": "^2.1.1",
     "@endo/eventual-send": "^0.14.8",
+    "@endo/far": "^0.2.18",
     "@endo/init": "^0.5.37",
     "@endo/marshal": "^0.6.9",
     "@endo/ses-ava": "^0.2.40",
@@ -56,11 +61,6 @@
   "keywords": [],
   "author": "Kryha",
   "license": "Apache-2.0",
-  "eslintConfig": {
-    "extends": [
-      "@agoric"
-    ]
-  },
   "prettier": {
     "trailingComma": "all",
     "singleQuote": true
@@ -68,7 +68,6 @@
   "eslintIgnore": [
     "characters.js",
     "items.js",
-    "chain-storage-proposal.js",
-    "chain-storage-proposal.js-clean.js"
+    "*-clean.js"
   ]
 }

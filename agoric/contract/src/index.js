@@ -7,8 +7,10 @@ import { M } from '@agoric/store';
 import { provideAll } from '@agoric/zoe/src/contractSupport/durability.js';
 import { prepareRecorderKitMakers } from '@agoric/zoe/src/contractSupport/recorder.js';
 import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
+import { InvitationShape } from '@agoric/zoe/src/typeGuards.js';
+import { handleParamGovernance } from '@agoric/governance';
+
 import { prepareKreadKit } from './kreadKit.js';
-import { RatioObject } from './type-guards.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -17,15 +19,14 @@ import { RatioObject } from './type-guards.js';
  * and from the inventory, using a token as access
  */
 
-/**
- * @typedef {import('@agoric/vat-data').Baggage} Baggage
- *
- * @typedef {import('@agoric/time/src/types').Clock} Clock
- */
+/** @typedef {import('@agoric/vat-data').Baggage} Baggage */
+/** @typedef {import('@agoric/time/src/types').Clock} Clock */
+/** @typedef {import('./type-guards.js').RatioObject} RatioObject */
 
 /** @type {ContractMeta} */
 export const meta = {
   privateArgsShape: M.splitRecord({
+    initialPoserInvitation: InvitationShape,
     seed: M.number(),
     clock: M.eref(M.remotable('Clock')),
     powers: {
@@ -53,37 +54,25 @@ export const meta = {
     },
     royaltyDepositFacet: M.any(),
     platformFeeDepositFacet: M.any(),
-    paymentBrand: M.eref(M.remotable('Brand')),
     assetNames: M.splitRecord({ character: M.string(), item: M.string() }),
   }),
 };
 harden(meta);
 
 /**
- * @param {ZCF} zcf
+ * @param {ZCF<KREAdTerms & GovernanceTerms<{}>>} zcf
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
  *   clock: Clock
+ *   defaultCharacters: object[],
+ *   defaultItems: object[],
+ *   initialPoserInvitation: Invitation
  * }} privateArgs
  *
  * @param {Baggage} baggage
  */
 export const start = async (zcf, privateArgs, baggage) => {
-  /**
-   * @type {{
-   *   paymentBrand: Brand
-   *   mintFee: bigint,
-   *   royaltyRate: RatioObject,
-   *   platformFeeRate: RatioObject,
-   *   mintRoyaltyRate: RatioObject,
-   *   mintPlatformFeeRate: RatioObject,
-   *   royaltyDepositFacet: DepositFacet,
-   *   platformFeeDepositFacet: DepositFacet,
-   *   assetNames: { character: string, item: string },
-   *   minUncommonRating: number
-   * }}
-   */
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
@@ -98,6 +87,12 @@ export const start = async (zcf, privateArgs, baggage) => {
     marketCharacterMetricsKit: 'market-metrics-character',
     marketItemMetricsKit: 'market-metrics-item',
   };
+
+  const { makeDurableGovernorFacet } = await handleParamGovernance(
+    zcf,
+    privateArgs.initialPoserInvitation,
+    {},
+  );
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
   // durability is not a concern with these, and defining them here, passing on what's needed
@@ -121,8 +116,8 @@ export const start = async (zcf, privateArgs, baggage) => {
     mintPlatformFeeRate,
     royaltyDepositFacet,
     platformFeeDepositFacet,
-    paymentBrand,
     minUncommonRating,
+    brands: { Money: paymentBrand },
   } = terms;
 
   const { makeRecorderKit } = prepareRecorderKitMakers(
@@ -131,30 +126,14 @@ export const start = async (zcf, privateArgs, baggage) => {
   );
 
   const mintFeeAmount = AmountMath.make(paymentBrand, mintFee);
-  const mintRoyaltyRateRatio = makeRatio(
-    mintRoyaltyRate.numerator,
-    paymentBrand,
-    mintRoyaltyRate.denominator,
-    paymentBrand,
-  );
-  const mintPlatformFeeRatio = makeRatio(
-    mintPlatformFeeRate.numerator,
-    paymentBrand,
-    mintPlatformFeeRate.denominator,
-    paymentBrand,
-  );
-  const royaltyRateRatio = makeRatio(
-    royaltyRate.numerator,
-    paymentBrand,
-    royaltyRate.denominator,
-    paymentBrand,
-  );
-  const platformFeeRatio = makeRatio(
-    platformFeeRate.numerator,
-    paymentBrand,
-    platformFeeRate.denominator,
-    paymentBrand,
-  );
+
+  const objectToRatio = (brand, { numerator, denominator }) => {
+    return makeRatio(numerator, brand, denominator, brand);
+  };
+  const mintRoyaltyRateRatio = objectToRatio(paymentBrand, mintRoyaltyRate);
+  const mintPlatformFeeRatio = objectToRatio(paymentBrand, mintPlatformFeeRate);
+  const royaltyRateRatio = objectToRatio(paymentBrand, royaltyRate);
+  const platformFeeRatio = objectToRatio(paymentBrand, platformFeeRate);
 
   const kreadKit = await harden(
     prepareKreadKit(
@@ -185,7 +164,11 @@ export const start = async (zcf, privateArgs, baggage) => {
     ),
   );
 
-  return harden(kreadKit);
+  return harden({
+    creatorFacet: makeDurableGovernorFacet(baggage, kreadKit.creator),
+    // no governed parameters, so no need to augment.
+    publicFacet: kreadKit.public,
+  });
 };
 
 harden(start);

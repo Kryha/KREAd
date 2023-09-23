@@ -47,7 +47,6 @@ function updateAverage(type, average, size, value) {
  * @param {string} collection
  * @param {object} state
  * @param {UpdateMetrics} updateMetrics
- * @param {import("@agoric/zoe/src/contractSupport").RecorderKit} marketCharacterMetricsKit
  */
 export const updateCollectionMetrics = (collection, state, updateMetrics) => {
   const metrics = { ...state.market.metrics.get(collection) };
