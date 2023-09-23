@@ -4,7 +4,7 @@
 import { updateCollectionMetrics } from './market-metrics.js';
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
-import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
+import { prepareExoClassKit, M } from '@agoric/vat-data';
 import { makeDurableZone } from '@agoric/zone/durable.js';
 
 import { E } from '@endo/eventual-send';
