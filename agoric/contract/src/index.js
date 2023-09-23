@@ -99,7 +99,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     marketItemMetricsKit: 'market-metrics-item',
   };
 
-  const { makeGovernorFacet } = await handleParamGovernance(
+  const { makeDurableGovernorFacet } = await handleParamGovernance(
     zcf,
     privateArgs.initialPoserInvitation,
     {},
@@ -176,7 +176,7 @@ export const start = async (zcf, privateArgs, baggage) => {
   );
 
   return harden({
-    creatorFacet: makeGovernorFacet(kreadKit.creator),
+    creatorFacet: makeDurableGovernorFacet(baggage, kreadKit.creator),
     // no governed parameters, so no need to augment.
     publicFacet: kreadKit.public,
   });
