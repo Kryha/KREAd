@@ -88,24 +88,3 @@ To run the application for more than one user follow these steps:
    4. Navigate to `localhost:3000` on each session and approve the app in both wallets
 10. Enjoy!
 
-
-
-## to start up the backend on a local chain
-
-1. Start the chain
-   1. make local-testnet
-2. Update KEPLR_ADDRESS in Makefile.paths
-   1. try to make the committee below, but it'll give you an aswer that some account doesn't exist
-   2. copy that address into Makefile.paths.local
-3. fund the account
-   1. make fund-account
-4. make the committee
-   1. make kread-committee
-5. provision the fee collector wallet
-   1. make provision-fee-collector
-6. start the KREAd contract
-   1. make clean start-kread
-
-To confirm it started,
-- in chain log you should see "CONTRACT INIT SUCCESS"
-- after that `agd query vstorage children published` should include "kread"
