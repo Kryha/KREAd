@@ -9,10 +9,10 @@ ensure you are in the agoric folder otherwise cd to agoric folder
 cd agoric
 ```
 
-run agoric install
+get the dependencies for current Mainnet:
 
 ```sh
-agoric install
+agoric install agoric-upgrade-11
 ```
 
 run chain from:
