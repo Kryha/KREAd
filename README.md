@@ -100,7 +100,7 @@ To run the application for more than one user follow these steps:
 3. fund the account
    1. make fund-account
 4. make the committee
-   1. KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make kread-committee
+   1. make kread-committee
 5. provision the fee collector wallet
    1. make provision-fee-collector
 6. start the KREAd contract
