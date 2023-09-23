@@ -33,7 +33,7 @@ create kread-bundle and publish it to chain (this step requires the `client-loca
 make kread-bundle
 ```
 
-provision the account that is in the core eval proposal ('agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu')
+provision the account that is in the core eval proposal
 
 ```sh
 make provision-fee-collector
