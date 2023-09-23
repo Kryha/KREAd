@@ -1,55 +1,28 @@
-# KREAd deploy steps
+# Contract deploy steps
 
 To succesfully run the below steps making use of the makefile, it is important to have a local file `Makefile.paths.local` filled in with the required paths and addresses, an example can be found in `Makefile.paths`.
 
 Steps to run:
 ensure you are in the agoric folder otherwise cd to agoric folder
 
-```sh
-cd agoric
-```
+1. Start the chain
+   1. make local-testnet
+2. Update KEPLR_ADDRESS in Makefile.paths
+   1. try to `make kread-committee`
+   2. it will fail but look for `"sender","value":"agoric1` to find the address
+   3. copy that address into Makefile.paths.local for KEPLR_ADDRESS
+3. fund the account
+   1. make fund-account
+4. make the committee
+   1. make kread-committee
+5. provision the fee collector wallet
+   1. make provision-fee-collector
+6. start the KREAd contract
+   1. make clean start-kread
 
-get the dependencies for current Mainnet:
+To confirm it started,
 
-```sh
-agoric install agoric-upgrade-11
-```
+- in chain log you should see "CONTRACT INIT SUCCESS"
+- after that `agd query vstorage children published` should include "kread"
 
-run chain from:
-
-```sh
-make local-testnet
-```
-
-run client for chain:
-
-```sh
-make client-local-testnet
-```
-
-create kread-bundle and publish it to chain (this step requires the `client-local-testnet` otherwise it has no address to bundle and publish from):
-
-```sh
-make kread-bundle
-```
-
-provision the account that is in the core eval proposal
-
-```sh
-make provision-fee-collector
-```
-
-create and vote on proposal
-
-```sh
-make proposal
-```
-
-The proposal logs some board_id information to chain-logs which can be used to verify it ran correctly.
-
-Vstorage should contain the following after startup:
-
-- kread bundle in bundles
-- kread instance in agoricNames/instances
-- KREAdCHARACTER and KREAdITEM brands in agoricNames/brands
-- kread storage path with kread-info populated with boardIds
+If you encounter `Request would exceed mint limit` try `make fund-account`

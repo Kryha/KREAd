@@ -124,7 +124,8 @@ provision-account:
 
 provision-fee-collector:
 	cd $(COSMIC_SWINGSET_PATH); \
-	make fund-provision-pool provision-acct ACCT_ADDR=$(FEE_ADDRESS) \
+	make fund-provision-pool provision-acct ACCT_ADDR=$(ROYALTY_ADDRESS) \
+	make fund-provision-pool provision-acct ACCT_ADDR=$(PLATFORM_ADDRESS) \
 
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \
