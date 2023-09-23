@@ -175,8 +175,9 @@ export const start = async (zcf, privateArgs, baggage) => {
     ),
   );
 
+  const { governorFacet } = makeDurableGovernorFacet(baggage, kreadKit.creator);
   return harden({
-    creatorFacet: makeDurableGovernorFacet(baggage, kreadKit.creator),
+    creatorFacet: governorFacet,
     // no governed parameters, so no need to augment.
     publicFacet: kreadKit.public,
   });
