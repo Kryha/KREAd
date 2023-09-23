@@ -1,4 +1,8 @@
-FEE_ADDRESS = agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu
+# accounts based on mnemonics in mn2-start.test.js
+ROYALTY_ADDRESS=agoric1yjc8llu3fugm7tgqye4rd5n92l9x2dhe30dazp
+PLATFORM_ADDRESS=agoric1enwuyn2hzyyvt39x87tk9rhlkpqtyv9haj7mgs
+COMMITTEE_ADDRESSES='{"kgov1": "agoric1890064p6j3xhzzdf8daknd6kpvhw766ds8flgw", "kgov2": "agoric1vqm5x5sj4lxmj2kem7x92tuhaum0k2yzyj6mgu"}'
+COMMITTEE_NAME=kread-gov
 
 # config options
 KREAD_REPO =
@@ -55,13 +59,19 @@ build-proposals: dist/kread-committee-info.json dist/start-kread-info.json
 
 dist/kread-invite-committee-permit.json dist/kread-invite-committee.js dist/kread-committee-info.json: dist/.keep \
 		contract/src/proposal/kread-committee-script.js
-	cd dist && agoric run ../contract/src/proposal/kread-committee-script.js >kread-committee-info.txt
+	cd dist && \
+	    KREAD_COMMITTEE_ADDRESSES=$(COMMITTEE_ADDRESSES) \
+		KREAD_COMMITTEE_NAME=$(COMMITTEE_NAME) \
+		  agoric run ../contract/src/proposal/kread-committee-script.js >kread-committee-info.txt
 	node contract/scripts/parseProposals.js <dist/kread-committee-info.txt >dist/kread-committee-info.json \
 		|| rm dist/kread-committee-info.json
 
 dist/start-kread-permit.json dist/start-kread.js dist/start-kread-info.json: dist/.keep \
 		contract/src/proposal/start-kread-script.js
-	cd dist && KREAD_ROYALTY_ADDRESS=$(FEE_ADDRESS) KREAD_PLATFORM_ADDRESS=$(FEE_ADDRESS) agoric run ../contract/src/proposal/start-kread-script.js >start-kread-info.txt
+	cd dist && \
+		KREAD_ROYALTY_ADDRESS=$(ROYALTY_ADDRESS) \
+		KREAD_PLATFORM_ADDRESS=$(PLATFORM_ADDRESS) \
+		  agoric run ../contract/src/proposal/start-kread-script.js >start-kread-info.txt
 	node contract/scripts/parseProposals.js <dist/start-kread-info.txt >dist/start-kread-info.json \
 		|| rm dist/start-kread-info.json
 
