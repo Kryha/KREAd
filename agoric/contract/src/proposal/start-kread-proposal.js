@@ -7,9 +7,14 @@ import { makeTracer } from '@agoric/internal';
 import { E } from '@endo/far';
 import { deeplyFulfilled } from '@endo/marshal';
 
-import { baseCharacters, baseItems } from './base-inventory.js';
+import {
+  baseCharacters,
+  baseItems,
+  marketplaceListing,
+} from './base-inventory.js';
 
 import '@agoric/governance/src/types-ambient.js';
+import { AmountMath } from '@agoric/ertp/src/amountMath.js';
 
 const KREAD_LABEL = 'KREAd';
 
@@ -298,12 +303,15 @@ export const startKread = async (powers, config) => {
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
 
+  const priceAmount = AmountMath.make(istIssuerP, terms.mintFee);
+
   trace('awaiting KREAd initialization');
   await Promise.all([
     E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems),
     E(creatorFacet).initializeMetrics(),
     E(creatorFacet).initializeCharacterNamesEntries(),
     E(creatorFacet).reviveMarketExitSubscribers(),
+    E(creatorFacet).publishItemCollection(priceAmount, marketplaceListing),
   ]);
 
   produceKreadInstance.resolve(instance);
