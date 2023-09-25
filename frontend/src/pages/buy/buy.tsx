@@ -16,9 +16,10 @@ interface Props {
   onSubmit: () => Promise<void>;
   isLoading: boolean;
   isOfferAccepted: boolean;
+  children?: React.ReactNode;
 }
 
-export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOfferAccepted }) => {
+export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOfferAccepted, children }) => {
   const { width, height } = useViewport();
   const location = useLocation();
   const previousPath = location.state.pathname;
@@ -46,11 +47,14 @@ export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOffer
   };
 
   return (
-    <ContentWrapper width={width} height={height}>
-      <FormCard height={height} width={width}>
-        <FormHeader currentStep={currentStep} stepAmount={BUY_FLOW_STEPS} title={pText.buy} link={previousPath} isPaymentFlow />
-        {perStepDisplay()}
-      </FormCard>
-    </ContentWrapper>
+    <>
+      <ContentWrapper width={width} height={height}>
+        <FormCard height={height} width={width}>
+          <FormHeader currentStep={currentStep} stepAmount={BUY_FLOW_STEPS} title={pText.buy} link={previousPath} isPaymentFlow />
+          {perStepDisplay()}
+        </FormCard>
+      </ContentWrapper>
+      {children}
+    </>
   );
 };

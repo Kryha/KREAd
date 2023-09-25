@@ -18,6 +18,7 @@ import {
   Warning,
 } from "./styles";
 import { SellData } from "./types";
+import { FormContainer } from "../create-character/styles";
 
 interface InformationProps {
   setData: (price: number) => void;
@@ -34,7 +35,7 @@ export const Information: FC<InformationProps> = ({ setData }) => {
 
   return (
     <ContentWrapper width={width} height={height}>
-      <form onSubmit={handleSubmit((fields) => setData(fields.price))}>
+      <FormContainer onSubmit={handleSubmit((fields) => setData(fields.price))}>
         <FormFields>
           <InputContainer>
             <Label>{text.store.setPrice}</Label>
@@ -66,7 +67,7 @@ export const Information: FC<InformationProps> = ({ setData }) => {
             <ButtonText customColor={color.white}>{text.general.next}</ButtonText>
           </PrimaryButton>
         </ButtonContainer>
-      </form>
+      </FormContainer>
     </ContentWrapper>
   );
 };

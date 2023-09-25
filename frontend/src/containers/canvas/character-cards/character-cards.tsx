@@ -18,14 +18,15 @@ import {
 import { useMyCharacters, useSelectedCharacter } from "../../../service";
 import { useUserStateDispatch } from "../../../context/user";
 import { routes } from "../../../navigation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ButtonInfoWrap } from "../../../components/button-info/styles";
 
 export const CharacterCards: FC = () => {
-  const { selectedAssetCategory, selectedAsset, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
+  const { selectedAsset, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
 
   const { height } = useViewport();
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedCharacter] = useSelectedCharacter();
 
   const [characters] = useMyCharacters();
@@ -39,7 +40,9 @@ export const CharacterCards: FC = () => {
 
   const sell = (character: ExtendedCharacter) => {
     if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.nft.id}`);
+    navigate(`${routes.sellCharacter}/${character.nft.id}`, {
+      state: location,
+    });
   };
 
   useEffect(() => {
@@ -130,7 +133,7 @@ const CharacterInformation: FC<CharacterInfo> = ({ character, sell, selectCharac
           <SecondaryButton>{text.general.info}</SecondaryButton>
         </ButtonInfoWrap>
         <PrimaryButton onClick={() => (sell ? sell(character) : null)}>
-          <ButtonText customColor={color.white}>Sell</ButtonText>
+          <ButtonText customColor={color.white}>sell</ButtonText>
         </PrimaryButton>
         {character.nft.name !== selectedCharacterName ? (
           <>

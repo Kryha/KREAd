@@ -25,6 +25,13 @@ export const ModeScroller: React.FC = () => {
   const [currentIndex] = useState(initialIndex);
   const isMobile = useIsMobile(breakpoints.tablet);
 
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentIndex]);
+
   if (isLoading) {
     // Handle loading state if needed
     return <LoadingPage />;
@@ -61,19 +68,10 @@ export const ModeScroller: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [currentIndex]);
-
   const pageTitle = () => {
     switch (interactionMode) {
       case ITEM_MODE:
-        return "";
-      /* FIXME: wrong type */
-      // return text.param.categories[categories[currentIndex]] as string;
+        return (text.param.categories as any)[categories[currentIndex]];
       case CATEGORY_MODE:
         return text.general.categories;
       case CHARACTER_SELECT_MODE:

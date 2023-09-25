@@ -14,28 +14,39 @@ import { useCharacterMarketState } from "../context/character-shop-context";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
-
   const userStateDispatch = useUserStateDispatch();
 
   useEffect(() => {
     const storedName = localStorage.getItem("selectedCharacter");
-    if (storedName) {
-      const selectedCharacter = characters.find((char) => char.nft.name === storedName);
+
+    if (selected) {
+      if (selected.nft.name !== storedName) {
+        localStorage.setItem("selectedCharacter", selected.nft.name);
+      }
+      const selectedCharacter = characters.find((char) => char.nft.name === selected.nft.name);
       if (selectedCharacter) {
         userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter });
       }
-    } else if (!selected && characters.length > 0) {
-      // If selected character is not found in localStorage and characters array is not empty, set the first character as selected
-      userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+    } else if (characters.length > 0) {
+      if (storedName) {
+        const matchingCharacter = characters.find((char) => char.nft.name === storedName);
+        if (matchingCharacter) {
+          userStateDispatch({
+            type: "SET_SELECTED",
+            payload: matchingCharacter,
+          });
+        } else {
+          const firstCharacter = characters[0];
+          localStorage.setItem("selectedCharacter", firstCharacter.nft.name);
+          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter });
+        }
+      } else {
+        const firstCharacterName = characters[0].nft.name;
+        localStorage.setItem("selectedCharacter", firstCharacterName);
+        userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+      }
     }
   }, [userStateDispatch, characters, selected]);
-
-  // Save the selected character's name to localStorage whenever it changes
-  useEffect(() => {
-    if (selected && selected.nft.name) {
-      localStorage.setItem("selectedCharacter", selected.nft.name);
-    }
-  }, [selected]);
 
   return [selected, !fetched];
 };

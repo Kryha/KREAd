@@ -49,7 +49,7 @@ export const AssetWrapper = styled.div`
 export const AssetContent = styled.div`
   display: flex;
   flex-direction: column;
-  height: 400px;
+  height: 450px;
   gap: 8px;
   width: 100%;
 `;

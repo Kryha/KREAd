@@ -6,6 +6,7 @@ import { color } from "../../design";
 import { routes } from "../../navigation";
 import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer } from "./styles";
 import { BuyText } from "./types";
+import { useViewport } from "../../hooks";
 
 interface Props {
   text: BuyText;
@@ -13,9 +14,10 @@ interface Props {
 
 export const Confirmation: FC<Props> = ({ text }) => {
   const navigate = useNavigate();
+  const { width, height } = useViewport();
 
   return (
-    <ContentWrapper>
+    <ContentWrapper width={width} height={height}>
       <TickContainer>
         <Tick />
       </TickContainer>

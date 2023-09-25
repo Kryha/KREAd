@@ -40,7 +40,7 @@ export const Landing: FC = () => {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   const sell = (characterId: number) => {
-    navigate(`${routes.sellCharacter}/${characterId}`);
+    navigate(`${routes.sellCharacter}/${characterId}`, { state: location });
   };
 
   const displayToast = () => {
