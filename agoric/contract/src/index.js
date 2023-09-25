@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // @ts-check
-import '@agoric/zoe/exported';
+import '@agoric/zoe/exported.js';
 
 import { AmountMath, AssetKind } from '@agoric/ertp';
 import { M } from '@agoric/store';
@@ -164,9 +164,14 @@ export const start = async (zcf, privateArgs, baggage) => {
     ),
   );
 
-  const { governorFacet } = makeDurableGovernorFacet(baggage, kreadKit.creator, {
-    publishItemCollection: () => kreadKit.market.publishItemCollection(),
-  });
+  const { governorFacet } = makeDurableGovernorFacet(
+    baggage,
+    kreadKit.creator,
+    {
+      publishItemCollection: (price, itemsToSell) =>
+        kreadKit.creator.publishItemCollection(price, itemsToSell),
+    },
+  );
   return harden({
     creatorFacet: governorFacet,
     // no governed parameters, so no need to augment.

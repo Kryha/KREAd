@@ -1139,98 +1139,6 @@ export const prepareKreadKit = async (
             }),
           );
         },
-        publishItemCollection() {
-          /**
-           *
-           * @param {ZCFSeat} seat
-           * @param {{
-           *    itemsToSell: [Item, bigint][],
-           * }} privateArgs
-           */
-          const handler = async (seat, { itemsToSell }) => {
-            const { market } = this.state;
-            const { market: marketFacet, item } = this.facets;
-
-            // const { zcfSeat: internalSellSeat } = zcf.makeEmptySeatKit();
-            const internalSellSeat = seat;
-            await item.mintBatch(internalSellSeat, itemsToSell);
-
-            const { want } = seat.getProposal();
-            const askingPrice = {
-              brand: want.Price.brand,
-              value: want.Price.value,
-            };
-            const royalty = multiplyBy(want.Price, royaltyRate);
-            const platformFee = multiplyBy(want.Price, platformFeeRate);
-
-            const claimedIdAndRecorder = await Promise.all(
-              itemsToSell.map((copyBagEntry) => {
-                const [_, itemSupply] = copyBagEntry;
-                const supplyRange = Array(Number(itemSupply));
-                return Promise.all(
-                  supplyRange.map(async () => {
-                    // putForSaleCount is incremented by updateMetrics() with each iteration of this loop
-                    const id =
-                      this.state.market.metrics.get('item').putForSaleCount;
-                    marketFacet.updateMetrics('item', {
-                      putForSaleCount: true,
-                    });
-                    const entryRecorder =
-                      await marketFacet.makeMarketItemRecorderKit(id);
-
-                    return [id, entryRecorder];
-                  }),
-                );
-              }),
-            );
-
-            itemsToSell.forEach(async (copyBagEntry, i) => {
-              const [itemAsset, itemSupply] = copyBagEntry;
-
-              for (let n = 0; n < itemSupply; n += 1) {
-                const [id, entryRecorder] = claimedIdAndRecorder[i][n];
-
-                // Add to store array
-                const newEntry = {
-                  seat: internalSellSeat,
-                  askingPrice,
-                  royalty,
-                  platformFee,
-                  id,
-                  asset: itemAsset,
-                  recorderKit: entryRecorder,
-                  isFirstSale: true,
-                };
-
-                // update metrics
-                marketFacet.updateMetrics('item', {
-                  marketplaceAverageLevel: {
-                    type: 'add',
-                    value: itemAsset.level,
-                  },
-                });
-
-                market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
-                const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
-                recorderKit.recorder.write(entry);
-              }
-            });
-          };
-
-          return zcf.makeInvitation(
-            handler,
-            'PublishItemCollection',
-            undefined,
-            M.splitRecord({
-              want: {
-                Price: M.splitRecord({
-                  brand: BrandShape,
-                  value: M.nat(),
-                }),
-              },
-            }),
-          );
-        },
         sellCharacter() {
           const handler = async (seat) => {
             const { market } = this.state;
@@ -1734,9 +1642,75 @@ export const prepareKreadKit = async (
             character.entries.init('names', harden([]));
           }
         },
-        makePublishItemCollectionInvitation() {
-          const { market } = this.facets;
-          return market.publishItemCollection();
+        /**
+         *
+         * @param {Amount<nat>} price
+         * @param {[Item, bigint][]} itemsToSell
+         */
+        async publishItemCollection(price, itemsToSell) {
+          const { market } = this.state;
+          const { market: marketFacet, item } = this.facets;
+
+          const { zcfSeat: internalSellSeat } = zcf.makeEmptySeatKit();
+          await item.mintBatch(internalSellSeat, itemsToSell);
+
+          const askingPrice = {
+            brand: price.brand,
+            value: price.value,
+          };
+          const royalty = multiplyBy(price, royaltyRate);
+          const platformFee = multiplyBy(price, platformFeeRate);
+          const claimedIdAndRecorder = await Promise.all(
+            itemsToSell.map(async (copyBagEntry) => {
+              const [_, itemSupply] = copyBagEntry;
+              const supplyRange = Array.from(Array(Number(itemSupply)).keys());
+              const idAndRecorder = await Promise.all(
+                supplyRange.map(async () => {
+                  // putForSaleCount is incremented by updateMetrics() with each iteration of this loop
+                  const id =
+                    this.state.market.metrics.get('item').putForSaleCount;
+                  await marketFacet.updateMetrics('item', {
+                    putForSaleCount: true,
+                  });
+                  const entryRecorder =
+                    await marketFacet.makeMarketItemRecorderKit(id);
+                  return [id, entryRecorder];
+                }),
+              );
+              return idAndRecorder;
+            }),
+          );
+
+          itemsToSell.forEach(async (copyBagEntry, i) => {
+            const [itemAsset, itemSupply] = copyBagEntry;
+
+            for (let n = 0; n < itemSupply; n += 1) {
+              const [id, entryRecorder] = claimedIdAndRecorder[i][n];
+              // Add to store array
+              const newEntry = {
+                seat: internalSellSeat,
+                askingPrice,
+                royalty,
+                platformFee,
+                id,
+                asset: itemAsset,
+                recorderKit: entryRecorder,
+                isFirstSale: true,
+              };
+
+              // update metrics
+              marketFacet.updateMetrics('item', {
+                marketplaceAverageLevel: {
+                  type: 'add',
+                  value: itemAsset.level,
+                },
+              });
+
+              market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
+              const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
+              recorderKit.recorder.write(entry);
+            }
+          });
         },
       },
       public: {
@@ -1817,7 +1791,6 @@ export const prepareKreadKit = async (
   return harden({
     public: facets.public,
     creator: facets.creator,
-    market: facets.market,
   });
 };
 

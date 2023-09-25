@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "ava": "^4.3.1",
-    "@agoric/internal": "agoric-upgrade-11",
     "@endo/eslint-plugin": "^0.4.4",
     "@jessie.js/eslint-plugin": "^0.4.0",
     "eslint": "^8.47.0",
@@ -31,6 +30,7 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
+    "@agoric/internal": "agoric-upgrade-11",
     "@agoric/assert": "agoric-upgrade-11",
     "@agoric/babel-parser": "^7.6.4",
     "@agoric/deploy-script-support": "agoric-upgrade-11",
