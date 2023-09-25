@@ -13,6 +13,7 @@ import {
   makeCharacterNftObjs,
   makeStorageNodeRecorderKits,
   makeCopyBagAmountShape,
+  addAllToMap,
 } from './utils.js';
 
 import { text } from './text.js';
@@ -228,7 +229,7 @@ export const prepareKreadKit = async (
         initializeBaseCharacters(baseCharacters) {
           const { character: characterState } = this.state;
           if (characterState.bases.getSize() > 0) return;
-          characterState.bases.addAll(baseCharacters);
+          addAllToMap(characterState.bases, baseCharacters);
         },
         async makeInventoryRecorderKit(path) {
           const node = await E(characterNode).makeChildNode(
@@ -366,7 +367,7 @@ export const prepareKreadKit = async (
                 ],
               };
 
-              characterState.entries.addAll([
+              addAllToMap(characterState.entries, [
                 [character.name, harden(character)],
               ]);
 
@@ -392,7 +393,7 @@ export const prepareKreadKit = async (
               return text.mintCharacterReturn;
             } catch (e) {
               // restore base char deletion and and name entry
-              characterState.bases.addAll([[baseIndex, baseCharacter]]);
+              addAllToMap(characterState.bases, [[baseIndex, baseCharacter]]);
               characterState.entries.set(
                 'names',
                 harden(
@@ -783,7 +784,7 @@ export const prepareKreadKit = async (
             else uncommonToLegendary.push(item);
           });
 
-          itemState.bases.addAll([
+          addAllToMap(itemState.bases, [
             ['common', harden(common)],
             ['uncommonToLegendary', harden(uncommonToLegendary)],
           ]);
@@ -841,7 +842,7 @@ export const prepareKreadKit = async (
               ],
             };
 
-            itemState.entries.addAll([[id, harden(item)]]);
+            addAllToMap(itemState.entries, [[id, harden(item)]]);
             itemKit.recorder.write(item);
 
             id += 1;
@@ -894,7 +895,7 @@ export const prepareKreadKit = async (
                 ],
               };
 
-              itemState.entries.addAll([[id, harden(item)]]);
+              addAllToMap(itemState.entries, [[id, harden(item)]]);
               itemKit.recorder.write(item);
 
               id += 1;
@@ -949,7 +950,7 @@ export const prepareKreadKit = async (
                 ],
               };
 
-              itemState.entries.addAll([[id, harden(item)]]);
+              addAllToMap(itemState.entries, [[id, harden(item)]]);
               itemKit.recorder.write(item);
 
               id += 1;
@@ -1113,7 +1114,7 @@ export const prepareKreadKit = async (
               },
             });
 
-            market.itemEntries.addAll([[newEntry.id, newEntry]]);
+            addAllToMap(market.itemEntries, [[newEntry.id, newEntry]]);
 
             const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
             recorderKit.recorder.write(entry);
@@ -1186,7 +1187,9 @@ export const prepareKreadKit = async (
               },
             });
 
-            market.characterEntries.addAll([[newEntry.id, harden(newEntry)]]);
+            addAllToMap(market.characterEntries, [
+              [newEntry.id, harden(newEntry)],
+            ]);
 
             const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
             recorderKit.recorder.write(entry);
@@ -1602,7 +1605,8 @@ export const prepareKreadKit = async (
           const { market } = this.state;
           if (market.metrics.getSize() > 0) return;
 
-          market.metrics.addAll(
+          addAllToMap(
+            market.metrics,
             ['character', 'item'].map((key) => [
               key,
               harden({
@@ -1706,7 +1710,9 @@ export const prepareKreadKit = async (
                 },
               });
 
-              market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
+              addAllToMap(market.itemEntries, [
+                [newEntry.id, harden(newEntry)],
+              ]);
               const { seat: _omitSeat, recorderKit, ...entry } = newEntry;
               recorderKit.recorder.write(entry);
             }
