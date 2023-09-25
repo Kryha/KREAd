@@ -53,10 +53,42 @@ export const start = async (zcf, privateArgs, baggage) => {
     return zcf.makeInvitation(voteOnOfferFilterHandler, 'vote on offer filter');
   };
 
+  /**
+   * @param {Instance} instance
+   * @param {string} methodName
+   * @param {string[]} methodArgs
+   * @param {import('@agoric/time').TimestampValue} deadline
+   */
+  const makeApiInvocationInvitation = (
+    instance,
+    methodName,
+    methodArgs,
+    deadline,
+  ) => {
+    const handler = (seat) => {
+      seat.exit();
+
+      const governor = instanceToGovernor.get(instance);
+      return E(governor).voteOnApiInvocation(
+        methodName,
+        methodArgs,
+        counter,
+        deadline,
+      );
+    };
+    return zcf.makeInvitation(handler, 'vote on API invocation');
+  };
+
   const MakerI = M.interface('Charter InvitationMakers', {
     VoteOnPauseOffers: M.call(
       InstanceHandleShape,
       M.arrayOf(M.string()),
+      TimestampShape,
+    ).returns(M.promise()),
+    VoteOnApiCall: M.call(
+      InstanceHandleShape,
+      M.string(),
+      M.arrayOf(M.any()),
       TimestampShape,
     ).returns(M.promise()),
   });
@@ -69,6 +101,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     MakerI,
     {
       VoteOnPauseOffers: makeOfferFilterInvitation,
+      VoteOnApiCall: makeApiInvocationInvitation,
     },
   );
 

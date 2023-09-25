@@ -1814,7 +1814,11 @@ export const prepareKreadKit = async (
     },
   );
   const facets = makeKreadKitInternal();
-  return harden({ public: facets.public, creator: facets.creator });
+  return harden({
+    public: facets.public,
+    creator: facets.creator,
+    market: facets.market,
+  });
 };
 
 harden(prepareKreadKit);
