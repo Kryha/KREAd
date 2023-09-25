@@ -758,18 +758,7 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   const itemsToSell = harden(itemCollection);
   const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
-  const sellItemInvitation = await E(
-    creatorFacet,
-  ).makePublishItemCollectionInvitation();
-  const proposal = harden({
-    give: {},
-    want: { Price: priceAmount },
-  });
-
-  const userSeat = await E(zoe).offer(sellItemInvitation, proposal, undefined, {
-    itemsToSell,
-  });
-  await E(userSeat).getOfferResult();
+  await E(creatorFacet).publishItemCollection(priceAmount, itemsToSell);
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
   t.deepEqual(itemsForSale.length, 27, 'Item is successfully added to market');
@@ -777,8 +766,6 @@ test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   // t.deepEqual(bob.getItems().length, 0, "Item is no longer in bob's wallet");
 });
 
-// FIXME: this case works on a local testnet setup
-// figure out why it doesn't pass here. (storageNode vs contract getters?)
 test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   /** @type {Bootstrap} */
   const {
