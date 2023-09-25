@@ -131,7 +131,7 @@ export const CreatorI = M.interface('creator', {
     M.arrayOf(ItemGuard),
   ).returns(),
   initializeCharacterNamesEntries: M.call().returns(),
-  makePublishItemCollectionInvitation: M.call().returns(M.promise()),
+  publishItemCollection: M.call().returns(M.promise()),
 });
 
 export const CharacterI = M.interface('character', {
@@ -204,7 +204,6 @@ export const MarketEntryGuard = M.splitRecord({
 
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
-  publishItemCollection: M.call().returns(M.promise()),
   buyItem: M.call().returns(M.promise()),
   buyFirstSaleItem: M.call().returns(M.promise()),
   buySecondarySaleItem: M.call().returns(M.promise()),
