@@ -249,7 +249,7 @@ export const startKread = async (powers, config) => {
     mintPlatformFeeRate,
     royaltyDepositFacet,
     platformFeeDepositFacet,
-    mintFee: 30000000n,
+    mintFee: 5000000n,
     assetNames: {
       character: 'KREAdCHARACTER',
       item: 'KREAdITEM',
