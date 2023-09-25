@@ -136,6 +136,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers.marshaller,
   );
 
+  assert(paymentBrand, 'missing paymentBrand');
   const mintFeeAmount = AmountMath.make(paymentBrand, mintFee);
 
   const objectToRatio = (brand, { numerator, denominator }) => {
