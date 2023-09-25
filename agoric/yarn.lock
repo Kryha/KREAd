@@ -141,6 +141,11 @@
     "@endo/nat" "4.1.27"
     "@endo/promise-kit" "0.2.56"
 
+"@agoric/eslint-config@agoric-upgrade-11":
+  version "0.4.1-u11wf.0"
+  resolved "https://registry.yarnpkg.com/@agoric/eslint-config/-/eslint-config-0.4.1-u11wf.0.tgz#dcb366e17619962e9ab3b276cc08ba4d3a26537b"
+  integrity sha512-hBpciqK5xkxrS3+HElOESCsx9bKAyQFFKQ3Hi0IfHB0XuiyfvqdgedHZftxOObkpO59RTzeA7gcquouaE1HKWw==
+
 "@agoric/governance@^0.10.4-u11wf.0", "@agoric/governance@agoric-upgrade-11":
   version "0.10.4-u11wf.0"
   resolved "https://registry.yarnpkg.com/@agoric/governance/-/governance-0.10.4-u11wf.0.tgz#41ec833992899241c992f9d6ae373d471a039379"

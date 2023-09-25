@@ -14,6 +14,7 @@
     "lint-check-jessie": "eslint -c '.eslintrc-jessie.js' '**/*.{js,jsx}'"
   },
   "devDependencies": {
+    "@agoric/eslint-config": "agoric-upgrade-11",
     "@endo/eslint-plugin": "^0.4.4",
     "@jessie.js/eslint-plugin": "^0.4.0",
     "ava": "^4.3.1",
@@ -29,11 +30,11 @@
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "@agoric/internal": "agoric-upgrade-11",
     "@agoric/assert": "agoric-upgrade-11",
     "@agoric/deploy-script-support": "agoric-upgrade-11",
     "@agoric/ertp": "agoric-upgrade-11",
     "@agoric/governance": "agoric-upgrade-11",
+    "@agoric/internal": "agoric-upgrade-11",
     "@agoric/notifier": "agoric-upgrade-11",
     "@agoric/store": "agoric-upgrade-11",
     "@agoric/time": "agoric-upgrade-11",
