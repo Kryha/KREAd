@@ -1791,7 +1791,6 @@ export const prepareKreadKit = async (
   return harden({
     public: facets.public,
     creator: facets.creator,
-    market: facets.market,
   });
 };
 
