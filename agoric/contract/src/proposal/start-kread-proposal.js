@@ -10,11 +10,11 @@ import { deeplyFulfilled } from '@endo/marshal';
 import {
   baseCharacters,
   baseItems,
-  marketplaceListing,
+  marketplaceListings,
+  marketplaceListingsUncommon,
 } from './base-inventory.js';
 
 import '@agoric/governance/src/types-ambient.js';
-import { AmountMath } from '@agoric/ertp/src/amountMath.js';
 
 const KREAD_LABEL = 'KREAd';
 
@@ -139,6 +139,7 @@ const startGovernedInstance = async (
   );
 
   trace('awaiting facets');
+
   const [instance, publicFacet, creatorFacet, adminFacet] = await Promise.all([
     E(governorFacets.creatorFacet).getInstance(),
     E(governorFacets.creatorFacet).getPublicFacet(),
@@ -303,15 +304,17 @@ export const startKread = async (powers, config) => {
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
 
-  const priceAmount = AmountMath.make(istIssuerP, terms.mintFee);
-
   trace('awaiting KREAd initialization');
   await Promise.all([
     E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems),
     E(creatorFacet).initializeMetrics(),
     E(creatorFacet).initializeCharacterNamesEntries(),
     E(creatorFacet).reviveMarketExitSubscribers(),
-    E(creatorFacet).publishItemCollection(priceAmount, marketplaceListing),
+    E(creatorFacet).publishItemCollection(5000000n, marketplaceListings),
+    E(creatorFacet).publishItemCollection(
+      10000000n,
+      marketplaceListingsUncommon,
+    ),
   ]);
 
   produceKreadInstance.resolve(instance);
