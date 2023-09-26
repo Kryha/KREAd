@@ -5,6 +5,7 @@ COMMITTEE_ADDRESSES='{"kgov1": "agoric1890064p6j3xhzzdf8daknd6kpvhw766ds8flgw", 
 COMMITTEE_NAME=kread-gov
 
 # config options
+AGORIC_CMD=agoric-linked
 KREAD_REPO =
 SDK_PATH =
 KEPLR_ADDRESS =
@@ -22,31 +23,31 @@ PROP_DIR = $(AG_DIR)/contract/src/proposal
 NEXT_PROPOSAL=$$((`agd query gov proposals --output json | jq -cr '.proposals[-1] | [.proposal_id][0]'`+1))
 
 chain-reset:
-	agoric start local-chain --reset --verbose
+	$(AGORIC_CMD) start local-chain --reset --verbose
 
 solo0-reset:
-	agoric start local-solo 8000 --reset --verbose
+	$(AGORIC_CMD) start local-solo 8000 --reset --verbose
 
 solo1-reset:
-	agoric start local-solo 8001 --reset --verbose
+	$(AGORIC_CMD) start local-solo 8001 --reset --verbose
 
 chain:
-	agoric start local-chain --verbose
+	$(AGORIC_CMD) start local-chain --verbose
 
 solo0:
-	agoric start local-solo 8000 --verbose
+	$(AGORIC_CMD) start local-solo 8000 --verbose
 
 solo1:
-	agoric start local-solo 8001 --verbose
+	$(AGORIC_CMD) start local-solo 8001 --verbose
 
 wallet0:
-	agoric open --hostport=localhost:8000 --no-browser
+	$(AGORIC_CMD) open --hostport=localhost:8000 --no-browser
 
 wallet1:
-	agoric open --hostport=localhost:8001 --no-browser
+	$(AGORIC_CMD) open --hostport=localhost:8001 --no-browser
 
 deploy:
-	agoric deploy contract/kread-deploy-contract.js api/kread-deploy-api.js
+	$(AGORIC_CMD) deploy contract/kread-deploy-contract.js api/kread-deploy-api.js
 
 dist/.keep dist/bundles/.keep:
 	mkdir -p dist/bundles
@@ -62,7 +63,7 @@ dist/kread-invite-committee-permit.json dist/kread-invite-committee.js dist/krea
 	cd dist && \
 	    KREAD_COMMITTEE_ADDRESSES=$(COMMITTEE_ADDRESSES) \
 		KREAD_COMMITTEE_NAME=$(COMMITTEE_NAME) \
-		  agoric run ../contract/src/proposal/kread-committee-script.js >kread-committee-info.txt
+		  $(AGORIC_CMD) run ../contract/src/proposal/kread-committee-script.js >kread-committee-info.txt
 	node contract/scripts/parseProposals.js <dist/kread-committee-info.txt >dist/kread-committee-info.json \
 		|| rm dist/kread-committee-info.json
 
@@ -71,7 +72,7 @@ dist/start-kread-permit.json dist/start-kread.js dist/start-kread-info.json: dis
 	cd dist && \
 		KREAD_ROYALTY_ADDRESS=$(ROYALTY_ADDRESS) \
 		KREAD_PLATFORM_ADDRESS=$(PLATFORM_ADDRESS) \
-		  agoric run ../contract/src/proposal/start-kread-script.js >start-kread-info.txt
+		  $(AGORIC_CMD) run ../contract/src/proposal/start-kread-script.js >start-kread-info.txt
 	node contract/scripts/parseProposals.js <dist/start-kread-info.txt >dist/start-kread-info.json \
 		|| rm dist/start-kread-info.json
 
@@ -89,7 +90,7 @@ clean:
 kread-committee: dist/kread-committee-info.json
 	jq -r '.bundles[]' dist/kread-committee-info.json | sort -u > kread-committee-bundles.out
 	for b in `cat kread-committee-bundles.out` ; do \
-	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
+	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval EVAL_PERMIT=$(AG_DIR)/dist/kread-invite-committee-permit.json \
@@ -98,7 +99,7 @@ kread-committee: dist/kread-committee-info.json
 start-kread: dist/start-kread-info.json
 	jq -r '.bundles[]' dist/start-kread-info.json | sort -u > start-kread-bundles.out
 	for b in `cat start-kread-bundles.out` ; do \
-	   agoric publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
+	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval EVAL_PERMIT=$(AG_DIR)/dist/start-kread-permit.json \
@@ -107,7 +108,7 @@ start-kread: dist/start-kread-info.json
 kread-bundle:
 	cd $(VATS_PATH); \
     yarn bundle-source --cache-json bundles/ ${KREAD_REPO} kread; \
-	agoric publish --node 127.0.0.1:26657 bundles/bundle-kread.json --chain-id agoriclocal --home ../cosmic-swingset/t1/8000; \
+	$(AGORIC_CMD) publish --node 127.0.0.1:26657 bundles/bundle-kread.json --chain-id agoriclocal --home ../cosmic-swingset/t1/8000; \
 
 local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
@@ -118,14 +119,26 @@ client-local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-run-client BASE_PORT=8000; \
 
+reset-client-local-testnet:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make scenario2-reset-client BASE_PORT=8000; \
+
 provision-account:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS) \
 
 provision-fee-collector:
+	make fund-pool; \
+	make provision-fee-collector-royalty; \
+	make provision-fee-collector-platform; \
+
+provision-fee-collector-royalty:
 	cd $(COSMIC_SWINGSET_PATH); \
-	make fund-provision-pool provision-acct ACCT_ADDR=$(ROYALTY_ADDRESS) \
-	make fund-provision-pool provision-acct ACCT_ADDR=$(PLATFORM_ADDRESS) \
+	make provision-acct ACCT_ADDR=$(ROYALTY_ADDRESS); \
+
+provision-fee-collector-platform:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make provision-acct ACCT_ADDR=$(PLATFORM_ADDRESS); \
 
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \

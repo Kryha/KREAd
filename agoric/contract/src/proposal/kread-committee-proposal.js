@@ -1,8 +1,12 @@
 import { E } from '@endo/far';
 
 import { reserveThenGetNamePaths } from './start-kread-proposal.js';
+import { deeplyFulfilled } from '@endo/marshal';
 
 const { Fail } = assert;
+
+// XXX no way to import makeTracker
+const trace = (...args) => console.log('---KreadCommittee', ...args);
 
 // These should be exported by Agoric, somewhere.
 const pathSegmentPattern = /^[a-zA-Z0-9_-]{1,100}$/;
@@ -46,6 +50,7 @@ export const startKreadCommittee = async (
   },
   { options },
 ) => {
+  trace('startKreadCommittee');
   const COMMITTEES_ROOT = 'committees';
   const {
     // NB: the electorate (and size) of the committee may change, but the name must not
@@ -55,17 +60,20 @@ export const startKreadCommittee = async (
   } = options;
   const committeeSize = Object.keys(voterAddresses).length;
 
-  const [storageNode, marshaller] = await Promise.all([
-    E(E(chainStorage).makeChildNode(COMMITTEES_ROOT)).makeChildNode(
-      sanitizePathSegment(committeeName),
-    ),
-    E(board).getPublishingMarshaller(),
-  ]);
+  const storageNode = E(
+    E(chainStorage).makeChildNode(COMMITTEES_ROOT),
+  ).makeChildNode(sanitizePathSegment(committeeName));
 
-  const privateArgs = {
-    storageNode,
-    marshaller,
-  };
+  // force the node to appear
+  await E(storageNode).setValue('');
+
+  const privateArgs = await deeplyFulfilled(
+    harden({
+      storageNode,
+      marshaller: E(board).getPublishingMarshaller(),
+    }),
+  );
+  trace('startKreadCommittee awaiting startInstance');
   const startResult = await E(zoe).startInstance(
     committee,
     {},
@@ -77,6 +85,7 @@ export const startKreadCommittee = async (
     harden({ ...startResult, label: 'kreadCommittee' }),
   );
 
+  trace('startKreadCommittee awaiting save');
   await E(diagnostics).savePrivateArgs(startResult.instance, privateArgs);
 
   kreadCommitteeCreatorFacet.resolve(startResult.creatorFacet);
@@ -181,7 +190,9 @@ harden(startKreadCharter);
  */
 export const addGovernorToKreadCharter = async ({
   consume: { kreadCharterKit, kreadKit },
-  instance: { consume: { kread } },
+  instance: {
+    consume: { kread },
+  },
 }) => {
   const { creatorFacet } = E.get(kreadCharterKit);
 
