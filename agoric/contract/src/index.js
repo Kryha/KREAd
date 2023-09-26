@@ -11,6 +11,7 @@ import { InvitationShape } from '@agoric/zoe/src/typeGuards.js';
 import { handleParamGovernance } from '@agoric/governance';
 
 import { prepareKreadKit } from './kreadKit.js';
+import { provide } from '@agoric/vat-data';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -88,12 +89,6 @@ export const start = async (zcf, privateArgs, baggage) => {
     marketItemMetricsKit: 'market-metrics-item',
   };
 
-  const { makeDurableGovernorFacet } = await handleParamGovernance(
-    zcf,
-    privateArgs.initialPoserInvitation,
-    {},
-  );
-
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
   // durability is not a concern with these, and defining them here, passing on what's needed
   // ensures that the capabilities are where they need to be
@@ -136,33 +131,39 @@ export const start = async (zcf, privateArgs, baggage) => {
   const royaltyRateRatio = objectToRatio(paymentBrand, royaltyRate);
   const platformFeeRatio = objectToRatio(paymentBrand, platformFeeRate);
 
-  const kreadKit = await harden(
-    prepareKreadKit(
-      baggage,
-      zcf,
-      {
-        seed,
-        mintFeeAmount,
-        royaltyRate: royaltyRateRatio,
-        platformFeeRate: platformFeeRatio,
-        mintRoyaltyRate: mintRoyaltyRateRatio,
-        mintPlatformFeeRate: mintPlatformFeeRatio,
-        royaltyDepositFacet,
-        platformFeeDepositFacet,
-        paymentBrand,
-        minUncommonRating,
-      },
-      harden({
-        characterIssuerRecord,
-        characterMint,
-        itemIssuerRecord,
-        itemMint,
-        clock,
-        storageNode: powers.storageNode,
-        makeRecorderKit,
-        storageNodePaths,
-      }),
-    ),
+  const makeKreadKit = await prepareKreadKit(
+    baggage,
+    zcf,
+    {
+      seed,
+      mintFeeAmount,
+      royaltyRate: royaltyRateRatio,
+      platformFeeRate: platformFeeRatio,
+      mintRoyaltyRate: mintRoyaltyRateRatio,
+      mintPlatformFeeRate: mintPlatformFeeRatio,
+      royaltyDepositFacet,
+      platformFeeDepositFacet,
+      paymentBrand,
+      minUncommonRating,
+    },
+    harden({
+      characterIssuerRecord,
+      characterMint,
+      itemIssuerRecord,
+      itemMint,
+      clock,
+      storageNode: powers.storageNode,
+      makeRecorderKit,
+      storageNodePaths,
+    }),
+  );
+
+  const kreadKit = provide(baggage, 'kitSingleton', () => makeKreadKit());
+
+  const { makeDurableGovernorFacet } = handleParamGovernance(
+    zcf,
+    privateArgs.initialPoserInvitation,
+    {},
   );
 
   const { governorFacet } = makeDurableGovernorFacet(
