@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { text } from "../../assets";
 import {
   BaseRoute,
@@ -30,6 +30,7 @@ import { DownloadImageModal } from "../../components/download-image";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [openTab] = useState(false);
   const [selectedCharacter, isLoading] = useSelectedCharacter();
   const [showDetail, setShowDetail] = useState(false);
@@ -40,7 +41,7 @@ export const Landing: FC = () => {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
 
   const sell = (characterId: number) => {
-    navigate(`${routes.sellCharacter}/${characterId}`);
+    navigate(`${routes.sellCharacter}/${characterId}`, { state: location });
   };
 
   const displayToast = () => {

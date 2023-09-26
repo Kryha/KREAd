@@ -2,7 +2,7 @@ import React, { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { useGetItemsInInventoryByCategory, useSelectedCharacter } from "../../../service";
-import { ButtonText, FadeInOut, NotificationDetail, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
+import { ButtonText, FadeInOut, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
 import { CATEGORY_MODE, MAIN_MODE } from "../../../constants";
 import { text } from "../../../assets";
 import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper, CardActionsContainer } from "../style";
@@ -24,8 +24,6 @@ export const ItemsMode: FC = () => {
     setSelectedAsset,
     setInteractionMode,
     showDetails,
-    showToast,
-    setShowToast,
     showWarning,
     setShowWarning,
   } = useCharacterBuilder();

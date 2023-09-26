@@ -5,7 +5,7 @@ import { CharacterShopCard, FadeInOut, LoadMore, Overlay, OverviewEmpty } from "
 import { useViewport } from "../../hooks";
 import { DetailContainer, ItemContainer, ItemWrapper, LoadMoreWrapper } from "./styles";
 import { CharacterInMarket } from "../../interfaces";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { PAGE_SIZE } from "../../constants";
 import { CharacterDetailSection } from "../../containers/detail-section";
@@ -34,6 +34,7 @@ export const CharactersShopDetail: FC<Props> = ({
 }) => {
   const { height } = useViewport();
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterInMarket>();
   const [close, setClose] = useState(false);
 
@@ -42,7 +43,7 @@ export const CharactersShopDetail: FC<Props> = ({
 
   const buy = () => {
     if (!selectedCharacter) return;
-    navigate(`${routes.buyCharacter}/${selectedCharacter.id}`);
+    navigate(`${routes.buyCharacter}/${selectedCharacter.id}`, { state: location });
   };
 
   const displayToast = () => {

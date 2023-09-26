@@ -18,9 +18,11 @@ import {
   Warning,
 } from "./styles";
 import { SellData } from "./types";
+import { FormContainer } from "../create-character/styles";
 
 interface InformationProps {
   setData: (price: number) => void;
+  disabled?: boolean;
 }
 
 export const Information: FC<InformationProps> = ({ setData }) => {
@@ -34,13 +36,13 @@ export const Information: FC<InformationProps> = ({ setData }) => {
 
   return (
     <ContentWrapper width={width} height={height}>
-      <form onSubmit={handleSubmit((fields) => setData(fields.price))}>
+      <FormContainer onSubmit={handleSubmit((fields) => setData(fields.price))}>
         <FormFields>
           <InputContainer>
             <Label>{text.store.setPrice}</Label>
             <TextLabel>
               {/*TODO: remove support for e notation, or handle conversion to bigint */}
-              <Input type="number" defaultValue="" {...register("price", { required: true, min: 1 })} />
+              <Input type="number" defaultValue="" placeholder="IST" {...register("price", { required: true, min: 1 })} />
             </TextLabel>
           </InputContainer>
           <InputWrapper>
@@ -66,7 +68,7 @@ export const Information: FC<InformationProps> = ({ setData }) => {
             <ButtonText customColor={color.white}>{text.general.next}</ButtonText>
           </PrimaryButton>
         </ButtonContainer>
-      </form>
+      </FormContainer>
     </ContentWrapper>
   );
 };

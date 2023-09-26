@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 import { breakpoints, color, fontWeight, margins } from "../../design";
 import { BoldLabel, Img } from "../atoms";
+import { EquippedIcon } from "../../assets";
 
 interface ImageProps {
   category?: string;
@@ -20,6 +21,25 @@ export const Element = styled.div`
   height: 320px;
   border-radius: ${margins.medium};
   overflow: hidden;
+`;
+export const AssetEquippedContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+
+export const AssetSubTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+`;
+
+export const Equipped = styled(EquippedIcon)`
+  display: flex;
+  align-items: flex-end;
+  width: 16px;
+  height: 16px;
 `;
 
 export const AssetPriceContainer = styled.div`
@@ -49,7 +69,7 @@ export const AssetWrapper = styled.div`
 export const AssetContent = styled.div`
   display: flex;
   flex-direction: column;
-  height: 400px;
+  height: 450px;
   gap: 8px;
   width: 100%;
 `;
@@ -78,8 +98,9 @@ export const AssetTitleWrapper = styled.div`
   flex-wrap: wrap;
   flex-direction: column;
   min-height: 54px;
-  ${BoldLabel} {
+  ${AssetSubTitle} {
     margin-top: ${margins.nano};
+    gap: 8px;
   }
 `;
 
@@ -112,7 +133,8 @@ export const AssetFooter = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 8px;
   margin-bottom: ${margins.small};
 `;
 
