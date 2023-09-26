@@ -15,7 +15,6 @@ export * from "./equipped-item-card";
 export * from "./content-loader";
 export * from "./base-character";
 export * from "./character-detail";
-export * from "./character-item";
 export * from "./filters";
 export * from "./title";
 export * from "./form-tab";

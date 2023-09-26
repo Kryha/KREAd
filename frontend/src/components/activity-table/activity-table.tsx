@@ -36,7 +36,7 @@ const Row: FC<RowProps> = ({ event }) => {
         <CategoryButton>{event.type}</CategoryButton>
       </Cell>
       <Cell>
-        <BoldLabel customColor={color.black}>{!!event.price && text.param.istPrice(event.price)}</BoldLabel>
+        <BoldLabel customColor={color.black}>{!!event.price && text.param.istPrice && event.price}</BoldLabel>
       </Cell>
       {/* <Cell>{event.from}</Cell>
       <Cell>{event.to}</Cell> */}

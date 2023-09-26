@@ -48,7 +48,7 @@ export const ContentWrapper = styled.div<ViewProps>`
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
     height: ${({ height }): string => `${height - 200}px`};
     transform: translate3d(0, 1rem, 0);
   }
@@ -210,8 +210,9 @@ export const FormFields = styled.div`
 
   margin-top: ${margins.big};
   ${Input} {
-    padding-right: 75px;
-    padding-left: 33px;
+    width: 100%;
+    padding-right: 10px;
+    padding-bottom: 4px;
   }
   ${ButtonText} {
     margin-top: ${margins.mini};
@@ -224,15 +225,15 @@ export const FormFields = styled.div`
 export const TextLabel = styled(BodyText)`
   display: flex;
   width: 100%;
-  ::before {
-    position: absolute;
-    content: "IST";
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 18px;
-    padding-top: 3px;
-    color: ${color.black};
-  }
+  // ::before {
+  //   position: absolute;
+  //   content: "IST";
+  //   font-weight: 400;
+  //   font-size: 14px;
+  //   line-height: 18px;
+  //   padding-top: 3px;
+  //   color: ${color.black};
+  // }
 `;
 
 export const InputContainer = styled.div`

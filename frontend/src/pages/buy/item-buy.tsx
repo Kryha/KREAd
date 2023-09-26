@@ -8,9 +8,10 @@ import { useItemMarketState } from "../../context/item-shop-context";
 
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
+
   const { items } = useItemMarketState();
   const itemToBuy = items.find((marketEntry) => marketEntry.id === id);
-  const buyItem = useBuyItem(itemToBuy!);
+  const buyItem = useBuyItem(itemToBuy);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(true);
   const [data, setData] = useState<ItemInMarket>();
@@ -19,6 +20,10 @@ export const ItemBuy = () => {
     // without this, the view will error out after purchase, since the item won't be on the market anymore
     if (itemToBuy) setData(itemToBuy);
   }, [itemToBuy, buyItem]);
+
+  useEffect(() => {
+    if (itemToBuy) setIsAwaitingApproval(false);
+  }, [itemToBuy]);
 
   const handleSubmit = async () => {
     setIsAwaitingApproval(true);

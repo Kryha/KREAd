@@ -8,15 +8,17 @@ import { AssetFilterCount } from "../../../components/asset-item-filters/styles"
 import { text } from "../../../assets";
 import { EmptyItemCardContainer, ItemCardContainer, ItemCardsContainer, ItemCardsWrapper } from "./style";
 import { routes } from "../../../navigation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ItemCardInfo } from "./item-card-info";
 
 export const ItemCards: FC = () => {
   const { selectedAssetCategory, selectedAsset, showToast, setShowToast, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
   const { height } = useViewport();
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedCharacter] = useSelectedCharacter();
   const characterName = selectedCharacter?.nft.name;
+  const category: string = selectedAssetCategory ? selectedAssetCategory : "";
   const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
 
   const equippedItem = items.find((item) => item.equippedTo === characterName);
@@ -44,7 +46,9 @@ export const ItemCards: FC = () => {
 
   const sell = () => {
     if (!selectedAsset) return;
-    navigate(`${routes.sellItem}/${selectedAssetCategory}/${selectedAsset}`);
+    navigate(`${routes.sellItem}/${selectedAssetCategory}/${selectedAsset}`, {
+      state: location,
+    });
   };
 
   useEffect(() => {
@@ -61,8 +65,7 @@ export const ItemCards: FC = () => {
     <ItemCardsContainer>
       {equippedItem ? (
         <>
-          {/* FIXME: wrong type */}
-          {/* <AssetFilterCount customColor={color.darkGrey}>Equipped {text.param.categories[selectedAssetCategory]}</AssetFilterCount> */}
+          <AssetFilterCount customColor={color.darkGrey}>Equipped {(text.param.categories as any)[category]}</AssetFilterCount>
           <HorizontalDivider />
           <ItemCardContainer
             isSelected={selectedAsset === equippedItem.name}
@@ -77,13 +80,11 @@ export const ItemCards: FC = () => {
         </>
       ) : (
         <EmptyItemCardContainer>
-          {/* FIXME: wrong type */}
-          {/* <ButtonText>No {text.param.categories[selectedAssetCategory]} equipped</ButtonText> */}
+          <ButtonText>No {(text.param.categories as any)[category]} equipped</ButtonText>
         </EmptyItemCardContainer>
       )}
       <AssetFilterCount customColor={color.darkGrey}>
-        {/* FIXME: wrong type */}
-        {/* {itemsCount} {text.param.assetCategories[selectedAssetCategory]} in inventory */}
+        {itemsCount} {(text.param.assetCategories as any)[category]} in inventory
       </AssetFilterCount>
       <HorizontalDivider />
       <ItemCardsWrapper height={height}>

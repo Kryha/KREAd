@@ -77,6 +77,7 @@ export const FormFields = styled.div`
   ${Input} {
     width: 100%;
     padding-right: 10px;
+    padding-bottom: 4px;
   }
   ${ButtonText} {
     margin-top: ${margins.mini};

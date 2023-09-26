@@ -29,8 +29,7 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
         <InfoContainer>
           <TitleWrapper>
             <TitleText>{character.character.name}</TitleText>
-            {/* FIXME: add titles*/}
-            <BoldLabel>{"text.param.titles"/*[character.character.title]*/}</BoldLabel>
+            <BoldLabel>{(text.param.titles as any)[character.character.title]}</BoldLabel>
           </TitleWrapper>
           <Footer>
             <Tag>

@@ -137,7 +137,7 @@ export function useAssembleCharacter(width: number, height: number) {
         // Add the category group to the assembledCharacterGroup
         extendedCharacter.setAttrs({
           name: character?.name,
-          id: character?.id,
+          id: character?.id.toString(),
           width: categoryGroup.width(),
           height: categoryGroup.height(),
         });

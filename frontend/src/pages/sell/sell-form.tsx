@@ -20,6 +20,7 @@ import {
   Tick,
 } from "./styles";
 import { SellData, SellStep } from "./types";
+import { ISTTouIST } from "../../util";
 
 interface SellFormProps {
   data: SellData;
@@ -51,7 +52,7 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, onSubmit, isPlac
           <PricingContainer>
             <NumberContainer active>{!isOnFirstStep ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
             <StepText>{text.mint.sendOfferToWallet}</StepText>
-            {isOnFirstStep && <PriceInIst price={data.price} />}
+            {isOnFirstStep && <PriceInIst price={ISTTouIST(data.price)} />}
           </PricingContainer>
           {isOnFirstStep && (
             <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>

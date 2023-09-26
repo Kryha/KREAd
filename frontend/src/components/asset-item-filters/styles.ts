@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { ButtonText, fadeUp, HorizontalDivider, Label, SecondaryButton } from "../atoms";
-import { color, fontSize, margins } from "../../design";
+import { breakpoints, color, fontSize, margins } from "../../design";
 import { FilterOption } from "../filters/styles";
 
 interface AssetFilterViewProps {
@@ -38,11 +38,15 @@ export const AssetFilterWrapper = styled.div`
 export const AssetFilterContainer = styled.div`
   margin-bottom: 16px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
   padding: 0;
   gap: 16px;
+
+  @media screen and (max-width: ${breakpoints.desktop}) {
+    flex-direction: column;
+  }
 `;
 
 export const AssetSelectorContainer = styled.div`

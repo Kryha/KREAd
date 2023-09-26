@@ -39,7 +39,7 @@ export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOffer
           />
         );
       case 2:
-        return <Confirmation text={pText} />;
+        return <Confirmation text={pText} link={previousPath} />;
       default:
         return <ErrorView />;
     }

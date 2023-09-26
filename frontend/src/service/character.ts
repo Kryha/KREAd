@@ -4,7 +4,7 @@ import { CharacterCreation, CharacterInMarket, ExtendedCharacter } from "../inte
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { CharacterFilters, filterCharactersMarket, ISTTouIST, useFilterCharacters } from "../util";
+import { ISTTouIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
 
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
@@ -14,28 +14,39 @@ import { useCharacterMarketState } from "../context/character-shop-context";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
-
   const userStateDispatch = useUserStateDispatch();
 
   useEffect(() => {
     const storedName = localStorage.getItem("selectedCharacter");
-    if (storedName) {
-      const selectedCharacter = characters.find((char) => char.nft.name === storedName);
+
+    if (selected) {
+      if (selected.nft.name !== storedName) {
+        localStorage.setItem("selectedCharacter", selected.nft.name);
+      }
+      const selectedCharacter = characters.find((char) => char.nft.name === selected.nft.name);
       if (selectedCharacter) {
         userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter });
       }
-    } else if (!selected && characters.length > 0) {
-      // If selected character is not found in localStorage and characters array is not empty, set the first character as selected
-      userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+    } else if (characters.length > 0) {
+      if (storedName) {
+        const matchingCharacter = characters.find((char) => char.nft.name === storedName);
+        if (matchingCharacter) {
+          userStateDispatch({
+            type: "SET_SELECTED",
+            payload: matchingCharacter,
+          });
+        } else {
+          const firstCharacter = characters[0];
+          localStorage.setItem("selectedCharacter", firstCharacter.nft.name);
+          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter });
+        }
+      } else {
+        const firstCharacterName = characters[0].nft.name;
+        localStorage.setItem("selectedCharacter", firstCharacterName);
+        userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+      }
     }
   }, [userStateDispatch, characters, selected]);
-
-  // Save the selected character's name to localStorage whenever it changes
-  useEffect(() => {
-    if (selected && selected.nft.name) {
-      localStorage.setItem("selectedCharacter", selected.nft.name);
-    }
-  }, [selected]);
 
   return [selected, !fetched];
 };
@@ -110,30 +121,12 @@ export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefin
   return [found, isLoading];
 };
 
-export const useCharactersMarket = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
+export const useCharactersMarket = (): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
-  const filtered = useMemo(() => {
-    if (!filters) return characters;
-    return filterCharactersMarket(characters, filters);
-  }, [filters, characters]);
+  const filtered = useFilterCharactersMarket(characters);
 
   const isLoading = !fetched;
   return [filtered, isLoading];
-};
-
-// TODO: consider whether fetching by range is necessary after implementing notifiers
-export const useCharactersMarketPages = (page: number, filters?: CharacterFilters): [CharacterInMarket[], boolean, number] => {
-  const { characters, fetched } = useCharacterMarketState();
-  // TODO: get total pages
-  const totalPages = 20;
-
-  const filtered = useMemo(() => {
-    if (!filters) return characters;
-    return filterCharactersMarket(characters, filters);
-  }, [filters, characters]);
-
-  const isLoading = !fetched;
-  return [filtered, isLoading, totalPages];
 };
 
 // TODO: Add error management
@@ -254,9 +247,8 @@ export const useGetCharacterInShopById = (id: string): [CharacterInMarket | unde
   return [found, isLoading];
 };
 
-export const useGetCharactersInShop = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
+export const useGetCharactersInShop = (): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
-  if (!filters) return [characters, !fetched];
-  const filtered = filterCharactersMarket(characters, filters);
+  const filtered = useFilterCharactersMarket(characters);
   return [filtered, !fetched];
 };

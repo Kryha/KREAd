@@ -28,10 +28,10 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
               <NavigationTab title={text.navigation.character} route={isOnboarding} />
             </NavigationSection>
             <NavigationSection route={`${routes.shop}/items`}>
-              <NavigationTab title={text.navigation.shop} route={`${routes.shop}/items`} />
+              <NavigationTab title={text.navigation.shop} route={`${routes.shop}/:section`} />
             </NavigationSection>
             <NavigationSection route={`${routes.inventory}/items`}>
-              <NavigationTab title={text.navigation.inventory} route={`${routes.inventory}/items`} />
+              <NavigationTab title={text.navigation.inventory} route={`${routes.inventory}/:section`} />
             </NavigationSection>
           </Box>
           <Box>
