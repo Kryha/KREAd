@@ -1,0 +1,24 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: character-builder-ui
+build:
+  tagPolicy:
+    sha256: {}
+  local:
+    concurrency: 0
+    push: true
+  artifacts:
+    - image: kread.azurecr.io/frontend
+      docker:
+        dockerfile: Dockerfile.ui
+        buildArgs:
+          VITE_RPC: "emerynet.rpc.agoric.net" # TODO: provide actual value
+          VITE_BRIDGE_HREF: "" # TODO: provide actual value
+          VITE_BASE_URL: "kryha.kread.dev"
+deploy:
+  kustomize:
+    paths:
+      - ../deployment/devnet/workloads
+    defaultNamespace: agoric-makefile-automation
+
