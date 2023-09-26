@@ -1,6 +1,6 @@
 import { Category, Item } from "../../interfaces";
-import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel } from "../atoms";
-import { FC } from "react";
+import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel, PrimaryButton } from "../atoms";
+import React, { FC } from "react";
 import {
   AssetContent,
   AssetFooter,
@@ -8,15 +8,19 @@ import {
   AssetImageContainer,
   AssetInfoContainer,
   AssetStatsContainer,
+  AssetSubTitle,
   AssetTag,
   AssetTitleText,
   AssetTitleWrapper,
   AssetWrapper,
+  Equipped,
 } from "./styles";
 import { EquippedIcon, text } from "../../assets";
 import { color } from "../../design";
-import { getRarityString } from "../../service";
-import styled from "@emotion/styled";
+import { getRarityString, useEquipItem, useUnequipItem } from "../../service";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ErrorView } from "../error-view";
+import { routes } from "../../navigation";
 
 interface Props {
   item: Item;
@@ -24,6 +28,28 @@ interface Props {
   imageProps?: ImageProps;
 }
 export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
+
+  if (equipItem.isError || unequipItem.isError) return <ErrorView />;
+  const equipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    equipItem.mutate({ item });
+  };
+
+  const unequipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    unequipItem.mutate({ item });
+  };
+
+  const sellAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    navigate(`${routes.sellItem}/${item.category}/${item.name}`, { state: location });
+  };
+
   const handleClick = () => {
     selectItem(item.name, item.category, item.equippedTo);
   };
@@ -32,17 +58,22 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
         <AssetImageContainer>
-          {item.equippedTo && (
-            <AssetEquippedContainer>
-              <EquippedIcon />
-            </AssetEquippedContainer>
-          )}
           <AssetImage src={item.image} category={item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
             <AssetTitleText>{item.name}</AssetTitleText>
-            <BoldLabel>{item.category}</BoldLabel>
+            <AssetSubTitle>
+              <BoldLabel>{item.category}</BoldLabel>
+              {item.equippedTo && (
+                <AssetSubTitle>
+                  <Equipped>
+                    <EquippedIcon />
+                  </Equipped>
+                  <BoldLabel>{item.equippedTo}</BoldLabel>
+                </AssetSubTitle>
+              )}
+            </AssetSubTitle>
           </AssetTitleWrapper>
           <AssetStatsContainer>
             <AssetTag>
@@ -57,17 +88,23 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
             </Badge>
           </AssetStatsContainer>
           <AssetFooter>
-            {item.equippedTo && <BoldLabel>equipped to: {item.equippedTo}</BoldLabel>}
-            {item.forSale && <BoldLabel>{text.general.forSale}</BoldLabel>}
+            {item.equippedTo !== "" ? (
+              <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequipAsset(event)}>
+                <ButtonText customColor={color.white}>unequip</ButtonText>
+              </PrimaryButton>
+            ) : (
+              <>
+                <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => equipAsset(event)}>
+                  <ButtonText customColor={color.white}>equip</ButtonText>
+                </PrimaryButton>
+                <PrimaryButton onClick={(event) => sellAsset(event)}>
+                  <ButtonText customColor={color.white}>{text.general.sell}</ButtonText>
+                </PrimaryButton>
+              </>
+            )}
           </AssetFooter>
         </AssetInfoContainer>
       </AssetContent>
     </AssetWrapper>
   );
 };
-
-export const AssetEquippedContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`;

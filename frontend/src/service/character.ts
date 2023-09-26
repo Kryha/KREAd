@@ -4,7 +4,7 @@ import { CharacterCreation, CharacterInMarket, ExtendedCharacter } from "../inte
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { CharacterFilters, filterCharactersMarket, ISTTouIST, useFilterCharacters } from "../util";
+import { ISTTouIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
 
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
@@ -121,30 +121,12 @@ export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefin
   return [found, isLoading];
 };
 
-export const useCharactersMarket = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
+export const useCharactersMarket = (): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
-  const filtered = useMemo(() => {
-    if (!filters) return characters;
-    return filterCharactersMarket(characters, filters);
-  }, [filters, characters]);
+  const filtered = useFilterCharactersMarket(characters);
 
   const isLoading = !fetched;
   return [filtered, isLoading];
-};
-
-// TODO: consider whether fetching by range is necessary after implementing notifiers
-export const useCharactersMarketPages = (page: number, filters?: CharacterFilters): [CharacterInMarket[], boolean, number] => {
-  const { characters, fetched } = useCharacterMarketState();
-  // TODO: get total pages
-  const totalPages = 20;
-
-  const filtered = useMemo(() => {
-    if (!filters) return characters;
-    return filterCharactersMarket(characters, filters);
-  }, [filters, characters]);
-
-  const isLoading = !fetched;
-  return [filtered, isLoading, totalPages];
 };
 
 // TODO: Add error management
@@ -265,9 +247,8 @@ export const useGetCharacterInShopById = (id: string): [CharacterInMarket | unde
   return [found, isLoading];
 };
 
-export const useGetCharactersInShop = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
+export const useGetCharactersInShop = (): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
-  if (!filters) return [characters, !fetched];
-  const filtered = filterCharactersMarket(characters, filters);
+  const filtered = useFilterCharactersMarket(characters);
   return [filtered, !fetched];
 };

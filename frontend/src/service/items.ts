@@ -144,6 +144,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
           },
           callback: async () => {
             console.info("SellItem call settled");
+            setIsLoading(false);
             setPlacedInShop();
           },
         });
@@ -159,7 +160,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
   return { callback, isLoading };
 };
 
-export const useBuyItem = (itemToBuy: ItemInMarket) => {
+export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [items] = useGetItemsInShop();

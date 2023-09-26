@@ -55,7 +55,7 @@ export const CharacterCards: FC = () => {
     return characters.filter((character) => character.nft.name !== selectedCharacter?.nft.name);
   }, [characters, selectedCharacter]);
 
-  const itemsCount = filteredCharacters.length;
+  const charactersCount = filteredCharacters.length;
 
   return (
     <CharacterCardsContainer>

@@ -1,4 +1,4 @@
-import { Category, Character, CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Rarity } from "../interfaces";
+import { Category, CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Rarity } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { getRarityString } from "../service";
 import { useFilters } from "../context/filter-context";
@@ -86,37 +86,29 @@ export const useFilterCharacters = (characters: ExtendedCharacter[]): ExtendedCh
   const filteredOrigins =
     origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.nft.origin.toLowerCase())) : characters;
   const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.nft.title)) : characters;
-
   const filteredCharacters = characters.filter((character) => filteredOrigins.includes(character) && filteredTitles.includes(character));
 
   return sortCharacters(sort, filteredCharacters);
 };
 
 // TODO: to update
-export const filterCharactersMarket = (
-  characters: CharacterInMarket[],
-  { titles, origins, sort, price }: CharacterFilters,
-): CharacterInMarket[] => {
+export const useFilterCharactersMarket = (characters: CharacterInMarket[]): CharacterInMarket[] => {
+  const { origin, title, sort, price } = useFilters();
   if (characters.length === 0) return [];
 
-  const isInTitle = (character: Character, selectedTitles: string[] | undefined) => {
-    if (!selectedTitles || selectedTitles.length === 0) return true; // Return true if no categories are selected
-    return selectedTitles.includes(character.title);
-  };
-
-  const isInOrigin = (character: Character, selectedOrigins: string[] | undefined) => {
-    if (!selectedOrigins || selectedOrigins.length === 0) return true; // Return true if no categories are selected
-    return selectedOrigins.includes(character.origin);
-  };
+  const filteredOrigins =
+    origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.character.origin.toLowerCase())) : characters;
+  const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.character.title)) : characters;
+  const filteredPrice = price
+    ? characters.filter(({ sell }) => {
+        const priceValue = uISTToIST(Number(sell.price));
+        return priceValue > price.min && priceValue < price.max;
+      })
+    : characters;
 
   const filteredCharacters = characters.filter(
-    (character) => isInTitle(character.character, titles) || isInOrigin(character.character, origins),
+    (character) => filteredOrigins.includes(character) && filteredTitles.includes(character) && filteredPrice.includes(character),
   );
 
-  const filterCharactersByPrice = filteredCharacters.filter(({ sell }) => {
-    if (!price) return true;
-    return Number(sell.price) > price.min && Number(sell.price) < price.max;
-  });
-
-  return sortCharactersMarket(sort, filterCharactersByPrice);
+  return sortCharactersMarket(sort, filteredCharacters);
 };

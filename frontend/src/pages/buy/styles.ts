@@ -35,7 +35,6 @@ export const ContentWrapper = styled.div<ViewProps>`
   ${FormCard} {
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
-    width: 100%;
     max-width: 500px;
     height: ${({ height }): string => `${height - 200}px`};
     transform: translate3d(0, 1rem, 0);
@@ -64,8 +63,7 @@ export const ButtonContainer = styled.div`
     width: 35px;
   }
   ${Spinner} {
-    padding-left: 13px;
-    width: 12px;
+    width: 16px;
     height: 16px;
     border: 2px solid ${color.white};
     border-top: 2px solid ${color.grey};

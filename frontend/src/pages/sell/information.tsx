@@ -22,6 +22,7 @@ import { FormContainer } from "../create-character/styles";
 
 interface InformationProps {
   setData: (price: number) => void;
+  disabled?: boolean;
 }
 
 export const Information: FC<InformationProps> = ({ setData }) => {
@@ -41,7 +42,7 @@ export const Information: FC<InformationProps> = ({ setData }) => {
             <Label>{text.store.setPrice}</Label>
             <TextLabel>
               {/*TODO: remove support for e notation, or handle conversion to bigint */}
-              <Input type="number" defaultValue="" {...register("price", { required: true, min: 1 })} />
+              <Input type="number" defaultValue="" placeholder="IST" {...register("price", { required: true, min: 1 })} />
             </TextLabel>
           </InputContainer>
           <InputWrapper>
