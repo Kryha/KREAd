@@ -1648,7 +1648,7 @@ export const prepareKreadKit = async (
         },
         /**
          *
-         * @param {bigint} price
+         * @param {Amount<nat>} price
          * @param {[Item, bigint][]} itemsToSell
          */
         async publishItemCollection(price, itemsToSell) {
@@ -1657,13 +1657,13 @@ export const prepareKreadKit = async (
 
           const { zcfSeat: internalSellSeat } = zcf.makeEmptySeatKit();
           await item.mintBatch(internalSellSeat, itemsToSell);
-          const priceAmount = AmountMath.make(paymentBrand, price);
+
           const askingPrice = {
-            brand: paymentBrand,
-            value: price,
+            brand: price.brand,
+            value: price.value,
           };
-          const royalty = multiplyBy(priceAmount, royaltyRate);
-          const platformFee = multiplyBy(priceAmount, platformFeeRate);
+          const royalty = multiplyBy(price, royaltyRate);
+          const platformFee = multiplyBy(price, platformFeeRate);
           const claimedIdAndRecorder = await Promise.all(
             itemsToSell.map(async (copyBagEntry) => {
               const [_, itemSupply] = copyBagEntry;
