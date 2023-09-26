@@ -124,9 +124,17 @@ provision-account:
 	make fund-provision-pool provision-acct ACCT_ADDR=$(KEPLR_ADDRESS) \
 
 provision-fee-collector:
+	make fund-pool; \
+	make provision-fee-collector-royalty; \
+	make provision-fee-collector-platform; \
+
+provision-fee-collector-royalty:
 	cd $(COSMIC_SWINGSET_PATH); \
-	make fund-provision-pool provision-acct ACCT_ADDR=$(ROYALTY_ADDRESS) \
-	make fund-provision-pool provision-acct ACCT_ADDR=$(PLATFORM_ADDRESS) \
+	make provision-acct ACCT_ADDR=$(ROYALTY_ADDRESS); \
+
+provision-fee-collector-platform:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make provision-acct ACCT_ADDR=$(PLATFORM_ADDRESS); \
 
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \
