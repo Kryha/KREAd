@@ -1,6 +1,8 @@
 // @ts-check
 import { E } from '@endo/eventual-send';
-import { M } from '@agoric/vat-data';
+import { M, matches, getCopyMapEntries } from '@endo/patterns';
+
+const { Fail } = assert;
 
 /**
  * @param {string} name
@@ -97,3 +99,23 @@ export const makeNatAmountShape = (brand, min) =>
  */
 export const makeCopyBagAmountShape = (brand, shape) =>
   harden({ brand, value: shape });
+
+// Added in https://github.com/Agoric/agoric-sdk/issues/7632 but not yet available on Mainnet
+// Adapted from https://github.com/Agoric/agoric-sdk/blob/3ff341c28af26f7879a02b4a7a228b545d552e4a/packages/swingset-liveslots/src/collectionManager.js#L645
+const isCopyMap = (m) => matches(m, M.map());
+export const addAllToMap = (map, mapEntries) => {
+  if (typeof mapEntries[Symbol.iterator] !== 'function') {
+    if (Object.isFrozen(mapEntries) && isCopyMap(mapEntries)) {
+      mapEntries = getCopyMapEntries(mapEntries);
+    } else {
+      Fail`provided data source is not iterable: ${mapEntries}`;
+    }
+  }
+  for (const [key, value] of mapEntries) {
+    if (map.has(key)) {
+      map.set(key, value);
+    } else {
+      map.init(key, value, true);
+    }
+  }
+};
