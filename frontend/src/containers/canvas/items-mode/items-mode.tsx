@@ -71,16 +71,6 @@ export const ItemsMode: FC = () => {
           </CanvasNotification>
         </NotificationWrapper>
       </FadeInOut>
-      <FadeInOut show={showToast} exiting={!showToast}>
-        {showToast && <Overlay isOnTop={true} />}
-        <NotificationWrapper showNotification={showToast}>
-          <NotificationDetail
-            title={text.general.goToYourWallet}
-            info={text.general.yourActionIsPending}
-            closeToast={() => setShowToast(false)}
-          />
-        </NotificationWrapper>
-      </FadeInOut>
       <CanvasAssetInventoryWrapper>
         <CanvasAssetContainer showDetails={showDetails}>
           {showDetails ? (
