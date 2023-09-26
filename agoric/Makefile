@@ -5,7 +5,7 @@ COMMITTEE_ADDRESSES='{"kgov1": "agoric1890064p6j3xhzzdf8daknd6kpvhw766ds8flgw", 
 COMMITTEE_NAME=kread-gov
 
 # config options
-AGORIC_CMD=agoric
+AGORIC_CMD=agoric-linked
 KREAD_REPO =
 SDK_PATH =
 KEPLR_ADDRESS =
@@ -118,6 +118,10 @@ local-testnet:
 client-local-testnet:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-run-client BASE_PORT=8000; \
+
+reset-client-local-testnet:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make scenario2-reset-client BASE_PORT=8000; \
 
 provision-account:
 	cd $(COSMIC_SWINGSET_PATH); \

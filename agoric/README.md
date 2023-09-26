@@ -10,6 +10,7 @@ ensure you are in the agoric folder otherwise cd to agoric folder
 2. Update KEPLR_ADDRESS in Makefile.paths
    1. try to `make kread-committee`
    2. it will fail but look for `"sender","value":"agoric1` to find the address
+      1. if it fails for another reason, you may need to run `make reset-client-local-testnet`
    3. copy that address into Makefile.paths.local for KEPLR_ADDRESS
 3. fund the account
    1. make fund-account
