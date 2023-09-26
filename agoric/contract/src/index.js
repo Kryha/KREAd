@@ -30,8 +30,8 @@ export const meta = {
     seed: M.number(),
     clock: M.eref(M.remotable('Clock')),
     powers: {
-      storageNode: M.eref(M.remotable('StorageNode')),
-      marshaller: M.eref(M.remotable('Marshaller')),
+      storageNode: M.remotable('StorageNode'),
+      marshaller: M.remotable('Marshaller'),
     },
   }),
   customTermsShape: M.splitRecord({
