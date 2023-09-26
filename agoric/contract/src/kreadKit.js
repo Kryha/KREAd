@@ -11,9 +11,9 @@ import { E } from '@endo/eventual-send';
 import { errors } from './errors.js';
 import {
   makeCharacterNftObjs,
-  makeStorageNodeRecorderKits,
   makeCopyBagAmountShape,
   addAllToMap,
+  provideRecorderKits,
 } from './utils.js';
 
 import { text } from './text.js';
@@ -28,7 +28,6 @@ import {
   CharacterGuardBagShape,
   ItemGuard,
   ItemGuardBagShape,
-  CharacterRecorderGuard,
   ItemRecorderGuard,
   MarketRecorderGuard,
   MarketMetricsGuard,
@@ -36,6 +35,7 @@ import {
   BaseCharacterGuard,
   MarketEntryGuard,
   CharacterEntryGuard,
+  CharacterRecorderGuard,
 } from './type-guards.js';
 import { atomicRearrange } from '@agoric/zoe/src/contractSupport/index.js';
 import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
@@ -68,12 +68,18 @@ import '@agoric/zoe/exported.js';
  *   itemIssuerRecord: IssuerRecord<"copyBag">
  *   itemMint: ZCFMint<"copyBag">
  *   clock: import('@agoric/time/src/types.js').Clock
- *   storageNode: StorageNode
- *   makeRecorderKit: import('@agoric/zoe/src/contractSupport').MakeRecorderKit
- *   storageNodePaths: Object
+ *   makeRecorderKit: import('@agoric/zoe/src/contractSupport').MakeRecorderKit,
+ *   recorderKits: {
+ *     characterKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
+ *     itemKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
+ *     marketCharacterKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
+ *     marketItemKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
+ *     marketCharacterMetricsKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
+ *     marketItemMetricsKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
+ *   };
  * }} powers
  */
-export const prepareKreadKit = async (
+export const prepareKreadKit = (
   baggage,
   zcf,
   {
@@ -94,34 +100,20 @@ export const prepareKreadKit = async (
     itemIssuerRecord,
     itemMint,
     clock,
-    storageNode,
     makeRecorderKit,
-    storageNodePaths,
+    recorderKits: {
+      characterKit,
+      itemKit,
+      marketCharacterKit,
+      marketCharacterMetricsKit,
+      marketItemKit,
+      marketItemMetricsKit,
+    },
   },
 ) => {
   const { brand: characterBrand } = characterIssuerRecord;
   const { brand: itemBrand } = itemIssuerRecord;
 
-  const {
-    characterKit,
-    itemKit,
-    marketCharacterKit,
-    marketItemKit,
-    marketCharacterMetricsKit,
-    marketItemMetricsKit,
-  } = await makeStorageNodeRecorderKits(
-    storageNode,
-    makeRecorderKit,
-    storageNodePaths,
-    {
-      characterKit: CharacterRecorderGuard,
-      itemKit: ItemRecorderGuard,
-      marketCharacterKit: M.arrayOf(MarketRecorderGuard),
-      marketItemKit: M.arrayOf(MarketRecorderGuard),
-      marketCharacterMetricsKit: MarketMetricsGuard,
-      marketItemMetricsKit: MarketMetricsGuard,
-    },
-  );
   const marketItemNode = marketItemKit.recorder.getStorageNode();
   const marketCharacterNode = marketCharacterKit.recorder.getStorageNode();
 
@@ -133,7 +125,7 @@ export const prepareKreadKit = async (
   );
   const itemShape = makeCopyBagAmountShape(itemBrand, ItemGuardBagShape);
 
-  const makeKreadKitInternal = prepareExoClassKit(
+  return prepareExoClassKit(
     baggage,
     'KreadKit',
     {
@@ -1793,11 +1785,41 @@ export const prepareKreadKit = async (
       },
     },
   );
-  const facets = makeKreadKitInternal();
-  return harden({
-    public: facets.public,
-    creator: facets.creator,
-  });
 };
 
 harden(prepareKreadKit);
+
+/**
+ *
+ * @param {import('@agoric/vat-data').Baggage} baggage
+ * @param {StorageNode} storageNode
+ * @param {import('@agoric/zoe/src/contractSupport/recorder.js').MakeRecorderKit} makeRecorderKit
+ * @returns
+ */
+export const provideKreadKitRecorderKits = (
+  baggage,
+  storageNode,
+  makeRecorderKit,
+) =>
+  provideRecorderKits(
+    baggage,
+    storageNode,
+    makeRecorderKit,
+    {
+      infoKit: 'info',
+      characterKit: 'character',
+      itemKit: 'item',
+      marketCharacterKit: 'market-characters',
+      marketItemKit: 'market-items',
+      marketCharacterMetricsKit: 'market-metrics-character',
+      marketItemMetricsKit: 'market-metrics-item',
+    },
+    {
+      characterKit: CharacterRecorderGuard,
+      itemKit: ItemRecorderGuard,
+      marketCharacterKit: M.arrayOf(MarketRecorderGuard),
+      marketItemKit: M.arrayOf(MarketRecorderGuard),
+      marketCharacterMetricsKit: MarketMetricsGuard,
+      marketItemMetricsKit: MarketMetricsGuard,
+    },
+  );
