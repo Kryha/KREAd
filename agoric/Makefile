@@ -140,6 +140,7 @@ provision-fee-collector-platform:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make provision-acct ACCT_ADDR=$(PLATFORM_ADDRESS); \
 
+
 fund-account:
 	cd $(COSMIC_SWINGSET_PATH); \
 	make fund-acct ACCT_ADDR=$(KEPLR_ADDRESS) FUNDS=1000000000000uist; \
