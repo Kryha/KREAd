@@ -133,7 +133,7 @@ export const prepareKreadKit = async (
   );
   const itemShape = makeCopyBagAmountShape(itemBrand, ItemGuardBagShape);
 
-  const makeKreadKitInternal = prepareExoClassKit(
+  return prepareExoClassKit(
     baggage,
     'KreadKit',
     {
@@ -1793,11 +1793,6 @@ export const prepareKreadKit = async (
       },
     },
   );
-  const facets = makeKreadKitInternal();
-  return harden({
-    public: facets.public,
-    creator: facets.creator,
-  });
 };
 
 harden(prepareKreadKit);
