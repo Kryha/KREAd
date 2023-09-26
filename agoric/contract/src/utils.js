@@ -1,4 +1,5 @@
 // @ts-check
+import { allValues, objectMap } from '@agoric/internal';
 import { E } from '@endo/eventual-send';
 import { M, matches, getCopyMapEntries } from '@endo/patterns';
 
@@ -33,57 +34,44 @@ export const makeCharacterNftObjs = (
 };
 
 /**
- * @template T
- * @typedef {object} RecorderKit<T>
- * @property {Publisher<T>} publisher
- * @property {StoredSubscriber<T>} subscriber
- */
-
-/**
- * @template T
- * @param {ERef<StorageNode>} storageNode
- * @param {import('@agoric/zoe/src/contractSupport').MakeRecorderKit} makeRecorderKit
- * @param {string} path
- * @param {Pattern} typeMatcher
- * @returns {Promise<import('@agoric/zoe/src/contractSupport').RecorderKit<T>>}
- */
-export const makeStorageNodeRecorderKit = async (
-  storageNode,
-  makeRecorderKit,
-  path,
-  typeMatcher,
-) => {
-  const node = await E(storageNode).makeChildNode(path);
-  return makeRecorderKit(node, typeMatcher);
-};
-
-/**
+ * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {ERef<StorageNode>} storageNode
  * @param {import('@agoric/zoe/src/contractSupport').MakeRecorderKit} makeRecorderKit
  * @param {{[key: string]: string}} paths
  * @param {{[key: string]: Pattern}} typeMatchers
- * @returns {Promise<{[key: string]: import('@agoric/zoe/src/contractSupport').RecorderKit<T>}>}
+ * @returns {Promise<{[key: string]: import('@agoric/zoe/src/contractSupport').RecorderKit<unknown>}>}
  */
-export const makeStorageNodeRecorderKits = async (
+export const provideRecorderKits = async (
+  baggage,
   storageNode,
   makeRecorderKit,
   paths,
   typeMatchers,
 ) => {
-  const recorderMap = {};
-  await Promise.all(
-    Object.keys(paths).map(async (key) => {
-      const recorderKit = await makeStorageNodeRecorderKit(
-        storageNode,
-        makeRecorderKit,
-        paths[key],
-        typeMatchers[key],
-      );
-      recorderMap[key] = recorderKit;
-    }),
-  );
+  console.log('provideRecorderKits', paths, typeMatchers);
+  const keys = Object.keys(paths);
+  // assume if any keys are defined they all are
+  const inBaggage = baggage.has(keys[0]);
+  if (inBaggage) {
+    const obj = objectMap(
+      paths,
+      /** @type {(value: any, key: string) => any} */
+      (_, k) => baggage.get(k),
+    );
+    return Promise.resolve(harden(obj));
+  }
 
-  return recorderMap;
+  const keyedPromises = objectMap(paths, async (_path, key) => {
+    const node = await E(storageNode).makeChildNode(paths[key]);
+    return makeRecorderKit(node, typeMatchers[key]);
+  });
+
+  return allValues(keyedPromises).then((keyedVals) => {
+    for (const [k, v] of Object.entries(keyedVals)) {
+      baggage.init(k, v);
+    }
+    return keyedVals;
+  });
 };
 
 /**

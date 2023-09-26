@@ -10,8 +10,9 @@ import { makeRatio } from '@agoric/zoe/src/contractSupport/ratio.js';
 import { InvitationShape } from '@agoric/zoe/src/typeGuards.js';
 import { handleParamGovernance } from '@agoric/governance';
 
-import { prepareKreadKit } from './kreadKit.js';
+import { prepareKreadKit, provideKreadKitRecorderKits } from './kreadKit.js';
 import { provide } from '@agoric/vat-data';
+import { provideRecorderKits } from './utils.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -90,16 +91,6 @@ export const start = async (zcf, privateArgs, baggage) => {
     item: 'KREAdITEM',
   };
 
-  const storageNodePaths = {
-    infoKit: 'info',
-    characterKit: 'character',
-    itemKit: 'item',
-    marketCharacterKit: 'market-characters',
-    marketItemKit: 'market-items',
-    marketCharacterMetricsKit: 'market-metrics-character',
-    marketItemMetricsKit: 'market-metrics-item',
-  };
-
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
   // durability is not a concern with these, and defining them here, passing on what's needed
   // ensures that the capabilities are where they need to be
@@ -131,6 +122,12 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers.marshaller,
   );
 
+  const recorderKits = await provideKreadKitRecorderKits(
+    baggage,
+    powers.storageNode,
+    makeRecorderKit,
+  );
+
   assert(paymentBrand, 'missing paymentBrand');
   const mintFeeAmount = AmountMath.make(paymentBrand, mintFee);
 
@@ -142,7 +139,7 @@ export const start = async (zcf, privateArgs, baggage) => {
   const royaltyRateRatio = objectToRatio(paymentBrand, royaltyRate);
   const platformFeeRatio = objectToRatio(paymentBrand, platformFeeRate);
 
-  const makeKreadKit = await prepareKreadKit(
+  const makeKreadKit = prepareKreadKit(
     baggage,
     zcf,
     {
@@ -158,14 +155,14 @@ export const start = async (zcf, privateArgs, baggage) => {
       minUncommonRating,
     },
     harden({
-      characterIssuerRecord,
+      recorderKits,
       characterMint,
+      characterIssuerRecord,
       itemIssuerRecord,
       itemMint,
       clock,
       storageNode: powers.storageNode,
       makeRecorderKit,
-      storageNodePaths,
     }),
   );
 
