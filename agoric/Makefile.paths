@@ -1,5 +1,5 @@
-SDK_PATH = /Users/WietzeS/Kryha/agoric/agoric-sdk
-KREAD_REPO = /Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/index.js
+SDK_PATH = /Users/carlostrigo/kryha/agoric/agoric-sdk
+KREAD_REPO = /Users/carlostrigo/kryha/agoric/KREAd/
 
 # changes by making scenario2
 KEPLR_ADDRESS = agoric10s7qs6cznnmswahwzh9lak6pac6we5k86qvnt8

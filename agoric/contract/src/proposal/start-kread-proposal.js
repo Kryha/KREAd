@@ -271,12 +271,14 @@ export const startKread = async (powers, config) => {
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
+  trace('awaiting Money');
+  const Money = await istIssuerP;
   trace('awaiting startGovernedInstance');
   const facets = await startGovernedInstance(
     {
       zoe,
       governedContractInstallation: installation,
-      issuerKeywordRecord: harden({ Money: await istIssuerP }),
+      issuerKeywordRecord: harden({ Money }),
       terms,
       privateArgs,
       label: KREAD_LABEL,
@@ -298,6 +300,7 @@ export const startKread = async (powers, config) => {
   const ck = zone.mapStore('ContractKits');
   ck.init(facets.instance, kreadKit);
 
+  trace('awaiting terms');
   const { creatorFacet, instance } = facets;
   const {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
