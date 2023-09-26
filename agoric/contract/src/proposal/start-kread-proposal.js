@@ -10,7 +10,7 @@ import { deeplyFulfilled } from '@endo/marshal';
 import {
   baseCharacters,
   baseItems,
-  marketplaceListings,
+  marketplaceListingsCommon,
   marketplaceListingsUncommon,
 } from './base-inventory.js';
 
@@ -320,7 +320,7 @@ export const startKread = async (powers, config) => {
     E(creatorFacet).reviveMarketExitSubscribers(),
     E(creatorFacet).publishItemCollection(
       marketPlaceAmountCommon,
-      marketplaceListings,
+      marketplaceListingsCommon,
     ),
     E(creatorFacet).publishItemCollection(
       marketPlaceAmountUncommon,
