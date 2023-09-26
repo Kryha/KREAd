@@ -1,4 +1,4 @@
-SDK_PATH = /Users/carlostrigo/kryha/agoric/agoric-sdk
+SDK_PATH = /Users/WietzeS/Kryha/agoric/agoric-sdk
 KREAD_REPO = /Users/carlostrigo/kryha/agoric/code/Agoric/agoric/contract/src/index.js
 
 # changes by making scenario2
