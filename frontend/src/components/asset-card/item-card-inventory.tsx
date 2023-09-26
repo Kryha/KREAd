@@ -88,7 +88,7 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
             </Badge>
           </AssetStatsContainer>
           <AssetFooter>
-            {item.equippedTo !== "" ? (
+            {item.equippedTo ? (
               <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequipAsset(event)}>
                 <ButtonText customColor={color.white}>unequip</ButtonText>
               </PrimaryButton>
