@@ -151,8 +151,8 @@ export const networkConfigs = {
     url: "http://localhost:3000/wallet/network-config",
   },
   localDevnet: {
-    label: "Local Devnet",
-    url: "https://wallet.agoric.app/wallet/network-config", //"https://wallet.agoric.app/wallet/network-config",
+    label: "Emerynet",
+    url: "https://emerynet.rpc.agoric.net/", //"https://wallet.agoric.app/wallet/network-config",
   },
 } as const;
 
