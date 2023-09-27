@@ -4,8 +4,7 @@ import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../i
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
 import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
 import { fetchChainInfo } from "./util";
-import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
-import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
+import { ChainStorageWatcher, makeAgoricChainStorageWatcher, AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 
 const initialState: AgoricState = {
   status: {
@@ -163,7 +162,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchInstance = async () => {
-      const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.instance");
+      const instances = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
       // TODO: remove publicFacet from state
@@ -171,7 +170,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchTokenInfo = async () => {
-      const agoricNameBrands = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.brand");
+      const agoricNameBrands = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.brand"]);
       const payload: TokenInfo = {
         character: {
           issuer: undefined,
@@ -213,8 +212,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
       try {
-        const { rpc, chainName } = await 
-fetchChainInfo(networkConfigs.emerynet.url);
+        const { rpc, chainName } = await fetchChainInfo(networkConfigs.emerynet.url);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
           console.error(e);
           return;

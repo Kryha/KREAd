@@ -37,7 +37,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     };
     // TO-DO: consider including inventory directly in sell record
     const formatMarketEntry = async (marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
-      const extendedCharacter = await extendCharacters([marketEntry.asset], chainStorageWatcher.marshaller);
+      const extendedCharacter = await extendCharacters([marketEntry.asset], chainStorageWatcher);
       const equippedItems = itemArrayToObject(extendedCharacter.equippedItems);
       const character = extendedCharacter.extendedCharacters[0].nft;
 
