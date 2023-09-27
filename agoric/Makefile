@@ -5,7 +5,7 @@ COMMITTEE_ADDRESSES='{"kgov1": "agoric1890064p6j3xhzzdf8daknd6kpvhw766ds8flgw", 
 COMMITTEE_NAME=kread-gov
 
 # config options
-AGORIC_CMD=agoric-linked
+AGORIC_CMD=agoric
 KREAD_REPO =
 SDK_PATH =
 KEPLR_ADDRESS =
@@ -86,7 +86,6 @@ clean:
 # 4. make the committee using 'KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make kread-committee'
 # 5. make provision-fee-collector
 # 6. start the KREAd contract using 'KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make start-kread'
-
 kread-committee: dist/kread-committee-info.json
 	jq -r '.bundles[]' dist/kread-committee-info.json | sort -u > kread-committee-bundles.out
 	for b in `cat kread-committee-bundles.out` ; do \
@@ -97,6 +96,24 @@ kread-committee: dist/kread-committee-info.json
 	   EVAL_CODE=$(AG_DIR)/dist/kread-invite-committee.js EVAL_CLEAN=$(AG_DIR)/dist/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=$(NEXT_PROPOSAL) \
 
 start-kread: dist/start-kread-info.json
+	jq -r '.bundles[]' dist/start-kread-info.json | sort -u > start-kread-bundles.out
+	for b in `cat start-kread-bundles.out` ; do \
+	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
+	done
+	cd $(COSMIC_SWINGSET_PATH); \
+	make scenario2-core-eval EVAL_PERMIT=$(AG_DIR)/dist/start-kread-permit.json \
+	   EVAL_CODE=$(AG_DIR)/dist/start-kread.js EVAL_CLEAN=$(AG_DIR)/dist/start-kread.js.t scenario2-vote VOTE_PROPOSAL=$(NEXT_PROPOSAL) \
+
+kread-committee-no-build:
+	jq -r '.bundles[]' dist/kread-committee-info.json | sort -u > kread-committee-bundles.out
+	for b in `cat kread-committee-bundles.out` ; do \
+	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
+	done
+	cd $(COSMIC_SWINGSET_PATH); \
+	make scenario2-core-eval EVAL_PERMIT=$(AG_DIR)/dist/kread-invite-committee-permit.json \
+	   EVAL_CODE=$(AG_DIR)/dist/kread-invite-committee.js EVAL_CLEAN=$(AG_DIR)/dist/kread-invite-committee.js.t scenario2-vote VOTE_PROPOSAL=$(NEXT_PROPOSAL) \
+
+start-kread-no-build:
 	jq -r '.bundles[]' dist/start-kread-info.json | sort -u > start-kread-bundles.out
 	for b in `cat start-kread-bundles.out` ; do \
 	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
