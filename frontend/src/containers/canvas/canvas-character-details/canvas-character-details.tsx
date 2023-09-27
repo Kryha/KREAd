@@ -18,7 +18,6 @@ import { DetailSectionSegmentHeader } from "../../detail-section/detail-section-
 export const CanvasCharacterDetails = () => {
   const { selectedAsset, setShowDetails } = useCharacterBuilder();
   const [character] = useGetCharacterByName(selectedAsset);
-  console.log(character);
 
   const { height } = useViewport();
   if (!character) return <ContentLoader loading={true} />;

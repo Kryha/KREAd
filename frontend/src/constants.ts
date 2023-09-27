@@ -178,3 +178,5 @@ export const SELL_CHARACTER_INVITATION = "makeSellCharacterInvitation" as const;
 export const AGORIC_RPC = import.meta.env.VITE_RPC || ("http://127.0.0.1:26657" as const);
 
 export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;
+
+export const PINATA_GATEWAY = import.meta.env.VITE_PINATA_GATEWAY || "https://pink-defensive-jay-557.mypinata.cloud";

@@ -14,7 +14,7 @@ Commneted code is dapp-inter's implementation
 */
 export const watchCharacterInventory = (chainStorageWatcher: any, characterName: string, agoricDispatch: AgoricDispatch) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
-  const path = `published.kread.inventory-${characterName}`;
+  const path = `published.kread.character.inventory-${characterName}`;
 
   chainStorageWatcher.watchLatest(
     [Kind.Data, path],
