@@ -1,5 +1,6 @@
 import { makeCopyBag } from "@agoric/store";
 import { Character, Item } from "../../interfaces";
+import { urlToCid } from "../../util/other";
 // TODO: Use makeOffer status callback for errors
 
 interface CharacterMarketAction {
@@ -18,6 +19,8 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
 
+  const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
+  
   const spec = {
     source: "contract",
     instance,
@@ -25,7 +28,7 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
   };
 
   const give = {
-    Character: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+    Character: { brand: charBrand, value: makeCopyBag(harden([[characterGive, 1n]])) },
   };
 
   const want = {
@@ -58,6 +61,9 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
   const charBrand = service.characterBrand;
   const istBrand = service.istBrand;
 
+  const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
+
+
   const spec = {
     source: "contract",
     instance,
@@ -69,7 +75,7 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
   };
 
   const want = {
-    Character: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
+    Character: { brand: charBrand, value: makeCopyBag(harden([[characterWant, 1n]])) },
   };
 
   const proposal = {
@@ -107,8 +113,9 @@ interface ItemMarketAction {
 
 const sellItem = async ({ item, price, service, callback }: ItemMarketAction): Promise<void> => {
   const instance = service.kreadInstance;
-
   const itemBrand = service.itemBrand;
+
+  const itemGive: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
 
   const spec = {
     id: "custom-id",
@@ -118,7 +125,7 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
   };
 
   const give = {
-    Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
+    Item: { brand: itemBrand, value: makeCopyBag(harden([[itemGive, 1n]])) },
   };
 
   const want = {
@@ -160,6 +167,9 @@ interface SellItemBatchAction {
 }
 
 const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }: SellItemBatchAction): Promise<void> => {
+  console.error("This feature is not implemented yet :)")
+  return;
+  
   const instance = service.kreadInstance;
 
   const spec = {
@@ -179,8 +189,6 @@ const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }
     exit: { waived: null },
   };
 
-  console.log(spec, proposal, harden({ itemsToSell: itemCollection }));
-
   service.makeOffer(spec, proposal, harden({ itemsToSell: itemCollection }), ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
@@ -199,6 +207,8 @@ const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }
 const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAction): Promise<void> => {
   if (!entryId) return;
 
+  const itemWant: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
+
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;
   const istBrand = service.istBrand;
@@ -214,7 +224,7 @@ const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAc
   };
 
   const want = {
-    Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
+    Item: { brand: itemBrand, value: makeCopyBag(harden([[itemWant, 1n]])) },
   };
 
   const proposal = {

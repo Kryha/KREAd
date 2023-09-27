@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { CharacterInMarket, KreadCharacterInMarket } from "../interfaces";
+import { Character, CharacterInMarket, KreadCharacterInMarket } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
 import { itemArrayToObject } from "../util";
 import { watchCharacterMarketPaths, parseCharacterMarket } from "../service/storage-node/watch-market";
+import { cidToUrl, urlToCid } from "../util/other";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
@@ -43,7 +44,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
 
       return {
         id: character.id.toString(),
-        character: { ...marketEntry.asset, id: marketEntry.asset.id },
+        character: { ...marketEntry.asset, id: marketEntry.asset.id, image: cidToUrl(marketEntry.asset.image) },
         equippedItems,
         sell: {
           price: marketEntry.askingPrice.value,
