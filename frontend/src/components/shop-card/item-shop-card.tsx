@@ -16,7 +16,6 @@ interface ShopCardProps {
 
 export const ItemShopCard: FC<ShopCardProps> = ({ itemInMarket, onClick }) => {
   const { item, sell } = itemInMarket;
-
   const { width, height } = useViewport();
 
   const handleClick = () => {

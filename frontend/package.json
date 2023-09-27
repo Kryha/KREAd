@@ -2,7 +2,7 @@
   "name": "@builder/frontend",
   "version": "0.1.0",
   "dependencies": {
-    "@agoric/rpc": "0.4.1-dev-7cf64bb.0",
+    "@agoric/rpc": "^0.6.0",
     "@agoric/smart-wallet": "0.5.4-dev-eb7e9eb.0",
     "@agoric/store": "^0.9.2",
     "@emotion/react": "^11.9.3",

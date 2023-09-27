@@ -1,4 +1,5 @@
 import { CharacterItems, ExtendedCharacter } from "../interfaces";
+import { PINATA_GATEWAY } from "../constants";
 
 export const replaceCharacterInUserStateArray = (arr: ExtendedCharacter[], name: string, newEntry: ExtendedCharacter) => {
   const newArr = [...arr];
@@ -24,3 +25,5 @@ export const replaceCharacterInventoryInUserStateArray = (arr: ExtendedCharacter
 export const dedupArrById = (arr: any[]) => [...new Map(arr.map((v) => [v.id, v])).values()];
 
 export const dedupArrByName = (arr: any[]) => [...new Map(arr.map((v) => [v.nft.name, v])).values()];
+
+export const cidToUrl = (cid: string) => `${PINATA_GATEWAY}/ipfs/${cid}`;
