@@ -1,12 +1,12 @@
 /// <reference types="ses"/>
 import { Character, ExtendedCharacter, Item } from "../interfaces";
-import { fetchFromVStorage } from "./storage-node/fetch-from-vstorage";
+import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 import { CATEGORY } from "../constants";
 import { cidToUrl } from "../util/other";
 
 export const extendCharacters = async (
   characters: Character[],
-  marshaller: any,
+  chainStorageWatcher: any,
 ): Promise<{
   extendedCharacters: ExtendedCharacter[];
   equippedItems: Item[];
@@ -15,7 +15,7 @@ export const extendCharacters = async (
 
   const charactersWithItems: ExtendedCharacter[] = await Promise.all(
     characters.map(async (character) => {
-      const result = await fetchFromVStorage(marshaller, `data/published.kread.character.inventory-${character.name}`);
+      const result = await chainStorageWatcher.queryOnce([Kind.Data, `published.kread.character.inventory-${character.name}`]);
       const frontendEquippedItems: Item[] = result.map((copyBag: [Item, bigint]) => ({
         ...copyBag[0],
         image: cidToUrl(copyBag[0].image),

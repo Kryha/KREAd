@@ -57,7 +57,7 @@ export const useMyCharactersForSale = () => {
       contracts: {
         kread: { publicFacet },
       },
-      chainStorageWatcher: { marshaller },
+      chainStorageWatcher,
     },
   ] = useAgoricContext();
   const wallet = useWalletState();
@@ -69,7 +69,7 @@ export const useMyCharactersForSale = () => {
   useEffect(() => {
     const extend = async () => {
       const myCharactersForSale = wallet.characterProposals.map((proposal: any) => proposal.give.Character.value.payload[0]);
-      const { extendedCharacters } = await extendCharacters(myCharactersForSale, marshaller);
+      const { extendedCharacters } = await extendCharacters(myCharactersForSale, chainStorageWatcher);
       setOfferCharacters(JSON.stringify(extendedCharacters));
     };
     extend();
