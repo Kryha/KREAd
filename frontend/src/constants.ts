@@ -5,7 +5,7 @@ export const MAX_PRICE = 10000000 as const;
 export const INFORMATION_STEP = 0 as const;
 export const WALLET_INTERACTION_STEP = 1 as const;
 export const CONFIRMATION_STEP = 2 as const;
-export const MINTING_COST = 30000000 as const;
+export const MINTING_COST = 5000000 as const;
 export const MONEY_DECIMALS = 6 as const;
 
 export const SUCCESSFUL_MINT_REPONSE_MSG = "Character mint successful, use attached public facet to purchase" as const;
