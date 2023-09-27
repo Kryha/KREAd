@@ -1,5 +1,0 @@
-{
-  "chainName": "agoriclocal",
-  "rpcAddrs": ["http://35.187.166.92:14343"],
-  "dappInterJumperBanner": "A Chrome update is affecting some users' dapp-wallet connection. If you're affected by this issue, please use Brave with shields down until the fix completes."
-}
