@@ -213,7 +213,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
       try {
-        const { rpc, chainName } = await fetchChainInfo(networkConfigs.localDevnet.url);
+        const { rpc, chainName } = await 
+fetchChainInfo(networkConfigs.emerynet.url);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
           console.error(e);
           return;
