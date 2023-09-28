@@ -134,8 +134,9 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
   const itemBrand = service.itemBrand;
 
   const wantKey = character.keyId == 2 ? 1 : 2;
-  const characterGive = { ...character, id: Number(character.id) };
-  const characterWant = { ...character, id: Number(character.id), keyId: wantKey };
+  const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
+  const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image), keyId: wantKey };
+  const itemGive: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
 
   const spec = {
     source: "contract",
@@ -145,7 +146,7 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
 
   const give = {
     CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[characterGive, 1n]])) },
-    Item: { brand: itemBrand, value: makeCopyBag(harden([[item, 1n]])) },
+    Item: { brand: itemBrand, value: makeCopyBag(harden([[itemGive, 1n]])) },
   };
 
   const want = {
@@ -160,7 +161,6 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     give,
   };
   
-  console.log(proposal)
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
