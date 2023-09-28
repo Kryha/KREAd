@@ -36,8 +36,8 @@ stages:
               command: "login"
           - script: |
               cd frontend
-              export $(grep -v '^#' .env.devnet | xargs)
-              envsubst < ../deployment/devnet/workloads/config/ui-config.template.yaml > ../deployment/devnet/workloads/config/ui-config.yaml
-              envsubst < skaffold.devnet.template.yaml > skaffold.devnet.yaml
-              skaffold run --filename skaffold.devnet.yaml
+              export $(grep -v '^#' .env.emerynet | xargs)
+              envsubst < ../deployment/emerynet/workloads/config/ui-config.template.yaml > ../deployment/emerynet/workloads/config/ui-config.yaml
+              envsubst < skaffold.emerynet.template.yaml > skaffold.emerynet.yaml
+              skaffold run --filename skaffold.emerynet.yaml
             displayName: Build and push docker images
