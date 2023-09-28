@@ -1,11 +1,11 @@
-import { CharacterItems, Item } from "../../interfaces";
+import { Item, Category } from "../../interfaces";
 import { FC } from "react";
-import { useNavigate } from "react-router-dom";
-import { routes } from "../../navigation";
 
 import { ItemCard } from "../item-card";
 import { VerticalInfo } from "../vertical-info";
 import { EquippedContainer } from "./styles";
+import { useCharacterBuilder } from "../../context/character-builder-context";
+import { ITEM_MODE } from "../../constants";
 
 interface EquippedItemCardProps {
   item?: Item;
@@ -16,7 +16,7 @@ interface EquippedItemCardProps {
   marginLeft?: string;
   marginRight?: string;
   marginBottom?: string;
-  category: keyof CharacterItems;
+  category: Category;
   area: "top" | "middle" | "bottom";
 }
 
@@ -32,15 +32,16 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({
   category,
   area,
 }) => {
-  const navigate = useNavigate();
+  const { setSelectedAsset, setSelectedAssetCategory, setInteractionMode } = useCharacterBuilder();
 
   const handleClick = () => {
-    navigate(`${routes.items}/${category}`);
+    setInteractionMode(ITEM_MODE);
+    setSelectedAssetCategory(category as string);
+    setSelectedAsset(item?.name || "None");
   };
 
   return (
     <EquippedContainer onClick={() => handleClick()} isRight={false}>
-      <VerticalInfo code={code} />
       <ItemCard
         position="left"
         area={area}
@@ -53,6 +54,7 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({
         marginLeft={marginLeft}
         marginRight={marginRight}
       />
+      <VerticalInfo code={code} />
     </EquippedContainer>
   );
 };
@@ -69,14 +71,16 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({
   category,
   area,
 }) => {
-  const navigate = useNavigate();
+  const { setSelectedAsset, setSelectedAssetCategory, setInteractionMode } = useCharacterBuilder();
 
   const handleClick = () => {
-    navigate(`${routes.items}/${category}`);
+    setInteractionMode(ITEM_MODE);
+    setSelectedAssetCategory(category as string);
+    setSelectedAsset(item?.name || "None");
   };
 
   return (
-    <EquippedContainer onClick={() => handleClick()} isRight isSecond={code === "noseline" || code === "liquid"}>
+    <EquippedContainer onClick={() => handleClick()} isRight isSecond={code === "perk 1" || code === "filter 1"}>
       <ItemCard
         position="right"
         area={area}

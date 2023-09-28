@@ -25,7 +25,7 @@ export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
           <Badge>
             <ButtonText customColor={color.darkGrey}>{text.param.categories[item.category]}</ButtonText>
           </Badge>
-          <ButtonText>{text.param.id(item.id)}</ButtonText>
+          <ButtonText>{text.param.id(item.name)}</ButtonText>
         </Footer>
       </Header>
       <StatsContainer>
@@ -36,15 +36,17 @@ export const ItemStats: FC<ItemStatsProps> = ({ item, position, area }) => {
         </LevelContainer>
         <ProgressContainer>
           <ButtonText>{text.item.effectiveness}</ButtonText>
-          <DetailSectionProgress id={text.item.effectiveness} value={item.effectiveness || 0} max={ONE_HUNDRED_PERCENT}>
+          {/* FIXME: wrong property */}
+          {/* <DetailSectionProgress id={text.item.effectiveness} value={item.effectiveness || 0} max={ONE_HUNDRED_PERCENT}>
             {item.effectiveness}
-          </DetailSectionProgress>
+          </DetailSectionProgress> */}
         </ProgressContainer>
         <ProgressContainer>
           <ButtonText>{text.item.layerComplexity}</ButtonText>
-          <DetailSectionProgress id={text.item.layerComplexity} value={item.layerComplexity || 0} max={ONE_HUNDRED_PERCENT}>
+          {/* FIXME: wrong property */}
+          {/* <DetailSectionProgress id={text.item.layerComplexity} value={item.layerComplexity || 0} max={ONE_HUNDRED_PERCENT}>
             {text.item.layerComplexity}
-          </DetailSectionProgress>
+          </DetailSectionProgress> */}
         </ProgressContainer>
       </StatsContainer>
     </StatsWrapper>

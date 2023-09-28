@@ -26,11 +26,16 @@ export const CharacterGuard = M.splitRecord({
   artistMetadata: M.string(),
   image: M.string(),
   characterTraits: M.string(),
-  name: M.string(),
+  name: M.string({ stringLengthLimit: 20 }),
   keyId: M.number(),
   id: M.gte(0),
   date: M.record(),
 });
+
+export const RatioObject = {
+  numerator: M.nat(),
+  denominator: M.nat(),
+};
 
 export const CharacterGuardBagShape = M.bagOf(CharacterGuard);
 
@@ -50,6 +55,7 @@ export const ItemGuard = M.splitRecord({
   ),
   description: M.string(),
   functional: M.boolean(),
+  origin: M.string(),
   image: M.string(),
   thumbnail: M.string(),
   rarity: M.gte(0),
@@ -63,13 +69,7 @@ export const ItemGuard = M.splitRecord({
   artistMetadata: M.string(),
 });
 
-export const RarityGuard = M.or(
-  'common',
-  'uncommon',
-  'rare',
-  'legendary',
-  'exotic',
-);
+export const RarityGuard = M.or('common', 'uncommonToLegendary');
 
 export const ItemGuardBagShape = M.bagOf(ItemGuard);
 
@@ -78,6 +78,8 @@ export const MarketMetricsGuard = M.splitRecord({
   collectionSize: M.gte(0),
   averageLevel: M.gte(0),
   marketplaceAverageLevel: M.gte(0),
+  latestSalePrice: M.gte(0),
+  putForSaleAmount: M.gte(0),
 });
 
 export const UpdateMarketMetricsGuard = M.splitRecord(
@@ -93,14 +95,14 @@ export const UpdateMarketMetricsGuard = M.splitRecord(
       type: M.or('add', 'remove'),
       value: M.gte(0),
     }),
+    latestSalePrice: M.gte(0),
+    putForSaleAmount: M.boolean(),
   },
 );
 
 export const PublicI = M.interface('public', {
   // Mint
   makeMintCharacterInvitation: M.call().returns(M.promise()),
-  makeMintItemInvitation: M.call().returns(M.promise()),
-  makeTokenFacetInvitation: M.call().returns(M.promise()),
   // Inventory
   makeEquipInvitation: M.call().returns(M.promise()),
   makeUnequipInvitation: M.call().returns(M.promise()),
@@ -112,13 +114,6 @@ export const PublicI = M.interface('public', {
   makeSellItemInvitation: M.call().returns(M.promise()),
   makeBuyItemInvitation: M.call().returns(M.promise()),
   // Getters
-  getTokenInfo: M.call().returns(
-    M.splitRecord({
-      character: { issuer: IssuerShape, brand: BrandShape },
-      item: { issuer: IssuerShape, brand: BrandShape },
-      payment: { issuer: IssuerShape, brand: BrandShape },
-    }),
-  ),
   getCharacters: M.call().returns(M.array()),
   getCharacterInventory: M.call().returns(M.splitRecord({ items: M.array() })),
   getCharactersForSale: M.call().returns(M.array()),
@@ -136,6 +131,8 @@ export const CreatorI = M.interface('creator', {
     M.arrayOf([M.number(), BaseCharacterGuard]),
     M.arrayOf(ItemGuard),
   ).returns(),
+  initializeCharacterNamesEntries: M.call().returns(),
+  makePublishItemCollectionInvitation: M.call().returns(M.promise()),
 });
 
 export const CharacterI = M.interface('character', {
@@ -144,7 +141,7 @@ export const CharacterI = M.interface('character', {
   unequip: M.call().returns(M.promise()),
   unequipAll: M.call().returns(M.promise()),
   swap: M.call().returns(M.promise()),
-  validateInventoryState: M.call().returns(),
+  validateInventoryState: M.call().returns(M.boolean()),
   isNameUnique: M.call(M.string()).returns(M.boolean()),
   getRandomBaseIndex: M.call().returns(M.any()),
   calculateLevel: M.call(M.string()).returns(M.gte(0)),
@@ -159,32 +156,63 @@ export const CharacterI = M.interface('character', {
 export const ItemI = M.interface('item', {
   mint: M.call().returns(M.promise()),
   mintDefaultBatch: M.call().returns(M.promise(M.string())),
+  mintBatch: M.call().returns(M.promise(M.string())),
   initializeBaseItems: M.call(M.arrayOf(ItemGuard)).returns(),
 });
 
 export const MarketRecorderGuard = M.splitRecord({
+  id: M.or(M.gte(0), M.string()),
+  askingPrice: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  royalty: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  platformFee: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  object: M.or(CharacterGuard, ItemGuard),
+  isFirstSale: M.boolean(),
+  // history: M.arrayOf(HistoryGuard),
+});
+
+export const MarketEntryGuard = M.splitRecord({
   id: M.or(M.gte(0), M.string()),
   seat: M.eref(M.remotable('Seat')),
   askingPrice: M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
   }),
+  royalty: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
+  platformFee: M.splitRecord({
+    brand: BrandShape,
+    value: M.nat(),
+  }),
   object: M.or(CharacterGuard, ItemGuard),
+  isFirstSale: M.boolean(),
   // history: M.arrayOf(HistoryGuard),
 });
 
 export const MarketI = M.interface('market', {
   sellItem: M.call().returns(M.promise()),
+  publishItemCollection: M.call().returns(M.promise()),
   buyItem: M.call().returns(M.promise()),
-  handleExitItem: M.call(MarketRecorderGuard).returns(),
-  handleExitCharacter: M.call(MarketRecorderGuard).returns(),
+  buyFirstSaleItem: M.call().returns(M.promise()),
+  buySecondarySaleItem: M.call().returns(M.promise()),
+  handleExitItem: M.call(MarketEntryGuard).returns(),
+  handleExitCharacter: M.call(MarketEntryGuard).returns(),
   sellCharacter: M.call().returns(M.promise()),
   buyCharacter: M.call().returns(M.promise()),
   updateMetrics: M.call(
     M.or('character', 'item'),
     UpdateMarketMetricsGuard,
   ).returns(),
-  freeTokens: M.call().returns(M.promise()),
 });
 
 export const KreadInfoGuard = M.splitRecord({
@@ -203,10 +231,17 @@ export const HistoryGuard = M.splitRecord({
   timestamp: M.record(),
 });
 
-export const CharacterRecorderGuard = M.splitRecord({
+export const CharacterEntryGuard = M.splitRecord({
   name: M.string(),
   character: CharacterGuard,
   inventory: M.eref(M.remotable('Seat')),
+  inventoryKit: M.record(), // TODO: figure out how to type recorderkits
+  history: M.arrayOf(HistoryGuard),
+});
+
+export const CharacterRecorderGuard = M.splitRecord({
+  name: M.string(),
+  character: CharacterGuard,
   inventoryKit: M.record(), // TODO: figure out how to type recorderkits
   history: M.arrayOf(HistoryGuard),
 });

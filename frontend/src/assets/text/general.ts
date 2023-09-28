@@ -1,3 +1,5 @@
+import { MAX_CHARACTER_LENGTH } from "../../constants";
+
 export const general = {
   notFound: "this screen doesn't exist.",
   dataNotFound: "data not found",
@@ -5,6 +7,8 @@ export const general = {
   appName: "KREAd",
   character: "character",
   characters: "characters",
+  category: "category",
+  categories: "categories",
   shop: "shop",
   inventory: "inventory",
   items: "items",
@@ -17,13 +21,12 @@ export const general = {
   createNew: "create new",
   choose: "choose",
   sell: "sell",
-  category: "category",
   loadMore: "load more",
   info: "i",
   toolTipTitle: "tool tip title",
   toolTipInfo: "maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.",
   thisFieldIsRequired: "this field is required",
-  mintNew: "mint new (IST 2)",
+  mintNew: "mint new (IST 30)",
   theMinimiumAmountIs: "the minimum amount is IST 1",
   moreInfo: "more info",
   thereAreNoAssetsAvailable: "there are no assets available",
@@ -50,7 +53,7 @@ export const general = {
   buy: "buy",
   comingSoon: "coming soon!",
   scroll: "scroll",
-  maxCharacterLength: "the character name cannot be longer than 16 characters",
+  maxCharacterLength: `the character name cannot be longer than ${MAX_CHARACTER_LENGTH} characters`,
   goToYourWallet: "go to your wallet to accept the action!",
   yourActionIsPending: "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
   loading: "loading...",
@@ -59,11 +62,13 @@ export const general = {
   characterCardInfo: "by clicking the button you will mint a new character. The cost of it is only IST 2. Start now!",
   createACharacterTitle: "character name",
   createACharacterInfo:
-    "this is the name for your character. Think about something original since it needs to be unique; and keep in mind after setting it up you won't be able to change it! Your character name must be max 16 characters.",
+    "this is the name for your character. Think about something original since it needs to be unique; and keep in mind after setting it up you won't be able to change it! Your character name must be max 20 characters.",
   sellAssetTitle: "set price",
   sellAssetInfo:
     "add a selling price to your character/item. Keep in mind the level that it is as a reference, since it can help you to set a fair price in comparison of the rest of the characters/items.",
   viewCharacter: "view character",
   desktopOnly: "unfortunately, this experience can only be enjoyed on desktop devices.",
   moreAboutThisProject: "more about this project",
+  backToMain: "back to main mode",
+  backToCategories: "back to categories",
 };

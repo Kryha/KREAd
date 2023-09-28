@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // @ts-check
 import '@agoric/zoe/exported';
-import { updateCharacterMetrics, updateItemMetrics } from './market-metrics';
+import { updateCollectionMetrics } from './market-metrics';
 import { assert, details as X } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
 import { makeScalarBigMapStore, prepareExoClassKit, M } from '@agoric/vat-data';
@@ -14,7 +14,7 @@ import {
 } from './utils.js';
 
 import { text } from './text.js';
-import { makeCopyBag } from '@agoric/store';
+import { makeCopyBag, mustMatch } from '@agoric/store';
 import {
   CharacterI,
   HelperI,
@@ -32,7 +32,11 @@ import {
   MarketMetricsGuard,
   RarityGuard,
   BaseCharacterGuard,
+  MarketEntryGuard,
+  CharacterEntryGuard,
 } from './type-guards.js';
+import { atomicRearrange } from '@agoric/zoe/src/contractSupport/index.js';
+import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio';
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
  * Utilizes capabilities from the prepare function suchs as mints
@@ -42,15 +46,22 @@ import {
  * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {ZCF} zcf
  * @param {{
- *   seed: number
+ *   seed: number,
+ *   mintFeeAmount: Amount<nat>,
+ *   royaltyRate: Ratio,
+ *   platformFeeRate: Ratio,
+ *   mintRoyaltyRate: Ratio,
+ *   mintPlatformFeeRate: Ratio,
+ *   royaltyDepositFacet: DepositFacet,
+ *   platformFeeDepositFacet: DepositFacet,
+ *   paymentBrand: Brand,
+ *   minUncommonRating: number
  * }} privateArgs
  * @param {{
  *   characterIssuerRecord: IssuerRecord<"copyBag">
  *   characterMint: ZCFMint<"copyBag">
  *   itemIssuerRecord: IssuerRecord<"copyBag">
  *   itemMint: ZCFMint<"copyBag">
- *   paymentFTIssuerRecord: IssuerRecord<"nat">
- *   paymentFTMint: ZCFMint<"nat">
  *   clock: import('@agoric/time/src/types.js').Clock
  *   storageNode: StorageNode
  *   makeRecorderKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit
@@ -60,14 +71,23 @@ import {
 export const prepareKreadKit = async (
   baggage,
   zcf,
-  { seed },
+  {
+    seed,
+    mintFeeAmount,
+    royaltyRate,
+    platformFeeRate,
+    mintRoyaltyRate,
+    mintPlatformFeeRate,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand,
+    minUncommonRating,
+  },
   {
     characterIssuerRecord,
     characterMint,
     itemIssuerRecord,
     itemMint,
-    paymentFTIssuerRecord,
-    paymentFTMint,
     clock,
     storageNode,
     makeRecorderKit,
@@ -77,8 +97,6 @@ export const prepareKreadKit = async (
   const { issuer: characterIssuer, brand: characterBrand } =
     characterIssuerRecord;
   const { issuer: itemIssuer, brand: itemBrand } = itemIssuerRecord;
-  const { issuer: paymentFTIssuer, brand: paymentFTBrand } =
-    paymentFTIssuerRecord;
 
   const {
     infoKit,
@@ -126,7 +144,7 @@ export const prepareKreadKit = async (
           entries: makeScalarBigMapStore('characters', {
             durable: true,
             keyShape: M.string(),
-            valueShape: CharacterRecorderGuard,
+            valueShape: M.or(CharacterEntryGuard, M.arrayOf(M.string())),
           }),
           bases: makeScalarBigMapStore('baseCharacters', {
             durable: true,
@@ -150,25 +168,19 @@ export const prepareKreadKit = async (
           characterEntries: makeScalarBigMapStore('characterMarket', {
             durable: true,
             keyShape: M.string(),
-            valueShape: MarketRecorderGuard,
+            valueShape: MarketEntryGuard,
           }),
           itemEntries: makeScalarBigMapStore('itemMarket', {
             durable: true,
             keyShape: M.number(),
-            valueShape: MarketRecorderGuard,
+            valueShape: MarketEntryGuard,
+          }),
+          metrics: makeScalarBigMapStore('marketMetrics', {
+            durable: true,
+            keyShape: M.or('character', 'item'),
+            valueShape: MarketMetricsGuard,
           }),
         }),
-        characterCollectionSize: 0,
-        characterAverageLevel: 0,
-        characterMarketplaceAverageLevel: 0,
-        characterAmountSold: 0,
-        characterLatestSalePrice: 0,
-        itemCollectionSize: 0,
-        itemAverageLevel: 0,
-        itemMarketplaceAverageLevel: 0,
-        itemAmountSold: 0,
-        itemLatestSalePrice: 0,
-        itemsPutForSaleAmount: 0,
       };
     },
     {
@@ -200,10 +212,7 @@ export const prepareKreadKit = async (
         },
         validateInventoryState(inventoryState) {
           const itemTypes = inventoryState.map((item) => item.category);
-          assert(
-            itemTypes.length === new Set(itemTypes).size,
-            X`${errors.duplicateCategoryInInventory}`,
-          );
+          return itemTypes.length === new Set(itemTypes).size;
         },
         isNameUnique(name) {
           return !this.state.character.entries.has(name);
@@ -226,7 +235,7 @@ export const prepareKreadKit = async (
           return makeRecorderKit(node, M.arrayOf([ItemGuard, M.nat()]));
         },
         mint() {
-          const handler = async (seat) => {
+          const handler = async (seat, offerArgs) => {
             const {
               helper,
               character: characterFacet,
@@ -236,108 +245,165 @@ export const prepareKreadKit = async (
 
             const { character: characterState } = this.state;
 
-            const { want } = seat.getProposal();
+            const { give } = seat.getProposal();
+            mustMatch(
+              offerArgs,
+              M.splitRecord({
+                name: M.string(harden({ stringLengthLimit: 20 })),
+              }),
+              'offerArgs',
+            );
 
-            const newCharacterName = want.Asset.value.payload[0][0].name;
+            const newCharacterName = offerArgs.name;
 
-            if (characterState.entries.has(newCharacterName)) {
-              seat.clear();
-              seat.fail();
-              return harden({ message: errors.nameTaken(newCharacterName) });
-            }
+            AmountMath.isGTE(give.Price, mintFeeAmount) ||
+              assert.fail(X`${errors.mintFeeTooLow}`);
 
-            if (characterState.bases.getSize() === 0) {
-              seat.clear();
-              seat.fail();
-              return harden({ message: errors.allMinted });
-            }
+            !characterState.entries.get('names').includes(newCharacterName) ||
+              assert.fail(X`${errors.nameTaken(newCharacterName)}`);
 
-            const currentTime = await helper.getTimeStamp();
+            characterState.bases.getSize() > 0 ||
+              assert.fail(X`${errors.allMinted}`);
+
+            const re = /^[a-zA-Z0-9_-]*$/;
+            (re.test(newCharacterName) && newCharacterName != 'names') ||
+              assert.fail(X`${errors.invalidName}`);
+
             const baseIndex = characterFacet.getRandomBaseIndex();
             const baseCharacter = characterState.bases.get(baseIndex);
-            const [newCharacterAmount1, newCharacterAmount2] =
-              makeCharacterNftObjs(
-                newCharacterName,
-                baseCharacter,
-                characterState.entries.getSize(),
-                currentTime,
-              ).map((character) =>
-                AmountMath.make(
-                  characterBrand,
-                  makeCopyBag(harden([[character, 1n]])),
-                ),
-              );
 
-            const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
-            // Mint character to user seat & inventorySeat
-            characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
-            characterMint.mintGains(
-              { CharacterKey: newCharacterAmount2 },
-              inventorySeat,
-            );
-
-            // Deleting here to ensure the base character does not get deleted before everything is minted
-            // Consideration: can this be a race condition when multiple people mint at the same time?
-            // This becomes more likely the less bases there are
             characterState.bases.delete(baseIndex);
 
-            await item.mintDefaultBatch(inventorySeat);
-
-            const inventoryKit = await characterFacet.makeInventoryRecorderKit(
-              newCharacterName,
+            characterState.entries.set(
+              'names',
+              harden([
+                ...characterState.entries.get('names'),
+                newCharacterName,
+              ]),
             );
 
-            // Add to state
-            const character = {
-              name: newCharacterName,
-              character: newCharacterAmount1.value.payload[0][0],
-              inventory: inventorySeat,
-              inventoryKit,
-              history: [
-                {
-                  type: 'mint',
-                  data: newCharacterAmount1.value[0],
-                  timestamp: currentTime,
+            try {
+              const currentTime = await helper.getTimeStamp();
+
+              const [newCharacterAmount1, newCharacterAmount2] =
+                makeCharacterNftObjs(
+                  newCharacterName,
+                  baseCharacter,
+                  characterState.entries.getSize(),
+                  currentTime,
+                ).map((character) =>
+                  AmountMath.make(
+                    characterBrand,
+                    makeCopyBag(harden([[character, 1n]])),
+                  ),
+                );
+
+              const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
+
+              const { zcfSeat: inventorySeat } = zcf.makeEmptySeatKit();
+              // Mint character to user seat & inventorySeat
+              characterMint.mintGains({ Asset: newCharacterAmount1 }, seat);
+              characterMint.mintGains(
+                { CharacterKey: newCharacterAmount2 },
+                inventorySeat,
+              );
+
+              const inventoryKit =
+                await characterFacet.makeInventoryRecorderKit(newCharacterName);
+
+              await item.mintDefaultBatch(inventorySeat);
+
+              const royaltyFee = multiplyBy(give.Price, mintRoyaltyRate);
+              const platformFee = multiplyBy(give.Price, mintPlatformFeeRate);
+
+              /** @type {TransferPart[]} */
+              const transfers = [];
+              transfers.push([
+                seat,
+                zcfSeat,
+                { Price: royaltyFee },
+                { Royalty: royaltyFee },
+              ]);
+              transfers.push([
+                seat,
+                zcfSeat,
+                { Price: platformFee },
+                { PlatformFee: platformFee },
+              ]);
+
+              try {
+                atomicRearrange(zcf, harden(transfers));
+              } catch (e) {
+                assert.fail(X`${errors.rearrangeError}`);
+              }
+
+              seat.exit();
+              zcfSeat.exit();
+
+              const payouts = await E(userSeat).getPayouts();
+              const royaltyPayout = await payouts.Royalty;
+              const platformFeePayout = await payouts.PlatformFee;
+
+              await E(royaltyDepositFacet).receive(royaltyPayout);
+              await E(platformFeeDepositFacet).receive(platformFeePayout);
+
+              // Add to state
+              const character = {
+                name: newCharacterName,
+                character: newCharacterAmount1.value.payload[0][0],
+                inventory: inventorySeat,
+                inventoryKit,
+                history: [
+                  {
+                    type: 'mint',
+                    data: newCharacterAmount1.value[0],
+                    timestamp: currentTime,
+                  },
+                ],
+              };
+
+              characterState.entries.addAll([
+                [character.name, harden(character)],
+              ]);
+
+              // update metrics
+              marketFacet.updateMetrics('character', {
+                collectionSize: true,
+                averageLevel: {
+                  type: 'add',
+                  value: character.character.level,
                 },
-              ],
-            };
+              });
 
-            characterState.entries.addAll([
-              [character.name, harden(character)],
-            ]);
+              characterKit.recorder.write(
+                (({ seat, ...char }) => char)(character),
+              );
 
-            // update metrics
-            marketFacet.updateMetrics('character', {
-              collectionSize: true,
-              averageLevel: {
-                type: 'add',
-                value: character.character.level,
-              },
-            });
+              // TODO: consider refactoring what we put in the inventory node
+              inventoryKit.recorder.write(
+                inventorySeat.getAmountAllocated('Item').value.payload,
+              );
 
-            characterKit.recorder.write(character);
-
-            // TODO: consider refactoring what we put in the inventory node
-            inventoryKit.recorder.write(
-              inventorySeat.getAmountAllocated('Item').value.payload,
-            );
-
-            seat.exit();
-
-            return text.mintCharacterReturn;
+              return text.mintCharacterReturn;
+            } catch (e) {
+              //restore base char deletion and and name entry
+              characterState.bases.addAll([[baseIndex, baseCharacter]]);
+              characterState.entries.set(
+                'names',
+                harden(
+                  characterState.entries
+                    .get('names')
+                    .filter((name) => name != newCharacterName),
+                ),
+              );
+              return e;
+            }
           };
           return zcf.makeInvitation(
             handler,
             'mintCharacterNfts',
             undefined,
-            M.splitRecord({
-              want: {
-                Asset: makeCopyBagAmountShape(
-                  characterBrand,
-                  M.bagOf({ name: M.string() }),
-                ),
-              },
-            }),
+            undefined,
           );
         },
         equip() {
@@ -363,15 +429,13 @@ export const prepareKreadKit = async (
             // Get current Character Key from inventorySeat
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
-            assert(
-              AmountMath.isEqual(
-                wantedCharacter,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
+
+            AmountMath.isEqual(
+              wantedCharacter,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             // Ensure inventory STATE will be valid before reallocation
             let inventory = inventorySeat
@@ -383,15 +447,8 @@ export const prepareKreadKit = async (
                 providedItemAmount.value.payload[0][0],
               ];
 
-            try {
-              // @ts-ignore
-              characterFacet.validateInventoryState(inventory);
-            } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return `${errors.duplicateCategoryInInventory}`;
-            }
+            characterFacet.validateInventoryState(inventory) ||
+              assert.fail(X`${errors.duplicateCategoryInInventory}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -410,12 +467,9 @@ export const prepareKreadKit = async (
             ]);
 
             try {
-              zcf.atomicRearrange(harden(transfers));
+              atomicRearrange(zcf, harden(transfers));
             } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return;
+              assert.fail(X`${errors.rearrangeError}`);
             }
 
             characterRecord.inventoryKit.recorder.write(
@@ -426,7 +480,6 @@ export const prepareKreadKit = async (
 
             return text.equipReturn;
           };
-
           return zcf.makeInvitation(
             handler,
             'addToInventory',
@@ -456,7 +509,8 @@ export const prepareKreadKit = async (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
+            providedCharacterKey ||
+              assert.fail(X`${errors.invalidCharacterKey}`);
 
             // Get reference to the wanted items and key
             const { want } = seat.getProposal();
@@ -465,17 +519,15 @@ export const prepareKreadKit = async (
 
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
 
             // Ensure requested key and inventory key match
-            assert(
-              AmountMath.isEqual(
-                wantedCharacter,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+
+            AmountMath.isEqual(
+              wantedCharacter,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -494,12 +546,9 @@ export const prepareKreadKit = async (
             ]);
 
             try {
-              zcf.atomicRearrange(harden(transfers));
+              atomicRearrange(zcf, harden(transfers));
             } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return `Swap assets error: ${e}`;
+              assert.fail(X`${errors.rearrangeError}`);
             }
 
             characterRecord.inventoryKit.recorder.write(
@@ -542,7 +591,8 @@ export const prepareKreadKit = async (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
+            providedCharacterKey ||
+              assert.fail(X`${errors.invalidCharacterKey}`);
 
             const { want } = seat.getProposal();
             const {
@@ -553,15 +603,13 @@ export const prepareKreadKit = async (
             // Ensure requested key and inventory key match
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
-            assert(
-              AmountMath.isEqual(
-                wantedCharacterAmount,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
+
+            AmountMath.isEqual(
+              wantedCharacterAmount,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             // Ensure inventory STATE is valid before reallocation
             let inventory = inventorySeat
@@ -580,15 +628,8 @@ export const prepareKreadKit = async (
                 providedItemAmount.value.payload[0][0],
               ];
 
-            try {
-              // @ts-ignore
-              characterFacet.validateInventoryState(inventory);
-            } catch (e) {
-              inventorySeat.clear();
-              seat.clear();
-              seat.fail(e);
-              return errors.duplicateCategoryInInventory;
-            }
+            characterFacet.validateInventoryState(inventory) ||
+              assert.fail(X`${errors.duplicateCategoryInInventory}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -617,7 +658,11 @@ export const prepareKreadKit = async (
               { CharacterKey2: wantedCharacterAmount },
             ]);
 
-            zcf.atomicRearrange(harden(transfers));
+            try {
+              atomicRearrange(zcf, harden(transfers));
+            } catch (e) {
+              assert.fail(X`${errors.rearrangeError}`);
+            }
 
             characterRecord.inventoryKit.recorder.write(
               inventorySeat.getAmountAllocated('Item').value.payload,
@@ -657,7 +702,8 @@ export const prepareKreadKit = async (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            assert(providedCharacterKey, X`${errors.invalidCharacterKey}`);
+            providedCharacterKey ||
+              assert.fail(X`${errors.invalidCharacterKey}`);
 
             // Get reference to the wanted item
             const { want } = seat.getProposal();
@@ -666,17 +712,15 @@ export const prepareKreadKit = async (
             // Get Character Key from inventorySeat
             const inventoryCharacterKey =
               inventorySeat.getAmountAllocated('CharacterKey');
-            assert(inventoryCharacterKey, X`${errors.noKeyInInventory}`);
+            inventoryCharacterKey || assert.fail(X`${errors.noKeyInInventory}`);
 
             const items = inventorySeat.getAmountAllocated('Item', itemBrand);
-            assert(
-              AmountMath.isEqual(
-                wantedCharacter,
-                inventoryCharacterKey,
-                characterBrand,
-              ),
-              X`${errors.inventoryKeyMismatch}`,
-            );
+
+            AmountMath.isEqual(
+              wantedCharacter,
+              inventoryCharacterKey,
+              characterBrand,
+            ) || assert.fail(X`${errors.inventoryKeyMismatch}`);
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -694,7 +738,11 @@ export const prepareKreadKit = async (
               { CharacterKey2: wantedCharacter },
             ]);
 
-            zcf.atomicRearrange(harden(transfers));
+            try {
+              atomicRearrange(zcf, harden(transfers));
+            } catch (e) {
+              assert.fail(X`${errors.rearrangeError}`);
+            }
             seat.exit();
 
             characterRecord.inventoryKit.recorder.write(
@@ -723,29 +771,19 @@ export const prepareKreadKit = async (
           if (itemState.bases.getSize() > 0) return;
 
           const common = [];
-          const uncommon = [];
-          const rare = [];
-          const legendary = [];
-          const exotic = [];
+          const uncommonToLegendary = [];
+
           baseItems.forEach((item) => {
-            if (item.rarity > 79) exotic.push(item);
-            else if (item.rarity > 59) legendary.push(item);
-            else if (item.rarity > 39) rare.push(item);
-            else if (item.rarity > 19) uncommon.push(item);
-            else common.push(item);
+            if (item.rarity < minUncommonRating) common.push(item);
+            else uncommonToLegendary.push(item);
           });
 
           itemState.bases.addAll([
             ['common', harden(common)],
-            ['uncommon', harden(uncommon)],
-            ['rare', harden(rare)],
-            ['legendary', harden(legendary)],
-            ['exotic', harden(exotic)],
+            ['uncommonToLegendary', harden(uncommonToLegendary)],
           ]);
         },
         // Mints the default set of items to a seat that doesn't exit
-        // FIXME: change how this works with copy bag
-        // define a limit of items to be able to be minted so we can generat a supply
         async mintDefaultBatch(seat) {
           const { helper, market: marketFacet } = this.facets;
           const { item: itemState } = this.state;
@@ -760,18 +798,17 @@ export const prepareKreadKit = async (
           const index2 = Math.floor(helper.randomNumber() * commonBases.length);
           const item2 = commonBases[index2];
 
-          const legendaryBases = itemState.bases
-            .get('legendary')
+          const uncommonToLegendary = itemState.bases
+            .get('uncommonToLegendary')
             .filter(
               (item) =>
                 item.category !== item1.category &&
                 item.category !== item2.category,
             );
-
           const index3 = Math.floor(
-            helper.randomNumber() * legendaryBases.length,
+            helper.randomNumber() * uncommonToLegendary.length,
           );
-          const item3 = legendaryBases[index3];
+          const item3 = uncommonToLegendary[index3];
 
           const items = [item1, item2, item3];
 
@@ -811,6 +848,60 @@ export const prepareKreadKit = async (
                 value: item.item.level,
               },
             });
+          });
+
+          return text.mintItemReturn;
+        },
+        /**
+         *
+         * @param {ZCFSeat} seat
+         * @param {[Item, bigint][]} itemBatch
+         * @returns {Promise<string>}
+         */
+        async mintBatch(seat, itemBatch) {
+          const { helper, market: marketFacet } = this.facets;
+          const { item: itemState } = this.state;
+
+          const currentTime = await helper.getTimeStamp();
+
+          const newItemAmount = AmountMath.make(
+            itemBrand,
+            makeCopyBag(harden(itemBatch)),
+          );
+
+          await itemMint.mintGains({ Item: newItemAmount }, seat);
+
+          let id = itemState.entries.getSize();
+
+          itemBatch.forEach((copyBagEntry) => {
+            const [itemObject, itemSupply] = copyBagEntry;
+
+            for (let n = 0; n < itemSupply; n++) {
+              const item = {
+                id,
+                item: itemObject,
+                history: [
+                  {
+                    type: 'mint',
+                    data: itemObject,
+                    timestamp: currentTime,
+                  },
+                ],
+              };
+
+              itemState.entries.addAll([[id, harden(item)]]);
+              itemKit.recorder.write(item);
+
+              id += 1;
+              // update metrics
+              marketFacet.updateMetrics('item', {
+                collectionSize: true,
+                averageLevel: {
+                  type: 'add',
+                  value: item.item.level,
+                },
+              });
+            }
           });
 
           return text.mintItemReturn;
@@ -882,7 +973,6 @@ export const prepareKreadKit = async (
           );
         },
       },
-      // TODO: figure out a way to handle the sell and buy more agnostic from the type of the amount
       market: {
         handleExitCharacter(entry) {
           const { market } = this.state;
@@ -904,7 +994,9 @@ export const prepareKreadKit = async (
             market.characterEntries.delete(object.name);
 
             marketCharacterKit.recorder.write(
-              Array.from(market.characterEntries.values()),
+              Array.from(market.characterEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
           });
         },
@@ -926,19 +1018,22 @@ export const prepareKreadKit = async (
             market.itemEntries.delete(id);
 
             marketItemKit.recorder.write(
-              Array.from(market.itemEntries.values()),
+              Array.from(market.itemEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
           });
         },
         updateMetrics(collection, updateMetrics) {
+          const updatedMetrics = updateCollectionMetrics(
+            collection,
+            this.state,
+            updateMetrics,
+          );
           if (collection === 'character') {
-            updateCharacterMetrics(
-              this.state,
-              updateMetrics,
-              marketCharacterMetricsKit,
-            );
+            marketCharacterMetricsKit.recorder.write(updatedMetrics);
           } else if (collection === 'item') {
-            updateItemMetrics(this.state, updateMetrics, marketItemMetricsKit);
+            marketItemMetricsKit.recorder.write(updatedMetrics);
           }
         },
         sellItem() {
@@ -949,18 +1044,27 @@ export const prepareKreadKit = async (
             // Inspect allocation of Character keyword in seller seat
             const objectInSellSeat = seat.getAmountAllocated('Item');
             const { want } = seat.getProposal();
+
+            paymentBrand === want.Price.brand ||
+              assert.fail(X`${errors.incorrectPaymentBrand(paymentBrand)}`);
             const askingPrice = {
               brand: want.Price.brand,
               value: want.Price.value,
             };
+            const royalty = multiplyBy(want.Price, royaltyRate);
+            const platformFee = multiplyBy(want.Price, platformFeeRate);
+
             const object = objectInSellSeat.value.payload[0][0];
 
             // Add to store array
             const newEntry = {
               seat,
               askingPrice,
-              id: this.state.itemsPutForSaleAmount,
+              royalty,
+              platformFee,
+              id: this.state.market.metrics.get('item').putForSaleAmount,
               object,
+              isFirstSale: false,
             };
 
             // update metrics
@@ -974,11 +1078,12 @@ export const prepareKreadKit = async (
             market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
             marketItemKit.recorder.write(
-              Array.from(market.itemEntries.values()),
+              Array.from(market.itemEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
-
+            marketFacet.updateMetrics('item', { putForSaleAmount: true });
             marketFacet.handleExitItem(newEntry);
-            this.state.itemsPutForSaleAmount++;
           };
 
           return zcf.makeInvitation(
@@ -998,6 +1103,80 @@ export const prepareKreadKit = async (
             }),
           );
         },
+        publishItemCollection() {
+          /**
+           *
+           * @param {ZCFSeat} seat
+           * @param {{
+           *    itemsToSell: [Item, bigint][],
+           * }} privateArgs
+           */
+          const handler = async (seat, { itemsToSell }) => {
+            const { market } = this.state;
+            const { market: marketFacet, item } = this.facets;
+
+            // const { zcfSeat: internalSellSeat } = zcf.makeEmptySeatKit();
+            const internalSellSeat = seat;
+            await item.mintBatch(internalSellSeat, itemsToSell);
+
+            const { want } = seat.getProposal();
+            const askingPrice = {
+              brand: want.Price.brand,
+              value: want.Price.value,
+            };
+            const royalty = multiplyBy(want.Price, royaltyRate);
+            const platformFee = multiplyBy(want.Price, platformFeeRate);
+
+            itemsToSell.forEach((copyBagEntry) => {
+              const [itemObject, itemSupply] = copyBagEntry;
+
+              for (let n = 0; n < itemSupply; n++) {
+                // Add to store array
+                const newEntry = {
+                  seat: internalSellSeat,
+                  askingPrice,
+                  royalty,
+                  platformFee,
+                  id: this.state.market.metrics.get('item').putForSaleAmount,
+                  object: itemObject,
+                  isFirstSale: true,
+                };
+
+                // update metrics
+                marketFacet.updateMetrics('item', {
+                  marketplaceAverageLevel: {
+                    type: 'add',
+                    value: itemObject.level,
+                  },
+                });
+
+                market.itemEntries.addAll([[newEntry.id, harden(newEntry)]]);
+
+                marketItemKit.recorder.write(
+                  Array.from(market.itemEntries.values()).map((entry) =>
+                    (({ seat, ...entry }) => entry)(entry),
+                  ),
+                );
+
+                marketFacet.updateMetrics('item', { putForSaleAmount: true });
+              }
+            });
+          };
+
+          return zcf.makeInvitation(
+            handler,
+            'PublishItemCollection',
+            undefined,
+            M.splitRecord({
+              want: {
+                Price: M.splitRecord({
+                  brand: BrandShape,
+                  value: M.nat(),
+                }),
+              },
+            }),
+          );
+        },
         sellCharacter() {
           const handler = (seat) => {
             const { market } = this.state;
@@ -1007,18 +1186,27 @@ export const prepareKreadKit = async (
             // Inspect allocation of Character keyword in seller seat
             const objectInSellSeat = seat.getAmountAllocated('Character');
             const { want } = seat.getProposal();
+
+            paymentBrand === want.Price.brand ||
+              assert.fail(X`${errors.incorrectPaymentBrand(paymentBrand)}`);
             const askingPrice = {
               brand: want.Price.brand,
               value: want.Price.value,
             };
+            const royalty = multiplyBy(want.Price, royaltyRate);
+            const platformFee = multiplyBy(want.Price, platformFeeRate);
+
             const object = objectInSellSeat.value.payload[0][0];
 
             // Add to store array
             const newEntry = {
               seat,
               askingPrice,
+              royalty,
+              platformFee,
               id: object.name,
               object,
+              isFirstSale: false,
             };
 
             // update metrics
@@ -1033,9 +1221,11 @@ export const prepareKreadKit = async (
             market.characterEntries.addAll([[newEntry.id, harden(newEntry)]]);
 
             marketCharacterKit.recorder.write(
-              Array.from(market.characterEntries.values()),
+              Array.from(market.characterEntries.values()).map((entry) =>
+                (({ seat, ...entry }) => entry)(entry),
+              ),
             );
-
+            marketFacet.updateMetrics('character', { putForSaleAmount: true });
             marketFacet.handleExitCharacter(newEntry);
           };
 
@@ -1057,65 +1247,33 @@ export const prepareKreadKit = async (
           );
         },
         buyItem() {
-          const handler = (buyerSeat, offerArgs) => {
+          const handler = async (buyerSeat, offerArgs) => {
             const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
-            // Inspect Character keyword in buyer seat
-            const { want, give } = buyerSeat.getProposal();
-            const { Item: wantedItemAmount } = want;
             // Find store record based on wanted character
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
-            assert(sellRecord, X`${errors.itemNotFound(offerArgs.entryId)}`);
-            const sellerSeat = sellRecord.seat;
+            sellRecord ||
+              assert.fail(X`${errors.itemNotFound(offerArgs.entryId)}`);
 
-            // Inspect Price keyword from buyer seat
-            const { Price: providedMoneyAmount } = give;
-            const { Item: itemForSaleAmount } = sellerSeat.getProposal().give;
-            assert(
-              AmountMath.isEqual(
-                wantedItemAmount,
-                itemForSaleAmount,
-                itemBrand,
-              ),
-              X`${errors.sellerSeatMismatch}`,
-            );
-
-            const { Price: itemForSalePrice } = sellerSeat.getProposal().want;
-            const paymentBrand = itemForSalePrice.brand;
-            assert(
-              AmountMath.isGTE(
-                providedMoneyAmount,
-                itemForSalePrice,
-                paymentBrand,
-              ),
-              X`${errors.insufficientFunds}`,
-            );
-
-            /** @type {TransferPart[]} */
-            const transfers = [];
-            transfers.push([
-              sellerSeat,
-              buyerSeat,
-              { Item: itemForSaleAmount },
-            ]);
-            transfers.push([
-              buyerSeat,
-              sellerSeat,
-              { Price: providedMoneyAmount },
-            ]);
-
-            zcf.atomicRearrange(harden(transfers));
-
-            buyerSeat.exit();
-            sellerSeat.exit();
-
-            // update metrics
-            marketFacet.updateMetrics('item', {
-              amountSold: true,
-              latestSalePrice: Number(itemForSalePrice.value),
-            });
+            /** @type {HelperFunctionReturn} */
+            let result;
+            if (sellRecord.isFirstSale) {
+              result = await marketFacet.buyFirstSaleItem(
+                sellRecord.seat,
+                buyerSeat,
+                sellRecord,
+              );
+            } else {
+              result = await marketFacet.buySecondarySaleItem(
+                sellRecord.seat,
+                buyerSeat,
+                sellRecord,
+              );
+            }
+            result.success || assert.fail(X`${result.error}`);
           };
+
           return zcf.makeInvitation(
             handler,
             'Buy Item in KREAd marketplace',
@@ -1133,10 +1291,237 @@ export const prepareKreadKit = async (
             }),
           );
         },
+        /**
+         *
+         * @param {ZCFSeat} sellerSeat
+         * @param {ZCFSeat} buyerSeat
+         * @param {ItemMarketRecord} sellRecord
+         * @returns {Promise<HelperFunctionReturn>}
+         */
+        async buyFirstSaleItem(sellerSeat, buyerSeat, sellRecord) {
+          const { market: marketFacet } = this.facets;
+          const { market } = this.state;
+
+          const { want, give } = buyerSeat.getProposal();
+          const { Item: wantedItemAmount } = want;
+
+          const itemForSaleAmount = harden({
+            brand: itemBrand,
+            value: makeCopyBag([[sellRecord.object, 1n]]),
+          });
+          const itemForSalePrice = sellRecord.askingPrice;
+          // Inspect Price keyword from buyer seat
+          const { Price: providedMoneyAmount } = give;
+
+          if (
+            !AmountMath.isEqual(wantedItemAmount, itemForSaleAmount, itemBrand)
+          ) {
+            return {
+              success: false,
+              error: errors.sellerSeatMismatch,
+            };
+          }
+
+          if (
+            !AmountMath.isGTE(
+              providedMoneyAmount,
+              AmountMath.add(
+                AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
+                sellRecord.platformFee,
+              ),
+              paymentBrand,
+            )
+          ) {
+            return {
+              success: false,
+              error: errors.insufficientFunds,
+            };
+          }
+
+          const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
+
+          /** @type {TransferPart[]} */
+          const transfers = [];
+          // Transfer item: seller -> buyer
+          transfers.push([sellerSeat, buyerSeat, { Item: itemForSaleAmount }]);
+          // Transfer artist royalty: buyer -> artist
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.royalty },
+            { Royalty: sellRecord.royalty },
+          ]);
+          // Transfer KREAd fees: buyer -> KREAd
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.platformFee },
+            { PlatformFee: sellRecord.platformFee },
+          ]);
+
+          // Transfer askingPrice: buyer -> artist
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            {
+              Price: AmountMath.subtract(
+                providedMoneyAmount,
+                AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+              ),
+            },
+          ]);
+
+          try {
+            atomicRearrange(zcf, harden(transfers));
+          } catch (e) {
+            assert.fail(X`${errors.rearrangeError}`);
+          }
+          buyerSeat.exit();
+          zcfSeat.exit();
+
+          const payouts = await E(userSeat).getPayouts();
+          const royaltyPayout = await payouts.Royalty;
+          const platformFeePayout = await payouts.PlatformFee;
+
+          await E(royaltyDepositFacet).receive(royaltyPayout);
+          await E(platformFeeDepositFacet).receive(platformFeePayout);
+
+          const askingPricePayout = await payouts.Price;
+          await E(royaltyDepositFacet).receive(askingPricePayout);
+
+          // Remove entry from market
+          marketFacet.updateMetrics('item', {
+            marketplaceAverageLevel: {
+              type: 'remove',
+              value: sellRecord.object.level,
+            },
+          });
+
+          market.itemEntries.delete(sellRecord.id);
+
+          marketItemKit.recorder.write(
+            Array.from(market.itemEntries.values()).map((entry) =>
+              (({ seat, ...entry }) => entry)(entry),
+            ),
+          );
+
+          // update metrics
+          marketFacet.updateMetrics('item', {
+            amountSold: true,
+            latestSalePrice: Number(itemForSalePrice.value),
+          });
+          return {
+            success: true,
+            error: '',
+          };
+        },
+        /**
+         *
+         * @param {ZCFSeat} sellerSeat
+         * @param {ZCFSeat} buyerSeat
+         * @param {ItemMarketRecord} sellRecord
+         * @returns {Promise<HelperFunctionReturn>}
+         */
+        async buySecondarySaleItem(sellerSeat, buyerSeat, sellRecord) {
+          const { market: marketFacet } = this.facets;
+
+          const { want, give } = buyerSeat.getProposal();
+          const { Item: wantedItemAmount } = want;
+
+          const itemForSaleAmount = sellerSeat.getProposal().give.Item;
+          const itemForSalePrice = sellerSeat.getProposal().want.Price;
+
+          // Inspect Price keyword from buyer seat
+          const { Price: providedMoneyAmount } = give;
+
+          if (
+            !AmountMath.isEqual(wantedItemAmount, itemForSaleAmount, itemBrand)
+          ) {
+            return {
+              success: false,
+              error: errors.sellerSeatMismatch,
+            };
+          }
+
+          if (
+            !AmountMath.isGTE(
+              providedMoneyAmount,
+              AmountMath.add(
+                AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
+                sellRecord.platformFee,
+              ),
+              paymentBrand,
+            )
+          ) {
+            return {
+              success: false,
+              error: errors.insufficientFunds,
+            };
+          }
+
+          const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
+
+          /** @type {TransferPart[]} */
+          const transfers = [];
+          // Transfer item: seller -> buyer
+          transfers.push([sellerSeat, buyerSeat, { Item: itemForSaleAmount }]);
+          // Transfer artist royalty: buyer -> artist
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.royalty },
+            { Royalty: sellRecord.royalty },
+          ]);
+          // Transfer KREAd fees: buyer -> KREAd
+          transfers.push([
+            buyerSeat,
+            zcfSeat,
+            { Price: sellRecord.platformFee },
+            { PlatformFee: sellRecord.platformFee },
+          ]);
+
+          // Transfer askingPrice: buyer -> seller
+          transfers.push([
+            buyerSeat,
+            sellerSeat,
+            {
+              Price: AmountMath.subtract(
+                providedMoneyAmount,
+                AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+              ),
+            },
+          ]);
+
+          try {
+            atomicRearrange(zcf, harden(transfers));
+          } catch (e) {
+            assert.fail(X`${errors.rearrangeError}`);
+          }
+
+          buyerSeat.exit();
+          sellerSeat.exit();
+          zcfSeat.exit();
+
+          const payouts = await E(userSeat).getPayouts();
+          const royaltyPayout = await payouts.Royalty;
+          const platformFeePayout = await payouts.PlatformFee;
+
+          await E(royaltyDepositFacet).receive(royaltyPayout);
+          await E(platformFeeDepositFacet).receive(platformFeePayout);
+
+          // update metrics
+          marketFacet.updateMetrics('item', {
+            amountSold: true,
+            latestSalePrice: Number(itemForSalePrice.value),
+          });
+          return {
+            success: true,
+            error: '',
+          };
+        },
         buyCharacter() {
           const handler = async (buyerSeat) => {
-            const { market: marketFacet, character: characterFacet } =
-              this.facets;
+            const { market: marketFacet } = this.facets;
             const { market, character: characterState } = this.state;
 
             // Inspect Character keyword in buyer seat
@@ -1146,38 +1531,36 @@ export const prepareKreadKit = async (
 
             // Find characterRecord entry based on wanted character
             const characterRecord = characterState.entries.get(character.name);
-            assert(characterRecord, X`${errors.character404}`);
+            characterRecord || assert.fail(X`${errors.character404}`);
 
             // Find store record based on wanted character
             const sellRecord = market.characterEntries.get(character.name);
 
-            assert(sellRecord, X`${errors.character404}`);
+            sellRecord || assert.fail(X`${errors.character404}`);
             const sellerSeat = sellRecord.seat;
 
             // Inspect Price keyword from buyer seat
             const { Price: providedMoneyAmount } = give;
             const { Character: characterForSaleAmount } =
               sellerSeat.getProposal().give;
-            assert(
-              AmountMath.isEqual(
-                wantedCharacterAmount,
-                characterForSaleAmount,
-                characterBrand,
-              ),
-              X`${errors.sellerSeatMismatch}`,
-            );
 
-            const { Price: characterForSalePrice } =
-              sellerSeat.getProposal().want;
-            const paymentBrand = characterForSalePrice.brand;
-            assert(
-              AmountMath.isGTE(
-                providedMoneyAmount,
-                characterForSalePrice,
-                paymentBrand,
+            AmountMath.isEqual(
+              wantedCharacterAmount,
+              characterForSaleAmount,
+              characterBrand,
+            ) || assert.fail(X`${errors.sellerSeatMismatch}`);
+
+            const characterForSalePrice = sellRecord.askingPrice;
+
+            AmountMath.isGTE(
+              providedMoneyAmount,
+              AmountMath.add(
+                AmountMath.add(sellRecord.askingPrice, sellRecord.royalty),
+                sellRecord.platformFee,
               ),
-              X`${errors.insufficientFunds}`,
-            );
+              paymentBrand,
+            ) || assert.fail(X`${errors.insufficientFunds}`);
+            const { zcfSeat, userSeat } = zcf.makeEmptySeatKit();
 
             /** @type {TransferPart[]} */
             const transfers = [];
@@ -1188,11 +1571,40 @@ export const prepareKreadKit = async (
             ]);
             transfers.push([
               buyerSeat,
+              zcfSeat,
+              { Price: sellRecord.royalty },
+              { Royalty: sellRecord.royalty },
+            ]);
+            transfers.push([
+              buyerSeat,
+              zcfSeat,
+              { Price: sellRecord.platformFee },
+              { PlatformFee: sellRecord.platformFee },
+            ]);
+            transfers.push([
+              buyerSeat,
               sellerSeat,
-              { Price: providedMoneyAmount },
+              {
+                Price: AmountMath.subtract(
+                  providedMoneyAmount,
+                  AmountMath.add(sellRecord.royalty, sellRecord.platformFee),
+                ),
+              },
             ]);
 
-            zcf.atomicRearrange(harden(transfers));
+            try {
+              atomicRearrange(zcf, harden(transfers));
+            } catch (e) {
+              assert.fail(X`${errors.rearrangeError}`);
+            }
+            zcfSeat.exit();
+
+            const payouts = await E(userSeat).getPayouts();
+            const royaltyPayout = await payouts.Royalty;
+            const platformFeePayout = await payouts.PlatformFee;
+
+            await E(royaltyDepositFacet).receive(royaltyPayout);
+            await E(platformFeeDepositFacet).receive(platformFeePayout);
 
             // update metrics
             marketFacet.updateMetrics('character', {
@@ -1221,16 +1633,6 @@ export const prepareKreadKit = async (
             }),
           );
         },
-
-        freeTokens() {
-          const handler = (seat) => {
-            const { want } = seat.getProposal();
-            paymentFTMint.mintGains(want, seat);
-            seat.exit();
-            return text.tokenFacetReturn;
-          };
-          return zcf.makeInvitation(handler, 'get tokens');
-        },
       },
       creator: {
         publishKreadInfo(
@@ -1257,19 +1659,27 @@ export const prepareKreadKit = async (
           return item.mint();
         },
         initializeMetrics() {
-          marketCharacterMetricsKit.recorder.write({
-            collectionSize: this.state.characterCollectionSize,
-            averageLevel: this.state.characterAverageLevel,
-            marketplaceAverageLevel:
-              this.state.characterMarketplaceAverageLevel,
-            amountSold: this.state.characterAmountSold,
-          });
-          marketItemMetricsKit.recorder.write({
-            collectionSize: this.state.itemCollectionSize,
-            averageLevel: this.state.itemAverageLevel,
-            marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
-            amountSold: this.state.itemAmountSold,
-          });
+          const { market } = this.state;
+          if (market.metrics.getSize() > 0) return;
+
+          market.metrics.addAll(
+            ['character', 'item'].map((key) => [
+              key,
+              harden({
+                collectionSize: 0,
+                averageLevel: 0,
+                marketplaceAverageLevel: 0,
+                amountSold: 0,
+                latestSalePrice: 0,
+                putForSaleAmount: 0,
+              }),
+            ]),
+          );
+
+          marketCharacterMetricsKit.recorder.write(
+            market.metrics.get('character'),
+          );
+          marketItemMetricsKit.recorder.write(market.metrics.get('item'));
         },
         reviveMarketExitSubscribers() {
           const { market } = this.state;
@@ -1286,36 +1696,26 @@ export const prepareKreadKit = async (
           character.initializeBaseCharacters(baseCharacters);
           item.initializeBaseItems(baseItems);
         },
-      },
-      // Public is currently a wrapper around the other created facets and fetches from the state
-      // Still to be defined what exactly comes into this
-      public: {
-        getTokenInfo() {
-          return harden({
-            character: {
-              issuer: characterIssuer,
-              brand: characterBrand,
-            },
-            item: {
-              issuer: itemIssuer,
-              brand: itemBrand,
-            },
-            payment: {
-              issuer: paymentFTIssuer,
-              brand: paymentFTBrand,
-            },
-          });
+        initializeCharacterNamesEntries() {
+          const { character } = this.state;
+          if (!character.entries.has('names')) {
+            character.entries.init('names', harden([]));
+          }
         },
+        makePublishItemCollectionInvitation() {
+          const { market } = this.facets;
+          return market.publishItemCollection();
+        },
+      },
+      public: {
         makeMintCharacterInvitation() {
           const { character } = this.facets;
           return character.mint();
         },
-        makeMintItemInvitation() {
-          const { item } = this.facets;
-          return item.mint();
-        },
         getCharacters() {
-          const characters = Array.from(this.state.character.entries.values());
+          const characters = Array.from(
+            this.state.character.entries.values(),
+          ).filter((x) => !Array.isArray(x));
           return characters;
         },
         getCharacterInventory(name) {
@@ -1368,27 +1768,11 @@ export const prepareKreadKit = async (
           const items = Array.from(this.state.market.itemEntries.values());
           return items;
         },
-        makeTokenFacetInvitation() {
-          const { market } = this.facets;
-          return market.freeTokens();
-        },
         getMarketMetrics() {
+          const { market } = this.state;
           return {
-            character: {
-              collectionSize: this.state.characterCollectionSize,
-              averageLevel: this.state.characterAverageLevel,
-              marketplaceAverageLevel:
-                this.state.characterMarketplaceAverageLevel,
-              amountSold: this.state.characterAmountSold,
-              latestSalePrice: this.state.characterLatestSalePrice,
-            },
-            item: {
-              collectionSize: this.state.itemCollectionSize,
-              averageLevel: this.state.itemAverageLevel,
-              marketplaceAverageLevel: this.state.itemMarketplaceAverageLevel,
-              amountSold: this.state.itemAmountSold,
-              latestSalePrice: this.state.itemLatestSalePrice,
-            },
+            character: market.metrics.get('character'),
+            item: market.metrics.get('item'),
           };
         },
         getCharacterLevel(name) {
@@ -1398,8 +1782,8 @@ export const prepareKreadKit = async (
       },
     },
   );
-
-  return harden(makeKreadKitInternal());
+  const { public: publicFacet, creator: creatorFacet } = makeKreadKitInternal();
+  return harden({ publicFacet, creatorFacet });
 };
 
 harden(prepareKreadKit);

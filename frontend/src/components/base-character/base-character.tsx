@@ -3,7 +3,7 @@ import { FC } from "react";
 import { CharacterItems } from "../../interfaces";
 import { CharacterContainer, CharacterIcon, CharacterWrapper, ItemIcon } from "./styles";
 import { useViewport } from "../../hooks";
-import { TempetCharacter, Empty, text } from "../../assets";
+import { Empty, TempetCharacter, text } from "../../assets";
 import { zIndex } from "../../design";
 
 interface BaseCharacterProps {
@@ -36,8 +36,8 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, i
           zIndex={zIndex.headPiece}
         />
         <ItemIcon
-          src={items?.noseline?.image || Empty}
-          alt={items?.noseline?.name || text.character.noseline}
+          src={items?.perk1?.image || Empty}
+          alt={items?.perk1?.name || text.character.noseline}
           width={width}
           height={height}
           zIndex={zIndex.noseline}
@@ -57,39 +57,39 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, i
           zIndex={zIndex.mask}
         />
         <ItemIcon
-          src={items?.airReservoir?.image || Empty}
-          alt={items?.airReservoir?.name || text.character.airReservoir}
+          src={items?.filter1?.image || Empty}
+          alt={items?.filter1?.name || text.character.airReservoir}
           width={width}
           height={height}
           zIndex={zIndex.airReservoir}
         />
         <ItemIcon
-          src={items?.liquid?.image || Empty}
-          alt={items?.liquid?.name || text.character.liquid}
+          src={items?.filter2?.image || Empty}
+          alt={items?.filter2?.name || text.character.liquid}
           width={width}
           height={height}
           zIndex={zIndex.liquid}
         />
         <ItemIcon
-          src={items?.midBackground?.image || Empty}
-          alt={items?.midBackground?.name || text.character.midBackground}
+          src={items?.patch?.image || Empty}
+          alt={items?.patch?.name || text.character.midBackground}
           width={width}
           height={height}
           zIndex={zIndex.midBackground}
         />
         <ItemIcon
-          src={items?.frontMask?.image || Empty}
-          alt={items?.frontMask?.name || text.character.frontMask}
+          src={items?.perk2?.image || Empty}
+          alt={items?.perk2?.name || text.character.frontMask}
           width={width}
           height={height}
           zIndex={zIndex.frontMask}
         />
         <ItemIcon
-          src={items?.clothing?.image || Empty}
-          alt={items?.clothing?.name || text.character.clothing}
+          src={items?.garment?.image || Empty}
+          alt={items?.garment?.name || text.character.garment}
           width={width}
           height={height}
-          zIndex={zIndex.clothing}
+          zIndex={zIndex.garment}
         />
       </CharacterContainer>
     </CharacterWrapper>

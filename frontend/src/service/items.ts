@@ -1,15 +1,23 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Item, ItemCategory, ItemInMarket } from "../interfaces";
-import { filterItems, filterItemsInShop, ItemFilters, ItemsMarketFilters, mediate } from "../util";
+import { Category, Item, ItemInMarket, Rarity } from "../interfaces";
+import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
 import { INVENTORY_CALL_FETCH_DELAY, ITEM_PURSE_NAME } from "../constants";
-import { useItemMarketState } from "../context/item-shop";
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { marketService } from "./character/market";
 import { inventoryService } from "./character/inventory";
+import { useItemMarketState } from "../context/item-shop-context";
+
+export function getRarityString(rarity: number) {
+  if (rarity > 79) return "exotic" as Rarity;
+  else if (rarity > 59) return "legendary" as Rarity;
+  else if (rarity > 39) return "rare" as Rarity;
+  else if (rarity > 19) return "uncommon" as Rarity;
+  else return "common" as Rarity;
+}
 
 // TODO: Fix this function used during buy and sell
 export const useMyItem = (id: string): [Item | undefined, boolean] => {
@@ -17,23 +25,45 @@ export const useMyItem = (id: string): [Item | undefined, boolean] => {
   return [found, false];
 };
 
-export const useGetItemInInventoryByNameAndCategory = (name: string, category: ItemCategory | undefined): [Item | undefined, boolean] => {
+export const useGetItemInInventoryByNameAndCategory = (
+  name: string,
+  category: string,
+  characterName: string | undefined,
+): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
 
-  const found = useMemo(() => items.find((item) => item.category === category && item.name === name), [name, category, items]);
+  const found = useMemo(
+    () => items.find((item) => item.category === category && item.name === name && item.equippedTo === characterName),
+    [items, category, name, characterName],
+  );
 
   return [found, isLoading];
 };
 
-export const useGetItemsInInventory = (filters?: ItemFilters): [Item[], boolean] => {
+export const useGetItemsInInventory = (): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
-  const allEquippedItems = characters.flatMap((character) => Object.values(character.equippedItems)).filter((item) => item !== undefined);
+  const { items } = useUserState();
 
-  if (!filters) return [allEquippedItems, !fetched];
-
-  const filtered = !filters ? allEquippedItems : filterItems(allEquippedItems, filters);
+  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
+  const filtered = useFilterItems(allItems);
 
   return [filtered, !fetched];
+};
+
+export const useGetItemsInInventoryByCategory = (category: string | null): [Item[], boolean] => {
+  const [items, isLoading] = useGetItemsInInventory();
+
+  const filtered = useMemo(() => items.filter((item) => item.category === category), [category, items]);
+
+  return [filtered, isLoading];
+};
+
+export const useGetItemInInventoryByName = (category: string | null, itemName: string | null): Item | undefined => {
+  const [items] = useGetItemsInInventory();
+
+  return items.find((item) => {
+    return item.category === category && item.name === itemName;
+  });
 };
 
 export const useMyItemsForSale = () => {
@@ -53,12 +83,12 @@ export const useMyItemsForSale = () => {
   );
 
   // getting items from filtered offers
-  const itemsForSale: ItemEquip[] = useMemo(() => {
+  const itemsForSale: Item[] = useMemo(() => {
     try {
-      const itemsFromOffers: ItemBackend[] = itemOffers.map((offer: any) => {
+      const itemsFromOffers: Item[] = itemOffers.map((offer: any) => {
         return offer.proposalTemplate.give.Items.value[0];
       });
-      const itemsFromOffersFrontend: ItemEquip[] = mediate.items
+      const itemsFromOffersFrontend: Item[] = mediate.items
         .toFront(itemsFromOffers)
         .map((item) => ({ ...item, equippedTo: "", isForSale: true }));
       return itemsFromOffersFrontend;
@@ -73,22 +103,21 @@ export const useMyItemsForSale = () => {
 export const useGetItemInShopById = (id: string): [ItemInMarket | undefined, boolean] => {
   const { items, fetched } = useItemMarketState();
 
-  const found = useMemo(() => items.find((item) => item.id === id), [id, items]);
+  const filteredItems = useFilterItemsInShop(items);
+  const found = useMemo(() => filteredItems.find((item) => item.id === id), [id, filteredItems]);
 
   return [found, !fetched];
 };
 
-export const useGetItemsInShop = (filters?: ItemsMarketFilters): [ItemInMarket[], boolean] => {
+export const useGetItemsInShop = (): [ItemInMarket[], boolean] => {
   const { items, fetched } = useItemMarketState();
-  if (!filters) return [items, !fetched];
-  const filtered = !filters ? items : filterItemsInShop(items, filters);
+  const filtered = useFilterItemsInShop(items);
 
   return [filtered, !fetched];
 };
 
-export const useSellItem = (itemName: string | undefined, itemCategory: ItemCategory | undefined) => {
+export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {
   const [service] = useAgoricContext();
-  const wallet = useWalletState();
   const { items } = useUserState();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -100,12 +129,13 @@ export const useSellItem = (itemName: string | undefined, itemCategory: ItemCate
         const { forSale, equippedTo, activity, ...itemToSell } = found;
         const instance = service.contracts.kread.instance;
         const itemBrand = service.tokenInfo.item.brand;
+        const uISTPrice = ISTTouIST(price);
 
         setIsLoading(true);
 
         marketService.sellItem({
           item: itemToSell,
-          price: BigInt(price),
+          price: BigInt(uISTPrice),
           service: {
             kreadInstance: instance,
             itemBrand,
@@ -114,6 +144,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: ItemCate
           },
           callback: async () => {
             console.info("SellItem call settled");
+            setIsLoading(false);
             setPlacedInShop();
           },
         });
@@ -123,13 +154,13 @@ export const useSellItem = (itemName: string | undefined, itemCategory: ItemCate
         return false;
       }
     },
-    [itemName, itemCategory, wallet, items, service],
+    [itemName, itemCategory, items, service],
   );
 
   return { callback, isLoading };
 };
 
-export const useBuyItem = (itemToBuy: ItemInMarket) => {
+export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [items] = useGetItemsInShop();
@@ -153,7 +184,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket) => {
         return await marketService.buyItem({
           entryId: itemToBuy.id,
           item: itemToBuy.item,
-          price: BigInt(itemToBuy.sell.price),
+          price: BigInt(itemToBuy.sell.price + itemToBuy.sell.platformFee + itemToBuy.sell.royalty),
           service: {
             kreadInstance: instance,
             itemBrand,

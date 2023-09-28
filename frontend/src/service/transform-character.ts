@@ -1,34 +1,44 @@
 /// <reference types="ses"/>
-import { CharacterBackend, ExtendedCharacterBackend, Item } from "../interfaces";
-import { itemCategories } from "./util";
-import { fetchFromVStorage } from "./storage-node/fetch-from-vstorage";
+import { Character, ExtendedCharacter, Item } from "../interfaces";
+import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
+import { CATEGORY } from "../constants";
+import { cidToUrl } from "../util/other";
 
 export const extendCharacters = async (
-  characters: CharacterBackend[],
-  marshaller: any,
-): Promise<{ extendedCharacters: ExtendedCharacterBackend[]; equippedItems: Item[] }> => {
+  characters: Character[],
+  chainStorageWatcher: any,
+): Promise<{
+  extendedCharacters: ExtendedCharacter[];
+  equippedItems: Item[];
+}> => {
   const equippedCharacterItems: Item[] = [];
 
-  const charactersWithItems: ExtendedCharacterBackend[] = await Promise.all(
+  const charactersWithItems: ExtendedCharacter[] = await Promise.all(
     characters.map(async (character) => {
-      const result = await fetchFromVStorage(marshaller, `data/published.kread.inventory-${character.name}`);
+      const result = await chainStorageWatcher.queryOnce([Kind.Data, `published.kread.character.inventory-${character.name}`]);
       const frontendEquippedItems: Item[] = result.map((copyBag: [Item, bigint]) => ({
         ...copyBag[0],
+        image: cidToUrl(copyBag[0].image),
+        thumbnail: cidToUrl(copyBag[0].thumbnail),
         equippedTo: character.name,
         forSale: false,
       }));
+
       equippedCharacterItems.push(...frontendEquippedItems);
       const equipped: { [key: string]: Item | undefined } = {};
-      itemCategories.forEach((category) => {
+      for (const category of Object.keys(CATEGORY)) {
         equipped[category] = frontendEquippedItems.find((item: Item) => item.category === category);
-      });
+      }
 
       return {
-        nft: character,
+        nft: { ...character, image: cidToUrl(character.image) },
         equippedItems: equipped,
       };
     }),
   );
 
-  return { extendedCharacters: charactersWithItems, equippedItems: equippedCharacterItems };
+  return {
+    extendedCharacters: charactersWithItems,
+    equippedItems: equippedCharacterItems,
+  };
 };

@@ -1,59 +1,72 @@
 import { ExtendedCharacter } from "../../interfaces";
-import { BoldLabel, Dash, ImageProps } from "../atoms";
-import { FC } from "react";
+import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel, PrimaryButton } from "../atoms";
+import React, { FC } from "react";
 import {
   AssetContent,
   AssetFooter,
-  AssetImage,
   AssetImageContainer,
   AssetInfoContainer,
+  AssetStatsContainer,
   AssetTag,
   AssetTitleText,
   AssetTitleWrapper,
   AssetWrapper,
   NoAssetImage,
 } from "./styles";
-import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
+import { text } from "../../assets";
+import { routes } from "../../navigation";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   extendedCharacter: ExtendedCharacter;
-  onClick?: (assetId: string) => void;
+  onClick?: (assetId: number) => void;
   imageProps?: ImageProps;
 }
 
 export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }) => {
   const { nft: character } = extendedCharacter;
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = () => {
     onClick && onClick(character.id);
   };
 
+  const sellAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    navigate(`${routes.sellCharacter}/${character.id}`, { state: location });
+  };
+
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
-        <BaseCharacter characterImage={character.image} items={extendedCharacter.equippedItems} isZoomed={false} size="medium" />
         <AssetImageContainer>
-          {character.image && <AssetImage src={character.image} />}
-          {!character.image && <NoAssetImage />}
+          {character.image ? (
+            <BaseCharacter characterImage={character.image} items={extendedCharacter.equippedItems} isZoomed={false} size="medium" />
+          ) : (
+            <NoAssetImage />
+          )}
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
             <AssetTitleText>{character.name}</AssetTitleText>
+            <BoldLabel>{character.title}</BoldLabel>
           </AssetTitleWrapper>
-          <AssetFooter>
+          <AssetStatsContainer>
             <AssetTag>
-              <BoldLabel customColor={color.black}>{text.param.level(character.level)}</BoldLabel>
-              {character.rarity && (
-                <>
-                  <Dash />
-                  <BoldLabel customColor={color.black}>{text.param.rarity(character.rarity)}</BoldLabel>
-                </>
-              )}
+              <BoldLabel customColor={color.black}>lvl. </BoldLabel>
+              <LevelBoldLabel customColor={color.black}>{character.level}</LevelBoldLabel>
             </AssetTag>
-            {/* TODO: figure out if we cann add this label */}
-            {/*extendedCharacter. && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>*/}
+            <Badge>
+              <ButtonText>{character.origin}</ButtonText>
+            </Badge>
+          </AssetStatsContainer>
+          <AssetFooter>
+            <PrimaryButton onClick={(event) => sellAsset(event)}>
+              <ButtonText customColor={color.white}>{text.general.sell}</ButtonText>
+            </PrimaryButton>
           </AssetFooter>
         </AssetInfoContainer>
       </AssetContent>

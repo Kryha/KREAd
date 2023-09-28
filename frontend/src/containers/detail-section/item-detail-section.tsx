@@ -26,6 +26,10 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
 
   if (!item) return <ErrorView />;
 
+  {
+    /* FIXME: update details section based on new types */
+  }
+
   return (
     <DetailSectionWrap width={width}>
       {/* header */}
@@ -43,10 +47,10 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
       </DetailSectionSegment>
 
       {/* details */}
-      <DetailSectionSegment title={text.item.details} sectionIndex={3}>
-        {/* FIXME: grab brand from state */}
-        <DetailSectionSegmentDetails data={{ ...item.details, brand: "KREAdITEM" }} />
-      </DetailSectionSegment>
+      {/*<DetailSectionSegment title={text.item.details} sectionIndex={3}>*/}
+      {/*  /!* FIXME: grab brand from state *!/*/}
+      {/*  <DetailSectionSegmentDetails data={{ ...item.details, brand: "KREAdITEM" }} />*/}
+      {/*</DetailSectionSegment>*/}
 
       {/* project */}
       <DetailSectionSegment title={text.item.project} sectionIndex={4}>

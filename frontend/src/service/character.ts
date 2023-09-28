@@ -1,27 +1,54 @@
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterEquip, CharacterInMarket, ExtendedCharacter, ExtendedCharacterBackend } from "../interfaces";
+import { CharacterCreation, CharacterInMarket, ExtendedCharacter } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
-import { useAgoricState, useAgoricContext } from "../context/agoric";
-import { CharacterFilters, filterCharacters, filterCharactersMarket, mediate } from "../util";
-import { useCharacterMarketState } from "../context/character-shop";
+import { useAgoricContext, useAgoricState } from "../context/agoric";
+import { ISTTouIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
+
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { mintCharacter } from "./character/mint";
 import { marketService } from "./character/market";
+import { useCharacterMarketState } from "../context/character-shop-context";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
   const userStateDispatch = useUserStateDispatch();
+
   useEffect(() => {
-    if (!selected) {
-      characters[0] && userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+    const storedName = localStorage.getItem("selectedCharacter");
+
+    if (selected) {
+      if (selected.nft.name !== storedName) {
+        localStorage.setItem("selectedCharacter", selected.nft.name);
+      }
+      const selectedCharacter = characters.find((char) => char.nft.name === selected.nft.name);
+      if (selectedCharacter) {
+        userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter });
+      }
+    } else if (characters.length > 0) {
+      if (storedName) {
+        const matchingCharacter = characters.find((char) => char.nft.name === storedName);
+        if (matchingCharacter) {
+          userStateDispatch({
+            type: "SET_SELECTED",
+            payload: matchingCharacter,
+          });
+        } else {
+          const firstCharacter = characters[0];
+          localStorage.setItem("selectedCharacter", firstCharacter.nft.name);
+          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter });
+        }
+      } else {
+        const firstCharacterName = characters[0].nft.name;
+        localStorage.setItem("selectedCharacter", firstCharacterName);
+        userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+      }
     }
   }, [userStateDispatch, characters, selected]);
 
-  const isLoading = !fetched;
-  return [selected, isLoading];
+  return [selected, !fetched];
 };
 
 export const useMyCharactersForSale = () => {
@@ -30,7 +57,7 @@ export const useMyCharactersForSale = () => {
       contracts: {
         kread: { publicFacet },
       },
-      chainStorageWatcher: { marshaller },
+      chainStorageWatcher,
     },
   ] = useAgoricContext();
   const wallet = useWalletState();
@@ -42,18 +69,18 @@ export const useMyCharactersForSale = () => {
   useEffect(() => {
     const extend = async () => {
       const myCharactersForSale = wallet.characterProposals.map((proposal: any) => proposal.give.Character.value.payload[0]);
-      const { extendedCharacters } = await extendCharacters(myCharactersForSale, marshaller);
+      const { extendedCharacters } = await extendCharacters(myCharactersForSale, chainStorageWatcher);
       setOfferCharacters(JSON.stringify(extendedCharacters));
     };
     extend();
   }, [wallet.characterProposals, publicFacet]);
 
-  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacterBackend[], [offerCharacters]);
+  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
 
   return parsedCharacters;
 };
 
-export const useMyCharacter = (id?: string): [ExtendedCharacter | undefined, boolean] => {
+export const useMyCharacter = (id?: number): [ExtendedCharacter | undefined, boolean] => {
   const [owned, isLoading] = useMyCharacters();
 
   const found = useMemo(() => owned.find((c) => c.nft.id === id), [id, owned]);
@@ -61,33 +88,26 @@ export const useMyCharacter = (id?: string): [ExtendedCharacter | undefined, boo
   return [found, isLoading];
 };
 
-export const useMyCharacters = (filters?: CharacterFilters): [ExtendedCharacter[], boolean] => {
-  const { characters, selected, fetched } = useUserState();
+export const useGetCharacterByName = (name: string | null): [ExtendedCharacter | undefined, boolean] => {
+  const [owned, isLoading] = useMyCharacters();
+
+  const found = useMemo(() => owned.find((c) => c.nft.name === name), [name, owned]);
+
+  return [found, isLoading];
+};
+
+export const useGetCharacterNames = (): [string[]] => {
+  const [owned] = useMyCharacters();
+  const names = useMemo(() => owned.map((c) => c.nft.name), [owned]);
+  return [names];
+};
+
+export const useMyCharacters = (): [ExtendedCharacter[], boolean] => {
+  const { characters, fetched } = useUserState();
   const charactersForSale = useMyCharactersForSale();
-  const charactersWithEquip: CharacterEquip[] = useMemo(() => {
-    return characters.map((character) => {
-      if (character.nft.id === selected?.nft.id) return { ...character, equippedTo: character.nft.name, isForSale: false };
-      return { ...character, equippedTo: "", isForSale: false };
-    });
-  }, [characters, selected?.nft.id]);
 
-  // mixing characters from wallet with characters from shop
-  const charactersWithForSale: CharacterEquip[] = useMemo(() => {
-    try {
-      const offerCharactersFrontend: CharacterEquip[] = mediate.characters
-        .toFront(charactersForSale)
-        .map((item) => ({ ...item, equippedTo: "", isForSale: true }));
-      return [...charactersWithEquip, ...offerCharactersFrontend];
-    } catch (error) {
-      return charactersWithEquip;
-    }
-  }, [charactersForSale, charactersWithEquip]);
-
-  // filtering all the characters
-  const filtered = useMemo(() => {
-    if (!filters) return charactersWithForSale;
-    return filterCharacters(charactersWithForSale, filters);
-  }, [charactersWithForSale, filters]);
+  const allCharacters = [...characters, ...charactersForSale];
+  const filtered = useFilterCharacters(allCharacters);
 
   const isLoading = !fetched;
   return [filtered, isLoading];
@@ -101,44 +121,26 @@ export const useCharacterFromMarket = (id: string): [CharacterInMarket | undefin
   return [found, isLoading];
 };
 
-export const useCharactersMarket = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
+export const useCharactersMarket = (): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
-  const filtered = useMemo(() => {
-    if (!filters) return characters;
-    return filterCharactersMarket(characters, filters);
-  }, [filters, characters]);
+  const filtered = useFilterCharactersMarket(characters);
 
   const isLoading = !fetched;
   return [filtered, isLoading];
-};
-
-// TODO: consider whether fetching by range is necessary after implementing notifiers
-export const useCharactersMarketPages = (page: number, filters?: CharacterFilters): [CharacterInMarket[], boolean, number] => {
-  const { characters, fetched } = useCharacterMarketState();
-  // TODO: get total pages
-  const totalPages = 20;
-
-  const filtered = useMemo(() => {
-    if (!filters) return characters;
-    return filterCharactersMarket(characters, filters);
-  }, [filters, characters]);
-
-  const isLoading = !fetched;
-  return [filtered, isLoading, totalPages];
 };
 
 // TODO: Add error management
 export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
-  const charBrand = service.tokenInfo.character.brand;
+  const istBrand = service.tokenInfo.ist.brand;
   return useMutation(async (body: CharacterCreation) => {
     if (!body.name) throw new Error("Name not specified");
     await mintCharacter({
       name: body.name,
       service: {
         kreadInstance: instance,
-        characterBrand: charBrand,
+        istBrand: istBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
       callback: async () => {
@@ -156,7 +158,7 @@ export const useEquipCharacter = () => {
 };
 
 // TODO: test after merge with equip/unequip fix
-export const useSellCharacter = (characterId: string) => {
+export const useSellCharacter = (characterId: number) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [characters] = useMyCharacters();
@@ -170,11 +172,12 @@ export const useSellCharacter = (characterId: string) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
       const characterToSell = { ...found.nft, id: Number(found.nft.id) };
+      const uISTPrice = ISTTouIST(price);
 
       setIsLoading(true);
-      const res = await marketService.sellCharacter({
+      return await marketService.sellCharacter({
         character: characterToSell,
-        price: BigInt(price),
+        price: BigInt(uISTPrice),
         service: {
           kreadInstance: instance,
           characterBrand: charBrand,
@@ -188,8 +191,6 @@ export const useSellCharacter = (characterId: string) => {
           userDispatch({ type: "SET_SELECTED", payload: undefined });
         },
       });
-
-      return res;
     },
     [characterId, characters, wallet, service, userDispatch],
   );
@@ -215,16 +216,13 @@ export const useBuyCharacter = (characterId: string) => {
     if (!found) return;
     const characterToBuy = {
       ...found,
-      character: {
-        ...found.character,
-        id: Number(found.id),
-      },
+      character: found.character,
     };
 
     setIsLoading(true);
     await marketService.buyCharacter({
       character: characterToBuy.character,
-      price: characterToBuy.sell.price,
+      price: BigInt(characterToBuy.sell.price + characterToBuy.sell.platformFee + characterToBuy.sell.royalty),
       service: {
         kreadInstance: instance,
         characterBrand: charBrand,
@@ -249,9 +247,8 @@ export const useGetCharacterInShopById = (id: string): [CharacterInMarket | unde
   return [found, isLoading];
 };
 
-export const useGetCharactersInShop = (filters?: CharacterFilters): [CharacterInMarket[], boolean] => {
+export const useGetCharactersInShop = (): [CharacterInMarket[], boolean] => {
   const { characters, fetched } = useCharacterMarketState();
-  if (!filters) return [characters, !fetched];
-  const filtered = filterCharactersMarket(characters, filters);
+  const filtered = useFilterCharactersMarket(characters);
   return [filtered, !fetched];
 };

@@ -5,7 +5,7 @@ export const MAX_PRICE = 10000000 as const;
 export const INFORMATION_STEP = 0 as const;
 export const WALLET_INTERACTION_STEP = 1 as const;
 export const CONFIRMATION_STEP = 2 as const;
-export const MINTING_COST = 2 as const;
+export const MINTING_COST = 5000000 as const;
 export const MONEY_DECIMALS = 6 as const;
 
 export const SUCCESSFUL_MINT_REPONSE_MSG = "Character mint successful, use attached public facet to purchase" as const;
@@ -34,34 +34,44 @@ export const ENTERED = "entered" as const;
 export const EXITING = "exiting" as const;
 export const MILLISECONDS = 1000 as const;
 
-export const ITEM_CATEGORIES = {
-  all: [
-    "noseline",
-    "midBackground",
-    "mask",
-    "headPiece",
-    "hair",
-    "airReservoir",
-    "liquid",
-    "background",
-    "frontMask",
-    "clothing",
-    "forSale",
-    "equipped",
-  ],
-  allCategories: "allCategories",
-  noseline: "noseline",
-  midBackground: "midBackground",
-  mask: "mask",
-  headPiece: "headPiece",
-  hair: "hair",
-  airReservoir: "airReservoir",
-  liquid: "liquid",
+/********************** PROPERTIES *********************/
+export const ORIGIN = {
+  elphia: "Elphia",
+  farma: "Farma",
+  mount: "Mount",
+  arm: "Arm",
+  west: "West",
+  sage: "Sage",
+  mars: "Mars",
+  tempet: "Tempet",
+} as const;
+export const TITLE = {
+  citizen: "Citizen",
+  scavenger: "Scavenger",
+  bountyHunter: "Bounty Hunter",
+  stateBountyHunter: "State Bounty Hunter",
+  councilMember: "Council Member",
+} as const;
+
+export const CATEGORY = {
   background: "background",
-  frontMask: "frontMask",
-  clothing: "clothing",
-  forSale: "forSale",
-  equipped: "equipped",
+  patch: "patch",
+  hair: "hair",
+  headPiece: "headPiece",
+  mask: "mask",
+  perk1: "perk1",
+  perk2: "perk2",
+  filter1: "filter1",
+  filter2: "filter2",
+  garment: "garment",
+} as const;
+
+export const RARITY = {
+  common: "common",
+  uncommon: "uncommon",
+  rare: "rare",
+  epic: "epic",
+  legendary: "legendary",
 } as const;
 
 export const COLORS = ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF", "#0000006", "#3063A5"] as const;
@@ -71,17 +81,17 @@ export const SECTION = {
   INVENTORY: "inventory",
 } as const;
 
-export const CHARACTER_CATEGORIES = ["tempetScavenger", "forSale", "equipped"] as const;
-
 export const ASSET_TYPE = {
   CHARACTER: "character",
   ITEM: "item",
 };
 
+/***************************************************************************/
+
 export const AGORIC_LINK = "https://agoric.com/" as const;
 export const KRYHA_LINK = "https://kryha.io/" as const;
 
-export const MAX_CHARACTER_LENGTH = 16 as const;
+export const MAX_CHARACTER_LENGTH = 20 as const;
 export const SLIDER_TIME = 4.5 as const;
 export const PAGE_SIZE = 10 as const;
 export const ASSETS_PER_PAGE = 10 as const;
@@ -103,8 +113,16 @@ export const STORAGE_NODE_SPEC_INVENTORY = ":published.kread.inventory-" as cons
 
 export const isDevelopmentMode = process.env.NODE_ENV === ("development" as const);
 
-export const DOWNLOAD_CANVAS_WIDTH = 2500 as const;
-export const DOWNLOAD_CANVAS_HEIGHT = 2500 as const;
+export type Section = "items" | "characters";
+export const ITEM_MODE = "item" as const;
+export const MAIN_MODE = "main" as const;
+
+export const CHARACTER_SELECT_MODE = "character-select" as const;
+export const CATEGORY_MODE = "category" as const;
+
+export type InteractionMode = typeof ITEM_MODE | typeof MAIN_MODE | typeof CATEGORY_MODE | typeof CHARACTER_SELECT_MODE;
+export const CHARACTER_HEIGHT = 1190.5511 as const;
+export const CHARACTER_WIDTH = 841.8898 as const;
 
 export const networkConfigs = {
   mainnet: {
@@ -160,3 +178,5 @@ export const SELL_CHARACTER_INVITATION = "makeSellCharacterInvitation" as const;
 export const AGORIC_RPC = import.meta.env.VITE_RPC || ("http://127.0.0.1:26657" as const);
 
 export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;
+
+export const PINATA_GATEWAY = import.meta.env.VITE_PINATA_GATEWAY || "https://pink-defensive-jay-557.mypinata.cloud";

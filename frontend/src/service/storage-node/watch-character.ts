@@ -14,7 +14,7 @@ Commneted code is dapp-inter's implementation
 */
 export const watchCharacterInventory = (chainStorageWatcher: any, characterName: string, agoricDispatch: AgoricDispatch) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
-  const path = `published.kread.inventory-${characterName}`;
+  const path = `published.kread.character.inventory-${characterName}`;
 
   chainStorageWatcher.watchLatest(
     [Kind.Data, path],
@@ -25,9 +25,9 @@ export const watchCharacterInventory = (chainStorageWatcher: any, characterName:
         return;
       }
 
-      agoricDispatch({ type: "SET_TEST_CHARACTER", payload: value.map((i) => i[0]) });
+      agoricDispatch({ type: "SET_TEST_CHARACTER", payload: value.map((i: any) => i[0]) });
     },
-    (log) => {
+    (log: any) => {
       console.error("Error watching vbank kread character inventory", log);
     },
   );

@@ -1,8 +1,8 @@
-import { MAX_PRICE, MIN_PRICE } from "../constants";
-import { CharacterEquip, CharacterInMarket, Item, ItemCategory, ItemInMarket } from "../interfaces";
+import { Category, CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Rarity } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
-import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { getRarityString } from "../service";
+import { useFilters } from "../context/filter-context";
+import { uISTToIST } from "./math";
 
 export interface OfferFilters {
   description?: string;
@@ -10,230 +10,105 @@ export interface OfferFilters {
 }
 
 export interface ItemFilters {
-  categories: ItemCategory[];
+  categories: Category[];
+  rarity: Rarity[];
+  origins: Origin[];
   sort: string;
-  color: string;
+  colors: string;
   price?: { min: number; max: number };
-}
-
-export interface ItemsMarketFilters {
-  categories: string[];
-  sort: string;
-  price: { min: number; max: number };
-  color: string;
+  equippedTo?: string;
+  forSale?: boolean;
 }
 
 export interface CharacterFilters {
-  categories: string[];
+  titles: string[];
+  origins: string[];
   sort: string;
   price?: { min: number; max: number };
 }
 
-export interface CharactersMarketFilters {
-  category: string;
-  sorting: string;
-  price: { min: number; max: number };
-}
+export const useFilterItems = (items: Item[]): Item[] => {
+  const { origin, categories, rarity, colors, sort, equippedTo, forSale } = useFilters();
+  if (items.length === 0) return [];
 
-export const filterItems = (items: Item[], { categories, sort, color }: ItemFilters): Item[] => {
-  if (items.length === 0) return []; // Return empty array if there are no items to filter
+  const filteredOrigins = origin.length > 0 ? items.filter((item) => origin.includes(<Origin>item.origin.toLowerCase())) : items;
+  const filteredCategories = categories.length > 0 ? items.filter((item) => categories.includes(item.category)) : items;
+  const filteredRarity = rarity.length > 0 ? items.filter((item) => rarity.includes(getRarityString(item.rarity))) : items;
+  const filteredColors = colors ? items.filter((item) => item.colors.includes(colors)) : items;
+  const equipped = equippedTo ? items.filter((item) => item.equippedTo === equippedTo) : items;
+  const itemsForSale = forSale ? items.filter((item) => item.forSale) : items;
 
-  const [, setSearchParams] = useSearchParams();
+  const filteredItems = items.filter(
+    (item) =>
+      filteredOrigins.includes(item) &&
+      filteredCategories.includes(item) &&
+      filteredRarity.includes(item) &&
+      filteredColors.includes(item) &&
+      equipped.includes(item) &&
+      itemsForSale.includes(item),
+  );
 
-  useEffect(() => {
-    setSearchParams(
-      {
-        categories: categories.join(","),
-        sort,
-        color,
-      },
-      {
-        relative: "path",
-      },
-    );
-  }, [categories, sort, color]);
-
-  // TODO: ForSale and isEquipped to be moved from categories to separate filters?
-  const isInCategory = (item: Item, selectedCategories: string[] | undefined) => {
-    if (!selectedCategories || selectedCategories.length === 0) return true; // Return true if no categories are selected
-
-    if (selectedCategories.includes("allCategories")) return true; // Return true if all categories are selected
-
-    const isForSaleSelected = selectedCategories.includes("forSale");
-    const isEquippedSelected = selectedCategories.includes("equipped");
-
-    if (isForSaleSelected && !isEquippedSelected) {
-      // If "forSale" is selected and other categories are listed
-      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-      if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(item.category) && item.forSale;
-      }
-
-      // If only "forSale" is selected, return only for sale items
-      return item.forSale;
-    }
-
-    if (!isForSaleSelected && isEquippedSelected) {
-      // If "equipped" is selected and other categories are listed
-      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-      if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(item.category) && item.equippedTo1;
-      }
-
-      // If only "equipped" is selected, return only equipped items
-      return item.equippedTo;
-    }
-
-    // If only specific categories are selected (excluding "forSale" and "equipped")
-    const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-    if (otherSelectedCategories.length > 0) {
-      return otherSelectedCategories.includes(item.category);
-    }
-
-    return selectedCategories.includes(item.category);
-  };
-  const hasColor = (item: Item, selectedColor: string) =>
-    selectedColor ? item.colors.some((colorElement) => colorElement === selectedColor) : true;
-  const filteredItems = items.filter((item) => isInCategory(item, categories) && hasColor(item, color));
-
+  // Sorting the filtered items
   return sortItems(sort, filteredItems);
 };
 
-export const filterItemsInShop = (items: ItemInMarket[], { categories, sort, price, color }: ItemFilters): ItemInMarket[] => {
+export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
+  const { origin, categories, rarity, price, colors, sort } = useFilters();
   if (items.length === 0) return [];
 
-  const [, setSearchParams] = useSearchParams();
+  const filteredOrigins = origin.length > 0 ? items.filter((item) => origin.includes(<Origin>item.item.origin.toLowerCase())) : items;
+  const filteredCategories = categories.length > 0 ? items.filter((item) => categories.includes(item.item.category)) : items;
+  const filteredRarity = rarity.length > 0 ? items.filter((item) => rarity.includes(getRarityString(item.item.rarity))) : items;
+  const filteredColors = colors ? items.filter((item) => item.item.colors.includes(colors)) : items;
+  const filteredPrice = price
+    ? items.filter(({ sell }) => {
+        const priceValue = uISTToIST(Number(sell.price));
+        return priceValue > price.min && priceValue < price.max;
+      })
+    : items;
 
-  useEffect(() => {
-    setSearchParams(
-      {
-        categories: categories?.join(",") || "",
-        sort: sort || "",
-        color: color || "",
-      },
-      {
-        relative: "path",
-      },
-    );
-  }, [categories, sort, color]);
+  const filteredItems = items.filter(
+    (item) =>
+      filteredOrigins.includes(item) &&
+      filteredCategories.includes(item) &&
+      filteredRarity.includes(item) &&
+      filteredPrice.includes(item) &&
+      filteredColors.includes(item),
+  );
 
-  const isInCategory = ({ item }: ItemInMarket, selectedCategories: string[] | undefined) => {
-    if (!selectedCategories || selectedCategories.length === 0) return true;
-    if (selectedCategories.includes("allCategories")) return true;
-    return selectedCategories.includes(item.category);
-  };
-
-  const hasColor = ({ item }: ItemInMarket, itemColor: string) => {
-    return !itemColor || item.colors.includes(itemColor);
-  };
-
-  const filteredItems = items.filter((item) => isInCategory(item, categories) && hasColor(item, color));
-  const filterItemsByPrice = filteredItems.filter(({ sell }) => {
-    if (!price) return true;
-    return Number(sell.price) > price.min && Number(sell.price) < price.max;
-  });
-
-  return sortItemsMarket(sort, filterItemsByPrice); // Make sure to define sortItemsMarket function
+  return sortItemsMarket(sort, filteredItems); // Make sure to define sortItemsMarket function
 };
 
-export const filterCharacters = (characters: CharacterEquip[], { categories, sort }: CharacterFilters): CharacterEquip[] => {
+export const useFilterCharacters = (characters: ExtendedCharacter[]): ExtendedCharacter[] => {
+  const { origin, title, sort } = useFilters();
   if (characters.length === 0) return []; // Return empty array if there are no items to filter
 
-  const [, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    setSearchParams(
-      {
-        categories: categories.join(","),
-        sort,
-      },
-      {
-        relative: "path",
-      },
-    );
-  }, [categories, sort]);
-
-  const isInCategory = (character: CharacterEquip, selectedCategories: string[] | undefined) => {
-    if (!selectedCategories || selectedCategories.length === 0) return true; // Return true if no categories are selected
-
-    if (selectedCategories.includes("allCategories")) return true; // Return true if all categories are selected
-
-    const isForSaleSelected = selectedCategories.includes("forSale");
-    const isEquippedSelected = selectedCategories.includes("equipped");
-
-    if (isForSaleSelected && !isEquippedSelected) {
-      // If "forSale" is selected and other categories are listed
-      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-      if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(character.nft.type) && character.isForSale;
-      }
-
-      // If only "forSale" is selected, return only for sale items
-      return character.isForSale;
-    }
-
-    if (!isForSaleSelected && isEquippedSelected) {
-      // If "equipped" is selected and other categories are listed
-      const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-      if (otherSelectedCategories.length > 0) {
-        return otherSelectedCategories.includes(character.nft.type) && character.isEquipped;
-      }
-
-      // If only "equipped" is selected, return only equipped items
-      return character.isEquipped;
-    }
-
-    // If only specific categories are selected (excluding "forSale" and "equipped")
-    const otherSelectedCategories = selectedCategories.filter((category) => category !== "forSale" && category !== "equipped");
-
-    if (otherSelectedCategories.length > 0) {
-      return otherSelectedCategories.includes(character.nft.type);
-    }
-
-    return selectedCategories.includes(character.nft.type);
-  };
-
-  const filteredCharacters = characters.filter((character) => isInCategory(character, categories));
+  const filteredOrigins =
+    origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.nft.origin.toLowerCase())) : characters;
+  const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.nft.title)) : characters;
+  const filteredCharacters = characters.filter((character) => filteredOrigins.includes(character) && filteredTitles.includes(character));
 
   return sortCharacters(sort, filteredCharacters);
 };
 
-export const filterCharactersMarket = (
-  characters: CharacterInMarket[],
-  { categories, sort, price }: CharacterFilters,
-): CharacterInMarket[] => {
+// TODO: to update
+export const useFilterCharactersMarket = (characters: CharacterInMarket[]): CharacterInMarket[] => {
+  const { origin, title, sort, price } = useFilters();
   if (characters.length === 0) return [];
 
-  const [, setSearchParams] = useSearchParams();
+  const filteredOrigins =
+    origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.character.origin.toLowerCase())) : characters;
+  const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.character.title)) : characters;
+  const filteredPrice = price
+    ? characters.filter(({ sell }) => {
+        const priceValue = uISTToIST(Number(sell.price));
+        return priceValue > price.min && priceValue < price.max;
+      })
+    : characters;
 
-  useEffect(() => {
-    setSearchParams(
-      {
-        categories: categories?.join(",") || "",
-        sort: sort || "",
-      },
-      {
-        relative: "path",
-      },
-    );
-  }, [categories, sort]);
+  const filteredCharacters = characters.filter(
+    (character) => filteredOrigins.includes(character) && filteredTitles.includes(character) && filteredPrice.includes(character),
+  );
 
-  const isInCategory = ({ character }: CharacterInMarket, selectedCategories: string[] | undefined) => {
-    if (!character || !selectedCategories || selectedCategories.length === 0) return true;
-    if (selectedCategories.includes("allCategories")) return true;
-    return selectedCategories.includes(character.type);
-  };
-
-  const filteredCharacters = characters.filter((character) => isInCategory(character, categories));
-  const filterCharactersByPrice = filteredCharacters.filter(({ sell }) => {
-    if (!price) return true;
-    return Number(sell.price) > price.min && Number(sell.price) < price.max;
-  });
-
-  return sortCharactersMarket(sort, filterCharactersByPrice);
+  return sortCharactersMarket(sort, filteredCharacters);
 };

@@ -50,13 +50,13 @@ export const TestServiceUI = () => {
 
   const mintCharacterAddOffer = async () => {
     const instance = service.contracts.kread.instance;
-    const charBrand = service.tokenInfo.character.brand;
+    const istBrand = service.tokenInfo.ist.brand;
 
     mintCharacter({
       name: "C-MONEY",
       service: {
         kreadInstance: instance,
-        characterBrand: charBrand,
+        istBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
       callback: async () => {
@@ -216,6 +216,50 @@ export const TestServiceUI = () => {
     });
   };
 
+  const sellItemBatchAddOffer = async () => {
+    console.log(">>>>");
+    const instance = service.contracts.kread.instance;
+    const itemBrand = service.tokenInfo.item.brand;
+    const { forSale, equippedTo, ...item } = wallet.item[0];
+    const items = [];
+    const testItem = {
+      name: "AirTox: Fairy Dust Elite",
+      category: "garment",
+      functional: false,
+      description:
+        "This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.",
+      image: "https://ipfs.io/ipfs/QmShge9z81i5sRjgHUjH5EBwtKPvSRNap5JHbp4imLgJ4H",
+      thumbnail: "https://ipfs.io/ipfs/QmdVLuhUPRvpHzmERTSsChHBexAhc6TUK6SPHsGnqQ7QaM",
+      rarity: 65,
+      level: 0,
+      filtering: 0,
+      weight: 0,
+      sense: 0,
+      reserves: 0,
+      durability: 0,
+      colors: ["#B1A2A2", "#7B5B7B", "#968996", "#FFFFFF"],
+      artistMetadata: "",
+    };
+
+    for (let i = 1; i < 3; i++) {
+      items.push([{ ...item, name: item.name + " " + i }, BigInt(i)]);
+    }
+
+    marketService.sellItemBatch({
+      itemCollection: items,
+      pricePerItem: 100000000n,
+      service: {
+        kreadInstance: instance,
+        itemBrand,
+        makeOffer: service.walletConnection.makeOffer,
+        istBrand: service.tokenInfo.ist,
+      },
+      callback: async () => {
+        console.info("SellItem call settled");
+      },
+    });
+  };
+
   const buyItemAddOffer = async () => {
     const instance = service.contracts.kread.instance;
     const itemBrand = service.tokenInfo.item.brand;
@@ -247,6 +291,7 @@ export const TestServiceUI = () => {
     { text: "SELLCHAR", onClick: sellCharacterAddOffer },
     { text: "BUYCHAR", onClick: buyCharacterAddOffer },
     { text: "SELLITEM", onClick: sellItemAddOffer },
+    { text: "SELLITEMBATCH", onClick: sellItemBatchAddOffer },
     { text: "BUYITEM", onClick: buyItemAddOffer },
     // Add more buttons here
   ];

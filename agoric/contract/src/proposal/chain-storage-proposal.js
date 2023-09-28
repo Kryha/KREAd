@@ -112,6 +112,7 @@ const baseItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'patch',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -130,8 +131,9 @@ const baseItems = [
   },
   {
     name: 'AirTox: Fairy Dust Elite',
-    category: 'perk2',
+    category: 'mask',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -150,7 +152,29 @@ const baseItems = [
   },
   {
     name: 'AirTox: Fairy Dust Elite',
+    category: 'perk2',
+    functional: false,
+    origin: 'Elphia',
+    description:
+      'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
+    image:
+      'https://ipfs.io/ipfs/QmS5TvnX9PMobuME6bLuuDWR4avhGGeuHg7eAFfZAiLLZ1',
+    thumbnail:
+      'https://ipfs.io/ipfs/QmS1X4KRtcumk4PqjowgKsbMh2uN79wwUsYYKnakqr7FZn',
+    rarity: 18,
+    level: 0,
+    filtering: 0,
+    weight: 0,
+    sense: 0,
+    reserves: 0,
+    durability: 0,
+    colors: ['#B1A2A2', '#968996', '#FFFFFF'],
+    artistMetadata: '',
+  },
+  {
+    name: 'AirTox: Fairy Dust Elite',
     category: 'headPiece',
+    origin: 'Elphia',
     functional: false,
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
@@ -172,6 +196,7 @@ const baseItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'filter2',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -192,6 +217,7 @@ const baseItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'garment',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -212,6 +238,7 @@ const baseItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'hair',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -232,9 +259,9 @@ const baseItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'filter1',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
-    origin: 'elphia',
     image:
       'https://ipfs.io/ipfs/QmP7iMiQLRWy1fF8yLXR5xQg1kpEqzy19uwzEJxxZmGUjS',
     thumbnail:
@@ -253,6 +280,7 @@ const baseItems = [
     name: 'AirTox: Fairy Dust Elite',
     category: 'background',
     functional: false,
+    origin: 'Elphia',
     description:
       'This is an all-purpose air filter and air temperature regulator with minimal water analyzing technology. Suitable for warm hostile places, weather, and contaminated areas. Not so good for the dead zone.',
     image:
@@ -278,11 +306,42 @@ const contractInfo = {
   // from Dec 14 office hours
   // https://github.com/Agoric/agoric-sdk/issues/6454#issuecomment-1351949397
   bundleID:
-    'b1-3c089ffa31bb785a63d871d8f6725896d45593b4bd4371336e2b785a8d258e97dbee474ce11563afc86a1245e5c2a9d6490139f13d5e8e3198f4fddc485d006a',
+    'b1-f8e879e8a013902510174f72cc310d74eb5297a4c27b33cd85b7415cb39bb977b3d89997fa05ba8bc6229de6556b5f9718df86d26b5920e93b88424612c77454',
 };
 
 const fail = (reason) => {
   throw reason;
+};
+
+const reserveThenGetNamePaths = async (nameAdmin, paths) => {
+  /**
+   * @param {ERef<import('@agoric/vats').NameAdmin>} nextAdmin
+   * @param {string[]} path
+   */
+  const nextPath = async (nextAdmin, path) => {
+    const [nextName, ...rest] = path;
+    assert.typeof(nextName, 'string');
+
+    // Ensure we wait for the next name until it exists.
+    await E(nextAdmin).reserve(nextName);
+
+    if (rest.length === 0) {
+      // Now return the readonly lookup of the name.
+      const nameHub = E(nextAdmin).readonly();
+      return E(nameHub).lookup(nextName);
+    }
+
+    // Wait until the next admin is resolved.
+    const restAdmin = await E(nextAdmin).lookupAdmin(nextName);
+    return nextPath(restAdmin, rest);
+  };
+
+  return Promise.all(
+    paths.map(async (path) => {
+      Array.isArray(path) || Fail`path ${path} is not an array`;
+      return nextPath(nameAdmin, path);
+    }),
+  );
 };
 
 /**
@@ -305,16 +364,62 @@ const executeProposal = async (powers) => {
       zoe,
       startUpgradable,
       chainTimerService,
-      agoricNamesAdmin,
-      agoricNames,
+      namesByAddressAdmin,
     },
     // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
+    // FIXME: Remove?
     produce: { kreadKit },
+    brand: {
+      produce: {
+        KREAdCHARACTER: produceCharacterBrand,
+        KREAdITEM: produceItemBrand,
+      },
+    },
+    issuer: {
+      consume: { IST: istIssuerP },
+      produce: {
+        KREAdCHARACTER: produceCharacterIssuer,
+        KREAdITEM: produceItemIssuer,
+      },
+    },
     instance: {
       // @ts-expect-error bakeSaleKit isn't declared in vats/src/core/types.js
       produce: { [contractInfo.instanceName]: kread },
     },
   } = powers;
+
+  const royaltyAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+  const platformFeeAddr = 'agoric1d33wj6vgjfdaefs6qzda8np8af6qfdzc433dsu';
+
+  const [royaltyDepositFacet] = await reserveThenGetNamePaths(
+    namesByAddressAdmin,
+    [[royaltyAddr, 'depositFacet']],
+  );
+  const [platformFeeDepositFacet] = await reserveThenGetNamePaths(
+    namesByAddressAdmin,
+    [[platformFeeAddr, 'depositFacet']],
+  );
+
+  const istIssuer = await istIssuerP;
+  const brand = await E(istIssuer).getBrand();
+
+  const royaltyRate = {
+    numerator: 10n,
+    denominator: 100n,
+  };
+  const platformFeeRate = {
+    numerator: 3n,
+    denominator: 100n,
+  };
+
+  const mintRoyaltyRate = {
+    numerator: 85n,
+    denominator: 100n,
+  };
+  const mintPlatformFeeRate = {
+    numerator: 15n,
+    denominator: 100n,
+  };
 
   const chainStorageSettled =
     (await chainStorage) || fail(Error('no chainStorage - sim chain?'));
@@ -326,59 +431,60 @@ const executeProposal = async (powers) => {
   const settledTimer = await chainTimerService;
   const clock = await E(settledTimer).getClock();
 
+  //FIXME: update this based privageargs/terms
   const kreadConfig = harden({
     clock,
     seed: 303,
   });
-  const istIssuer = await E(agoricNames).lookup('issuer', 'IST');
 
   const privateArgs = harden({ powers: kreadPowers, ...kreadConfig });
 
   const installation = await E(zoe).installBundleID(contractInfo.bundleID);
   const issuers = harden({ Money: istIssuer });
-  // TODO: add terms indicating the keywordRecords used within our offers
-  const noTerms = harden({});
+  const terms = harden({
+    royaltyRate,
+    platformFeeRate,
+    mintRoyaltyRate,
+    mintPlatformFeeRate,
+    royaltyDepositFacet,
+    platformFeeDepositFacet,
+    paymentBrand: brand,
+    mintFee: 30000000n,
+    assetNames: {
+      character: 'KREAdCHARACTER',
+      item: 'KREAdITEM',
+    },
+    minUncommonRating: 20,
+  });
 
-  const { instance, creatorFacet, publicFacet } = await E(startUpgradable)({
+  const { instance, creatorFacet } = await E(startUpgradable)({
     installation,
     label: 'KREAd',
     issuers,
     privateArgs,
-    noTerms,
+    terms,
   });
 
   // Get board ids for instance and assets
   const boardId = await E(board).getId(instance);
+  //FIXME: update this based no getTerms
   const {
-    character: { issuer: characterIssuer, brand: characterBrand },
-    item: { issuer: itemIssuer, brand: itemBrand },
-    payment: { issuer: tokenIssuer, brand: tokenBrand },
-  } = await E(publicFacet).getTokenInfo();
+    issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
+    brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
+  } = await E(zoe).getTerms(instance);
 
+  //FIXME: remove these infavour of terms and getting them differently
   const [
     CHARACTER_BRAND_BOARD_ID,
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
     ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
   ] = await Promise.all([
     E(board).getId(characterBrand),
     E(board).getId(characterIssuer),
     E(board).getId(itemBrand),
     E(board).getId(itemIssuer),
-    E(board).getId(tokenBrand),
-    E(board).getId(tokenIssuer),
   ]);
-
-  const assetBoardIds = {
-    character: {
-      issuer: CHARACTER_ISSUER_BOARD_ID,
-      brand: CHARACTER_BRAND_BOARD_ID,
-    },
-    item: { issuer: ITEM_ISSUER_BOARD_ID, brand: ITEM_BRAND_BOARD_ID },
-    paymentFT: { issuer: TOKEN_ISSUER_BOARD_ID, brand: TOKEN_BRAND_BOARD_ID },
-  };
 
   await E(creatorFacet).publishKreadInfo(
     boardId,
@@ -386,44 +492,23 @@ const executeProposal = async (powers) => {
     CHARACTER_ISSUER_BOARD_ID,
     ITEM_BRAND_BOARD_ID,
     ITEM_ISSUER_BOARD_ID,
-    TOKEN_BRAND_BOARD_ID,
-    TOKEN_ISSUER_BOARD_ID,
   );
 
   await E(creatorFacet).initializeBaseAssets(baseCharacters, baseItems);
-
+  await E(creatorFacet).initializeCharacterNamesEntries();
   await E(creatorFacet).initializeMetrics();
-
-  // TODO: Get the most recent state of metrics from the storage node and send it to the contract
-  // const data = {};
-  // const restoreMetricsInvitation = await E(
-  //   creatorFacet,
-  // ).makeRestoreMetricsInvitation();
-  // await E(zoe).offer(restoreMetricsInvitation, {}, {}, data);
 
   // Revive seat exit subscribers after upgrade
   await E(creatorFacet).reviveMarketExitSubscribers();
 
-  // Log board ids for use in frontend constants
-  console.log(`KREAD BOARD ID: ${boardId}`);
-  for (const [key, value] of Object.entries(assetBoardIds)) {
-    console.log(`${key.toUpperCase()} BRAND BOARD ID: ${value.brand}`);
-    console.log(`${key.toUpperCase()} ISSUER BOARD ID: ${value.issuer}`);
-  }
-
-  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
   kread.resolve(instance);
 
-  const kindAdmin = (kind) => E(agoricNamesAdmin).lookupAdmin(kind);
+  produceCharacterIssuer.resolve(characterIssuer);
+  produceCharacterBrand.resolve(characterBrand);
+  produceItemIssuer.resolve(itemIssuer);
+  produceItemBrand.resolve(itemBrand);
 
-  await E(kindAdmin('issuer')).update('KREAdCHARACTER', characterIssuer);
-  await E(kindAdmin('brand')).update('KREAdCHARACTER', characterBrand);
-
-  await E(kindAdmin('issuer')).update('KREAdITEM', itemIssuer);
-  await E(kindAdmin('brand')).update('KREAdITEM', itemBrand);
-
-  console.log('ASSETS ADDED TO AGORIC NAMES');
-  // Share instance widely via E(agoricNames).lookup('instance', <instance name>)
+  console.log('CONTRACT INIT SUCCESS!');
 };
 
 harden(executeProposal);

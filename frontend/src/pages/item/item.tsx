@@ -34,7 +34,7 @@ export const ItemPage: FC = () => {
         items={character.equippedItems}
         size="extraLarge"
         isZoomed
-        isClothing={category === "clothing"}
+        isClothing={category === "garment"}
       />
       <MenuCard
         title={text.param.categories[category]}

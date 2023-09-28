@@ -2,11 +2,9 @@
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
-import { CHARACTER_IDENTIFIER, isDevelopmentMode, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
-import { useDataMode } from "../hooks";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
 import { fetchChainInfo } from "./util";
-import { ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
-import { fetchFromVStorage } from "../service/storage-node/fetch-from-vstorage";
+import { ChainStorageWatcher, makeAgoricChainStorageWatcher, AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 import { watchMarketplaceMetrics } from "../service/storage-node/watch-general";
 
 const initialState: AgoricState = {
@@ -168,7 +166,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchInstance = async () => {
-      const instances = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.instance");
+      const instances = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
       // TODO: remove publicFacet from state
@@ -176,7 +174,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchTokenInfo = async () => {
-      const agoricNameBrands = await fetchFromVStorage(chainStorageWatcher.marshaller, "data/published.agoricNames.brand");
+      const agoricNameBrands = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.brand"]);
       const payload: TokenInfo = {
         character: {
           issuer: undefined,
@@ -218,7 +216,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
       try {
-        const { rpc, chainName } = await fetchChainInfo(networkConfigs.localDevnet.url);
+        const { rpc, chainName } = await fetchChainInfo(networkConfigs.emerynet.url);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
           console.error(e);
           return;
@@ -227,7 +225,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         connectKeplr();
         fetchInstance();
         fetchTokenInfo();
-        watchMarketplaceMetrics(chainStorageWatcher, dispatch)
+        // watchMarketplaceMetrics(chainStorageWatcher, dispatch)
       } catch (e) {
         if (isCancelled) return;
         console.error(e);
@@ -256,14 +254,9 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
 export const useAgoricState = (): AgoricState => {
   const state = useContext(Context);
-  const { isMockData } = useDataMode();
 
   if (state === undefined) {
     throw new Error("useAgoricState can only be called inside a ServiceProvider.");
-  }
-
-  if (isDevelopmentMode && isMockData) {
-    state.isLoading = false;
   }
 
   return state;

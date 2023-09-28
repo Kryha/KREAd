@@ -1,7 +1,7 @@
 import { Badge, ButtonText, CharacterImgs, Input, MenuItemName, PrimaryButton } from "../../components";
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
-import { breakpoints, color, margins } from "../../design";
+import { breakpoints, color, fontSize, margins } from "../../design";
 import { Spinner } from "../../components/content-loader/styles";
 
 interface ViewProps {
@@ -17,10 +17,9 @@ export const Exclamation = styled(ExclamationIcon)`
 `;
 
 export const Tick = styled(TickIcon)`
-  position: absolute;
+  position: relative;
   right: 44px;
   margin-right: 20px;
-  margin-bottom: 20px;
   height: 10px;
   width: 20px;
 `;
@@ -33,23 +32,22 @@ export const FormCard = styled.div<ViewProps>`
   display: flex;
   flex-direction: column;
   padding: ${margins.medium};
-  background: ${color.offWhite};
-  flex: 1 1 auto;
-  border: none;
-  border-radius: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+  background: ${color.lightGrey};
+  border: 1px solid ${color.grey};
+  border-radius: ${margins.medium};
+  margin-top: ${margins.big};
+  margin-bottom: ${margins.big};
+  width: 550px;
 
-  @media (min-width: 768px) {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid ${color.grey};
-    border-radius: ${margins.medium};
-    margin-top: ${margins.big};
-    margin-bottom: ${margins.big};
-    min-width: fit-content;
-    max-width: max-content;
+  @media screen and (max-width: ${breakpoints.desktop}) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media screen and (max-width: ${breakpoints.mobile}) {
+    margin: auto;
+    height: 100%;
+    border-radius: 0;
   }
 `;
 
@@ -78,7 +76,8 @@ export const FormFields = styled.div`
   position: relative;
   ${Input} {
     width: 100%;
-    padding-right: 75px;
+    padding-right: 10px;
+    padding-bottom: 4px;
   }
   ${ButtonText} {
     margin-top: ${margins.mini};
@@ -130,6 +129,7 @@ export const InputWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-top: 8px;
 `;
 
 export const StepContainer = styled.div`
@@ -137,21 +137,17 @@ export const StepContainer = styled.div`
 `;
 
 export const StepText = styled(ButtonText)`
-  font-size: ${margins.small};
+  font-size: ${fontSize.subTitle};
   line-height: 20.5px;
 `;
 
 export const StepWrapper = styled.div<ActiveProps>`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: ${margins.mini};
-
-  @media (min-width: ${breakpoints.tablet}) {
-    flex-direction: row;
-  }
+  justify-content: space-between;
   padding: ${margins.small};
-  background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: 24px;
   ${StepText} {
@@ -164,7 +160,7 @@ export const StepWrapper = styled.div<ActiveProps>`
     background: transparent;
   }
   ${({ active }): string => {
-    return active
+    return active === true
       ? `
       background: ${color.white};
         `
@@ -208,6 +204,8 @@ export const NumberContainer = styled.div<ActiveProps>`
   }};
   ${Tick} {
     margin: 0;
+    position: relative;
+    right: 0;
     path {
       stroke: ${color.white};
     }
@@ -250,16 +248,15 @@ export const InfoContainer = styled.div`
 
 export const GeneralInfo = styled.div<ActiveProps>`
   display: flex;
-  justify-content: center;
   box-sizing: border-box;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: ${margins.small};
   width: 100%;
   background: ${color.white};
   border: 1px solid ${color.darkGrey};
   border-radius: 24px;
-  min-height: 88px;
   ${StepText} {
     margin: 0 ${margins.small};
   }
@@ -282,15 +279,10 @@ export const GeneralInfo = styled.div<ActiveProps>`
 
 export const PricingContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: ${margins.mini};
-  min-height: 88px;
-  justify-content: center;
-
-  @media (min-width: ${breakpoints.tablet}) {
-    flex-direction: row;
-  }
 `;
 
 export const ButtonWrapper = styled.div`

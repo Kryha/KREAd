@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { useMatch, useResolvedPath } from "react-router-dom";
-import { NavTabs, NavTitle, Tab, NavTab, ActiveLine } from "./styles";
+import { useMatch } from "react-router-dom";
+import { ActiveLine, NavTab, NavTabs, NavTitle, Tab } from "./styles";
 
 interface NavigationTabProps {
   route: string;
@@ -8,8 +8,7 @@ interface NavigationTabProps {
 }
 
 export const NavigationTab: FC<NavigationTabProps> = ({ route, title }) => {
-  const resolved = useResolvedPath(route);
-  const match = useMatch({ path: resolved.pathname, end: true });
+  const match = useMatch({ path: route, end: true });
   return (
     <NavTabs>
       <Tab active={!!match}>

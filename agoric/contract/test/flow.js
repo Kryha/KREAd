@@ -4,28 +4,54 @@ import { defaultItems } from './items.js';
 
 const mintCharacter = {
   expected: {
-    want: { name: 'TestCharacterExpectedFlow' },
+    offerArgs: { name: 'TestCharacter' },
+    give: { Price: 30000000n },
     message: text.characterMintSuccess,
   },
-  duplicateName: {
-    want: { name: 'TestCharacterExpectedFlow' },
-    message: errors.nameTaken('TestCharacterExpectedFlow'),
+  feeTooLow: {
+    offerArgs: { name: 'TestCharacterBadFlow' },
+    give: { Price: 10000000n },
+    message: errors.mintFeeTooLow,
   },
-  noWantInOffer: {
-    want: undefined,
-    message: errors.noWantInOffer,
+  duplicateName: {
+    offerArgs: { name: 'TestCharacter' },
+    give: { Price: 30000000n },
+    message: errors.nameTaken('TestCharacter'),
+  },
+  noArgs: {
+    offerArgs: undefined,
+    give: { Price: 30000000n },
+    message: errors.noNameArg,
   },
   noName: {
-    want: { name: undefined },
+    offerArgs: { name: undefined },
+    give: { Price: 30000000n },
     message: errors.noNameArg,
   },
   noAvailability: {
-    want: { name: 'TestCharacterBadFlow' },
+    offerArgs: { name: 'TestCharacterBadFlow' },
+    give: { Price: 30000000n },
     message: errors.allMinted,
   },
   extraProperties: {
-    want: { name: 'TestCharacter', bloodType: 'blue', married: true },
+    offerArgs: { name: 'TestCharacter', bloodType: 'blue', married: true },
+    give: { Price: 30000000n },
     message: '',
+  },
+  invalidName1: {
+    offerArgs: { name: '012345678901234567890123' },
+    give: { Price: 30000000n },
+    message: errors.invalidName,
+  },
+  invalidName2: {
+    offerArgs: { name: 'TestCharacter!' },
+    give: { Price: 30000000n },
+    message: errors.invalidName,
+  },
+  invalidName3: {
+    offerArgs: { name: 'names' },
+    give: { Price: 30000000n },
+    message: errors.invalidName,
   },
 };
 
@@ -48,7 +74,7 @@ const mintItem = {
 };
 
 const inventory = {
-  characterName: 'TestCharacterExpectedFlow',
+  characterName: 'TestCharacter',
   unequip: {
     message: text.unequipSuccess,
   },
@@ -60,7 +86,7 @@ const inventory = {
 const market = {
   bob: {
     give: {
-      character: 'TestCharacterExpectedFlow',
+      character: 'TestCharacter',
     },
     want: {
       item: 'hair',
@@ -73,7 +99,7 @@ const market = {
       payment: 20n,
     },
     want: {
-      character: 'TestCharacterExpectedFlow',
+      character: 'TestCharacter',
     },
   },
 };

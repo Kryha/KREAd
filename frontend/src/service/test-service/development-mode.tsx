@@ -10,7 +10,6 @@ import { css } from "@emotion/react";
 import { Diamond } from "../../components/price-in-ist/styles";
 import { Tick } from "../../pages/buy/styles";
 import { DevIcon } from "../../assets";
-import { DataModeSelector } from "../../components/data-mode-selector/data-mode-selector";
 
 interface ModalProps {
   isOpen: boolean;
@@ -121,9 +120,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   return (
     <ModalWrapper isOpen={isOpen} onClose={onClose}>
       <ModalContainer ref={modalRef} height={height}>
-        <ModalHeader>
-          <DataModeSelector />
-        </ModalHeader>
+        <ModalHeader></ModalHeader>
         <ModalContents>
           {buttonLinks.map((button, index) => (
             <ModalContent
@@ -182,6 +179,7 @@ const ModalContainer = styled.div<ViewProps>`
   display: flex;
   flex-direction: column;
   padding: ${margins.medium};
+  width: 250px;
   ${({ height }): string => `max-height: ${height - 250}px;`};
 
   &.open {

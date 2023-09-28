@@ -5,8 +5,8 @@ import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { OverviewContainer } from "../../pages/inventory/styles";
 import { Overlay } from "../atoms";
 import { fadeOut, fadeUp } from "../atoms/animations";
-import { CharacterWrapper } from "../character-card/styles";
 import { EmptyCardWrapper } from "../empty-card/styles";
+import { CharacterWrapper } from "../character-card/styles";
 
 interface AnimationProps {
   entering?: boolean;

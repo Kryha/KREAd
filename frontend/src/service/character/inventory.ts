@@ -1,5 +1,6 @@
 import { makeCopyBag } from "@agoric/store";
 import { Character, Item } from "../../interfaces";
+import { urlToCid } from "../../util/other";
 
 // TODO: Use makeOffer status callback for errors
 interface UnequipItem {
@@ -20,8 +21,9 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
   const charBrand = service.characterBrand;
   const itemBrand = service.itemBrand;
   const wantKey = character.keyId == 2 ? 1 : 2;
-  const characterGive = { ...character, id: Number(character.id) };
-  const characterWant = { ...character, id: Number(character.id), keyId: wantKey };
+  const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
+  const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image), keyId: wantKey };
+  const itemWant: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
 
   const spec = {
     source: "contract",
@@ -40,7 +42,7 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     },
     Item: {
       brand: itemBrand,
-      value: makeCopyBag([[item, 1n]]),
+      value: makeCopyBag([[itemWant, 1n]]),
     },
   };
 
@@ -186,6 +188,8 @@ interface SwapItems {
 }
 
 const swapItems = async ({ giveItem, wantItem, character, service, callback }: SwapItems): Promise<void> => {
+  console.error("This feature is not implemented yet :)")
+  return;
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
   const itemBrand = service.itemBrand;

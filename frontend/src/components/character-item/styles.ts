@@ -9,7 +9,7 @@ export const InfoContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: ${margins.mini};
-  padding: 0px;
+  padding: 0;
   margin-right: ${margins.medium};
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
@@ -73,16 +73,16 @@ export const ImageCard = styled.div`
   box-sizing: border-box;
   border-radius: ${margins.medium};
   border: 1px solid ${color.grey};
-  width: 80px;
-  height: 80px;
-  min-width: 80px;
+  width: 120px;
+  height: 120px;
+  min-width: 120px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: ${margins.small};
   ${CharacterWrapper} {
-    left: 15px;
+    //left: 15px;
   }
 `;
 
@@ -91,13 +91,13 @@ export const InfoWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0px;
+  padding: 0;
   width: 100%;
   z-index: 500;
 `;
 
 export const Divider = styled.div`
-  height: 0px;
+  height: 0;
   width: 24px;
   border: 0.5px solid #d0d0d0;
   transform: rotate(90deg);
@@ -122,7 +122,7 @@ export const SubTitleContainer = styled.div`
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0px;
+  padding: 0;
   gap: ${margins.medium};
   justify-content: space-between;
   width: 100%;

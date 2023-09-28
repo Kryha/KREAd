@@ -20,7 +20,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
   if (!character) return <ErrorView />;
 
   const equipNewCharacter = () => {
-    equipCharacter.mutate({ id: character.id });
+    equipCharacter.mutate({ id: character.id.toString() });
   };
 
   if (equipCharacter.isSuccess) return <Navigate to={routes.character} />;

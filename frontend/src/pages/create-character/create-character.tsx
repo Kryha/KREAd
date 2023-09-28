@@ -18,11 +18,13 @@ export const CreateCharacter: FC = () => {
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [mintedCharacter, setMintedCharacter] = useState<ExtendedCharacter>();
-  const [characterData, setCharacterData] = useState<CharacterCreation>({ name: "" });
+  const [characterData, setCharacterData] = useState<CharacterCreation>({
+    name: "",
+  });
   const [myCharacters, isLoadingCharacters] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
-  const mobile = useIsMobile(breakpoints.tablet);
+  const mobile = useIsMobile(breakpoints.desktop);
 
   // TODO: Implement wallet listener for cases where the user doesn't approve the mint
   // const [isWalletError, setIsWalletError] = useState<boolean>(false);

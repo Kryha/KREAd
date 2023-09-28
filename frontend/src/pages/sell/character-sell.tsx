@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
-import { ErrorView, FadeInOut } from "../../components";
+import { ErrorView } from "../../components";
 import { SELL_CHARACTER_DESCRIPTION } from "../../constants";
-import { CharacterDetailSection } from "../../containers/detail-section";
 import { useMyCharacter, useOffers, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
@@ -12,10 +11,13 @@ export const CharacterSell = () => {
   const { id } = useParams<"id">();
   const idString = String(id);
 
-  const sellCharacter = useSellCharacter(idString);
-  const [character] = useMyCharacter(idString);
+  const sellCharacter = useSellCharacter(Number(idString));
+  const [character] = useMyCharacter(Number(idString));
   const [characterCopy] = useState(character);
-  const offers = useOffers({ description: SELL_CHARACTER_DESCRIPTION, status: "pending" });
+  const offers = useOffers({
+    description: SELL_CHARACTER_DESCRIPTION,
+    status: "pending",
+  });
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
 
@@ -48,10 +50,6 @@ export const CharacterSell = () => {
         successLong: text.store.characterSuccessfullyPlacedInShop,
         check: text.store.goToInventory,
       }}
-    >
-      <FadeInOut show>
-        <CharacterDetailSection character={characterCopy} showToast={() => ({})} />
-      </FadeInOut>
-    </Sell>
+    />
   );
 };

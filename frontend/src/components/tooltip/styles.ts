@@ -44,7 +44,8 @@ export const TooltipContent = styled.div`
     }
   }
   &.top {
-    top: calc(${margins.mini} * -1);
+    top: calc(160px * -1);
+    transform: translateX(0) translateY(0);
   }
   &.bottom {
     bottom: calc(${margins.mini} * -1);

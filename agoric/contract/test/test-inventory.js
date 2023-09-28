@@ -164,9 +164,11 @@ test.serial('| INVENTORY - Unequip already unequipped item', async (t) => {
   };
 
   const userSeat = await E(zoe).offer(unequipInvitation, proposal, payment);
-  const result = await E(userSeat).getOfferResult();
-
-  t.deepEqual(result.substring(0, 19), 'Swap assets error: ');
+  await t.throwsAsync(
+    E(userSeat).getOfferResult(),
+    Error.message,
+    errors.rearrangeError,
+  );
 
   const characterPayout = await E(userSeat).getPayout('CharacterKey1');
   purses.character.deposit(characterPayout);
@@ -369,6 +371,7 @@ test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
     name: 'New item',
     category: 'hair',
     thumbnail: '',
+    origin: 'Tempet',
     description: '',
     functional: false,
     rarity: 65,
@@ -429,10 +432,12 @@ test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
     CharacterKey1: purses.character.withdraw(characterKeyAmount),
     Item: purses.item.withdraw(hairAmount),
   };
-
   const userSeat = await E(zoe).offer(invitation, proposal, payment);
-  const result = await E(userSeat).getOfferResult();
-  t.deepEqual(result, errors.duplicateCategoryInInventory);
+  await t.throwsAsync(
+    E(userSeat).getOfferResult(),
+    Error.message,
+    errors.duplicateCategoryInInventory,
+  );
 
   const characterPayout = await E(userSeat).getPayout('CharacterKey1');
   const itemPayout = await E(userSeat).getPayout('Item');
@@ -684,6 +689,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
       ],
     ]),
   );
+
   const hairItemGive = AmountMath.make(
     contractAssets.item.brand,
     hairItemGiveCopyBagAmount,
@@ -694,7 +700,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
   );
   const clothingItemWantValue = characterInventory.items
     .map((i) => i[0])
-    .find((item) => item.rarity < 79);
+    .find((item) => item.rarity < 59);
   const clothingItemWantCopyBagAmount = makeCopyBag(
     harden([[clothingItemWantValue, 1n]]),
   );
@@ -733,9 +739,11 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
   };
 
   const userSeat = await E(zoe).offer(invitation, proposal, payment);
-  const result = await E(userSeat).getOfferResult();
-
-  t.deepEqual(result, errors.duplicateCategoryInInventory);
+  await t.throwsAsync(
+    E(userSeat).getOfferResult(),
+    Error.message,
+    errors.duplicateCategoryInInventory,
+  );
 
   const itemPayout = await E(userSeat).getPayout('Item1');
   const characterPayout = await E(userSeat).getPayout('CharacterKey1');
@@ -757,7 +765,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
     characterName,
   );
   t.deepEqual(
-    updatedInventory.items.map((i) => i[0]).find((item) => item.rarity < 79),
+    updatedInventory.items.map((i) => i[0]).find((item) => item.rarity < 59),
     clothingItemWantValue,
     'Clothing item still in inventory',
   );

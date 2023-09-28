@@ -2,23 +2,28 @@ import { FadeInOut } from "../fade-in-out";
 import { DetailContainer } from "../../pages/shop/styles";
 import { ItemDetailSection } from "../../containers/detail-section";
 import { Overlay } from "../atoms";
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { text } from "../../assets";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { routes } from "../../navigation";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
-import { Item, ItemCategory } from "../../interfaces";
+import { Item } from "../../interfaces";
 
 interface ItemDetailsInventoryProps {
   item: Item;
-  selectedItem: { name: string; category: ItemCategory | undefined };
-  selectItem: (name: string, category: ItemCategory | undefined) => void;
+  selectedItem: {
+    name: string;
+    category: string;
+    characterName: string | undefined;
+  };
+  selectItem: (name: string, category: string, characterName: string | undefined) => void;
 }
 export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, selectedItem, selectItem }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [close, setClose] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const equipItem = useEquipItem();
@@ -36,14 +41,17 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
   };
 
   const sellAsset = () => {
-    navigate(`${routes.sellItem}/${item.category}/${item.name}`);
+    navigate(`${routes.sellItem}/${item.category}/${item.name}`, { state: location });
   };
 
   const assetDetailActions = () => {
-    if (item.equippedTo) {
+    if (item.equippedTo !== "") {
       return { primary: { text: text.item.unequip, onClick: unequipAsset } };
-    } else if (item.forSale) {
-      return { primary: { text: text.item.equip, onClick: equipAsset }, secondary: { text: text.item.sell, onClick: sellAsset } };
+    } else {
+      return {
+        primary: { text: text.item.equip, onClick: equipAsset },
+        secondary: { text: text.item.sell, onClick: sellAsset },
+      };
     }
   };
 
@@ -56,7 +64,7 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
               item={item}
               actions={{
                 onClose: () => {
-                  selectItem("", undefined);
+                  selectItem("", "", undefined);
                   setClose(true);
                 },
                 primary: assetDetailActions()?.primary,

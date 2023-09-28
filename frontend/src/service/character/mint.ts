@@ -1,11 +1,12 @@
-import { makeCopyBag } from "@agoric/store";
+import { MINTING_COST } from "../../constants";
+
 // TODO: Use makeOffer status callback for errors
 
 interface MintCharacter {
   name: string;
   service: {
     kreadInstance: any;
-    characterBrand: any;
+    istBrand: any;
     makeOffer: any;
   };
   callback: () => Promise<void>;
@@ -13,23 +14,23 @@ interface MintCharacter {
 
 export const mintCharacter = async ({ name, service, callback }: MintCharacter): Promise<void> => {
   const instance = service.kreadInstance;
-  const charBrand = service.characterBrand;
-
   const spec = {
     source: "contract",
     instance,
     publicInvitationMaker: "makeMintCharacterInvitation",
   };
 
-  const want = {
-    Asset: { brand: charBrand, value: makeCopyBag(harden([[{ name: name }, 1n]])) },
+  const offerArgs = {
+    name: name,
   };
+
+  const give = { Price: { brand: service.istBrand, value: BigInt(MINTING_COST) } };
 
   const proposal = {
-    want,
+    give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
+  service.makeOffer(spec, proposal, offerArgs, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
     }
