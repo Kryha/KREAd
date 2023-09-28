@@ -12,6 +12,8 @@ import {
   baseItems,
   marketplaceListingsCommon,
   marketplaceListingsUncommon,
+  marketplaceListingsRare,
+  marketplaceListingsLegendary,
 } from './base-inventory.js';
 
 import '@agoric/governance/src/types-ambient.js';
@@ -333,8 +335,10 @@ export const startKread = async (powers, config) => {
 
   const brand = await E(Money).getBrand();
 
-  const marketPlaceAmountCommon = AmountMath.make(brand, 5000000n);
-  const marketPlaceAmountUncommon = AmountMath.make(brand, 10000000n);
+  const marketplaceAmountCommon = AmountMath.make(brand, 1000000n);
+  const marketplaceAmountUncommon = AmountMath.make(brand, 2000000n);
+  const marketplaceAmountRare = AmountMath.make(brand, 4000000n);
+  const marketplaceAmountLegendary = AmountMath.make(brand, 8000000n);
 
   trace('awaiting KREAd initialization');
   await Promise.all([
@@ -343,12 +347,20 @@ export const startKread = async (powers, config) => {
     E(creatorFacet).initializeCharacterNamesEntries(),
     E(creatorFacet).reviveMarketExitSubscribers(),
     E(creatorFacet).publishItemCollection(
-      marketPlaceAmountCommon,
+      marketplaceAmountCommon,
       marketplaceListingsCommon,
     ),
     E(creatorFacet).publishItemCollection(
-      marketPlaceAmountUncommon,
+      marketplaceAmountUncommon,
       marketplaceListingsUncommon,
+    ),
+    E(creatorFacet).publishItemCollection(
+      marketplaceAmountRare,
+      marketplaceListingsRare,
+    ),
+    E(creatorFacet).publishItemCollection(
+      marketplaceAmountLegendary,
+      marketplaceListingsLegendary,
     ),
   ]);
 
