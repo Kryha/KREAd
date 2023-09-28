@@ -217,6 +217,7 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
   const itemBrand = service.tokenInfo.item.brand;
 
   return useMutation(async (body: { item: Item }) => {
+    console.log(body)
     if (!character || !body.item) {
       console.error("Could not find item or character");
       return;
@@ -224,12 +225,11 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
     // FIXME: add character type
     const characterInWallet = charactersInWallet.find((walletEntry: any) => walletEntry.id == character.nft.id);
 
-    if (!body.item) return;
-
     userStateDispatch({ type: "START_INVENTORY_CALL" });
 
     const { forSale, equippedTo, activity, ...itemToEquip } = body.item;
 
+    console.log(itemToEquip)
     await inventoryService.equipItem({
       character: characterInWallet,
       item: itemToEquip,

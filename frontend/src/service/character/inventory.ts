@@ -159,7 +159,8 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     want,
     give,
   };
-
+  
+  console.log(proposal)
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);

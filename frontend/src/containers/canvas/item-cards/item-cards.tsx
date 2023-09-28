@@ -29,6 +29,7 @@ export const ItemCards: FC = () => {
   const unequipItem = useUnequipItem(() => setEquippedItemState(undefined));
 
   const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("DDDD", selectedItemToEquip)
     event.stopPropagation();
     setShowToast(!showToast);
     if (selectedItemToEquip) {
