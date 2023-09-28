@@ -5,7 +5,7 @@
 // XXX this is unsupported, but it's already included in the bundle (statically linked)
 import { makeTracer } from '@agoric/internal';
 import { E } from '@endo/far';
-import { deeplyFulfilled } from '@endo/marshal';
+import { deeplyFulfilled, makeMarshal } from '@endo/marshal';
 
 import {
   baseCharacters,
@@ -59,6 +59,26 @@ export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
       return nextPath(nameAdmin, path);
     }),
   );
+};
+
+const BOARD_AUX = 'boardAux';
+
+const marshalData = makeMarshal((_val) => Fail`data only`);
+
+const makeBoardAuxNode = async (chainStorage, boardId) => {
+  const boardAux = E(chainStorage).makeChildNode(BOARD_AUX);
+  return E(boardAux).makeChildNode(boardId);
+};
+
+const publishBrandInfo = async (chainStorage, board, brand) => {
+  const [id, displayInfo, allegedName] = await Promise.all([
+    E(board).getId(brand),
+    E(brand).getDisplayInfo(),
+    E(brand).getAllegedName(),
+  ]);
+  const node = makeBoardAuxNode(chainStorage, id);
+  const aux = marshalData.toCapData(harden({ allegedName, displayInfo }));
+  await E(node).setValue(JSON.stringify(aux));
 };
 
 const CONTRACT_ELECTORATE = 'Electorate';
@@ -306,6 +326,10 @@ export const startKread = async (powers, config) => {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
+
+  trace('adding to boardAux');
+  publishBrandInfo(chainStorage, board, characterBrand);
+  publishBrandInfo(chainStorage, board, itemBrand);
 
   const brand = await E(Money).getBrand();
 
