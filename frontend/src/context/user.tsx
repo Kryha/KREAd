@@ -1,7 +1,7 @@
 import { Character, ExtendedCharacter, Item } from "../interfaces";
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import { mediate } from "../util";
-import { dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
+import { cidToUrl, dedupArrById, replaceCharacterInventoryInUserStateArray } from "../util/other";
 import { useWalletState } from "./wallet";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
@@ -89,7 +89,14 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
     }
 
     case "SET_ITEMS": {
-      return { ...state, items: action.payload, fetched: true };
+      const items = action.payload.map((item) => {
+        if(!item.image.includes("/ipfs/")){
+          item.image = cidToUrl(item.image);
+          item.thumbnail = cidToUrl(item.thumbnail);
+        }
+        return item;
+      })
+      return { ...state, items, fetched: true };
     }
 
     case "UPDATE_CHARACTER_ITEMS": {

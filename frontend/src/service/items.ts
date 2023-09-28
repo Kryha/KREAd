@@ -43,7 +43,6 @@ export const useGetItemInInventoryByNameAndCategory = (
 export const useGetItemsInInventory = (): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
   const { items } = useUserState();
-
   const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
   const filtered = useFilterItems(allItems);
 
