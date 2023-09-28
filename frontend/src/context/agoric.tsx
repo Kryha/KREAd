@@ -212,9 +212,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
       try {
-        const networkUrl = process.env.NETWORK_CONFIG; // Get the environment variable
-        // Use the networkUrl directly to fetch data, assuming it contains the URL
-        const { rpc, chainName } = await fetchChainInfo(networkUrl);
+        const { rpc, chainName } = await fetchChainInfo(networkConfigs.emerynet.url);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
           console.error(e);
           return;
