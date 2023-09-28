@@ -149,12 +149,12 @@ export const networkConfigs = {
   localhost: {
     label: "Local Network",
     url: "http://localhost:3000/wallet/network-config",
-  }
+  },
+  localDevnet: {
+    label: "Emerynet",
+    url: "https://emerynet.rpc.agoric.net/", //"https://wallet.agoric.app/wallet/network-config",
+  },
 } as const;
-
-export const getNetworkConfig = (networkArg?: string) => {
-  return networkArg ? networkConfigs[networkArg] : networkConfigs.localhost;
-};
 
 export const localBridgeHref = "http://localhost:3000/wallet/bridge.html" as const;
 export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html" as const;
