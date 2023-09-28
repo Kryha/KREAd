@@ -2,7 +2,7 @@ export const routes = {
   root: "/",
   character: "/character",
   shop: "/shop",
-  inventory: "/inventory",
+  inventory: "/inventory/shop", // defaulst to items
   items: "/items",
   createCharacter: "/create-character",
   buyItem: "/buy-item",
