@@ -14776,7 +14776,7 @@ export const marketplaceListingsCommon = [
       colors: ['#0000ff'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    400n,
+    50n,
   ],
   [
     {
@@ -14800,7 +14800,7 @@ export const marketplaceListingsCommon = [
       colors: ['#808080'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    400n,
+    50n,
   ],
   [
     {
@@ -14824,7 +14824,7 @@ export const marketplaceListingsCommon = [
       colors: ['#808080'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    400n,
+    50n,
   ],
 ];
 
@@ -14851,7 +14851,7 @@ export const marketplaceListingsUncommon = [
       colors: ['#808080'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    30n,
   ],
   [
     {
@@ -14875,7 +14875,7 @@ export const marketplaceListingsUncommon = [
       colors: ['#008000'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    30n,
   ],
   [
     {
@@ -14899,7 +14899,7 @@ export const marketplaceListingsUncommon = [
       colors: ['#808080'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    30n,
   ],
   [
     {
@@ -14923,7 +14923,7 @@ export const marketplaceListingsUncommon = [
       colors: ['#008000'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    30n,
   ],
 ];
 
@@ -14950,7 +14950,7 @@ export const marketplaceListingsRare = [
       colors: ['#000000'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -14974,7 +14974,7 @@ export const marketplaceListingsRare = [
       colors: ['#ffc0cb'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -14998,7 +14998,7 @@ export const marketplaceListingsRare = [
       colors: ['#800080'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -15022,7 +15022,7 @@ export const marketplaceListingsRare = [
       colors: ['#ffff00'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -15046,7 +15046,7 @@ export const marketplaceListingsRare = [
       colors: ['#ffff00'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -15070,7 +15070,7 @@ export const marketplaceListingsRare = [
       colors: ['#0000ff'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -15094,7 +15094,7 @@ export const marketplaceListingsRare = [
       colors: ['#808080'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -15118,7 +15118,7 @@ export const marketplaceListingsRare = [
       colors: ['#ffffff'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -15142,7 +15142,7 @@ export const marketplaceListingsRare = [
       colors: ['#0000ff'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
   [
     {
@@ -15166,7 +15166,7 @@ export const marketplaceListingsRare = [
       colors: ['#808080'],
       artistMetadata: 'https://www.instagram.com/enmanueljrperez/',
     },
-    200n,
+    14n,
   ],
 ];
 
