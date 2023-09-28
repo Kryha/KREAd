@@ -12,6 +12,7 @@ export const ItemSell = () => {
   const { name, category } = useParams<"category" | "name">();
   const { itemProposals } = useWalletState();
 
+  // @ts-ignore
   const latestItemSellProposal = useMemo(()=> itemProposals[itemProposals.length-1].give.Item.value.payload[0][0], [itemProposals]);
   const isPlacedInShop = useMemo(() => latestItemSellProposal.name === name && latestItemSellProposal.category === category, [latestItemSellProposal, name, category]);
   
