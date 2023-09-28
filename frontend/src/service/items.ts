@@ -193,6 +193,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
           callback: async () => {
             console.info("BuyItem call settled");
             setIsLoading(false);
+            setIsAwaitingApprovalToFalse();
           },
         });
       } catch (error) {
@@ -217,7 +218,6 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
   const itemBrand = service.tokenInfo.item.brand;
 
   return useMutation(async (body: { item: Item }) => {
-    console.log(body)
     if (!character || !body.item) {
       console.error("Could not find item or character");
       return;
@@ -229,7 +229,6 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
 
     const { forSale, equippedTo, activity, ...itemToEquip } = body.item;
 
-    console.log(itemToEquip)
     await inventoryService.equipItem({
       character: characterInWallet,
       item: itemToEquip,

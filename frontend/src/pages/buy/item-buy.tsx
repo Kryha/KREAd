@@ -13,7 +13,8 @@ export const ItemBuy = () => {
   const itemToBuy = items.find((marketEntry) => marketEntry.id === id);
   const buyItem = useBuyItem(itemToBuy);
 
-  const [isAwaitingApproval, setIsAwaitingApproval] = useState(true);
+  const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
+  const [isOfferAccepted, setIsOfferAccepted] = useState(false);  
   const [data, setData] = useState<ItemInMarket>();
 
   useEffect(() => {
@@ -27,7 +28,10 @@ export const ItemBuy = () => {
 
   const handleSubmit = async () => {
     setIsAwaitingApproval(true);
-    await buyItem.callback(() => setIsAwaitingApproval(false));
+    await buyItem.callback(() => {
+      setIsOfferAccepted(true);
+      setIsAwaitingApproval(false);
+    });
   };
 
   return (
@@ -35,7 +39,7 @@ export const ItemBuy = () => {
       data={data && { ...data.item, price: Number(data.sell.price) }}
       onSubmit={handleSubmit}
       isLoading={isAwaitingApproval}
-      isOfferAccepted={isAwaitingApproval}
+      isOfferAccepted={isOfferAccepted}
       text={{
         buy: text.store.buyItem,
         success: text.store.itemSuccessfullyBought,

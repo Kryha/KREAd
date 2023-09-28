@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton } from "../../components";
@@ -41,6 +41,12 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
     setIsOnFirstStep(false);
   };
 
+  const changeStepDisabled = useMemo(()=>({
+    step1: true,
+    step2: !isOfferAccepted,
+    step3: !isOfferAccepted,
+  }), [isOfferAccepted]);
+
   return (
     <ContentWrapper width={width} height={height}>
       <FormText>{text.mint.theCostsOfMinting}</FormText>
@@ -71,10 +77,16 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
         </Step>
       </StepContainer>
       <ButtonContainer>
-        <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
-          <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          {isLoading ? <LoadingPage /> : <ArrowUp />}
-        </PrimaryButton>
+        {isOnFirstStep ? (
+            <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
+              <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+            </PrimaryButton>
+          ):(
+            <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={changeStepDisabled.step2}>
+              <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+              {isLoading ? <LoadingPage /> : <ArrowUp />}
+            </PrimaryButton>
+          )}
       </ButtonContainer>
     </ContentWrapper>
   );
