@@ -36,7 +36,7 @@ export const ItemCards: FC = () => {
       equipItem.mutate({ item: selectedItemToEquip });
     }
   };
-  
+
   const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
@@ -44,29 +44,29 @@ export const ItemCards: FC = () => {
       unequipItem.mutate({ item: equippedItemState });
     }
   };
-  
+
   const sell = () => {
     if (!selectedAsset) return;
     navigate(`${routes.sellItem}/${selectedAssetCategory}/${selectedAsset}`, {
       state: location,
     });
   };
-  
+
   useEffect(() => {
     if (selectedAsset === null && equippedItem) {
       setSelectedAsset(equippedItem?.name);
     }
   }, [equippedItem, selectedAsset]);
-  
+
   const validateActions = useMemo(() => {
-    return { 
+    return {
       unequip: !selectedItemToEquip?.equippedTo || !equippedItemState,
       equip: !!selectedItemToEquip?.equippedTo || !selectedItemToEquip,
-      sell: !!selectedItemToEquip?.equippedTo || !selectedItemToEquip
-    }
-  },[equippedItemState, selectedItemToEquip, selectedAsset]);
-  
-  console.log(validateActions)
+      sell: !!selectedItemToEquip?.equippedTo || !selectedItemToEquip,
+    };
+  }, [equippedItemState, selectedItemToEquip, selectedAsset]);
+
+  console.log(validateActions);
   // Filter out the selectedItem from the items array
   const filteredItems = items.filter((item) => item.equippedTo === "");
   const itemsCount = filteredItems.length;
@@ -85,7 +85,7 @@ export const ItemCards: FC = () => {
             }}
           >
             <ItemCard item={equippedItem} image={equippedItem?.thumbnail} />
-            <ItemCardInfo item={equippedItem} equip={equip} sell={sell} unequip={unequip} validateActions={validateActions}/>
+            <ItemCardInfo item={equippedItem} equip={equip} sell={sell} unequip={unequip} validateActions={validateActions} />
           </ItemCardContainer>
         </>
       ) : (
@@ -113,17 +113,17 @@ export const ItemCards: FC = () => {
               </ItemCardContainer>
             ))
           : null}
-          <AdjustedItemButtonContainer>
-            <PrimaryButton disabled={validateActions.unequip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}>
-              <ButtonText customColor={color.white}>unequip</ButtonText>
-            </PrimaryButton>
-            <PrimaryButton disabled={validateActions.equip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}>
-              <ButtonText customColor={color.white}>equip</ButtonText>
-            </PrimaryButton>
-            <PrimaryButton disabled={validateActions.sell} onClick={sell}>
-              <ButtonText customColor={color.white}>sell</ButtonText>
-            </PrimaryButton>
-          </AdjustedItemButtonContainer>
+        <AdjustedItemButtonContainer>
+          <PrimaryButton disabled={validateActions.unequip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}>
+            <ButtonText customColor={color.white}>unequip</ButtonText>
+          </PrimaryButton>
+          <PrimaryButton disabled={validateActions.equip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}>
+            <ButtonText customColor={color.white}>equip</ButtonText>
+          </PrimaryButton>
+          <PrimaryButton disabled={validateActions.sell} onClick={sell}>
+            <ButtonText customColor={color.white}>sell</ButtonText>
+          </PrimaryButton>
+        </AdjustedItemButtonContainer>
       </ItemCardsWrapper>
     </ItemCardsContainer>
   );
@@ -131,4 +131,4 @@ export const ItemCards: FC = () => {
 
 const AdjustedItemButtonContainer = styled(ItemButtonContainer)`
   justify-content: center;
-`
+`;

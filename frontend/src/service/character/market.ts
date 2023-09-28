@@ -20,7 +20,7 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
   const charBrand = service.characterBrand;
 
   const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
-  
+
   const spec = {
     source: "contract",
     instance,
@@ -62,7 +62,6 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
   const istBrand = service.istBrand;
 
   const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
-
 
   const spec = {
     source: "contract",
@@ -167,9 +166,9 @@ interface SellItemBatchAction {
 }
 
 const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }: SellItemBatchAction): Promise<void> => {
-  console.error("This feature is not implemented yet :)")
+  console.error("This feature is not implemented yet :)");
   return;
-  
+
   const instance = service.kreadInstance;
 
   const spec = {

@@ -15,7 +15,7 @@ interface ItemInfoProps {
   equip: (event: React.MouseEvent<HTMLButtonElement>) => void;
   unequip: (event: React.MouseEvent<HTMLButtonElement>) => void;
   sell: () => void;
-  validateActions: { unequip: boolean, equip: boolean, sell: boolean}
+  validateActions: { unequip: boolean; equip: boolean; sell: boolean };
 }
 export const ItemCardInfo: FC<ItemInfoProps> = ({ item, sell, unequip, equip, validateActions }) => {
   const { setShowDetails } = useCharacterBuilder();

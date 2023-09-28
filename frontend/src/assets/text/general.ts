@@ -1,6 +1,6 @@
 import { MAX_CHARACTER_LENGTH, MINTING_COST, MONEY_DECIMALS } from "../../constants";
 
-const characterMintPrice = MINTING_COST/Number("1".padEnd(MONEY_DECIMALS+1, "0"));
+const characterMintPrice = MINTING_COST / Number("1".padEnd(MONEY_DECIMALS + 1, "0"));
 
 export const general = {
   notFound: "this screen doesn't exist.",

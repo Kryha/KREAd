@@ -90,12 +90,12 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
 
     case "SET_ITEMS": {
       const items = action.payload.map((item) => {
-        if(!item.image.includes("/ipfs/")){
+        if (!item.image.includes("/ipfs/")) {
           item.image = cidToUrl(item.image);
           item.thumbnail = cidToUrl(item.thumbnail);
         }
         return item;
-      })
+      });
       return { ...state, items, fetched: true };
     }
 

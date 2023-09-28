@@ -160,7 +160,7 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     want,
     give,
   };
-  
+
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
@@ -189,7 +189,7 @@ interface SwapItems {
 }
 
 const swapItems = async ({ giveItem, wantItem, character, service, callback }: SwapItems): Promise<void> => {
-  console.error("This feature is not implemented yet :)")
+  console.error("This feature is not implemented yet :)");
   return;
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;

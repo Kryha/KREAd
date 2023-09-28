@@ -14,7 +14,7 @@ export const ItemBuy = () => {
   const buyItem = useBuyItem(itemToBuy);
 
   const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
-  const [isOfferAccepted, setIsOfferAccepted] = useState(false);  
+  const [isOfferAccepted, setIsOfferAccepted] = useState(false);
   const [data, setData] = useState<ItemInMarket>();
 
   useEffect(() => {

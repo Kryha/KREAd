@@ -41,11 +41,14 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
     setIsOnFirstStep(false);
   };
 
-  const changeStepDisabled = useMemo(()=>({
-    step1: true,
-    step2: !isOfferAccepted,
-    step3: !isOfferAccepted,
-  }), [isOfferAccepted]);
+  const changeStepDisabled = useMemo(
+    () => ({
+      step1: true,
+      step2: !isOfferAccepted,
+      step3: !isOfferAccepted,
+    }),
+    [isOfferAccepted],
+  );
 
   return (
     <ContentWrapper width={width} height={height}>
@@ -78,15 +81,15 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
       </StepContainer>
       <ButtonContainer>
         {isOnFirstStep ? (
-            <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
-              <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-            </PrimaryButton>
-          ):(
-            <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={changeStepDisabled.step2}>
-              <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-              {isLoading ? <LoadingPage /> : <ArrowUp />}
-            </PrimaryButton>
-          )}
+          <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
+            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+          </PrimaryButton>
+        ) : (
+          <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={changeStepDisabled.step2}>
+            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+            {isLoading ? <LoadingPage /> : <ArrowUp />}
+          </PrimaryButton>
+        )}
       </ButtonContainer>
     </ContentWrapper>
   );

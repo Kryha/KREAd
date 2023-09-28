@@ -13,9 +13,12 @@ export const ItemSell = () => {
   const { itemProposals } = useWalletState();
 
   // @ts-ignore
-  const latestItemSellProposal = useMemo(()=> itemProposals[itemProposals.length-1].give.Item.value.payload[0][0], [itemProposals]);
-  const isPlacedInShop = useMemo(() => latestItemSellProposal.name === name && latestItemSellProposal.category === category, [latestItemSellProposal, name, category]);
-  
+  const latestItemSellProposal = useMemo(() => itemProposals[itemProposals.length - 1].give.Item.value.payload[0][0], [itemProposals]);
+  const isPlacedInShop = useMemo(
+    () => latestItemSellProposal.name === name && latestItemSellProposal.category === category,
+    [latestItemSellProposal, name, category],
+  );
+
   const sellItem = useSellItem(name, category as Category);
   const [data, setData] = useState<SellData>({ price: 0 });
 
