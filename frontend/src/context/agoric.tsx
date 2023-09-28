@@ -162,7 +162,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchInstance = async () => {
-      const instances = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
+      // TODO: consider typing the result
+      const instances: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
       // TODO: remove publicFacet from state
@@ -170,7 +171,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchTokenInfo = async () => {
-      const agoricNameBrands = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.brand"]);
+      // TODO: consider typing the result
+      const agoricNameBrands: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.brand"]);
       const payload: TokenInfo = {
         character: {
           issuer: undefined,
@@ -212,7 +214,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
       try {
-        const { rpc, chainName } = await fetchChainInfo(networkConfigs.emerynet.url);
+        const { rpc, chainName } = await fetchChainInfo(networkConfigs.localDevnet.url);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
           console.error(e);
           return;
