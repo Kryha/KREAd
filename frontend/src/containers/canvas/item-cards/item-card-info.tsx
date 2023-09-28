@@ -15,13 +15,11 @@ interface ItemInfoProps {
   equip: (event: React.MouseEvent<HTMLButtonElement>) => void;
   unequip: (event: React.MouseEvent<HTMLButtonElement>) => void;
   sell: () => void;
+  validateActions: { unequip: boolean, equip: boolean, sell: boolean}
 }
-export const ItemCardInfo: FC<ItemInfoProps> = ({ item, sell, unequip, equip }) => {
+export const ItemCardInfo: FC<ItemInfoProps> = ({ item, sell, unequip, equip, validateActions }) => {
   const { setShowDetails } = useCharacterBuilder();
 
-  const handleEquip = () => {
-    console.log("EEEE")
-  }
   return (
     <ItemInfo>
       <ButtonText customColor={color.black}>{item?.name}</ButtonText>
@@ -34,20 +32,6 @@ export const ItemCardInfo: FC<ItemInfoProps> = ({ item, sell, unequip, equip }) 
         <ButtonInfoWrap onClick={() => setShowDetails(true)}>
           <SecondaryButton>{text.general.info}</SecondaryButton>
         </ButtonInfoWrap>
-        {item.equippedTo !== "" ? (
-          <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}>
-            <ButtonText customColor={color.white}>unequip</ButtonText>
-          </PrimaryButton>
-        ) : (
-          <>
-            <PrimaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}>
-              <ButtonText customColor={color.white}>equip</ButtonText>
-            </PrimaryButton>
-            <PrimaryButton onClick={sell}>
-              <ButtonText customColor={color.white}>sell</ButtonText>
-            </PrimaryButton>
-          </>
-        )}
       </ItemButtonContainer>
     </ItemInfo>
   );
