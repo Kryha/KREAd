@@ -328,8 +328,8 @@ export const startKread = async (powers, config) => {
   } = await E(zoe).getTerms(instance);
 
   trace('adding to boardAux');
-  publishBrandInfo(chainStorage, board, characterBrand);
-  publishBrandInfo(chainStorage, board, itemBrand);
+  await publishBrandInfo(chainStorage, board, characterBrand);
+  await publishBrandInfo(chainStorage, board, itemBrand);
 
   const brand = await E(Money).getBrand();
 
