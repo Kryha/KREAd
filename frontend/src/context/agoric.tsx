@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
-import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NETWORK_CONFIG } from "../constants";
 import { fetchChainInfo } from "./util";
 import { ChainStorageWatcher, makeAgoricChainStorageWatcher, AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 
@@ -212,7 +212,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
       try {
-        const { rpc, chainName } = await fetchChainInfo(networkConfigs.emerynet.url);
+        const { rpc, chainName } = await fetchChainInfo(NETWORK_CONFIG);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
           console.error(e);
           return;
