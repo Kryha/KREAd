@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { ButtonText, MenuText, PrimaryButton } from "../../components";
-import { TempetCharacter, text } from "../../assets";
+import { ElephiaCitizen, text } from "../../assets";
 import { routes } from "../../navigation";
 import { useNavigate } from "react-router-dom";
 import { ArrowUp } from "../buy/styles";
@@ -16,7 +16,7 @@ export const MobileNotAvailable: FC = () => {
   return (
     <Container>
       <ImageContainer>
-        <MainIcon src={TempetCharacter} alt={text.character.defaultCharacter} />
+        <MainIcon src={ElephiaCitizen} alt={text.character.defaultCharacter} />
       </ImageContainer>
       <Content>
         <MenuText>{text.general.desktopOnly}</MenuText>

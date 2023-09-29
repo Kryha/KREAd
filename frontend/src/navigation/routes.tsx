@@ -17,14 +17,12 @@ import {
   Shop,
 } from "../pages";
 import { ErrorFallback, ErrorView, LoadingPage, MainContainer } from "../components";
-
-import { TestServiceUI } from "../service/test-service/test-service-ui";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
-import { isDevelopmentMode } from "../constants";
 import { MobileNotAvailable } from "../pages/mobile-not-available";
 import { useIsMobile } from "../hooks";
 import { breakpoints } from "../design";
+import { ConnectWallet } from "../pages/connect-wallet";
 
 export const InternalAppWrapper = () => {
   return (
@@ -46,7 +44,7 @@ export const InternalAppRoutes: FC = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
       <Routes>
-        <Route path={routes.root} element={<Onboarding />} />
+        <Route path={routes.connectWallet} element={<ConnectWallet />} />
         <Route path={routes.character} element={<Landing />} />
         <Route path={routes.createCharacter} element={<CreateCharacter />} />
         <Route path={`${routes.items}/:category`} element={isMobile ? <MobileNotAvailable /> : <ItemPage />} />
@@ -56,9 +54,6 @@ export const InternalAppRoutes: FC = () => {
         <Route path={`${routes.buyCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterBuy />} />
         <Route path={`${routes.sellItem}/:category/:name`} element={isMobile ? <MobileNotAvailable /> : <ItemSell />} />
         <Route path={`${routes.sellCharacter}/:id`} element={isMobile ? <MobileNotAvailable /> : <CharacterSell />} />
-
-        {isDevelopmentMode && <Route path={`${routes.test}`} element={<TestServiceUI />} />}
-
         <Route path="*" element={<ErrorView />} />
       </Routes>
     </ErrorBoundary>
