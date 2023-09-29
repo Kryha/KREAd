@@ -46,8 +46,6 @@ export const Sell: FC<Props> = ({ data, setData, text: pText, sendOfferHandler, 
     if (previousPath.includes("buy")) confirmationPath = `${routes.inventory}/characters`;
   }
 
-  console.log(previousPath, confirmationPath);
-
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
       case 0:

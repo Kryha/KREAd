@@ -1,31 +1,31 @@
 import { FC } from "react";
-import { Navigate } from "react-router-dom";
 import { text } from "../../assets";
-
 import { ButtonText, ErrorView, MenuItemName, PrimaryButton, TitleText } from "../../components";
 import { color } from "../../design";
 import { Character } from "../../interfaces";
-import { routes } from "../../navigation";
-import { useEquipCharacter } from "../../service";
 import { getDatefromEpoch } from "../../util";
 import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer } from "./styles";
+import { useUserStateDispatch } from "../../context/user";
+import { useNavigate } from "react-router-dom";
+import { routes } from "../../navigation";
 
 interface ConfirmationProps {
   character?: Character;
 }
 
 export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
-  const equipCharacter = useEquipCharacter();
+  const userStateDispatch = useUserStateDispatch();
+  const navigate = useNavigate();
 
-  if (!character) return <ErrorView />;
+  if (!character) { 
+    console.error("No character found")
+    return <ErrorView />;
+  }
 
-  const equipNewCharacter = () => {
-    equipCharacter.mutate({ id: character.id.toString() });
-  };
-
-  if (equipCharacter.isSuccess) return <Navigate to={routes.character} />;
-
-  if (equipCharacter.isError) return <ErrorView />;
+  const handleConfirm = () => {
+    userStateDispatch({ type: "SET_SELECTED", payload: character.name });
+    navigate(routes.character);
+  }
 
   return (
     <ContentWrapper>
@@ -42,7 +42,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
         <MenuItemName>{getDatefromEpoch(Date.now())}</MenuItemName>
       </InfoContainer>
       <ButtonContainer>
-        <PrimaryButton onClick={() => equipNewCharacter()}>
+        <PrimaryButton onClick={handleConfirm}>
           <ButtonText customColor={color.white}>{text.mint.goToCharacter}</ButtonText>
           <ArrowUp />
         </PrimaryButton>

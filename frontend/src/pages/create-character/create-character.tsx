@@ -4,7 +4,7 @@ import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useIsMobile, useViewport } from "../../hooks";
-import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
+import { Character, CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
 import { Confirmation } from "./confirmation";
@@ -18,13 +18,12 @@ export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [mintedCharacter, setMintedCharacter] = useState<ExtendedCharacter>();
+  const [mintedCharacter, setMintedCharacter] = useState<Character>();
   const [characterData, setCharacterData] = useState<CharacterCreation>({
     name: "",
   });
   const { character, fetched } = useWalletState();
   const isLoadingCharacters = !fetched;
-  // const [myCharacters, isLoadingCharacters] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
   const mobile = useIsMobile(breakpoints.desktop);
@@ -59,7 +58,7 @@ export const CreateCharacter: FC = () => {
       case 1:
         return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
       case 2:
-        return <Confirmation character={mintedCharacter?.nft} />;
+        return <Confirmation character={mintedCharacter} />;
       default:
         return <ErrorView />;
     }

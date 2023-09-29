@@ -19,7 +19,7 @@ export interface UserContext {
 
 interface SetSelected {
   type: "SET_SELECTED";
-  payload: ExtendedCharacter | undefined;
+  payload: string;
 }
 interface SetCharacters {
   type: "SET_CHARACTERS";
@@ -130,7 +130,8 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
       return { ...state, processed: action.payload.sort() };
 
     case "SET_SELECTED":
-      return { ...state, selected: action.payload };
+      const characterToSelect = state.characters.find((character)=> character.nft.name === action.payload);
+      return { ...state, selected: characterToSelect };
 
     case "SET_FETCHED":
       return { ...state, fetched: action.payload };
@@ -173,7 +174,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       if (charactersInWallet.length === 0 && !userState.inventoryCallInProgress) {
         userStateDispatch({ type: "SET_CHARACTERS", payload: [] });
         userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: [] });
-        userStateDispatch({ type: "SET_SELECTED", payload: undefined });
+        userStateDispatch({ type: "SET_SELECTED", payload: "" });
 
         return;
       }
@@ -196,9 +197,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
         });
       }
 
-      const charactersToProcess = charactersInWallet.filter((character: { name: string }) => !processedCharacters.includes(character.name));
-      console.log(charactersInWallet, charactersToProcess);
-      const extendedCharacters = await extendCharacters(charactersToProcess, agoric.chainStorageWatcher);
+      const charactersToProcess = charactersInWallet.filter((character: { name: string }) => !processedCharacters.includes(character.name));      const extendedCharacters = await extendCharacters(charactersToProcess, agoric.chainStorageWatcher);
       const frontendCharacters = mediate.characters.toFront(extendedCharacters.extendedCharacters);
       userStateDispatch({ type: "SET_CHARACTERS", payload: frontendCharacters });
       userStateDispatch({ type: "SET_EQUIPPED_ITEMS", payload: extendedCharacters.equippedItems });

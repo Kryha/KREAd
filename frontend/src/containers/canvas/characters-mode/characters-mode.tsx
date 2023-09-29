@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
@@ -15,7 +15,6 @@ import { CharacterCards } from "../character-cards/character-cards";
 import { CharacterActions } from "./styles";
 import { CanvasCharacterDetails } from "../canvas-character-details/canvas-character-details";
 
-//TODO : Work in progress
 export const CharactersMode: FC = () => {
   const navigate = useNavigate();
   const { setInteractionMode, showDetails, showWarning } = useCharacterBuilder();
