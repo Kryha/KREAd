@@ -14,10 +14,11 @@ import {
   NoAssetImage,
 } from "./styles";
 import { color } from "../../design";
-import { BaseCharacter } from "../base-character";
 import { text } from "../../assets";
 import { routes } from "../../navigation";
 import { useLocation, useNavigate } from "react-router-dom";
+import { BaseCharacterCanvas } from "../base-character-canvas/base-character-canvas";
+import { useParentViewport } from "../../hooks/use-parent-viewport";
 
 interface Props {
   extendedCharacter: ExtendedCharacter;
@@ -29,6 +30,7 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
   const { nft: character } = extendedCharacter;
   const navigate = useNavigate();
   const location = useLocation();
+  const { parentRef, parentWidth, parentHeight } = useParentViewport();
 
   const handleClick = () => {
     onClick && onClick(character.id);
@@ -42,9 +44,9 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
-        <AssetImageContainer>
-          {character.image ? (
-            <BaseCharacter characterImage={character.image} items={extendedCharacter.equippedItems} isZoomed={false} size="medium" />
+        <AssetImageContainer ref={parentRef}>
+          {character ? (
+            <BaseCharacterCanvas width={parentWidth} height={parentHeight} character={character} items={extendedCharacter.equippedItems} />
           ) : (
             <NoAssetImage />
           )}

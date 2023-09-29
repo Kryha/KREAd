@@ -19,6 +19,7 @@ export const AssetHeader = styled.div`
 `;
 export const AssetFilterCount = styled(ButtonText)`
   margin-left: ${margins.mini};
+  margin-bottom: ${margins.mini};
 `;
 export const AssetFilterWrapper = styled.div`
   position: relative;

@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { BoldLabel, MenuItemName } from "../atoms";
-import { CharacterWrapper } from "../base-character/styles";
 
 export const InfoContainer = styled.div`
   display: flex;
@@ -71,19 +70,15 @@ export const Info = styled.div<InfoProps>`
 export const ImageCard = styled.div`
   position: relative;
   box-sizing: border-box;
-  border-radius: ${margins.medium};
-  border: 1px solid ${color.grey};
-  width: 120px;
-  height: 120px;
-  min-width: 120px;
+  width: 40%;
+  height: 160px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: ${margins.small};
-  ${CharacterWrapper} {
-    //left: 15px;
-  }
+  background-color: ${color.white};
+  border-top-left-radius: ${margins.medium};
+  border-bottom-left-radius: ${margins.medium};
 `;
 
 export const InfoWrapper = styled.div`

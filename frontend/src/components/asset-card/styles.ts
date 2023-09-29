@@ -81,6 +81,8 @@ export const AssetImageContainer = styled.div`
   justify-content: center;
   overflow: hidden;
   position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
 export const AssetImage = styled(Img)<ImageProps>`

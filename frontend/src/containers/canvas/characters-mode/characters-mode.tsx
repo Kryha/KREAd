@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
-import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
+import { ButtonText, HorizontalDivider, PrimaryButton, SecondaryButton } from "../../../components";
 import { MAIN_MODE } from "../../../constants";
 import { text } from "../../../assets";
 import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper, CardActionsContainer } from "../style";
@@ -44,6 +44,7 @@ export const CharactersMode: FC = () => {
               <CanvasContentWrapper>
                 <CharacterCards />
                 <CardActionsContainer>
+                  <HorizontalDivider />
                   <CharacterActions>
                     <ButtonInfo info={text.general.characterCardInfo} infoPosition={"top"} />
                     <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
