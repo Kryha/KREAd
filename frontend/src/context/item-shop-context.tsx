@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Item, ItemInMarket } from "../interfaces";
+import { Item, ItemInMarket, MarketMetrics } from "../interfaces";
 import { useAgoricState } from "./agoric";
-import { parseItemMarket, watchItemMarketPaths } from "../service/storage-node/watch-market";
+import { parseItemMarket, parseItemMarketMetrics, watchItemMarketPaths } from "../service/storage-node/watch-market";
 import { cidToUrl } from "../util/other";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
   itemMarketPaths: string[];
   fetched: boolean;
+  metrics: MarketMetrics;
 }
 const initialState: ItemMarketContext = {
   items: [],
@@ -36,11 +37,15 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       const merged = marketState.itemMarketPaths.concat(paths);
       const unique = Array.from(new Set(merged));
       marketDispatch((prevState: ItemMarketContext) => ({ ...prevState, itemMarketPaths: unique }));
+      await parseItemMarketMetrics(agoric.chainStorageWatcher, parseItemMarketMetricsUpdate);
       await parseItemMarket(agoric.chainStorageWatcher, unique, parseItemMarketUpdate);
     };
     const parseItemMarketUpdate = async (itemsInMarket: ContractMarketEntry[]) => {
       const items = await Promise.all(itemsInMarket.map((item) => formatMarketEntry(item)));
       marketDispatch((prevState: ItemMarketContext) => ({ ...prevState, items, fetched: true }));
+    };
+    const parseItemMarketMetricsUpdate = async (metrics) => {
+      marketDispatch((prevState: ItemMarketContext) => ({ ...prevState, metrics }));
     };
     const formatMarketEntry = async (marketEntry: ContractMarketEntry): Promise<ItemInMarket> => {
       const item = marketEntry.asset;

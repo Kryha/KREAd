@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Category, Item, ItemInMarket, Rarity } from "../interfaces";
+import { Category, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
 import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -114,6 +114,11 @@ export const useGetItemsInShop = (): [ItemInMarket[], boolean] => {
   const filtered = useFilterItemsInShop(items);
 
   return [filtered, !fetched];
+};
+
+export const useGetItemMarketMetrics = (): MarketMetrics => {
+  const { metrics } = useItemMarketState();
+  return metrics;
 };
 
 export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {

@@ -20,6 +20,15 @@ export const parseCharacterMarket = async (chainStorageWatcher: any, paths: stri
   await parseMarketUpdate(values);
 };
 
+export const parseItemMarketMetrics = async (chainStorageWatcher: any, parseItemMarketMetricsUpdate: any) => {
+  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+  const path = "published.kread.market-metrics-item";
+
+  const values = await chainStorageWatcher.queryOnce([Kind.Data, path]);
+
+  return parseItemMarketMetricsUpdate(values);
+};
+
 export const watchCharacterMarketPaths = (chainStorageWatcher: any, addMarketCharacterPaths: any) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = "published.kread.market-characters";
