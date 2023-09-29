@@ -54,11 +54,19 @@ export const FiltersContainer = styled.div<FilterProps>`
       ${ButtonText} {
         color: ${color.black};
       }
+      ${Triangle} {
+        transform: rotate(180deg);
+        transition: transform 0.2s ease 0.2s;
+        }
         `
       : `
-      ${ButtonText} {
-        color: ${color.darkGrey};
-      }
+        ${ButtonText} {
+          color: ${color.darkGrey};
+        }
+       ${Triangle} {
+        transform: rotate(0);
+        transition: transform 0.1s ease 0.1s;
+        }
       `;
   }};
   ${({ disabled }): string => {

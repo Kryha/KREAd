@@ -22,10 +22,23 @@ export const Element = styled.div`
   border-radius: ${margins.medium};
   overflow: hidden;
 `;
+
+export const Equipped = styled(EquippedIcon)`
+  display: flex;
+  align-items: flex-end;
+  width: 16px;
+  height: 16px;
+`;
+
 export const AssetEquippedContainer = styled.div`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 16px;
+  right: 16px;
+
+  ${Equipped} {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 export const AssetSubTitle = styled.div`
@@ -33,13 +46,6 @@ export const AssetSubTitle = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-`;
-
-export const Equipped = styled(EquippedIcon)`
-  display: flex;
-  align-items: flex-end;
-  width: 16px;
-  height: 16px;
 `;
 
 export const AssetPriceContainer = styled.div`
@@ -135,7 +141,6 @@ export const AssetFooter = styled.div`
   align-items: flex-start;
   justify-content: center;
   gap: 8px;
-  margin-bottom: ${margins.small};
 `;
 
 export const AssetTag = styled.div`

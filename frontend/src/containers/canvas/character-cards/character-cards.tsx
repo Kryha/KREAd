@@ -36,7 +36,7 @@ export const CharacterCards: FC = () => {
 
   const select = (character: ExtendedCharacter) => {
     if (!character) return;
-    userStateDispatch({ type: "SET_SELECTED", payload: character.nft.name });
+    userStateDispatch({ type: "SET_SELECTED", payload: character });
   };
 
   const sell = (character: ExtendedCharacter) => {

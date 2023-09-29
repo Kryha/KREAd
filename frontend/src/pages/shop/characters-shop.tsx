@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from "react";
-import { SECTION } from "../../constants";
+import { METRICS_CHARACTER, SECTION } from "../../constants";
 import { useGetCharacterInShopById, useGetCharacterMarketMetrics, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
 import { OverviewContainer } from "./styles";
@@ -8,7 +8,7 @@ import { text } from "../../assets";
 import { CharacterDetailsMarket } from "../../components/asset-details/character-details-market";
 import { CharacterCardsMarket } from "../../components/asset-cards/character-cards-market";
 import { AssetCharacterFilters } from "../../components/asset-character-filters/asset-character-filters";
-import { AssetFilterCount } from "../../components/asset-item-filters/styles";
+import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
 import { color } from "../../design";
 import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
@@ -38,9 +38,14 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
 
   return (
     <>
-      <AssetCharacterFilters section={SECTION.SHOP} pageSelector={pageSelector} />
-      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
-      {metrics ? <MarketplaceMetrics data={metricsData} /> : <></>}
+      <AssetHeaderContainer>
+        <AssetHeader>
+          {pageSelector}
+          {metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_CHARACTER} /> : <></>}
+        </AssetHeader>
+        <AssetCharacterFilters section={SECTION.SHOP} />
+      </AssetHeaderContainer>
+      <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
       {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (

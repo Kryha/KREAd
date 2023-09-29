@@ -116,7 +116,7 @@ export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
   position: relative;
   z-index: 1000;
   ${Close} {
-    margin: 0px 6px !important;
+    margin: 0 6px !important;
     width: 15px;
     height: 15px;
   }
@@ -197,7 +197,7 @@ export const KreadContainer = styled.div<ViewProps>`
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    top: 40px;
+    top: 24px;
     width: 100px;
     height: 24px;
   }

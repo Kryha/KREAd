@@ -7,26 +7,25 @@ import {
   MetricsHeader,
   MetricsRow,
   MetricsTable,
-  MetricText,
 } from "./styles";
 import { ButtonText, HorizontalDivider } from "../atoms";
 import { color } from "../../design";
-import { metricsLabels } from "../../constants";
 
 interface Props {
   data: (string | number)[];
+  asset: string[];
 }
 
-export const MarketplaceMetrics: FC<Props> = ({ data }) => {
+export const MarketplaceMetrics: FC<Props> = ({ data, asset }) => {
   return (
     <>
       <MarketplaceMetricsWrapper>
         <MarketplaceMetricsContainer>
           <MetricsTable>
-            {metricsLabels.map((item, index) => (
+            {asset.map((item, index) => (
               <Metric key={index}>
                 <MetricsHeader>
-                  <MetricText>{data[index]}</MetricText>
+                  <ButtonText>{data[index]}</ButtonText>
                 </MetricsHeader>
                 <HorizontalDivider />
                 <MetricsRow>
