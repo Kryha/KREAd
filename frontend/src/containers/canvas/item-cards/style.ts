@@ -97,3 +97,7 @@ export const ItemCardContainer = styled.div<ItemProps>`
           `};
   }
 `;
+
+export const AdjustedItemButtonContainer = styled(ItemButtonContainer)`
+  justify-content: center;
+`;

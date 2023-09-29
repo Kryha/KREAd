@@ -1,9 +1,18 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import { bounce, changeSize, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
+import {
+  bounce,
+  changeSize,
+  CharacterImgs,
+  disappear,
+  fadeIn,
+  PrimaryButton,
+  slideUp,
+  TitleText,
+} from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
-import { color, fontWeight, zIndex } from "../../design";
+import { breakpoints, color, fontWeight, zIndex } from "../../design";
 
 interface HeightProps {
   height: number;
@@ -33,7 +42,7 @@ export const InfoText = styled.div<HeightProps>`
 `;
 
 export const ArrowUp = styled(ArrowUpRightIcon)`
-  margin: 0px 0px 0px 13px !important;
+  margin: 0 0 0 13px !important;
   path {
     stroke: ${color.white};
   }
@@ -47,10 +56,12 @@ export const ButtonContainer = styled.div<ButtonProps>`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
   gap: 16px;
   z-index: 100;
   ${PrimaryButton} {
+    max-height: 45px;
+    gap: 8px;
     &:hover {
       ${ArrowUp} {
         path {
@@ -83,7 +94,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
       ${PrimaryButton} {
         position: fixed;
         left: 40px;
-        top: 464px;
+        top: 610px;
         z-index: 100;
       }
       `;
@@ -100,19 +111,23 @@ export const ButtonContainer = styled.div<ButtonProps>`
 `;
 
 export const ArrowUpRight = styled(ArrowUpRightIcon)`
-  margin: 0px 0px 0px 13px !important;
+  margin: 0 0 0 13px !important;
 `;
 
 export const EndContent = styled.div<HeightProps>`
-  ${({ height }): string => `height: ${height - 100}px; min-height: ${height - 100}px;`};
+  ${({ height }): string =>
+    `height: ${height - 100}px; min-height: ${height - 100}px;`};
   ${TitleText} {
     margin-top: 16px;
   }
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
   background-size: cover;
   scroll-snap-align: start;
   padding-top: 110px;
+  gap: 80px;
 `;
 
 export const MiddleContent = styled.div<HeightProps>`
@@ -141,11 +156,9 @@ interface ViewProps {
   showAnimation?: boolean;
 }
 export const OnboardingContainer = styled.div<ViewProps>`
-  overflow-y: scroll;
   ${({ height }): string => `height: ${height}px;`};
   scroll-snap-type: y mandatory;
   max-height: 100vh;
-  overflow-y: scroll;
   transition: all 0.4s;
   animation: ${disappear}, ${fadeIn};
   animation-duration: 5s, 0.5s;
@@ -172,7 +185,6 @@ export const DefaultImage = styled(CharacterImgs)<ViewProps>`
 
 export const Link = styled.a`
   text-decoration: underline;
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
@@ -180,25 +192,30 @@ export const Link = styled.a`
     text-transform: capitalize;
   }
   color: ${color.darkGrey};
-  display: inline;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-left: 5px;
 `;
 
 export const KryhaLink = styled(Link)`
-  margin-left: 0px;
+  margin-left: 0;
 `;
 
 export const TextContainer = styled.span`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
   :first-letter {
     text-transform: capitalize;
   }
+  :first-of-type {
+    margin-top: 8px;
+  }
+  margin-top: 24px;
   display: inline-block;
   color: ${color.darkGrey};
-  margin-top: 8px;
+  white-space: pre-line;
 `;
 
 export const KreadLogo = styled(KreadIcon)`
@@ -276,6 +293,10 @@ export const SectionContainer = styled.div`
   padding-left: 40px;
   padding-top: 50px;
   width: 460px;
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    padding-left: 16px;
+    width: 100%;
+  }
 `;
 
 export const ScrollContainer = styled.div`
@@ -311,4 +332,15 @@ export const ConnectContainer = styled.div<ButtonProps>`
           animation-duration: 0.5s, 0.5s;
           animation-delay: 0s, 0.5s;
         `};
+`;
+
+export const SocialsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const SocialLink = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;

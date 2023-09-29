@@ -73,6 +73,7 @@ export const TitleText = styled.h3<TextProps>`
   font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
+  white-space: pre-line;
   :first-letter {
     text-transform: capitalize;
   }
@@ -101,7 +102,7 @@ export const PageTitle = styled.h1<TextProps>`
 
 export const ButtonText = styled.h3<TextProps>`
   font-weight: ${fontWeight.medium};
-  font-size: 12px;
+  font-size: 14px;
   line-height: 15px;
   :first-letter {
     text-transform: capitalize;

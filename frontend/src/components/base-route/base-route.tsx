@@ -5,7 +5,6 @@ import { routes } from "../../navigation";
 import { Footer } from "../footer";
 import { NavigationSection, NavigationTab } from "../navigation-tab";
 import { Box, ChildrenContainer, FooterContainer, TopbarContainer } from "./styles";
-import { DevelopmentMode } from "../../service/test-service/development-mode";
 import { useCharacterBuilder } from "../../context/character-builder-context";
 import { MAIN_MODE } from "../../constants";
 
@@ -34,10 +33,7 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
               <NavigationTab title={text.navigation.inventory} route={`${routes.inventory}/:section`} />
             </NavigationSection>
           </Box>
-          <Box>
-            {sideNavigation}
-            <DevelopmentMode />
-          </Box>
+          <Box>{sideNavigation}</Box>
         </TopbarContainer>
       )}
       <ChildrenContainer isLanding={isLanding}>{children}</ChildrenContainer>

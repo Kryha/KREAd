@@ -9,6 +9,7 @@ import { Confirmation } from "./confirmation";
 import { ContentWrapper } from "./styles";
 import { BuyData, BuyStep, BuyText } from "./types";
 import { useLocation } from "react-router-dom";
+import { routes } from "../../navigation";
 
 interface Props {
   data?: BuyData;
@@ -22,6 +23,7 @@ export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOffer
   const { width, height } = useViewport();
   const location = useLocation();
   const previousPath = location.state.pathname;
+  const confirmationPath = previousPath === `${routes.shop}/items` ? `${routes.inventory}/items` : `${routes.inventory}/characters`;
   const [currentStep, setCurrentStep] = useState<BuyStep>(1);
   if (!data) return <ErrorView />;
 
@@ -39,7 +41,7 @@ export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOffer
           />
         );
       case 2:
-        return <Confirmation text={pText} link={previousPath} />;
+        return <Confirmation text={pText} link={confirmationPath} />;
       default:
         return <ErrorView />;
     }

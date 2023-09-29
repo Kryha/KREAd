@@ -1,7 +1,6 @@
-import React, { createContext, FC, useEffect, useMemo, useState } from "react";
+import React, { createContext, FC, useMemo, useState } from "react";
 import { useAndRequireContext } from "../hooks";
 import { Category, Origin, Rarity, Title } from "../interfaces";
-import { useSearchParams } from "react-router-dom";
 import { MAX_PRICE, MIN_PRICE } from "../constants";
 
 interface Context {
@@ -60,25 +59,27 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
     setReset(!reset);
   };
 
-  const [, setSearchParams] = useSearchParams();
+  //TODO: Needs to be improved. not necessary now but will be in the future
 
-  useEffect(() => {
-    setSearchParams(
-      {
-        character,
-        categories,
-        origin,
-        rarity,
-        sort,
-        colors,
-        forSale: forSale ? "true" : "false",
-        equippedTo,
-      },
-      {
-        relative: "path",
-      },
-    );
-  }, [character, categories, origin, rarity, colors, equippedTo, forSale, sort]);
+  // const [, setSearchParams] = useSearchParams();
+  //
+  // useEffect(() => {
+  //   setSearchParams(
+  //     {
+  //       character,
+  //       categories,
+  //       origin,
+  //       rarity,
+  //       sort,
+  //       colors,
+  //       forSale: forSale ? "true" : "false",
+  //       equippedTo,
+  //     },
+  //     {
+  //       relative: "path",
+  //     },
+  //   );
+  // }, [character, categories, origin, rarity, colors, equippedTo, forSale, sort]);
 
   const contextValue = useMemo(
     () => ({

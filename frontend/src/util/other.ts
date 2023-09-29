@@ -26,5 +26,15 @@ export const dedupArrById = (arr: any[]) => [...new Map(arr.map((v) => [v.id, v]
 
 export const dedupArrByName = (arr: any[]) => [...new Map(arr.map((v) => [v.nft.name, v])).values()];
 
-export const cidToUrl = (cid: string) => `${PINATA_GATEWAY}/ipfs/${cid}`;
-export const urlToCid = (url: string) => url.split("/ipfs/")[1];
+export const cidToUrl = (cid: string) => {
+  if (cid.includes("/ipfs/")) {
+    return cid;
+  }
+  return `${PINATA_GATEWAY}/ipfs/${cid}`;
+};
+export const urlToCid = (url: string) => {
+  if (!url.includes("/ipfs/")) {
+    return url;
+  }
+  return url.split("/ipfs/")[1];
+};

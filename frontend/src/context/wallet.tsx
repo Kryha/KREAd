@@ -67,6 +67,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         ...prevState,
         character: characterWallet,
         item: itemWallet,
+        fetched: true,
       }));
     };
 

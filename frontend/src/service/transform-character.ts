@@ -23,7 +23,6 @@ export const extendCharacters = async (
         equippedTo: character.name,
         forSale: false,
       }));
-
       equippedCharacterItems.push(...frontendEquippedItems);
       const equipped: { [key: string]: Item | undefined } = {};
       for (const category of Object.keys(CATEGORY)) {
