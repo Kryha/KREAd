@@ -53,16 +53,16 @@ export const AssetPriceContainer = styled.div`
 export const AssetWrapper = styled.div`
   position: relative;
   height: 100%;
-  padding: ${margins.mini};
   background: ${color.white};
   border: 1px solid ${color.grey};
   box-sizing: border-box;
-  border-radius: ${margins.mini};
+  border-radius: ${margins.medium};
   align-items: center;
   cursor: pointer;
 
   :hover {
     border: 1px solid ${color.black};
+    transform: translateY(-5px);
   }
 `;
 
@@ -70,7 +70,6 @@ export const AssetContent = styled.div`
   display: flex;
   flex-direction: column;
   height: 450px;
-  gap: 8px;
   width: 100%;
 `;
 
@@ -91,6 +90,7 @@ export const AssetInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  padding: ${margins.small};
 `;
 export const AssetTitleWrapper = styled.div`
   width: 100%;
