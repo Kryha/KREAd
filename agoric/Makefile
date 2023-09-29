@@ -1,7 +1,7 @@
 # accounts based on mnemonics in mn2-start.test.js
-ROYALTY_ADDRESS=agoric1yjc8llu3fugm7tgqye4rd5n92l9x2dhe30dazp
-PLATFORM_ADDRESS=agoric1enwuyn2hzyyvt39x87tk9rhlkpqtyv9haj7mgs
-COMMITTEE_ADDRESSES='{"kgov1": "agoric1890064p6j3xhzzdf8daknd6kpvhw766ds8flgw", "kgov2": "agoric1vqm5x5sj4lxmj2kem7x92tuhaum0k2yzyj6mgu"}'
+ROYALTY_ADDRESS=agoric19rtq0t8rm5ej5eyumgl0qwepzr7t4x50whx9ae
+PLATFORM_ADDRESS=agoric1plt4252p5yu4x0nndfnkumh0gws7pdeksqq33e
+COMMITTEE_ADDRESSES='{"kgov1": "agoric1hlm7w6pyyqnwz35jdknly8mp0ehvyrl04xjez7", "kgov2": "agoric19rtq0t8rm5ej5eyumgl0qwepzr7t4x50whx9ae"}'
 COMMITTEE_NAME=kread-gov
 
 # config options
