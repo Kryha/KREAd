@@ -4,9 +4,14 @@ import { breakpoints, margins } from "../../design";
 interface AssetsProps {
   height: number;
 }
-export const AssetsWrapper = styled.div<AssetsProps>`
+export const AssetsShopWrapper = styled.div<AssetsProps>`
   overflow-y: scroll;
   ${({ height }): string => `height: ${height - 320}px;`};
+`;
+
+export const AssetsWrapper = styled.div<AssetsProps>`
+  overflow-y: scroll;
+  ${({ height }): string => `height: ${height - 200}px;`};
 `;
 export const AssetsContainer = styled.div`
   display: grid;

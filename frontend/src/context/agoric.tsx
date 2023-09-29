@@ -114,9 +114,6 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_CHAIN_STORAGE_WATCHER":
       return { ...state, chainStorageWatcher: action.payload };
 
-    case "SET_MARKETPLACE_METRICS_WATCHER":
-      return { ...state, chainStorageWatcher: action.payload };
-
     case "RESET":
       return initialState;
 

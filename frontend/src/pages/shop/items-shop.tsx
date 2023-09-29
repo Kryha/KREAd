@@ -24,21 +24,23 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [item] = useGetItemInShopById(selectedId);
   const assetsCount = items.length;
 
-  const metricsLabels = ["Sales", "Collection size", "Floor price", "Avg. item price", "Avg. item level", "Avg. marketplace level"];
-  const metricsData = metrics ? [
-    metrics.amountSold,
-    metrics.collectionSize,
-    "IST " + toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
-    "IST " + toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
-    toTwoDecimals(metrics.averageLevel),
-    toTwoDecimals(metrics.marketplaceAverageLevel)] : []
-  
+  const metricsData = metrics
+    ? [
+        metrics.amountSold,
+        metrics.collectionSize,
+        "IST " + toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+        "IST " + toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+        toTwoDecimals(metrics.averageLevel),
+        toTwoDecimals(metrics.marketplaceAverageLevel),
+      ]
+    : [];
+
   if (!items) return <></>;
   return (
     <>
       <AssetItemFilters section={SECTION.SHOP} pageSelector={pageSelector} />
       <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
-      {metrics ? <MarketplaceMetrics header={metricsLabels} data={metricsData} /> : <></>}
+      {metrics ? <MarketplaceMetrics data={metricsData} /> : <></>}
       <HorizontalDivider />
       {selectedId && item && <ItemDetailsMarket itemInMarket={item} selectItemInMarket={(id: string) => setSelectedId(id)} />}
       {items.length > 0 ? (

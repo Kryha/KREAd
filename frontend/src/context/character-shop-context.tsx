@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Character, CharacterInMarket, KreadCharacterInMarket, MarketMetrics } from "../interfaces";
+import { CharacterInMarket, KreadCharacterInMarket, MarketMetrics } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
 import { itemArrayToObject } from "../util";
-import { watchCharacterMarketPaths, parseCharacterMarket, parseCharacterMarketMetrics, watchCharacterMarketMetrics } from "../service/storage-node/watch-market";
-import { cidToUrl, urlToCid } from "../util/other";
+import { parseCharacterMarket, watchCharacterMarketMetrics, watchCharacterMarketPaths } from "../service/storage-node/watch-market";
+import { cidToUrl } from "../util/other";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
@@ -16,6 +16,14 @@ const initialState: CharacterMarketContext = {
   characters: [],
   characterPaths: [],
   fetched: false,
+  metrics: {
+    amountSold: 0,
+    collectionSize: 0,
+    averageLevel: 0,
+    marketplaceAverageLevel: 0,
+    putForSaleCount: 0,
+    latestSalePrice: BigInt(0),
+  },
 };
 
 const Context = createContext<CharacterMarketContext | undefined>(undefined);
@@ -37,8 +45,11 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       const characters = await Promise.all(charactersInMarket.map((character) => formatMarketEntry(character)));
       if (characters.length) marketDispatch((prevState: CharacterMarketContext) => ({ ...prevState, characters, fetched: true }));
     };
-    const parseCharacterMarketMetricsUpdate = async (metrics) => {
-      marketDispatch((prevState: CharacterMarketContext) => ({ ...prevState, metrics }));
+    const parseCharacterMarketMetricsUpdate = async (metrics: MarketMetrics) => {
+      marketDispatch((prevState: CharacterMarketContext) => ({
+        ...prevState,
+        metrics,
+      }));
     };
     // TO-DO: consider including inventory directly in sell record
     const formatMarketEntry = async (marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
