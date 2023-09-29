@@ -23,7 +23,7 @@ export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOffer
   const { width, height } = useViewport();
   const location = useLocation();
   const previousPath = location.state.pathname;
-  const confirmationPath = previousPath===`${routes.shop}/items` ? `${routes.inventory}/items` : `${routes.inventory}/characters`;
+  const confirmationPath = previousPath === `${routes.shop}/items` ? `${routes.inventory}/items` : `${routes.inventory}/characters`;
   const [currentStep, setCurrentStep] = useState<BuyStep>(1);
   if (!data) return <ErrorView />;
 

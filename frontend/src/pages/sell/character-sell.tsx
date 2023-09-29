@@ -22,7 +22,7 @@ export const CharacterSell = () => {
     await sellCharacter.callback(data.price, () => setIsPlacedInShop(true));
   };
 
-  if(!data || !characterCopy) return <ErrorView />;
+  if (!data || !characterCopy) return <ErrorView />;
 
   return (
     <Sell

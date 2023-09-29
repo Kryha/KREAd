@@ -37,13 +37,13 @@ export const Sell: FC<Props> = ({ data, setData, text: pText, sendOfferHandler, 
   if (!data) return <ErrorView />;
 
   let confirmationPath: string = routes.character;
-  if(previousPath.includes(`item`)){
-    if(previousPath.includes(`sell`)) confirmationPath = `${routes.shop}/items`
-    if(previousPath.includes(`buy`)) confirmationPath = `${routes.inventory}/items`
+  if (previousPath.includes("item")) {
+    if (previousPath.includes("sell")) confirmationPath = `${routes.shop}/items`;
+    if (previousPath.includes("buy")) confirmationPath = `${routes.inventory}/items`;
   }
-  if(previousPath.includes(`character`)){
-    if(previousPath.includes(`sell`)) confirmationPath = `${routes.shop}/characters`
-    if(previousPath.includes(`buy`)) confirmationPath = `${routes.inventory}/characters`
+  if (previousPath.includes("character")) {
+    if (previousPath.includes("sell")) confirmationPath = `${routes.shop}/characters`;
+    if (previousPath.includes("buy")) confirmationPath = `${routes.inventory}/characters`;
   }
 
   console.log(previousPath, confirmationPath);

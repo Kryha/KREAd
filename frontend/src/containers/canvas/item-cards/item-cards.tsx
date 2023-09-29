@@ -56,8 +56,8 @@ export const ItemCards: FC = () => {
       setSelectedAsset(equippedItem?.name);
     }
   }, [equippedItem, selectedAsset]);
-  
-  if(!selectedCharacter) {
+
+  if (!selectedCharacter) {
     console.error("No character selected");
     return <></>;
   }
