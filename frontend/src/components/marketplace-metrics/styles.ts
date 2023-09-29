@@ -64,7 +64,7 @@ export const Metric = styled.div`
 `;
 
 export const MetricText = styled(ButtonText)`
-  font-size: 16px;
+  font-size: 24px;
   :first-letter {
     text-transform: none;
   }
