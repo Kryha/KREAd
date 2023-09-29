@@ -56,6 +56,7 @@ export const general = {
   comingSoon: "coming soon!",
   scroll: "scroll",
   maxCharacterLength: `the character name cannot be longer than ${MAX_CHARACTER_LENGTH} characters`,
+  characterNamePatternError: "the character name can only contain alphanumeric characters, underscores(_)  and/or dashes(-)",
   goToYourWallet: "go to your wallet to accept the action!",
   yourActionIsPending: "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
   loading: "loading...",

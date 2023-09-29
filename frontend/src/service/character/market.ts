@@ -38,7 +38,6 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
   const proposal = {
     want,
     give,
-    exit: { waived: null },
   };
 
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
@@ -134,7 +133,6 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
   const proposal = {
     want,
     give,
-    exit: { waived: null },
   };
 
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
@@ -185,7 +183,6 @@ const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }
   const proposal = {
     want,
     give: {},
-    exit: { waived: null },
   };
 
   service.makeOffer(spec, proposal, harden({ itemsToSell: itemCollection }), ({ status, data }: { status: string; data: object }) => {
