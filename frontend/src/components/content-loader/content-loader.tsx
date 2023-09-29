@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { AnimatedLoading } from "./animated-loading";
-import { LoadingDevMode, LoadingPageContainer, Spinner } from "./styles";
-import { DevelopmentMode } from "../../service/test-service/development-mode";
+import { LoadingPageContainer, Spinner } from "./styles";
 
 interface ContentLoaderProps {
   loading: boolean;
@@ -13,29 +12,8 @@ interface LoadingPageProps {
 }
 
 export const LoadingPage: FC<LoadingPageProps> = ({ spinner = true }) => {
-  const [showDevelopmentMode, setShowDevelopmentMode] = useState(false);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === "d") {
-        setShowDevelopmentMode((prevMode) => !prevMode);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
   return (
     <>
-      {showDevelopmentMode && (
-        <LoadingDevMode>
-          <DevelopmentMode />
-        </LoadingDevMode>
-      )}
       <LoadingPageContainer isSpinner={spinner}>{spinner ? <Spinner /> : <AnimatedLoading />}</LoadingPageContainer>
     </>
   );

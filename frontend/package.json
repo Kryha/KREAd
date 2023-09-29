@@ -66,7 +66,7 @@
     "@agoric/ertp": "0.16.3-dev-f581a7e.0",
     "@agoric/ui-components": "0.7.1-dev-7cf64bb.0",
     "@agoric/wallet": "0.18.4-dev-eb7e9eb.0",
-    "@agoric/web-components": "0.10.1-dev-7cf64bb.0",
+    "@agoric/web-components": "0.12.1-dev-7c365a1.0",
     "@emotion/babel-plugin": "^11.9.2",
     "@endo/captp": "^2.0.8",
     "@endo/eslint-plugin": "^0.4.0",
