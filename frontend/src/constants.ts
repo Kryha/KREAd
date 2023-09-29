@@ -124,41 +124,7 @@ export type InteractionMode = typeof ITEM_MODE | typeof MAIN_MODE | typeof CATEG
 export const CHARACTER_HEIGHT = 1190.5511 as const;
 export const CHARACTER_WIDTH = 841.8898 as const;
 
-<<<<<<< HEAD
-export const networkConfigs = {
-  mainnet: {
-    label: "Agoric Mainnet",
-    url: "https://main.agoric.net/network-config",
-  },
-  testnet: {
-    label: "Agoric Testnet",
-    url: "https://testnet.agoric.net/network-config",
-    chainId: "agoriclocal",
-  },
-  devnet: {
-    label: "Agoric Devnet",
-    url: "https://devnet.agoric.net/network-config",
-  },
-  ollinet: {
-    label: "Agoric Ollinet",
-    url: "https://ollinet.agoric.net/network-config",
-  },
-  emerynet: {
-    label: "Agoric Emerynet",
-    url: "https://emerynet.agoric.net/network-config",
-  },
-  localhost: {
-    label: "Local Network",
-    url: "http://localhost:3000/wallet/network-config",
-  },
-  localDevnet: {
-    label: "Emerynet",
-    url: "https://emerynet.rpc.agoric.net/", //"https://wallet.agoric.app/wallet/network-config",
-  },
-} as const;
-=======
 export const NETWORK_CONFIG = import.meta.env.VITE_NETWORK_CONFIG || ("https://wallet.agoric.app/wallet/network-config" as const);
->>>>>>> 2b9f354c7fd60aa00f176ac8cf9a5384ea593400
 
 export const localBridgeHref = "http://localhost:3000/wallet/bridge.html" as const;
 export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html" as const;
