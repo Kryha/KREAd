@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 import { ErrorView } from "../../components";
@@ -6,17 +6,11 @@ import { useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
 import { isItemCategory, Category } from "../../interfaces";
-import { useWalletState } from "../../context/wallet";
 
 export const ItemSell = () => {
   const { name, category } = useParams<"category" | "name">();
-
-  const { item: walletItems } = useWalletState();
-
-  // Locking itemToSell in useMemo to prevent it from updating when it leaves the wallet
-  const itemToSell = useMemo(() => walletItems.find((item) => item.name === name && item.category === category), []);
-  const sellItem = useSellItem(name, category as Category);
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
+  const sellItem = useSellItem(name, category as Category);
   const [data, setData] = useState<SellData>({ price: 0 });
 
   const sendOfferHandler = async (data: SellData) => {

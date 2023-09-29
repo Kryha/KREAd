@@ -7,11 +7,13 @@ import { CharacterDetailSectionSegmentStats } from "./detail-section-segment-sta
 import { DetailSectionSegmentActivity } from "./detail-section-segment-activity";
 import { DetailSectionWrap } from "./styles";
 
-import { text, UnnamedCreator } from "../../assets";
+import { InstagramIcon, text, UnnamedCreator } from "../../assets";
 import { ExtendedCharacter } from "../../interfaces";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
 import { ErrorView } from "../../components";
+import { DetailSectionItems } from "./detail-section-items";
+import { Link } from "../../pages/onboarding/styles";
 
 interface CharacterDetailSectionProps {
   character: ExtendedCharacter;
@@ -23,10 +25,6 @@ interface CharacterDetailSectionProps {
 export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions }) => {
   const { width } = useViewport();
   if (!character) return <ErrorView />;
-
-  {
-    /* FIXME: update details section based on new types */
-  }
 
   return (
     <DetailSectionWrap width={width}>
@@ -43,27 +41,24 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
       {/* stats */}
       <DetailSectionSegment title={text.character.stats} sectionIndex={2}>
-        <CharacterDetailSectionSegmentStats character={character.nft} />
+        <CharacterDetailSectionSegmentStats character={character} />
       </DetailSectionSegment>
 
       {/* equipped items */}
       <DetailSectionSegment title={text.character.equippedItems} sectionIndex={3}>
-        {/* <DetailSectionItems items={itemsValues} showToast={showToast || (() => {})} /> */}
+        <DetailSectionItems items={Object.values(character.equippedItems).filter((i) => i !== undefined)} showToast={() => {}} />
       </DetailSectionSegment>
-
-      {/* details */}
-      {/*<DetailSectionSegment title={text.character.details} sectionIndex={4}>*/}
-      {/*  <DetailSectionSegmentDetails data={{ ...character.nft.details, brand: character.nft.details.brand }} />*/}
-      {/*</DetailSectionSegment>*/}
 
       {/* project */}
-      <DetailSectionSegment title={text.character.project} sectionIndex={5}>
-        {character.nft.description}
+      <DetailSectionSegment title={text.character.project} sectionIndex={4}>
+        {text.util.correctDescriptionString(character.nft.description)}
       </DetailSectionSegment>
 
-      {/* activity */}
-      <DetailSectionSegment title={text.character.itemActivity} sectionIndex={6}>
-        {character.activity && <DetailSectionSegmentActivity events={character.activity} />}
+      <DetailSectionSegment title={text.character.artistInfo} sectionIndex={5}>
+        <Link href={character.nft.artistMetadata} target="_blank">
+          <InstagramIcon />
+          {text.general.instagram}
+        </Link>
       </DetailSectionSegment>
     </DetailSectionWrap>
   );

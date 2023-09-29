@@ -38,7 +38,6 @@ export interface AgoricState {
   notifiers: NotifiersState;
   offers: any[];
   tokenInfo: TokenInfo;
-  testCharacterInventory: any;
   isLoading: boolean;
   isReady: boolean;
   chainStorageWatcher: any;
@@ -54,7 +53,6 @@ export interface WalletConnection {
   makeOffer: any;
   publicSubscribersNotifier: any;
   leader: any;
-  address: any;
   chainId: string;
   unserializer?: {
     fromCapData: any;
@@ -63,6 +61,10 @@ export interface WalletConnection {
     unserialize: any;
   };
   importContext: any;
+  provisionSmartWallet: any;
+  smartWalletProvisioned: boolean;
+  smartWalletStatusNotifierKit: any;
+  address: string;
 }
 
 interface NotifiersState {
@@ -132,14 +134,9 @@ interface SetChainStorageWatcher {
   payload: any;
 }
 
-interface SetTestCharacter {
-  type: "SET_TEST_CHARACTER";
-  payload: any;
-}
-
-interface SetMarketplaceMetricsWatcher {
-  type: "SET_MARKETPLACE_METRICS_WATCHER";
-  payload: any;
+interface SetSmartWalletStatus {
+  type: "SET_SMART_WALLET_STATUS";
+  payload: boolean;
 }
 
 interface Reset {
@@ -163,11 +160,10 @@ export type AgoricStateActions =
   | SetAddOffer
   | SetWalletConnection
   | SetChainStorageWatcher
-  | SetTestCharacter
-  | SetMarketplaceMetricsWatcher
-  | SetOffers;
+  | SetOffers
+  | SetSmartWalletStatus;
 
 export interface OfferProposal {
-  give: Object;
-  want: Object;
+  give: any;
+  want: any;
 }

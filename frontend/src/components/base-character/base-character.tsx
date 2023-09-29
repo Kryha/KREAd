@@ -3,7 +3,7 @@ import { FC } from "react";
 import { CharacterItems } from "../../interfaces";
 import { CharacterContainer, CharacterIcon, CharacterWrapper, ItemIcon } from "./styles";
 import { useViewport } from "../../hooks";
-import { Empty, TempetCharacter, text } from "../../assets";
+import { ArmaCitizen, Empty, text } from "../../assets";
 import { zIndex } from "../../design";
 
 interface BaseCharacterProps {
@@ -14,13 +14,13 @@ interface BaseCharacterProps {
   isClothing?: boolean;
 }
 
-export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, isZoomed = false, size = "normal", isClothing }) => {
+export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, isZoomed = false, size = "normal" }) => {
   const { width, height } = useViewport();
 
   return (
     <CharacterWrapper>
-      <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size} isClothing={isClothing}>
-        <CharacterIcon width={width} height={height} src={characterImage || TempetCharacter} />
+      <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size}>
+        <CharacterIcon width={width} height={height} src={characterImage || ArmaCitizen} />
         <ItemIcon
           src={items?.hair?.image || Empty}
           alt={items?.hair?.name || text.character.hair}
@@ -37,7 +37,7 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, i
         />
         <ItemIcon
           src={items?.perk1?.image || Empty}
-          alt={items?.perk1?.name || text.character.noseline}
+          alt={items?.perk1?.name || text.character.perk1}
           width={width}
           height={height}
           zIndex={zIndex.noseline}
@@ -58,28 +58,28 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, i
         />
         <ItemIcon
           src={items?.filter1?.image || Empty}
-          alt={items?.filter1?.name || text.character.airReservoir}
+          alt={items?.filter1?.name || text.character.filter2}
           width={width}
           height={height}
           zIndex={zIndex.airReservoir}
         />
         <ItemIcon
           src={items?.filter2?.image || Empty}
-          alt={items?.filter2?.name || text.character.liquid}
+          alt={items?.filter2?.name || text.character.filter1}
           width={width}
           height={height}
           zIndex={zIndex.liquid}
         />
         <ItemIcon
           src={items?.patch?.image || Empty}
-          alt={items?.patch?.name || text.character.midBackground}
+          alt={items?.patch?.name || text.character.patch}
           width={width}
           height={height}
           zIndex={zIndex.midBackground}
         />
         <ItemIcon
           src={items?.perk2?.image || Empty}
-          alt={items?.perk2?.name || text.character.frontMask}
+          alt={items?.perk2?.name || text.character.perk2}
           width={width}
           height={height}
           zIndex={zIndex.frontMask}

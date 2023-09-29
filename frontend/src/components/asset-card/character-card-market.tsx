@@ -20,6 +20,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { PriceContainer } from "../price-in-ist/styles";
 import { PriceInIst } from "../price-in-ist";
 import { text } from "../../assets";
+import { calculateCharacterLevels } from "../../util";
 
 interface Props {
   characterInMarket: CharacterInMarket;
@@ -30,7 +31,12 @@ interface Props {
 export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { character } = characterInMarket;
+  const { character, equippedItems } = characterInMarket;
+
+  const { totalLevel } = calculateCharacterLevels({
+    nft: character,
+    equippedItems,
+  });
 
   const handleClick = () => {
     onClick && onClick(character.id);
@@ -59,7 +65,7 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
           <AssetStatsContainer>
             <AssetTag>
               <BoldLabel customColor={color.black}>lvl. </BoldLabel>
-              <LevelBoldLabel customColor={color.black}>{character.level}</LevelBoldLabel>
+              <LevelBoldLabel customColor={color.black}>{totalLevel}</LevelBoldLabel>
             </AssetTag>
             <Badge>
               <ButtonText>{character.origin}</ButtonText>

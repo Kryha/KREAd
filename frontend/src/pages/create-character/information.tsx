@@ -42,9 +42,9 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
         <FormFields>
           <Label>{text.mint.characterName}</Label>
           <InputWrapper>
-            <Input type="text" {...register("name", { required: true, maxLength: MAX_CHARACTER_LENGTH })} />
+            <Input type="text" {...register("name", { required: true, maxLength: MAX_CHARACTER_LENGTH, pattern: /^[a-zA-Z0-9_-]*$/ })} />
             {Boolean(!errors.name && dirtyFields.name) && <Tick />}
-            <ButtonInfo info={text.general.createACharacterInfo} infoPosition={"left"} />
+            <ButtonInfo info={text.general.createACharacterInfo} infoPosition={"right"} />
           </InputWrapper>
           {errors.name && errors.name.type === "required" && (
             <ErrorContainer>
@@ -56,6 +56,12 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
             <ErrorContainer>
               <Warning />
               <ButtonText>{text.general.maxCharacterLength}</ButtonText>
+            </ErrorContainer>
+          )}
+          {errors.name && errors.name.type === "pattern" && (
+            <ErrorContainer>
+              <Warning />
+              <ButtonText>{text.general.characterNamePatternError}</ButtonText>
             </ErrorContainer>
           )}
         </FormFields>

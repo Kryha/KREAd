@@ -43,7 +43,6 @@ export const useGetItemInInventoryByNameAndCategory = (
 export const useGetItemsInInventory = (): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
   const { items } = useUserState();
-
   const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
   const filtered = useFilterItems(allItems);
 
@@ -138,7 +137,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
 
         setIsLoading(true);
 
-        marketService.sellItem({
+        await marketService.sellItem({
           item: itemToSell,
           price: BigInt(uISTPrice),
           service: {
@@ -150,9 +149,9 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
           callback: async () => {
             console.info("SellItem call settled");
             setIsLoading(false);
-            setPlacedInShop();
           },
         });
+        setPlacedInShop();
         return true;
       } catch (error) {
         console.warn(error);
@@ -199,6 +198,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
           callback: async () => {
             console.info("BuyItem call settled");
             setIsLoading(false);
+            setIsAwaitingApprovalToFalse();
           },
         });
       } catch (error) {
@@ -229,8 +229,6 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
     }
     // FIXME: add character type
     const characterInWallet = charactersInWallet.find((walletEntry: any) => walletEntry.id == character.nft.id);
-
-    if (!body.item) return;
 
     userStateDispatch({ type: "START_INVENTORY_CALL" });
 

@@ -1,9 +1,4 @@
-import {
-  CharacterItems,
-  ExtendedCharacter,
-  Item,
-  ItemInMarket,
-} from "../interfaces";
+import { CharacterItems, ExtendedCharacter, Item, ItemInMarket } from "../interfaces";
 
 //TODO: ARE WE STILL USING THIS FOR ITEMS?
 

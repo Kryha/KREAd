@@ -49,7 +49,15 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       const characterWallet = newCharacterPurses[newCharacterPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
       // FIXME: this is not going to work when a users has more than 1 item that is the same (then it will be 2n)
       // Consider creating an array that fills an array n amount of times based onthe amount the user owns
-      let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
+      let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload
+        .map((i: any) => {
+          const itemArray: any = [];
+          for (let j = 0; j < Number(i[1]); j++) {
+            itemArray.push(i[0]);
+          }
+          return itemArray;
+        })
+        .flat();
 
       if (itemWallet) {
         itemWallet = itemWallet.map((item: any) => ({ ...item, equippedTo: "", forSale: false }));
@@ -59,6 +67,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         ...prevState,
         character: characterWallet,
         item: itemWallet,
+        fetched: true,
       }));
     };
 
