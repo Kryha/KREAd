@@ -11,7 +11,7 @@ import { ItemCardsMarket } from "../../components/asset-cards/item-cards-market"
 import { AssetFilterCount } from "../../components/asset-item-filters/styles";
 import { color } from "../../design";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
-import { uISTToIST } from "../../util";
+import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 
 interface Props {
   pageSelector?: ReactNode;
@@ -28,10 +28,10 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const metricsData = metrics ? [
     metrics.amountSold,
     metrics.collectionSize,
-    "IST " + Math.min(...items.map((x) => uISTToIST(Number(x.sell.price)))),
-    "IST " + (items.reduce((acc, x) => acc + uISTToIST(Number(x.sell.price)), 0) / items.length).toFixed(2),
-    metrics.averageLevel.toFixed(2),
-    metrics.marketplaceAverageLevel.toFixed(2)] : []
+    "IST " + toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+    "IST " + toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+    toTwoDecimals(metrics.averageLevel),
+    toTwoDecimals(metrics.marketplaceAverageLevel)] : []
   
   if (!items) return <></>;
   return (
