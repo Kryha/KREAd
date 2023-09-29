@@ -10,7 +10,7 @@ import { CharacterCardsMarket } from "../../components/asset-cards/character-car
 import { AssetCharacterFilters } from "../../components/asset-character-filters/asset-character-filters";
 import { AssetFilterCount } from "../../components/asset-item-filters/styles";
 import { color } from "../../design";
-import { uISTToIST } from "../../util";
+import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 
 interface Props {
@@ -29,10 +29,10 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
     ? [
         metrics.amountSold,
         metrics.collectionSize,
-        "IST " + Math.min(...characters.map((x) => uISTToIST(Number(x.sell.price)))),
-        "IST " + (characters.reduce((acc, x) => acc + uISTToIST(Number(x.sell.price)), 0) / characters.length).toFixed(2),
-        metrics.averageLevel.toFixed(2),
-        metrics.marketplaceAverageLevel.toFixed(2),
+        "IST " + toTwoDecimals(findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
+        "IST " + toTwoDecimals(findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
+        toTwoDecimals(metrics.averageLevel),
+        toTwoDecimals(metrics.marketplaceAverageLevel),
       ]
     : [];
 

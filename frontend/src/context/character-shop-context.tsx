@@ -3,7 +3,7 @@ import { Character, CharacterInMarket, KreadCharacterInMarket, MarketMetrics } f
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
 import { itemArrayToObject } from "../util";
-import { watchCharacterMarketPaths, parseCharacterMarket, parseCharacterMarketMetrics } from "../service/storage-node/watch-market";
+import { watchCharacterMarketPaths, parseCharacterMarket, parseCharacterMarketMetrics, watchCharacterMarketMetrics } from "../service/storage-node/watch-market";
 import { cidToUrl, urlToCid } from "../util/other";
 
 interface CharacterMarketContext {
@@ -31,7 +31,6 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       const merged = marketState.characterPaths.concat(paths);
       const unique = Array.from(new Set(merged));
       marketDispatch((prevState: CharacterMarketContext) => ({ ...prevState, itemMarketPaths: unique }));
-      await parseCharacterMarketMetrics(chainStorageWatcher, parseCharacterMarketMetricsUpdate);
       await parseCharacterMarket(chainStorageWatcher, unique, parseCharacterMarketUpdate);
     };
     const parseCharacterMarketUpdate = async (charactersInMarket: KreadCharacterInMarket[]) => {
@@ -60,6 +59,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     };
     if (chainStorageWatcher) {
       watchCharacterMarketPaths(chainStorageWatcher, addMarketCharacterPaths);
+      watchCharacterMarketMetrics(chainStorageWatcher, parseCharacterMarketMetricsUpdate);
       console.info("✅ LISTENING TO CHARACTER SHOP NOTIFIER");
     }
   }, [chainStorageWatcher]);

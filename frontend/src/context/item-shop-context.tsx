@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Item, ItemInMarket, MarketMetrics } from "../interfaces";
 import { useAgoricState } from "./agoric";
-import { parseItemMarket, parseItemMarketMetrics, watchItemMarketPaths } from "../service/storage-node/watch-market";
+import { parseItemMarket, parseItemMarketMetrics, watchItemMarketMetrics, watchItemMarketPaths } from "../service/storage-node/watch-market";
 import { cidToUrl } from "../util/other";
 
 interface ItemMarketContext {
@@ -37,7 +37,6 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       const merged = marketState.itemMarketPaths.concat(paths);
       const unique = Array.from(new Set(merged));
       marketDispatch((prevState: ItemMarketContext) => ({ ...prevState, itemMarketPaths: unique }));
-      await parseItemMarketMetrics(agoric.chainStorageWatcher, parseItemMarketMetricsUpdate);
       await parseItemMarket(agoric.chainStorageWatcher, unique, parseItemMarketUpdate);
     };
     const parseItemMarketUpdate = async (itemsInMarket: ContractMarketEntry[]) => {
@@ -62,6 +61,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
 
     if (agoric.chainStorageWatcher && !watchingStore) {
       watchItemMarketPaths(agoric.chainStorageWatcher, addMarketItemPaths);
+      watchItemMarketMetrics(agoric.chainStorageWatcher, parseItemMarketMetricsUpdate);
       setWatchingStore(true);
       console.count("✅ LISTENING TO ITEM SHOP NOTIFIER");
     }

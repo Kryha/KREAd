@@ -5,7 +5,6 @@ import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } fro
 import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, networkConfigs } from "../constants";
 import { fetchChainInfo } from "./util";
 import { ChainStorageWatcher, makeAgoricChainStorageWatcher, AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
-import { watchMarketplaceMetrics } from "../service/storage-node/watch-general";
 
 const initialState: AgoricState = {
   status: {
@@ -225,7 +224,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         connectKeplr();
         fetchInstance();
         fetchTokenInfo();
-        // watchMarketplaceMetrics(chainStorageWatcher, dispatch)
       } catch (e) {
         if (isCancelled) return;
         console.error(e);

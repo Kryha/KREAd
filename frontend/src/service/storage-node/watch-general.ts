@@ -114,19 +114,3 @@ chainStorageWatcher.watchLatest(
     console.error("Error watching vbank assets", log);
   },)
 };
-
-export const watchMarketplaceMetrics = (chainStorageWatcher: any, agoricDispatch: AgoricDispatch) => {
-  const path = "published.agoricNames.instance";
-
-  createWatcher(
-    chainStorageWatcher,
-    path,
-    (value) => {
-      const metrics = value.filter((i: any) => i[0] === "kread");
-      agoricDispatch({ type: "SET_MARKETPLACE_METRICS_WATCHER", payload: { marketplace_metrics: metrics } });
-    },
-    (log) => {
-      console.error("Error watching marketplace metrics", log);
-    }
-  );
-};
