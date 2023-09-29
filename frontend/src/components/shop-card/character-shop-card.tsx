@@ -8,6 +8,7 @@ import { PriceInIst } from "../price-in-ist";
 import { BaseCharacter } from "../base-character";
 import { Content, Element, Footer, ImageContainer, InfoContainer, PriceContainer, Product, Tag, TitleWrapper } from "./styles";
 import { useViewport } from "../../hooks";
+import { calculateCharacterLevels } from "../../util";
 
 interface CharacterShopCardProps {
   character: CharacterInMarket;
@@ -18,6 +19,11 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
   const { width, height } = useViewport();
 
   if (!isCharacterCategory(character.character.title)) return <></>;
+
+  const { totalLevel } = calculateCharacterLevels({
+    nft: character.character,
+    equippedItems: character.equippedItems,
+  });
 
   return (
     <Product onClick={() => onClick && onClick(character)} width={width} height={height}>
@@ -33,7 +39,7 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
           </TitleWrapper>
           <Footer>
             <Tag>
-              <BoldLabel customColor={color.black}>{text.param.level(character.character.level)}</BoldLabel>
+              <BoldLabel customColor={color.black}>{text.param.level(totalLevel)}</BoldLabel>
             </Tag>
             <PriceContainer>
               <PriceInIst price={Number(character.sell.price)} />

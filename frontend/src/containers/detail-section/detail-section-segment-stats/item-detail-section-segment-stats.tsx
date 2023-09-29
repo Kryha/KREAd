@@ -29,19 +29,19 @@ export const ItemDetailSectionSegmentStats: FC<ItemDetailSectionSegmentStatsProp
           <DetailSectionElement title={text.item.filtering} info={text.item.filteringInfo} infoPosition="left">
             <DetailSectionProgressBar title={text.item.filtering} amount={item.filtering || 0} />
           </DetailSectionElement>
-          <DetailSectionElement title={text.item.sense} info={text.item.senseInfo} infoPosition="left">
-            <DetailSectionProgressBar title={text.item.sense} amount={item.sense || 0} />
+          <DetailSectionElement title={text.item.weight} info={text.item.weightInfo} infoPosition="left">
+            <DetailSectionProgressBar title={text.item.weight} amount={item.weight || 0} />
           </DetailSectionElement>
           <DetailSectionElement title={text.item.sense} info={text.item.senseInfo} infoPosition="left">
             <DetailSectionProgressBar title={text.item.sense} amount={item.sense || 0} />
+          </DetailSectionElement>
+          <DetailSectionElement title={text.item.reserves} info={text.item.reservesInfo} infoPosition="left">
+            <DetailSectionProgressBar title={text.item.reserves} amount={item.reserves || 0} />
           </DetailSectionElement>
         </FlexColumn>
       </FlexRow>
       <DetailSectionElement title={text.item.colors}>
         <DetailSectionColorPalette hexCodeList={item.colors} />
-      </DetailSectionElement>
-      <DetailSectionElement title={text.item.itemActivity}>
-        <DetailSectionSegmentActivity events={item.activity} />
       </DetailSectionElement>
     </DetailSectionSegmentStatsWrap>
   );

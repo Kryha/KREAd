@@ -27,6 +27,7 @@ import { ItemsMode } from "../../containers/canvas/items-mode/items-mode";
 import { CharactersMode } from "../../containers/canvas/characters-mode/characters-mode";
 import { MainMode } from "../../containers/canvas/main-mode/main-mode";
 import { DownloadImageModal } from "../../components/download-image";
+import { calculateCharacterLevels } from "../../util";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
@@ -56,6 +57,12 @@ export const Landing: FC = () => {
   const handleCloseDownload = () => {
     setIsDownloadOpen(false);
   };
+
+  let level = 0;
+  if (selectedCharacter) {
+    const { totalLevel } = calculateCharacterLevels(selectedCharacter);
+    level = totalLevel;
+  }
 
   return (
     <BaseRoute
@@ -92,7 +99,7 @@ export const Landing: FC = () => {
                 <SecondaryButton onClick={() => setShowDetail(true)}>
                   <ButtonText>{text.general.moreInfo}</ButtonText>
                 </SecondaryButton>
-                <ButtonText>{text.param.level(selectedCharacter?.nft.level)}</ButtonText>
+                <ButtonText>{text.param.level(level)}</ButtonText>
               </ButtonContainer>
             </DetailContainer>
           )}

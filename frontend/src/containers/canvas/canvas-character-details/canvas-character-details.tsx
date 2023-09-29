@@ -48,7 +48,9 @@ export const CanvasCharacterDetails = () => {
         {/* story */}
         <DetailSectionSegment title={text.item.story} sectionIndex={1}>
           <DetailSectionSegmentStoryWrap>
-            <DetailSectionSegmentStoryDescription>{character.nft.description}</DetailSectionSegmentStoryDescription>
+            <DetailSectionSegmentStoryDescription>
+              {text.util.correctDescriptionString(character.nft.description)}
+            </DetailSectionSegmentStoryDescription>
           </DetailSectionSegmentStoryWrap>
         </DetailSectionSegment>
         <DetailsSectionContent></DetailsSectionContent>

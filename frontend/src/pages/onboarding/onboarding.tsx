@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { DiscordIcon, InstagramIcon, KeplerIcon, TwitterIcon, text } from "../../assets";
+import { DiscordIcon, KeplerIcon, TwitterIcon, text } from "../../assets";
 import { breakpoints, color } from "../../design";
 import { AnimatedLogo, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
@@ -22,7 +22,6 @@ import {
   OnboardingWrapper,
   ScrollContainer,
   SectionContainer,
-  SocialLink,
   SocialsContainer,
   TextContainer,
 } from "./styles";
@@ -113,10 +112,6 @@ export const Onboarding: FC = () => {
                 <Link href={TWITTER_LINK} target="_blank">
                   <TwitterIcon />
                   {text.general.twitter}
-                </Link>
-                <Link href={`mailto:${text.general.contactEmail}`}>
-                  <InstagramIcon />
-                  {text.general.instagram}
                 </Link>
               </SocialsContainer>
             </GeneralSectionContainer>
