@@ -30,8 +30,8 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
     metrics.collectionSize,
     "IST " + Math.min(...items.map((x) => uISTToIST(Number(x.sell.price)))),
     "IST " + (items.reduce((acc, x) => acc + uISTToIST(Number(x.sell.price)), 0) / items.length).toFixed(2),
-    metrics.averageLevel,
-    metrics.marketplaceAverageLevel]
+    metrics.averageLevel.toFixed(2),
+    metrics.marketplaceAverageLevel.toFixed(2)]
   
   if (!items) return <></>;
   return (
