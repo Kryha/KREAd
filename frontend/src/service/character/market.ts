@@ -20,7 +20,7 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
   const charBrand = service.characterBrand;
 
   const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
-  
+
   const spec = {
     source: "contract",
     instance,
@@ -38,7 +38,6 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
   const proposal = {
     want,
     give,
-    exit: { waived: null },
   };
 
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
@@ -62,7 +61,6 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
   const istBrand = service.istBrand;
 
   const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
-
 
   const spec = {
     source: "contract",
@@ -135,7 +133,6 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
   const proposal = {
     want,
     give,
-    exit: { waived: null },
   };
 
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
@@ -167,9 +164,9 @@ interface SellItemBatchAction {
 }
 
 const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }: SellItemBatchAction): Promise<void> => {
-  console.error("This feature is not implemented yet :)")
+  console.error("This feature is not implemented yet :)");
   return;
-  
+
   const instance = service.kreadInstance;
 
   const spec = {
@@ -186,7 +183,6 @@ const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }
   const proposal = {
     want,
     give: {},
-    exit: { waived: null },
   };
 
   service.makeOffer(spec, proposal, harden({ itemsToSell: itemCollection }), ({ status, data }: { status: string; data: object }) => {

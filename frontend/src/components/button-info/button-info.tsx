@@ -15,7 +15,7 @@ export const ButtonInfo: FC<ButtonInfoProps> = ({ title, info, infoPosition }) =
   return (
     <ButtonInfoWrap>
       <Tooltip title={title} content={info} position={infoPosition}>
-        <SecondaryButton>{text.general.info}</SecondaryButton>
+        <SecondaryButton disabled={true}>{text.general.info}</SecondaryButton>
       </Tooltip>
     </ButtonInfoWrap>
   );
