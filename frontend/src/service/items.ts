@@ -49,6 +49,14 @@ export const useGetItemsInInventory = (): [Item[], boolean] => {
   return [filtered, !fetched];
 };
 
+export const useGetItemsForCanvas = (): [Item[], boolean] => {
+  const { characters, fetched } = useUserState();
+  const { items } = useUserState();
+  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
+
+  return [allItems, !fetched];
+};
+
 export const useGetItemsInInventoryByCategory = (category: string | null): [Item[], boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
 
