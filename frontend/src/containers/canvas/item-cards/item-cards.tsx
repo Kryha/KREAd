@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { ButtonText, HorizontalDivider, ItemCard, PrimaryButton } from "../../../components";
 import { color } from "../../../design";
-import { useEquipItem, useGetItemsInInventoryByCategory, useSelectedCharacter, useUnequipItem } from "../../../service";
+import { useEquipItem, useSelectedCharacter, useUnequipItem } from "../../../service";
 import { useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { AssetFilterCount } from "../../../components/asset-item-filters/styles";
@@ -10,6 +10,8 @@ import { EmptyItemCardContainer, AdjustedItemButtonContainer, ItemCardContainer,
 import { routes } from "../../../navigation";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ItemCardInfo } from "./item-card-info";
+import { Category } from "../../../interfaces";
+import { useUserState } from "../../../context/user";
 
 export const ItemCards: FC = () => {
   const { selectedAssetCategory, selectedAsset, showToast, setShowToast, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
@@ -17,22 +19,32 @@ export const ItemCards: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedCharacter] = useSelectedCharacter();
-  const characterName = selectedCharacter?.nft.name;
-  const category: string = selectedAssetCategory ? selectedAssetCategory : "";
-  const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
+  const category = selectedAssetCategory ? selectedAssetCategory : "";
+  const { items } = useUserState();
 
-  const equippedItem = items.find((item) => item.equippedTo === characterName);
-  const selectedItemToEquip = items.find((item) => item.name === selectedAsset);
+  const equippedItems = useMemo(() => {
+    if(!selectedCharacter) return [];
+    const equipped = Object.values(selectedCharacter.equippedItems).filter(i=>!!i);
+    return equipped;
+  }, [selectedCharacter])
+  
+  const allUsableItems = useMemo(()=> [...items, ...equippedItems], [selectedCharacter, items])
+  const [equippedItem, setEquippedItem] = useState(selectedCharacter?.equippedItems[selectedAssetCategory as Category] || undefined);
+  const selectedItem = useMemo(()=>{
+    return items.find((item) => item.name === selectedAsset );
+  },[selectedAsset, items]);
   const [equippedItemState, setEquippedItemState] = useState(equippedItem);
-
   const equipItem = useEquipItem(setEquippedItemState);
   const unequipItem = useUnequipItem(() => setEquippedItemState(undefined));
+  const selectedItemIsEquipped = useMemo(()=>{
+    return selectedItem?.equippedTo===selectedCharacter!.nft.name;
+  }, [selectedItem, selectedCharacter]);
 
   const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    if (selectedItemToEquip) {
-      equipItem.mutate({ item: selectedItemToEquip });
+    if (selectedItem) {
+      equipItem.mutate({ item: selectedItem });
     }
   };
 
@@ -42,6 +54,7 @@ export const ItemCards: FC = () => {
     if (equippedItemState) {
       unequipItem.mutate({ item: equippedItemState });
     }
+    setEquippedItem(undefined);
   };
 
   const sell = () => {
@@ -63,11 +76,11 @@ export const ItemCards: FC = () => {
   }
   const validateActions = useMemo(() => {
     return {
-      unequip: !(selectedItemToEquip?.equippedTo === selectedCharacter.nft.name),
-      equip: !!(selectedItemToEquip?.equippedTo === selectedCharacter.nft.name) || !selectedItemToEquip,
-      sell: !!(selectedItemToEquip?.equippedTo === selectedCharacter.nft.name) || !selectedItemToEquip,
+      unequip: selectedItemIsEquipped,
+      equip: !!(selectedItem?.equippedTo===selectedCharacter.nft.name) || !selectedItem,
+      sell: !!(selectedItem?.equippedTo===selectedCharacter.nft.name) || !selectedItem,
     };
-  }, [equippedItemState, selectedItemToEquip, selectedAsset]);
+  }, [selectedItem, equippedItem]);
 
   // Filter out the selectedItem from the items array
   const filteredItems = items.filter((item) => item.equippedTo === "");
