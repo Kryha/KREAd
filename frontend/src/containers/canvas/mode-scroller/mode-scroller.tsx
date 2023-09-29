@@ -63,7 +63,7 @@ export const ModeScroller: React.FC = () => {
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft" || "Escape") {
+    if (event.key === "Escape") {
       handlePreviousMode();
     }
   };

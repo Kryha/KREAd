@@ -25,7 +25,7 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
       }
       const selectedCharacter = characters.find((char) => char.nft.name === selected.nft.name);
       if (selectedCharacter) {
-        userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter });
+        userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter.nft.name });
       }
     } else if (characters.length > 0) {
       if (storedName) {
@@ -33,17 +33,17 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
         if (matchingCharacter) {
           userStateDispatch({
             type: "SET_SELECTED",
-            payload: matchingCharacter,
+            payload: matchingCharacter.nft.name,
           });
         } else {
           const firstCharacter = characters[0];
           localStorage.setItem("selectedCharacter", firstCharacter.nft.name);
-          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter });
+          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter.nft.name });
         }
       } else {
         const firstCharacterName = characters[0].nft.name;
         localStorage.setItem("selectedCharacter", firstCharacterName);
-        userStateDispatch({ type: "SET_SELECTED", payload: characters[0] });
+        userStateDispatch({ type: "SET_SELECTED", payload: characters[0].nft.name });
       }
     }
   }, [userStateDispatch, characters, selected]);
@@ -134,7 +134,7 @@ export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
   const istBrand = service.tokenInfo.ist.brand;
-  return useMutation(async (body: CharacterCreation) => {
+  return useMutation(async (body: CharacterCreation): Promise<void> => {
     if (!body.name) throw new Error("Name not specified");
     await mintCharacter({
       name: body.name,
@@ -147,13 +147,6 @@ export const useCreateCharacter = () => {
         console.info("MintCharacter call settled");
       },
     });
-  });
-};
-
-export const useEquipCharacter = () => {
-  return useMutation(async (body: { id: string }) => {
-    if (!body.id) throw new Error("Id not specified");
-    // TODO: intergrate
   });
 };
 
@@ -175,7 +168,7 @@ export const useSellCharacter = (characterId: number) => {
       const uISTPrice = ISTTouIST(price);
 
       setIsLoading(true);
-      return await marketService.sellCharacter({
+      await marketService.sellCharacter({
         character: characterToSell,
         price: BigInt(uISTPrice),
         service: {
@@ -187,10 +180,10 @@ export const useSellCharacter = (characterId: number) => {
         callback: async () => {
           console.info("SellCharacter call settled");
           setIsLoading(false);
-          successCallback();
-          userDispatch({ type: "SET_SELECTED", payload: undefined });
+          userDispatch({ type: "SET_SELECTED", payload: "" });
         },
       });
+      successCallback();
     },
     [characterId, characters, wallet, service, userDispatch],
   );

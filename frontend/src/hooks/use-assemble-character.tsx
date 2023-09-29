@@ -4,7 +4,6 @@ import { Empty } from "../assets";
 import { useGetItemsInInventory, useSelectedCharacter } from "../service";
 import { CHARACTER_HEIGHT, CHARACTER_WIDTH } from "../constants";
 import { Category } from "../interfaces";
-import { cidToUrl } from "../util/other";
 
 interface Item {
   category: Category;
