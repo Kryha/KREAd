@@ -4,7 +4,7 @@ import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useIsMobile, useViewport } from "../../hooks";
-import { Character, CharacterCreation, ExtendedCharacter } from "../../interfaces";
+import { Character, CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
 import { Confirmation } from "./confirmation";
@@ -12,7 +12,7 @@ import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
 import { breakpoints } from "../../design";
-import { useWalletState } from "../../context/wallet";
+import { useUserState } from "../../context/user";
 
 export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
@@ -22,20 +22,20 @@ export const CreateCharacter: FC = () => {
   const [characterData, setCharacterData] = useState<CharacterCreation>({
     name: "",
   });
-  const { character, fetched } = useWalletState();
+  const { characters, fetched } = useUserState();
   const isLoadingCharacters = !fetched;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
   const mobile = useIsMobile(breakpoints.desktop);
 
   useEffect(() => {
-    if (character.map((c: any) => c.name).includes(characterData.name)) {
+    if (characters.map((c: any) => c.nft.name).includes(characterData.name)) {
       setIsOfferAccepted(true);
-      const [newCharacter] = character.filter((c: any) => c.name === characterData.name);
-      setMintedCharacter(newCharacter);
+      const [newCharacter] = characters.filter((c: any) => c.nft.name === characterData.name);
+      setMintedCharacter(newCharacter.nft);
       setIsLoading(false);
     }
-  }, [character, characterData]);
+  }, [characters, characterData]);
 
   const changeStep = async (step: number): Promise<void> => {
     setCurrentStep(step);
