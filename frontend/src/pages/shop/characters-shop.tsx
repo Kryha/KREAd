@@ -25,21 +25,22 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [character] = useGetCharacterInShopById(selectedId);
   const assetsCount = characters.length;
 
-  const metricsLabels = ["Sales", "Collection size", "Floor price", "Avg. character price", "Avg. character level", "Avg. marketplace level"];
-  const metricsData = metrics ? [
-    metrics.amountSold,
-    metrics.collectionSize,
-    "IST " + Math.min(...characters.map((x) => uISTToIST(Number(x.sell.price)))),
-    "IST " + (characters.reduce((acc, x) => acc + uISTToIST(Number(x.sell.price)), 0) / characters.length).toFixed(2),
-    metrics.averageLevel.toFixed(2),
-    metrics.marketplaceAverageLevel.toFixed(2)] : []
-  
+  const metricsData = metrics
+    ? [
+        metrics.amountSold,
+        metrics.collectionSize,
+        "IST " + Math.min(...characters.map((x) => uISTToIST(Number(x.sell.price)))),
+        "IST " + (characters.reduce((acc, x) => acc + uISTToIST(Number(x.sell.price)), 0) / characters.length).toFixed(2),
+        metrics.averageLevel.toFixed(2),
+        metrics.marketplaceAverageLevel.toFixed(2),
+      ]
+    : [];
 
   return (
     <>
       <AssetCharacterFilters section={SECTION.SHOP} pageSelector={pageSelector} />
       <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
-      {metrics ? <MarketplaceMetrics header={metricsLabels} data={metricsData} /> : <></>}
+      {metrics ? <MarketplaceMetrics data={metricsData} /> : <></>}
       <HorizontalDivider />
       {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (

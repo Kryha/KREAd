@@ -81,11 +81,14 @@ export const SECTION = {
   INVENTORY: "inventory",
 } as const;
 
-export const ASSET_TYPE = {
-  CHARACTER: "character",
-  ITEM: "item",
-};
-
+export const metricsLabels = [
+  "sales",
+  "collection size",
+  "floor price",
+  "avg. character price",
+  "avg. character level",
+  "avg. marketplace level",
+] as const;
 /***************************************************************************/
 
 export const AGORIC_LINK = "https://agoric.com/" as const;

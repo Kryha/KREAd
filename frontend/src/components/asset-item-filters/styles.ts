@@ -52,7 +52,7 @@ export const AssetFilterContainer = styled.div`
 export const AssetSelectorContainer = styled.div`
   display: flex;
   gap: 16px;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
 `;
 
