@@ -6,12 +6,13 @@ import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../consta
 import { useIsMobile, useViewport } from "../../hooks";
 import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
 import { routes } from "../../navigation";
-import { useCreateCharacter, useMyCharacters } from "../../service";
+import { useCreateCharacter } from "../../service";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
 import { breakpoints } from "../../design";
+import { useWalletState } from "../../context/wallet";
 
 export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
@@ -21,22 +22,21 @@ export const CreateCharacter: FC = () => {
   const [characterData, setCharacterData] = useState<CharacterCreation>({
     name: "",
   });
-  const [myCharacters, isLoadingCharacters] = useMyCharacters();
+  const { character, fetched } = useWalletState();
+  const isLoadingCharacters = !fetched;
+  // const [myCharacters, isLoadingCharacters] = useMyCharacters();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
   const mobile = useIsMobile(breakpoints.desktop);
 
-  // TODO: Implement wallet listener for cases where the user doesn't approve the mint
-  // const [isWalletError, setIsWalletError] = useState<boolean>(false);
-
   useEffect(() => {
-    if (myCharacters.map((c) => c.nft.name).includes(characterData.name)) {
+    if (character.map((c: any) => c.name).includes(characterData.name)) {
       setIsOfferAccepted(true);
-      const [newCharacter] = myCharacters.filter((character) => character.nft.name === characterData.name);
+      const [newCharacter] = character.filter((c: any) => c.name === characterData.name);
       setMintedCharacter(newCharacter);
       setIsLoading(false);
     }
-  }, [myCharacters, characterData]);
+  }, [character, characterData]);
 
   const changeStep = async (step: number): Promise<void> => {
     setCurrentStep(step);

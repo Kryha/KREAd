@@ -10,6 +10,7 @@ import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { SELL_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useLocation } from "react-router-dom";
+import { routes } from "../../navigation";
 
 interface Props {
   data: SellData;
@@ -35,6 +36,18 @@ export const Sell: FC<Props> = ({ data, setData, text: pText, sendOfferHandler, 
 
   if (!data) return <ErrorView />;
 
+  let confirmationPath: string = routes.character;
+  if(previousPath.includes(`item`)){
+    if(previousPath.includes(`sell`)) confirmationPath = `${routes.shop}/items`
+    if(previousPath.includes(`buy`)) confirmationPath = `${routes.inventory}/items`
+  }
+  if(previousPath.includes(`character`)){
+    if(previousPath.includes(`sell`)) confirmationPath = `${routes.shop}/characters`
+    if(previousPath.includes(`buy`)) confirmationPath = `${routes.inventory}/characters`
+  }
+
+  console.log(previousPath, confirmationPath);
+
   const perStepDisplay = (): React.ReactNode => {
     switch (currentStep) {
       case 0:
@@ -42,7 +55,7 @@ export const Sell: FC<Props> = ({ data, setData, text: pText, sendOfferHandler, 
       case 1:
         return <SellForm onSubmit={onSellFormSubmit} data={data} changeStep={setCurrentStep} isPlacedInShop={isPlacedInShop} />;
       case 2:
-        return <Confirmation text={pText} />;
+        return <Confirmation text={pText} confirmationPath={confirmationPath} />;
       default:
         return <ErrorView />;
     }

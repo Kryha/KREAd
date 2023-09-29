@@ -6,11 +6,10 @@ import { useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { AssetFilterCount } from "../../../components/asset-item-filters/styles";
 import { text } from "../../../assets";
-import { EmptyItemCardContainer, ItemButtonContainer, ItemCardContainer, ItemCardsContainer, ItemCardsWrapper } from "./style";
+import { EmptyItemCardContainer, AdjustedItemButtonContainer, ItemCardContainer, ItemCardsContainer, ItemCardsWrapper } from "./style";
 import { routes } from "../../../navigation";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ItemCardInfo } from "./item-card-info";
-import styled from "@emotion/styled";
 
 export const ItemCards: FC = () => {
   const { selectedAssetCategory, selectedAsset, showToast, setShowToast, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
@@ -57,16 +56,19 @@ export const ItemCards: FC = () => {
       setSelectedAsset(equippedItem?.name);
     }
   }, [equippedItem, selectedAsset]);
-
+  
+  if(!selectedCharacter) {
+    console.error("No character selected");
+    return <></>;
+  }
   const validateActions = useMemo(() => {
     return {
-      unequip: !selectedItemToEquip?.equippedTo || !equippedItemState,
-      equip: !!selectedItemToEquip?.equippedTo || !selectedItemToEquip,
-      sell: !!selectedItemToEquip?.equippedTo || !selectedItemToEquip,
+      unequip: !(selectedItemToEquip?.equippedTo === selectedCharacter.nft.name),
+      equip: !!(selectedItemToEquip?.equippedTo === selectedCharacter.nft.name) || !selectedItemToEquip,
+      sell: !!(selectedItemToEquip?.equippedTo === selectedCharacter.nft.name) || !selectedItemToEquip,
     };
   }, [equippedItemState, selectedItemToEquip, selectedAsset]);
 
-  console.log(validateActions);
   // Filter out the selectedItem from the items array
   const filteredItems = items.filter((item) => item.equippedTo === "");
   const itemsCount = filteredItems.length;
@@ -85,7 +87,7 @@ export const ItemCards: FC = () => {
             }}
           >
             <ItemCard item={equippedItem} image={equippedItem?.thumbnail} />
-            <ItemCardInfo item={equippedItem} equip={equip} sell={sell} unequip={unequip} validateActions={validateActions} />
+            <ItemCardInfo item={equippedItem} />
           </ItemCardContainer>
         </>
       ) : (
@@ -109,7 +111,7 @@ export const ItemCards: FC = () => {
                 }}
               >
                 <ItemCard key={index} item={item} image={item.thumbnail} />
-                <ItemCardInfo item={item} equip={equip} sell={sell} unequip={unequip} validateActions={validateActions} />
+                <ItemCardInfo item={item} />
               </ItemCardContainer>
             ))
           : null}
@@ -128,7 +130,3 @@ export const ItemCards: FC = () => {
     </ItemCardsContainer>
   );
 };
-
-const AdjustedItemButtonContainer = styled(ItemButtonContainer)`
-  justify-content: center;
-`;

@@ -197,6 +197,7 @@ export const UserContextProvider = (props: ProviderProps): React.ReactElement =>
       }
 
       const charactersToProcess = charactersInWallet.filter((character: { name: string }) => !processedCharacters.includes(character.name));
+      console.log(charactersInWallet, charactersToProcess)
       const extendedCharacters = await extendCharacters(charactersToProcess, agoric.chainStorageWatcher);
       const frontendCharacters = mediate.characters.toFront(extendedCharacters.extendedCharacters);
       userStateDispatch({ type: "SET_CHARACTERS", payload: frontendCharacters });

@@ -1,7 +1,7 @@
 export const routes = {
   root: "/",
   character: "/character",
-  shop: "/shop/items", // Defaults to item shop
+  shop: "/shop",
   inventory: "/inventory",
   items: "/items",
   createCharacter: "/create-character",

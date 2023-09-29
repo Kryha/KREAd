@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
 import { ISTTouIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
-
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { mintCharacter } from "./character/mint";
@@ -62,8 +61,7 @@ export const useMyCharactersForSale = () => {
   ] = useAgoricContext();
   const wallet = useWalletState();
 
-  // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
-  const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
+  const [offerCharacters, setOfferCharacters] = useState<string>("[]");
 
   // adding items to characters from offers
   useEffect(() => {
@@ -134,7 +132,7 @@ export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
   const istBrand = service.tokenInfo.ist.brand;
-  return useMutation(async (body: CharacterCreation) => {
+  return useMutation(async (body: CharacterCreation): Promise<void> => {
     if (!body.name) throw new Error("Name not specified");
     await mintCharacter({
       name: body.name,
@@ -150,14 +148,6 @@ export const useCreateCharacter = () => {
   });
 };
 
-export const useEquipCharacter = () => {
-  return useMutation(async (body: { id: string }) => {
-    if (!body.id) throw new Error("Id not specified");
-    // TODO: intergrate
-  });
-};
-
-// TODO: test after merge with equip/unequip fix
 export const useSellCharacter = (characterId: number) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
@@ -175,7 +165,7 @@ export const useSellCharacter = (characterId: number) => {
       const uISTPrice = ISTTouIST(price);
 
       setIsLoading(true);
-      return await marketService.sellCharacter({
+      await marketService.sellCharacter({
         character: characterToSell,
         price: BigInt(uISTPrice),
         service: {
@@ -187,10 +177,10 @@ export const useSellCharacter = (characterId: number) => {
         callback: async () => {
           console.info("SellCharacter call settled");
           setIsLoading(false);
-          successCallback();
           userDispatch({ type: "SET_SELECTED", payload: undefined });
         },
       });
+      successCallback();
     },
     [characterId, characters, wallet, service, userDispatch],
   );

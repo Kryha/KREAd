@@ -132,7 +132,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
 
         setIsLoading(true);
 
-        marketService.sellItem({
+        await marketService.sellItem({
           item: itemToSell,
           price: BigInt(uISTPrice),
           service: {
@@ -144,9 +144,9 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
           callback: async () => {
             console.info("SellItem call settled");
             setIsLoading(false);
-            setPlacedInShop();
           },
         });
+        setPlacedInShop();
         return true;
       } catch (error) {
         console.warn(error);
