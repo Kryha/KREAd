@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from "react";
-import { METRICS_CHARACTER, SECTION } from "../../constants";
+import { IST_IDENTIFIER, METRICS_CHARACTER, SECTION } from "../../constants";
 import { useGetCharacterInShopById, useGetCharacterMarketMetrics, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
 import { OverviewContainer } from "./styles";
@@ -25,12 +25,13 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [character] = useGetCharacterInShopById(selectedId);
   const assetsCount = characters.length;
 
+  // TODO: replace identifier with logo
   const metricsData = metrics
     ? [
         metrics.amountSold,
         metrics.collectionSize,
-        "IST " + toTwoDecimals(findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
-        "IST " + toTwoDecimals(findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
+        IST_IDENTIFIER + toTwoDecimals(findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
+        IST_IDENTIFIER + toTwoDecimals(findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
         toTwoDecimals(metrics.averageLevel),
         toTwoDecimals(metrics.marketplaceAverageLevel),
       ]

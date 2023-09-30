@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from "react";
-import { METRICS_ITEM, SECTION } from "../../constants";
+import { IST_IDENTIFIER, METRICS_ITEM, SECTION } from "../../constants";
 import { useGetItemInShopById, useGetItemMarketMetrics, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
@@ -24,12 +24,13 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   const [item] = useGetItemInShopById(selectedId);
   const assetsCount = items.length;
 
+  // TODO: replace identifier with logo
   const metricsData = metrics
     ? [
         metrics.amountSold,
         metrics.collectionSize,
-        "IST " + toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
-        "IST " + toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+        IST_IDENTIFIER + toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+        IST_IDENTIFIER + toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
         toTwoDecimals(metrics.averageLevel),
         toTwoDecimals(metrics.marketplaceAverageLevel),
       ]
