@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useState } from "react";
-import { SECTION } from "../../constants";
-import { useGetCharacterInShopById, useGetCharactersInShop } from "../../service";
+import { IST_IDENTIFIER, METRICS_CHARACTER, SECTION } from "../../constants";
+import { useGetCharacterInShopById, useGetCharacterMarketMetrics, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
 import { OverviewContainer } from "./styles";
 import { HorizontalDivider, OverviewEmpty } from "../../components";
@@ -8,8 +8,10 @@ import { text } from "../../assets";
 import { CharacterDetailsMarket } from "../../components/asset-details/character-details-market";
 import { CharacterCardsMarket } from "../../components/asset-cards/character-cards-market";
 import { AssetCharacterFilters } from "../../components/asset-character-filters/asset-character-filters";
-import { AssetFilterCount } from "../../components/asset-item-filters/styles";
+import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
 import { color } from "../../design";
+import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
+import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 
 interface Props {
   pageSelector?: ReactNode;
@@ -19,14 +21,32 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   const [selectedId, setSelectedId] = useState<string>("");
 
   const [characters, isLoading] = useGetCharactersInShop();
-
+  const metrics = useGetCharacterMarketMetrics();
   const [character] = useGetCharacterInShopById(selectedId);
   const assetsCount = characters.length;
 
+  // TODO: replace identifier with logo
+  const metricsData = metrics
+    ? [
+        metrics.amountSold,
+        metrics.collectionSize,
+        IST_IDENTIFIER + toTwoDecimals(findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
+        IST_IDENTIFIER + toTwoDecimals(findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
+        toTwoDecimals(metrics.averageLevel),
+        toTwoDecimals(metrics.marketplaceAverageLevel),
+      ]
+    : [];
+
   return (
     <>
-      <AssetCharacterFilters section={SECTION.SHOP} pageSelector={pageSelector} />
-      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
+      <AssetHeaderContainer>
+        <AssetHeader>
+          {pageSelector}
+          {metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_CHARACTER} /> : <></>}
+        </AssetHeader>
+        <AssetCharacterFilters section={SECTION.SHOP} />
+      </AssetHeaderContainer>
+      <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
       {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (

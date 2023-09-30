@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Category, Item, ItemInMarket, Rarity } from "../interfaces";
+import { Category, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
 import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -47,6 +47,14 @@ export const useGetItemsInInventory = (): [Item[], boolean] => {
   const filtered = useFilterItems(allItems);
 
   return [filtered, !fetched];
+};
+
+export const useGetItemsForCanvas = (): [Item[], boolean] => {
+  const { characters, fetched } = useUserState();
+  const { items } = useUserState();
+  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
+
+  return [allItems, !fetched];
 };
 
 export const useGetItemsInInventoryByCategory = (category: string | null): [Item[], boolean] => {
@@ -113,6 +121,11 @@ export const useGetItemsInShop = (): [ItemInMarket[], boolean] => {
   const filtered = useFilterItemsInShop(items);
 
   return [filtered, !fetched];
+};
+
+export const useGetItemMarketMetrics = (): MarketMetrics => {
+  const { metrics } = useItemMarketState();
+  return metrics;
 };
 
 export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {

@@ -1,23 +1,11 @@
 import { FC, useState } from "react";
 import { ASSETS_PER_PAGE } from "../../constants";
 import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more";
-import { AssetsContainer, AssetsWrapper } from "./styles";
+import { AssetsContainer, AssetsShopWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
 import { CharacterInMarket } from "../../interfaces";
 import { CharacterCardMarket } from "../asset-card/character-card-market";
-
-export interface AssetData {
-  id: string;
-  image: string;
-  name: string;
-  category: string;
-  level: number;
-  rarity: number;
-  isEquipped?: boolean;
-  isForSale?: boolean;
-  price?: bigint;
-}
 
 interface Props {
   charactersInMarket: CharacterInMarket[];
@@ -34,7 +22,7 @@ export const CharacterCardsMarket: FC<Props> = ({ charactersInMarket, isLoading,
 
   if (isLoading) return <LoadingPage spinner={false} />;
   return (
-    <AssetsWrapper height={height}>
+    <AssetsShopWrapper height={height}>
       {charactersInMarket.length > 0 && (
         <AssetsContainer>
           {charactersInMarket.slice(0, visibleAssets).map((characterInMarket) => (
@@ -47,6 +35,6 @@ export const CharacterCardsMarket: FC<Props> = ({ charactersInMarket, isLoading,
           {visibleAssets < charactersInMarket.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
         </AssetsContainer>
       )}
-    </AssetsWrapper>
+    </AssetsShopWrapper>
   );
 };

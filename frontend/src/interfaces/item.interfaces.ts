@@ -43,3 +43,12 @@ export interface ItemInMarket {
     royalty: bigint;
   };
 }
+
+export interface MarketMetrics {
+  amountSold: number;
+  averageLevel: number;
+  collectionSize: number;
+  latestSalePrice: bigint;
+  marketplaceAverageLevel: number;
+  putForSaleCount: number;
+}

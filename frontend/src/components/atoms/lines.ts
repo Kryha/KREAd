@@ -8,6 +8,7 @@ interface DividersProps {
 export const HorizontalDivider = styled.div<DividersProps>`
   height: 1px;
   width: 100%;
+  margin-top: ${margins.mini};
   background-color: ${(props): string => props.customColor || color.grey};
 `;
 
@@ -22,7 +23,7 @@ export const VerticalDivider = styled.div`
 
 export const Dash = styled.div`
   width: 16px;
-  height: 0px;
+  height: 0;
   border: 0.5px solid ${color.darkGrey};
   margin-right: 8px;
   margin-left: 8px;

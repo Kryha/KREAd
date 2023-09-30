@@ -3,6 +3,7 @@ import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel, PrimaryButton
 import React, { FC } from "react";
 import {
   AssetContent,
+  AssetEquippedContainer,
   AssetFooter,
   AssetImage,
   AssetImageContainer,
@@ -58,6 +59,11 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
         <AssetImageContainer>
+          {item.equippedTo && (
+            <AssetEquippedContainer>
+              <Equipped />
+            </AssetEquippedContainer>
+          )}
           <AssetImage src={item.image} category={item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>

@@ -2,9 +2,16 @@ import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 import { AgoricDispatch, TokenInfo } from "../../interfaces";
 import { ITEM_IDENTIFIER, IST_IDENTIFIER, CHARACTER_IDENTIFIER } from "../../constants";
 
-export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: AgoricDispatch) => {
+type WatcherCallback = (value: any) => void;
+type ErrorHandler = (log: any) => void;
+
+export const createWatcher = (
+  chainStorageWatcher: any,
+  path: string,
+  onValueUpdate: WatcherCallback,
+  onError: ErrorHandler
+) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
-  const path = "published.agoricNames.brand";
 
   chainStorageWatcher.watchLatest(
     [Kind.Data, path],
@@ -14,6 +21,19 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
         console.warn(`${path} returned undefined`);
         return;
       }
+      onValueUpdate(value);
+    },
+    onError
+  );
+};
+
+export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: AgoricDispatch) => {
+  const path = "published.agoricNames.brand";
+
+  createWatcher(
+    chainStorageWatcher,
+    path,
+    (value) => {
       const payload: TokenInfo = {
         character: {
           issuer: undefined,
@@ -50,22 +70,23 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
     },
     (log: any) => {
       console.error("Error watching vbank assets", log);
-    },
+    }
   );
 };
 
-export const watchWalletVstorage = (chainStorageWatcher: any, walletAddress: string, updateStatePurses: any, updateStateOffers: any) => {
-  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+export const watchWalletVstorage = (
+  chainStorageWatcher: any,
+  walletAddress: string,
+  updateStatePurses: any,
+  updateStateOffers: any
+) => {
   if (!walletAddress) return;
   const path = `published.wallet.${walletAddress}.current`;
-  chainStorageWatcher.watchLatest(
-    [Kind.Data, path],
-    (value: any) => {
-      console.debug("got update", path, value);
-      if (!value) {
-        console.warn(`${path} returned undefined`);
-        return;
-      }
+
+  createWatcher(
+    chainStorageWatcher,
+    path,
+    (value) => {
       updateStateOffers(value.liveOffers);
       updateStatePurses(value.purses);
     },
@@ -76,22 +97,20 @@ export const watchWalletVstorage = (chainStorageWatcher: any, walletAddress: str
 };
 
 export const watchKreadInstance = (chainStorageWatcher: any, agoricDispatch: AgoricDispatch) => {
-  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = "published.agoricNames.instance";
 
-  chainStorageWatcher.watchLatest(
-    [Kind.Data, path],
-    (value: any) => {
-      console.debug("got update", path, value);
-      if (!value) {
-        console.warn(`${path} returned undefined`);
-        return;
-      }
-      const instance = value.filter((i: any) => i[0] === "kread");
-      agoricDispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1], publicFacet: undefined } });
-    },
-    (log: any) => {
-      console.error("Error watching vbank assets", log);
-    },
-  );
+chainStorageWatcher.watchLatest(
+  [Kind.Data, path],
+  (value: any) => {
+    console.debug("got update", path, value);
+    if (!value) {
+      console.warn(`${path} returned undefined`);
+      return;
+    }
+    const instance = value.filter((i: any) => i[0] === "kread");
+    agoricDispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1], publicFacet: undefined } });
+  },
+  (log: any) => {
+    console.error("Error watching vbank assets", log);
+  },)
 };

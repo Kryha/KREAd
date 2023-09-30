@@ -81,11 +81,16 @@ export const SECTION = {
   INVENTORY: "inventory",
 } as const;
 
-export const ASSET_TYPE = {
-  CHARACTER: "character",
-  ITEM: "item",
-};
+export const METRICS_CHARACTER = [
+  "sales",
+  "collection size",
+  "floor price",
+  "avg. character price",
+  "avg. character level",
+  "avg. marketplace level",
+];
 
+export const METRICS_ITEM = ["sales", "collection size", "floor price", "avg. item price", "avg. item level", "avg. marketplace level"];
 /***************************************************************************/
 
 export const AGORIC_LINK = "https://agoric.com/" as const;
@@ -125,6 +130,7 @@ export const CATEGORY_MODE = "category" as const;
 export type InteractionMode = typeof ITEM_MODE | typeof MAIN_MODE | typeof CATEGORY_MODE | typeof CHARACTER_SELECT_MODE;
 export const CHARACTER_HEIGHT = 1190.5511 as const;
 export const CHARACTER_WIDTH = 841.8898 as const;
+
 export const NETWORK_CONFIG = import.meta.env.VITE_NETWORK_CONFIG || ("https://emerynet.agoric.net/network-config" as const);
 export const localBridgeHref = "http://localhost:3000/wallet/bridge.html" as const;
 export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html" as const;
