@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { DiscordIcon, KeplerIcon, TwitterIcon, text } from "../../assets";
 import { breakpoints, color } from "../../design";
-import { AnimatedLogo, ButtonText, Footer, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
+import { AnimatedLogo, ButtonText, Footer, Kado, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowDown,
   ArrowUp,
@@ -53,6 +53,8 @@ export const Onboarding: FC = () => {
 
   return (
     <>
+      <Kado show={true} />
+
       <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <PrimaryButton onClick={() => connectWallet()}>

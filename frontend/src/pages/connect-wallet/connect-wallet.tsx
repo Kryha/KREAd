@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { text } from "../../assets";
 import { breakpoints, color } from "../../design";
-import { ButtonText, Footer, LoadingPage, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
+import { ButtonText, Footer, Kado, LoadingPage, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
 import {
   ArrowUp,
   ButtonContainer,
@@ -40,6 +40,7 @@ export const ConnectWallet: FC = () => {
 
   return (
     <>
+      <Kado show={true} />
       <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <PrimaryButton onClick={() => provisionWallet()}>

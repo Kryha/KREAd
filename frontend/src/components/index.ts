@@ -30,3 +30,4 @@ export * from "./fade-in-out";
 export * from "./onboarding-character";
 export * from "./logo";
 export * from "./load-more";
+export * from "./kado-on-ramp";
