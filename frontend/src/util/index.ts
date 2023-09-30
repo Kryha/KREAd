@@ -7,3 +7,4 @@ export * from "./styles";
 export * from "./math";
 export * from "./filter";
 export * from "./mediators";
+export * from "./character";

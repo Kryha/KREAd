@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { useGetItemsInInventoryByCategory, useSelectedCharacter } from "../../../service";

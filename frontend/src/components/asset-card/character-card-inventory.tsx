@@ -17,6 +17,7 @@ import { color } from "../../design";
 import { text } from "../../assets";
 import { routes } from "../../navigation";
 import { useLocation, useNavigate } from "react-router-dom";
+import { calculateCharacterLevels } from "../../util";
 import { BaseCharacterCanvas } from "../base-character-canvas/base-character-canvas";
 import { useParentViewport } from "../../hooks/use-parent-viewport";
 
@@ -27,7 +28,7 @@ interface Props {
 }
 
 export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }) => {
-  const { nft: character } = extendedCharacter;
+  const { nft: character, equippedItems } = extendedCharacter;
   const navigate = useNavigate();
   const location = useLocation();
   const { parentRef, parentWidth, parentHeight } = useParentViewport();
@@ -40,6 +41,11 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
     event.stopPropagation();
     navigate(`${routes.sellCharacter}/${character.id}`, { state: location });
   };
+
+  const { totalLevel } = calculateCharacterLevels({
+    nft: character,
+    equippedItems,
+  });
 
   return (
     <AssetWrapper onClick={() => handleClick()}>
@@ -59,7 +65,7 @@ export const CharacterCardInventory: FC<Props> = ({ extendedCharacter, onClick }
           <AssetStatsContainer>
             <AssetTag>
               <BoldLabel customColor={color.black}>lvl. </BoldLabel>
-              <LevelBoldLabel customColor={color.black}>{character.level}</LevelBoldLabel>
+              <LevelBoldLabel customColor={color.black}>{totalLevel}</LevelBoldLabel>
             </AssetTag>
             <Badge>
               <ButtonText>{character.origin}</ButtonText>

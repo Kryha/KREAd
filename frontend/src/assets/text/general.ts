@@ -1,4 +1,6 @@
-import { MAX_CHARACTER_LENGTH } from "../../constants";
+import { MAX_CHARACTER_LENGTH, MINTING_COST, MONEY_DECIMALS } from "../../constants";
+
+const characterMintPrice = MINTING_COST / Number("1".padEnd(MONEY_DECIMALS + 1, "0"));
 
 export const general = {
   notFound: "this screen doesn't exist.",
@@ -24,29 +26,40 @@ export const general = {
   loadMore: "load more",
   info: "i",
   toolTipTitle: "tool tip title",
-  toolTipInfo: "maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.",
+  toolTipInfo:
+    "maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.",
   thisFieldIsRequired: "this field is required",
-  mintNew: "mint new (IST 30)",
+  mintNew: `mint new (IST ${characterMintPrice})`,
   theMinimiumAmountIs: "the minimum amount is IST 1",
   moreInfo: "more info",
   thereAreNoAssetsAvailable: "there are no assets available",
   logo: "KREAd",
-  launchingTheFirst: "launching the first character builder dApp",
   aCharcterBuilderApp:
-    "a character builder dApp where all the items are NFTs and are represented by art assets. You have the freedom to build your own character and the ownership of all the equipment attached to it, so feel free to sell them, trade them or even burn them!",
+    "KREAd is a character builder dApp, where all the characters and their items are dynamic NFTs. You have the freedom to build your character and the ownership of all the equipment attached to it. So feel free to sell them, trade them, or even burn them!",
+  sagesBy: "SAGES by KREAd",
+  sagesIsTheFirst:
+    "SAGES is the first collection\nlaunched on the KREAd dApp.\nStart collecting SAGES NFTs to\nshape your own saga.",
   explore: "explore",
-  connectWallet: "connect wallet",
+  connectWallet: "connect Keplr Wallet",
+  activateWallet: "activate Wallet",
   whoWeAre: "who we are",
-  ourLeadership: "our leadership includes some of the most inventive and experienced executives in the technology industry.",
+  ourLeadership:
+    "Our leadership includes some of\nthe most inventive and\nexperienced executives in the technology industry.",
   isPartOfAgoric: "KREAd is part of",
-  agoric: "Agoric",
   anOpenSource:
-    "an open-source development company launching an interoperable Proof-of-Stake chain and economy, but originally ideated and created by ",
+    ", an open-source development company launching an interoperable Proof-\nof-Stake chain and economy. The dApp is imagined, built, and\ndesigned by ",
+  agoric: "Agoric",
+  theSagesArt: "The SAGES art and comic is\ncreated by Enmanuel Heredia.",
   kryha: "Kryha",
   contactUs: "contact us",
-  questionsBug: "questions, bug reports, feedback... we are here for it all.",
+  questionsBug:
+    "questions, bug reports, \nfeedback... ? We are here for it all.",
   sendEmailTo: "send an email to",
-  contactEmail: "kreadapp@kryha.io",
+  contactEmail: "kread@kryha.io",
+  followUs: "Follow us",
+  discord: "Discord",
+  twitter: "Twitter",
+  instagram: "Instagram",
   forSale: "for sale",
   createCharacter: "create character",
   thereIsNoActity: "there is no activity currently.",
@@ -56,11 +69,12 @@ export const general = {
   maxCharacterLength: `the character name cannot be longer than ${MAX_CHARACTER_LENGTH} characters`,
   characterNamePatternError: "the character name can only contain alphanumeric characters, underscores(_)  and/or dashes(-)",
   goToYourWallet: "go to your wallet to accept the action!",
-  yourActionIsPending: "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
+  yourActionIsPending:
+    "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
   loading: "loading...",
   next: "next",
   characterCardTitle: "mint a new character",
-  characterCardInfo: "by clicking the button you will mint a new character. The cost of it is only IST 2. Start now!",
+  characterCardInfo: `by clicking the button you will mint a new character. The cost of it is only IST ${characterMintPrice}. Start now!`,
   createACharacterTitle: "character name",
   createACharacterInfo:
     "this is the name for your character. Think about something original since it needs to be unique; and keep in mind after setting it up you won't be able to change it! Your character name must be max 20 characters.",
@@ -68,8 +82,14 @@ export const general = {
   sellAssetInfo:
     "add a selling price to your character/item. Keep in mind the level that it is as a reference, since it can help you to set a fair price in comparison of the rest of the characters/items.",
   viewCharacter: "view character",
-  desktopOnly: "unfortunately, this experience can only be enjoyed on desktop devices.",
+  desktopOnly:
+    "unfortunately, this experience can only be enjoyed on desktop devices.",
   moreAboutThisProject: "more about this project",
   backToMain: "back to main mode",
   backToCategories: "back to categories",
+  activateSmartWallet: "your smart wallet is the key to your character",
+  activateSmartWalletDescription:
+    "Activate your smart wallet to manage your transactions on the Agoric chain. This will allow you mint your characters and store your character's items and progress. \n" +
+    "\n" +
+    "Click “Activate wallet” to get started.",
 };

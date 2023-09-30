@@ -5,7 +5,10 @@ import { ReactComponent as MenuIcon } from "./menu.svg";
 import { ReactComponent as CloseIcon } from "./close.svg";
 import { ReactComponent as ExpandIcon } from "./expand.svg";
 import Empty from "./empty.png";
-import { ReactComponent as CardElementIcon, ReactComponent as NotificationIcon } from "./element.svg";
+import {
+  ReactComponent as CardElementIcon,
+  ReactComponent as NotificationIcon,
+} from "./element.svg";
 import { ReactComponent as SmallElementIcon } from "./element-small.svg";
 import UnnamedCreator from "./unnamed-creator.png";
 import SmallEl from "./small-el.png";
@@ -37,8 +40,13 @@ import { ReactComponent as NextIcon } from "./next.svg";
 import { ReactComponent as PreviousIcon } from "./previous.svg";
 import { ReactComponent as EquippedIcon } from "./equipped.svg";
 import { ReactComponent as DiagonalIcon } from "./diagonal.svg";
+import { ReactComponent as KeplerIcon } from "./kelpr.svg";
+import { ReactComponent as InstagramIcon } from "./instagram.svg";
+import { ReactComponent as DiscordIcon } from "./discord.svg";
+import { ReactComponent as TwitterIcon } from "./twitter.svg";
 
 export {
+  KeplerIcon,
   DiagonalIcon,
   NextIcon,
   EquippedIcon,
@@ -79,4 +87,7 @@ export {
   ZoomInIcon,
   ZoomOutIcon,
   DownloadIcon,
+  InstagramIcon,
+  DiscordIcon,
+  TwitterIcon,
 };

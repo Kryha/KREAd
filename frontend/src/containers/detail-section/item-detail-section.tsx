@@ -54,12 +54,7 @@ export const ItemDetailSection: FC<ItemDetailSectionProps> = ({ item, actions })
 
       {/* project */}
       <DetailSectionSegment title={text.item.project} sectionIndex={4}>
-        {item.description}
-      </DetailSectionSegment>
-
-      {/* activity */}
-      <DetailSectionSegment title={text.item.itemActivity} sectionIndex={5} isActivity>
-        {activity ? <DetailSectionSegmentActivity events={activity} /> : <LoadingPage />}
+        {text.util.correctDescriptionString(item.description)}
       </DetailSectionSegment>
     </DetailSectionWrap>
   );

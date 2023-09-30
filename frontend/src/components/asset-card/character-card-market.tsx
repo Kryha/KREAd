@@ -21,6 +21,7 @@ import { PriceInIst } from "../price-in-ist";
 import { text } from "../../assets";
 import { BaseCharacterCanvas } from "../base-character-canvas/base-character-canvas";
 import { useParentViewport } from "../../hooks/use-parent-viewport";
+import { calculateCharacterLevels } from "../../util";
 
 interface Props {
   characterInMarket: CharacterInMarket;
@@ -32,7 +33,12 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
   const navigate = useNavigate();
   const location = useLocation();
   const { parentRef, parentWidth, parentHeight } = useParentViewport();
-  const { character } = characterInMarket;
+  const { character, equippedItems } = characterInMarket;
+
+  const { totalLevel } = calculateCharacterLevels({
+    nft: character,
+    equippedItems,
+  });
 
   const handleClick = () => {
     onClick && onClick(character.id);
@@ -61,7 +67,7 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
           <AssetStatsContainer>
             <AssetTag>
               <BoldLabel customColor={color.black}>lvl. </BoldLabel>
-              <LevelBoldLabel customColor={color.black}>{character.level}</LevelBoldLabel>
+              <LevelBoldLabel customColor={color.black}>{totalLevel}</LevelBoldLabel>
             </AssetTag>
             <Badge>
               <ButtonText>{character.origin}</ButtonText>

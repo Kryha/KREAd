@@ -1,5 +1,6 @@
 export const routes = {
   root: "/",
+  connectWallet: "/connect-wallet",
   character: "/character",
   shop: "/shop",
   inventory: "/inventory",
@@ -12,7 +13,6 @@ export const routes = {
   about: "/about",
   privacy: "/privacy",
   onboarding: "/onboarding",
-  test: "/test",
   downloadCharacter: "/download-character",
   mobileNotAvailable: "/mobile-not-available",
 } as const;

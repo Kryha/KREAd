@@ -4,39 +4,38 @@ import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useIsMobile, useViewport } from "../../hooks";
-import { CharacterCreation, ExtendedCharacter } from "../../interfaces";
+import { Character, CharacterCreation } from "../../interfaces";
 import { routes } from "../../navigation";
-import { useCreateCharacter, useMyCharacters } from "../../service";
+import { useCreateCharacter } from "../../service";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
 import { DefaultImage, FormCard } from "./styles";
 import { breakpoints } from "../../design";
+import { useUserState } from "../../context/user";
 
 export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [mintedCharacter, setMintedCharacter] = useState<ExtendedCharacter>();
+  const [mintedCharacter, setMintedCharacter] = useState<Character>();
   const [characterData, setCharacterData] = useState<CharacterCreation>({
     name: "",
   });
-  const [myCharacters, isLoadingCharacters] = useMyCharacters();
+  const { characters, fetched } = useUserState();
+  const isLoadingCharacters = !fetched;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
   const mobile = useIsMobile(breakpoints.desktop);
 
-  // TODO: Implement wallet listener for cases where the user doesn't approve the mint
-  // const [isWalletError, setIsWalletError] = useState<boolean>(false);
-
   useEffect(() => {
-    if (myCharacters.map((c) => c.nft.name).includes(characterData.name)) {
+    if (characters.map((c: any) => c.nft.name).includes(characterData.name)) {
       setIsOfferAccepted(true);
-      const [newCharacter] = myCharacters.filter((character) => character.nft.name === characterData.name);
-      setMintedCharacter(newCharacter);
+      const [newCharacter] = characters.filter((c: any) => c.nft.name === characterData.name);
+      setMintedCharacter(newCharacter.nft);
       setIsLoading(false);
     }
-  }, [myCharacters, characterData]);
+  }, [characters, characterData]);
 
   const changeStep = async (step: number): Promise<void> => {
     setCurrentStep(step);
@@ -59,7 +58,7 @@ export const CreateCharacter: FC = () => {
       case 1:
         return <Payment sendOfferHandler={sendOfferHandler} submit={changeStep} isOfferAccepted={isOfferAccepted} isLoading={isLoading} />;
       case 2:
-        return <Confirmation character={mintedCharacter?.nft} />;
+        return <Confirmation character={mintedCharacter} />;
       default:
         return <ErrorView />;
     }

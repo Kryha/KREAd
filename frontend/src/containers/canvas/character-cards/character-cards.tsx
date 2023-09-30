@@ -22,6 +22,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ButtonInfoWrap } from "../../../components/button-info/styles";
 import { BaseCharacterCanvas } from "../../../components/base-character-canvas/base-character-canvas";
 import { useParentViewport } from "../../../hooks/use-parent-viewport";
+import { calculateCharacterLevels } from "../../../util";
 
 export const CharacterCards: FC = () => {
   const { selectedAsset, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
@@ -37,7 +38,7 @@ export const CharacterCards: FC = () => {
 
   const select = (character: ExtendedCharacter) => {
     if (!character) return;
-    userStateDispatch({ type: "SET_SELECTED", payload: character });
+    userStateDispatch({ type: "SET_SELECTED", payload: character.nft.name });
   };
 
   const sell = (character: ExtendedCharacter) => {
@@ -66,7 +67,6 @@ export const CharacterCards: FC = () => {
             onClick={() => {
               setSelectedAsset(character.nft.name);
               setOnAssetChange(true);
-              select(character);
             }}
           >
             <ImageCard ref={parentRef}>
@@ -93,11 +93,13 @@ interface CharacterInfo {
 }
 const CharacterInformation: FC<CharacterInfo> = ({ character, sell }) => {
   const { setShowDetails } = useCharacterBuilder();
+  const { totalLevel } = calculateCharacterLevels(character);
+
   return (
     <CharacterInfo>
       <ButtonText customColor={color.black}>{character.nft.name}</ButtonText>
       <CharacterInfoCharacter>Title: {character.nft.title}</CharacterInfoCharacter>
-      <CharacterInfoCharacter>Lvl: {character.nft.level}</CharacterInfoCharacter>
+      <CharacterInfoCharacter>Lvl: {totalLevel}</CharacterInfoCharacter>
       <CharacterInfoCharacter>Origin: {character.nft.origin}</CharacterInfoCharacter>
       <CharacterButtonContainer>
         <ButtonInfoWrap onClick={() => setShowDetails(true)}>

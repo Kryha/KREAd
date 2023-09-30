@@ -12,15 +12,13 @@ import {
   ImageConatiner,
   InformationContainer,
   KreadContainer,
-  KreadDevelopmentContainer,
 } from "./styles";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
-import { ErrorImage, text } from "../../assets";
+import { ArmaCitizen, text } from "../../assets";
 import { routes } from "../../navigation";
 import { color } from "../../design";
 import { GO_BACK } from "../../constants";
 import { AnimatedLogo } from "../logo";
-import { DevelopmentMode } from "../../service/test-service/development-mode";
 
 interface ErrorViewProps {
   headingText?: string;
@@ -42,9 +40,6 @@ export const ErrorView: FC<ErrorViewProps> = ({ redirectRoute, headingText, navi
     <>
       <KreadContainer>
         <AnimatedLogo iteration={1} />
-        <KreadDevelopmentContainer>
-          <DevelopmentMode />
-        </KreadDevelopmentContainer>
       </KreadContainer>
       <ErrorContainer>
         <InformationContainer>
@@ -63,7 +58,7 @@ export const ErrorView: FC<ErrorViewProps> = ({ redirectRoute, headingText, navi
         </InformationContainer>
       </ErrorContainer>
       <ImageConatiner>
-        <ErrorIcon src={ErrorImage} alt={text.character.garment} />
+        <ErrorIcon src={ArmaCitizen} alt={text.character.garment} />
       </ImageConatiner>
     </>
   );
