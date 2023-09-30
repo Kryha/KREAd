@@ -11,7 +11,7 @@ import { useUserState } from "../../../context/user";
 import { Item } from "../../../interfaces";
 
 interface Props {
-  equipped: { all: Item[]; inCategory: Item | undefined };
+  equipped: { all: (Item | undefined)[]; inCategory: Item | undefined };
   unequipped: { all: Item[]; inCategory: Item[] };
   equippedSelected: boolean;
   setEquippedSelected: (value: boolean) => void;

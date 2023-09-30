@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
 import { breakpoints, color, fontWeight, margins } from "../../../design";
 import { disappear, fadeIn } from "../../../components";
-import { DiagonalContainer, ElementContainer, PlusContainer } from "../../../components/item-card/styles";
-import { css } from "@emotion/react";
 
 interface StyleProps {
   height: number;
@@ -12,8 +10,8 @@ interface StyleProps {
 export const CharacterButtonContainer = styled.div`
   margin-top: ${margins.medium};
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  gap: 24px;
 `;
 export const CharacterInfoCharacter = styled.span`
   :first-letter {
@@ -29,12 +27,15 @@ export const CharacterInfo = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  flex: 1 1 auto;
 `;
 export const CharacterCardsContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: ${margins.small};
-  gap: 8px;
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding: 8px;
@@ -45,9 +46,10 @@ export const CharacterCardsContainer = styled.div`
 export const CharacterCardsWrapper = styled.div<StyleProps>`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  padding-top: 16px;
+  gap: 16px;
   overflow-y: scroll;
-  ${({ height }): string => `height: ${height - 480}px;`};
+  ${({ height }): string => `height: ${height - 320}px;`};
   ::-webkit-scrollbar {
     display: none;
   }
@@ -62,31 +64,11 @@ interface CharacterProps {
 
 export const CharacterCardContainer = styled.div<CharacterProps>`
   display: flex;
-  gap: 12px;
   transition: transform 0.3s ease; /* Add CSS transition for smooth animation */
-
-  ${ElementContainer} {
-    ${({ isSelected }) =>
-      isSelected === true
-        ? css`
-            background: ${color.lightGrey};
-            border: 1px solid ${color.darkGrey};
-            ${PlusContainer} {
-              background-color: ${color.lightGrey};
-            }
-            ${DiagonalContainer} {
-              background-color: ${color.lightGrey};
-            }
-          `
-        : css`
-            background: ${color.white};
-            border: 1px solid ${color.lightGrey};
-            ${PlusContainer} {
-              background-color: ${color.white};
-            }
-            ${DiagonalContainer} {
-              background-color: ${color.white};
-            }
-          `};
+  border-radius: ${margins.medium};
+  border: 1px solid ${color.grey};
+  ${({ isSelected }): string => (isSelected ? `background: whitesmoke; border: 1px solid ${color.black} ` : "background: white")};
+  :hover {
+    border: 1px solid ${color.black};
   }
 `;

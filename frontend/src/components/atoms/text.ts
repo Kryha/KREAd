@@ -124,3 +124,18 @@ export const FormText = styled(BodyText)`
   font-size: 14px;
   line-height: 18px;
 `;
+
+export const FormTable = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 16px;
+`;
+
+export const FormTableRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+`;

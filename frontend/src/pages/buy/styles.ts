@@ -48,6 +48,12 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
   }
 `;
 
+export const BuyFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+`;
+
 export const ButtonContainer = styled.div`
   position: absolute;
   bottom: ${margins.big};

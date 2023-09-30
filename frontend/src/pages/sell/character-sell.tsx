@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
 import { ErrorView } from "../../components";
@@ -21,6 +21,10 @@ export const CharacterSell = () => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
     await sellCharacter.callback(data.price, () => setIsPlacedInShop(true));
   };
+
+  const characterName = useMemo(() => character?.nft.name, [character]);
+  data.type = "character";
+  data.name = characterName;
 
   if (!data || !characterCopy) return <ErrorView />;
 

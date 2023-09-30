@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
-import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
+import { ButtonText, HorizontalDivider, PrimaryButton, SecondaryButton } from "../../../components";
 import { MAIN_MODE } from "../../../constants";
 import { text } from "../../../assets";
 import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper, CardActionsContainer } from "../style";
@@ -10,7 +10,6 @@ import { routes } from "../../../navigation";
 import { ModeScroller } from "../mode-scroller/mode-scroller";
 import { color } from "../../../design";
 import { ArrowUp } from "../../../components/character-card/styles";
-import { ButtonInfo } from "../../../components/button-info";
 import { CharacterCards } from "../character-cards/character-cards";
 import { CharacterActions } from "./styles";
 import { CanvasCharacterDetails } from "../canvas-character-details/canvas-character-details";
@@ -43,8 +42,8 @@ export const CharactersMode: FC = () => {
               <CanvasContentWrapper>
                 <CharacterCards />
                 <CardActionsContainer>
+                  <HorizontalDivider />
                   <CharacterActions>
-                    <ButtonInfo info={text.general.characterCardInfo} infoPosition={"top"} />
                     <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
                       <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
                       <ArrowUp />

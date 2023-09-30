@@ -41,8 +41,10 @@ import { ReactComponent as KeplerIcon } from "./kelpr.svg";
 import { ReactComponent as InstagramIcon } from "./instagram.svg";
 import { ReactComponent as DiscordIcon } from "./discord.svg";
 import { ReactComponent as TwitterIcon } from "./twitter.svg";
+import { ReactComponent as ISTIcon } from "./IST_black_icon.svg";
 
 export {
+  ISTIcon,
   KeplerIcon,
   DiagonalIcon,
   NextIcon,

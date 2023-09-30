@@ -1,11 +1,9 @@
 import { FC } from "react";
-import { text } from "../../assets";
 
 import { color } from "../../design";
 import { toTwoDecimals, uISTToIST } from "../../util";
-import { AssetTag } from "../asset-card/styles";
-import { BoldLabel, LevelBoldLabel } from "../atoms";
-import { Diamond } from "./styles";
+import { AssetTag, IST } from "../asset-card/styles";
+import { LevelBoldLabel } from "../atoms";
 
 interface PriceInIstProps {
   price: number;
@@ -14,9 +12,8 @@ interface PriceInIstProps {
 export const PriceInIst: FC<PriceInIstProps> = ({ price }) => {
   return (
     <>
-      <Diamond />
+      <IST />
       <AssetTag>
-        <BoldLabel customColor={color.black}>{text.param.istPrice}</BoldLabel>
         <LevelBoldLabel customColor={color.black}>{toTwoDecimals(Number(uISTToIST(price)))}</LevelBoldLabel>
       </AssetTag>
     </>

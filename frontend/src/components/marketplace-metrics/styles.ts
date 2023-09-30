@@ -30,11 +30,14 @@ export const MetricsTable = styled.div`
 
 export const MetricsHeader = styled.div`
   display: flex;
+  align-items: center;
   ${ButtonText} {
     font-size: 24px;
     font-weight: ${fontWeight.medium};
   }
   margin-bottom: 8px;
+  width: 100%;
+  height: 20px;
 `;
 
 export const MetricsRow = styled.div`
@@ -55,12 +58,7 @@ export const LabelWrapper = styled.div`
 export const Metric = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  height: 100%;
   justify-content: flex-start;
-`;
-
-export const MetricText = styled(ButtonText)`
-  font-size: 24px;
-  :first-letter {
-    text-transform: none;
-  }
 `;

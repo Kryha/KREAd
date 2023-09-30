@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 import { breakpoints, color, fontWeight, margins } from "../../design";
 import { BoldLabel, Img } from "../atoms";
-import { EquippedIcon } from "../../assets";
+import { EquippedIcon, ISTIcon } from "../../assets";
 
 interface ImageProps {
   category?: string;
@@ -86,6 +86,8 @@ export const AssetImageContainer = styled.div`
   justify-content: center;
   overflow: hidden;
   position: relative;
+  width: 100%;
+  height: 100%;
 `;
 
 export const AssetImage = styled(Img)<ImageProps>`
@@ -166,4 +168,11 @@ export const NoAssetImage = styled.div`
   width: 126px;
   top: 38px;
   left: -20px;
+`;
+
+export const IST = styled(ISTIcon)`
+  display: flex;
+  align-items: flex-start;
+  width: 24px;
+  height: 24px;
 `;

@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from "react";
-import { IST_IDENTIFIER, METRICS_ITEM, SECTION } from "../../constants";
+import { METRICS_ITEM, SECTION } from "../../constants";
 import { useGetItemInShopById, useGetItemMarketMetrics, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
@@ -29,8 +29,8 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
     ? [
         metrics.amountSold,
         metrics.collectionSize,
-        IST_IDENTIFIER + toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
-        IST_IDENTIFIER + toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+        toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
+        toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
         toTwoDecimals(metrics.averageLevel),
         toTwoDecimals(metrics.marketplaceAverageLevel),
       ]

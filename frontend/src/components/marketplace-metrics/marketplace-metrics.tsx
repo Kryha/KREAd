@@ -10,6 +10,7 @@ import {
 } from "./styles";
 import { ButtonText, HorizontalDivider } from "../atoms";
 import { color } from "../../design";
+import { IST } from "../asset-card/styles";
 
 interface Props {
   data: (string | number)[];
@@ -25,6 +26,8 @@ export const MarketplaceMetrics: FC<Props> = ({ data, asset }) => {
             {asset.map((item, index) => (
               <Metric key={index}>
                 <MetricsHeader>
+                  {index === 2 && <IST />}
+                  {index === 3 && <IST />}
                   <ButtonText>{data[index]}</ButtonText>
                 </MetricsHeader>
                 <HorizontalDivider />
