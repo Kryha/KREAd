@@ -234,6 +234,7 @@ export const TickContainer = styled.div`
   border: 1px solid ${color.black};
   ${Tick} {
     margin: 0;
+    right: 0;
   }
   margin-bottom: ${margins.small};
 `;

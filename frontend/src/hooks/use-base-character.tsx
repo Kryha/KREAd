@@ -63,6 +63,7 @@ export function useBaseCharacter(width: number, height: number, character: Chara
 
   const extendedCharacter = new Konva.Group({
     preventDefault: true,
+    pixelRatio: 2,
     centeredScaling: true,
     x: width / 2,
     y: height / 2,
