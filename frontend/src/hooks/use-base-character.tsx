@@ -173,10 +173,11 @@ function extractItems(characterItems: CharacterItems): Item[] {
   const items: Item[] = [];
 
   for (const key in characterItems) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (characterItems.hasOwnProperty(key) && characterItems[key] !== undefined && characterItems[key] !== null) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      items.push(characterItems[key] as Item); // Assert as type Item
+    if (Object.prototype.hasOwnProperty.call(characterItems, key)) {
+      const item = characterItems[key];
+      if (item !== undefined && item !== null) {
+        items.push(item);
+      }
     }
   }
 

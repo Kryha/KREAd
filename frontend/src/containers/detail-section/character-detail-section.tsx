@@ -51,7 +51,7 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
       {/* equipped items */}
       <DetailSectionSegment title={text.character.equippedItems} sectionIndex={3}>
-        <DetailSectionItems items={Object.values(character.equippedItems).filter((i) => i !== undefined)} showToast={() => {}} />
+        <DetailSectionItems items={Object.values(character.equippedItems).filter((item) => item !== undefined)} showToast={() => {}} />
       </DetailSectionSegment>
 
       <DetailSectionSegment title={text.character.artistInfo} sectionIndex={5}>

@@ -11,7 +11,7 @@ export interface UserContext {
   characters: ExtendedCharacter[];
   selected: ExtendedCharacter | undefined;
   items: Item[];
-  equippedItems: Item[];
+  equippedItems: (Item | undefined)[];
   processed: string[];
   fetched: boolean;
   inventoryCallInProgress: boolean;

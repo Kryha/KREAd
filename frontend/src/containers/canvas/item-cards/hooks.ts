@@ -11,8 +11,8 @@ export const useGetItemSelectionForCharacter = () => {
 
   const equipped = useMemo(() => {
     if (!selectedCharacter) return { all: [], inCategory: undefined };
-    const equipped: Item[] = Object.values(selectedCharacter.equippedItems).filter((i) => !!i);
-    const inCategory = equipped.find((item) => item.category === category);
+    const equipped: (Item | undefined)[] = Object.values(selectedCharacter.equippedItems).filter((i) => !!i);
+    const inCategory = equipped.find((item) => item?.category === category);
     return {
       all: equipped,
       inCategory,
