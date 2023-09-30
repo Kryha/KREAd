@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterInMarket, ExtendedCharacter } from "../interfaces";
+import { CharacterCreation, CharacterInMarket, ExtendedCharacter, MarketMetrics } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
@@ -100,6 +100,11 @@ export const useGetCharacterNames = (): [string[]] => {
   const [owned] = useMyCharacters();
   const names = useMemo(() => owned.map((c) => c.nft.name), [owned]);
   return [names];
+};
+
+export const useGetCharacterMarketMetrics = (): MarketMetrics => {
+  const { metrics } = useCharacterMarketState();
+  return metrics;
 };
 
 export const useMyCharacters = (): [ExtendedCharacter[], boolean] => {

@@ -10,11 +10,9 @@ import { AssetFilterContainer, AssetFilterWrapper, AssetSelectorContainer, SortA
 
 interface Props {
   section: (typeof SECTION)[keyof typeof SECTION];
-  pageSelector: React.ReactNode;
 }
 
-// TODO: TO FIX
-export const AssetCharacterFilters: FC<Props> = ({ section, pageSelector }) => {
+export const AssetCharacterFilters: FC<Props> = ({ section }) => {
   const { title, origin, sort, reset, price, setOrigin, setTitle, setSort, setColors, setPrice, onReset } = useFilters();
   const [filterId, setFilterId] = useState("");
 
@@ -31,7 +29,6 @@ export const AssetCharacterFilters: FC<Props> = ({ section, pageSelector }) => {
       <AssetFilterWrapper>
         <AssetFilterContainer>
           <AssetSelectorContainer>
-            {pageSelector}
             <Filters
               label={title.length === 0 ? text.filters.title : `${text.filters.title}: ${title.length}`}
               openFilter={openFilter}
@@ -48,17 +45,17 @@ export const AssetCharacterFilters: FC<Props> = ({ section, pageSelector }) => {
             >
               <Select label={text.filters.origin} onArrayChange={setOrigin} options={originOptions} isMultiSelect reset={reset} />
             </Filters>
+            {section === SECTION.SHOP && (
+              <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
+                {price && <PriceSelector handleChange={onPriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
+              </Filters>
+            )}
+            <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
+              <ColorSelector handleChange={setColors} />
+            </Filters>
           </AssetSelectorContainer>
           <AssetSelectorContainer>
             <>
-              {section === SECTION.SHOP && (
-                <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-                  {price && <PriceSelector handleChange={onPriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
-                </Filters>
-              )}
-              <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
-                <ColorSelector handleChange={setColors} />
-              </Filters>
               <SortAssetsByContainer>
                 {section === SECTION.SHOP && (
                   <>

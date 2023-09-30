@@ -10,9 +10,9 @@ export const AssetCardLoadMoreWrapper = styled.div`
   background: ${color.white};
   border: 1px solid ${color.grey};
   box-sizing: border-box;
-  border-radius: ${margins.mini};
+  border-radius: ${margins.medium};
   align-items: center;
-  min-height: 350px;
+  min-height: 450px;
 `;
 export const AssetCardLoadMoreContainer = styled.div`
   display: flex;

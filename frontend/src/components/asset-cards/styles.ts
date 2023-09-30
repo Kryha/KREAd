@@ -4,14 +4,19 @@ import { breakpoints, margins } from "../../design";
 interface AssetsProps {
   height: number;
 }
+export const AssetsShopWrapper = styled.div<AssetsProps>`
+  overflow-y: scroll;
+  ${({ height }): string => `height: ${height - 320}px;`};
+`;
+
 export const AssetsWrapper = styled.div<AssetsProps>`
   overflow-y: scroll;
-  ${({ height }): string => `height: ${height - 250}px;`};
+  ${({ height }): string => `height: ${height - 200}px;`};
 `;
 export const AssetsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: ${margins.mini};
+  gap: ${margins.small};
   list-style-type: none;
   isolation: isolate;
   flex-direction: column;
