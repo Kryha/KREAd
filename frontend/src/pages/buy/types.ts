@@ -7,6 +7,9 @@ export interface BuyText {
 
 export interface BuyData {
   price: number;
+  name?: string;
+  type?: string;
+  image?: string;
 }
 
 export type BuyStep = 1 | 2;

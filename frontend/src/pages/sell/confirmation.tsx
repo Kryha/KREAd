@@ -1,26 +1,38 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { ButtonText, FormText, PrimaryButton, TitleText } from "../../components";
+import { ButtonText, FormTable, FormTableRow, FormText, PrimaryButton, TitleText } from "../../components";
 import { color } from "../../design";
-import { useViewport } from "../../hooks";
-import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer } from "./styles";
-import { SellText } from "./types";
+import { ArrowUp, ButtonContainer, Header, InfoContainer, Tick, TickContainer } from "./styles";
+import { SellData, SellText } from "./types";
+import styled from "@emotion/styled";
 
 interface Props {
   text: SellText;
   confirmationPath: string;
+  data: SellData;
 }
 
-export const Confirmation: FC<Props> = ({ text, confirmationPath }) => {
-  const { width, height } = useViewport();
+export const Confirmation: FC<Props> = ({ text, confirmationPath, data }) => {
   const navigate = useNavigate();
 
   return (
-    <ContentWrapper width={width} height={height}>
-      <TickContainer>
-        <Tick />
-      </TickContainer>
-      <TitleText>{text.success}</TitleText>
+    <ConfirmationContainer>
+      <Header>
+        <TickContainer>
+          <Tick />
+        </TickContainer>
+        <TitleText>{text.success}</TitleText>
+      </Header>
+      <FormTable>
+        <FormTableRow>
+          <FormText>asset type</FormText>
+          <ButtonText>{data.type}</ButtonText>
+        </FormTableRow>
+        <FormTableRow>
+          <FormText>name</FormText>
+          <ButtonText>{data.name}</ButtonText>
+        </FormTableRow>
+      </FormTable>
       <InfoContainer>
         <FormText>{text.successLong}</FormText>
       </InfoContainer>
@@ -30,6 +42,13 @@ export const Confirmation: FC<Props> = ({ text, confirmationPath }) => {
           <ArrowUp />
         </PrimaryButton>
       </ButtonContainer>
-    </ContentWrapper>
+    </ConfirmationContainer>
   );
 };
+
+export const ConfirmationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;

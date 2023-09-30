@@ -39,9 +39,13 @@ export const CharacterBuy = () => {
 
   if (!data) return <ErrorView />;
 
+  const { royalty, platformFee, price } = data.sell;
+
+  const totalPrice = Number(royalty + platformFee + price);
+
   return (
     <Buy
-      data={{ ...data.character, price: Number(data.sell.price) }}
+      data={{ ...data.character, price: totalPrice, type: "character" }}
       onSubmit={handleSubmit}
       isLoading={isAwaitingApproval}
       isOfferAccepted={!!boughtCharacter}

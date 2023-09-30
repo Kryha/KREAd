@@ -30,5 +30,6 @@ export const store = {
   thereAreNoCharactersInTheShop: "there are no characters in the shop",
   thereAreNoItemsAvailable: "there are no items available in the shop. Wait for items to be placed in the shop",
   thereAreNoCharactersAvailable: "there are no characters available. Wait for characters to be placed in the shop",
-  sellDescription: "you're listing your item for sale on the shop. To finish please go to your wallet to accept your action.",
+  sellDescription: "you're listing your item for sale on the shop. The marketplace will add a 10% royalty fee and 3% platform fee on-top.",
+  marketplaceFees: "the purchase price consists of the list price, a 10% royalty fee and a 3% platform fee",
 };

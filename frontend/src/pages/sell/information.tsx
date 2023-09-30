@@ -1,33 +1,23 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { text } from "../../assets";
-import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../components";
+import { ButtonText, FormTable, FormTableRow, FormText, Input, Label, PrimaryButton } from "../../components";
 import { ButtonInfo } from "../../components/button-info";
 import { color } from "../../design";
-import { useViewport } from "../../hooks";
-import {
-  ButtonContainer,
-  ContentWrapper,
-  ErrorContainer,
-  FormFields,
-  InputContainer,
-  InputWrapper,
-  TextLabel,
-  Tick,
-  Warning,
-} from "./styles";
+import { ButtonContainer, ErrorContainer, FormFields, InputContainer, InputWrapper, TextLabel, Tick, Warning } from "./styles";
 import { SellData } from "./types";
 import { FormContainer } from "../create-character/styles";
+import { SellDescription } from "../../components/sell-description/sell-description";
 
 interface InformationProps {
   setData: (price: number) => void;
+  data: SellData;
   disabled?: boolean;
 }
 
-export const Information: FC<InformationProps> = ({ setData }) => {
-  const { width, height } = useViewport();
-
+export const Information: FC<InformationProps> = ({ setData, data }) => {
+  const [price, setPrice] = useState(0);
   const {
     register,
     handleSubmit,
@@ -35,19 +25,39 @@ export const Information: FC<InformationProps> = ({ setData }) => {
   } = useForm<SellData>({ mode: "onChange", reValidateMode: "onChange" });
 
   return (
-    <ContentWrapper width={width} height={height}>
+    <>
       <FormContainer onSubmit={handleSubmit((fields) => setData(fields.price))}>
+        <FormTable>
+          <FormTableRow>
+            <FormText>asset type</FormText>
+            <ButtonText>{data.type}</ButtonText>
+          </FormTableRow>
+          <FormTableRow>
+            <FormText>name</FormText>
+            <ButtonText>{data.name}</ButtonText>
+          </FormTableRow>
+        </FormTable>
         <FormFields>
-          <InputContainer>
-            <Label>{text.store.setPrice}</Label>
-            <TextLabel>
-              {/*TODO: remove support for e notation, or handle conversion to bigint */}
-              <Input type="number" defaultValue="" placeholder="IST" {...register("price", { required: true, min: 1 })} />
-            </TextLabel>
-          </InputContainer>
+          <Label>{text.store.setPrice}</Label>
           <InputWrapper>
+            <InputContainer>
+              <TextLabel>
+                <Input
+                  type="number"
+                  defaultValue=""
+                  placeholder="IST"
+                  {...register("price", {
+                    required: true,
+                    min: 1,
+                    onChange: (event) => {
+                      setPrice(event.target.value);
+                    },
+                  })}
+                />
+              </TextLabel>
+            </InputContainer>
             {Boolean(!errors.price && dirtyFields.price) && <Tick />}
-            <ButtonInfo info={text.general.sellAssetInfo} />
+            <ButtonInfo info={text.general.sellAssetInfo} infoPosition={"right"} />
           </InputWrapper>
           {Boolean(errors.price && errors.price.type === "required") && (
             <ErrorContainer>
@@ -62,13 +72,13 @@ export const Information: FC<InformationProps> = ({ setData }) => {
             </ErrorContainer>
           )}
         </FormFields>
-        <FormText>{text.store.sellDescription}</FormText>
+        <SellDescription price={Number(price)} />
         <ButtonContainer>
           <PrimaryButton type="submit" disabled={!isValid}>
             <ButtonText customColor={color.white}>{text.general.next}</ButtonText>
           </PrimaryButton>
         </ButtonContainer>
       </FormContainer>
-    </ContentWrapper>
+    </>
   );
 };

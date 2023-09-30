@@ -7,7 +7,7 @@ import { color } from "../../design";
 import {
   ArrowUp,
   ButtonContainer,
-  ContentWrapper,
+  BuyFormContainer,
   GeneralInfo,
   Line,
   NumberContainer,
@@ -18,7 +18,6 @@ import {
   Tick,
 } from "./styles";
 import { BuyData, BuyStep } from "./types";
-import { useViewport } from "../../hooks";
 
 interface BuyFormProps {
   data: BuyData;
@@ -34,7 +33,6 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
   const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
   const isOfferPending = !isOnFirstStep && !isOfferAccepted;
   const [isDisabled, setIsDisabled] = useState(false);
-  const { width, height } = useViewport();
   const onSendOfferClickHandler = async () => {
     setIsDisabled(true);
     await onSubmit();
@@ -51,8 +49,8 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
   );
 
   return (
-    <ContentWrapper width={width} height={height}>
-      <FormText>{text.mint.theCostsOfMinting}</FormText>
+    <BuyFormContainer>
+      <FormText>{text.store.marketplaceFees}</FormText>
       <StepContainer>
         <GeneralInfo active={!isOnFirstStep}>
           <PricingContainer>
@@ -91,6 +89,6 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
           </PrimaryButton>
         )}
       </ButtonContainer>
-    </ContentWrapper>
+    </BuyFormContainer>
   );
 };

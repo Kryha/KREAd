@@ -157,3 +157,6 @@ export const AGORIC_RPC = import.meta.env.VITE_RPC || ("http://127.0.0.1:26657" 
 export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;
 
 export const PINATA_GATEWAY = import.meta.env.VITE_PINATA_GATEWAY || "https://pink-defensive-jay-557.mypinata.cloud";
+
+export const PLATFORM_RATE = 0.03;
+export const ROYALTY_RATE = 0.1;

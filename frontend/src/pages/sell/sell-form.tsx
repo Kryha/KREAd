@@ -1,14 +1,12 @@
 import { FC, useState } from "react";
 
 import { text } from "../../assets";
-import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
+import { Badge, ButtonText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
 import { CONFIRMATION_STEP, INFORMATION_STEP } from "../../constants";
 import { color } from "../../design";
-import { useViewport } from "../../hooks";
 import {
   ArrowUp,
   ButtonContainer,
-  ContentWrapper,
   GeneralInfo,
   Line,
   NumberContainer,
@@ -21,6 +19,7 @@ import {
 } from "./styles";
 import { SellData, SellStep } from "./types";
 import { ISTTouIST } from "../../util";
+import { SellDescription } from "../../components/sell-description/sell-description";
 
 interface SellFormProps {
   data: SellData;
@@ -32,8 +31,6 @@ interface SellFormProps {
 }
 
 export const SellForm: FC<SellFormProps> = ({ data, changeStep, onSubmit, isPlacedInShop }) => {
-  const { width, height } = useViewport();
-
   const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
   const isOfferPending = !isOnFirstStep && !isPlacedInShop;
   const [isDisabled, setIsDisabled] = useState(false);
@@ -45,8 +42,8 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, onSubmit, isPlac
   };
 
   return (
-    <ContentWrapper width={width} height={height}>
-      <FormText>{text.store.sellDescription}</FormText>
+    <>
+      <SellDescription price={Number(data.price)} />
       <StepContainer>
         <GeneralInfo active={!isOnFirstStep}>
           <PricingContainer>
@@ -86,6 +83,6 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, onSubmit, isPlac
           {isOfferPending ? <LoadingPage /> : <ArrowUp />}
         </PrimaryButton>
       </ButtonContainer>
-    </ContentWrapper>
+    </>
   );
 };

@@ -47,6 +47,10 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
     navigate(`${routes.buyCharacter}/${character.id}`, { state: location });
   };
 
+  const { price, platformFee, royalty } = characterInMarket.sell;
+
+  const totalPrice = Number(price + platformFee + royalty);
+
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
@@ -73,7 +77,7 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
           </AssetStatsContainer>
           <AssetFooter>
             <PriceContainer>
-              <PriceInIst price={Number(characterInMarket.sell.price)} />
+              <PriceInIst price={totalPrice} />
               <PrimaryButton onClick={(event) => buyAsset(event)}>
                 <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
               </PrimaryButton>

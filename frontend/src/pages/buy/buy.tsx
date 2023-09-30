@@ -2,11 +2,9 @@ import { FC, useState } from "react";
 
 import { ErrorView, FormHeader } from "../../components";
 import { BUY_FLOW_STEPS } from "../../constants";
-import { useViewport } from "../../hooks";
 import { FormCard } from "../create-character/styles";
 import { BuyForm } from "./buy-form";
 import { Confirmation } from "./confirmation";
-import { ContentWrapper } from "./styles";
 import { BuyData, BuyStep, BuyText } from "./types";
 import { useLocation } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -20,7 +18,6 @@ interface Props {
 }
 
 export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOfferAccepted }) => {
-  const { width, height } = useViewport();
   const location = useLocation();
   const previousPath = location.state.pathname;
   const confirmationPath = previousPath === `${routes.shop}/items` ? `${routes.inventory}/items` : `${routes.inventory}/characters`;
@@ -41,18 +38,16 @@ export const Buy: FC<Props> = ({ data, text: pText, onSubmit, isLoading, isOffer
           />
         );
       case 2:
-        return <Confirmation text={pText} link={confirmationPath} />;
+        return <Confirmation text={pText} link={confirmationPath} data={data} />;
       default:
         return <ErrorView />;
     }
   };
 
   return (
-    <ContentWrapper width={width} height={height}>
-      <FormCard height={height} width={width}>
-        <FormHeader currentStep={currentStep} stepAmount={BUY_FLOW_STEPS} title={pText.buy} link={previousPath} isPaymentFlow />
-        {perStepDisplay()}
-      </FormCard>
-    </ContentWrapper>
+    <FormCard>
+      <FormHeader currentStep={currentStep} stepAmount={BUY_FLOW_STEPS} title={pText.buy} link={previousPath} isPaymentFlow />
+      {perStepDisplay()}
+    </FormCard>
   );
 };

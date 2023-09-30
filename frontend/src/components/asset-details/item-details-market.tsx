@@ -24,6 +24,10 @@ export const ItemDetailsMarket: FC<ItemDetailsMarketProps> = ({ itemInMarket, se
     navigate(`${routes.buyItem}/${itemInMarket.id}`, { state: location });
   };
 
+  const { royalty, platformFee, price } = itemInMarket.sell;
+
+  const totalPrice = Number(royalty + platformFee + price);
+
   const assetDetailActions = {
     primary: { text: text.item.buy, onClick: buyAsset },
     price: Number(itemInMarket.sell.price),
@@ -40,7 +44,7 @@ export const ItemDetailsMarket: FC<ItemDetailsMarketProps> = ({ itemInMarket, se
                 selectItemInMarket("");
                 setClose(true);
               },
-              price: assetDetailActions.price,
+              price: totalPrice,
               primary: assetDetailActions.primary,
               secondary: undefined,
             }}
