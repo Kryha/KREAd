@@ -31,12 +31,12 @@ export const useFilterItems = (items: Item[]): Item[] => {
   const { origin, categories, rarity, colors, sort, equippedTo, forSale } = useFilters();
   if (items.length === 0) return [];
 
-  const filteredOrigins = origin.length > 0 ? items.filter((item) => origin.includes(<Origin>item.origin.toLowerCase())) : items;
-  const filteredCategories = categories.length > 0 ? items.filter((item) => categories.includes(item.category)) : items;
-  const filteredRarity = rarity.length > 0 ? items.filter((item) => rarity.includes(getRarityString(item.rarity))) : items;
-  const filteredColors = colors ? items.filter((item) => item.colors.includes(colors)) : items;
-  const equipped = equippedTo ? items.filter((item) => item.equippedTo === equippedTo) : items;
-  const itemsForSale = forSale ? items.filter((item) => item.forSale) : items;
+  const filteredOrigins = origin.length > 0 ? items.filter((item) => item && origin.includes(<Origin>item.origin.toLowerCase())) : items;
+  const filteredCategories = categories.length > 0 ? items.filter((item) => item && categories.includes(item.category)) : items;
+  const filteredRarity = rarity.length > 0 ? items.filter((item) => item && rarity.includes(getRarityString(item.rarity))) : items;
+  const filteredColors = colors ? items.filter((item) => item && item.colors.includes(colors)) : items;
+  const equipped = equippedTo ? items.filter((item) => item && item.equippedTo === equippedTo) : items;
+  const itemsForSale = forSale ? items.filter((item) => item && item.forSale) : items;
 
   const filteredItems = items.filter(
     (item) =>

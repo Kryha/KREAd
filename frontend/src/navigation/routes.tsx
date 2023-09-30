@@ -3,19 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 import { routes } from "./route-names";
-import {
-  CharacterBuy,
-  CharacterSell,
-  CreateCharacter,
-  Inventory,
-  ItemBuy,
-  ItemPage,
-  ItemSell,
-  Landing,
-  Onboarding,
-  Privacy,
-  Shop,
-} from "../pages";
+import { CharacterBuy, CharacterSell, CreateCharacter, Inventory, ItemBuy, ItemSell, Landing, Onboarding, Privacy, Shop } from "../pages";
 import { ErrorFallback, ErrorView, LoadingPage, MainContainer } from "../components";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
@@ -47,7 +35,6 @@ export const InternalAppRoutes: FC = () => {
         <Route path={routes.connectWallet} element={<ConnectWallet />} />
         <Route path={routes.character} element={<Landing />} />
         <Route path={routes.createCharacter} element={<CreateCharacter />} />
-        <Route path={`${routes.items}/:category`} element={isMobile ? <MobileNotAvailable /> : <ItemPage />} />
         <Route path={`${routes.shop}/:section`} element={isMobile ? <MobileNotAvailable /> : <Shop />} />
         <Route path={`${routes.inventory}/:section`} element={isMobile ? <MobileNotAvailable /> : <Inventory />} />
         <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />

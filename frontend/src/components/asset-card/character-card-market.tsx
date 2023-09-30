@@ -14,12 +14,13 @@ import {
   NoAssetImage,
 } from "./styles";
 import { color } from "../../design";
-import { BaseCharacter } from "../base-character";
 import { routes } from "../../navigation";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PriceContainer } from "../price-in-ist/styles";
 import { PriceInIst } from "../price-in-ist";
 import { text } from "../../assets";
+import { BaseCharacterCanvas } from "../base-character-canvas/base-character-canvas";
+import { useParentViewport } from "../../hooks/use-parent-viewport";
 import { calculateCharacterLevels } from "../../util";
 
 interface Props {
@@ -31,6 +32,7 @@ interface Props {
 export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { parentRef, parentWidth, parentHeight } = useParentViewport();
   const { character, equippedItems } = characterInMarket;
 
   const { totalLevel } = calculateCharacterLevels({
@@ -54,9 +56,9 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
   return (
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
-        <AssetImageContainer>
-          {character.image ? (
-            <BaseCharacter characterImage={character.image} items={characterInMarket.equippedItems} isZoomed={false} size="medium" />
+        <AssetImageContainer ref={parentRef}>
+          {character ? (
+            <BaseCharacterCanvas width={parentWidth} height={parentHeight} character={character} items={characterInMarket.equippedItems} />
           ) : (
             <NoAssetImage />
           )}

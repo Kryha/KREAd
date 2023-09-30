@@ -20,13 +20,15 @@ import {
 } from "./styles";
 
 interface ListItemProps {
-  item: Item;
+  item: Item | undefined;
   showToast: () => void;
 }
 
 const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
   const [selected, setSelected] = useState(false);
   const unequipItem = useUnequipItem();
+
+  if (!item) return null;
 
   const unequip = () => {
     showToast();
@@ -71,7 +73,7 @@ const EmptyItem: FC = () => {
 };
 
 interface SectionProps {
-  items: Item[];
+  items: (Item | undefined)[];
   showToast: () => void;
 }
 

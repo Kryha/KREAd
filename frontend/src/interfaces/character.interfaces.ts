@@ -16,6 +16,7 @@ export const isCharacterCategory = (title: unknown): title is Title => {
 };
 
 export interface CharacterItems {
+  [key: string]: Item | undefined;
   background?: Item;
   patch?: Item;
   hair?: Item;

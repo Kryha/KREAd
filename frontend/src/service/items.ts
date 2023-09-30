@@ -43,7 +43,10 @@ export const useGetItemInInventoryByNameAndCategory = (
 export const useGetItemsInInventory = (): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
   const { items } = useUserState();
-  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
+  const allItems: Item[] = [
+    ...characters.flatMap((c) => Object.values(c.equippedItems)).filter((item): item is Item => item !== undefined), // Filter out undefined items
+    ...items,
+  ];
   const filtered = useFilterItems(allItems);
 
   return [filtered, !fetched];
@@ -52,8 +55,10 @@ export const useGetItemsInInventory = (): [Item[], boolean] => {
 export const useGetItemsForCanvas = (): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
   const { items } = useUserState();
-  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
-
+  const allItems: Item[] = [
+    ...characters.flatMap((c) => Object.values(c.equippedItems)).filter((item): item is Item => item !== undefined), // Filter out undefined items
+    ...items,
+  ];
   return [allItems, !fetched];
 };
 
