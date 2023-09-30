@@ -7,8 +7,6 @@ import { text } from "../../assets";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { routes } from "../../navigation";
 import { useLocation, useNavigate } from "react-router-dom";
-import { NotificationWrapper } from "../notification-detail/styles";
-import { NotificationDetail } from "../notification-detail";
 import { ErrorView } from "../error-view";
 import { Item } from "../../interfaces";
 
@@ -75,17 +73,7 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
         )}
         <Overlay />
       </FadeInOut>
-      <FadeInOut show={showToast} exiting={!showToast}>
-        {showToast && <Overlay isOnTop={true} />}
-        <NotificationWrapper showNotification={showToast}>
-          <NotificationDetail
-            title={text.general.goToYourWallet}
-            info={text.general.yourActionIsPending}
-            closeToast={() => setShowToast(false)}
-            isError
-          />
-        </NotificationWrapper>
-      </FadeInOut>
+      d
     </>
   );
 };

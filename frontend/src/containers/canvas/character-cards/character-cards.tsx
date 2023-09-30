@@ -67,17 +67,13 @@ export const CharacterCards: FC = () => {
             onClick={() => {
               setSelectedAsset(character.nft.name);
               setOnAssetChange(true);
+              select(character);
             }}
           >
             <ImageCard ref={parentRef}>
               <BaseCharacterCanvas width={parentWidth} height={parentHeight} character={character.nft} items={character.equippedItems} />
             </ImageCard>
-            <CharacterInformation
-              character={character}
-              selectCharacter={select}
-              sell={sell}
-              selectedCharacterName={selectedCharacter?.nft.name}
-            />
+            <CharacterInformation character={character} sell={sell} />
           </CharacterCardContainer>
         ))}
       </CharacterCardsWrapper>
@@ -108,13 +104,6 @@ const CharacterInformation: FC<CharacterInfo> = ({ character, sell }) => {
         <PrimaryButton onClick={() => (sell ? sell(character) : null)}>
           <ButtonText customColor={color.white}>sell</ButtonText>
         </PrimaryButton>
-        {/*{character.nft.name !== selectedCharacterName ? (*/}
-        {/*  <>*/}
-        {/*    <PrimaryButton onClick={() => (selectCharacter ? selectCharacter(character) : null)}>*/}
-        {/*      <ButtonText customColor={color.white}>select</ButtonText>*/}
-        {/*    </PrimaryButton>*/}
-        {/*  </>*/}
-        {/*) : null}*/}
       </CharacterButtonContainer>
     </CharacterInfo>
   );

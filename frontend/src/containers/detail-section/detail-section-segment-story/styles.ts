@@ -43,10 +43,12 @@ export const DetailSectionSegmentStoryImg = styled.img`
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   background-color: ${color.white};
+  object-fit: contain;
 `;
 
 export const ImageContainer = styled.div`
   width: 100%;
+  height: 550px;
   box-sizing: border-box;
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};

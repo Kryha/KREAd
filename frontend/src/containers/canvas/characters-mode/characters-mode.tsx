@@ -10,7 +10,6 @@ import { routes } from "../../../navigation";
 import { ModeScroller } from "../mode-scroller/mode-scroller";
 import { color } from "../../../design";
 import { ArrowUp } from "../../../components/character-card/styles";
-import { ButtonInfo } from "../../../components/button-info";
 import { CharacterCards } from "../character-cards/character-cards";
 import { CharacterActions } from "./styles";
 import { CanvasCharacterDetails } from "../canvas-character-details/canvas-character-details";
@@ -45,7 +44,6 @@ export const CharactersMode: FC = () => {
                 <CardActionsContainer>
                   <HorizontalDivider />
                   <CharacterActions>
-                    <ButtonInfo info={text.general.characterCardInfo} infoPosition={"top"} />
                     <PrimaryButton type="submit" onClick={() => navigate(routes.createCharacter)}>
                       <ButtonText customColor={color.white}>{text.general.mintNew}</ButtonText>
                       <ArrowUp />

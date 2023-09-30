@@ -10,8 +10,8 @@ interface StyleProps {
 export const CharacterButtonContainer = styled.div`
   margin-top: ${margins.medium};
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  gap: 24px;
 `;
 export const CharacterInfoCharacter = styled.span`
   :first-letter {
@@ -47,7 +47,7 @@ export const CharacterCardsWrapper = styled.div<StyleProps>`
   display: flex;
   flex-direction: column;
   padding-top: 16px;
-  gap: 8px;
+  gap: 16px;
   overflow-y: scroll;
   ${({ height }): string => `height: ${height - 320}px;`};
   ::-webkit-scrollbar {

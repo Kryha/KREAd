@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import { ButtonInfo } from "../../../components/button-info";
-import { InfoPosition } from "../../../interfaces/layout.types";
+import { InfoPosition } from "../../../interfaces";
 import { DetailSectionElemenTitle, DetailSectionElementWrap, TitleFlexRow } from "./styles";
 
 interface DetailSectionElementProps {
@@ -15,8 +15,8 @@ export const DetailSectionElement: FC<DetailSectionElementProps> = ({ title, chi
   return (
     <DetailSectionElementWrap>
       <TitleFlexRow>
-        <DetailSectionElemenTitle>{title}</DetailSectionElemenTitle>
         {!!info && <ButtonInfo title={title} info={info} infoPosition={infoPosition} />}
+        <DetailSectionElemenTitle>{title}</DetailSectionElemenTitle>
       </TitleFlexRow>
       {children}
     </DetailSectionElementWrap>

@@ -124,9 +124,8 @@ export const InventoryWrapper = styled.div`
   width: 100%;
 
   ${DetailSectionWrap} {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
+    margin: auto;
     z-index: 1000;
   }
 

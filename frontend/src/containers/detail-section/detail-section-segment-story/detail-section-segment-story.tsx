@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 
 import { text } from "../../../assets";
-import { BaseCharacter, Label } from "../../../components";
-import { CharacterItems } from "../../../interfaces";
+import { Label } from "../../../components";
+import { Character, CharacterItems } from "../../../interfaces";
 
 import {
   DetailSectionSegmentStoryCreators,
@@ -16,8 +16,11 @@ import {
 import { Download, DownloadButton } from "../../../components/download-image/styles";
 import styled from "@emotion/styled";
 import { DownloadImageModal } from "../../../components/download-image";
+import { useParentViewport } from "../../../hooks/use-parent-viewport";
+import { BaseCharacterCanvas } from "../../../components/base-character-canvas/base-character-canvas";
 
 interface Data {
+  character?: Character;
   characterImage?: string;
   name: string;
   description: string;
@@ -31,6 +34,7 @@ interface DetailSectionSegmentStoryProps {
 
 export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ data }) => {
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
+  const { parentRef, parentWidth, parentHeight } = useParentViewport();
 
   const handleDownloadButtonClick = () => {
     setIsDownloadOpen(true);
@@ -54,8 +58,8 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
       {typeof data.image === "string" ? (
         <DetailSectionSegmentStoryImg src={data.image} />
       ) : (
-        <ImageContainer>
-          <BaseCharacter characterImage={data.characterImage} items={data.image} size="half" />
+        <ImageContainer ref={parentRef}>
+          <BaseCharacterCanvas character={data.character!} items={data.image} width={parentWidth} height={parentHeight} />
           <DownloadButtonContainer>
             <DownloadButton onClick={handleDownloadButtonClick}>
               <Download />
@@ -72,4 +76,5 @@ export const DownloadButtonContainer = styled.div`
   position: absolute;
   top: 24px;
   left: 24px;
+  z-index: 0;
 `;
