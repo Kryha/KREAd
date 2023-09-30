@@ -40,7 +40,7 @@ export const Landing: FC = () => {
   const { width, height } = useViewport();
   const { interactionMode, setInteractionMode } = useCharacterBuilder();
   const [isDownloadOpen, setIsDownloadOpen] = useState(false);
-  
+
   const sell = (characterId: number) => {
     navigate(`${routes.sellCharacter}/${characterId}`, { state: location });
   };
