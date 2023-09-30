@@ -69,7 +69,7 @@ export const CreateCharacter: FC = () => {
   return (
     <PageContainer
       sidebarContent={
-        <FormCard height={height} width={width}>
+        <FormCard>
           <FormHeader
             currentStep={currentStep}
             stepAmount={MINT_CHARACTER_FLOW_STEPS}

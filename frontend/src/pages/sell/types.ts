@@ -7,6 +7,9 @@ export interface SellText {
 
 export interface SellData {
   price: number;
+  name?: string;
+  type?: string;
+  image?: string;
 }
 
 export type SellStep = 0 | 1 | 2;

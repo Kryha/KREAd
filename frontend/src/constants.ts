@@ -132,6 +132,7 @@ export const CHARACTER_HEIGHT = 1190.5511 as const;
 export const CHARACTER_WIDTH = 841.8898 as const;
 
 export const NETWORK_CONFIG = import.meta.env.VITE_NETWORK_CONFIG || ("https://emerynet.agoric.net/network-config" as const);
+
 export const localBridgeHref = "http://localhost:3000/wallet/bridge.html" as const;
 export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html" as const;
 export const devBridgeHref = "https://main.wallet-app.pages.dev/wallet/bridge.html" as const;
@@ -156,3 +157,6 @@ export const AGORIC_RPC = import.meta.env.VITE_RPC || ("http://127.0.0.1:26657" 
 export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;
 
 export const PINATA_GATEWAY = import.meta.env.VITE_PINATA_GATEWAY || "https://pink-defensive-jay-557.mypinata.cloud";
+
+export const PLATFORM_RATE = 0.03;
+export const ROYALTY_RATE = 0.1;

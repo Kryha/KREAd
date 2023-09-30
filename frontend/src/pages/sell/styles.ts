@@ -37,23 +37,23 @@ export const TickContainer = styled.div`
   margin-bottom: ${margins.small};
 `;
 
-interface ViewProps {
-  height: number;
-  width: number;
-}
+export const ContentWrapper = styled.div`
+  margin-left: auto;
+  margin-right: auto;
 
-export const ContentWrapper = styled.div<ViewProps>`
-  margin: auto;
   ${FormCard} {
     animation: ${fadeUp} 1.2s ease-out 0s forwards;
     opacity: 0;
     width: 100%;
-    max-width: 550px;
-    height: ${({ height }): string => `${height - 200}px`};
     transform: translate3d(0, 1rem, 0);
   }
 `;
 
+export const Header = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+`;
 export const ArrowUp = styled(ArrowUpRightIcon)`
   padding-left: 13px;
   path {
@@ -62,9 +62,10 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
 `;
 
 export const ButtonContainer = styled.div`
-  position: absolute;
-  bottom: ${margins.big};
-  right: ${margins.big};
+  display: flex;
+  margin-top: auto;
+  flex-direction: row;
+  justify-content: flex-end;
   :hover {
     ${ArrowUp} {
       path {
@@ -86,9 +87,14 @@ export const ButtonContainer = styled.div`
 `;
 
 export const InputWrapper = styled.div`
-  position: absolute;
-  right: 0;
-  top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  ${Tick} {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
 `;
 
 export const StepContainer = styled.div`
@@ -241,9 +247,11 @@ export const InputContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   padding: 0;
+  gap: 8px;
   width: 100%;
   ${Input} {
     width: 100%;
+    font-size: 24px;
   }
 `;
 

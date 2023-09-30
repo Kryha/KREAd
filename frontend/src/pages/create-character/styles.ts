@@ -1,4 +1,4 @@
-import { Badge, ButtonText, CharacterImgs, Input, MenuItemName, PrimaryButton } from "../../components";
+import { Badge, ButtonText, CharacterImgs, fadeUp, Input, MenuItemName, PrimaryButton } from "../../components";
 import styled from "@emotion/styled";
 import { ArrowUpRightIcon, ExclamationIcon, TickIcon, WarningIcon } from "../../assets";
 import { breakpoints, color, fontSize, margins } from "../../design";
@@ -28,27 +28,26 @@ interface ActiveProps {
   active: boolean;
 }
 
-export const FormCard = styled.div<ViewProps>`
+export const FormCard = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${margins.medium};
   background: ${color.lightGrey};
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
-  margin-top: ${margins.big};
-  margin-bottom: ${margins.big};
-  width: 550px;
-
-  @media screen and (max-width: ${breakpoints.desktop}) {
-    margin-left: auto;
-    margin-right: auto;
-  }
+  margin: auto;
+  width: 500px;
+  height: 90%;
 
   @media screen and (max-width: ${breakpoints.mobile}) {
     margin: auto;
     height: 100%;
     border-radius: 0;
   }
+
+  animation: ${fadeUp} 1.2s ease-out 0s forwards;
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
 `;
 
 export const Warning = styled(WarningIcon)``;

@@ -49,7 +49,7 @@ export const ItemCardsWrapper = styled.div<StyleProps>`
   flex-direction: column;
   gap: 8px;
   overflow-y: scroll;
-  ${({ height }): string => `height: ${height - 480}px;`};
+  ${({ height }): string => `height: ${height - 520}px;`};
   ::-webkit-scrollbar {
     display: none;
   }

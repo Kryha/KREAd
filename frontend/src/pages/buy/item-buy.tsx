@@ -5,6 +5,7 @@ import { ItemInMarket } from "../../interfaces";
 import { useBuyItem } from "../../service";
 import { Buy } from "./buy";
 import { useItemMarketState } from "../../context/item-shop-context";
+import { ErrorView } from "../../components";
 
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
@@ -34,9 +35,15 @@ export const ItemBuy = () => {
     });
   };
 
+  if (!data) return <ErrorView />;
+
+  const { royalty, platformFee, price } = data.sell;
+
+  const totalPrice = Number(royalty + platformFee + price);
+
   return (
     <Buy
-      data={data && { ...data.item, price: Number(data.sell.price) }}
+      data={data && { ...data.item, price: totalPrice, type: "item" }}
       onSubmit={handleSubmit}
       isLoading={isAwaitingApproval}
       isOfferAccepted={isOfferAccepted}

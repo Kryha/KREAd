@@ -5,7 +5,7 @@ import { ErrorView } from "../../components";
 import { useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
-import { isItemCategory, Category } from "../../interfaces";
+import { Category, isItemCategory } from "../../interfaces";
 
 export const ItemSell = () => {
   const { name, category } = useParams<"category" | "name">();
@@ -19,6 +19,8 @@ export const ItemSell = () => {
   };
 
   if (!data || !isItemCategory(category)) return <ErrorView />;
+  data.type = "item";
+  data.name = name;
 
   return (
     <Sell

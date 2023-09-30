@@ -1,16 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import {
-  bounce,
-  changeSize,
-  CharacterImgs,
-  disappear,
-  fadeIn,
-  PrimaryButton,
-  slideUp,
-  TitleText,
-} from "../../components";
+import { bounce, changeSize, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { breakpoints, color, fontWeight, zIndex } from "../../design";
 
@@ -115,8 +106,7 @@ export const ArrowUpRight = styled(ArrowUpRightIcon)`
 `;
 
 export const EndContent = styled.div<HeightProps>`
-  ${({ height }): string =>
-    `height: ${height - 100}px; min-height: ${height - 100}px;`};
+  ${({ height }): string => `height: ${height - 100}px; min-height: ${height - 100}px;`};
   ${TitleText} {
     margin-top: 16px;
   }
