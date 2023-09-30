@@ -73,7 +73,6 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
         )}
         <Overlay />
       </FadeInOut>
-      d
     </>
   );
 };

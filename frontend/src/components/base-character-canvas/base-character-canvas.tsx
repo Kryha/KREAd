@@ -8,7 +8,7 @@ import { Character, CharacterItems } from "../../interfaces";
 interface Props {
   width: number;
   height: number;
-  character: Character;
+  character: Character | undefined;
   items: CharacterItems;
 }
 

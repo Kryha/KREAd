@@ -54,12 +54,11 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
         </DetailSectionSegmentStoryCreators>
         <DetailSectionSegmentStoryDescription>{text.util.correctDescriptionString(data.description)} </DetailSectionSegmentStoryDescription>
       </DetailSectionSegmentStoryWrap>
-
       {typeof data.image === "string" ? (
         <DetailSectionSegmentStoryImg src={data.image} />
       ) : (
         <ImageContainer ref={parentRef}>
-          <BaseCharacterCanvas character={data.character!} items={data.image} width={parentWidth} height={parentHeight} />
+          data.character ?? <BaseCharacterCanvas character={data.character} items={data.image} width={parentWidth} height={parentHeight} />
           <DownloadButtonContainer>
             <DownloadButton onClick={handleDownloadButtonClick}>
               <Download />

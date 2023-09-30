@@ -24,7 +24,7 @@ const assembledCharacterOrder = [
   "filter2",
   "garment",
 ];
-export function useBaseCharacter(width: number, height: number, character: Character, items: CharacterItems) {
+export function useBaseCharacter(width: number, height: number, character: Character | undefined, items: CharacterItems) {
   const stageAspectRatio = height / width;
   const itemsInventory = extractItems(items);
 
