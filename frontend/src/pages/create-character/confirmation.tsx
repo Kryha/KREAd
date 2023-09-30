@@ -17,15 +17,15 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
   const userStateDispatch = useUserStateDispatch();
   const navigate = useNavigate();
 
-  if (!character) { 
-    console.error("No character found")
+  if (!character) {
+    console.error("No character found");
     return <ErrorView />;
   }
 
   const handleConfirm = () => {
     userStateDispatch({ type: "SET_SELECTED", payload: character.name });
     navigate(routes.character);
-  }
+  };
 
   return (
     <ContentWrapper>
