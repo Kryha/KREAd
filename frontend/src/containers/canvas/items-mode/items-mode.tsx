@@ -1,7 +1,7 @@
-import { FC, useEffect } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
-import { useGetItemsInInventoryByCategory, useSelectedCharacter } from "../../../service";
+import { useEquipItem, useGetItemsInInventoryByCategory, useSelectedCharacter, useUnequipItem } from "../../../service";
 import { ButtonText, FadeInOut, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
 import { CATEGORY_MODE, MAIN_MODE } from "../../../constants";
 import { text } from "../../../assets";
@@ -15,11 +15,16 @@ import { useIsMobile } from "../../../hooks";
 import { NotificationWrapper } from "../../../components/notification-detail/styles";
 import { CanvasNotification } from "../canvas-notification/canvas-notification";
 import { CanvasItemDetails } from "../canvas-item-details/canvas-item-details";
+import { AdjustedItemButtonContainer } from "../item-cards/style";
+import { useGetItemSelectionForCharacter } from "../item-cards/hooks";
 
 export const ItemsMode: FC = () => {
   const navigate = useNavigate();
   const {
     selectedAssetCategory,
+    selectedAsset,
+    showToast,
+    setShowToast,
     setSelectedAssetCategory,
     setSelectedAsset,
     setInteractionMode,
@@ -32,8 +37,23 @@ export const ItemsMode: FC = () => {
   const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
 
   const isMobile = useIsMobile(breakpoints.tablet);
+  const { equipped, unequipped, inCategory } = useGetItemSelectionForCharacter();
+
+  const [equippedSelected, setEquippedSelected] = useState(false);
+
+  const selected = useMemo(() => {
+    if (equippedSelected) return equipped.inCategory;
+    return inCategory.find((item) => item.name === selectedAsset);
+  }, [selectedAsset, items, equippedSelected]);
+
+  const selectedItemIsEquipped = useMemo(() => {
+    return selected?.equippedTo === selectedCharacter?.nft.name;
+  }, [selected, selectedCharacter]);
 
   const equippedItem = items.find((item) => item.equippedTo === characterName);
+  const [equippedItemState, setEquippedItemState] = useState(equipped.inCategory);
+  const equipItem = useEquipItem(setEquippedItemState);
+  const unequipItem = useUnequipItem(() => setEquippedItemState(undefined));
 
   // Always select the equipped item on default
   useEffect(() => {
@@ -41,6 +61,41 @@ export const ItemsMode: FC = () => {
       setSelectedAsset(equippedItem.name);
     }
   }, [equippedItem]);
+
+  const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowToast(!showToast);
+    if (selected) {
+      equipItem.mutate({ item: selected });
+    }
+  };
+
+  const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowToast(!showToast);
+    if (equippedItemState) {
+      unequipItem.mutate({ item: equippedItemState });
+    }
+  };
+
+  const sell = () => {
+    if (!selectedAsset) return;
+    navigate(`${routes.sellItem}/${selectedAssetCategory}/${selectedAsset}`, {
+      state: location,
+    });
+  };
+
+  const disable = useMemo(() => {
+    return {
+      unequip: !selected || !equippedSelected,
+      equip: !selected || equippedSelected,
+      sell: !selected || equippedSelected,
+    };
+  }, [equippedSelected, selected]);
+  if (!selectedCharacter) {
+    console.error("No character selected");
+    return <></>;
+  }
 
   return (
     <>
@@ -81,8 +136,25 @@ export const ItemsMode: FC = () => {
                 <ModeScroller />
               </CanvasAssetHeader>
               <CanvasContentWrapper>
-                <ItemCards />
+                <ItemCards
+                  equipped={equipped}
+                  unequipped={unequipped}
+                  equippedSelected={equippedSelected}
+                  setEquippedSelected={setEquippedSelected}
+                  selectedItemIsEquipped={selectedItemIsEquipped}
+                />
                 <CardActionsContainer>
+                  <AdjustedItemButtonContainer>
+                    <PrimaryButton disabled={disable.unequip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}>
+                      <ButtonText customColor={color.white}>unequip</ButtonText>
+                    </PrimaryButton>
+                    <PrimaryButton disabled={disable.equip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}>
+                      <ButtonText customColor={color.white}>equip</ButtonText>
+                    </PrimaryButton>
+                    <PrimaryButton disabled={disable.sell} onClick={sell}>
+                      <ButtonText customColor={color.white}>sell</ButtonText>
+                    </PrimaryButton>
+                  </AdjustedItemButtonContainer>
                   <SecondaryButton
                     type="submit"
                     onClick={() => {
