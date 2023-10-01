@@ -15,7 +15,12 @@ interface ItemInfoProps {
   item: Item;
 }
 export const ItemCardInfo: FC<ItemInfoProps> = ({ item }) => {
-  const { setShowItemDetails } = useCharacterBuilder();
+  const { showItemDetails, setShowItemDetails } = useCharacterBuilder();
+
+  const showDetails = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setShowItemDetails(!showItemDetails);
+  };
 
   return (
     <ItemInfo>
@@ -31,8 +36,10 @@ export const ItemCardInfo: FC<ItemInfoProps> = ({ item }) => {
         </Badge>
       </ItemsRow>
       <ItemButtonContainer>
-        <ButtonInfoWrap onClick={() => setShowItemDetails(true)}>
-          <SecondaryButton>{text.general.info}</SecondaryButton>
+        <ButtonInfoWrap>
+          <SecondaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => showDetails(event)}>
+            {text.general.info}
+          </SecondaryButton>
         </ButtonInfoWrap>
       </ItemButtonContainer>
     </ItemInfo>

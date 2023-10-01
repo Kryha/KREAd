@@ -66,7 +66,7 @@ export const ItemCardWrapper = styled.div`
   right: 24px;
   ${DetailSectionWrap} {
     height: 95vh;
-    width: 450px;
+    width: 500px;
   }
 `;
 

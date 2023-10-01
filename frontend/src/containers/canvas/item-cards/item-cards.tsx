@@ -39,6 +39,7 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
               setEquippedSelected(true);
               setSelectedAsset(equipped.inCategory?.name || null);
               setOnAssetChange(false);
+              setCharacterName(equipped.inCategory?.equippedTo);
             }}
           >
             <ItemImageCard>
