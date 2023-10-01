@@ -15,11 +15,6 @@ stages:
         steps:
           - script: curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && sudo install skaffold /usr/local/bin/
             displayName: Install Skaffold
-          - task: Docker@2
-            displayName: Login to Container Registry
-            inputs:
-              command: login
-              containerRegistry: $(CONTAINER_REGISTRY_SERVICE_CONNECTION)
           - task: DownloadSecureFile@1
             name: authkey
             displayName: "Download Service Account Key"
