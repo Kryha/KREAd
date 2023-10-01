@@ -194,10 +194,10 @@ export const DetailContainer = styled.div`
 
 export const KreadContainer = styled.div`
   ${KreadIcon} {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 24px;
     width: 100px;
     height: 24px;
   }
