@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { HorizontalDivider, LoadingPage, OverviewEmpty } from "../../components";
+import { FadeInOut, HorizontalDivider, LoadingPage, NotificationDetail, Overlay, OverviewEmpty } from "../../components";
 import { routes } from "../../navigation";
 import { useGetItemInInventoryByNameAndCategory, useGetItemsInInventory } from "../../service";
 import { text } from "../../assets";
@@ -10,11 +10,14 @@ import { AssetFilterCount, AssetHeaderContainer } from "../../components/asset-i
 import { color } from "../../design";
 import { SECTION } from "../../constants";
 import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { useCharacterBuilder } from "../../context/character-builder-context";
 
 export const ItemsInventory: FC = () => {
   const [selectedName, setSelectedName] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedCharacterName, setSelectedCharacterName] = useState<string>();
+  const { showToast, setShowToast } = useCharacterBuilder();
 
   const selectItem = (itemName: string, category: string, characterName: string | undefined) => {
     setSelectedName(itemName);
@@ -60,6 +63,17 @@ export const ItemsInventory: FC = () => {
           />
         </OverviewContainer>
       )}
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
+      </FadeInOut>
     </>
   );
 };

@@ -2,9 +2,9 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { useEquipItem, useGetItemsInInventoryByCategory, useSelectedCharacter, useUnequipItem } from "../../../service";
-import { ButtonText, FadeInOut, HorizontalDivider, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
+import { ButtonText, FadeInOut, HorizontalDivider, NotificationDetail, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
 import { CATEGORY_MODE, MAIN_MODE } from "../../../constants";
-import { StoreIcon } from "../../../assets";
+import { StoreIcon, text } from "../../../assets";
 import {
   CanvasAssetContainer,
   CanvasAssetHeader,
@@ -102,6 +102,17 @@ export const ItemsMode: FC = () => {
 
   return (
     <>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
+      </FadeInOut>
       <FadeInOut show={showWarning} exiting={!showWarning}>
         {showWarning && <Overlay isOnTop={true} />}
         <NotificationWrapper showNotification={showWarning}>
