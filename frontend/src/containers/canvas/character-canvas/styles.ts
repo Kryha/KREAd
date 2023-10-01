@@ -45,6 +45,8 @@ export const CanvasArea = styled.div`
   grid-area: canvas;
   position: relative;
   display: flex;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
   justify-content: center;
   align-items: center;
   overflow: hidden !important;

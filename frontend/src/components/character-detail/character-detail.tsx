@@ -77,6 +77,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
             </StoryContainer>
           </DetailContent>
         </Content>
+        <HorizontalDivider />
         <CardActionsContainer>
           <PrimaryButton onClick={() => navigate(routes.shop)}>
             <ButtonText customColor={color.white}>{text.character.deleteCharacter}</ButtonText>

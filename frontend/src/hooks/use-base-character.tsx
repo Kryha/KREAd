@@ -63,10 +63,12 @@ export function useBaseCharacter(width: number, height: number, character: Chara
 
   const extendedCharacter = new Konva.Group({
     preventDefault: true,
-    pixelRatio: 2,
+    pixelRatio: 3,
+    scaleX: 1.4,
+    scaleY: 1.4,
     centeredScaling: true,
     x: width / 2,
-    y: height / 2,
+    y: height / 3,
   });
 
   const uniqueCategories = new Set();

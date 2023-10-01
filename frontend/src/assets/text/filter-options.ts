@@ -2,7 +2,7 @@ import { Category, Origin, Rarity } from "../../interfaces";
 import { CATEGORY, ORIGIN, RARITY } from "../../constants";
 
 export const sortItemsInventoryOptions = [
-  { label: "A to Z", value: "atoz" },
+  { label: "A to Z", value: "A to Z" },
   { label: "level", value: "level_sort" },
   { label: "category", value: "category_sort" },
   { label: "origin", value: "origin_sort" },
@@ -10,24 +10,24 @@ export const sortItemsInventoryOptions = [
 ];
 
 export const sortCharactersInventoryOptions = [
-  { label: "A to Z", value: "atoz" },
+  { label: "A to Z", value: "A to Z" },
   { label: "level", value: "level_sort" },
   { label: "title", value: "title_sort" },
   { label: "origin", value: "origin_sort" },
 ];
 
 export const sortCharactersMarketOptions = [
-  { label: "A to Z", value: "atoz" },
-  { label: "level", value: "level" },
-  { label: "title", value: "title" },
-  { label: "origin", value: "origin" },
+  { label: "A to Z", value: "A to Z" },
+  { label: "level", value: "level_sort" },
+  { label: "title", value: "title_sort" },
+  { label: "origin", value: "origin_sort" },
   { label: "lowest price", value: "lowestPrice" },
   { label: "highest price", value: "highestPrice" },
 ];
 export const sortItemsMarketOptions = [
-  { label: "A to Z", value: "atoz" },
-  { label: "level", value: "level" },
-  { label: "category", value: "category" },
+  { label: "A to Z", value: "A to Z" },
+  { label: "level", value: "level_sort" },
+  { label: "category", value: "category_sort" },
   { label: "lowest price", value: "lowestPrice" },
   { label: "highest price", value: "highestPrice" },
 ];

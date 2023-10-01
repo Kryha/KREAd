@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { breakpoints, color, fontWeight, margins } from "../../../design";
 import { disappear, fadeIn } from "../../../components";
+import { AssetTag } from "../../../components/asset-card/styles";
 
 interface StyleProps {
   height: number;
@@ -8,10 +9,9 @@ interface StyleProps {
 }
 
 export const CharacterButtonContainer = styled.div`
-  margin-top: ${margins.medium};
-  display: flex;
-  justify-content: center;
-  gap: 24px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
 `;
 export const CharacterInfoCharacter = styled.span`
   :first-letter {
@@ -23,6 +23,7 @@ export const CharacterInfoCharacter = styled.span`
   color: ${color.darkGrey};
 `;
 export const CharacterInfo = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -31,6 +32,11 @@ export const CharacterInfo = styled.div`
   padding-bottom: 16px;
   padding-left: 16px;
   flex: 1 1 auto;
+  gap: 8px;
+
+  ${AssetTag} {
+    flex: 0;
+  }
 `;
 export const CharacterCardsContainer = styled.div`
   display: flex;

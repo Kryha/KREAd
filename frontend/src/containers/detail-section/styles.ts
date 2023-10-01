@@ -10,11 +10,11 @@ export const DetailSectionWrap = styled.div<ViewProps>`
   background-color: ${color.lightGrey};
   border: 1px solid ${color.grey};
   border-radius: 24px;
-  padding: 0 ${margins.big} ${margins.big};
+  padding: 0 ${margins.medium} ${margins.medium};
   display: flex;
   flex-flow: column nowrap;
   overflow-y: scroll;
-  max-width: ${breakpoints.desktop};
+  max-width: ${breakpoints.tablet};
 
   -ms-overflow-style: none;
   scrollbar-width: none;

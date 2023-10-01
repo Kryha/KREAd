@@ -6,16 +6,12 @@ import { text } from "../../assets";
 import { OverviewContainer } from "../shop/styles";
 import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
 import { ItemCardsInventory } from "../../components/asset-cards/item-cards-inventory";
-import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
+import { AssetFilterCount, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
 import { color } from "../../design";
 import { SECTION } from "../../constants";
 import { ItemDetailsInventory } from "../../components/asset-details/item-details-inventory";
 
-interface Props {
-  pageSelector?: React.ReactNode;
-}
-
-export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
+export const ItemsInventory: FC = () => {
   const [selectedName, setSelectedName] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedCharacterName, setSelectedCharacterName] = useState<string>();
@@ -36,17 +32,18 @@ export const ItemsInventory: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <AssetHeaderContainer>
-        <AssetHeader>
-          {pageSelector}
-          <AssetItemFilters section={SECTION.INVENTORY} />
-        </AssetHeader>
+        <AssetItemFilters section={SECTION.INVENTORY} />
       </AssetHeaderContainer>
       <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
       {item && (
         <ItemDetailsInventory
           item={item}
-          selectedItem={{ name: selectedName, category: selectedCategory, characterName: selectedCharacterName }}
+          selectedItem={{
+            name: selectedName,
+            category: selectedCategory,
+            characterName: selectedCharacterName,
+          }}
           selectItem={selectItem}
         />
       )}

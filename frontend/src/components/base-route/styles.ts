@@ -1,10 +1,16 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { breakpoints, margins, zIndex } from "../../design";
+import { breakpoints, color, margins, zIndex } from "../../design";
 
 interface AnimationProps {
   isLanding: boolean;
 }
+
+export const NavBarDivider = styled.div`
+  border: 0.5px solid ${color.grey};
+  transform: rotate(90deg);
+  width: 41px;
+`;
 
 export const TopbarContainer = styled.header<AnimationProps>`
   display: flex;
@@ -12,7 +18,12 @@ export const TopbarContainer = styled.header<AnimationProps>`
   justify-content: space-between;
   align-items: flex-end;
   z-index: 100;
-  padding: ${margins.medium};
+  margin-left: ${margins.medium};
+  margin-right: ${margins.medium};
+  padding-top: ${margins.medium};
+  padding-bottom: ${margins.medium};
+  background: transparent;
+  backdrop-filter: blur(5px);
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding: ${margins.mini};
@@ -25,6 +36,15 @@ export const Box = styled.div`
   padding: 0;
   z-index: 1;
   align-items: center;
+`;
+
+export const RightBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  z-index: 1;
+  align-items: center;
+  gap: 12px;
 `;
 
 export const ChildrenContainer = styled.div<AnimationProps>`

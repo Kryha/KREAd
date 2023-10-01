@@ -32,12 +32,14 @@ export const AssetCharacterFilters: FC<Props> = ({ section }) => {
             <Filters
               label={title.length === 0 ? text.filters.title : `${text.filters.title}: ${title.length}`}
               openFilter={openFilter}
+              options={titleOptions}
               id={filterId}
               hasValue={title.length > 0}
             >
               <Select label={text.filters.title} onArrayChange={setTitle} options={titleOptions} isMultiSelect reset={reset} />
             </Filters>
             <Filters
+              options={originOptions}
               label={origin.length === 0 ? text.filters.origin : `${text.filters.origin}: ${origin.length}`}
               openFilter={openFilter}
               id={filterId}
@@ -68,7 +70,13 @@ export const AssetCharacterFilters: FC<Props> = ({ section }) => {
                 {section === SECTION.INVENTORY && (
                   <>
                     <Label customColor={color.black}>{text.filters.sortBy}</Label>
-                    <Filters label={sort || text.filters.aToZ} openFilter={openFilter} id={filterId} hasValue={!!sort}>
+                    <Filters
+                      label={sort || text.filters.aToZ}
+                      openFilter={openFilter}
+                      id={filterId}
+                      hasValue={!!sort}
+                      options={sortCharactersInventoryOptions}
+                    >
                       <Select label={text.filters.aToZ} onChange={setSort} options={sortCharactersInventoryOptions} reset={reset} />
                     </Filters>
                   </>

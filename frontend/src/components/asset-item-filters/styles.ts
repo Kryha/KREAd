@@ -18,6 +18,7 @@ export const AssetHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 16px;
   margin-bottom: 16px;
 `;
 export const AssetFilterCount = styled(ButtonText)`

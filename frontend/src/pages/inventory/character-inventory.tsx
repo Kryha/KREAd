@@ -6,16 +6,12 @@ import { useMyCharacter, useMyCharacters } from "../../service";
 import { OverviewContainer } from "../shop/styles";
 import { CharacterDetailsInventory } from "../../components/asset-details/character-details-inventory";
 import { CharacterCardsInventory } from "../../components/asset-cards/character-cards-inventory";
-import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
+import { AssetFilterCount, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
 import { color } from "../../design";
 import { SECTION } from "../../constants";
 import { AssetCharacterFilters } from "../../components/asset-character-filters/asset-character-filters";
 
-interface Props {
-  pageSelector?: React.ReactNode;
-}
-
-export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
+export const CharactersInventory: FC = () => {
   const [selectedId, setSelectedId] = useState<number>();
 
   const [characters, isLoadingCharacters] = useMyCharacters();
@@ -31,10 +27,7 @@ export const CharactersInventory: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <AssetHeaderContainer>
-        <AssetHeader>
-          {pageSelector}
-          <AssetCharacterFilters section={SECTION.INVENTORY} />
-        </AssetHeader>
+        <AssetCharacterFilters section={SECTION.INVENTORY} />
       </AssetHeaderContainer>
       <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />

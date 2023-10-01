@@ -68,7 +68,6 @@ export const AssetWrapper = styled.div`
 
   :hover {
     border: 1px solid ${color.black};
-    transform: translateY(-5px);
   }
 `;
 
@@ -175,4 +174,21 @@ export const IST = styled(ISTIcon)`
   align-items: flex-start;
   width: 24px;
   height: 24px;
+`;
+
+export const ISTButton = styled.div`
+  display: flex;
+  align-items: flex-end;
+  font-size: 16px;
+`;
+
+export const ISTButtonIcon = styled(ISTIcon)`
+  width: 18px;
+  height: 18px;
+  stroke: ${color.white};
+  fill: ${color.white};
+  :hover {
+    stroke: ${color.black};
+    fill: ${color.black};
+  }
 `;

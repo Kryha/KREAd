@@ -1,5 +1,6 @@
 import { CharacterInMarket, ExtendedCharacter, Item, ItemInMarket } from "../interfaces";
 import { getRarityString } from "../service";
+import { Options } from "../components";
 
 export const sortItems = (sorting: string, items: Item[]): Item[] => {
   switch (sorting) {
@@ -37,7 +38,7 @@ export const sortItemsMarket = (sorting: string, items: ItemInMarket[]): ItemInM
   }
 };
 
-export const sortCharacters = (sorting: string, characters: (ExtendedCharacter | ExtendedCharacter)[]): ExtendedCharacter[] => {
+export const sortCharacters = (sorting: string, characters: ExtendedCharacter[]): ExtendedCharacter[] => {
   switch (sorting) {
     case "atoz":
       return characters.sort((a, b) => a.nft.name.localeCompare(b.nft.name));
@@ -70,3 +71,8 @@ export const sortCharactersMarket = (sorting: string, characters: CharacterInMar
       return characters;
   }
 };
+
+export function getLabelForValue(value: string, options: Options[]) {
+  const option = options.find((option) => option.value === value);
+  return option ? option.label : "";
+}

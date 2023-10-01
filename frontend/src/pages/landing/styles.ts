@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { CloseIcon, DownArrowIcon } from "../../assets";
-import { disappear, fadeIn } from "../../components";
+import { disappear, fadeIn, SecondaryButton } from "../../components";
 import { CharacterWrapper } from "../../components/base-character/styles";
 import { color, margins } from "../../design";
+import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 interface ImageProps {
   isZoomed?: boolean;
@@ -30,12 +31,23 @@ export const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
+  z-index: 100;
   gap: ${margins.nano};
-  margin-left: ${margins.big};
+  margin-top: ${margins.medium};
+  margin-right: ${margins.medium};
+  margin-left: ${margins.medium};
   animation: ${disappear}, ${fadeIn};
   animation-duration: 0.8s, 1s;
   animation-delay: 0s, 0.8s;
+  height: fit-content;
+
+  background: transparent;
+  backdrop-filter: blur(5px);
+
+  ${SecondaryButton} {
+    background: ${color.white};
+  }
 `;
 
 export const ButtonContainer = styled.div`
@@ -43,14 +55,27 @@ export const ButtonContainer = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 0;
+  margin-top: 16px;
   gap: 12px;
+`;
+
+export const ItemCardWrapper = styled.div`
+  position: absolute;
+  z-index: 1000;
+  top: 24px;
+  right: 24px;
+  ${DetailSectionWrap} {
+    height: 95vh;
+    width: 450px;
+  }
 `;
 
 export const CharacterCardWrapper = styled.div`
   position: absolute;
   z-index: 1000;
-  bottom: ${margins.big};
-  left: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export const Tag = styled.div`

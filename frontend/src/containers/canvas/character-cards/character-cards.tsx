@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { ButtonText, PrimaryButton, SecondaryButton } from "../../../components";
+import { BoldLabel, ButtonText, LevelBoldLabel, SecondaryButton } from "../../../components";
 import { color } from "../../../design";
 import { useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
@@ -17,19 +17,16 @@ import {
 } from "./styles";
 import { useMyCharacters, useSelectedCharacter } from "../../../service";
 import { useUserStateDispatch } from "../../../context/user";
-import { routes } from "../../../navigation";
-import { useLocation, useNavigate } from "react-router-dom";
 import { ButtonInfoWrap } from "../../../components/button-info/styles";
 import { BaseCharacterCanvas } from "../../../components/base-character-canvas/base-character-canvas";
 import { useParentViewport } from "../../../hooks/use-parent-viewport";
 import { calculateCharacterLevels } from "../../../util";
+import { AssetTag } from "../../../components/asset-card/styles";
 
 export const CharacterCards: FC = () => {
   const { selectedAsset, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
   const { height } = useViewport();
   const { parentRef, parentWidth, parentHeight } = useParentViewport();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [selectedCharacter] = useSelectedCharacter();
 
   const [characters] = useMyCharacters();
@@ -39,13 +36,6 @@ export const CharacterCards: FC = () => {
   const select = (character: ExtendedCharacter) => {
     if (!character) return;
     userStateDispatch({ type: "SET_SELECTED", payload: character.nft.name });
-  };
-
-  const sell = (character: ExtendedCharacter) => {
-    if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.nft.id}`, {
-      state: location,
-    });
   };
 
   useEffect(() => {
@@ -73,7 +63,7 @@ export const CharacterCards: FC = () => {
             <ImageCard ref={parentRef}>
               <BaseCharacterCanvas width={parentWidth} height={parentHeight} character={character.nft} items={character.equippedItems} />
             </ImageCard>
-            <CharacterInformation character={character} sell={sell} />
+            <CharacterInformation character={character} />
           </CharacterCardContainer>
         ))}
       </CharacterCardsWrapper>
@@ -85,9 +75,8 @@ export const CharacterCards: FC = () => {
 
 interface CharacterInfo {
   character: ExtendedCharacter;
-  sell?: (character: ExtendedCharacter) => void;
 }
-const CharacterInformation: FC<CharacterInfo> = ({ character, sell }) => {
+const CharacterInformation: FC<CharacterInfo> = ({ character }) => {
   const { setShowDetails } = useCharacterBuilder();
   const { totalLevel } = calculateCharacterLevels(character);
 
@@ -95,15 +84,15 @@ const CharacterInformation: FC<CharacterInfo> = ({ character, sell }) => {
     <CharacterInfo>
       <ButtonText customColor={color.black}>{character.nft.name}</ButtonText>
       <CharacterInfoCharacter>Title: {character.nft.title}</CharacterInfoCharacter>
-      <CharacterInfoCharacter>Lvl: {totalLevel}</CharacterInfoCharacter>
       <CharacterInfoCharacter>Origin: {character.nft.origin}</CharacterInfoCharacter>
+      <AssetTag>
+        <BoldLabel>lvl. </BoldLabel>
+        <LevelBoldLabel>{totalLevel}</LevelBoldLabel>
+      </AssetTag>
       <CharacterButtonContainer>
         <ButtonInfoWrap onClick={() => setShowDetails(true)}>
           <SecondaryButton>{text.general.info}</SecondaryButton>
         </ButtonInfoWrap>
-        <PrimaryButton onClick={() => (sell ? sell(character) : null)}>
-          <ButtonText customColor={color.white}>sell</ButtonText>
-        </PrimaryButton>
       </CharacterButtonContainer>
     </CharacterInfo>
   );

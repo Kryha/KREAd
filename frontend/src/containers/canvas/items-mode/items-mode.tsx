@@ -2,20 +2,24 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { useEquipItem, useGetItemsInInventoryByCategory, useSelectedCharacter, useUnequipItem } from "../../../service";
-import { ButtonText, FadeInOut, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
+import { ButtonText, FadeInOut, HorizontalDivider, Overlay, PrimaryButton, SecondaryButton } from "../../../components";
 import { CATEGORY_MODE, MAIN_MODE } from "../../../constants";
-import { text } from "../../../assets";
-import { CanvasAssetContainer, CanvasAssetHeader, CanvasAssetInventoryWrapper, CanvasContentWrapper, CardActionsContainer } from "../style";
+import { StoreIcon } from "../../../assets";
+import {
+  CanvasAssetContainer,
+  CanvasAssetHeader,
+  CanvasAssetInventoryWrapper,
+  CanvasContentWrapper,
+  CardActionsContainer,
+  Store,
+} from "../style";
 import { ItemCards } from "../item-cards/item-cards";
-import { ArrowUpRight } from "../../../pages/onboarding/styles";
 import { routes } from "../../../navigation";
 import { ModeScroller } from "../mode-scroller/mode-scroller";
 import { breakpoints, color } from "../../../design";
 import { useIsMobile } from "../../../hooks";
 import { NotificationWrapper } from "../../../components/notification-detail/styles";
 import { CanvasNotification } from "../canvas-notification/canvas-notification";
-import { CanvasItemDetails } from "../canvas-item-details/canvas-item-details";
-import { AdjustedItemButtonContainer } from "../item-cards/style";
 import { useGetItemSelectionForCharacter } from "../item-cards/hooks";
 
 export const ItemsMode: FC = () => {
@@ -28,7 +32,6 @@ export const ItemsMode: FC = () => {
     setSelectedAssetCategory,
     setSelectedAsset,
     setInteractionMode,
-    showDetails,
     showWarning,
     setShowWarning,
   } = useCharacterBuilder();
@@ -127,48 +130,42 @@ export const ItemsMode: FC = () => {
         </NotificationWrapper>
       </FadeInOut>
       <CanvasAssetInventoryWrapper>
-        <CanvasAssetContainer showDetails={showDetails}>
-          {showDetails ? (
-            <CanvasItemDetails />
-          ) : (
-            <>
-              <CanvasAssetHeader>
-                <ModeScroller />
-              </CanvasAssetHeader>
-              <CanvasContentWrapper>
-                <ItemCards
-                  equipped={equipped}
-                  unequipped={unequipped}
-                  equippedSelected={equippedSelected}
-                  setEquippedSelected={setEquippedSelected}
-                  selectedItemIsEquipped={selectedItemIsEquipped}
-                />
-                <CardActionsContainer>
-                  <AdjustedItemButtonContainer>
-                    <PrimaryButton disabled={disable.unequip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}>
-                      <ButtonText customColor={color.white}>unequip</ButtonText>
-                    </PrimaryButton>
-                    <PrimaryButton disabled={disable.equip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}>
-                      <ButtonText customColor={color.white}>equip</ButtonText>
-                    </PrimaryButton>
-                    <PrimaryButton disabled={disable.sell} onClick={sell}>
-                      <ButtonText customColor={color.white}>sell</ButtonText>
-                    </PrimaryButton>
-                  </AdjustedItemButtonContainer>
-                  <SecondaryButton
-                    type="submit"
-                    onClick={() => {
-                      setInteractionMode(MAIN_MODE);
-                      navigate(`${routes.shop}/items`);
-                    }}
-                  >
-                    <ButtonText>{text.store.buyMoreAtStore}</ButtonText>
-                    <ArrowUpRight />
-                  </SecondaryButton>
-                </CardActionsContainer>
-              </CanvasContentWrapper>
-            </>
-          )}
+        <CanvasAssetContainer>
+          <CanvasAssetHeader>
+            <ModeScroller />
+          </CanvasAssetHeader>
+          <CanvasContentWrapper>
+            <ItemCards
+              equipped={equipped}
+              unequipped={unequipped}
+              equippedSelected={equippedSelected}
+              setEquippedSelected={setEquippedSelected}
+              selectedItemIsEquipped={selectedItemIsEquipped}
+            />
+            <HorizontalDivider />
+            <CardActionsContainer>
+              <PrimaryButton disabled={disable.unequip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}>
+                <ButtonText customColor={color.white}>unequip</ButtonText>
+              </PrimaryButton>
+              <PrimaryButton disabled={disable.equip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}>
+                <ButtonText customColor={color.white}>equip</ButtonText>
+              </PrimaryButton>
+              <PrimaryButton disabled={disable.sell} onClick={sell}>
+                <ButtonText customColor={color.white}>sell</ButtonText>
+              </PrimaryButton>
+              <Store>
+                <SecondaryButton
+                  type="submit"
+                  onClick={() => {
+                    setInteractionMode(MAIN_MODE);
+                    navigate(`${routes.shop}/items`);
+                  }}
+                >
+                  <StoreIcon />
+                </SecondaryButton>
+              </Store>
+            </CardActionsContainer>
+          </CanvasContentWrapper>
         </CanvasAssetContainer>
       </CanvasAssetInventoryWrapper>
     </>
