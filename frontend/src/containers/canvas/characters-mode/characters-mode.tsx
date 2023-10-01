@@ -24,7 +24,7 @@ import { ISTButton, ISTButtonIcon } from "../../../components/asset-card/styles"
 export const CharactersMode: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedAsset, setInteractionMode, showDetails, showWarning } = useCharacterBuilder();
+  const { selectedAsset, setInteractionMode, showWarning } = useCharacterBuilder();
   const [characters] = useMyCharacters();
 
   const selectedCharacter = characters.find((character) => character.nft.name === selectedAsset);
@@ -49,7 +49,7 @@ export const CharactersMode: FC = () => {
   return (
     <>
       <CanvasAssetInventoryWrapper>
-        <CanvasAssetContainer showDetails={showDetails}>
+        <CanvasAssetContainer>
           <CanvasAssetHeader>
             <ModeScroller />
           </CanvasAssetHeader>
