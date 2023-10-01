@@ -1,6 +1,6 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 
-import { ErrorView, FormHeader } from "../../components";
+import { ErrorView, FadeInOut, FormHeader, NotificationDetail, Overlay } from "../../components";
 import { FormCard } from "../create-character/styles";
 import { SellData, SellStep, SellText } from "./types";
 import { SellForm } from "./sell-form";
@@ -9,6 +9,9 @@ import { Information } from "./information";
 import { SELL_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useLocation } from "react-router-dom";
 import { routes } from "../../navigation";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { text } from "../../assets";
+import { useCharacterBuilder } from "../../context/character-builder-context";
 
 interface Props {
   data: SellData;
@@ -22,6 +25,7 @@ export const Sell: FC<Props> = ({ data, setData, text: pText, sendOfferHandler, 
   const location = useLocation();
   const previousPath = location.state.pathname;
   const [currentStep, setCurrentStep] = useState<SellStep>(0);
+  const { showToast, setShowToast } = useCharacterBuilder();
   if (!data) return <ErrorView />;
 
   const setInformationData = async (price: number) => {
@@ -57,9 +61,22 @@ export const Sell: FC<Props> = ({ data, setData, text: pText, sendOfferHandler, 
   };
 
   return (
-    <FormCard>
-      <FormHeader currentStep={currentStep} stepAmount={SELL_FLOW_STEPS} title={pText.sell} link={previousPath} />
-      {perStepDisplay()}
-    </FormCard>
+    <>
+      <FormCard>
+        <FormHeader currentStep={currentStep} stepAmount={SELL_FLOW_STEPS} title={pText.sell} link={previousPath} />
+        {perStepDisplay()}
+      </FormCard>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
+      </FadeInOut>
+    </>
   );
 };

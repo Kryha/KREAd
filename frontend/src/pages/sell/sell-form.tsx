@@ -20,6 +20,7 @@ import {
 import { SellData, SellStep } from "./types";
 import { ISTTouIST } from "../../util";
 import { SellDescription } from "../../components/sell-description/sell-description";
+import { useCharacterBuilder } from "../../context/character-builder-context";
 
 interface SellFormProps {
   data: SellData;
@@ -34,9 +35,11 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, onSubmit, isPlac
   const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
   const isOfferPending = !isOnFirstStep && !isPlacedInShop;
   const [isDisabled, setIsDisabled] = useState(false);
+  const { showToast, setShowToast } = useCharacterBuilder();
 
   const onSendOfferClickHandler = async () => {
     setIsDisabled(true);
+    setShowToast(!showToast);
     await onSubmit();
     setIsOnFirstStep(false);
   };
