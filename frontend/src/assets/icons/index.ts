@@ -42,8 +42,10 @@ import { ReactComponent as InstagramIcon } from "./instagram.svg";
 import { ReactComponent as DiscordIcon } from "./discord.svg";
 import { ReactComponent as TwitterIcon } from "./twitter.svg";
 import { ReactComponent as ISTIcon } from "./IST_black_icon.svg";
+import { ReactComponent as StoreIcon } from "./store.svg";
 
 export {
+  StoreIcon,
   ISTIcon,
   KeplerIcon,
   DiagonalIcon,

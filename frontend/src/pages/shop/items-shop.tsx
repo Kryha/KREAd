@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, useState } from "react";
 import { METRICS_ITEM, SECTION } from "../../constants";
 import { useGetItemInShopById, useGetItemMarketMetrics, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
@@ -13,11 +13,7 @@ import { color } from "../../design";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 
-interface Props {
-  pageSelector?: ReactNode;
-}
-
-export const ItemsShop: FC<Props> = ({ pageSelector }) => {
+export const ItemsShop: FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
   const [items, fetched] = useGetItemsInShop();
   const metrics = useGetItemMarketMetrics();
@@ -40,10 +36,7 @@ export const ItemsShop: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <AssetHeaderContainer>
-        <AssetHeader>
-          {pageSelector}
-          {metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_ITEM} /> : <></>}
-        </AssetHeader>
+        <AssetHeader>{metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_ITEM} /> : <></>}</AssetHeader>
         <AssetItemFilters section={SECTION.SHOP} />
       </AssetHeaderContainer>
       <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>

@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, useState } from "react";
 import { METRICS_CHARACTER, SECTION } from "../../constants";
 import { useGetCharacterInShopById, useGetCharacterMarketMetrics, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
@@ -13,11 +13,7 @@ import { color } from "../../design";
 import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 
-interface Props {
-  pageSelector?: ReactNode;
-}
-
-export const CharactersShop: FC<Props> = ({ pageSelector }) => {
+export const CharactersShop: FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
 
   const [characters, isLoading] = useGetCharactersInShop();
@@ -40,10 +36,7 @@ export const CharactersShop: FC<Props> = ({ pageSelector }) => {
   return (
     <>
       <AssetHeaderContainer>
-        <AssetHeader>
-          {pageSelector}
-          {metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_CHARACTER} /> : <></>}
-        </AssetHeader>
+        <AssetHeader>{metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_CHARACTER} /> : <></>}</AssetHeader>
         <AssetCharacterFilters section={SECTION.SHOP} />
       </AssetHeaderContainer>
       <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>

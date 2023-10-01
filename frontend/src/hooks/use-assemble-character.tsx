@@ -154,6 +154,7 @@ const loadImage = (item: Item, characterName: string) => {
   return new Promise<Konva.Image>((resolve, reject) => {
     const imgElement = new Image();
     imgElement.src = item.image;
+    imgElement.crossOrigin = "anonymous";
     imgElement.onload = () => {
       const imageNode = new Konva.Image({
         image: imgElement,

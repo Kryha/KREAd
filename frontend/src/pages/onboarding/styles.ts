@@ -39,6 +39,11 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
   }
 `;
 
+export const ButtonRow = styled.div`
+  position: relative;
+  display: flex;
+  gap: 16px;
+`;
 interface ButtonProps {
   isVisible: boolean;
 }
@@ -64,7 +69,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
   ${({ isVisible }): string => {
     return isVisible
       ? `
-      ${PrimaryButton} {
+      ${ButtonRow} {
         -webkit-transition: 0.3s ease-out;
         transition: 0.3s ease-out;
         will-change: transform;
@@ -82,10 +87,10 @@ export const ButtonContainer = styled.div<ButtonProps>`
         `
       : `
       margin-top: 46px;
-      ${PrimaryButton} {
+      ${ButtonRow} {
         position: fixed;
         left: 40px;
-        top: 610px;
+        top: 620px;
         z-index: 100;
       }
       `;

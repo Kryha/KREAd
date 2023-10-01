@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import { breakpoints, color, fontWeight, margins } from "../../../design";
 import { disappear, fadeIn, SecondaryButton } from "../../../components";
-import { DiagonalContainer, ElementContainer, PlusContainer } from "../../../components/item-card/styles";
-import { css } from "@emotion/react";
+import { Equipped } from "../../../components/asset-card/styles";
 
 interface StyleProps {
   height: number;
@@ -10,10 +9,9 @@ interface StyleProps {
 }
 
 export const ItemButtonContainer = styled.div`
-  margin-top: ${margins.medium};
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  position: absolute;
+  top: 8px;
+  right: 0;
 `;
 export const ItemInfoItem = styled.span`
   :first-letter {
@@ -25,13 +23,34 @@ export const ItemInfoItem = styled.span`
   color: ${color.darkGrey};
 `;
 export const ItemInfo = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
+  padding-left: 16px;
+  margin-right: 16px;
+  flex: 1 1 auto;
 `;
 
+export const ItemsRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: end;
+`;
 export const ItemDetailsButton = styled(SecondaryButton)``;
+
+export const EquippedContainer = styled.div`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+
+  ${Equipped} {
+    width: 24px;
+    height: 24px;
+  }
+`;
 export const ItemCardsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,7 +68,7 @@ export const ItemCardsWrapper = styled.div<StyleProps>`
   flex-direction: column;
   gap: 8px;
   overflow-y: scroll;
-  ${({ height }): string => `height: ${height - 520}px;`};
+  ${({ height }): string => `height: ${height - 480}px;`};
   ::-webkit-scrollbar {
     display: none;
   }
@@ -66,38 +85,30 @@ export const EmptyItemCardContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 120px;
 `;
 export const ItemCardContainer = styled.div<ItemProps>`
   display: flex;
-  gap: 16px;
   transition: transform 0.3s ease; /* Add CSS transition for smooth animation */
+  border-radius: ${margins.medium};
+  border: 1px solid ${color.grey};
+  ${({ isSelected }): string => (isSelected ? `background: whitesmoke; border: 1px solid ${color.black} ` : "background: white")};
 
-  ${ElementContainer} {
-    ${({ isSelected }) =>
-      isSelected === true
-        ? css`
-            background: ${color.lightGrey};
-            border: 1px solid ${color.darkGrey};
-            ${PlusContainer} {
-              background-color: ${color.lightGrey};
-            }
-            ${DiagonalContainer} {
-              background-color: ${color.lightGrey};
-            }
-          `
-        : css`
-            background: ${color.white};
-            border: 1px solid ${color.lightGrey};
-            ${PlusContainer} {
-              background-color: ${color.white};
-            }
-            ${DiagonalContainer} {
-              background-color: ${color.white};
-            }
-          `};
+  :hover {
+    border: 1px solid ${color.black};
   }
 `;
 
-export const AdjustedItemButtonContainer = styled(ItemButtonContainer)`
+export const ItemImageCard = styled.div`
+  position: relative;
+  box-sizing: border-box;
+  width: 40%;
+  height: 120px;
+  overflow: hidden;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  background-color: ${color.white};
+  border-top-left-radius: ${margins.medium};
+  border-bottom-left-radius: ${margins.medium};
 `;

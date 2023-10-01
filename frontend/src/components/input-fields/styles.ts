@@ -52,6 +52,7 @@ export const ClearButton = styled.div`
   align-items: center;
   gap: 16px;
   margin-top: 16px;
+  margin-bottom: 16px;
 
   :hover {
     cursor: pointer;
@@ -62,7 +63,7 @@ export const ClearButton = styled.div`
 `;
 
 export const SelectBox = styled.div<ViewProps>`
-  width: 180px;
+  width: 220px;
   border: 1px solid ${color.grey};
   border-radius: ${margins.small};
   background: ${color.lightGrey};

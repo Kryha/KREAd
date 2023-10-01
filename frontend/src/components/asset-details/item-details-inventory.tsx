@@ -9,6 +9,8 @@ import { routes } from "../../navigation";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ErrorView } from "../error-view";
 import { Item } from "../../interfaces";
+import { NotificationWrapper } from "../notification-detail/styles";
+import { NotificationDetail } from "../notification-detail";
 
 interface ItemDetailsInventoryProps {
   item: Item;
@@ -72,6 +74,17 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
           </DetailContainer>
         )}
         <Overlay />
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.general.goToYourWallet}
+            info={text.general.yourActionIsPending}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
       </FadeInOut>
     </>
   );

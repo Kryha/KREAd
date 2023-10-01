@@ -1,14 +1,15 @@
 import React, { FC } from "react";
-import { ButtonText, HorizontalDivider, ItemCard } from "../../../components";
+import { ButtonText, HorizontalDivider, Img } from "../../../components";
 import { color } from "../../../design";
 import { useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { AssetFilterCount } from "../../../components/asset-item-filters/styles";
 import { text } from "../../../assets";
-import { EmptyItemCardContainer, ItemCardContainer, ItemCardsContainer, ItemCardsWrapper } from "./style";
+import { EmptyItemCardContainer, EquippedContainer, ItemCardContainer, ItemCardsContainer, ItemCardsWrapper, ItemImageCard } from "./style";
 import { ItemCardInfo } from "./item-card-info";
-import { useUserState } from "../../../context/user";
 import { Item } from "../../../interfaces";
+import { useGetItemsInInventoryByCategory } from "../../../service";
+import { Equipped } from "../../../components/asset-card/styles";
 
 interface Props {
   equipped: { all: (Item | undefined)[]; inCategory: Item | undefined };
@@ -18,10 +19,10 @@ interface Props {
   selectedItemIsEquipped: boolean;
 }
 export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, setEquippedSelected, selectedItemIsEquipped }) => {
-  const { selectedAssetCategory, selectedAsset, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
+  const { selectedAssetCategory, selectedAsset, setOnAssetChange, setSelectedAsset, setCharacterName } = useCharacterBuilder();
   const { height } = useViewport();
   const category = selectedAssetCategory ? selectedAssetCategory : "";
-  const { items } = useUserState();
+  const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
 
   // Filter out the selectedItem from the items array
   const filteredItems = items.filter((item) => item.equippedTo === "");
@@ -32,16 +33,23 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
       {equipped.inCategory ? (
         <>
           <AssetFilterCount customColor={color.darkGrey}>Equipped {(text.param.categories as any)[category]}</AssetFilterCount>
-          <HorizontalDivider />
           <ItemCardContainer
             isSelected={equippedSelected && selectedItemIsEquipped}
             onClick={() => {
               setEquippedSelected(true);
               setSelectedAsset(equipped.inCategory?.name || null);
               setOnAssetChange(false);
+              setCharacterName(equipped.inCategory?.equippedTo);
             }}
           >
-            <ItemCard item={equipped.inCategory} image={equipped.inCategory?.thumbnail} />
+            <ItemImageCard>
+              {equipped.inCategory.equippedTo && (
+                <EquippedContainer>
+                  <Equipped />
+                </EquippedContainer>
+              )}
+              <Img src={equipped.inCategory?.thumbnail} />
+            </ItemImageCard>
             <ItemCardInfo item={equipped.inCategory} />
           </ItemCardContainer>
         </>
@@ -64,9 +72,12 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
                   setEquippedSelected(false);
                   setSelectedAsset(item.name);
                   setOnAssetChange(true);
+                  setCharacterName(item.equippedTo);
                 }}
               >
-                <ItemCard key={index} item={item} image={item.thumbnail} />
+                <ItemImageCard>
+                  <Img key={index} src={item.thumbnail} />
+                </ItemImageCard>
                 <ItemCardInfo item={item} />
               </ItemCardContainer>
             ))

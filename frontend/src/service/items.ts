@@ -19,15 +19,9 @@ export function getRarityString(rarity: number) {
   else return "common" as Rarity;
 }
 
-// TODO: Fix this function used during buy and sell
-export const useMyItem = (id: string): [Item | undefined, boolean] => {
-  const [found] = useState<Item | undefined>(undefined);
-  return [found, false];
-};
-
 export const useGetItemInInventoryByNameAndCategory = (
-  name: string,
-  category: string,
+  name: any,
+  category: any,
   characterName: string | undefined,
 ): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();

@@ -36,7 +36,7 @@ export const MILLISECONDS = 1000 as const;
 
 /********************** PROPERTIES *********************/
 export const ORIGIN = {
-  elphia: "Elphia",
+  elephia: "Elephia",
   farma: "Farma",
   mount: "Mount",
   arm: "Arm",
@@ -44,6 +44,7 @@ export const ORIGIN = {
   sage: "Sage",
   mars: "Mars",
   tempet: "Tempet",
+  wildlands: "Wildlands",
 } as const;
 export const TITLE = {
   citizen: "Citizen",

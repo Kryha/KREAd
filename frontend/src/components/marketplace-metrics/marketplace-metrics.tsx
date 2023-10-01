@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import {
   LabelWrapper,
   MarketplaceMetricsContainer,
@@ -18,6 +18,8 @@ interface Props {
 }
 
 export const MarketplaceMetrics: FC<Props> = ({ data, asset }) => {
+  const metrics = useMemo(() => data, [data]);
+
   return (
     <>
       <MarketplaceMetricsWrapper>
@@ -28,7 +30,7 @@ export const MarketplaceMetrics: FC<Props> = ({ data, asset }) => {
                 <MetricsHeader>
                   {index === 2 && <IST />}
                   {index === 3 && <IST />}
-                  <ButtonText>{data[index]}</ButtonText>
+                  <ButtonText>{metrics[index].toString()}</ButtonText>
                 </MetricsHeader>
                 <HorizontalDivider />
                 <MetricsRow>

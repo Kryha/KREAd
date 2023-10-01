@@ -10,7 +10,7 @@ import { InstagramIcon, text, UnnamedCreator } from "../../assets";
 import { ExtendedCharacter } from "../../interfaces";
 import { DetailSectionActions } from "./types";
 import { useViewport } from "../../hooks";
-import { ErrorView } from "../../components";
+import { LoadingPage } from "../../components";
 import { DetailSectionItems } from "./detail-section-items";
 import { Link } from "../../pages/onboarding/styles";
 
@@ -23,7 +23,7 @@ interface CharacterDetailSectionProps {
 // TODO: Make index dynamic
 export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions }) => {
   const { width } = useViewport();
-  if (!character) return <ErrorView />;
+  if (!character) return <LoadingPage spinner={true} />;
 
   return (
     <DetailSectionWrap width={width}>

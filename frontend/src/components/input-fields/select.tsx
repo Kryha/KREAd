@@ -77,6 +77,13 @@ export const Select: FC<SelectProps> = ({ options, onChange, onArrayChange, isMu
 
   return (
     <SelectBox height={height}>
+      <ClearButton>
+        <ButtonText onClick={resetComponent} customColor={color.darkGrey}>
+          reset
+        </ButtonText>
+        <CloseIcon />
+      </ClearButton>
+      <HorizontalDivider />
       {options.map((option, index) => (
         <React.Fragment key={index}>
           <StyledSelect
@@ -90,13 +97,6 @@ export const Select: FC<SelectProps> = ({ options, onChange, onArrayChange, isMu
           </StyledSelect>
         </React.Fragment>
       ))}
-      <HorizontalDivider />
-      <ClearButton>
-        <ButtonText onClick={resetComponent} customColor={color.darkGrey}>
-          reset
-        </ButtonText>
-        <CloseIcon />
-      </ClearButton>
     </SelectBox>
   );
 };

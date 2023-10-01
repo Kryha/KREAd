@@ -1,5 +1,7 @@
 export const store = {
   buyAtStore: "buy at store",
+  buyAssets: "buy IST/BLD",
+  returnToKREAd: "return to KREAd",
   min: "min",
   max: "max",
   buyMoreAtStore: "buy more at store",

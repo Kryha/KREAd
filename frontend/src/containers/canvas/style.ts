@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import { disappear, fadeIn } from "../../components";
-import { breakpoints, color, margins } from "../../design";
-import { css } from "@emotion/react";
+import { disappear, fadeIn, SecondaryButton } from "../../components";
+import { breakpoints, color, fontSize, margins } from "../../design";
 
 export const CanvasAssetInventoryWrapper = styled.div`
   position: absolute;
@@ -38,11 +37,7 @@ export const CanvasAssetHeader = styled.div`
   }
 `;
 
-interface Props {
-  showDetails?: boolean;
-}
-
-export const CanvasAssetContainer = styled.div<Props>`
+export const CanvasAssetContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,15 +47,6 @@ export const CanvasAssetContainer = styled.div<Props>`
   border: 1px solid ${color.grey};
   border-radius: ${margins.medium};
   padding: ${margins.medium};
-  ${({ showDetails }) =>
-    showDetails === true
-      ? css`
-          background: ${color.lightGrey};
-          width: 500px;
-        `
-      : css`
-          background: ${color.white};
-        `};
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     height: fit-content;
@@ -78,9 +64,37 @@ export const CanvasContentWrapper = styled.div`
 export const CardActionsContainer = styled.div`
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row;
   gap: 16px;
   justify-content: center;
-  margin-top: ${margins.mini};
-  box-shadow: none;
+  margin-top: ${margins.small};
+  margin-bottom: ${margins.mini};
+`;
+
+export const Store = styled.div`
+  z-index: 1;
+  ${SecondaryButton} {
+    position: relative;
+    /* Add styles for the pop-up */
+    &::before {
+      content: "Go to Store";
+      position: absolute;
+      top: -2rem; /* Adjust the vertical position as needed */
+      left: 50%;
+      transform: translateX(-50%);
+      background: ${color.black};
+      color: ${color.white};
+      padding: 0.25rem 0.5rem;
+      font-size: ${fontSize.extraSmall};
+      border-radius: ${margins.mini};
+      opacity: 0;
+      width: max-content;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Show the pop-up on hover */
+    &:hover::before {
+      opacity: 1;
+    }
+  }
 `;

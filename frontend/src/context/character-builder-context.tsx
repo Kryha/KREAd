@@ -1,7 +1,7 @@
 import React, { createContext, FC, useCallback, useMemo, useState } from "react";
-import { useAndRequireContext, useAssembleCharacter, useViewport } from "../hooks";
+import { useAndRequireContext, useAssembleCharacter } from "../hooks";
 import { text } from "../assets";
-import { InteractionMode, MAIN_MODE } from "../constants";
+import { CHARACTER_HEIGHT, CHARACTER_WIDTH, InteractionMode, MAIN_MODE } from "../constants";
 
 interface Context {
   selectedAsset: string | null;
@@ -24,6 +24,10 @@ interface Context {
   setShowWarning: (show: boolean) => void;
   showToast: boolean;
   setShowToast: (show: boolean) => void;
+  characterName: string | undefined;
+  setCharacterName: (name: string | undefined) => void;
+  showItemDetails: boolean;
+  setShowItemDetails: (show: boolean) => void;
 }
 
 interface Props {
@@ -48,9 +52,17 @@ export const CharacterBuilderContextProvider: FC<Props> = ({ children }) => {
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const [showToast, setShowToast] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
+  const [characterName, setCharacterName] = useState<string | undefined>("");
+  const [showItemDetails, setShowItemDetails] = useState<boolean>(false);
+
+  console.log(selectedAsset, selectedAssetCategory, characterName);
 
   const contextValue = useMemo(
     () => ({
+      characterName,
+      showItemDetails,
+      setShowItemDetails,
+      setCharacterName,
       showToast,
       setShowToast,
       showWarning,
@@ -73,6 +85,8 @@ export const CharacterBuilderContextProvider: FC<Props> = ({ children }) => {
       setOnAssetChange,
     }),
     [
+      showItemDetails,
+      characterName,
       showToast,
       showWarning,
       showDetails,
@@ -99,8 +113,7 @@ const downloadOptions = [
 ];
 
 export function useCharacterDownloader(initialDownloadSize = "original") {
-  const { width, height } = useViewport();
-  const assembledCharacter = useAssembleCharacter(width, height);
+  const assembledCharacter = useAssembleCharacter(CHARACTER_WIDTH, CHARACTER_HEIGHT);
   const [downloadSize, setDownloadSize] = useState<string>(initialDownloadSize);
   const [downloadUrl, setDownloadUrl] = useState<string>("");
   const [characterName, setCharacterName] = useState<string>("");

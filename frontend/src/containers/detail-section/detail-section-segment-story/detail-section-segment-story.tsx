@@ -58,7 +58,7 @@ export const DetailSectionSegmentStory: FC<DetailSectionSegmentStoryProps> = ({ 
         <DetailSectionSegmentStoryImg src={data.image} />
       ) : (
         <ImageContainer ref={parentRef}>
-          data.character ?? <BaseCharacterCanvas character={data.character} items={data.image} width={parentWidth} height={parentHeight} />
+          <BaseCharacterCanvas character={data.character} items={data.image} width={parentWidth} height={parentHeight} />
           <DownloadButtonContainer>
             <DownloadButton onClick={handleDownloadButtonClick}>
               <Download />

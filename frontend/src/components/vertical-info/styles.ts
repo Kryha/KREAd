@@ -11,7 +11,7 @@ export const Id = styled.h3<DirectionProps>`
     text-transform: capitalize;
   }
   font-weight: ${fontWeight.medium};
-  font-size: 12px;
+  font-size: 14px;
   white-space: nowrap;
   color: ${color.darkGrey};
 `;

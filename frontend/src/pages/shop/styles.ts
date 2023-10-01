@@ -192,7 +192,7 @@ export const DetailContainer = styled.div`
   }
 `;
 
-export const KreadContainer = styled.div<ViewProps>`
+export const KreadContainer = styled.div`
   ${KreadIcon} {
     position: absolute;
     left: 50%;
@@ -204,9 +204,12 @@ export const KreadContainer = styled.div<ViewProps>`
 `;
 
 export const OverviewContainer = styled.div`
+  position: relative;
+  z-index: 0;
   ${OverviewWrapper} {
     padding-top: 97px;
     padding-left: 0;
+    z-index: 0;
   }
 `;
 
