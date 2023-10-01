@@ -10,4 +10,4 @@ spec:
     spec:
       containers:
         - name: ui
-          image: "gcr.io/frontend:latest"
+          image: "eu.gcr.io/web3-335312/kread/frontend-production/frontend:latest"
