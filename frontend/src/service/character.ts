@@ -151,6 +151,7 @@ export const useCreateCharacter = () => {
       callback: async () => {
         console.info("MintCharacter call settled");
       },
+      errorCallback: body.setError
     });
   });
 };

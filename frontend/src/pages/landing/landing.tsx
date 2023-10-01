@@ -59,8 +59,6 @@ export const Landing: FC = () => {
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
 
-  if (!selectedCharacter) return <LoadingPage spinner={false} />;
-
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
   const equipAsset = () => {
     setShowToast(!showToast);

@@ -1,12 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAgoricState } from "./agoric";
-import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION } from "../constants";
+import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION, IST_IDENTIFIER } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
 import { Item, OfferProposal } from "../interfaces";
+import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
+import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 
 export interface WalletContext {
   token: any;
-  money: any;
+  ist: bigint;
+  characterNameList: string[];
   character: any;
   item: Item[];
   itemProposals: OfferProposal[];
@@ -16,7 +19,8 @@ export interface WalletContext {
 
 const initialState: WalletContext = {
   token: [],
-  money: [],
+  ist: 0n,
+  characterNameList: [],
   character: [],
   item: [],
   itemProposals: [],
@@ -39,6 +43,32 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
   useEffect(() => {
     let isCancelled = false;
 
+    // TODO: move watcher to service
+    const watchExistingCharacterPaths = () => {
+      assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+      const path = "published.kread.character";
+      chainStorageWatcher.watchLatest(
+        [Kind.Children, path],
+        async (value: any) => {
+          console.debug("got update", path, value);
+          if (!value) {
+            console.warn(`${path} returned undefined`);
+            return;
+          }
+
+          const characterNameList = value.map((char: string)=> char.substring(10));
+       
+          walletDispatch((prevState) => ({
+            ...prevState,
+            characterNameList,
+          }));
+        },
+        (log: any) => {
+          console.error("Error watching kread char market", log);
+        },
+      );
+    };
+    
     const updateStateNonVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");
 
@@ -96,8 +126,25 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       }));
     };
 
+    const watchVBankAssets = async () => {
+      for await (const status of iterateNotifier(agoric.walletConnection.pursesNotifier)) {
+        if(status){
+          const ist = status.find(({ brandPetname }: any)=> brandPetname===IST_IDENTIFIER);
+          const istValue = ist.currentAmount.value
+          walletDispatch((prevState) => ({
+            ...prevState,
+            ist: istValue,
+          }));
+        }
+      }
+    };
+    watchVBankAssets().catch((err: Error) => {
+      console.error("got status watch err", err);
+    });
+
     if (!walletState.fetched && chainStorageWatcher) {
       watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
+      watchExistingCharacterPaths();
     }
 
     return () => {

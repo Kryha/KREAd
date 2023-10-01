@@ -7,6 +7,8 @@ export const WALLET_INTERACTION_STEP = 1 as const;
 export const CONFIRMATION_STEP = 2 as const;
 export const MINTING_COST = 5000000 as const;
 export const MONEY_DECIMALS = 6 as const;
+export const MINTING_COST_USD = MINTING_COST / Number("1".padEnd(MONEY_DECIMALS + 1, "0"));
+
 
 export const SUCCESSFUL_MINT_REPONSE_MSG = "Character mint successful, use attached public facet to purchase" as const;
 export const SELL_CHARACTER_DESCRIPTION = "Sell Character in KREAd marketplace" as const;
@@ -159,5 +161,11 @@ export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;
 
 export const PINATA_GATEWAY = import.meta.env.VITE_PINATA_GATEWAY || "https://pink-defensive-jay-557.mypinata.cloud";
 
+// Contract errors
+
+export const KREAD_CONTRACT_ERRORS = {
+  invalidName: "Offer error Error: (a string)",
+  
+}
 export const PLATFORM_RATE = 0.03;
 export const ROYALTY_RATE = 0.1;

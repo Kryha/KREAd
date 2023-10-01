@@ -299,3 +299,7 @@ export const Step = styled.div`
   flex-direction: row;
   align-items: center;
 `;
+
+export const RedButtonText = styled(ButtonText)`
+  color: red;
+`

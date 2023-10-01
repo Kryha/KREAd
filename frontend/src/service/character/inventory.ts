@@ -189,13 +189,16 @@ interface SwapItems {
 }
 
 const swapItems = async ({ giveItem, wantItem, character, service, callback }: SwapItems): Promise<void> => {
-  console.error("This feature is not implemented yet :)");
-  return;
   const instance = service.kreadInstance;
   const charBrand = service.characterBrand;
   const itemBrand = service.itemBrand;
 
   const wantKey = character.keyId == 2 ? 1 : 2;
+  const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
+  const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image), keyId: wantKey };
+  const itemGive: Item = { ...giveItem, image: urlToCid(giveItem.image), thumbnail: urlToCid(giveItem.thumbnail) };
+  const itemWant: Item = { ...wantItem, image: urlToCid(wantItem.image), thumbnail: urlToCid(wantItem.thumbnail) };
+
 
   const spec = {
     source: "contract",
@@ -204,16 +207,16 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
   };
 
   const give = {
-    CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[character, 1n]])) },
-    Item1: { brand: itemBrand, value: makeCopyBag(harden([[giveItem, 1n]])) },
+    CharacterKey1: { brand: charBrand, value: makeCopyBag(harden([[characterGive, 1n]])) },
+    Item1: { brand: itemBrand, value: makeCopyBag(harden([[itemGive, 1n]])) },
   };
 
   const want = {
     CharacterKey2: {
       brand: charBrand,
-      value: makeCopyBag(harden([[{ ...character, keyId: wantKey }, 1n]])),
+      value: makeCopyBag(harden([[characterWant, 1n]])),
     },
-    Item2: { brand: itemBrand, value: makeCopyBag(harden([[wantItem, 1n]])) },
+    Item2: { brand: itemBrand, value: makeCopyBag(harden([[itemWant, 1n]])) },
   };
 
   const proposal = {
