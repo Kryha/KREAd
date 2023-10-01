@@ -10,9 +10,10 @@ interface MintCharacter {
     makeOffer: any;
   };
   callback: () => Promise<void>;
+  errorCallback?: (error: string) => void;
 }
 
-export const mintCharacter = async ({ name, service, callback }: MintCharacter): Promise<void> => {
+export const mintCharacter = async ({ name, service, callback, errorCallback }: MintCharacter): Promise<void> => {
   const instance = service.kreadInstance;
   const spec = {
     source: "contract",
@@ -33,6 +34,7 @@ export const mintCharacter = async ({ name, service, callback }: MintCharacter):
   service.makeOffer(spec, proposal, offerArgs, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
       console.error("Offer error", data);
+      if(errorCallback) errorCallback(JSON.stringify(data));
     }
     if (status === "refunded") {
       console.error("Offer refunded", data);

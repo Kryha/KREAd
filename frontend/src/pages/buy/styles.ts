@@ -3,7 +3,7 @@ import { ArrowUpRightIcon, TickIcon } from "../../assets";
 import { Badge, ButtonText, fadeUp, MenuItemName, PrimaryButton } from "../../components";
 import { LoadingPageContainer, Spinner } from "../../components/content-loader/styles";
 import { color, margins } from "../../design";
-import { FormCard } from "../create-character/styles";
+import { ErrorContainer, FormCard } from "../create-character/styles";
 
 export const Tick = styled(TickIcon)`
   margin-right: 20px;
@@ -231,4 +231,8 @@ export const PricingContainer = styled.div`
   flex-direction: row;
   align-items: center;
   position: static;
+`;
+
+export const ErrorContainerMarginTop = styled(ErrorContainer)`
+  margin-top: 20px;
 `;

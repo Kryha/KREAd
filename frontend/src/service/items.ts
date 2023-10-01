@@ -229,7 +229,7 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
   const characterBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { item: Item }) => {
+  return useMutation(async (body: { item: Item; currentlyEquipped?: Item }): Promise<void> => {
     if (!character || !body.item) {
       console.error("Could not find item or character");
       return;
@@ -240,25 +240,47 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
     userStateDispatch({ type: "START_INVENTORY_CALL" });
 
     const { forSale, equippedTo, activity, ...itemToEquip } = body.item;
+    if (body.currentlyEquipped) {
+      const { forSale: f_, equippedTo: e_, activity: a_, ...itemToUnequip } = body.currentlyEquipped;
+      await inventoryService.swapItems({
+        character: characterInWallet,
+        giveItem: itemToEquip,
+        wantItem: itemToUnequip,
+        service: {
+          kreadInstance,
+          characterBrand,
+          itemBrand,
+          makeOffer: service.walletConnection.makeOffer,
+        },
+        callback: async () => {
+          console.info("Swap call settled");
 
-    await inventoryService.equipItem({
-      character: characterInWallet,
-      item: itemToEquip,
-      service: {
-        kreadInstance,
-        characterBrand,
-        itemBrand,
-        makeOffer: service.walletConnection.makeOffer,
-      },
-      callback: async () => {
-        console.info("Equip call settled");
+          if (callback) callback(body.item);
 
-        if (callback) callback(body.item);
+          // Using a delay to prevent the character from disappearing when making inventory calls
+          setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+        },
+      });
+    } else {
+      await inventoryService.equipItem({
+        character: characterInWallet,
+        item: itemToEquip,
+        service: {
+          kreadInstance,
+          characterBrand,
+          itemBrand,
+          makeOffer: service.walletConnection.makeOffer,
+        },
+        callback: async () => {
+          console.info("Equip call settled");
 
-        // Using a delay to prevent the character from disappearing when making inventory calls
-        setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-      },
-    });
+          if (callback) callback(body.item);
+
+          // Using a delay to prevent the character from disappearing when making inventory calls
+          setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+        },
+      });
+    }
   });
 };
 

@@ -99,4 +99,5 @@ export interface CharacterInMarketBackend {
 
 export interface CharacterCreation {
   name: string;
+  setError?: (error: string) => void
 }

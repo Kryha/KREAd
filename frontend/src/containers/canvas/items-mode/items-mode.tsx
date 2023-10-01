@@ -58,6 +58,8 @@ export const ItemsMode: FC = () => {
   const equipItem = useEquipItem(setEquippedItemState);
   const unequipItem = useUnequipItem(() => setEquippedItemState(undefined));
 
+  const [showUnequipFirst, setShowUnequipFirst] = useState(false);
+
   // Always select the equipped item on default
   useEffect(() => {
     if (equippedItem) {
@@ -67,6 +69,9 @@ export const ItemsMode: FC = () => {
 
   const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    if (equipped.inCategory && selected) {
+      equipItem.mutate({ item: selected, currentlyEquipped: equipped.inCategory });
+    }
     setShowToast(!showToast);
     if (selected) {
       equipItem.mutate({ item: selected });
@@ -118,7 +123,7 @@ export const ItemsMode: FC = () => {
         <NotificationWrapper showNotification={showWarning}>
           <CanvasNotification
             isError
-            title={"Oops..you have not equipped your item!"}
+            title={text.error.youHaveNotEquipped}
             info={""}
             closeToast={() => {
               setShowWarning(false);
@@ -138,6 +143,19 @@ export const ItemsMode: FC = () => {
               <ButtonText customColor={color.white}>equip</ButtonText>
             </PrimaryButton>
           </CanvasNotification>
+        </NotificationWrapper>
+      </FadeInOut>
+      <FadeInOut show={showUnequipFirst} exiting={!showUnequipFirst}>
+        {showUnequipFirst && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showUnequipFirst}>
+          <CanvasNotification
+            isError
+            title={text.error.categoryAlreadyEquipped.title(selected?.category)}
+            info={text.error.categoryAlreadyEquipped.info(selected?.name, selected?.category)}
+            closeToast={() => {
+              setShowUnequipFirst(false);
+            }}
+          ></CanvasNotification>
         </NotificationWrapper>
       </FadeInOut>
       <CanvasAssetInventoryWrapper>

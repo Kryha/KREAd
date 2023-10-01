@@ -1,3 +1,5 @@
+import { MINTING_COST_USD } from "../../constants";
+
 export const mint = {
   mintNew: "mint new",
   information: "information",
@@ -5,7 +7,7 @@ export const mint = {
   confirmation: "confirmation",
   characterTitle: "character title",
   characterName: "character name",
-  theCostsOfMinting: "minting requires a fee of 5 IST.",
+  theCostsOfMinting: `minting requires a fee of ${MINTING_COST_USD} IST.`,
   next: "next",
   confirm: "confirm",
   sendOffer: "send offer",
