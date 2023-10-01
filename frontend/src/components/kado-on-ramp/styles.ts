@@ -7,7 +7,6 @@ export const KadoContainer = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 16px;
-  background: ${color.white};
   iframe {
     border: 1px solid ${color.grey};
     border-radius: 24px;
