@@ -5,12 +5,11 @@ import { useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { AssetFilterCount } from "../../../components/asset-item-filters/styles";
 import { text } from "../../../assets";
-import { EmptyItemCardContainer, ItemCardContainer, ItemCardsContainer, ItemCardsWrapper, ItemImageCard } from "./style";
+import { EmptyItemCardContainer, EquippedContainer, ItemCardContainer, ItemCardsContainer, ItemCardsWrapper, ItemImageCard } from "./style";
 import { ItemCardInfo } from "./item-card-info";
 import { Item } from "../../../interfaces";
 import { useGetItemsInInventoryByCategory } from "../../../service";
 import { Equipped } from "../../../components/asset-card/styles";
-import styled from "@emotion/styled";
 
 interface Props {
   equipped: { all: (Item | undefined)[]; inCategory: Item | undefined };
@@ -86,14 +85,3 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
     </ItemCardsContainer>
   );
 };
-
-export const EquippedContainer = styled.div`
-  position: absolute;
-  top: 16px;
-  left: 16px;
-
-  ${Equipped} {
-    width: 24px;
-    height: 24px;
-  }
-`;

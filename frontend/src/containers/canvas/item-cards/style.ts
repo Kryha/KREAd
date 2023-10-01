@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { breakpoints, color, fontWeight, margins } from "../../../design";
 import { disappear, fadeIn, SecondaryButton } from "../../../components";
+import { Equipped } from "../../../components/asset-card/styles";
 
 interface StyleProps {
   height: number;
@@ -39,6 +40,17 @@ export const ItemsRow = styled.div`
   align-items: end;
 `;
 export const ItemDetailsButton = styled(SecondaryButton)``;
+
+export const EquippedContainer = styled.div`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+
+  ${Equipped} {
+    width: 24px;
+    height: 24px;
+  }
+`;
 export const ItemCardsContainer = styled.div`
   display: flex;
   flex-direction: column;

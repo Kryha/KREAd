@@ -20,8 +20,8 @@ export function getRarityString(rarity: number) {
 }
 
 export const useGetItemInInventoryByNameAndCategory = (
-  name: string | undefined | null,
-  category: string | undefined | null,
+  name: any,
+  category: any,
   characterName: string | undefined,
 ): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
