@@ -4,7 +4,7 @@ import { text } from "../../assets";
 import { routes } from "../../navigation";
 import { Footer } from "../footer";
 import { NavigationSection, NavigationTab } from "../navigation-tab";
-import { Box, ChildrenContainer, FooterContainer, NavBarDivider, RightBox, TopbarContainer } from "./styles";
+import { Box, ChildrenContainer, FooterContainer, RightBox, TopbarContainer } from "./styles";
 import { useCharacterBuilder } from "../../context/character-builder-context";
 import { MAIN_MODE, Section } from "../../constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -52,10 +52,6 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
       {interactionMode === MAIN_MODE && (
         <TopbarContainer isLanding={isLanding}>
           <Box>
-            <KreadContainer onClick={home}>
-              <KreadIcon />
-            </KreadContainer>
-            <NavBarDivider />
             <NavigationSection route={isOnboarding}>
               <NavigationTab title={text.navigation.character} route={isOnboarding} />
             </NavigationSection>
@@ -66,6 +62,9 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
               <NavigationTab title={text.navigation.inventory} route={`${routes.inventory}/:section`} />
             </NavigationSection>
           </Box>
+          <KreadContainer onClick={home}>
+            <KreadIcon />
+          </KreadContainer>
           <RightBox>
             {isShop && <BuyCryptoButton />}
             {!isLanding && <>{pageSelector}</>}
