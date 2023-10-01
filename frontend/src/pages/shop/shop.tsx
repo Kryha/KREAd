@@ -9,13 +9,13 @@ import { useKadoWidget } from "../../context/filter-context";
 
 export const Shop: FC = () => {
   const { section } = useParams<{ section: Section }>();
-  const { showWidget } = useKadoWidget();
+  const { showWidget, toggleWidget } = useKadoWidget();
 
   return (
     <BaseRoute isShop={true} sideNavigation={<></>}>
       <ShopWrapper>{section === "items" ? <ItemsShop /> : <CharactersShop />}</ShopWrapper>
       <FadeInOut show={showWidget}>
-        <Kado show={showWidget} />
+        <Kado show={showWidget} toggleWidget={toggleWidget} />
         <Overlay />
       </FadeInOut>
     </BaseRoute>

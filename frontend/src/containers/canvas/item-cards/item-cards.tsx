@@ -55,9 +55,7 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
         </>
       ) : (
         <EmptyItemCardContainer>
-          <ItemImageCard>
-            <ButtonText>No {(text.param.categories as any)[category]} equipped</ButtonText>
-          </ItemImageCard>
+          <ButtonText>No {(text.param.categories as any)[category]} equipped</ButtonText>
         </EmptyItemCardContainer>
       )}
       <AssetFilterCount customColor={color.darkGrey}>

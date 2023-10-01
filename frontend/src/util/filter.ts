@@ -1,4 +1,4 @@
-import { Category, CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Rarity } from "../interfaces";
+import { CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Title } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { getRarityString } from "../service";
 import { useFilters } from "../context/filter-context";
@@ -7,24 +7,6 @@ import { uISTToIST } from "./math";
 export interface OfferFilters {
   description?: string;
   status?: string;
-}
-
-export interface ItemFilters {
-  categories: Category[];
-  rarity: Rarity[];
-  origins: Origin[];
-  sort: string;
-  colors: string;
-  price?: { min: number; max: number };
-  equippedTo?: string;
-  forSale?: boolean;
-}
-
-export interface CharacterFilters {
-  titles: string[];
-  origins: string[];
-  sort: string;
-  price?: { min: number; max: number };
 }
 
 export const useFilterItems = (items: Item[]): Item[] => {
@@ -85,7 +67,8 @@ export const useFilterCharacters = (characters: ExtendedCharacter[]): ExtendedCh
 
   const filteredOrigins =
     origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.nft.origin.toLowerCase())) : characters;
-  const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.nft.title)) : characters;
+  const filteredTitles =
+    title.length > 0 ? characters.filter((character) => title.includes(<Title>character.nft.title.toLowerCase())) : characters;
   const filteredCharacters = characters.filter((character) => filteredOrigins.includes(character) && filteredTitles.includes(character));
 
   return sortCharacters(sort, filteredCharacters);

@@ -4,6 +4,7 @@ import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
 import { bounce, changeSize, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { color, fontWeight, zIndex } from "../../design";
+import { ButtonRow } from "../onboarding/styles";
 
 interface HeightProps {
   height: number;
@@ -51,6 +52,8 @@ export const ButtonContainer = styled.div<ButtonProps>`
   gap: 16px;
   z-index: 100;
   ${PrimaryButton} {
+    max-height: 45px;
+    gap: 8px;
     &:hover {
       ${ArrowUp} {
         path {
@@ -62,7 +65,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
   ${({ isVisible }): string => {
     return isVisible
       ? `
-      ${PrimaryButton} {
+      ${ButtonRow} {
         -webkit-transition: 0.3s ease-out;
         transition: 0.3s ease-out;
         will-change: transform;
@@ -80,7 +83,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
         `
       : `
       margin-top: 46px;
-      ${PrimaryButton} {
+      ${ButtonRow} {
         position: fixed;
         left: 40px;
         top: 464px;

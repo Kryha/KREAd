@@ -16,10 +16,10 @@ export const AssetHeaderContainer = styled.div`
 `;
 export const AssetHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-top: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 export const AssetFilterCount = styled(ButtonText)`
   margin-left: ${margins.mini};

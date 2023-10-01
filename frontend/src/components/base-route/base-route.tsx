@@ -7,7 +7,7 @@ import { NavigationSection, NavigationTab } from "../navigation-tab";
 import { Box, ChildrenContainer, FooterContainer, NavBarDivider, RightBox, TopbarContainer } from "./styles";
 import { useCharacterBuilder } from "../../context/character-builder-context";
 import { MAIN_MODE, Section } from "../../constants";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { SwitchSelector } from "../switch-selector";
 import { KreadContainer } from "../../pages/shop/styles";
 import { KreadIcon } from "../logo/styles";
@@ -30,6 +30,10 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
 
   const { pathname } = useLocation();
   const { section } = useParams<{ section: Section }>();
+  const navigate = useNavigate();
+  const home = () => {
+    navigate(routes.character);
+  };
 
   const pageSelector = useMemo(
     () => (
@@ -48,7 +52,7 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
       {interactionMode === MAIN_MODE && (
         <TopbarContainer isLanding={isLanding}>
           <Box>
-            <KreadContainer>
+            <KreadContainer onClick={home}>
               <KreadIcon />
             </KreadContainer>
             <NavBarDivider />
@@ -82,7 +86,7 @@ export const BuyCryptoButton = () => {
   return (
     <Container>
       <PrimaryButton onClick={toggleWidget}>
-        <ButtonText customColor={color.white}>{text.store.buyCrypto}</ButtonText>
+        <ButtonText customColor={color.white}>{text.store.buyAssets}</ButtonText>
       </PrimaryButton>
     </Container>
   );

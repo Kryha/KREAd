@@ -73,6 +73,7 @@ export const EmptyItemCardContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 120px;
 `;
 export const ItemCardContainer = styled.div<ItemProps>`
   display: flex;

@@ -1,13 +1,25 @@
-import { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { DiscordIcon, KeplerIcon, TwitterIcon, text } from "../../assets";
+import { DiscordIcon, KeplerIcon, text, TwitterIcon } from "../../assets";
 import { breakpoints, color } from "../../design";
-import { AnimatedLogo, ButtonText, Footer, Kado, MenuText, OnboardingCharacter, PrimaryButton, TitleText } from "../../components";
+import {
+  AnimatedLogo,
+  ButtonText,
+  FadeInOut,
+  Footer,
+  Kado,
+  MenuText,
+  OnboardingCharacter,
+  Overlay,
+  PrimaryButton,
+  TitleText,
+} from "../../components";
 import {
   ArrowDown,
   ArrowUp,
   ButtonContainer,
+  ButtonRow,
   EndContent,
   FooterContainer,
   GeneralSectionContainer,
@@ -38,6 +50,11 @@ export const Onboarding: FC = () => {
   const isConnectButtonVisible = useOnScreen(ref);
   const [showAnimation, setShowAnimation] = useState(true);
   const isFirstTime = localStorage.getItem(FIRST_TIME) === null;
+  const [showWidget, setShowWidget] = useState(false);
+
+  const toggleWidget = () => {
+    setShowWidget(!showWidget);
+  };
 
   useEffect(() => {
     if (!isFirstTime) {
@@ -53,15 +70,15 @@ export const Onboarding: FC = () => {
 
   return (
     <>
-      <Kado show={true} />
-
       <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
         <ButtonContainer isVisible={isConnectButtonVisible}>
-          <PrimaryButton onClick={() => connectWallet()}>
-            <KeplerIcon />
-            <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-            <ArrowUp />
-          </PrimaryButton>
+          <ButtonRow>
+            <PrimaryButton onClick={() => connectWallet()}>
+              <KeplerIcon />
+              <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+              <ArrowUp />
+            </PrimaryButton>
+          </ButtonRow>
         </ButtonContainer>
         <OnboardingWrapper>
           <InfoText height={height}>
@@ -133,6 +150,10 @@ export const Onboarding: FC = () => {
           <KreadLogo />
         </LogoContainer>
       )}
+      <FadeInOut show={showWidget}>
+        <Kado show={showWidget} toggleWidget={toggleWidget} />
+        <Overlay />
+      </FadeInOut>
     </>
   );
 };

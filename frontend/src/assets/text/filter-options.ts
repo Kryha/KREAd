@@ -34,11 +34,11 @@ export const sortItemsMarketOptions = [
 
 export const categoryOptions = (Object.keys(CATEGORY) as Category[]).map((category) => ({
   label: category.toLowerCase(),
-  value: category.toLowerCase(),
+  value: category,
 }));
 export const originOptions = (Object.keys(ORIGIN) as Origin[]).map((origin) => ({
   label: origin.toLowerCase(),
-  value: origin.toLowerCase(),
+  value: origin,
 }));
 
 export const titleOptions = [

@@ -42,7 +42,7 @@ export const sortCharacters = (sorting: string, characters: ExtendedCharacter[])
   switch (sorting) {
     case "atoz":
       return characters.sort((a, b) => a.nft.name.localeCompare(b.nft.name));
-    case "level":
+    case "level_sort":
       return characters.sort((a, b) => b.nft.level - a.nft.level);
     case "title_sort":
       return characters.sort((a, b) => a.nft.title.localeCompare(b.nft.title));

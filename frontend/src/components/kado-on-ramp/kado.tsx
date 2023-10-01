@@ -3,20 +3,19 @@ import React, { FC } from "react";
 import { KadoContainer, KadoWrapper } from "./styles";
 import { ButtonText, PrimaryButton } from "../atoms";
 import { color } from "../../design";
-import { useKadoWidget } from "../../context/filter-context";
 import { text } from "../../assets";
 
 interface KadoProps {
   show: boolean;
+  toggleWidget: () => void;
 }
 
-export const Kado: FC<KadoProps> = ({ show }) => {
-  const { toggleWidget } = useKadoWidget();
+export const Kado: FC<KadoProps> = ({ show, toggleWidget }) => {
   return show ? (
     <KadoWrapper>
       <KadoContainer>
         <PrimaryButton onClick={toggleWidget}>
-          <ButtonText customColor={color.white}>{text.store.returnToStore}</ButtonText>
+          <ButtonText customColor={color.white}>{text.store.returnToKREAd}</ButtonText>
         </PrimaryButton>
         <iframe
           src={

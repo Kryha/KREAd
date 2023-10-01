@@ -204,9 +204,12 @@ export const KreadContainer = styled.div`
 `;
 
 export const OverviewContainer = styled.div`
+  position: relative;
+  z-index: 0;
   ${OverviewWrapper} {
     padding-top: 97px;
     padding-left: 0;
+    z-index: 0;
   }
 `;
 
