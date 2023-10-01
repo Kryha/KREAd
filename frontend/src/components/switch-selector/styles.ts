@@ -13,7 +13,7 @@ export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
   justify-content: center;
   padding: 8px 16px 8px 16px;
   width: 120px;
-  font-size: ${fontSize.extraSmall};
+  font-size: ${fontSize.subTitle};
 
   :hover {
     color: ${color.black};
@@ -31,10 +31,10 @@ export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
 `;
 
 export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
-  border-radius: 0px ${margins.medium} ${margins.medium} 0px;
+  border-radius: 0 ${margins.medium} ${margins.medium} 0px;
   padding: 8px 16px 8px 16px;
   justify-content: center;
-  font-size: ${fontSize.extraSmall};
+  font-size: ${fontSize.subTitle};
   width: 120px;
   text-transform: capitalize;
   :hover {
@@ -57,5 +57,5 @@ export const Group = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
+  padding: 0;
 `;

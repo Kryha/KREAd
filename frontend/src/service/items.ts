@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Category, Item, ItemInMarket, Rarity } from "../interfaces";
+import { Category, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
 import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -19,15 +19,9 @@ export function getRarityString(rarity: number) {
   else return "common" as Rarity;
 }
 
-// TODO: Fix this function used during buy and sell
-export const useMyItem = (id: string): [Item | undefined, boolean] => {
-  const [found] = useState<Item | undefined>(undefined);
-  return [found, false];
-};
-
 export const useGetItemInInventoryByNameAndCategory = (
-  name: string,
-  category: string,
+  name: any,
+  category: any,
   characterName: string | undefined,
 ): [Item | undefined, boolean] => {
   const [items, isLoading] = useGetItemsInInventory();
@@ -43,10 +37,23 @@ export const useGetItemInInventoryByNameAndCategory = (
 export const useGetItemsInInventory = (): [Item[], boolean] => {
   const { characters, fetched } = useUserState();
   const { items } = useUserState();
-  const allItems = [...characters.flatMap((c) => Object.values(c.equippedItems)).filter(Boolean), ...items];
+  const allItems: Item[] = [
+    ...characters.flatMap((c) => Object.values(c.equippedItems)).filter((item): item is Item => item !== undefined), // Filter out undefined items
+    ...items,
+  ];
   const filtered = useFilterItems(allItems);
 
   return [filtered, !fetched];
+};
+
+export const useGetItemsForCanvas = (): [Item[], boolean] => {
+  const { characters, fetched } = useUserState();
+  const { items } = useUserState();
+  const allItems: Item[] = [
+    ...characters.flatMap((c) => Object.values(c.equippedItems)).filter((item): item is Item => item !== undefined), // Filter out undefined items
+    ...items,
+  ];
+  return [allItems, !fetched];
 };
 
 export const useGetItemsInInventoryByCategory = (category: string | null): [Item[], boolean] => {
@@ -113,6 +120,11 @@ export const useGetItemsInShop = (): [ItemInMarket[], boolean] => {
   const filtered = useFilterItemsInShop(items);
 
   return [filtered, !fetched];
+};
+
+export const useGetItemMarketMetrics = (): MarketMetrics => {
+  const { metrics } = useItemMarketState();
+  return metrics;
 };
 
 export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {

@@ -4,14 +4,31 @@ import { breakpoints, margins } from "../../design";
 interface AssetsProps {
   height: number;
 }
-export const AssetsWrapper = styled.div<AssetsProps>`
+
+export const ShopWrapper = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+export const FilterWrapper = styled.div<AssetsProps>`
   overflow-y: scroll;
   ${({ height }): string => `height: ${height - 250}px;`};
+  width: 50%;
+`;
+export const AssetsShopWrapper = styled.div<AssetsProps>`
+  overflow-y: scroll;
+  ${({ height }): string => `height: ${height - 280}px;`};
+  width: 100%;
+`;
+
+export const AssetsWrapper = styled.div<AssetsProps>`
+  overflow-y: scroll;
+  ${({ height }): string => `height: ${height - 200}px;`};
 `;
 export const AssetsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: ${margins.mini};
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: ${margins.small};
   list-style-type: none;
   isolation: isolate;
   flex-direction: column;

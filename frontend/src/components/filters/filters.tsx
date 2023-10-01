@@ -7,13 +7,12 @@ import { useClickAwayListener } from "../../hooks";
 interface FiltersProps {
   children?: React.ReactNode;
   label: string;
-  value?: string;
   openFilter: (id: string) => void;
   id: string;
   hasValue?: boolean;
 }
 
-export const Filters: FC<FiltersProps> = ({ children, label, value, openFilter, id, hasValue }) => {
+export const Filters: FC<FiltersProps> = ({ children, label, openFilter, id, hasValue }) => {
   const filterRef = React.useRef<HTMLDivElement>(null);
 
   const closeFilter = () => {
@@ -24,7 +23,7 @@ export const Filters: FC<FiltersProps> = ({ children, label, value, openFilter, 
   return (
     <FiltersWrapper ref={filterRef}>
       <FiltersContainer isOpen={id === label} onClick={() => openFilter(label)} hasValue={hasValue}>
-        <ButtonText>{value ? value : label}</ButtonText>
+        <ButtonText>{label}</ButtonText>
         <Triangle />
       </FiltersContainer>
       <FilterOption isOpen={id === label}>{children}</FilterOption>

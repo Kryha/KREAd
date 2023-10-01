@@ -26,10 +26,9 @@ export const general = {
   loadMore: "load more",
   info: "i",
   toolTipTitle: "tool tip title",
-  toolTipInfo:
-    "maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.",
+  toolTipInfo: "maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.",
   thisFieldIsRequired: "this field is required",
-  mintNew: `mint new (IST ${characterMintPrice})`,
+  mintNew: "mint new",
   theMinimiumAmountIs: "the minimum amount is IST 1",
   moreInfo: "more info",
   thereAreNoAssetsAvailable: "there are no assets available",
@@ -37,14 +36,12 @@ export const general = {
   aCharcterBuilderApp:
     "KREAd is a character builder dApp, where all the characters and their items are dynamic NFTs. You have the freedom to build your character and the ownership of all the equipment attached to it. So feel free to sell them, trade them, or even burn them!",
   sagesBy: "SAGES by KREAd",
-  sagesIsTheFirst:
-    "SAGES is the first collection\nlaunched on the KREAd dApp.\nStart collecting SAGES NFTs to\nshape your own saga.",
+  sagesIsTheFirst: "SAGES is the first collection\nlaunched on the KREAd dApp.\nStart collecting SAGES NFTs to\nshape your own saga.",
   explore: "explore",
   connectWallet: "connect Keplr Wallet",
   activateWallet: "activate Wallet",
   whoWeAre: "who we are",
-  ourLeadership:
-    "Our leadership includes some of\nthe most inventive and\nexperienced executives in the technology industry.",
+  ourLeadership: "Our leadership includes some of\nthe most inventive and\nexperienced executives in the technology industry.",
   isPartOfAgoric: "KREAd is part of",
   anOpenSource:
     ", an open-source development company launching an interoperable Proof-\nof-Stake chain and economy. The dApp is imagined, built, and\ndesigned by ",
@@ -52,8 +49,7 @@ export const general = {
   theSagesArt: "The SAGES art and comic is\ncreated by Enmanuel Heredia.",
   kryha: "Kryha",
   contactUs: "contact us",
-  questionsBug:
-    "questions, bug reports, \nfeedback... ? We are here for it all.",
+  questionsBug: "questions, bug reports, \nfeedback... ? We are here for it all.",
   sendEmailTo: "send an email to",
   contactEmail: "kread@kryha.io",
   followUs: "Follow us",
@@ -69,8 +65,7 @@ export const general = {
   maxCharacterLength: `the character name cannot be longer than ${MAX_CHARACTER_LENGTH} characters`,
   characterNamePatternError: "the character name can only contain alphanumeric characters, underscores(_)  and/or dashes(-)",
   goToYourWallet: "go to your wallet to accept the action!",
-  yourActionIsPending:
-    "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
+  yourActionIsPending: "your action is pending in your wallet. Please go and accept the action to be able to continue your experience.",
   loading: "loading...",
   next: "next",
   characterCardTitle: "mint a new character",
@@ -82,8 +77,7 @@ export const general = {
   sellAssetInfo:
     "add a selling price to your character/item. Keep in mind the level that it is as a reference, since it can help you to set a fair price in comparison of the rest of the characters/items.",
   viewCharacter: "view character",
-  desktopOnly:
-    "unfortunately, this experience can only be enjoyed on desktop devices.",
+  desktopOnly: "unfortunately, this experience can only be enjoyed on desktop devices.",
   moreAboutThisProject: "more about this project",
   backToMain: "back to main mode",
   backToCategories: "back to categories",

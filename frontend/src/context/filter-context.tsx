@@ -24,6 +24,8 @@ interface Context {
   setForSale: (value: boolean) => void;
   setPrice: (value: { min: number; max: number }) => void;
   onReset: () => void;
+  showKadoWidget: boolean;
+  toggleWidget: () => void;
 }
 
 interface Props {
@@ -47,6 +49,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
   const [colors, setColors] = useState<string>("");
   const [reset, setReset] = useState<boolean>(false);
   const [character, setCharacter] = useState<string>("");
+  const [showKadoWidget, setShowKadoWidget] = useState<boolean>(false);
 
   const onReset = () => {
     setCategories([]);
@@ -57,6 +60,10 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
     setSort("");
     setColors("");
     setReset(!reset);
+  };
+
+  const toggleWidget = () => {
+    setShowKadoWidget(!showKadoWidget);
   };
 
   //TODO: Needs to be improved. not necessary now but will be in the future
@@ -94,6 +101,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
       forSale,
       equippedTo,
       price,
+      showKadoWidget,
       setTitle,
       setCharacter,
       setEquippedTo,
@@ -106,8 +114,9 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
       setPrice,
       setReset,
       onReset,
+      toggleWidget,
     }),
-    [categories, colors, equippedTo, forSale, origin, price, rarity, reset, sort, title],
+    [character, categories, colors, equippedTo, forSale, origin, price, rarity, reset, sort, title, showKadoWidget],
   );
 
   return <ContextRef.Provider value={contextValue}>{children}</ContextRef.Provider>;
@@ -115,4 +124,11 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
 
 export function useFilters() {
   return useAndRequireContext(ContextRef, "useFilters");
+}
+
+export function useKadoWidget() {
+  const showWidget = useAndRequireContext(ContextRef, "showKadoWidget").showKadoWidget;
+  const toggleWidget = useAndRequireContext(ContextRef, "setShowKadoWidget").toggleWidget;
+
+  return { showWidget, toggleWidget };
 }

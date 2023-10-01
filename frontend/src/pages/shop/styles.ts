@@ -116,7 +116,7 @@ export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
   position: relative;
   z-index: 1000;
   ${Close} {
-    margin: 0px 6px !important;
+    margin: 0 6px !important;
     width: 15px;
     height: 15px;
   }
@@ -192,21 +192,24 @@ export const DetailContainer = styled.div`
   }
 `;
 
-export const KreadContainer = styled.div<ViewProps>`
+export const KreadContainer = styled.div`
   ${KreadIcon} {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    top: 40px;
+    top: 24px;
     width: 100px;
     height: 24px;
   }
 `;
 
 export const OverviewContainer = styled.div`
+  position: relative;
+  z-index: 0;
   ${OverviewWrapper} {
     padding-top: 97px;
     padding-left: 0;
+    z-index: 0;
   }
 `;
 

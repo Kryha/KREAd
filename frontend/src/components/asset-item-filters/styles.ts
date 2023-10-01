@@ -9,16 +9,21 @@ interface AssetFilterViewProps {
   showFilter?: boolean;
 }
 
+export const AssetHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+`;
 export const AssetHeader = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: ${margins.small};
+  justify-content: center;
   align-items: center;
-  justify-content: flex-end;
-  padding: 0;
+  margin-top: 16px;
+  margin-bottom: 24px;
 `;
 export const AssetFilterCount = styled(ButtonText)`
   margin-left: ${margins.mini};
+  margin-bottom: ${margins.mini};
 `;
 export const AssetFilterWrapper = styled.div`
   position: relative;
@@ -36,7 +41,6 @@ export const AssetFilterWrapper = styled.div`
 `;
 
 export const AssetFilterContainer = styled.div`
-  margin-bottom: 16px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -52,6 +56,15 @@ export const AssetFilterContainer = styled.div`
 export const AssetSelectorContainer = styled.div`
   display: flex;
   gap: 16px;
+  flex-direction: row;
+  align-items: flex-start;
+`;
+
+export const PageMetricsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const SortAssetsByContainer = styled.div`

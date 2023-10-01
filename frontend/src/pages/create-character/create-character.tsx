@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { DefaultIcon, text } from "../../assets";
+import { ElephiaCitizen, text } from "../../assets";
 import { ErrorView, FormHeader, LoadingPage } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
@@ -69,7 +69,7 @@ export const CreateCharacter: FC = () => {
   return (
     <PageContainer
       sidebarContent={
-        <FormCard height={height} width={width}>
+        <FormCard>
           <FormHeader
             currentStep={currentStep}
             stepAmount={MINT_CHARACTER_FLOW_STEPS}
@@ -81,7 +81,7 @@ export const CreateCharacter: FC = () => {
         </FormCard>
       }
     >
-      {!mobile && <DefaultImage src={DefaultIcon} alt={text.character.defaultCharacter} height={height} width={width} />}
+      {!mobile && <DefaultImage src={ElephiaCitizen} alt={text.character.defaultCharacter} height={height} width={width} />}
     </PageContainer>
   );
 };

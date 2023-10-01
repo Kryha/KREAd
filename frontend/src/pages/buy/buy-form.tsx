@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton } from "../../components";
@@ -7,7 +7,7 @@ import { color } from "../../design";
 import {
   ArrowUp,
   ButtonContainer,
-  ContentWrapper,
+  BuyFormContainer,
   GeneralInfo,
   Line,
   NumberContainer,
@@ -18,7 +18,7 @@ import {
   Tick,
 } from "./styles";
 import { BuyData, BuyStep } from "./types";
-import { useViewport } from "../../hooks";
+import { useCharacterBuilder } from "../../context/character-builder-context";
 
 interface BuyFormProps {
   data: BuyData;
@@ -34,9 +34,10 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
   const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
   const isOfferPending = !isOnFirstStep && !isOfferAccepted;
   const [isDisabled, setIsDisabled] = useState(false);
-  const { width, height } = useViewport();
+  const { showToast, setShowToast } = useCharacterBuilder();
   const onSendOfferClickHandler = async () => {
     setIsDisabled(true);
+    setShowToast(!showToast);
     await onSubmit();
     setIsOnFirstStep(false);
   };
@@ -51,46 +52,48 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
   );
 
   return (
-    <ContentWrapper width={width} height={height}>
-      <FormText>{text.mint.theCostsOfMinting}</FormText>
-      <StepContainer>
-        <GeneralInfo active={!isOnFirstStep}>
-          <PricingContainer>
-            <NumberContainer active>{!isOnFirstStep ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
-            <StepText>{text.mint.sendOfferToWallet}</StepText>
-            {isOnFirstStep && <PriceInIst price={data.price} />}
-          </PricingContainer>
-          {isOnFirstStep && (
+    <>
+      <BuyFormContainer>
+        <FormText>{text.store.marketplaceFees}</FormText>
+        <StepContainer>
+          <GeneralInfo active={!isOnFirstStep}>
+            <PricingContainer>
+              <NumberContainer active>{!isOnFirstStep ? <Tick /> : <ButtonText>{text.mint.stepOne}</ButtonText>}</NumberContainer>
+              <StepText>{text.mint.sendOfferToWallet}</StepText>
+              {isOnFirstStep && <PriceInIst price={data.price} />}
+            </PricingContainer>
+            {isOnFirstStep && (
+              <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
+                <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
+              </PrimaryButton>
+            )}
+          </GeneralInfo>
+          <Line />
+          <Step active={isOnFirstStep}>
+            <NumberContainer active={!isOnFirstStep}>
+              {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
+            </NumberContainer>
+            <StepText>{text.mint.acceptOfferIn}</StepText>
+            {isOfferPending && (
+              <Badge>
+                <ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText>
+              </Badge>
+            )}
+          </Step>
+        </StepContainer>
+        <ButtonContainer>
+          {isOnFirstStep ? (
             <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
-              <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
+              <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+            </PrimaryButton>
+          ) : (
+            <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={changeStepDisabled.step2}>
+              <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+              {isLoading ? <LoadingPage /> : <ArrowUp />}
             </PrimaryButton>
           )}
-        </GeneralInfo>
-        <Line />
-        <Step active={isOnFirstStep}>
-          <NumberContainer active={!isOnFirstStep}>
-            {isOfferAccepted ? <Tick /> : <ButtonText>{text.mint.stepTwo}</ButtonText>}
-          </NumberContainer>
-          <StepText>{text.mint.acceptOfferIn}</StepText>
-          {isOfferPending && (
-            <Badge>
-              <ButtonText customColor={color.darkGrey}>{text.mint.offerPending}</ButtonText>
-            </Badge>
-          )}
-        </Step>
-      </StepContainer>
-      <ButtonContainer>
-        {isOnFirstStep ? (
-          <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
-            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          </PrimaryButton>
-        ) : (
-          <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={changeStepDisabled.step2}>
-            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-            {isLoading ? <LoadingPage /> : <ArrowUp />}
-          </PrimaryButton>
-        )}
-      </ButtonContainer>
-    </ContentWrapper>
+        </ButtonContainer>
+      </BuyFormContainer>
+    </>
   );
 };

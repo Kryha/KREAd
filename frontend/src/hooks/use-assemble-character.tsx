@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Konva from "konva";
 import { Empty } from "../assets";
-import { useGetItemsInInventory, useSelectedCharacter } from "../service";
+import { useGetItemsForCanvas, useSelectedCharacter } from "../service";
 import { CHARACTER_HEIGHT, CHARACTER_WIDTH } from "../constants";
 import { Category } from "../interfaces";
 
@@ -30,7 +30,7 @@ export function useAssembleCharacter(width: number, height: number) {
   const stageAspectRatio = height / width;
   const [selectedCharacter] = useSelectedCharacter();
   const character = useMemo(() => selectedCharacter?.nft, [selectedCharacter]);
-  const [itemsInventory] = useGetItemsInInventory();
+  const [itemsInventory] = useGetItemsForCanvas();
 
   const [assembledCharacter, setAssembledCharacter] = useState<Konva.Group | null>(null);
 
@@ -154,6 +154,7 @@ const loadImage = (item: Item, characterName: string) => {
   return new Promise<Konva.Image>((resolve, reject) => {
     const imgElement = new Image();
     imgElement.src = item.image;
+    imgElement.crossOrigin = "anonymous";
     imgElement.onload = () => {
       const imageNode = new Konva.Image({
         image: imgElement,

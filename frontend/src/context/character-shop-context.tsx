@@ -1,20 +1,29 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Character, CharacterInMarket, KreadCharacterInMarket } from "../interfaces";
+import { CharacterInMarket, KreadCharacterInMarket, MarketMetrics } from "../interfaces";
 import { useAgoricState } from "./agoric";
 import { extendCharacters } from "../service/transform-character";
 import { itemArrayToObject } from "../util";
-import { watchCharacterMarketPaths, parseCharacterMarket } from "../service/storage-node/watch-market";
-import { cidToUrl, urlToCid } from "../util/other";
+import { parseCharacterMarket, watchCharacterMarketMetrics, watchCharacterMarketPaths } from "../service/storage-node/watch-market";
+import { cidToUrl } from "../util/other";
 
 interface CharacterMarketContext {
   characters: CharacterInMarket[];
   characterPaths: string[];
   fetched: boolean;
+  metrics: MarketMetrics;
 }
 const initialState: CharacterMarketContext = {
   characters: [],
   characterPaths: [],
   fetched: false,
+  metrics: {
+    amountSold: 0,
+    collectionSize: 0,
+    averageLevel: 0,
+    marketplaceAverageLevel: 0,
+    putForSaleCount: 0,
+    latestSalePrice: BigInt(0),
+  },
 };
 
 const Context = createContext<CharacterMarketContext | undefined>(undefined);
@@ -36,6 +45,12 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
       const characters = await Promise.all(charactersInMarket.map((character) => formatMarketEntry(character)));
       if (characters.length) marketDispatch((prevState: CharacterMarketContext) => ({ ...prevState, characters, fetched: true }));
     };
+    const parseCharacterMarketMetricsUpdate = async (metrics: MarketMetrics) => {
+      marketDispatch((prevState: CharacterMarketContext) => ({
+        ...prevState,
+        metrics,
+      }));
+    };
     // TO-DO: consider including inventory directly in sell record
     const formatMarketEntry = async (marketEntry: KreadCharacterInMarket): Promise<CharacterInMarket> => {
       const extendedCharacter = await extendCharacters([marketEntry.asset], chainStorageWatcher);
@@ -55,6 +70,7 @@ export const CharacterMarketContextProvider = (props: ProviderProps): React.Reac
     };
     if (chainStorageWatcher) {
       watchCharacterMarketPaths(chainStorageWatcher, addMarketCharacterPaths);
+      watchCharacterMarketMetrics(chainStorageWatcher, parseCharacterMarketMetricsUpdate);
       console.info("✅ LISTENING TO CHARACTER SHOP NOTIFIER");
     }
   }, [chainStorageWatcher]);

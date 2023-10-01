@@ -5,10 +5,7 @@ import { ReactComponent as MenuIcon } from "./menu.svg";
 import { ReactComponent as CloseIcon } from "./close.svg";
 import { ReactComponent as ExpandIcon } from "./expand.svg";
 import Empty from "./empty.png";
-import {
-  ReactComponent as CardElementIcon,
-  ReactComponent as NotificationIcon,
-} from "./element.svg";
+import { ReactComponent as CardElementIcon, ReactComponent as NotificationIcon } from "./element.svg";
 import { ReactComponent as SmallElementIcon } from "./element-small.svg";
 import UnnamedCreator from "./unnamed-creator.png";
 import SmallEl from "./small-el.png";
@@ -44,8 +41,12 @@ import { ReactComponent as KeplerIcon } from "./kelpr.svg";
 import { ReactComponent as InstagramIcon } from "./instagram.svg";
 import { ReactComponent as DiscordIcon } from "./discord.svg";
 import { ReactComponent as TwitterIcon } from "./twitter.svg";
+import { ReactComponent as ISTIcon } from "./IST_black_icon.svg";
+import { ReactComponent as StoreIcon } from "./store.svg";
 
 export {
+  StoreIcon,
+  ISTIcon,
   KeplerIcon,
   DiagonalIcon,
   NextIcon,

@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useMemo } from "react";
-import { BaseCharacter, ButtonText, HorizontalDivider, PrimaryButton, SecondaryButton } from "../../../components";
+import React, { FC, useEffect } from "react";
+import { BoldLabel, ButtonText, LevelBoldLabel, SecondaryButton } from "../../../components";
 import { color } from "../../../design";
 import { useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
@@ -17,17 +17,16 @@ import {
 } from "./styles";
 import { useMyCharacters, useSelectedCharacter } from "../../../service";
 import { useUserStateDispatch } from "../../../context/user";
-import { routes } from "../../../navigation";
-import { useLocation, useNavigate } from "react-router-dom";
 import { ButtonInfoWrap } from "../../../components/button-info/styles";
+import { BaseCharacterCanvas } from "../../../components/base-character-canvas/base-character-canvas";
+import { useParentViewport } from "../../../hooks/use-parent-viewport";
 import { calculateCharacterLevels } from "../../../util";
+import { AssetTag } from "../../../components/asset-card/styles";
 
 export const CharacterCards: FC = () => {
   const { selectedAsset, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
-
   const { height } = useViewport();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { parentRef, parentWidth, parentHeight } = useParentViewport();
   const [selectedCharacter] = useSelectedCharacter();
 
   const [characters] = useMyCharacters();
@@ -39,73 +38,32 @@ export const CharacterCards: FC = () => {
     userStateDispatch({ type: "SET_SELECTED", payload: character.nft.name });
   };
 
-  const sell = (character: ExtendedCharacter) => {
-    if (!character) return;
-    navigate(`${routes.sellCharacter}/${character.nft.id}`, {
-      state: location,
-    });
-  };
-
   useEffect(() => {
     if (selectedCharacter) {
       setSelectedAsset(selectedCharacter.nft.name);
     }
   }, [selectedCharacter, setSelectedAsset]);
 
-  const filteredCharacters = useMemo(() => {
-    return characters.filter((character) => character.nft.name !== selectedCharacter?.nft.name);
-  }, [characters, selectedCharacter]);
-
-  const charactersCount = filteredCharacters.length;
+  const charactersCount = characters.length;
 
   return (
     <CharacterCardsContainer>
-      <AssetFilterCount customColor={color.darkGrey}>Selected Character</AssetFilterCount>
-      <HorizontalDivider />
-      {selectedCharacter ? (
-        <CharacterCardContainer
-          isSelected={selectedAsset === selectedCharacter.nft.name}
-          onClick={() => {
-            setSelectedAsset(selectedCharacter.nft.name);
-            setOnAssetChange(false);
-          }}
-        >
-          <ImageCard>
-            {/*//TODO: items not showing on character card*/}
-            <BaseCharacter
-              characterImage={selectedCharacter.nft.image}
-              items={selectedCharacter.equippedItems}
-              isZoomed={false}
-              size="mini"
-            />
-          </ImageCard>
-          <CharacterInformation character={selectedCharacter} selectedCharacterName={selectedCharacter?.nft.name} sell={sell} />
-        </CharacterCardContainer>
-      ) : null}
-      {/* FIXME: wrong type */}
-      {/* <AssetFilterCount customColor={color.darkGrey}>
-        {itemsCount} {text.param.assetCategories[selectedAssetCategory]} in inventory
-      </AssetFilterCount> */}
-      <HorizontalDivider />
+      <AssetFilterCount customColor={color.darkGrey}>{text.param.amountOfCharacters(charactersCount)} in inventory</AssetFilterCount>
       <CharacterCardsWrapper height={height}>
-        {filteredCharacters.map((character, index) => (
+        {characters.map((character, index) => (
           <CharacterCardContainer
             key={index}
             isSelected={selectedAsset === character.nft.name}
             onClick={() => {
               setSelectedAsset(character.nft.name);
               setOnAssetChange(true);
+              select(character);
             }}
           >
-            <ImageCard>
-              <BaseCharacter characterImage={character.nft.image} items={character.equippedItems} isZoomed={false} size="mini" />
+            <ImageCard ref={parentRef}>
+              <BaseCharacterCanvas width={parentWidth} height={parentHeight} character={character.nft} items={character.equippedItems} />
             </ImageCard>
-            <CharacterInformation
-              character={character}
-              selectCharacter={select}
-              sell={sell}
-              selectedCharacterName={selectedCharacter?.nft.name}
-            />
+            <CharacterInformation character={character} />
           </CharacterCardContainer>
         ))}
       </CharacterCardsWrapper>
@@ -117,11 +75,8 @@ export const CharacterCards: FC = () => {
 
 interface CharacterInfo {
   character: ExtendedCharacter;
-  sell?: (character: ExtendedCharacter) => void;
-  selectedCharacterName?: string;
-  selectCharacter?: (character: ExtendedCharacter) => void;
 }
-const CharacterInformation: FC<CharacterInfo> = ({ character, sell, selectCharacter, selectedCharacterName }) => {
+const CharacterInformation: FC<CharacterInfo> = ({ character }) => {
   const { setShowDetails } = useCharacterBuilder();
   const { totalLevel } = calculateCharacterLevels(character);
 
@@ -129,22 +84,15 @@ const CharacterInformation: FC<CharacterInfo> = ({ character, sell, selectCharac
     <CharacterInfo>
       <ButtonText customColor={color.black}>{character.nft.name}</ButtonText>
       <CharacterInfoCharacter>Title: {character.nft.title}</CharacterInfoCharacter>
-      <CharacterInfoCharacter>Lvl: {totalLevel}</CharacterInfoCharacter>
       <CharacterInfoCharacter>Origin: {character.nft.origin}</CharacterInfoCharacter>
+      <AssetTag>
+        <BoldLabel>lvl. </BoldLabel>
+        <LevelBoldLabel>{totalLevel}</LevelBoldLabel>
+      </AssetTag>
       <CharacterButtonContainer>
         <ButtonInfoWrap onClick={() => setShowDetails(true)}>
           <SecondaryButton>{text.general.info}</SecondaryButton>
         </ButtonInfoWrap>
-        <PrimaryButton onClick={() => (sell ? sell(character) : null)}>
-          <ButtonText customColor={color.white}>sell</ButtonText>
-        </PrimaryButton>
-        {character.nft.name !== selectedCharacterName ? (
-          <>
-            <PrimaryButton onClick={() => (selectCharacter ? selectCharacter(character) : null)}>
-              <ButtonText customColor={color.white}>select</ButtonText>
-            </PrimaryButton>
-          </>
-        ) : null}
       </CharacterButtonContainer>
     </CharacterInfo>
   );

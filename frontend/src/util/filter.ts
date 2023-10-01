@@ -1,4 +1,4 @@
-import { Category, CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Rarity } from "../interfaces";
+import { CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Title } from "../interfaces";
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { getRarityString } from "../service";
 import { useFilters } from "../context/filter-context";
@@ -9,34 +9,16 @@ export interface OfferFilters {
   status?: string;
 }
 
-export interface ItemFilters {
-  categories: Category[];
-  rarity: Rarity[];
-  origins: Origin[];
-  sort: string;
-  colors: string;
-  price?: { min: number; max: number };
-  equippedTo?: string;
-  forSale?: boolean;
-}
-
-export interface CharacterFilters {
-  titles: string[];
-  origins: string[];
-  sort: string;
-  price?: { min: number; max: number };
-}
-
 export const useFilterItems = (items: Item[]): Item[] => {
   const { origin, categories, rarity, colors, sort, equippedTo, forSale } = useFilters();
   if (items.length === 0) return [];
 
-  const filteredOrigins = origin.length > 0 ? items.filter((item) => origin.includes(<Origin>item.origin.toLowerCase())) : items;
-  const filteredCategories = categories.length > 0 ? items.filter((item) => categories.includes(item.category)) : items;
-  const filteredRarity = rarity.length > 0 ? items.filter((item) => rarity.includes(getRarityString(item.rarity))) : items;
-  const filteredColors = colors ? items.filter((item) => item.colors.includes(colors)) : items;
-  const equipped = equippedTo ? items.filter((item) => item.equippedTo === equippedTo) : items;
-  const itemsForSale = forSale ? items.filter((item) => item.forSale) : items;
+  const filteredOrigins = origin.length > 0 ? items.filter((item) => item && origin.includes(<Origin>item.origin.toLowerCase())) : items;
+  const filteredCategories = categories.length > 0 ? items.filter((item) => item && categories.includes(item.category)) : items;
+  const filteredRarity = rarity.length > 0 ? items.filter((item) => item && rarity.includes(getRarityString(item.rarity))) : items;
+  const filteredColors = colors ? items.filter((item) => item && item.colors.includes(colors)) : items;
+  const equipped = equippedTo ? items.filter((item) => item && item.equippedTo === equippedTo) : items;
+  const itemsForSale = forSale ? items.filter((item) => item && item.forSale) : items;
 
   const filteredItems = items.filter(
     (item) =>
@@ -85,7 +67,8 @@ export const useFilterCharacters = (characters: ExtendedCharacter[]): ExtendedCh
 
   const filteredOrigins =
     origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.nft.origin.toLowerCase())) : characters;
-  const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.nft.title)) : characters;
+  const filteredTitles =
+    title.length > 0 ? characters.filter((character) => title.includes(<Title>character.nft.title.toLowerCase())) : characters;
   const filteredCharacters = characters.filter((character) => filteredOrigins.includes(character) && filteredTitles.includes(character));
 
   return sortCharacters(sort, filteredCharacters);

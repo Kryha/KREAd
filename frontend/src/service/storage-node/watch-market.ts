@@ -20,6 +20,42 @@ export const parseCharacterMarket = async (chainStorageWatcher: any, paths: stri
   await parseMarketUpdate(values);
 };
 
+export const watchItemMarketMetrics = async (chainStorageWatcher: any, parseItemMarketMetricsUpdate: any) => {
+  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+  const path = "published.kread.market-metrics-item";
+  chainStorageWatcher.watchLatest(
+    [Kind.Data, path],
+    async (value: any) => {
+      if (!value) {
+        console.warn(`${path} returned undefined`);
+        return;
+      }
+      await parseItemMarketMetricsUpdate(value);
+    },
+    (log: any) => {
+      console.error("Error watching kread char market", log);
+    },
+  );
+};
+
+export const watchCharacterMarketMetrics = async (chainStorageWatcher: any, parseCharacterMarketMetricsUpdate: any) => {
+  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+  const path = "published.kread.market-metrics-character";
+  chainStorageWatcher.watchLatest(
+    [Kind.Data, path],
+    async (value: any) => {
+      if (!value) {
+        console.warn(`${path} returned undefined`);
+        return;
+      }
+      await parseCharacterMarketMetricsUpdate(value);
+    },
+    (log: any) => {
+      console.error("Error watching kread char market", log);
+    },
+  );
+};
+
 export const watchCharacterMarketPaths = (chainStorageWatcher: any, addMarketCharacterPaths: any) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
   const path = "published.kread.market-characters";

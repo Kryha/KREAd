@@ -1,7 +1,7 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { ASSETS_PER_PAGE } from "../../constants";
 import { AssetCardLoadMore } from "../asset-card-load-more/asset-card-load-more";
-import { AssetsContainer, AssetsWrapper } from "./styles";
+import { AssetsContainer, AssetsShopWrapper, ShopWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { LoadingPage } from "../content-loader";
 import { ItemCardMarket } from "../asset-card/item-card-market";
@@ -34,15 +34,17 @@ export const ItemCardsMarket: FC<Props> = ({ isLoading, itemsInMarket, selectIte
 
   if (isLoading) return <LoadingPage spinner={false} />;
   return (
-    <AssetsWrapper height={height}>
-      {itemsInMarket.length > 0 && (
-        <AssetsContainer>
-          {itemsInMarket.slice(0, visibleAssets).map((itemInMarket) => (
-            <ItemCardMarket key={itemInMarket.id} itemInMarket={itemInMarket} selectItemInMarketId={selectItemInMarketId} />
-          ))}
-          {visibleAssets < itemsInMarket.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
-        </AssetsContainer>
-      )}
-    </AssetsWrapper>
+    <ShopWrapper>
+      <AssetsShopWrapper height={height}>
+        {itemsInMarket.length > 0 && (
+          <AssetsContainer>
+            {itemsInMarket.slice(0, visibleAssets).map((itemInMarket) => (
+              <ItemCardMarket key={itemInMarket.id} itemInMarket={itemInMarket} selectItemInMarketId={selectItemInMarketId} />
+            ))}
+            {visibleAssets < itemsInMarket.length && <AssetCardLoadMore isLoading={isLoading} loadMore={loadMoreAssets} />}
+          </AssetsContainer>
+        )}
+      </AssetsShopWrapper>
+    </ShopWrapper>
   );
 };

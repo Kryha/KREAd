@@ -2,7 +2,7 @@ export const navigation = {
   goBack: "go back",
   goHome: "go home",
   character: "character",
-  shop: "shop",
+  shop: "market",
   inventory: "inventory",
   myCharacters: "my Characters",
   about: "about",

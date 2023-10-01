@@ -1,8 +1,9 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { SelectBox, StyledSelect, Tick } from "./styles";
-import { ButtonText } from "../atoms";
+import { ClearButton, SelectBox, StyledSelect, Tick } from "./styles";
+import { ButtonText, HorizontalDivider } from "../atoms";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
+import { CloseIcon } from "../../assets";
 
 export interface Options {
   label: string;
@@ -26,8 +27,9 @@ export const Select: FC<SelectProps> = ({ options, onChange, onArrayChange, isMu
   // Function to reset the component's state to its initial state
   const resetComponent = () => {
     setSelected(isMultiSelect ? [] : [options.length > 0 ? options[0].value : ""]);
+    onArrayChange && onArrayChange([]);
+    onChange && onChange("");
   };
-
   useEffect(() => {
     // Check if the reset prop is true and reset the component's state
     if (reset) {
@@ -75,6 +77,13 @@ export const Select: FC<SelectProps> = ({ options, onChange, onArrayChange, isMu
 
   return (
     <SelectBox height={height}>
+      <ClearButton>
+        <ButtonText onClick={resetComponent} customColor={color.darkGrey}>
+          reset
+        </ButtonText>
+        <CloseIcon />
+      </ClearButton>
+      <HorizontalDivider />
       {options.map((option, index) => (
         <React.Fragment key={index}>
           <StyledSelect

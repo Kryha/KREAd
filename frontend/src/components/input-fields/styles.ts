@@ -16,7 +16,7 @@ export const StyledSelect = styled.div<SelectProps>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0px;
+  padding: 0;
   margin: ${margins.small} 0px;
   cursor: pointer;
   :hover {
@@ -46,11 +46,26 @@ export const SelectDivider = styled.div`
   width: 100%;
 `;
 
+export const ClearButton = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+
+  :hover {
+    cursor: pointer;
+    ${ButtonText} {
+      color: ${color.black};
+    }
+  }
+`;
+
 export const SelectBox = styled.div<ViewProps>`
-  width: 180px;
+  width: 220px;
   border: 1px solid ${color.grey};
-  border-top-left-radius: ${margins.small};
-  border-bottom-left-radius: ${margins.small};
+  border-radius: ${margins.small};
   background: ${color.lightGrey};
   box-sizing: border-box;
   display: flex;
@@ -79,7 +94,7 @@ export const ButtonContainer = styled.div`
   gap: ${margins.small};
   align-items: center;
   justify-content: center;
-  padding: 0px;
+  padding: 0;
 `;
 
 export const RangeContainer = styled.div`
@@ -108,7 +123,7 @@ export const SliderTrack = styled.div`
 `;
 
 export const SliderRange = styled.div<RangeProps>`
-  border-radius: 0px;
+  border-radius: 0;
   height: 4px;
   width: ${(props): string => `${props.width}%;`};
   left: ${(props): string => `${props.left}%;`};
@@ -161,9 +176,8 @@ export const ThumbRight = styled(ThumbLeft)`
 
 export const MaxInput = styled(Input)`
   width: 119px;
-  padding: 3px 0px 16px 33px;
+  padding: 3px 0 16px 33px;
   position: relative;
-  font-family: aktiv-grotesk;
   font-weight: ${fontWeight.light};
 `;
 
@@ -175,7 +189,7 @@ export const InputWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0px;
+  padding: 0;
   margin-bottom: 38px;
 `;
 
@@ -197,7 +211,7 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0px;
+  padding: 0;
 `;
 
 export const ColorWrapper = styled.div<SelectProps>`

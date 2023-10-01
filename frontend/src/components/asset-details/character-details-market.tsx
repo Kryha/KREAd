@@ -32,9 +32,13 @@ export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCha
     navigate(`${routes.buyCharacter}/${characterInMarket.id}`, { state: location });
   };
 
+  const { royalty, platformFee, price } = characterInMarket.sell;
+
+  const totalPrice = Number(royalty + platformFee + price);
+
   const buyCharacterAction = {
     primary: { text: text.item.buy, onClick: buyAsset },
-    price: Number(characterInMarket.sell.price),
+    price: totalPrice,
   };
 
   return (
@@ -52,6 +56,7 @@ export const CharacterDetailsMarket: FC<Props> = ({ characterInMarket, selectCha
                   selectCharacter("");
                   setClose(true);
                 },
+                price: totalPrice,
                 primary: buyCharacterAction.primary,
               }}
             />

@@ -1,16 +1,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { ArrowDownIcon, ArrowUpRightIcon } from "../../assets";
-import {
-  bounce,
-  changeSize,
-  CharacterImgs,
-  disappear,
-  fadeIn,
-  PrimaryButton,
-  slideUp,
-  TitleText,
-} from "../../components";
+import { bounce, changeSize, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { breakpoints, color, fontWeight, zIndex } from "../../design";
 
@@ -48,6 +39,11 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
   }
 `;
 
+export const ButtonRow = styled.div`
+  position: relative;
+  display: flex;
+  gap: 16px;
+`;
 interface ButtonProps {
   isVisible: boolean;
 }
@@ -73,7 +69,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
   ${({ isVisible }): string => {
     return isVisible
       ? `
-      ${PrimaryButton} {
+      ${ButtonRow} {
         -webkit-transition: 0.3s ease-out;
         transition: 0.3s ease-out;
         will-change: transform;
@@ -91,10 +87,10 @@ export const ButtonContainer = styled.div<ButtonProps>`
         `
       : `
       margin-top: 46px;
-      ${PrimaryButton} {
+      ${ButtonRow} {
         position: fixed;
         left: 40px;
-        top: 610px;
+        top: 620px;
         z-index: 100;
       }
       `;
@@ -115,8 +111,7 @@ export const ArrowUpRight = styled(ArrowUpRightIcon)`
 `;
 
 export const EndContent = styled.div<HeightProps>`
-  ${({ height }): string =>
-    `height: ${height - 100}px; min-height: ${height - 100}px;`};
+  ${({ height }): string => `height: ${height - 100}px; min-height: ${height - 100}px;`};
   ${TitleText} {
     margin-top: 16px;
   }

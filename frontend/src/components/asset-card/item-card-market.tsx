@@ -35,6 +35,10 @@ export const ItemCardMarket: FC<Props> = ({ itemInMarket, selectItemInMarketId }
     navigate(`${routes.buyItem}/${itemInMarket.id}`, { state: location });
   };
 
+  const { royalty, platformFee, price } = itemInMarket.sell;
+
+  const totalPrice = Number(royalty + platformFee + price);
+
   return (
     <AssetWrapper onClick={() => selectItemInMarketId(itemInMarket.id)}>
       <AssetContent>
@@ -60,7 +64,7 @@ export const ItemCardMarket: FC<Props> = ({ itemInMarket, selectItemInMarketId }
           </AssetStatsContainer>
           <AssetFooter>
             <PriceContainer>
-              <PriceInIst price={Number(itemInMarket.sell.price)} />
+              <PriceInIst price={totalPrice} />
               <PrimaryButton onClick={(event) => buyAsset(event)}>
                 <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
               </PrimaryButton>

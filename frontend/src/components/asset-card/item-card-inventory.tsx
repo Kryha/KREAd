@@ -3,6 +3,7 @@ import { Badge, BoldLabel, ButtonText, ImageProps, LevelBoldLabel, PrimaryButton
 import React, { FC } from "react";
 import {
   AssetContent,
+  AssetEquippedContainer,
   AssetFooter,
   AssetImage,
   AssetImageContainer,
@@ -21,6 +22,7 @@ import { getRarityString, useEquipItem, useUnequipItem } from "../../service";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ErrorView } from "../error-view";
 import { routes } from "../../navigation";
+import { useCharacterBuilder } from "../../context/character-builder-context";
 
 interface Props {
   item: Item;
@@ -30,6 +32,7 @@ interface Props {
 export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setShowToast } = useCharacterBuilder();
 
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
@@ -37,11 +40,13 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
   const equipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    setShowToast(true);
     equipItem.mutate({ item });
   };
 
   const unequipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    setShowToast(true);
     unequipItem.mutate({ item });
   };
 
@@ -58,6 +63,11 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
     <AssetWrapper onClick={() => handleClick()}>
       <AssetContent>
         <AssetImageContainer>
+          {item.equippedTo && (
+            <AssetEquippedContainer>
+              <Equipped />
+            </AssetEquippedContainer>
+          )}
           <AssetImage src={item.image} category={item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>

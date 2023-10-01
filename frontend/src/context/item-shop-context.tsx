@@ -1,18 +1,27 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Item, ItemInMarket } from "../interfaces";
+import { Item, ItemInMarket, MarketMetrics } from "../interfaces";
 import { useAgoricState } from "./agoric";
-import { parseItemMarket, watchItemMarketPaths } from "../service/storage-node/watch-market";
+import { parseItemMarket, watchItemMarketMetrics, watchItemMarketPaths } from "../service/storage-node/watch-market";
 import { cidToUrl } from "../util/other";
 
 interface ItemMarketContext {
   items: ItemInMarket[];
   itemMarketPaths: string[];
   fetched: boolean;
+  metrics: MarketMetrics;
 }
 const initialState: ItemMarketContext = {
   items: [],
   itemMarketPaths: [],
   fetched: false,
+  metrics: {
+    amountSold: 0,
+    collectionSize: 0,
+    averageLevel: 0,
+    marketplaceAverageLevel: 0,
+    putForSaleCount: 0,
+    latestSalePrice: BigInt(0),
+  },
 };
 
 const Context = createContext<ItemMarketContext | undefined>(undefined);
@@ -42,6 +51,12 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       const items = await Promise.all(itemsInMarket.map((item) => formatMarketEntry(item)));
       marketDispatch((prevState: ItemMarketContext) => ({ ...prevState, items, fetched: true }));
     };
+    const parseItemMarketMetricsUpdate = async (metrics: MarketMetrics) => {
+      marketDispatch((prevState: ItemMarketContext) => ({
+        ...prevState,
+        metrics,
+      }));
+    };
     const formatMarketEntry = async (marketEntry: ContractMarketEntry): Promise<ItemInMarket> => {
       const item = marketEntry.asset;
       return {
@@ -57,6 +72,7 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
 
     if (agoric.chainStorageWatcher && !watchingStore) {
       watchItemMarketPaths(agoric.chainStorageWatcher, addMarketItemPaths);
+      watchItemMarketMetrics(agoric.chainStorageWatcher, parseItemMarketMetricsUpdate);
       setWatchingStore(true);
       console.count("✅ LISTENING TO ITEM SHOP NOTIFIER");
     }
