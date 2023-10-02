@@ -7,9 +7,9 @@ interface MainProps {
 export const MainWrap = styled.div<MainProps>`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  ${({ height }): string => `height: ${height}px;`};
+  // ${({ height }): string => `height: ${height}px;`};
 `;

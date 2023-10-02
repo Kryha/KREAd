@@ -12,9 +12,10 @@ import { SwitchSelector } from "../switch-selector";
 import { KreadContainer } from "../../pages/shop/styles";
 import { KreadIcon } from "../logo/styles";
 import { ButtonText, PrimaryButton } from "../atoms";
-import { color } from "../../design";
+import { breakpoints, color } from "../../design";
 import { useKadoWidget } from "../../context/filter-context";
 import styled from "@emotion/styled";
+import { useIsMobile } from "../../hooks";
 
 interface BaseRouteProps {
   sideNavigation: React.ReactNode;
@@ -27,6 +28,7 @@ interface BaseRouteProps {
 export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboarding = false, isLanding = false, isShop = false }) => {
   const isOnboarding = onboarding ? routes.onboarding : routes.character;
   const { interactionMode } = useCharacterBuilder();
+  const isMobile = useIsMobile(breakpoints.tablet);
 
   const { pathname } = useLocation();
   const { section } = useParams<{ section: Section }>();
@@ -73,9 +75,11 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
         </TopbarContainer>
       )}
       <ChildrenContainer isLanding={isLanding}>{children}</ChildrenContainer>
-      <FooterContainer isLanding={isLanding}>
-        <Footer />
-      </FooterContainer>
+      {!isMobile && (
+        <FooterContainer isLanding={isLanding}>
+          <Footer />
+        </FooterContainer>
+      )}
     </>
   );
 };

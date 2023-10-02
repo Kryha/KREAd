@@ -15,15 +15,14 @@ export const Layout = styled.div<StyleProps>`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "canvas";
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
+  width: 100vw;
+  height: 100vh;
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 0fr;
     grid-template-areas: "canvas" "bottom-pane";
-    width: ${(props) => props.width};
   }
 `;
 
