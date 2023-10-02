@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAgoricState } from "./agoric";
-import { SELL_ITEM_INVITATION, SELL_CHARACTER_INVITATION, IST_IDENTIFIER } from "../constants";
+import { IST_IDENTIFIER, SELL_CHARACTER_INVITATION, SELL_ITEM_INVITATION } from "../constants";
 import { watchWalletVstorage } from "../service/storage-node/watch-general";
 import { Item, OfferProposal } from "../interfaces";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
@@ -56,8 +56,8 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
             return;
           }
 
-          const characterNameList = value.map((char: string)=> char.substring(10));
-       
+          const characterNameList = value.map((char: string) => char.substring(10));
+
           walletDispatch((prevState) => ({
             ...prevState,
             characterNameList,
@@ -68,7 +68,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
         },
       );
     };
-    
+
     const updateStateNonVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");
 
@@ -103,8 +103,8 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
 
     const updateStateOffers = async (offers: any) => {
       console.count("💾 LOADING OFFER CHANGE 💾");
-      const itemProposals: { give: Object; want: Object }[] = [];
-      const characterProposals: { give: Object; want: Object }[] = [];
+      const itemProposals: { give: any; want: any }[] = [];
+      const characterProposals: { give: any; want: any }[] = [];
       offers.forEach((offer: any) => {
         const {
           proposal: { give, want },
@@ -128,9 +128,9 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
 
     const watchVBankAssets = async () => {
       for await (const status of iterateNotifier(agoric.walletConnection.pursesNotifier)) {
-        if(status){
-          const ist = status.find(({ brandPetname }: any)=> brandPetname===IST_IDENTIFIER);
-          const istValue = ist.currentAmount.value
+        if (status) {
+          const ist = status.find(({ brandPetname }: any) => brandPetname === IST_IDENTIFIER);
+          const istValue = ist.currentAmount.value;
           walletDispatch((prevState) => ({
             ...prevState,
             ist: istValue,
@@ -150,7 +150,15 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     return () => {
       isCancelled = true;
     };
-  }, [pursesNotifier, walletState.fetched, chainStorageWatcher]);
+  }, [
+    pursesNotifier,
+    walletState.fetched,
+    chainStorageWatcher,
+    tokenInfo,
+    agoric.contracts.kread.instance,
+    agoric.walletConnection.pursesNotifier,
+    walletAddress,
+  ]);
 
   return <Context.Provider value={walletState}>{props.children}</Context.Provider>;
 };

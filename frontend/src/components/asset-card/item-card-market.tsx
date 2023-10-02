@@ -43,7 +43,7 @@ export const ItemCardMarket: FC<Props> = ({ itemInMarket, selectItemInMarketId }
     <AssetWrapper onClick={() => selectItemInMarketId(itemInMarket.id)}>
       <AssetContent>
         <AssetImageContainer>
-          <AssetImage src={itemInMarket.item.image} category={itemInMarket.item.category} />
+          <AssetImage src={itemInMarket.item.thumbnail} category={itemInMarket.item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
