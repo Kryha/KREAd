@@ -20,8 +20,9 @@ export const CategoryInfoCategory = styled.span`
 
 export const CategoryInfo = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 export const CategoryCardsContainer = styled.div`
@@ -41,6 +42,10 @@ export const CategoryCardsContainer = styled.div`
   }
 `;
 
+export const CategoryImage = styled.div`
+  display: flex;
+  position: relative;
+`;
 export const CategoryCardsWrapper = styled.div<StyleProps>`
   overflow-y: scroll;
   ${({ height }): string => `height: ${height - 190}px;`};
@@ -65,6 +70,7 @@ interface CategoryProps {
 
 export const CategoryCard = styled.div<CategoryProps>`
   display: flex;
+  position: relative;
   gap: 16px;
   transition: transform 0.3s ease; /* Add CSS transition for smooth animation */
 

@@ -3,6 +3,22 @@ import { HeaderHorizontalDivider, NavigationTitle } from "../../../components";
 import { color, margins } from "../../../design";
 import { CloseIcon, ExclamationIcon, TickIcon } from "../../../assets";
 
+export const ToastContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${margins.medium};
+  width: 100%;
+`;
+
+export const NotificationContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${margins.medium};
+`;
 export const ToastContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -30,6 +46,7 @@ export const ToastActions = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
 `;
 
 export const Tick = styled(TickIcon)`

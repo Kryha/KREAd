@@ -11,8 +11,8 @@ import {
   InfoContainer,
   ReturnContainer,
   Tick,
-  ToastActions,
   ToastContainer,
+  ToastContent,
   ToastHeader,
   ToastTitle,
 } from "./styles";
@@ -44,7 +44,7 @@ export const CanvasNotification: FC<NotificationDetailProps> = ({ isError, title
           </ReturnContainer>
         </DividerContainer>
       </ToastHeader>
-      <ToastActions>{children}</ToastActions>
+      <ToastContent>{children}</ToastContent>
     </ToastContainer>
   );
 };
