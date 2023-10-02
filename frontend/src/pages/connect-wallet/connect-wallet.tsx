@@ -10,6 +10,7 @@ import {
   Kado,
   LoadingPage,
   MenuText,
+  NotificationDetail,
   OnboardingCharacter,
   Overlay,
   PrimaryButton,
@@ -30,6 +31,7 @@ import { useIsMobile, useOnScreen, useViewport } from "../../hooks";
 import { useAgoricContext } from "../../context/agoric";
 import { routes } from "../../navigation";
 import { ButtonRow } from "../onboarding/styles";
+import { NotificationWrapper } from "../../components/notification-detail/styles";
 
 // TODO: Update to designs, Update stylings
 
@@ -37,11 +39,12 @@ export const ConnectWallet: FC = () => {
   const [service, _] = useAgoricContext();
   const navigate = useNavigate();
   const { width, height } = useViewport();
-  const [, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
   const isMobile = useIsMobile(breakpoints.tablet);
   const [showWidget, setShowWidget] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const toggleWidget = () => {
     setShowWidget(!showWidget);
@@ -50,7 +53,12 @@ export const ConnectWallet: FC = () => {
 
   const provisionWallet = async () => {
     setIsLoading(true);
-    await service.walletConnection.provisionSmartWallet();
+    try {
+      await service.walletConnection.provisionSmartWallet();
+    } catch (e) {
+      setIsLoading(false);
+      setShowToast(true);
+    }
   };
   if (!service.walletConnection.address) return <LoadingPage spinner={false} />;
   if (service.walletConnection.smartWalletProvisioned) navigate(routes.character);
@@ -63,7 +71,7 @@ export const ConnectWallet: FC = () => {
             <PrimaryButton onClick={() => provisionWallet()}>
               <KeplerIcon />
               <ButtonText customColor={color.white}>{text.general.activateWallet}</ButtonText>
-              <ArrowUp />
+              {isLoading ? <LoadingPage /> : <ArrowUp />}
             </PrimaryButton>
             <PrimaryButton onClick={toggleWidget}>
               <ButtonText customColor={color.white}>{text.store.buyAssets}</ButtonText>
@@ -90,6 +98,17 @@ export const ConnectWallet: FC = () => {
       <FadeInOut show={showWidget}>
         <Kado show={showWidget} toggleWidget={toggleWidget} />
         <Overlay />
+      </FadeInOut>
+      <FadeInOut show={showToast} exiting={!showToast}>
+        {showToast && <Overlay isOnTop={true} />}
+        <NotificationWrapper showNotification={showToast}>
+          <NotificationDetail
+            title={text.error.provisionError}
+            info={text.error.notEnoughBLD}
+            closeToast={() => setShowToast(false)}
+            isError
+          />
+        </NotificationWrapper>
       </FadeInOut>
     </>
   );
