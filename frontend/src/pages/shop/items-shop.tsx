@@ -20,17 +20,26 @@ export const ItemsShop: FC = () => {
   const [item] = useGetItemInShopById(selectedId);
   const assetsCount = items.length;
 
-  // TODO: replace identifier with logo
-  const metricsData = metrics
-    ? [
-        metrics.amountSold,
-        metrics.collectionSize,
-        toTwoDecimals(findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
-        toTwoDecimals(findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))))),
-        toTwoDecimals(metrics.averageLevel),
-        toTwoDecimals(metrics.marketplaceAverageLevel),
-      ]
-    : [];
+  let metricsData: any = [];
+
+  if (metrics) {
+    let itemAverage = 0;
+    let itemMinimum = 0;
+
+    if (items.length != 0) {
+      itemMinimum = findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))));
+      itemAverage = findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))));
+    }
+
+    metricsData = [
+      metrics.amountSold,
+      metrics.collectionSize,
+      toTwoDecimals(itemMinimum),
+      toTwoDecimals(itemAverage),
+      toTwoDecimals(metrics.averageLevel),
+      toTwoDecimals(metrics.marketplaceAverageLevel),
+    ];
+  }
 
   if (!items) return <></>;
   return (

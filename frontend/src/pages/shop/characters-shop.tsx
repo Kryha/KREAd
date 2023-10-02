@@ -21,17 +21,26 @@ export const CharactersShop: FC = () => {
   const [character] = useGetCharacterInShopById(selectedId);
   const assetsCount = characters.length;
 
-  // TODO: replace identifier with logo
-  const metricsData = metrics
-    ? [
-        metrics.amountSold,
-        metrics.collectionSize,
-        toTwoDecimals(findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
-        toTwoDecimals(findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))))),
-        toTwoDecimals(metrics.averageLevel),
-        toTwoDecimals(metrics.marketplaceAverageLevel),
-      ]
-    : [];
+  let metricsData: any = [];
+
+  if (metrics) {
+    let charAverage = 0;
+    let charMinimum = 0;
+
+    if (characters.length != 0) {
+      charMinimum = findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
+      charAverage = findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
+    }
+
+    metricsData = [
+      metrics.amountSold,
+      metrics.collectionSize,
+      toTwoDecimals(charMinimum),
+      toTwoDecimals(charAverage),
+      toTwoDecimals(metrics.averageLevel),
+      toTwoDecimals(metrics.marketplaceAverageLevel),
+    ];
+  }
 
   return (
     <>
