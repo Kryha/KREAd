@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { HeaderHorizontalDivider, NavigationTitle } from "../../../components";
 import { color, margins } from "../../../design";
-import { CloseIcon, ExclamationIcon, TickIcon } from "../../../assets";
+import { CloseIcon, TickIcon } from "../../../assets";
 
 export const ToastContent = styled.div`
   display: flex;
@@ -39,6 +39,7 @@ export const ToastHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   gap: ${margins.medium};
 `;
 
@@ -55,23 +56,15 @@ export const Tick = styled(TickIcon)`
   height: 6px;
 `;
 
-export const Exclamation = styled(ExclamationIcon)`
-  width: 2px;
-  height: 8px;
-  margin: 0;
-`;
-
 export const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: ${margins.nano};
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   border: 1px solid ${color.black};
-  min-width: 18px;
 `;
 
 export const ToastTitle = styled(NavigationTitle)``;

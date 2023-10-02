@@ -6,7 +6,6 @@ import {
   Close,
   Divider,
   DividerContainer,
-  Exclamation,
   IconContainer,
   InfoContainer,
   ReturnContainer,
@@ -30,7 +29,7 @@ export const CanvasNotification: FC<NotificationDetailProps> = ({ isError, title
   return (
     <ToastContainer>
       <ToastHeader>
-        <IconContainer>{isError ? <Exclamation /> : <Tick />}</IconContainer>
+        <IconContainer>{isError ? "!" : <Tick />}</IconContainer>
         <InfoContainer>
           <ToastTitle>{title}</ToastTitle>
           <ButtonText>{info}</ButtonText>
