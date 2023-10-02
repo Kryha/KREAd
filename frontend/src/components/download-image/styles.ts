@@ -50,7 +50,10 @@ export const DownloadWrapper = styled.div<DownloadProps>`
   ${({ isOpen }): string => {
     return isOpen
       ? `
-        position: relative;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         z-index: 1000;
         margin: auto;
         width: max-content;

@@ -68,7 +68,7 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
               <Equipped />
             </AssetEquippedContainer>
           )}
-          <AssetImage src={item.image} category={item.category} />
+          <AssetImage src={item.thumbnail} category={item.category} />
         </AssetImageContainer>
         <AssetInfoContainer>
           <AssetTitleWrapper>
