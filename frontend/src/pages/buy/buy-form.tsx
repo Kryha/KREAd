@@ -58,7 +58,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
 
   return (
     <BuyFormContainer>
-      <FormText>{text.mint.theCostsOfMinting}</FormText>
+      <FormText>{text.store.marketplaceFees}</FormText>
       <StepContainer>
         <GeneralInfo active={!isOnFirstStep}>
           <PricingContainer>
