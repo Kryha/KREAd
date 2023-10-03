@@ -18,16 +18,8 @@ interface Props {
 }
 export const ItemNotifications: FC<Props> = ({ selected, equip }) => {
   const isMobile = useIsMobile(breakpoints.tablet);
-  const {
-    showToast,
-    setShowToast,
-    setOnAssetChange,
-    setSelectedAssetCategory,
-    setSelectedAsset,
-    setInteractionMode,
-    showWarning,
-    setShowWarning,
-  } = useCharacterBuilder();
+  const { showToast, setShowToast, setSelectedAssetCategory, setSelectedAsset, setInteractionMode, showWarning, setShowWarning } =
+    useCharacterBuilder();
   const [showUnequipFirst, setShowUnequipFirst] = useState(false);
   return (
     <>
