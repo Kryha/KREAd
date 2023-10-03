@@ -14,15 +14,17 @@ export const ToastContainer = styled.div`
   border-radius: ${margins.small};
   bottom: ${margins.big};
   z-index: 10000;
-  width: 100%;
+  width: fit-content;
   position: absolute;
   left: 40px;
   height: fit-content;
+
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding: ${margins.small};
     margin-left: ${margins.mini};
     margin-right: ${margins.mini};
     gap: ${margins.small};
+    width: 100%;
     top: 50%;
     left: 50%;
   }
