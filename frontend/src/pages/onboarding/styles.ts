@@ -42,7 +42,7 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
 export const ButtonRow = styled.div`
   position: relative;
   display: flex;
-  justify-content: space-between;
+  gap: 16px;
 
   ${PrimaryButton} {
     height: 45px;
