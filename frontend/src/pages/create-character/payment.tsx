@@ -7,6 +7,7 @@ import {
   Line,
   NumberContainer,
   PreviousButtonContainer,
+  PriceWrapper,
   PricingContainer,
   Step,
   StepContainer,
@@ -18,6 +19,7 @@ import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, Se
 import { text } from "../../assets";
 import { CONFIRMATION_STEP, INFORMATION_STEP, MINTING_COST } from "../../constants";
 import { color } from "../../design";
+import { ArrowBack } from "../../components/error-view/styles";
 
 interface PaymentProps {
   submit: (step: number) => void;
@@ -47,12 +49,12 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
               <StepText>{text.mint.sendOfferToWallet}</StepText>
             </Step>
             {!sendOffer && (
-              <>
+              <PriceWrapper>
                 <PriceInIst price={MINTING_COST} />
                 <PrimaryButton onClick={sendOfferToWallet} disabled={disable}>
                   <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
                 </PrimaryButton>
-              </>
+              </PriceWrapper>
             )}
           </PricingContainer>
         </StepWrapper>
@@ -74,6 +76,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
       <ButtonWrapper>
         {!sendOffer && (
           <PreviousButtonContainer onClick={() => submit(INFORMATION_STEP)}>
+            <ArrowBack />
             <SecondaryButton>
               <ButtonText>{text.mint.previous}</ButtonText>
             </SecondaryButton>

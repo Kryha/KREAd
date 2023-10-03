@@ -44,6 +44,7 @@ export const FormCard = styled.div`
     height: 100%;
     width: 100%;
     border-radius: 0;
+    padding: ${margins.small};
   }
 
   animation: ${fadeUp} 1.2s ease-out 0s forwards;
@@ -120,6 +121,10 @@ export const ButtonContainer = styled.div`
     border: 2px solid ${color.white};
     border-top: 2px solid ${color.grey};
     margin-left: 3px;
+  }
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
   }
 `;
 
@@ -213,6 +218,10 @@ export const NumberContainer = styled.div<ActiveProps>`
 `;
 
 export const PreviousButtonContainer = styled.div`
+  margin-top: auto;
+  @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
+  }
   :hover {
     ${ArrowUp} {
       path {
@@ -284,6 +293,23 @@ export const PricingContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: ${margins.mini};
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: ${margins.small};
+  }
+`;
+
+export const PriceWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const ButtonWrapper = styled.div`
