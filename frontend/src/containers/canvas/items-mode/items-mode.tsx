@@ -61,14 +61,16 @@ export const ItemsMode: FC = () => {
         currentlyEquipped: equipped.inCategory,
       });
     }
+    setOnAssetChange(false);
     setShowToast(!showToast);
-    if (selected) {
+    if (!equipped.inCategory && selected) {
       equipItem.mutate({ item: selected });
     }
   };
 
   const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    setOnAssetChange(false);
     setShowToast(!showToast);
     if (equippedItemState) {
       unequipItem.mutate({ item: equippedItemState });
@@ -115,7 +117,6 @@ export const ItemsMode: FC = () => {
                 disabled={disable.unequip}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                   unequip(event);
-                  setOnAssetChange(false);
                 }}
               >
                 <ButtonText customColor={color.white}>unequip</ButtonText>
@@ -124,7 +125,6 @@ export const ItemsMode: FC = () => {
                 disabled={disable.equip}
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                   equip(event);
-                  setOnAssetChange(false);
                 }}
               >
                 <ButtonText customColor={color.white}>equip</ButtonText>

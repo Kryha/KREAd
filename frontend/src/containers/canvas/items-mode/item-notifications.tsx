@@ -69,7 +69,6 @@ export const ItemNotifications: FC<Props> = ({ selected, equip }) => {
                   setSelectedAsset(null);
                   isMobile ? setInteractionMode(MAIN_MODE) : setInteractionMode(CATEGORY_MODE);
                   setShowWarning(false);
-                  setOnAssetChange(false);
                 }}
               >
                 <ButtonText>Continue without equipping</ButtonText>
