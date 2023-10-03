@@ -75,6 +75,10 @@ export const ButtonContainer = styled.div`
     border-top: 2px solid ${color.grey};
     margin-left: 3px;
   }
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
+  }
 `;
 
 export const InputWrapper = styled.div`

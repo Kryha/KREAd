@@ -65,6 +65,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   margin-top: auto;
   flex-direction: row;
+  align-items: flex-end;
   justify-content: flex-end;
   :hover {
     ${ArrowUp} {
@@ -83,6 +84,10 @@ export const ButtonContainer = styled.div`
     border: 2px solid ${color.white};
     border-top: 2px solid ${color.grey};
     margin-left: 3px;
+  }
+
+  @media screen and (max-width: 768px) {
+    margin-bottom: 40px;
   }
 `;
 
