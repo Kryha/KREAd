@@ -22,7 +22,8 @@ import { ItemNotifications } from "./item-notifications";
 
 export const ItemsMode: FC = () => {
   const navigate = useNavigate();
-  const { selectedAssetCategory, selectedAsset, showToast, setShowToast, setSelectedAsset, setInteractionMode } = useCharacterBuilder();
+  const { selectedAssetCategory, selectedAsset, setOnAssetChange, showToast, setShowToast, setSelectedAsset, setInteractionMode } =
+    useCharacterBuilder();
   const [selectedCharacter] = useSelectedCharacter();
   const characterName = selectedCharacter?.nft.name;
   const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
@@ -110,10 +111,22 @@ export const ItemsMode: FC = () => {
             />
             <HorizontalDivider />
             <CardActionsContainer>
-              <PrimaryButton disabled={disable.unequip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}>
+              <PrimaryButton
+                disabled={disable.unequip}
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                  unequip(event);
+                  setOnAssetChange(false);
+                }}
+              >
                 <ButtonText customColor={color.white}>unequip</ButtonText>
               </PrimaryButton>
-              <PrimaryButton disabled={disable.equip} onClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}>
+              <PrimaryButton
+                disabled={disable.equip}
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                  equip(event);
+                  setOnAssetChange(false);
+                }}
+              >
                 <ButtonText customColor={color.white}>equip</ButtonText>
               </PrimaryButton>
               <PrimaryButton disabled={disable.sell} onClick={sell}>

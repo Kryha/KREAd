@@ -55,6 +55,8 @@ export const CharacterBuilderContextProvider: FC<Props> = ({ children }) => {
   const [characterName, setCharacterName] = useState<string | undefined>("");
   const [showItemDetails, setShowItemDetails] = useState<boolean>(false);
 
+  console.log("onAssetChange", onAssetChange);
+
   const contextValue = useMemo(
     () => ({
       characterName,

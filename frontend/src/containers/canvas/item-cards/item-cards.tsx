@@ -35,10 +35,6 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
     if (selectedItemIsEquipped) {
       setEquippedSelected(true);
     }
-
-    if (equipped.inCategory) {
-      setOnAssetChange(false);
-    }
   }, [equipped.inCategory, selectedItemIsEquipped]);
 
   return (
