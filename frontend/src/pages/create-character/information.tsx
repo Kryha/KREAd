@@ -103,7 +103,7 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
         <FormText>{text.mint.theCostsOfMinting}</FormText>
         <ButtonWrapper>
           <ButtonContainer>
-            <PrimaryButton type="submit" disabled={!isValid || disabled || notEnoughIST}>
+            <PrimaryButton type="submit" disabled={!isValid || disabled || notEnoughIST || nameTaken}>
               <ButtonText customColor={color.white}>{text.mint.next}</ButtonText>
               <ArrowUp />
             </PrimaryButton>
