@@ -21,7 +21,7 @@ export const Layout = styled.div<StyleProps>`
   @media screen and (max-width: ${breakpoints.tablet}) {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 0fr;
+    grid-template-rows: 1fr 1fr;
     grid-template-areas: "canvas" "bottom-pane";
   }
 `;
@@ -50,10 +50,15 @@ export const CanvasArea = styled.div`
   align-items: center;
   overflow: hidden !important;
   width: 100vw;
+  height: 100vh;
 
   animation: ${disappear}, ${fadeIn};
   animation-duration: 0.6s, 0.8s;
   animation-delay: 0s, 0.6s;
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    height: 70vh;
+  }
 `;
 
 export const ItemNavigationActions = styled.div`

@@ -7,9 +7,6 @@ import { CharacterBuy, CharacterSell, CreateCharacter, Inventory, ItemBuy, ItemS
 import { ErrorFallback, ErrorView, LoadingPage, MainContainer } from "../components";
 import { AgoricStateProvider, useAgoricContext } from "../context/agoric";
 import { UseWithContext } from "../context/wrapper";
-import { MobileNotAvailable } from "../pages/mobile-not-available";
-import { useIsMobile } from "../hooks";
-import { breakpoints } from "../design";
 import { ConnectWallet } from "../pages/connect-wallet";
 
 export const InternalAppWrapper = () => {
@@ -24,7 +21,6 @@ export const InternalAppWrapper = () => {
 
 export const InternalAppRoutes: FC = () => {
   const navigate = useNavigate();
-  const isMobile = useIsMobile(breakpoints.tablet);
   const [service] = useAgoricContext();
 
   if (service.isLoading) return <LoadingPage spinner={false} />;
@@ -35,8 +31,8 @@ export const InternalAppRoutes: FC = () => {
         <Route path={routes.connectWallet} element={<ConnectWallet />} />
         <Route path={routes.character} element={<Landing />} />
         <Route path={routes.createCharacter} element={<CreateCharacter />} />
-        <Route path={`${routes.shop}/:section`} element={isMobile ? <MobileNotAvailable /> : <Shop />} />
-        <Route path={`${routes.inventory}/:section`} element={isMobile ? <MobileNotAvailable /> : <Inventory />} />
+        <Route path={`${routes.shop}/:section`} element={<Shop />} />
+        <Route path={`${routes.inventory}/:section`} element={<Inventory />} />
         <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
         <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
         <Route path={`${routes.sellItem}/:category/:name`} element={<ItemSell />} />

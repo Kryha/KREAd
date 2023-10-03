@@ -15,9 +15,9 @@ export const CanvasAssetInventoryWrapper = styled.div`
   animation-delay: 0s, 0.6s;
 
   @media screen and (max-width: ${breakpoints.tablet}) {
-    grid-area: bottom-pane;
-    position: relative;
     width: 100%;
+    height: 100%;
+    z-index: 1000;
     margin: 0;
   }
 `;
@@ -30,10 +30,7 @@ export const CanvasAssetHeader = styled.div`
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     flex-direction: row;
-    padding-top: ${margins.mini};
-    padding-bottom: ${margins.mini};
-    padding-right: ${margins.mini};
-    border-right: 1px solid ${color.grey};
+    padding: 0;
   }
 `;
 
@@ -49,10 +46,9 @@ export const CanvasAssetContainer = styled.div`
   padding: ${margins.medium};
 
   @media screen and (max-width: ${breakpoints.tablet}) {
-    height: fit-content;
-    flex: none;
-    padding: 0;
+    width: 100%;
     border-radius: 0;
+    padding: ${margins.small};
   }
 `;
 
@@ -65,10 +61,14 @@ export const CardActionsContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
-  gap: 16px;
-  justify-content: center;
-  margin-top: ${margins.small};
-  margin-bottom: ${margins.mini};
+  justify-content: space-between;
+  padding-top: ${margins.medium};
+  padding-bottom: ${margins.medium};
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    justify-content: space-between;
+    padding-top: ${margins.mini};
+    padding-bottom: ${margins.mini};
+  }
 `;
 
 export const Store = styled.div`

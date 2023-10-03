@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { text } from "../../assets";
+import { CharactersIcon, text } from "../../assets";
 import {
   BaseRoute,
   BoldLabel,
@@ -23,7 +23,7 @@ import { routes } from "../../navigation";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { Layout } from "../../containers/canvas/character-canvas/styles";
 import { CharacterCanvas } from "../../containers/canvas/character-canvas/character-canvas";
-import { useViewport } from "../../hooks";
+import { useIsMobile, useViewport } from "../../hooks";
 import { useCharacterBuilder } from "../../context/character-builder-context";
 import { CategoryMode } from "../../containers/canvas/category-mode/category-mode";
 import { CATEGORY_MODE, CHARACTER_SELECT_MODE, ITEM_MODE, MAIN_MODE } from "../../constants";
@@ -32,7 +32,7 @@ import { CharactersMode } from "../../containers/canvas/characters-mode/characte
 import { MainMode } from "../../containers/canvas/main-mode/main-mode";
 import { calculateCharacterLevels } from "../../util";
 import { AssetTag } from "../../components/asset-card/styles";
-import { color } from "../../design";
+import { breakpoints, color } from "../../design";
 import { ButtonInfoWrap } from "../../components/button-info/styles";
 
 export const Landing: FC = () => {
@@ -42,6 +42,7 @@ export const Landing: FC = () => {
   const [closeDetail, setCloseDetail] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const { width, height } = useViewport();
+  const isMobile = useIsMobile(breakpoints.tablet);
   const {
     selectedAsset,
     selectedAssetCategory,
@@ -112,7 +113,7 @@ export const Landing: FC = () => {
         <>
           {selectedCharacter ? (
             <SecondaryButton onClick={() => setInteractionMode(CHARACTER_SELECT_MODE)}>
-              <ButtonText>{text.navigation.myCharacters}</ButtonText>
+              {isMobile ? <CharactersIcon /> : <ButtonText>{text.navigation.myCharacters}</ButtonText>}
             </SecondaryButton>
           ) : (
             <></>

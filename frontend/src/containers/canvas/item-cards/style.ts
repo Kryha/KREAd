@@ -56,11 +56,6 @@ export const ItemCardsContainer = styled.div`
   flex-direction: column;
   margin-top: ${margins.small};
   gap: 8px;
-
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    padding: 8px;
-    margin: 0;
-  }
 `;
 
 export const ItemCardsWrapper = styled.div<StyleProps>`
@@ -71,6 +66,10 @@ export const ItemCardsWrapper = styled.div<StyleProps>`
   ${({ height }): string => `height: ${height - 480}px;`};
   ::-webkit-scrollbar {
     display: none;
+  }
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    ${({ height }): string => `height: ${height - 367}px;`};
   }
   animation: ${disappear}, ${fadeIn};
   animation-duration: 0.6s, 0.8s;

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ButtonText, fadeUp, HorizontalDivider, Label, SecondaryButton } from "../atoms";
+import { ButtonText, fadeUp, HorizontalDivider, Label, PrimaryButton, SecondaryButton } from "../atoms";
 import { breakpoints, color, fontSize, margins } from "../../design";
 import { FilterOption } from "../filters/styles";
 
@@ -19,13 +19,21 @@ export const AssetHeader = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    margin: 0;
+  }
 `;
 export const AssetFilterCount = styled(ButtonText)`
   margin-left: ${margins.mini};
   margin-bottom: ${margins.mini};
 `;
-export const AssetFilterWrapper = styled.div`
+
+interface Props {
+  showFilter?: boolean;
+}
+export const AssetFilterWrapper = styled.div<Props>`
+  ${({ showFilter }): string => (showFilter ? "display: flex;" : "display: none;")}
   position: relative;
   display: flex;
   justify-content: flex-start;
@@ -38,6 +46,11 @@ export const AssetFilterWrapper = styled.div`
   animation: ${fadeUp} 1.2s ease-out 0s forwards;
   opacity: 0;
   transform: translate3d(0, 1rem, 0);
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    padding: 16px;
+    width: 100%;
+  }
 `;
 
 export const AssetFilterContainer = styled.div`
@@ -47,9 +60,18 @@ export const AssetFilterContainer = styled.div`
   align-items: flex-start;
   padding: 0;
   gap: 16px;
+  ${PrimaryButton} {
+    width: max-content;
+  }
 
   @media screen and (max-width: ${breakpoints.desktop}) {
     flex-direction: column;
+  }
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
   }
 `;
 

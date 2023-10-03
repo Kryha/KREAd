@@ -21,6 +21,7 @@ export const CategoryWrapper = styled.div`
   grid-area: bottom-pane;
   position: relative;
   width: 100%;
+  height: 20vh;
   margin: 0;
 `;
 export const CategoryContainer = styled.div`

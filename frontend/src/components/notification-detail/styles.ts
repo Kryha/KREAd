@@ -1,23 +1,31 @@
 import styled from "@emotion/styled";
 import { CloseIcon, ExclamationIcon, TickIcon } from "../../assets";
-import { color, margins } from "../../design";
+import { breakpoints, color, margins } from "../../design";
 import { HeaderHorizontalDivider, NavigationTitle } from "../atoms";
 
 export const ToastContainer = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  padding: ${margins.medium} ${margins.medium} ${margins.medium} 32px;
+  padding: ${margins.medium};
   gap: ${margins.medium};
   background: ${color.lightGrey};
   border: 1px solid ${color.grey};
   border-radius: ${margins.small};
   bottom: ${margins.big};
   z-index: 10000;
-  width: 720px;
+  width: 100%;
   position: absolute;
   left: 40px;
   height: fit-content;
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    padding: ${margins.small};
+    margin-left: ${margins.mini};
+    margin-right: ${margins.mini};
+    gap: ${margins.small};
+    top: 50%;
+    left: 50%;
+  }
 `;
 
 export const Tick = styled(TickIcon)`
@@ -49,17 +57,14 @@ export const ToastTitle = styled(NavigationTitle)``;
 
 export const Divider = styled(HeaderHorizontalDivider)`
   transform: rotate(90deg);
-  width: ${margins.big};
+  width: ${margins.medium};
 `;
 
 export const ArrowContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  box-sizing: border-box;
+  align-items: flex-end;
   border-radius: ${margins.medium};
-  margin-left: 46px;
-  margin-right: 14px;
 `;
 
 export const NotificationItemCardContainer = styled.div`

@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 import { color, fontSize, margins } from "../../design";
 import { SecondaryButton } from "../atoms";
+import { CharacterAssetsIcon, ItemAssetsIcon } from "../../assets";
 
 interface ButtonProps {
   selected: boolean;
@@ -24,10 +25,16 @@ export const SwitchButtonLeft = styled(SecondaryButton)<ButtonProps>`
       background-color: ${color.black};
       color: ${color.white};
       border: 1px solid ${color.black};
+      ${ItemsSelector} {
+        fill: ${color.white};
+      }
         `
-      : `
-      `;
+      : "";
   }};
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
@@ -46,11 +53,17 @@ export const SwitchButtonRight = styled(SecondaryButton)<ButtonProps>`
         background-color: ${color.black};
         color: ${color.white};
         border: 1px solid ${color.black};
+        ${CharacterSelector} {
+          fill: ${color.white};
+          }
         `
       : `
 
       `;
   }};
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const Group = styled.div`
@@ -59,3 +72,6 @@ export const Group = styled.div`
   align-items: center;
   padding: 0;
 `;
+
+export const ItemsSelector = styled(ItemAssetsIcon)``;
+export const CharacterSelector = styled(CharacterAssetsIcon)``;

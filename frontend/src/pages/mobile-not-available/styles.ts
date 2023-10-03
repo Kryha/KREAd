@@ -22,11 +22,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: auto;
-  padding-left: 40px;
-  padding-right: 40px;
-  height: 100%;
-  max-width: 800px;
+  padding-left: 24px;
+  padding-right: 24px;
+  width: 100%;
 `;
 
 export const Content = styled.div`

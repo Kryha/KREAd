@@ -49,7 +49,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
   flex-direction: row;
   align-items: flex-start;
   padding: 0;
-  gap: 16px;
+  justify-content: space-between;
   z-index: 100;
   ${PrimaryButton} {
     max-height: 45px;
@@ -72,6 +72,9 @@ export const ButtonContainer = styled.div<ButtonProps>`
         position: absolute;
         left: 40px;
         top: 40px;
+        @media screen and (max-width: 768px) {
+          left: 16px;
+        }
       };
       background: rgba(255, 255, 255, 0.46);
       backdrop-filter: blur(4px);
@@ -80,6 +83,9 @@ export const ButtonContainer = styled.div<ButtonProps>`
       height: 120px;
       width: 460px;
       position: absolute;
+      @media screen and (max-width: 768px) {
+        width: 100%;
+      }
         `
       : `
       margin-top: 46px;
@@ -88,6 +94,9 @@ export const ButtonContainer = styled.div<ButtonProps>`
         left: 40px;
         top: 464px;
         z-index: 100;
+        @media screen and (max-width: 768px) {
+          left: 16px;
+        }
       }
       `;
   }};
@@ -275,39 +284,8 @@ export const SectionContainer = styled.div`
   padding-left: 40px;
   padding-top: 50px;
   width: 460px;
-`;
-
-export const ScrollContainer = styled.div`
-  position: absolute;
-  left: 40px;
-  bottom: 73px;
-`;
-
-export const GeneralSectionContainer = styled.div`
-  padding-left: 40px;
-  width: 460px;
-`;
-
-export const ConnectContainer = styled.div<ButtonProps>`
-  ${({ isVisible }): string => {
-    return isVisible
-      ? `
-        background: rgba(255, 255, 255, 0.46);
-        backdrop-filter: blur(4px);
-        z-index: 100;
-        width: 460px;
-        padding-top: 40px;
-        padding-bottom: 40px;
-        position: relative;
-      `
-      : "";
-  }};
-  ${({ isVisible }) =>
-    isVisible === true
-      ? css``
-      : css`
-          animation: ${disappear}, ${fadeIn};
-          animation-duration: 0.5s, 0.5s;
-          animation-delay: 0s, 0.5s;
-        `};
+  @media screen and (max-width: 768px) {
+    padding-left: 16px;
+    width: 100%;
+  }
 `;

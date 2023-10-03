@@ -43,8 +43,20 @@ import { ReactComponent as DiscordIcon } from "./discord.svg";
 import { ReactComponent as TwitterIcon } from "./twitter.svg";
 import { ReactComponent as ISTIcon } from "./IST_black_icon.svg";
 import { ReactComponent as StoreIcon } from "./store.svg";
+import { ReactComponent as CharacterIcon } from "./character.svg";
+import { ReactComponent as InventoryIcon } from "./inventory.svg";
+import { ReactComponent as CharactersIcon } from "./characters.svg";
+import { ReactComponent as CharacterAssetsIcon } from "./chars.svg";
+import { ReactComponent as ItemAssetsIcon } from "./items.svg";
+import { ReactComponent as MetricsIcon } from "./metrics.svg";
 
 export {
+  ItemAssetsIcon,
+  CharacterAssetsIcon,
+  MetricsIcon,
+  CharactersIcon,
+  InventoryIcon,
+  CharacterIcon,
   StoreIcon,
   ISTIcon,
   KeplerIcon,

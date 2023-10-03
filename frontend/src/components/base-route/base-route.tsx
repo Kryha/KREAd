@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from "react";
 
-import { text } from "../../assets";
+import { CharacterIcon, InventoryIcon, StoreIcon, text } from "../../assets";
 import { routes } from "../../navigation";
 import { Footer } from "../footer";
 import { NavigationSection, NavigationTab } from "../navigation-tab";
@@ -16,6 +16,7 @@ import { breakpoints, color } from "../../design";
 import { useKadoWidget } from "../../context/filter-context";
 import styled from "@emotion/styled";
 import { useIsMobile } from "../../hooks";
+import { MobileNavbar } from "../mobile-navbar/mobile-navbar";
 
 interface BaseRouteProps {
   sideNavigation: React.ReactNode;
@@ -51,17 +52,17 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
 
   return (
     <>
-      {interactionMode === MAIN_MODE && (
+      {interactionMode === MAIN_MODE && !isMobile && (
         <TopbarContainer isLanding={isLanding}>
           <Box>
             <NavigationSection route={isOnboarding}>
-              <NavigationTab title={text.navigation.character} route={isOnboarding} />
+              <NavigationTab title={text.navigation.character} route={isOnboarding} icon={<CharacterIcon />} />
             </NavigationSection>
             <NavigationSection route={`${routes.shop}/items`}>
-              <NavigationTab title={text.navigation.shop} route={`${routes.shop}/:section`} />
+              <NavigationTab title={text.navigation.shop} route={`${routes.shop}/:section`} icon={<StoreIcon />} />
             </NavigationSection>
             <NavigationSection route={`${routes.inventory}/items`}>
-              <NavigationTab title={text.navigation.inventory} route={`${routes.inventory}/:section`} />
+              <NavigationTab title={text.navigation.inventory} route={`${routes.inventory}/:section`} icon={<InventoryIcon />} />
             </NavigationSection>
           </Box>
           <KreadContainer onClick={home}>
@@ -74,12 +75,15 @@ export const BaseRoute: FC<BaseRouteProps> = ({ children, sideNavigation, onboar
           </RightBox>
         </TopbarContainer>
       )}
-      <ChildrenContainer isLanding={isLanding}>{children}</ChildrenContainer>
-      {!isMobile && (
-        <FooterContainer isLanding={isLanding}>
-          <Footer />
-        </FooterContainer>
-      )}
+      <ChildrenContainer isLanding={isLanding}>
+        {children}
+        {isMobile && <MobileNavbar isLanding={isLanding} />}
+        {!isMobile && !isLanding && (
+          <FooterContainer isLanding={isLanding}>
+            <Footer />
+          </FooterContainer>
+        )}
+      </ChildrenContainer>
     </>
   );
 };

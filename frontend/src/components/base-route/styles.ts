@@ -27,6 +27,8 @@ export const TopbarContainer = styled.header<AnimationProps>`
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding: ${margins.mini};
+    margin-left: 0;
+    margin-right: 0;
   }
 `;
 
@@ -49,8 +51,8 @@ export const RightBox = styled.div`
 
 export const ChildrenContainer = styled.div<AnimationProps>`
   display: flex;
+  flex-direction: column;
   align-items: stretch;
-  flex: 1 1 auto;
   ${({ isLanding }) =>
     isLanding === true
       ? css`
@@ -69,8 +71,9 @@ export const ChildrenContainer = styled.div<AnimationProps>`
 
 export const FooterContainer = styled.div<AnimationProps>`
   display: flex;
+  bottom: 0;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-end;
   width: 100%;
   background: transparent;

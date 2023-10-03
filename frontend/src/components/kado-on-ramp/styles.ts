@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { color } from "../../design";
+import { breakpoints, color } from "../../design";
 
 export const KadoContainer = styled.div`
   display: flex;
@@ -12,6 +12,17 @@ export const KadoContainer = styled.div`
     border-radius: 24px;
     width: 500px;
     height: 700px;
+  }
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 24px;
+    iframe {
+      border-radius: 0;
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
   }
 `;
 

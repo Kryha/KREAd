@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { DiscordIcon, KeplerIcon, text, TwitterIcon } from "../../assets";
-import { breakpoints, color } from "../../design";
+import { color } from "../../design";
 import {
   AnimatedLogo,
   ButtonText,
@@ -37,7 +37,7 @@ import {
   SocialsContainer,
   TextContainer,
 } from "./styles";
-import { useIsMobile, useOnScreen, useTimer, useViewport } from "../../hooks";
+import { useOnScreen, useTimer, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, DISCORD_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME, TWITTER_LINK } from "../../constants";
 
@@ -45,7 +45,6 @@ export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
-  const isMobile = useIsMobile(breakpoints.tablet);
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
   const [showAnimation, setShowAnimation] = useState(true);
@@ -136,7 +135,7 @@ export const Onboarding: FC = () => {
             </GeneralSectionContainer>
           </EndContent>
         </OnboardingWrapper>
-        {!isMobile && <OnboardingCharacter />}
+        <OnboardingCharacter />
         <FooterContainer>
           <Footer />
         </FooterContainer>

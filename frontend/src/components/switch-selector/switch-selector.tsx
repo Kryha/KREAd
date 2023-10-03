@@ -1,8 +1,10 @@
 import React, { FC } from "react";
 
-import { Group, SwitchButtonLeft, SwitchButtonRight } from "./styles";
+import { CharacterSelector, Group, ItemsSelector, SwitchButtonLeft, SwitchButtonRight } from "./styles";
 import { Section } from "../../constants";
 import { useLocation, useNavigate } from "react-router-dom";
+import { breakpoints } from "../../design";
+import { useIsMobile } from "../../hooks";
 
 interface SwitchSelectorProps {
   selectedSection: Section;
@@ -16,6 +18,7 @@ export const SwitchSelector: FC<SwitchSelectorProps> = ({ toggleDevMode = false,
   const navigate = useNavigate();
   const location = useLocation();
   const basePath = location.pathname.split("/").slice(0, -1).join("/");
+  const isMobile = useIsMobile(breakpoints.tablet);
 
   const handleItem = () => {
     navigate(`${basePath}/items`);
@@ -30,10 +33,12 @@ export const SwitchSelector: FC<SwitchSelectorProps> = ({ toggleDevMode = false,
   return (
     <Group>
       <SwitchButtonLeft onClick={handleItem} selected={selectedSection === "items"}>
-        {buttonOneText}
+        {!isMobile && buttonOneText}
+        {isMobile && <ItemsSelector />}
       </SwitchButtonLeft>
       <SwitchButtonRight onClick={handleCharacter} selected={selectedSection === "characters"}>
-        {buttonTwoText}
+        {!isMobile && buttonTwoText}
+        {isMobile && <CharacterSelector />}
       </SwitchButtonRight>
     </Group>
   );

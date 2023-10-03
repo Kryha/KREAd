@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { PageTitle } from "../../../components";
+import { breakpoints } from "../../../design";
 
 export const ModeScrollerContainer = styled.div`
   display: flex;
@@ -15,6 +16,12 @@ export const ModeButton = styled.button`
   border: none;
   background: none;
   outline: none;
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    ${PageTitle} {
+      font-size: 16px;
+    }
+  }
 `;
 
 export const ModeAnimationContainer = styled.div`
@@ -24,20 +31,4 @@ export const ModeAnimationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-export const ModeName = styled(PageTitle)`
-  display: flex;
-  transition: transform 0.3s ease;
-  position: absolute;
-  width: 100%;
-  animation: slide 0.3s ease forwards;
-  @keyframes slide {
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(0);
-    }
-  }
 `;

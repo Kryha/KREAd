@@ -15,11 +15,13 @@ a {
 
 body,
 html {
-  min-width: 800px !important;
   padding: 0;
   margin: 0;
-  height: 100%;
-  overflow: hidden;
+  height:100vh;
+  max-height:100vh;
+  min-height:100vh;
+  min-height: -webkit-fill-available;
+  overflow: hidden !important;
 }
 
 body {

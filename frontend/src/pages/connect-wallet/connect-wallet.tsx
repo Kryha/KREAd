@@ -2,7 +2,7 @@ import React, { FC, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { KeplerIcon, text } from "../../assets";
-import { breakpoints, color } from "../../design";
+import { color } from "../../design";
 import {
   ButtonText,
   FadeInOut,
@@ -27,7 +27,7 @@ import {
   OnboardingWrapper,
   SectionContainer,
 } from "./styles";
-import { useIsMobile, useOnScreen, useViewport } from "../../hooks";
+import { useOnScreen, useViewport } from "../../hooks";
 import { useAgoricContext } from "../../context/agoric";
 import { routes } from "../../navigation";
 import { ButtonRow } from "../onboarding/styles";
@@ -42,7 +42,6 @@ export const ConnectWallet: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
-  const isMobile = useIsMobile(breakpoints.tablet);
   const [showWidget, setShowWidget] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
@@ -87,7 +86,7 @@ export const ConnectWallet: FC = () => {
             </SectionContainer>
           </InfoText>
         </OnboardingWrapper>
-        {!isMobile && <OnboardingCharacter size={"large"} isZoomed={true} />}
+        <OnboardingCharacter />
         <FooterContainer>
           <Footer />
         </FooterContainer>

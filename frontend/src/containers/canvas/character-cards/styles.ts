@@ -62,6 +62,10 @@ export const CharacterCardsWrapper = styled.div<StyleProps>`
   animation: ${disappear}, ${fadeIn};
   animation-duration: 0.6s, 0.8s;
   animation-delay: 0s, 0.6s;
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    ${({ height }): string => `height: ${height - 190}px;`};
+  }
 `;
 
 interface CharacterProps {

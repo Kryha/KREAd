@@ -26,7 +26,6 @@ export const ItemsMode: FC = () => {
   const [selectedCharacter] = useSelectedCharacter();
   const characterName = selectedCharacter?.nft.name;
   const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
-
   const { equipped, unequipped, inCategory } = useGetItemSelectionForCharacter();
 
   const [equippedSelected, setEquippedSelected] = useState(false);

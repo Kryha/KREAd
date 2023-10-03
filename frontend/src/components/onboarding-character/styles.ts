@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { margins } from "../../design";
+import { breakpoints, margins } from "../../design";
 import { CharacterImgs, SecondaryButton, sequentialFadeIn, zoomClothing, zoomIn } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
@@ -65,6 +65,12 @@ export const CharacterWrapper = styled.div<ImageProps>`
       : css`
           right: 0;
         `};
+
+  @media (max-width: ${breakpoints.tablet}) {
+    bottom: 0;
+    left: 0;
+    opacity: 0.1;
+  }
 `;
 
 export const CharacterContainer = styled.div<ImageProps>`

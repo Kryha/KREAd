@@ -127,6 +127,10 @@ export const ButtonText = styled.h3<TextProps>`
     text-transform: capitalize;
   }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
+
+  @media screen and (max-width: ${breakpoints.mobile}) {
+    font-size: 12px;
+  }
 `;
 
 export const SectionHeader = styled.h1`

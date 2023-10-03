@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useMemo, useRef } from "react";
 import Konva from "konva";
 import { Layer, Stage } from "react-konva";
-import { CanvasArea } from "./styles";
 import { useAssembleCharacter, useIsMobile } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { ITEM_MODE, MAIN_MODE } from "../../../constants";
 import { breakpoints } from "../../../design";
+import { CanvasArea } from "./styles";
 
 interface Props {
   width: number;
@@ -14,9 +14,13 @@ interface Props {
 
 export const CharacterCanvas: FC<Props> = ({ width, height }) => {
   const layerRef = useRef<Konva.Layer | null>(null);
-  const extendedCharacter = useAssembleCharacter(width, height);
-  const { selectedAssetCategory, selectedAsset, interactionMode, showDetails, onAssetChange } = useCharacterBuilder();
   const isMobile = useIsMobile(breakpoints.tablet);
+  let adjustedHeight = height;
+  if (isMobile) {
+    adjustedHeight = height * 0.8;
+  }
+  const extendedCharacter = useAssembleCharacter(width, adjustedHeight);
+  const { selectedAssetCategory, selectedAsset, interactionMode, showDetails, onAssetChange } = useCharacterBuilder();
 
   const assembledCharacter = useMemo(() => extendedCharacter, [extendedCharacter]);
 
@@ -106,7 +110,7 @@ export const CharacterCanvas: FC<Props> = ({ width, height }) => {
 
   return (
     <CanvasArea>
-      <Stage width={width} height={height}>
+      <Stage width={width} height={adjustedHeight}>
         <Layer ref={layerRef} />
       </Stage>
     </CanvasArea>

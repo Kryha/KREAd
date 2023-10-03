@@ -42,7 +42,16 @@ export const ArrowUp = styled(ArrowUpRightIcon)`
 export const ButtonRow = styled.div`
   position: relative;
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
+
+  ${PrimaryButton} {
+    height: 45px;
+    justify-content: space-between;
+  }
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    flex-direction: column;
+    gap: 16px;
+  }
 `;
 interface ButtonProps {
   isVisible: boolean;
@@ -56,6 +65,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
   gap: 16px;
   z-index: 100;
   ${PrimaryButton} {
+    height: 45px;
     max-height: 45px;
     gap: 8px;
     &:hover {
@@ -76,6 +86,9 @@ export const ButtonContainer = styled.div<ButtonProps>`
         position: absolute;
         left: 40px;
         top: 40px;
+        @media screen and (max-width: 768px) {
+          left: 16px;
+        }
       };
       background: rgba(255, 255, 255, 0.46);
       backdrop-filter: blur(4px);
@@ -84,6 +97,9 @@ export const ButtonContainer = styled.div<ButtonProps>`
       height: 120px;
       width: 460px;
       position: absolute;
+      @media screen and (max-width: 768px) {
+        width: 100%;
+      }
         `
       : `
       margin-top: 46px;
@@ -92,6 +108,9 @@ export const ButtonContainer = styled.div<ButtonProps>`
         left: 40px;
         top: 620px;
         z-index: 100;
+        @media screen and (max-width: 768px) {
+          left: 16px;
+        }
       }
       `;
   }};
@@ -308,6 +327,10 @@ export const ScrollContainer = styled.div`
 export const GeneralSectionContainer = styled.div`
   padding-left: 40px;
   width: 460px;
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    padding-left: 16px;
+    width: 100%;
+  }
 `;
 
 export const ConnectContainer = styled.div<ButtonProps>`

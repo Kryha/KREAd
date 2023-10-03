@@ -42,6 +42,7 @@ export const FormCard = styled.div`
   @media screen and (max-width: ${breakpoints.mobile}) {
     margin: auto;
     height: 100%;
+    width: 100%;
     border-radius: 0;
   }
 
@@ -302,4 +303,4 @@ export const Step = styled.div`
 
 export const RedButtonText = styled(ButtonText)`
   color: red;
-`
+`;

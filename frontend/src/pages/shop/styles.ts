@@ -9,7 +9,7 @@ import { OverviewWrapper } from "../../components/overview-empty/styles";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE } from "../../constants";
 import { DetailSectionHeaderNavigationWrap } from "../../containers/detail-section/detail-section-header-navigation/styles";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
-import { color, margins } from "../../design";
+import { breakpoints, color, margins } from "../../design";
 
 interface ShopProps {
   height: number;
@@ -198,8 +198,11 @@ export const KreadContainer = styled.div`
     left: 50%;
     transform: translate(-50%, 0);
     top: 24px;
-    width: 100px;
+    width: 80px;
     height: 24px;
+    @media (max-width: ${breakpoints.tablet}) {
+      top: 16px;
+    }
   }
 `;
 
