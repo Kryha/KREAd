@@ -82,6 +82,8 @@ export const CategoryCard = styled.div<CategoryProps>`
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 8px;
   }
 `;

@@ -57,7 +57,7 @@ export const CanvasArea = styled.div`
   animation-delay: 0s, 0.6s;
 
   @media screen and (max-width: ${breakpoints.tablet}) {
-    height: 70vh;
+    height: 75vh;
   }
 `;
 

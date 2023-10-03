@@ -3,6 +3,7 @@ import { useCharacterBuilder } from "../../../context/character-builder-context"
 import { MAIN_MODE } from "../../../constants";
 import { CategoryCards } from "../category-cards/category-cards";
 import styled from "@emotion/styled";
+import { color } from "../../../design";
 
 export const MainModeMobile: FC = () => {
   const { setInteractionMode } = useCharacterBuilder();
@@ -23,6 +24,7 @@ export const CategoryWrapper = styled.div`
   width: 100%;
   height: 20vh;
   margin: 0;
+  border-top: 1px solid ${color.grey};
 `;
 export const CategoryContainer = styled.div`
   flex-direction: row;
