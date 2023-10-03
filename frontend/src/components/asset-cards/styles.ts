@@ -39,6 +39,6 @@ export const AssetsContainer = styled.div`
   @media screen and (max-width: ${breakpoints.mobile}) {
     padding-left: 8px;
     padding-right: 8px;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 `;
