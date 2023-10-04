@@ -3,12 +3,9 @@ import React, { FC } from "react";
 
 import { ItemCard } from "../item-card";
 import { VerticalInfo } from "../vertical-info";
-import { EquippedContainer, ItemCount } from "./styles";
+import { EquippedContainer } from "./styles";
 import { useCharacterBuilder } from "../../context/character-builder-context";
 import { ITEM_MODE } from "../../constants";
-import { useGetItemsInInventory } from "../../service";
-import { ItemCategoryCounts } from "../../containers/canvas/category-cards/category-cards";
-import { ButtonText } from "../atoms";
 
 interface EquippedItemCardProps {
   item?: Item;
@@ -36,14 +33,6 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({
   area,
 }) => {
   const { setSelectedAsset, setSelectedAssetCategory, setInteractionMode } = useCharacterBuilder();
-  const [availableItems] = useGetItemsInInventory();
-
-  const unequippedAvailableItems = availableItems.filter((item) => item.equippedTo === "");
-  const itemCategoryCounts: ItemCategoryCounts = unequippedAvailableItems.reduce((countObj: ItemCategoryCounts, item) => {
-    const { category } = item;
-    countObj[category] = (countObj[category] || 0) + 1;
-    return countObj;
-  }, {});
 
   const handleClick = () => {
     setInteractionMode(ITEM_MODE);
@@ -65,11 +54,6 @@ export const LeftEquippedItemCard: FC<EquippedItemCardProps> = ({
         marginLeft={marginLeft}
         marginRight={marginRight}
       />
-      {itemCategoryCounts[category] !== undefined ? (
-        <ItemCount>
-          <ButtonText>{itemCategoryCounts[category]}</ButtonText>
-        </ItemCount>
-      ) : null}
       <VerticalInfo code={code} />
     </EquippedContainer>
   );
@@ -88,14 +72,6 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({
   area,
 }) => {
   const { setSelectedAsset, setSelectedAssetCategory, setInteractionMode } = useCharacterBuilder();
-  const [availableItems] = useGetItemsInInventory();
-
-  const unequippedAvailableItems = availableItems.filter((item) => item.equippedTo === "");
-  const itemCategoryCounts: ItemCategoryCounts = unequippedAvailableItems.reduce((countObj: ItemCategoryCounts, item) => {
-    const { category } = item;
-    countObj[category] = (countObj[category] || 0) + 1;
-    return countObj;
-  }, {});
 
   const handleClick = () => {
     setInteractionMode(ITEM_MODE);
@@ -117,11 +93,6 @@ export const RightEquippedItemCard: FC<EquippedItemCardProps> = ({
         marginLeft={marginLeft}
         marginRight={marginRight}
       />
-      {itemCategoryCounts[category] !== undefined ? (
-        <ItemCount>
-          <ButtonText>{itemCategoryCounts[category]}</ButtonText>
-        </ItemCount>
-      ) : null}
       <VerticalInfo code={code} isRight />
     </EquippedContainer>
   );
