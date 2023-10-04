@@ -23,7 +23,11 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
   const wantKey = character.keyId == 2 ? 1 : 2;
   const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
   const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image), keyId: wantKey };
-  const itemWant: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
+  const itemWant: Item = {
+    ...item,
+    image: urlToCid(item.image),
+    thumbnail: urlToCid(item.thumbnail),
+  };
 
   const spec = {
     source: "contract",
@@ -50,6 +54,7 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     want,
     give,
   };
+
 
   service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
     if (status === "error") {
@@ -136,7 +141,11 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
   const wantKey = character.keyId == 2 ? 1 : 2;
   const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
   const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image), keyId: wantKey };
-  const itemGive: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
+  const itemGive: Item = {
+    ...item,
+    image: urlToCid(item.image),
+    thumbnail: urlToCid(item.thumbnail),
+};
 
   const spec = {
     source: "contract",
@@ -196,8 +205,16 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
   const wantKey = character.keyId == 2 ? 1 : 2;
   const characterGive: Character = { ...character, id: Number(character.id), image: urlToCid(character.image) };
   const characterWant: Character = { ...character, id: Number(character.id), image: urlToCid(character.image), keyId: wantKey };
-  const itemGive: Item = { ...giveItem, image: urlToCid(giveItem.image), thumbnail: urlToCid(giveItem.thumbnail) };
-  const itemWant: Item = { ...wantItem, image: urlToCid(wantItem.image), thumbnail: urlToCid(wantItem.thumbnail) };
+  const itemGive: Item = {
+    ...giveItem,
+    image: urlToCid(giveItem.image),
+    thumbnail: urlToCid(giveItem.thumbnail),
+};
+  const itemWant: Item = {
+    ...wantItem,
+    image: urlToCid(wantItem.image),
+    thumbnail: urlToCid(wantItem.thumbnail),
+};
 
 
   const spec = {

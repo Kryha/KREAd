@@ -20,6 +20,7 @@ export const extendCharacters = async (
         ...copyBag[0],
         image: cidToUrl(copyBag[0].image),
         thumbnail: cidToUrl(copyBag[0].thumbnail),
+        description: copyBag[0].description.replace(/â/g, "’"),
         equippedTo: character.name,
         forSale: false,
       }));
