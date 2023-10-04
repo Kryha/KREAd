@@ -42,10 +42,6 @@ export const ItemsShop: FC = () => {
   }
 
   if (!items) return <></>;
-
-  //FIXME: disable hair and perk for now until fixed
-  const filteredItems = items.filter((entry) => entry.item.category != "hair" && entry.item.category != "perk2");
-
   return (
     <>
       <AssetHeaderContainer>
@@ -55,8 +51,8 @@ export const ItemsShop: FC = () => {
       <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
       {selectedId && item && <ItemDetailsMarket itemInMarket={item} selectItemInMarket={(id: string) => setSelectedId(id)} />}
-      {filteredItems.length > 0 ? (
-        <ItemCardsMarket itemsInMarket={filteredItems} isLoading={fetched} selectItemInMarketId={(id: string) => setSelectedId(id)} />
+      {items.length > 0 ? (
+        <ItemCardsMarket itemsInMarket={items} isLoading={fetched} selectItemInMarketId={(id: string) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty
