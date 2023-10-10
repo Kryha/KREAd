@@ -1,12 +1,7 @@
 import { FC } from "react";
 
 import { text } from "../../assets";
-import {
-  BUY_FLOW_STEPS,
-  CONFIRMATION_STEP,
-  PAYMENT_STEP,
-  SELL_FLOW_STEPS,
-} from "../../constants";
+import { CONFIRMATION_STEP, WALLET_INTERACTION_STEP } from "../../constants";
 import { FormHeaderClose } from "../form-header-close";
 import { FormTab } from "../form-tab";
 import { FormNavigation, NavigationTab } from "./styles";
@@ -19,12 +14,9 @@ interface NavigationTabProps {
   link: string;
 }
 
-export const FormHeader: FC<NavigationTabProps> = ({
-  currentStep,
-  title,
-  isBuyFlow = false,
-  link,
-}) => {
+export const FormHeader: FC<NavigationTabProps> = ({ currentStep, stepAmount, title, isPaymentFlow = false, link }) => {
+  const INFORMATION_STEP_INCLUDED = 3;
+
   return (
     <>
       <FormHeaderClose title={title} link={link} />

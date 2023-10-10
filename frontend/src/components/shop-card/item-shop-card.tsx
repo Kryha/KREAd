@@ -5,17 +5,7 @@ import { text } from "../../assets";
 import { color } from "../../design";
 import { BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
-import {
-  Product,
-  Content,
-  ImageContainer,
-  Footer,
-  Tag,
-  TitleWrapper,
-  ItemImage,
-  InfoContainer,
-  PriceContainer,
-} from "./styles";
+import { Product, Content, ImageContainer, Footer, Tag, TitleWrapper, ItemImage, InfoContainer, PriceContainer } from "./styles";
 import { useViewport } from "../../hooks";
 import { ErrorView } from "../error-view";
 
@@ -48,16 +38,12 @@ export const ItemShopCard: FC<ShopCardProps> = ({ itemInMarket, onClick }) => {
           </TitleWrapper>
           <Footer>
             <Tag>
-              <BoldLabel customColor={color.black}>
-                {text.param.level(item.level)}
-              </BoldLabel>
+              <BoldLabel customColor={color.black}>{text.param.level(item.level)}</BoldLabel>
             </Tag>
             <PriceContainer>
               <PriceInIst price={Number(sell.price)} />
               <PrimaryButton>
-                <ButtonText customColor={color.white}>
-                  {text.general.buy}
-                </ButtonText>
+                <ButtonText customColor={color.white}>{text.general.buy}</ButtonText>
               </PrimaryButton>
             </PriceContainer>
           </Footer>

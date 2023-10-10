@@ -1,9 +1,17 @@
 import { FC } from "react";
-import { imageSize } from "../../design";
 import { Item } from "../../interfaces";
 import { ImageProps, Img } from "../atoms";
-import { ItemStats } from "../item-stats";
-import { Diagonal, ElementWrapper, ElementContainer, ItemWrapper, NoImage, Card, Plus, PlusContainer, ItemCardWrapper } from "./styles";
+import {
+  Diagonal,
+  DiagonalContainer,
+  ElementContainer,
+  ElementWrapper,
+  ItemCardWrapper,
+  ItemWrapper,
+  NoImage,
+  Plus,
+  PlusContainer,
+} from "./styles";
 
 interface ItemCardProps extends ImageProps {
   image?: string;
@@ -16,10 +24,11 @@ export const EmptyItemCard = () => {
   return (
     <ElementWrapper>
       <ElementContainer>
-        <Card />
         <ItemWrapper>
           <NoImage>
-            <Diagonal />
+            <DiagonalContainer>
+              <Diagonal />
+            </DiagonalContainer>
           </NoImage>
         </ItemWrapper>
       </ElementContainer>
@@ -27,22 +36,22 @@ export const EmptyItemCard = () => {
   );
 };
 
-export const ItemCard: FC<ItemCardProps> = ({ image, width, height, item, position = "left", area = "middle" }) => {
+export const ItemCard: FC<ItemCardProps> = ({ image, width, height }) => {
   return (
     <ItemCardWrapper>
-      <ItemStats item={item} position={position} area={area} />
       <ElementWrapper>
-        <Card />
         <ElementContainer>
           <ItemWrapper>
             {image ? (
-              <Img src={image} width={width || imageSize.medium} height={height || imageSize.small} />
+              <Img src={image} width={width} height={height} />
             ) : (
               <NoImage>
                 <PlusContainer>
                   <Plus />
                 </PlusContainer>
-                <Diagonal />
+                <DiagonalContainer>
+                  <Diagonal />
+                </DiagonalContainer>
               </NoImage>
             )}
           </ItemWrapper>

@@ -1,61 +1,58 @@
 import { FC, useEffect, useState } from "react";
 
-import {
-  CharacterContainer,
-  CharacterIcon,
-  CharacterWrapper,
-  FirstIcon,
-  SecondIcon,
-  ThirdIcon,
-  FourthIcon,
-  FifthIcon,
-} from "./styles";
+import { CharacterContainer, CharacterSwitchIcon, CharacterWrapper, FifthIcon, FirstIcon, FourthIcon, ThirdIcon } from "./styles";
 import { useViewport } from "../../hooks";
 import {
+  ArmaCitizen,
+  ArmaPerk_I6,
+  ArmaPerk_I7,
+  ElephiaCitizen,
   Empty,
-  TempetAddons,
-  TempetFrontMask2,
-  TempetCharacter,
-  TempetClothing,
-  TempetClothing2,
-  TempetHair,
-  TempetHair2,
-  TempetHeadpiece,
-  TempetHeadpiece2,
-  TempetMask,
-  TempetMask2,
+  Headpiece_Arma_3,
+  Headpiece_Arma_5,
+  Headpiece_Farma_4,
+  Legendary_Garment_Arma_7,
+  Mask_Elephia_24,
+  Mask_Elephia_32,
+  Mask_Mount_3,
+  Rare_Garment_Arma_2,
   text,
+  Uncommon_Garment_Arma_1,
 } from "../../assets";
 import { zIndex } from "../../design";
 
-const hairImages = [TempetHair, TempetHair2];
-const headPieceImages = [TempetHeadpiece, TempetHeadpiece2];
-const maskImages = [TempetMask, TempetMask2];
-const addOnsImages = [TempetAddons, TempetFrontMask2];
-const clothingImages = [TempetClothing, TempetClothing2];
+const characterImages = [ArmaCitizen, ElephiaCitizen];
+const headPieceImages = [Headpiece_Arma_3, Headpiece_Farma_4, Headpiece_Arma_5, Empty];
+const perk1Images = [ArmaPerk_I6, ArmaPerk_I7, Empty];
+const maskImages = [Mask_Mount_3, Mask_Elephia_24, Mask_Elephia_32];
+const garmentImages = [Legendary_Garment_Arma_7, Rare_Garment_Arma_2, Uncommon_Garment_Arma_1];
 
-export const OnboardingCharacter: FC = () => {
+interface Props {
+  size?: "mini" | "medium" | "half" | "normal" | "large" | "extraLarge";
+  isZoomed?: boolean;
+}
+export const OnboardingCharacter: FC<Props> = ({ size, isZoomed }) => {
   const { width, height } = useViewport();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentIndex(Math.floor(Math.random() * 2) + 0);
+      setCurrentIndex(Math.floor(Math.random() * 3.5));
     }, 5000);
 
     return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <CharacterWrapper>
-      <CharacterContainer width={width} height={height}>
-        <CharacterIcon width={width} height={height} src={TempetCharacter} />
+    <CharacterWrapper isZoomed={isZoomed} width={width} height={height}>
+      <CharacterContainer width={width} height={height} size={size} isZoomed isClothing={true}>
+        <CharacterSwitchIcon width={width} height={height} src={characterImages[currentIndex] || ArmaCitizen} />
         <FourthIcon
-          src={hairImages[currentIndex] || Empty}
-          alt={text.character.hair}
+          src={perk1Images[currentIndex] || Empty}
+          alt={text.character.perk1}
           width={width}
           height={height}
-          zIndex={zIndex.hair}
+          zIndex={zIndex.perk1}
         />
         <ThirdIcon
           src={headPieceImages[currentIndex] || Empty}
@@ -64,26 +61,13 @@ export const OnboardingCharacter: FC = () => {
           height={height}
           zIndex={zIndex.headPiece}
         />
-        <SecondIcon
-          src={maskImages[currentIndex] || Empty}
-          alt={text.character.mask}
-          width={width}
-          height={height}
-          zIndex={zIndex.mask}
-        />
-        <FifthIcon
-          src={addOnsImages[currentIndex] || Empty}
-          alt={text.character.frontMask}
-          width={width}
-          height={height}
-          zIndex={zIndex.frontMask}
-        />
+        <FifthIcon src={maskImages[currentIndex] || Empty} alt={text.character.mask} width={width} height={height} zIndex={zIndex.mask} />
         <FirstIcon
-          src={clothingImages[currentIndex] || Empty}
-          alt={text.character.clothing}
+          src={garmentImages[currentIndex] || Empty}
+          alt={text.character.garment}
           width={width}
           height={height}
-          zIndex={zIndex.clothing}
+          zIndex={zIndex.garment}
         />
       </CharacterContainer>
     </CharacterWrapper>

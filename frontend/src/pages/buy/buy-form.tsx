@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 
 import { text } from "../../assets";
 import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton } from "../../components";
@@ -7,7 +7,8 @@ import { color } from "../../design";
 import {
   ArrowUp,
   ButtonContainer,
-  ContentWrapper,
+  ErrorContainerMarginTop,
+  BuyFormContainer,
   GeneralInfo,
   Line,
   NumberContainer,
@@ -18,6 +19,8 @@ import {
   Tick,
 } from "./styles";
 import { BuyData, BuyStep } from "./types";
+import { Warning } from "../create-character/styles";
+import { useCharacterBuilder } from "../../context/character-builder-context";
 
 interface BuyFormProps {
   data: BuyData;
@@ -27,22 +30,35 @@ interface BuyFormProps {
 
   isLoading: boolean;
   isOfferAccepted: boolean;
+
+  notEnoughIST?: boolean;
+  ist: bigint;
 }
 
-export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted }) => {
+export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmit, isOfferAccepted, notEnoughIST, ist }) => {
   const [isOnFirstStep, setIsOnFirstStep] = useState<boolean>(true);
   const isOfferPending = !isOnFirstStep && !isOfferAccepted;
   const [isDisabled, setIsDisabled] = useState(false);
-
+  const { showToast, setShowToast } = useCharacterBuilder();
   const onSendOfferClickHandler = async () => {
     setIsDisabled(true);
+    setShowToast(!showToast);
     await onSubmit();
     setIsOnFirstStep(false);
   };
 
+  const changeStepDisabled = useMemo(
+    () => ({
+      step1: true,
+      step2: !isOfferAccepted,
+      step3: !isOfferAccepted,
+    }),
+    [isOfferAccepted],
+  );
+
   return (
-    <ContentWrapper>
-      <FormText>{text.mint.theCostsOfMinting}</FormText>
+    <BuyFormContainer>
+      <FormText>{text.store.marketplaceFees}</FormText>
       <StepContainer>
         <GeneralInfo active={!isOnFirstStep}>
           <PricingContainer>
@@ -51,7 +67,7 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
             {isOnFirstStep && <PriceInIst price={data.price} />}
           </PricingContainer>
           {isOnFirstStep && (
-            <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled}>
+            <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled || notEnoughIST}>
               <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
             </PrimaryButton>
           )}
@@ -70,11 +86,23 @@ export const BuyForm: FC<BuyFormProps> = ({ data, changeStep, isLoading, onSubmi
         </Step>
       </StepContainer>
       <ButtonContainer>
-        <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
-          <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          {isLoading ? <LoadingPage /> : <ArrowUp />}
-        </PrimaryButton>
+        {isOnFirstStep ? (
+          <PrimaryButton onClick={() => onSendOfferClickHandler()} disabled={isDisabled || notEnoughIST}>
+            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+          </PrimaryButton>
+        ) : (
+          <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={changeStepDisabled.step2}>
+            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+            {isLoading ? <LoadingPage /> : <ArrowUp />}
+          </PrimaryButton>
+        )}
       </ButtonContainer>
-    </ContentWrapper>
+      {notEnoughIST && (
+        <ErrorContainerMarginTop>
+          <Warning />
+          <ButtonText customColor={color.red}>{text.error.mint.insufficientFunds(ist)}</ButtonText>
+        </ErrorContainerMarginTop>
+      )}
+    </BuyFormContainer>
   );
 };

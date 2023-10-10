@@ -1,12 +1,6 @@
 import { FC } from "react";
 
-import {
-  ActivityTableWrap,
-  BodyWrap,
-  Cell,
-  HeaderWrap,
-  RowWrap,
-} from "./styles";
+import { ActivityTableWrap, BodyWrap, Cell, HeaderWrap, RowWrap } from "./styles";
 import { ActivityEvent } from "../../interfaces";
 import { text } from "../../assets";
 import { CategoryButton } from "../../containers/detail-section/detail-section-header/styles";
@@ -42,9 +36,7 @@ const Row: FC<RowProps> = ({ event }) => {
         <CategoryButton>{event.type}</CategoryButton>
       </Cell>
       <Cell>
-        <BoldLabel customColor={color.black}>
-          {!!event.price && text.param.istPrice(event.price)}
-        </BoldLabel>
+        <BoldLabel customColor={color.black}>{!!event.price && text.param.istPrice && event.price}</BoldLabel>
       </Cell>
       {/* <Cell>{event.from}</Cell>
       <Cell>{event.to}</Cell> */}

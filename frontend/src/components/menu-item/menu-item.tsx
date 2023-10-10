@@ -1,30 +1,9 @@
 import { FC, useState } from "react";
 
-import {
-  CharacterItems,
-  isCharacterCategory,
-  isItemCategory,
-  isString,
-} from "../../interfaces";
-import {
-  ButtonContainer,
-  Dash,
-  ImageContainer,
-  Info,
-  InfoContainer,
-  InfoWrapper,
-  InlineDetails,
-  TitleContainer,
-} from "./styles";
-import {
-  BoldLabel,
-  ButtonText,
-  ImageProps,
-  MenuItemName,
-  PrimaryButton,
-  SecondaryButton,
-} from "../atoms";
-import { text } from "../../assets/text";
+import { CharacterItems, isCharacterCategory, isItemCategory, isString } from "../../interfaces";
+import { ImageContainer, Info, InfoContainer, InfoWrapper, InlineDetails, TitleContainer } from "./styles";
+import { BoldLabel, ButtonText, Dash, ImageProps, MenuItemName } from "../atoms";
+import { text } from "../../assets";
 import { color } from "../../design";
 import { BaseCharacter } from "../base-character";
 import { ItemThumbnail } from "../item-thumbnail";
@@ -40,7 +19,7 @@ export interface Data {
 
 interface MenuItemProps {
   data: Data;
-  onClick?: (id: string) => void;
+  onClick?: () => void;
   onButtonClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   isEquipped?: boolean;
   isForSale?: boolean;
@@ -53,34 +32,20 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isIniti
   const [selected, setSelected] = useState(false);
 
   const handleClick = () => {
-    onClick && onClick(data.id);
+    onClick && onClick();
     removeInitial && removeInitial();
     setSelected(true);
   };
 
-  if (!isItemCategory(data.category) && !isCharacterCategory(data.category))
-    return <></>;
+  if (!isItemCategory(data.category) && !isCharacterCategory(data.category)) return <></>;
 
   return (
-    <Info
-      tabIndex={0}
-      selected={selected || isInitial}
-      onClick={handleClick}
-      onBlur={() => setSelected(false)}
-    >
+    <Info tabIndex={0} selected={selected || isInitial} onClick={handleClick} onBlur={() => setSelected(false)}>
       {isString(data.image) ? (
-        <ItemThumbnail
-          {...imageProps}
-          category={data.category}
-          src={data.image}
-        />
+        <ItemThumbnail {...imageProps} category={data.category} src={data.image} />
       ) : (
         <ImageContainer>
-          <BaseCharacter
-            characterImage={data.characterImage}
-            items={data.image}
-            size="mini"
-          />
+          <BaseCharacter characterImage={data.characterImage} items={data.image} size="mini" />
         </ImageContainer>
       )}
 
@@ -90,57 +55,24 @@ export const MenuItem: FC<MenuItemProps> = ({ data, imageProps, onClick, isIniti
             <MenuItemName>{data.name}</MenuItemName>
           </TitleContainer>
           <InlineDetails>
-            <ButtonText customColor={color.darkGrey}>
-              {text.param.categories[data.category]}
-            </ButtonText>
+            {/* FIXME: type mismatch */}
+            {/* <ButtonText customColor={color.darkGrey}>{text.param.categories[data.category]}</ButtonText> */}
             <Dash />
-            <BoldLabel customColor={color.black}>
-              {text.param.level(data.level)}
-            </BoldLabel>
+            <BoldLabel customColor={color.black}>{text.param.level(data.level)}</BoldLabel>
             {isEquipped && (
               <>
                 <Dash />
-                <ButtonText customColor={color.darkGrey}>
-                  {text.general.equipped}
-                </ButtonText>
+                <ButtonText customColor={color.darkGrey}>{text.general.equipped}</ButtonText>
               </>
             )}
             {isForSale && (
               <>
                 <Dash />
-                <ButtonText customColor={color.darkGrey}>
-                  {text.general.forSale}
-                </ButtonText>
+                <ButtonText customColor={color.darkGrey}>{text.general.forSale}</ButtonText>
               </>
             )}
           </InlineDetails>
         </InfoContainer>
-
-        {!!onButtonClick && (
-          <ButtonContainer>
-            {isEquipped ? (
-              <SecondaryButton
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-                  onButtonClick(event)
-                }
-              >
-                <ButtonText customColor={color.white}>
-                  {text.character.unequip}
-                </ButtonText>
-              </SecondaryButton>
-            ) : (
-              <PrimaryButton
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-                  onButtonClick(event)
-                }
-              >
-                <ButtonText customColor={color.white}>
-                  {text.character.equip}
-                </ButtonText>
-              </PrimaryButton>
-            )}
-          </ButtonContainer>
-        )}
       </InfoWrapper>
     </Info>
   );

@@ -2,12 +2,7 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { MenuText } from "../atoms";
-import {
-  ArrowContainer,
-  Close,
-  HeaderContainer,
-  ReturnContainer,
-} from "./styles";
+import { ArrowContainer, Close, HeaderContainer, ReturnContainer } from "./styles";
 
 interface FormHeaderCloseProps {
   title: string;

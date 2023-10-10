@@ -4,14 +4,7 @@ import { text } from "../../assets";
 import { color } from "../../design";
 import { routes } from "../../navigation";
 
-import {
-  AboutText,
-  AgoricText,
-  FooterContainer,
-  FooterWrapper,
-  Link,
-  PrivacyText,
-} from "./styles";
+import { AboutText, AgoricText, FooterContainer, FooterWrapper, Link, PrivacyText } from "./styles";
 
 export const Footer: FC = () => {
   const resolvedShop = useResolvedPath(routes.shop);
@@ -24,19 +17,13 @@ export const Footer: FC = () => {
       <FooterContainer>
         {!matchLanding && (
           <Link to={routes.root}>
-            <AboutText customColor={color.darkGrey}>
-              {text.navigation.about}
-            </AboutText>
+            <AboutText customColor={color.darkGrey}>{text.navigation.about}</AboutText>
           </Link>
         )}
         <Link to={routes.privacy}>
-          <PrivacyText customColor={color.darkGrey}>
-            {text.navigation.privacyAndTerms}
-          </PrivacyText>
+          <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
         </Link>
-        <AgoricText customColor={color.darkGrey}>
-          {text.navigation.agoric2022}
-        </AgoricText>
+        <AgoricText customColor={color.darkGrey}>{text.navigation.agoricCopyright(new Date().getFullYear())}</AgoricText>
       </FooterContainer>
     </FooterWrapper>
   );

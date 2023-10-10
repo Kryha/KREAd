@@ -10,6 +10,8 @@ import { filters } from "./filters";
 import { mint } from "./mint";
 import { notifications } from "./notifications";
 import { content } from "./content";
+import { inventory } from "./inventory";
+import { util } from "./util";
 
 export const text = {
   error,
@@ -17,6 +19,7 @@ export const text = {
   general,
   param,
   store,
+  inventory,
   itemSlots,
   character,
   item,
@@ -24,4 +27,5 @@ export const text = {
   mint,
   notifications,
   content,
+  util,
 };

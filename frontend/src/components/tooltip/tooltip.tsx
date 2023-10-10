@@ -12,12 +12,7 @@ interface TooltipProps {
 
 // TODO: Fix position so it doesn't get covered by parent container
 // TODO: Make it smart so that if the viewport is smaller it finds a better position to pop
-export const Tooltip: FC<TooltipProps> = ({
-  title,
-  position,
-  content,
-  children,
-}) => {
+export const Tooltip: FC<TooltipProps> = ({ title, position, content, children }) => {
   const [active, setActive] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const showTip = () => setActive(true);

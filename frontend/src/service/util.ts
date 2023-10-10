@@ -1,9 +1,9 @@
 import { AmountMath } from "@agoric/ertp";
 import { E } from "@endo/eventual-send";
-import { Character, CharacterBackend, ExtendedCharacter, Item, ItemCategory } from "../interfaces";
-import { Purses, TokenInfo } from "../interfaces/agoric.interfaces";
-import { makeLeader, makeFollower, makeCastingSpec } from "@agoric/casting";
+import { Character, ExtendedCharacter, Purses, TokenInfo } from "../interfaces";
+import { makeCastingSpec, makeFollower, makeLeader } from "@agoric/casting";
 
+//TODO: THIS FILE NOT BEING USED??
 export const formOfferForItem = (purses: Purses, item: any) => ({
   want: {
     Item: {
@@ -27,20 +27,10 @@ export const formOfferForCharacter = (characterBrand: any, character: any, money
   // },
 });
 
-export const formatIdAsNumber = (obj: Character | Item) => ({ ...obj, id: BigInt(obj.id) });
-
-export const itemCategories: ItemCategory[] = [
-  "noseline",
-  "midBackground",
-  "mask",
-  "headPiece",
-  "hair",
-  "frontMask",
-  "liquid",
-  "background",
-  "airReservoir",
-  "clothing",
-];
+export const formatIdAsNumber = (obj: { [key: string]: any }) => ({
+  ...obj,
+  id: BigInt(obj.id),
+});
 
 export const getExtendedCharacter = (name: string, characters: ExtendedCharacter[]): ExtendedCharacter | undefined => {
   return characters.find((c) => c.nft.name === name);
@@ -48,13 +38,19 @@ export const getExtendedCharacter = (name: string, characters: ExtendedCharacter
 
 export const getCharacterKeys = (
   characterName: string,
-  characterPurse: CharacterBackend[],
-): { ownedCharacterKey: CharacterBackend; wantedCharacterKey: CharacterBackend } => {
+  characterPurse: Character[],
+): {
+  ownedCharacterKey: Character;
+  wantedCharacterKey: Character;
+} => {
   const ownedCharacterKey = characterPurse.find((character) => character.name === character.name);
 
   if (!ownedCharacterKey) throw `Could not find character (${characterName}) in wallet`;
 
-  const wantedCharacterKey: CharacterBackend = { ...ownedCharacterKey, keyId: ownedCharacterKey.keyId === 1 ? 2 : 1 };
+  const wantedCharacterKey: Character = {
+    ...ownedCharacterKey,
+    keyId: ownedCharacterKey.keyId === 1 ? 2 : 1,
+  };
 
   return { ownedCharacterKey, wantedCharacterKey };
 };

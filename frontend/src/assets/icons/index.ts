@@ -32,8 +32,27 @@ import { ReactComponent as ZoomInIcon } from "./zoom-in.svg";
 import { ReactComponent as ZoomOutIcon } from "./zoom-out.svg";
 import { ReactComponent as DownloadIcon } from "./download.svg";
 import { ReactComponent as DevIcon } from "./dev.svg";
+import { ReactComponent as HelpIcon } from "./help.svg";
+import { ReactComponent as NextIcon } from "./next.svg";
+import { ReactComponent as PreviousIcon } from "./previous.svg";
+import { ReactComponent as EquippedIcon } from "./equipped.svg";
+import { ReactComponent as DiagonalIcon } from "./diagonal.svg";
+import { ReactComponent as KeplerIcon } from "./kelpr.svg";
+import { ReactComponent as InstagramIcon } from "./instagram.svg";
+import { ReactComponent as DiscordIcon } from "./discord.svg";
+import { ReactComponent as TwitterIcon } from "./twitter.svg";
+import { ReactComponent as ISTIcon } from "./IST_black_icon.svg";
+import { ReactComponent as StoreIcon } from "./store.svg";
 
 export {
+  StoreIcon,
+  ISTIcon,
+  KeplerIcon,
+  DiagonalIcon,
+  NextIcon,
+  EquippedIcon,
+  PreviousIcon,
+  HelpIcon,
   DevIcon,
   ErrorIcon,
   SelectArrowIcon,
@@ -69,4 +88,7 @@ export {
   ZoomInIcon,
   ZoomOutIcon,
   DownloadIcon,
+  InstagramIcon,
+  DiscordIcon,
+  TwitterIcon,
 };

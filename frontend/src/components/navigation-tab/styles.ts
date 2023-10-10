@@ -9,14 +9,15 @@ export const NavTab = styled(NavLink)`
 `;
 
 export const NavTitle = styled(NavigationTitle)`
-  padding: 0px ${margins.small} ${margins.small} ${margins.small};
+  padding: 0 ${margins.small} ${margins.mini} ${margins.mini};
 `;
 
 export const NavTabs = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0px;
+  padding: 0;
+  height: 100%;
 `;
 
 interface NavTabProps {

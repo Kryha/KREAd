@@ -7,30 +7,17 @@ import { Notification } from "../../interfaces";
 
 interface NotificationInfoProps {
   notification: Notification;
-  setInfo: (
-    showNotification: boolean,
-    information: string,
-    heading: string
-  ) => void;
+  setInfo: (showNotification: boolean, information: string, heading: string) => void;
 }
 
-export const NotificationInfo: FC<NotificationInfoProps> = ({
-  notification,
-  setInfo,
-}) => {
+export const NotificationInfo: FC<NotificationInfoProps> = ({ notification, setInfo }) => {
   return (
     <Content>
       <NotificationItemContainer>
         <NotificationHeader>
           <MessageContainer>
-            {notification.status === "sold" && (
-              <BodyMessage>{text.notifications.your}</BodyMessage>
-            )}
-            <BodyText>
-              {notification.status === "sold"
-                ? text.notifications.item
-                : text.notifications.the}
-            </BodyText>
+            {notification.status === "sold" && <BodyMessage>{text.notifications.your}</BodyMessage>}
+            <BodyText>{notification.status === "sold" ? text.notifications.item : text.notifications.the}</BodyText>
             <BoldText>
               {notification.status === "sold" ? text.param.itemQuoted(notification.itemName) : text.param.itemQuoted(notification.itemName)}
             </BoldText>
@@ -43,16 +30,9 @@ export const NotificationInfo: FC<NotificationInfoProps> = ({
               setInfo(
                 true,
                 notification.status === "sold"
-                  ? text.param.yourItemHasBeenSold(
-                      notification.itemName,
-                      notification.price || 0
-                    )
-                  : text.param.theItemIsSussfullyPurchased(
-                      notification.itemName
-                    ),
-                notification.status === "sold"
-                  ? text.notifications.yourItemHasBeenPurchased
-                  : text.notifications.yourItemHasBeenPurchased
+                  ? text.param.yourItemHasBeenSold(notification.itemName, notification.price || 0)
+                  : text.param.theItemIsSussfullyPurchased(notification.itemName),
+                notification.status === "sold" ? text.notifications.yourItemHasBeenPurchased : text.notifications.yourItemHasBeenPurchased,
               )
             }
           >

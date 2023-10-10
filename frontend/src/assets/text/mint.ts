@@ -1,3 +1,5 @@
+import { MINTING_COST_USD } from "../../constants";
+
 export const mint = {
   mintNew: "mint new",
   information: "information",
@@ -5,18 +7,15 @@ export const mint = {
   confirmation: "confirmation",
   characterTitle: "character title",
   characterName: "character name",
-  theCostsOfMinting:
-    "minting requires a small fee in IST to be payed to the network",
+  theCostsOfMinting: `minting requires a fee of ${MINTING_COST_USD} IST.`,
   next: "next",
   confirm: "confirm",
   sendOffer: "send offer",
-  inOrderToPay:
-    "in order to pay for the minting of your new avatar, proceed the following steps:",
+  inOrderToPay: "in order to pay for the minting of your new avatar, proceed the following steps:",
   acceptOfferIn: "accept offer in your wallet",
   sendOfferToWallet: "send offer to your wallet",
   characterSuccessfullyMinted: "character successfully minted!",
-  yourNewCharacterIsSucessfullyMinted:
-    "your new character is successfully minted.",
+  yourNewCharacterIsSucessfullyMinted: "your new character is successfully minted.",
   creationDate: "creation date",
   goToCharacter: "go to character",
   newCharacterMinted: "new character minted",

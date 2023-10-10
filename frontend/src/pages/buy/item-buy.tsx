@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { text } from "../../assets";
-import { FadeInOut } from "../../components";
-import { ItemDetailSection } from "../../containers/detail-section";
 import { ItemInMarket } from "../../interfaces";
 import { useBuyItem } from "../../service";
 import { Buy } from "./buy";
-import { useItemMarketState } from "../../context/item-shop";
+import { useItemMarketState } from "../../context/item-shop-context";
+import { ErrorView } from "../../components";
 
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
+
   const { items } = useItemMarketState();
   const itemToBuy = items.find((marketEntry) => marketEntry.id === id);
-  const buyItem = useBuyItem(itemToBuy!);
+  const buyItem = useBuyItem(itemToBuy);
 
-  const [isAwaitingApproval, setIsAwaitingApproval] = useState(true);
+  const [isAwaitingApproval, setIsAwaitingApproval] = useState(false);
+  const [isOfferAccepted, setIsOfferAccepted] = useState(false);
   const [data, setData] = useState<ItemInMarket>();
 
   useEffect(() => {
@@ -22,27 +23,36 @@ export const ItemBuy = () => {
     if (itemToBuy) setData(itemToBuy);
   }, [itemToBuy, buyItem]);
 
+  useEffect(() => {
+    if (itemToBuy) setIsAwaitingApproval(false);
+  }, [itemToBuy]);
+
   const handleSubmit = async () => {
     setIsAwaitingApproval(true);
-    await buyItem.callback(() => setIsAwaitingApproval(false));
+    await buyItem.callback(() => {
+      setIsOfferAccepted(true);
+      setIsAwaitingApproval(false);
+    });
   };
+
+  if (!data) return <ErrorView />;
+
+  const { royalty, platformFee, price } = data.sell;
+
+  const totalPrice = Number(royalty + platformFee + price);
 
   return (
     <Buy
-      data={data && { ...data.item, price: Number(data.sell.price) }}
+      data={data && { ...data.item, price: totalPrice, type: "item" }}
       onSubmit={handleSubmit}
       isLoading={isAwaitingApproval}
-      isOfferAccepted={isAwaitingApproval}
+      isOfferAccepted={isOfferAccepted}
       text={{
         buy: text.store.buyItem,
         success: text.store.itemSuccessfullyBought,
         successLong: text.store.yourNewItemIs,
         check: text.store.checkItem,
       }}
-    >
-      <FadeInOut show>
-        <ItemDetailSection item={data && data.item} />
-      </FadeInOut>
-    </Buy>
+    />
   );
 };

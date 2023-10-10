@@ -2,14 +2,13 @@ import styled from "@emotion/styled";
 
 import { color, margins } from "../../design";
 import { BoldLabel, MenuItemName } from "../atoms";
-import { CharacterWrapper } from "../base-character/styles";
 
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: ${margins.mini};
-  padding: 0px;
+  padding: 0;
   margin-right: ${margins.medium};
   ${MenuItemName} {
     margin-bottom: ${margins.nano};
@@ -71,19 +70,15 @@ export const Info = styled.div<InfoProps>`
 export const ImageCard = styled.div`
   position: relative;
   box-sizing: border-box;
-  border-radius: ${margins.medium};
-  border: 1px solid ${color.grey};
-  width: 80px;
-  height: 80px;
-  min-width: 80px;
+  width: 40%;
+  height: 160px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: ${margins.small};
-  ${CharacterWrapper} {
-    left: 15px;
-  }
+  background-color: ${color.white};
+  border-top-left-radius: ${margins.medium};
+  border-bottom-left-radius: ${margins.medium};
 `;
 
 export const InfoWrapper = styled.div`
@@ -91,13 +86,13 @@ export const InfoWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0px;
+  padding: 0;
   width: 100%;
   z-index: 500;
 `;
 
 export const Divider = styled.div`
-  height: 0px;
+  height: 0;
   width: 24px;
   border: 0.5px solid #d0d0d0;
   transform: rotate(90deg);
@@ -122,7 +117,7 @@ export const SubTitleContainer = styled.div`
 export const TitleContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0px;
+  padding: 0;
   gap: ${margins.medium};
   justify-content: space-between;
   width: 100%;

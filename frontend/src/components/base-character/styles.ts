@@ -3,12 +3,7 @@ import styled from "@emotion/styled";
 import { margins } from "../../design";
 import { SecondaryButton, zoomClothing, zoomIn } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
-import {
-  EXTRA_LARGE_SCREEN_SIZE,
-  LARGE_SCREEN_SIZE,
-  MEDIUM_SCREEN_SIZE,
-  SMALL_SCREEN_SIZE,
-} from "../../constants";
+import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
 import { css } from "@emotion/react";
 
 export interface ImageProps {
@@ -46,13 +41,13 @@ export const ExpandButton = styled(SecondaryButton)<ViewProps>`
   bottom: ${margins.big};
   padding: 8px 16px;
   > svg {
-    margin-left: 0px;
+    margin-left: 0;
   }
 `;
 
 export const CharacterIcon = styled.img<ImageProps>`
   position: relative;
-  top: 0px;
+  top: 0;
   ${({ zIndex }): string => `z-index: ${zIndex || zIndexProps.character};`};
   ${({ height }): string => `height: ${height}px;`};
   ${({ width }): string => {
@@ -74,9 +69,7 @@ export const CharacterIcon = styled.img<ImageProps>`
 `;
 
 export const CharacterWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  right: 30.16%;
+  position: relative;
   margin: 0;
 `;
 
@@ -84,8 +77,8 @@ export const CharacterContainer = styled.div<ImageProps>`
   ${({ size, width, height }): string => {
     if (size === "mini") {
       if (width <= SMALL_SCREEN_SIZE) {
-        return `zoom: 0.1;
-        -moz-transform: scale(0.1);
+        return `zoom: 0.18;
+        -moz-transform: scale(0.18);
         -moz-transform-origin: 0 0;
         `;
       }
@@ -101,8 +94,8 @@ export const CharacterContainer = styled.div<ImageProps>`
       `;
     } else if (size === "medium") {
       if (width <= SMALL_SCREEN_SIZE) {
-        return `zoom: 0.42;
-        -moz-transform: scale(0.42);
+        return `zoom: 0.36;
+        -moz-transform: scale(0.36);
         -moz-transform-origin: 0 0;
         `;
       }

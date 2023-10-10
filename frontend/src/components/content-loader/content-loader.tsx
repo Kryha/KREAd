@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { AnimatedLoading } from "./animated-loading";
-import { LoadingDevMode, LoadingPageContainer, Spinner } from "./styles";
-import { DevelopmentMode } from "../../service/test-service/development-mode";
+import { LoadingPageContainer, Spinner } from "./styles";
 
 interface ContentLoaderProps {
   loading: boolean;
@@ -12,16 +11,14 @@ interface LoadingPageProps {
   spinner?: boolean;
 }
 
-export const LoadingPage: FC<LoadingPageProps> = ({ spinner = true }) => (
-  <LoadingPageContainer isSpinner={spinner}>
-    {spinner ? <Spinner /> : <AnimatedLoading />}
-  </LoadingPageContainer>
-);
+export const LoadingPage: FC<LoadingPageProps> = ({ spinner = true }) => {
+  return (
+    <>
+      <LoadingPageContainer isSpinner={spinner}>{spinner ? <Spinner /> : <AnimatedLoading />}</LoadingPageContainer>
+    </>
+  );
+};
 
-export const ContentLoader: FC<ContentLoaderProps> = ({
-  loading,
-  children,
-  spinner,
-}) => {
+export const ContentLoader: FC<ContentLoaderProps> = ({ loading, children, spinner }) => {
   return <>{loading ? <LoadingPage spinner={spinner} /> : children}</>;
 };

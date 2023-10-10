@@ -79,9 +79,7 @@ export const LoadingDevMode = styled.div`
 export const LogoWrap = styled.div<AnimationProps>`
   ${({ iteration }): string => `
   #eB1kvmsL79H3 {
-    animation: eB1kvmsL79H3_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H3_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H3_c_o {
     0% {
@@ -104,9 +102,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H5 {
-    animation: eB1kvmsL79H5_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H5_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H5_c_o {
     0% {
@@ -123,9 +119,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H6 {
-    animation: eB1kvmsL79H6_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H6_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H6_c_o {
     0% {
@@ -154,9 +148,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H8 {
-    animation: eB1kvmsL79H8_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H8_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H8_c_o {
     0% {
@@ -179,9 +171,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H9 {
-    animation: eB1kvmsL79H9_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H9_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H9_c_o {
     0% {
@@ -204,9 +194,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H10 {
-    animation: eB1kvmsL79H10_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H10_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H10_c_o {
     0% {
@@ -241,9 +229,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H12 {
-    animation: eB1kvmsL79H12_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H12_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H12_c_o {
     0% {
@@ -260,9 +246,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H13 {
-    animation: eB1kvmsL79H13_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H13_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H13_c_o {
     0% {
@@ -279,9 +263,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H14 {
-    animation: eB1kvmsL79H14_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H14_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H14_c_o {
     0% {
@@ -304,9 +286,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H16 {
-    animation: eB1kvmsL79H16_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H16_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H16_c_o {
     0% {
@@ -323,9 +303,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H17 {
-    animation: eB1kvmsL79H17_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H17_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H17_c_o {
     0% {
@@ -348,9 +326,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H19 {
-    animation: eB1kvmsL79H19_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H19_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H19_c_o {
     0% {
@@ -373,9 +349,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H20 {
-    animation: eB1kvmsL79H20_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H20_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H20_c_o {
     0% {
@@ -392,9 +366,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H22 {
-    animation: eB1kvmsL79H22_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H22_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H22_c_o {
     0% {
@@ -417,9 +389,7 @@ export const LogoWrap = styled.div<AnimationProps>`
     }
   }
   #eB1kvmsL79H23 {
-    animation: eB1kvmsL79H23_c_o 3400ms linear ${
-      iteration || "infinite"
-    } normal forwards;
+    animation: eB1kvmsL79H23_c_o 3400ms linear ${iteration || "infinite"} normal forwards;
   }
   @keyframes eB1kvmsL79H23_c_o {
     0% {

@@ -1,61 +1,128 @@
-import { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { FC, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { text } from "../../assets";
-import { color } from "../../design";
 import {
-  BaseCharacter,
   BaseRoute,
+  BoldLabel,
   ButtonText,
-  CharacterCard,
-  CharacterItems,
+  ErrorView,
   FadeInOut,
+  LevelBoldLabel,
   LoadingPage,
-  MenuText,
   NotificationDetail,
   Overlay,
   OverviewEmpty,
+  PageSubTitle,
+  PageTitle,
   SecondaryButton,
 } from "../../components";
-import { ButtonContainer, CharacterCardWrapper, Close, DetailContainer, LandingContainer, Menu } from "./styles";
-import { CharacterDetailSection } from "../../containers/detail-section";
-import { useSelectedCharacter } from "../../service";
+import { ButtonContainer, CharacterCardWrapper, DetailContainer, ItemCardWrapper } from "./styles";
+import { CharacterDetailSection, ItemDetailSection } from "../../containers/detail-section";
+import { useEquipItem, useGetItemInInventoryByNameAndCategory, useSelectedCharacter, useUnequipItem } from "../../service";
 import { routes } from "../../navigation";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { Layout } from "../../containers/canvas/character-canvas/styles";
+import { CharacterCanvas } from "../../containers/canvas/character-canvas/character-canvas";
+import { useViewport } from "../../hooks";
+import { useCharacterBuilder } from "../../context/character-builder-context";
+import { CategoryMode } from "../../containers/canvas/category-mode/category-mode";
+import { CATEGORY_MODE, CHARACTER_SELECT_MODE, ITEM_MODE, MAIN_MODE } from "../../constants";
+import { ItemsMode } from "../../containers/canvas/items-mode/items-mode";
+import { CharactersMode } from "../../containers/canvas/characters-mode/characters-mode";
+import { MainMode } from "../../containers/canvas/main-mode/main-mode";
+import { calculateCharacterLevels } from "../../util";
+import { AssetTag } from "../../components/asset-card/styles";
+import { color } from "../../design";
+import { ButtonInfoWrap } from "../../components/button-info/styles";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
-  const [openTab, setOpenTab] = useState(false);
+  const location = useLocation();
   const [selectedCharacter, isLoading] = useSelectedCharacter();
-  const [showDetail, setShowDetail] = useState(false);
   const [closeDetail, setCloseDetail] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const { width, height } = useViewport();
+  const {
+    selectedAsset,
+    selectedAssetCategory,
+    showDetails,
+    setShowDetails,
+    characterName,
+    showItemDetails,
+    setShowItemDetails,
+    interactionMode,
+    setInteractionMode,
+  } = useCharacterBuilder();
 
-  const sell = (characterId: string) => {
-    navigate(`${routes.sellCharacter}/${characterId}`);
+  const [item] = useGetItemInInventoryByNameAndCategory(selectedAsset, selectedAssetCategory, characterName);
+
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
+
+  if (equipItem.isError || unequipItem.isError) return <ErrorView />;
+  const equipAsset = () => {
+    setShowToast(!showToast);
+    if (item) {
+      equipItem.mutate({ item });
+    }
+  };
+
+  const unequipAsset = () => {
+    setShowToast(!showToast);
+    if (item) {
+      unequipItem.mutate({ item });
+    }
+  };
+
+  const sell = (characterId: number) => {
+    navigate(`${routes.sellCharacter}/${characterId}`, { state: location });
+  };
+
+  const sellAsset = () => {
+    navigate(`${routes.sellItem}/${item?.category}/${item?.name}`, {
+      state: location,
+    });
+  };
+
+  const assetDetailActions = () => {
+    if (item?.equippedTo !== "") {
+      return { primary: { text: text.item.unequip, onClick: unequipAsset } };
+    } else {
+      return {
+        primary: { text: text.item.equip, onClick: equipAsset },
+        secondary: { text: text.item.sell, onClick: sellAsset },
+      };
+    }
   };
 
   const displayToast = () => {
     setShowToast(true);
   };
 
-  const displayCharacter = () => {
-    navigate(routes.downloadCharacter);
-  };
+  let level = 0;
+  if (selectedCharacter) {
+    const { totalLevel } = calculateCharacterLevels(selectedCharacter);
+    level = totalLevel;
+  }
 
   return (
     <BaseRoute
       isLanding
       sideNavigation={
-        <SecondaryButton onClick={() => setOpenTab(!openTab)} backgroundColor={openTab ? color.lightGrey : color.white}>
-          <ButtonText>{text.navigation.myCharacters}</ButtonText>
-          {openTab ? <Close /> : <Menu />}
-        </SecondaryButton>
+        <>
+          {selectedCharacter ? (
+            <SecondaryButton onClick={() => setInteractionMode(CHARACTER_SELECT_MODE)}>
+              <ButtonText>{text.navigation.myCharacters}</ButtonText>
+            </SecondaryButton>
+          ) : (
+            <></>
+          )}
+        </>
       }
     >
       {isLoading ? (
         <LoadingPage spinner={false} />
       ) : !selectedCharacter ? (
-        // TODO: abstract internal component so we don't end up in this conditional madness
         <OverviewEmpty
           headingText={text.character.youDoNotHave}
           descriptionText={text.character.youDoNotOwnACharacter}
@@ -64,53 +131,70 @@ export const Landing: FC = () => {
         />
       ) : (
         <>
-          {/* character big picture */}
-          <LandingContainer isZoomed={!openTab}>
-            <BaseCharacter
-              characterImage={selectedCharacter.nft.image}
-              items={selectedCharacter.equippedItems}
-              isZoomed={openTab}
-              size="normal"
-            />
-          </LandingContainer>
-
-          {/* equipped items under character */}
-          <CharacterItems items={selectedCharacter.equippedItems} showItems={!openTab} />
-
           {/* character info */}
-          {!openTab && (
+          {interactionMode === MAIN_MODE ? (
             <DetailContainer>
-              <MenuText>{selectedCharacter?.nft.name}</MenuText>
+              <PageTitle>{selectedCharacter?.nft.name}</PageTitle>
+              <PageSubTitle>{selectedCharacter?.nft.title}</PageSubTitle>
               <ButtonContainer>
-                <SecondaryButton onClick={() => setShowDetail(true)}>
-                  <ButtonText>{text.general.moreInfo}</ButtonText>
-                </SecondaryButton>
-                <ButtonText>{text.param.level(selectedCharacter?.nft.level)}</ButtonText>
+                <ButtonInfoWrap onClick={() => setShowDetails(true)}>
+                  <SecondaryButton>{text.general.info}</SecondaryButton>
+                </ButtonInfoWrap>
+                <AssetTag>
+                  <BoldLabel customColor={color.black}>lvl. </BoldLabel>
+                  <LevelBoldLabel customColor={color.black}>{level}</LevelBoldLabel>
+                </AssetTag>
               </ButtonContainer>
+            </DetailContainer>
+          ) : (
+            <DetailContainer>
+              <PageTitle>{selectedCharacter?.nft.name}</PageTitle>
+              <PageSubTitle>{selectedCharacter?.nft.title}</PageSubTitle>
               <ButtonContainer>
-                <SecondaryButton onClick={displayCharacter}>
-                  <ButtonText>{text.general.viewCharacter}</ButtonText>
-                </SecondaryButton>
+                <AssetTag>
+                  <BoldLabel customColor={color.black}>lvl. </BoldLabel>
+                  <LevelBoldLabel customColor={color.black}>{level}</LevelBoldLabel>
+                </AssetTag>
               </ButtonContainer>
             </DetailContainer>
           )}
-          <CharacterCardWrapper>
-            <FadeInOut show={showDetail} exiting={closeDetail}>
-              <CharacterDetailSection
-                character={selectedCharacter}
+
+          <ItemCardWrapper>
+            {showItemDetails && (
+              <ItemDetailSection
+                item={item}
                 actions={{
-                  secondary: { text: text.character.sell, onClick: () => sell(selectedCharacter.nft.id) },
                   onClose: () => {
-                    setShowDetail(false);
-                    setCloseDetail(true);
+                    setShowItemDetails(false);
                   },
+                  primary: assetDetailActions()?.primary,
+                  secondary: assetDetailActions()?.secondary,
                 }}
-                showToast={displayToast}
               />
-            </FadeInOut>
+            )}
+          </ItemCardWrapper>
+          <CharacterCardWrapper>
+            {interactionMode !== ITEM_MODE && (
+              <FadeInOut show={showDetails} exiting={closeDetail}>
+                <CharacterDetailSection
+                  character={selectedCharacter}
+                  actions={{
+                    secondary: {
+                      text: text.character.sell,
+                      onClick: () => sell(Number(selectedCharacter.nft.id)),
+                    },
+                    onClose: () => {
+                      setShowDetails(false);
+                      setCloseDetail(true);
+                    },
+                  }}
+                  showToast={displayToast}
+                />
+              </FadeInOut>
+            )}
           </CharacterCardWrapper>
 
-          <FadeInOut show={showDetail} exiting={closeDetail}>
+          <FadeInOut show={showDetails} exiting={closeDetail}>
             <Overlay />
           </FadeInOut>
           <FadeInOut show={showToast} exiting={!showToast}>
@@ -124,8 +208,13 @@ export const Landing: FC = () => {
               />
             </NotificationWrapper>
           </FadeInOut>
-          {/* my characters list */}
-          <CharacterCard id={selectedCharacter.nft.id} showCard={openTab} />
+          <Layout width={width} height={height}>
+            <CharacterCanvas width={width} height={height} />
+            {interactionMode === CATEGORY_MODE && <CategoryMode />}
+            {interactionMode === ITEM_MODE && <ItemsMode />}
+            {interactionMode === CHARACTER_SELECT_MODE && <CharactersMode />}
+            {interactionMode === MAIN_MODE && <MainMode items={selectedCharacter.equippedItems} showItems={!!MAIN_MODE} />}
+          </Layout>
         </>
       )}
     </BaseRoute>

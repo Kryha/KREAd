@@ -1,14 +1,9 @@
 import { FC } from "react";
 
 import { CharacterItems } from "../../interfaces";
-import {
-  CharacterContainer,
-  CharacterIcon,
-  CharacterWrapper,
-  ItemIcon,
-} from "./styles";
+import { CharacterContainer, CharacterIcon, CharacterWrapper, ItemIcon } from "./styles";
 import { useViewport } from "../../hooks";
-import { TempetCharacter, Empty, text } from "../../assets";
+import { ArmaCitizen, Empty, text } from "../../assets";
 import { zIndex } from "../../design";
 
 interface BaseCharacterProps {
@@ -19,29 +14,13 @@ interface BaseCharacterProps {
   isClothing?: boolean;
 }
 
-export const BaseCharacter: FC<BaseCharacterProps> = ({
-  characterImage,
-  items,
-  isZoomed = false,
-  size = "normal",
-  isClothing,
-}) => {
+export const BaseCharacter: FC<BaseCharacterProps> = ({ characterImage, items, isZoomed = false, size = "normal" }) => {
   const { width, height } = useViewport();
 
   return (
     <CharacterWrapper>
-      <CharacterContainer
-        width={width}
-        height={height}
-        isZoomed={isZoomed}
-        size={size}
-        isClothing={isClothing}
-      >
-        <CharacterIcon
-          width={width}
-          height={height}
-          src={characterImage || TempetCharacter}
-        />
+      <CharacterContainer width={width} height={height} isZoomed={isZoomed} size={size}>
+        <CharacterIcon width={width} height={height} src={characterImage || ArmaCitizen} />
         <ItemIcon
           src={items?.hair?.image || Empty}
           alt={items?.hair?.name || text.character.hair}
@@ -57,8 +36,8 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({
           zIndex={zIndex.headPiece}
         />
         <ItemIcon
-          src={items?.noseline?.image || Empty}
-          alt={items?.noseline?.name || text.character.noseline}
+          src={items?.perk1?.image || Empty}
+          alt={items?.perk1?.name || text.character.perk1}
           width={width}
           height={height}
           zIndex={zIndex.noseline}
@@ -78,39 +57,39 @@ export const BaseCharacter: FC<BaseCharacterProps> = ({
           zIndex={zIndex.mask}
         />
         <ItemIcon
-          src={items?.airReservoir?.image || Empty}
-          alt={items?.airReservoir?.name || text.character.airReservoir}
+          src={items?.filter1?.image || Empty}
+          alt={items?.filter1?.name || text.character.filter2}
           width={width}
           height={height}
           zIndex={zIndex.airReservoir}
         />
         <ItemIcon
-          src={items?.liquid?.image || Empty}
-          alt={items?.liquid?.name || text.character.liquid}
+          src={items?.filter2?.image || Empty}
+          alt={items?.filter2?.name || text.character.filter1}
           width={width}
           height={height}
           zIndex={zIndex.liquid}
         />
         <ItemIcon
-          src={items?.midBackground?.image || Empty}
-          alt={items?.midBackground?.name || text.character.midBackground}
+          src={items?.patch?.image || Empty}
+          alt={items?.patch?.name || text.character.patch}
           width={width}
           height={height}
           zIndex={zIndex.midBackground}
         />
         <ItemIcon
-          src={items?.frontMask?.image || Empty}
-          alt={items?.frontMask?.name || text.character.frontMask}
+          src={items?.perk2?.image || Empty}
+          alt={items?.perk2?.name || text.character.perk2}
           width={width}
           height={height}
           zIndex={zIndex.frontMask}
         />
         <ItemIcon
-          src={items?.clothing?.image || Empty}
-          alt={items?.clothing?.name || text.character.clothing}
+          src={items?.garment?.image || Empty}
+          alt={items?.garment?.name || text.character.garment}
           width={width}
           height={height}
-          zIndex={zIndex.clothing}
+          zIndex={zIndex.garment}
         />
       </CharacterContainer>
     </CharacterWrapper>

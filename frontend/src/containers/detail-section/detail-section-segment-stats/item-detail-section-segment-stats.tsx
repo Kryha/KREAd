@@ -7,8 +7,9 @@ import { Item } from "../../../interfaces";
 import { DetailSectionColorPalette } from "../detail-section-color-palette";
 import { DetailSectionElement } from "../detail-section-element";
 import { DetailSectionProgressBar } from "../detail-section-progress-bar";
-import { DetailSectionBody, DetailSectionBodyBigBold } from "../detail-section-segment/styles";
+import { DetailSectionBodyBigBold } from "../detail-section-segment/styles";
 import { DetailSectionSegmentStatsWrap } from "./styles";
+import { DetailSectionSegmentActivity } from "../detail-section-segment-activity";
 
 interface ItemDetailSectionSegmentStatsProps {
   item: Item;
@@ -22,24 +23,23 @@ export const ItemDetailSectionSegmentStats: FC<ItemDetailSectionSegmentStatsProp
           <DetailSectionBodyBigBold>{item.level}</DetailSectionBodyBigBold>
         </DetailSectionElement>
         <FlexColumn>
-          <DetailSectionElement title={text.item.effectiveness} info={text.item.effectivenessInfo} infoPosition="left">
-            <DetailSectionProgressBar title={text.item.effectiveness} amount={item.effectiveness || 0} />
+          <DetailSectionElement title={text.item.durability} info={text.item.durabilityInfo} infoPosition="left">
+            <DetailSectionProgressBar title={text.item.durability} amount={item.durability || 0} />
           </DetailSectionElement>
-          <DetailSectionElement title={text.item.layerComplexity} info={text.item.layerComplexityInfo} infoPosition="left">
-            <DetailSectionProgressBar title={text.item.layerComplexity} amount={item.layerComplexity || 0} />
+          <DetailSectionElement title={text.item.filtering} info={text.item.filteringInfo} infoPosition="left">
+            <DetailSectionProgressBar title={text.item.filtering} amount={item.filtering || 0} />
+          </DetailSectionElement>
+          <DetailSectionElement title={text.item.weight} info={text.item.weightInfo} infoPosition="left">
+            <DetailSectionProgressBar title={text.item.weight} amount={item.weight || 0} />
+          </DetailSectionElement>
+          <DetailSectionElement title={text.item.sense} info={text.item.senseInfo} infoPosition="left">
+            <DetailSectionProgressBar title={text.item.sense} amount={item.sense || 0} />
+          </DetailSectionElement>
+          <DetailSectionElement title={text.item.reserves} info={text.item.reservesInfo} infoPosition="left">
+            <DetailSectionProgressBar title={text.item.reserves} amount={item.reserves || 0} />
           </DetailSectionElement>
         </FlexColumn>
       </FlexRow>
-
-      <FlexRow>
-        <DetailSectionElement title={text.item.forged}>
-          <DetailSectionBody>{item.forged}</DetailSectionBody>
-        </DetailSectionElement>
-        <DetailSectionElement title={text.item.baseMaterial}>
-          <DetailSectionBody>{item.baseMaterial}</DetailSectionBody>
-        </DetailSectionElement>
-      </FlexRow>
-
       <DetailSectionElement title={text.item.colors}>
         <DetailSectionColorPalette hexCodeList={item.colors} />
       </DetailSectionElement>

@@ -1,35 +1,27 @@
 import { FC, useMemo, useState } from "react";
-import { Item, ItemCategory } from "../../interfaces";
+import { Item, Category } from "../../interfaces";
 import { text } from "../../assets";
 import {
   ArrowContainer,
+  ArrowUpRight,
   CardActionsContainer,
   Close,
+  Content,
   Divider,
   InfoContainer,
   Menu,
+  MenuCardWrapper,
   MenuContainer,
   MenuContent,
   MenuHeader,
-  Content,
-  ArrowUpRight,
-  MenuCardWrapper,
 } from "./styles";
-import {
-  ButtonText,
-  HorizontalDivider,
-  ImageProps,
-  Label,
-  MenuText,
-  Overlay,
-  SecondaryButton,
-} from "../atoms";
+import { ButtonText, HorizontalDivider, ImageProps, Label, MenuText, Overlay, SecondaryButton } from "../atoms";
 import { MenuItem } from "../menu-item";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
 import { GO_BACK } from "../../constants";
 import { useViewport } from "../../hooks";
-import { ItemDetailSection } from "../../containers/detail-section/item-detail-section";
+import { ItemDetailSection } from "../../containers/detail-section";
 import { EmptyCard } from "../empty-card";
 import { useEquipItem, useUnequipItem } from "../../service";
 import { FadeInOut } from "../fade-in-out";
@@ -40,16 +32,11 @@ interface MenuCardProps {
   title: string;
   equippedItemProp?: Item;
   unequippedItems: Item[];
-  category: ItemCategory;
+  category: Category;
   imageProps?: ImageProps;
 }
 
-export const MenuCard: FC<MenuCardProps> = ({
-  title,
-  equippedItem,
-  unequippedItems,
-  imageProps,
-}) => {
+export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp, unequippedItems, imageProps }) => {
   const navigate = useNavigate();
   const { width: viewWidth, height: viewHeight } = useViewport();
   const [selectedName, setSelectedName] = useState<string>("");
@@ -65,35 +52,32 @@ export const MenuCard: FC<MenuCardProps> = ({
     return unequippedItems;
   }, [equippedItem, unequippedItems]);
 
-  const selectedItem = useMemo(
-    () => allItems?.find((item) => item.id === selectedId),
-    [allItems, selectedId]
-  );
+  const selectedItem = useMemo(() => allItems?.find((item) => item.name === selectedName), [allItems, selectedName]);
 
   const equip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    equipItem.mutate({ item: selectedItem! });
+    if (!selectedItem) return;
+    equipItem.mutate({ item: selectedItem });
   };
 
   const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
-    unequipItem.mutate({ item: equippedItem! });
+    if (!equippedItem) return;
+    unequipItem.mutate({ item: equippedItem });
   };
 
   const primaryActions = () => {
-    if (selectedItem?.id === equippedItem?.id) {
+    if (selectedItem?.name === equippedItem?.name) {
       return {
         text: text.item.unequip,
-        onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
-          unequip(event, selectedId),
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) => unequip(event),
       };
     } else {
       return {
         text: text.item.equip,
-        onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
-          equip(event, selectedId),
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) => equip(event),
       };
     }
   };
@@ -116,7 +100,8 @@ export const MenuCard: FC<MenuCardProps> = ({
           <MenuContainer>
             <MenuText>{title}</MenuText>
             <InfoContainer>
-              <Label>{text.param.amountOfAssets(allItems.length)}</Label>
+              {/* FIXME: missinf fn */}
+              {/* <Label>{text.param.amountOfAssets(allItems.length)}</Label> */}
               <Divider />
               <ArrowContainer>
                 <Close onClick={() => navigate(GO_BACK)} />
@@ -134,17 +119,12 @@ export const MenuCard: FC<MenuCardProps> = ({
                 onClick={() => setSelectedName(equippedItem.name)}
                 key={equippedItem.name}
                 isEquipped
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-                  unequip(event, equippedItem.id)
-                }
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => unequip(event)}
                 isInitial={intitial}
                 removeInitial={removeInitial}
               />
             ) : (
-              <EmptyCard
-                title={text.item.noItemEquipped}
-                description={text.item.selectAnItemFrom}
-              />
+              <EmptyCard title={text.item.noItemEquipped} description={text.item.selectAnItemFrom} />
             )}
 
             {isDividerShown && <HorizontalDivider />}
@@ -153,11 +133,9 @@ export const MenuCard: FC<MenuCardProps> = ({
               <MenuItem
                 data={{ ...item, image: item.thumbnail }}
                 imageProps={imageProps}
-                onClick={() => setSelectedId(item.id)}
-                key={item.id}
-                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-                  equip(event, item.id)
-                }
+                onClick={() => setSelectedName(item.name)}
+                key={item.name}
+                onButtonClick={(event: React.MouseEvent<HTMLButtonElement>) => equip(event)}
                 removeInitial={removeInitial}
               />
             ))}

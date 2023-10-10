@@ -10,6 +10,8 @@ export const filters = {
   price: "price",
   category: "category",
   categories: "categories",
+  origin: "origin",
+  title: "title",
   clearFilter: "clear all",
   apply: "apply",
   filters: "filters",

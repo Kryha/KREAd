@@ -1,21 +1,9 @@
-import {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { text } from "../../assets";
 import { color } from "../../design";
 import { useViewport } from "../../hooks";
-import {
-  BoldLabel,
-  ButtonText,
-  PrimaryButton,
-  SecondaryButton,
-} from "../atoms";
+import { BoldLabel, ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
 import {
   ButtonContainer,
   ColorBox,
@@ -38,11 +26,9 @@ interface PriceSelectorProps {
   max: number;
 }
 
-export const PriceSelector: FC<PriceSelectorProps> = ({
-  handleChange,
-  min,
-  max,
-}) => {
+// TODO: fix the min value slider
+
+export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }) => {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
   const [leftRange, setLeftRange] = useState(min / max);
@@ -51,10 +37,7 @@ export const PriceSelector: FC<PriceSelectorProps> = ({
   const maxValRef = useRef(max);
   const { height } = useViewport();
 
-  const getPercent = useCallback(
-    (value: number) => Math.round(((value - min) / (max - min)) * 100),
-    [min, max]
-  );
+  const getPercent = useCallback((value: number) => Math.round(((value - min) / (max - min)) * 100), [min, max]);
 
   useEffect(() => {
     const minPercent = getPercent(minVal);
@@ -123,9 +106,7 @@ export const PriceSelector: FC<PriceSelectorProps> = ({
             handleChange(minVal, maxVal);
           }}
         >
-          <ButtonText customColor={color.white}>
-            {text.filters.apply}
-          </ButtonText>
+          <ButtonText customColor={color.white}>{text.filters.apply}</ButtonText>
         </PrimaryButton>
       </ButtonContainer>
     </ColorBox>

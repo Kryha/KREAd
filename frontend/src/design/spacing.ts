@@ -8,7 +8,7 @@ export const margins = {
   extraLarge: "70px",
   huge: "100px",
   gigantic: "120px",
-};
+} as const;
 
 export interface zIndexProps {
   [key: string]: number;
@@ -21,14 +21,14 @@ export const zIndex: zIndexProps = {
   onTop: 101,
   overCharacter: 41,
   background: 0,
-  midBackground: 1,
+  patch: 1,
   character: 2,
   hair: 3,
   mask: 4,
-  noseline: 5,
-  liquid: 6,
-  frontMask: 7,
-  airReservoir: 8,
-  clothing: 9,
+  perk1: 5,
+  filter1: 6,
+  perk2: 7,
+  filter2: 8,
+  garment: 9,
   headPiece: 10,
-};
+} as const;

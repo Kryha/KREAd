@@ -1,47 +1,55 @@
-import { FC, ReactNode, useState } from "react";
-import { ASSET_TYPE, MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
-import { useGetCharacterInShopById, useGetCharactersInShop } from "../../service";
+import React, { FC, useState } from "react";
+import { METRICS_CHARACTER, SECTION } from "../../constants";
+import { useGetCharacterInShopById, useGetCharacterMarketMetrics, useGetCharactersInShop } from "../../service";
 import { routes } from "../../navigation";
-import { AssetFilters } from "../../components/asset-filters/asset-filters";
 import { OverviewContainer } from "./styles";
-import { OverviewEmpty } from "../../components";
+import { HorizontalDivider, OverviewEmpty } from "../../components";
 import { text } from "../../assets";
 import { CharacterDetailsMarket } from "../../components/asset-details/character-details-market";
 import { CharacterCardsMarket } from "../../components/asset-cards/character-cards-market";
+import { AssetCharacterFilters } from "../../components/asset-character-filters/asset-character-filters";
+import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../components/asset-item-filters/styles";
+import { color } from "../../design";
+import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
+import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 
-interface Props {
-  pageSelector: ReactNode;
-}
-
-export const CharactersShop: FC<Props> = ({ pageSelector }) => {
+export const CharactersShop: FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedSorting, setSelectedSorting] = useState<string>("");
-  const [selectedPrice, setSelectedPrice] = useState<{ min: number; max: number }>({ min: MIN_PRICE, max: MAX_PRICE });
 
-  const [characters, isLoading] = useGetCharactersInShop({
-    categories: selectedCategories,
-    sort: selectedSorting,
-    price: selectedPrice,
-  });
-
+  const [characters, isLoading] = useGetCharactersInShop();
+  const metrics = useGetCharacterMarketMetrics();
   const [character] = useGetCharacterInShopById(selectedId);
-  // if (!character) return <h1>No character found?!</h1>;
+  const assetsCount = characters.length;
+
+  let metricsData: any = [];
+
+  if (metrics) {
+    let charAverage = 0;
+    let charMinimum = 0;
+
+    if (characters.length != 0) {
+      charMinimum = findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
+      charAverage = findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
+    }
+
+    metricsData = [
+      metrics.amountSold,
+      metrics.collectionSize,
+      toTwoDecimals(charMinimum),
+      toTwoDecimals(charAverage),
+      toTwoDecimals(metrics.averageLevel),
+      toTwoDecimals(metrics.marketplaceAverageLevel),
+    ];
+  }
 
   return (
     <>
-      <AssetFilters
-        assetType={ASSET_TYPE.CHARACTER}
-        section={SECTION.SHOP}
-        pageSelector={pageSelector}
-        assets={characters}
-        selectedCategories={selectedCategories}
-        selectedSorting={selectedSorting}
-        selectedPrice={selectedPrice}
-        setSelectedSorting={setSelectedSorting}
-        setSelectedCategories={setSelectedCategories}
-        setSelectedPrice={setSelectedPrice}
-      />
+      <AssetHeaderContainer>
+        <AssetHeader>{metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_CHARACTER} /> : <></>}</AssetHeader>
+        <AssetCharacterFilters section={SECTION.SHOP} />
+      </AssetHeaderContainer>
+      <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
+      <HorizontalDivider />
       {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (
         <CharacterCardsMarket charactersInMarket={characters} isLoading={isLoading} selectCharacterId={(id: string) => setSelectedId(id)} />

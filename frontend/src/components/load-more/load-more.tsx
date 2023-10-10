@@ -10,16 +10,8 @@ interface LoadMoreProps {
 
 export const LoadMore: FC<LoadMoreProps> = ({ isLoading, loadMore }) => {
   return (
-    <LoadMoreContainer>
-      <SecondaryButton
-        disabled={false}
-        onClick={() => {
-          loadMore();
-        }}
-      >
-        <ButtonText>
-          {isLoading ? text.general.loading : text.general.loadMore}
-        </ButtonText>
+    <LoadMoreWrapper onClick={loadMore}>
+      <LoadMoreContainer>
         <Refresh />
         <ButtonText>{isLoading ? text.general.loading : text.general.loadMore}</ButtonText>
       </LoadMoreContainer>

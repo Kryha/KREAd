@@ -6,10 +6,8 @@ interface TextProps {
 }
 
 export const Heading = styled.h1<TextProps>`
-  font-family: "aktiv-grotesk";
   font-size: 40px;
   line-height: 44px;
-  white-space: normal;
   word-break: keep-all;
   white-space: pre-wrap;
   font-weight: ${fontWeight.light};
@@ -20,11 +18,9 @@ export const Heading = styled.h1<TextProps>`
 `;
 
 export const MenuText = styled.h1<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 32px;
   line-height: 41px;
-  white-space: normal;
   word-break: keep-all;
   white-space: pre-wrap;
   :first-letter {
@@ -34,7 +30,6 @@ export const MenuText = styled.h1<TextProps>`
 `;
 
 export const Label = styled.p<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 12px;
   line-height: 15px;
@@ -46,12 +41,15 @@ export const Label = styled.p<TextProps>`
 `;
 
 export const BoldLabel = styled(Label)`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
 `;
 
+export const LevelBoldLabel = styled(Label)`
+  font-weight: ${fontWeight.medium};
+  font-size: ${fontSize.medium};
+`;
+
 export const MenuItemName = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: ${fontSize.title};
   line-height: 22px;
@@ -62,21 +60,24 @@ export const MenuItemName = styled.h3<TextProps>`
 `;
 
 export const NavigationTitle = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
-  font-size: ${fontSize.subTitle};
+  font-size: 16px;
   line-height: 18px;
   :first-letter {
     text-transform: capitalize;
   }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
+
+  @media screen and (max-width: 768px) {
+    font-size: ${fontSize.subTitle};
+  }
 `;
 
 export const TitleText = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
+  white-space: pre-line;
   :first-letter {
     text-transform: capitalize;
   }
@@ -84,7 +85,6 @@ export const TitleText = styled.h3<TextProps>`
 `;
 
 export const BodyText = styled.p<TextProps>`
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.light};
   font-size: 24px;
   line-height: 31px;
@@ -96,7 +96,6 @@ export const BodyText = styled.p<TextProps>`
 
 export const PageTitle = styled.h1<TextProps>`
   color: ${color.black};
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 32px;
   line-height: 52px;
@@ -105,10 +104,20 @@ export const PageTitle = styled.h1<TextProps>`
   }
 `;
 
-export const ButtonText = styled.h3<TextProps>`
-  font-family: "aktiv-grotesk";
+export const PageSubTitle = styled.h1<TextProps>`
+  color: ${color.black};
   font-weight: ${fontWeight.medium};
-  font-size: 12px;
+  font-size: 24px;
+  line-height: 12px;
+  color: ${color.darkGrey};
+  :first-letter {
+    text-transform: capitalize;
+  }
+`;
+
+export const ButtonText = styled.h3<TextProps>`
+  font-weight: ${fontWeight.medium};
+  font-size: 14px;
   line-height: 15px;
   :first-letter {
     text-transform: capitalize;
@@ -129,4 +138,19 @@ export const SectionHeader = styled.h1`
 export const FormText = styled(BodyText)`
   font-size: 14px;
   line-height: 18px;
+`;
+
+export const FormTable = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 16px;
+`;
+
+export const FormTableRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
 `;

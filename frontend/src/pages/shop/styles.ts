@@ -16,13 +16,13 @@ interface ShopProps {
 }
 
 export const ShopWrapper = styled.div`
-  margin: 0px ${margins.big} 120px ${margins.big};
   position: relative;
+  width: 100%;
 
   ${DetailSectionWrap} {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     z-index: 1000;
   }
 `;
@@ -31,7 +31,7 @@ export const FilterWrapper = styled.div`
   position: sticky;
   display: flex;
   flex-direction: column;
-  padding: 0px;
+  padding: 0;
   z-index: 30;
   ${HorizontalDivider} {
     margin-top: 4px;
@@ -47,7 +47,7 @@ export const FilterContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0px;
+  padding: 0;
   gap: 16px;
   margin-left: auto;
   margin-right: auto;
@@ -61,7 +61,7 @@ export const SelectorContainer = styled.div`
 export const SortByContainer = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 0px;
+  padding: 0;
   align-items: center;
   ${Label} {
     margin-right: 10px;
@@ -98,7 +98,7 @@ export const Refresh = styled(RefreshIcon)`
 `;
 
 export const Close = styled(CloseIcon)`
-  margin: 0px 0px 0px 11px !important;
+  margin: 0 0 0 11px !important;
   width: 12px;
 `;
 
@@ -116,7 +116,7 @@ export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
   position: relative;
   z-index: 1000;
   ${Close} {
-    margin: 0px 6px !important;
+    margin: 0 6px !important;
     width: 15px;
     height: 15px;
   }
@@ -192,21 +192,24 @@ export const DetailContainer = styled.div`
   }
 `;
 
-export const KreadContainer = styled.div<ViewProps>`
+export const KreadContainer = styled.div`
   ${KreadIcon} {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);
-    top: 40px;
+    top: 24px;
     width: 100px;
     height: 24px;
   }
 `;
 
 export const OverviewContainer = styled.div`
+  position: relative;
+  z-index: 0;
   ${OverviewWrapper} {
     padding-top: 97px;
-    padding-left: 0px;
+    padding-left: 0;
+    z-index: 0;
   }
 `;
 

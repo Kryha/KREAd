@@ -39,8 +39,3 @@ export const ActiveLine = styled.div<NavTabProps>`
     `;
   }}
 `;
-
-export const Tab = styled.div<WidthProps>`
-  ${({ width, amount }): string =>
-    `width: ${tabWidth(width, amount) / amount}px;`};
-`;

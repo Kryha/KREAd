@@ -20,7 +20,6 @@ export const PrimaryButton = styled.button<ButtonProps>`
   padding: 8px 16px;
   cursor: pointer;
   border-radius: 24px;
-  font-family: "aktiv-grotesk";
   font-weight: ${fontWeight.medium};
   font-size: 14px;
   line-height: 18px;
@@ -90,8 +89,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
 export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   color: ${(props): string => props.fontColor || color.black};
   border: 1px solid ${(props): string => props.borderColor || color.grey};
-  background-color: ${(props): string =>
-    props.backgroundColor || "transparent"};
+  background-color: ${(props): string => props.backgroundColor || "transparent"};
   z-index: ${zIndex.onTop};
   ${ButtonText} {
     color: ${(props): string => props.fontColor || color.black};
@@ -102,8 +100,7 @@ export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
   }
   &:hover {
     border: 1px solid ${color.black};
-    background-color: ${(props): string =>
-      props.backgroundColor || "transparent"};
+    background-color: ${(props): string => props.backgroundColor || "transparent"};
     ${ButtonText} {
       color: ${(props): string => props.fontColor || color.black};
     }
@@ -159,8 +156,7 @@ export const SecondaryButton = styled(PrimaryButton)<ButtonProps>`
 `;
 
 export const TertiaryButton = styled(PrimaryButton)<ButtonProps>`
-  background-color: ${(props): string =>
-    props.backgroundColor || "transparent"};
+  background-color: ${(props): string => props.backgroundColor || "transparent"};
   color: ${(props): string => props.fontColor || color.black};
   border: none;
   outline: none;

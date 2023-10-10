@@ -14,13 +14,11 @@ import {
   KreadContainer,
 } from "./styles";
 import { ButtonText, PrimaryButton, SecondaryButton } from "../atoms";
-import { ErrorImage, text } from "../../assets";
+import { ArmaCitizen, text } from "../../assets";
 import { routes } from "../../navigation";
 import { color } from "../../design";
 import { GO_BACK } from "../../constants";
-import { ErrorImage } from "../../assets";
 import { AnimatedLogo } from "../logo";
-import { DevelopmentMode } from "../../service/test-service/development-mode";
 
 interface ErrorViewProps {
   headingText?: string;
@@ -30,13 +28,7 @@ interface ErrorViewProps {
   onButtonClick?: () => void;
 }
 
-export const ErrorView: FC<ErrorViewProps> = ({
-  redirectRoute,
-  headingText,
-  navigationText,
-  onButtonClick,
-  descriptionText,
-}) => {
+export const ErrorView: FC<ErrorViewProps> = ({ redirectRoute, headingText, navigationText, onButtonClick, descriptionText }) => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -48,32 +40,25 @@ export const ErrorView: FC<ErrorViewProps> = ({
     <>
       <KreadContainer>
         <AnimatedLogo iteration={1} />
-        <KreadDevelopmentContainer>
-          <DevelopmentMode />
-        </KreadDevelopmentContainer>
       </KreadContainer>
       <ErrorContainer>
         <InformationContainer>
           <ErrorTitle>{headingText || text.error.pageNotFound}</ErrorTitle>
-          <DescriptionTitle>
-            {descriptionText || text.error.sorrySomethingWentWrong}
-          </DescriptionTitle>
+          <DescriptionTitle>{descriptionText || text.error.sorrySomethingWentWrong}</DescriptionTitle>
           <ButtonContainer>
             <SecondaryButton onClick={() => navigate(GO_BACK)}>
               <ButtonText>{text.error.goBack}</ButtonText>
               <ArrowBack />
             </SecondaryButton>
             <PrimaryButton onClick={handleButtonClick}>
-              <ButtonText customColor={color.white}>
-                {text.error.goHome || navigationText}
-              </ButtonText>
+              <ButtonText customColor={color.white}>{text.error.goHome || navigationText}</ButtonText>
               <ArrowUp />
             </PrimaryButton>
           </ButtonContainer>
         </InformationContainer>
       </ErrorContainer>
       <ImageConatiner>
-        <ErrorIcon src={ErrorImage} alt={text.character.clothing} />
+        <ErrorIcon src={ArmaCitizen} alt={text.character.garment} />
       </ImageConatiner>
     </>
   );

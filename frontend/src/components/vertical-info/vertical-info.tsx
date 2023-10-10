@@ -7,10 +7,7 @@ interface VerticalInfoProps {
   isRight?: boolean;
 }
 
-export const VerticalInfo: FC<VerticalInfoProps> = ({
-  code,
-  isRight = false,
-}) => {
+export const VerticalInfo: FC<VerticalInfoProps> = ({ code, isRight = false }) => {
   return (
     <InfoContainer>
       <Id isRight={isRight} category={code}>
