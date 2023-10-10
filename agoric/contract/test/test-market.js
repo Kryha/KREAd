@@ -9,6 +9,7 @@ import { addCharacterToBootstrap, addItemToBootstrap } from './setup.js';
 import { makeCopyBag } from '@agoric/store';
 import { errors } from '../src/errors.js';
 import { defaultItems } from './items.js';
+import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
@@ -76,7 +77,7 @@ test.before(async (t) => {
     assets,
     purses,
     zoe,
-    users: { bob, alice },
+    users: { bob, alice, admin },
     paymentAsset,
     royaltyPurse,
     platformFeePurse,

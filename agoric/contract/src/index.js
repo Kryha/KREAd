@@ -66,14 +66,6 @@ harden(meta);
  * @param {{
  *   seed: number
  *   powers: { storageNode: StorageNode, marshaller: Marshaller },
- *   mintFee: bigint,
- *   royaltyRate: RatioObject,
- *   platformFeeRate: RatioObject,
- *   mintRoyaltyRate: RatioObject,
- *   mintPlatformFeeRate: RatioObject,
- *   royaltyDepositFacet: DepositFacet,
- *   platformFeeDepositFacet: DepositFacet,
- *   paymentBrand: Brand
  *   clock: Clock
  *   defaultCharacters: object[],
  *   defaultItems: object[],
@@ -86,10 +78,7 @@ export const start = async (zcf, privateArgs, baggage) => {
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
-  const assetNames = {
-    character: 'KREAdCHARACTER',
-    item: 'KREAdITEM',
-  };
+  const assetNames = terms.assetNames;
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
   // durability is not a concern with these, and defining them here, passing on what's needed
