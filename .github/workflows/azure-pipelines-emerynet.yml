@@ -1,7 +1,9 @@
 name: CI CD Emerynet
 
 on:
-  push
+  push:
+    branches:
+      - develop
 
 jobs:
   build_and_deploy:
@@ -18,15 +20,13 @@ jobs:
       shell: bash
 
     - name: Download Service Account Key
-      uses: actions/checkout@v2
-      with:
-        path: ${{ runner.workspace }}/authkey
-      env:
-        GCP_AUTH_KEY: ${{ secrets.GCP_AUTH_KEY }}
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/authkey
+        echo "${{ secrets.GCP_AUTH_KEY }}" > $GITHUB_WORKSPACE/authkey/google-credentials.json
+      shell: bash
 
     - name: Set Google Cloud Credentials
       run: |
-        echo "$GCP_AUTH_KEY" > $GITHUB_WORKSPACE/authkey/google-credentials.json
         export GOOGLE_APPLICATION_CREDENTIALS="$GITHUB_WORKSPACE/authkey/google-credentials.json"
       shell: bash
 
@@ -36,7 +36,7 @@ jobs:
       shell: bash
 
     - name: Login to Container Registry
-      run: docker login -u _json_key -p "$GCP_AUTH_KEY" https://gcr.io
+      run: docker login -u _json_key -p "$(cat $GITHUB_WORKSPACE/authkey/google-credentials.json)" https://gcr.io
       env:
         DOCKER_CLI_ACI_SERVER: ${{ secrets.CONTAINER_REGISTRY_SERVER }}
       shell: bash
