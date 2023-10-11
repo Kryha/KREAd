@@ -20,7 +20,6 @@ jobs:
     - name: Configure Docker and Authenticate with Google Cloud
       run: |
         echo "${{ secrets.GCP_AUTH_KEY }}" > google-credentials.json
-        gcloud auth activate-service-account web3-agoric-0@web3-335312.iam.gserviceaccount.com --key-file=google-credentials.json
         gcloud auth configure-docker
       shell: bash
 
