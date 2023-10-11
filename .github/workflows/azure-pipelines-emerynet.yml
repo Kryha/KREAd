@@ -15,7 +15,6 @@ jobs:
       run: |
         curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
         sudo install skaffold /usr/local/bin/
-        sudo apt-get update -y && sudo apt-get -y install google-cloud-sdk-gke-gcloud-auth-plugin
       shell: bash
 
     - name: Authenticate with Google Cloud
@@ -25,8 +24,10 @@ jobs:
         project_id: web3-335312
         export_default_credentials: true  
 
-    - name: Activate Service Account
-      run: gcloud auth activate-service-account github-actions-187@web3-335312.iam.gserviceaccount.com --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+    - name: Activate Service Account + Install GKE Plugin
+      run: |
+         gcloud auth activate-service-account github-actions-187@web3-335312.iam.gserviceaccount.com --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+         gcloud components install gke-gcloud-auth-plugin
 
     - name: Login to GCR
       uses: docker/login-action@v3
