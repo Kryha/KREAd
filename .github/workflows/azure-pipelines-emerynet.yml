@@ -1,9 +1,7 @@
 name: CI CD Emerynet
 
 on:
-  push:
-    branches:
-      - develop
+  push
 
 jobs:
   build_and_deploy:
