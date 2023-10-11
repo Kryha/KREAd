@@ -1,7 +1,11 @@
 name: CI/CD Emerynet
 
 on:
-  push
+  pull_request:
+    branches:
+      - develop
+    types:
+      - closed
 
 jobs:
   build_and_deploy:
@@ -11,7 +15,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Install Skaffold + GKE Auth Plugin
+    - name: Install Skaffold 
       run: |
         curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
         sudo install skaffold /usr/local/bin/
