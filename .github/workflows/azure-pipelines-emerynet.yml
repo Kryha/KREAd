@@ -30,6 +30,7 @@ jobs:
         DOCKER_CLI_ACI_SERVER: ${{ secrets.CONTAINER_REGISTRY_SERVER }}
       shell: bash
 
+
     - name: Login to Kubernetes
       uses: azure/k8s-set-context@v1
       with:
