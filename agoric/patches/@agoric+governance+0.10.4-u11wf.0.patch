@@ -1,0 +1,35 @@
+diff --git a/node_modules/@agoric/governance/tools/puppetGovernance.js b/node_modules/@agoric/governance/tools/puppetGovernance.js
+index 4f41593..10ce1dd 100644
+--- a/node_modules/@agoric/governance/tools/puppetGovernance.js
++++ b/node_modules/@agoric/governance/tools/puppetGovernance.js
+@@ -1,5 +1,3 @@
+-/* eslint-disable import/no-extraneous-dependencies */
+-
+ import bundleSource from '@endo/bundle-source';
+ import { E } from '@endo/eventual-send';
+ import { resolve as importMetaResolve } from 'import-meta-resolve';
+@@ -28,6 +26,7 @@ const autoRefundBundleP = makeBundle(
+  * @param {import('@agoric/swingset-vat/src/vats/timer/vat-timer.js').TimerService} timer
+  * @param {{ [k: string]: any, governedParams?: Record<string, unknown>, governedApis?: string[] }} termsOfGoverned
+  * @param {{}} privateArgsOfGoverned
++ * @param {IssuerKeywordRecord} [issuerKeywordRecord]
+  */
+ export const setUpGovernedContract = async (
+   zoe,
+@@ -35,6 +34,7 @@ export const setUpGovernedContract = async (
+   timer,
+   termsOfGoverned = {},
+   privateArgsOfGoverned = {},
++  issuerKeywordRecord = {},
+ ) => {
+   const [contractGovernorBundle, autoRefundBundle] = await Promise.all([
+     contractGovernorBundleP,
+@@ -87,7 +87,7 @@ export const setUpGovernedContract = async (
+     governedContractInstallation: governed,
+     governed: {
+       terms: governedTermsWithElectorate,
+-      issuerKeywordRecord: {},
++      issuerKeywordRecord,
+     },
+   };
+ 

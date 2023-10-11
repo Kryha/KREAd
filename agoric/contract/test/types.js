@@ -40,19 +40,21 @@
  * }} ContractAssets
  */
 
+// XXX approximate
 /**
  * Return value from bootstrap.js
  *
  * @typedef {{
- *  assets: Assets
- *  contractAssets: ContractAssets
- *  zoe: ZoeService
+ *  assets: Assets;
+ *  creatorFacet: unknown;
+ *  contractAssets: ContractAssets;
+ *  publicFacet: unknown;
+ *  zoe: ZoeService;
  *  purses: {
  *    character: any
  *    item: any
  *    payment: any
- *  }
- *  instance: StartInstanceResult
+ *  };
  * }} Bootstrap
  */
 

@@ -94,6 +94,7 @@ const Reducer = (state: UserContext, action: UserStateActions): UserContext => {
           item.image = cidToUrl(item.image);
           item.thumbnail = cidToUrl(item.thumbnail);
         }
+        item.description = item.description.replace(/â/g, "’");
         return item;
       });
       return { ...state, items, fetched: true };

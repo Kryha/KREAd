@@ -61,7 +61,12 @@ export const ItemMarketContextProvider = (props: ProviderProps): React.ReactElem
       const item = marketEntry.asset;
       return {
         id: marketEntry.id.toString(),
-        item: { ...item, image: cidToUrl(item.image), thumbnail: cidToUrl(item.thumbnail) },
+        item: {
+          ...item,
+          image: cidToUrl(item.image),
+          thumbnail: cidToUrl(item.thumbnail),
+          description: item.description.replace(/â/g, "’"),
+        },
         sell: {
           price: marketEntry.askingPrice.value,
           platformFee: marketEntry.platformFee.value,

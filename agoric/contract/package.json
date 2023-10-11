@@ -1,5 +1,5 @@
 {
-  "name": "KREAd-contract",
+  "name": "kread-contract",
   "version": "0.1.0",
   "private": true,
   "description": "Contract for the KREAd nested NFTs",
@@ -14,9 +14,10 @@
     "lint-check-jessie": "eslint -c '.eslintrc-jessie.js' '**/*.{js,jsx}'"
   },
   "devDependencies": {
-    "ava": "^4.3.1",
+    "@agoric/eslint-config": "agoric-upgrade-11",
     "@endo/eslint-plugin": "^0.4.4",
     "@jessie.js/eslint-plugin": "^0.4.0",
+    "ava": "^4.3.1",
     "eslint": "^8.47.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-jessie": "^0.0.6",
@@ -26,26 +27,29 @@
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsdoc": "^46.4.3",
     "eslint-plugin-prettier": "^5.0.0",
-    "import-meta-resolve": "^1.1.1",
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "@agoric/assert": "beta",
-    "@agoric/babel-parser": "^7.6.4",
-    "@agoric/deploy-script-support": "beta",
-    "@agoric/ertp": "beta",
-    "@agoric/nat": "dev",
-    "@agoric/notifier": "beta",
-    "@agoric/store": "beta",
-    "@agoric/vat-data": "^0.5.2",
-    "@agoric/zoe": "beta",
-    "@agoric/vats": "beta",
-    "@endo/bundle-source": "^2.1.1",
-    "@endo/eventual-send": "^0.14.8",
-    "@endo/init": "^0.5.37",
-    "@endo/marshal": "^0.6.9",
+    "@agoric/assert": "agoric-upgrade-11",
+    "@agoric/deploy-script-support": "agoric-upgrade-11",
+    "@agoric/ertp": "agoric-upgrade-11",
+    "@agoric/governance": "agoric-upgrade-11",
+    "@agoric/internal": "agoric-upgrade-11",
+    "@agoric/notifier": "agoric-upgrade-11",
+    "@agoric/store": "agoric-upgrade-11",
+    "@agoric/time": "agoric-upgrade-11",
+    "@agoric/vat-data": "agoric-upgrade-11",
+    "@agoric/vats": "agoric-upgrade-11",
+    "@agoric/zoe": "agoric-upgrade-11",
+    "@agoric/zone": "agoric-upgrade-11",
+    "@endo/bundle-source": "^2.5.2-upstream-rollup",
+    "@endo/eventual-send": "^0.17.2",
+    "@endo/far": "^0.2.18",
+    "@endo/init": "^0.5.56",
+    "@endo/marshal": "^0.8.5",
+    "@endo/patterns": "^0.2.2",
     "@endo/ses-ava": "^0.2.40",
-    "import-meta-resolve": "^1.1.1"
+    "import-meta-resolve": "^2.2.1"
   },
   "ava": {
     "files": [
@@ -56,11 +60,6 @@
   "keywords": [],
   "author": "Kryha",
   "license": "Apache-2.0",
-  "eslintConfig": {
-    "extends": [
-      "@agoric"
-    ]
-  },
   "prettier": {
     "trailingComma": "all",
     "singleQuote": true
@@ -68,7 +67,6 @@
   "eslintIgnore": [
     "characters.js",
     "items.js",
-    "chain-storage-proposal.js",
-    "chain-storage-proposal.js-clean.js"
+    "*-clean.js"
   ]
 }

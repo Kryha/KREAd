@@ -1,0 +1,628 @@
+diff --git a/node_modules/@agoric/swingset-liveslots/tools/fakeCollectionManager.js b/node_modules/@agoric/swingset-liveslots/tools/fakeCollectionManager.js
+new file mode 100644
+index 0000000..78be570
+--- /dev/null
++++ b/node_modules/@agoric/swingset-liveslots/tools/fakeCollectionManager.js
+@@ -0,0 +1,44 @@
++import { makeCollectionManager } from '../src/collectionManager.js';
++
++export function makeFakeCollectionManager(vrm, fakeStuff, _options = {}) {
++  const {
++    makeScalarBigMapStore,
++    makeScalarBigWeakMapStore,
++    makeScalarBigSetStore,
++    makeScalarBigWeakSetStore,
++    provideBaggage,
++    initializeStoreKindInfo,
++    flushSchemaCache,
++  } = makeCollectionManager(
++    fakeStuff.syscall,
++    vrm,
++    fakeStuff.allocateExportID,
++    fakeStuff.allocateCollectionID,
++    fakeStuff.convertValToSlot,
++    fakeStuff.convertSlotToVal,
++    fakeStuff.registerEntry,
++    fakeStuff.marshal.serialize,
++    fakeStuff.marshal.unserialize,
++    fakeStuff.assertAcceptableSyscallCapdataSize,
++  );
++  initializeStoreKindInfo();
++
++  const normalCM = {
++    makeScalarBigMapStore,
++    makeScalarBigWeakMapStore,
++    makeScalarBigSetStore,
++    makeScalarBigWeakSetStore,
++    provideBaggage,
++    flushSchemaCache,
++  };
++
++  const debugTools = {
++    getValForSlot: fakeStuff.getValForSlot,
++    setValForSlot: fakeStuff.setValForSlot,
++    registerEntry: fakeStuff.registerEntry,
++    deleteEntry: fakeStuff.deleteEntry,
++    dumpStore: fakeStuff.dumpStore,
++  };
++
++  return harden({ ...normalCM, ...debugTools });
++}
+diff --git a/node_modules/@agoric/swingset-liveslots/tools/fakeVirtualObjectManager.js b/node_modules/@agoric/swingset-liveslots/tools/fakeVirtualObjectManager.js
+new file mode 100644
+index 0000000..2acee35
+--- /dev/null
++++ b/node_modules/@agoric/swingset-liveslots/tools/fakeVirtualObjectManager.js
+@@ -0,0 +1,60 @@
++import { makeVirtualObjectManager } from '../src/virtualObjectManager.js';
++
++// Note: `fakeVirtualObjectManager` is something of a misnomer here.  The
++// virtual object manager being used to implement this realized by the actual
++// virtual object manager code.  What's being faked is everything else the
++// virtual object manager is embedded in, i.e., the kernel and the rest of
++// liveslots.  In particular, this module can be (and is, and is intended to be)
++// used for unit tests for the virtual object manager itself.  What you get back
++// from `makeFakeVirtualObjectManager` can't be used to program as if you were
++// running in a vat because the rest of the vat environment is not present, but
++// it *will* execute virtual object manager operations in the same way that the
++// real one will because underneath it *is* the real one.
++
++export function makeFakeVirtualObjectManager(vrm, fakeStuff) {
++  const {
++    initializeKindHandleKind,
++    defineKind,
++    defineKindMulti,
++    defineDurableKind,
++    defineDurableKindMulti,
++    makeKindHandle,
++    VirtualObjectAwareWeakMap,
++    VirtualObjectAwareWeakSet,
++    flushStateCache,
++    canBeDurable,
++  } = makeVirtualObjectManager(
++    fakeStuff.syscall,
++    vrm,
++    fakeStuff.allocateExportID,
++    fakeStuff.getSlotForVal,
++    fakeStuff.requiredValForSlot,
++    fakeStuff.registerEntry,
++    fakeStuff.marshal.serialize,
++    fakeStuff.marshal.unserialize,
++    fakeStuff.assertAcceptableSyscallCapdataSize,
++  );
++
++  const normalVOM = {
++    initializeKindHandleKind,
++    defineKind,
++    defineKindMulti,
++    defineDurableKind,
++    defineDurableKindMulti,
++    makeKindHandle,
++    canBeDurable,
++    VirtualObjectAwareWeakMap,
++    VirtualObjectAwareWeakSet,
++  };
++
++  const debugTools = {
++    getValForSlot: fakeStuff.getValForSlot,
++    setValForSlot: fakeStuff.setValForSlot,
++    registerEntry: fakeStuff.registerEntry,
++    deleteEntry: fakeStuff.deleteEntry,
++    flushStateCache,
++    dumpStore: fakeStuff.dumpStore,
++  };
++
++  return harden({ ...normalVOM, ...debugTools });
++}
+diff --git a/node_modules/@agoric/swingset-liveslots/tools/fakeVirtualSupport.js b/node_modules/@agoric/swingset-liveslots/tools/fakeVirtualSupport.js
+new file mode 100644
+index 0000000..6280ec6
+--- /dev/null
++++ b/node_modules/@agoric/swingset-liveslots/tools/fakeVirtualSupport.js
+@@ -0,0 +1,357 @@
++/* global WeakRef */
++/* eslint-disable max-classes-per-file */
++import { makeMarshal } from '@endo/marshal';
++import { assert } from '@agoric/assert';
++import { parseVatSlot } from '../src/parseVatSlots.js';
++
++import { makeVirtualReferenceManager } from '../src/virtualReferences.js';
++import { makeWatchedPromiseManager } from '../src/watchedPromises.js';
++import { makeFakeVirtualObjectManager } from './fakeVirtualObjectManager.js';
++import { makeFakeCollectionManager } from './fakeCollectionManager.js';
++
++class FakeFinalizationRegistry {
++  // eslint-disable-next-line no-useless-constructor, no-empty-function
++  constructor() {}
++
++  // eslint-disable-next-line class-methods-use-this
++  register(_target, _heldValue, _unregisterToken) {}
++
++  // eslint-disable-next-line class-methods-use-this
++  unregister(_unregisterToken) {}
++}
++
++class FakeWeakRef {
++  constructor(target) {
++    this.target = target;
++  }
++
++  deref() {
++    return this.target; // strong ref
++  }
++}
++
++const RealWeakRef = WeakRef;
++
++export function makeFakeLiveSlotsStuff(options = {}) {
++  let vrm;
++  function setVrm(vrmToUse) {
++    assert(!vrm, 'vrm already configured');
++    vrm = vrmToUse;
++  }
++
++  const {
++    fakeStore = new Map(),
++    weak = false,
++    log,
++    FinalizationRegistry = FakeFinalizationRegistry,
++    WeakRef = FakeWeakRef, // VRM uses this
++    addToPossiblyDeadSet = () => {},
++    addToPossiblyRetiredSet = () => {},
++  } = options;
++
++  let sortedKeys;
++  let priorKeyReturned;
++  let priorKeyIndex;
++
++  function s(v) {
++    switch (typeof v) {
++      case 'symbol':
++        return v.toString();
++      case 'bigint':
++        return `${v}n`;
++      default:
++        return `${v}`;
++    }
++  }
++
++  function ensureSorted() {
++    if (!sortedKeys) {
++      sortedKeys = [];
++      for (const key of fakeStore.keys()) {
++        sortedKeys.push(key);
++      }
++      sortedKeys.sort((k1, k2) => k1.localeCompare(k2));
++    }
++  }
++
++  function clearGetNextKeyCache() {
++    priorKeyReturned = undefined;
++    priorKeyIndex = -1;
++  }
++  clearGetNextKeyCache();
++
++  function clearSorted() {
++    sortedKeys = undefined;
++    clearGetNextKeyCache();
++  }
++
++  function dumpStore() {
++    ensureSorted();
++    const result = [];
++    for (const key of sortedKeys) {
++      result.push([key, fakeStore.get(key)]);
++    }
++    return result;
++  }
++
++  const syscall = {
++    vatstoreGet(key) {
++      const result = fakeStore.get(key);
++      if (log) {
++        log.push(`get ${s(key)} => ${s(result)}`);
++      }
++      return result;
++    },
++    vatstoreGetNextKey(priorKey) {
++      assert.typeof(priorKey, 'string');
++      ensureSorted();
++      // TODO: binary search for priorKey (maybe missing), then get
++      // the one after that. For now we go simple and slow. But cache
++      // a starting point, because the main use case is a full
++      // iteration. OTOH, the main use case also deletes everything,
++      // which will clobber the cache on each deletion, so it might
++      // not help.
++      const start = priorKeyReturned === priorKey ? priorKeyIndex : 0;
++      let result;
++      for (let i = start; i < sortedKeys.length; i += 1) {
++        const key = sortedKeys[i];
++        if (key > priorKey) {
++          priorKeyReturned = key;
++          priorKeyIndex = i;
++          result = key;
++          break;
++        }
++      }
++      if (!result) {
++        // reached end without finding the key, so clear our cache
++        clearGetNextKeyCache();
++      }
++      if (log) {
++        log.push(`getNextKey ${s(priorKey)} => ${s(result)}`);
++      }
++      return result;
++    },
++    vatstoreSet(key, value) {
++      if (log) {
++        log.push(`set ${s(key)} ${s(value)}`);
++      }
++      if (!fakeStore.has(key)) {
++        clearSorted();
++      }
++      fakeStore.set(key, value);
++    },
++    vatstoreDelete(key) {
++      if (log) {
++        log.push(`delete ${s(key)}`);
++      }
++      if (fakeStore.has(key)) {
++        clearSorted();
++      }
++      fakeStore.delete(key);
++    },
++  };
++
++  let nextExportID = 1;
++  function allocateExportID() {
++    const exportID = nextExportID;
++    nextExportID += 1;
++    return exportID;
++  }
++
++  let nextCollectionID = 1;
++  function allocateCollectionID() {
++    const collectionID = nextCollectionID;
++    nextCollectionID += 1;
++    return collectionID;
++  }
++
++  // note: The real liveslots slotToVal() maps slots (vrefs) to a WeakRef,
++  // and the WeakRef may or may not contain the target value. Use
++  // options={weak:true} to match that behavior, or the default weak:false to
++  // keep strong references.
++  const valToSlot = new WeakMap();
++  const slotToVal = new Map();
++
++  function getSlotForVal(val) {
++    return valToSlot.get(val);
++  }
++
++  function getValForSlot(slot) {
++    const d = slotToVal.get(slot);
++    return d && (weak ? d.deref() : d);
++  }
++
++  function requiredValForSlot(slot) {
++    const val = getValForSlot(slot);
++    assert(val, `${slot} must have a value`);
++    return val;
++  }
++
++  function setValForSlot(slot, val) {
++    slotToVal.set(slot, weak ? new RealWeakRef(val) : val);
++  }
++
++  function convertValToSlot(val) {
++    if (!valToSlot.has(val)) {
++      const slot = `o+${allocateExportID()}`;
++      valToSlot.set(val, slot);
++      setValForSlot(slot, val);
++    }
++    return valToSlot.get(val);
++  }
++
++  function convertSlotToVal(slot) {
++    const { type, id, virtual, durable, facet, baseRef } = parseVatSlot(slot);
++    assert.equal(type, 'object');
++    let val = getValForSlot(baseRef);
++    if (val) {
++      if (virtual || durable) {
++        if (facet !== undefined) {
++          return vrm.getFacet(id, val, facet);
++        }
++      }
++      return val;
++    }
++    if (virtual || durable) {
++      if (vrm) {
++        val = vrm.reanimate(slot);
++        if (facet !== undefined) {
++          return vrm.getFacet(id, val, facet);
++        }
++      } else {
++        assert.fail('fake liveSlots stuff configured without vrm');
++      }
++    }
++    return val;
++  }
++
++  const marshal = makeMarshal(convertValToSlot, convertSlotToVal, {
++    serializeBodyFormat: 'smallcaps',
++  });
++
++  function registerEntry(baseRef, val, valIsCohort) {
++    setValForSlot(baseRef, val);
++    if (valIsCohort) {
++      const { id } = parseVatSlot(baseRef);
++      vrm.getFacetNames(id).forEach((name, index) => {
++        valToSlot.set(val[name], `${baseRef}:${index}`);
++      });
++    } else {
++      valToSlot.set(val, baseRef);
++    }
++  }
++
++  function deleteEntry(slot, val) {
++    if (!val) {
++      val = getValForSlot(slot);
++    }
++    slotToVal.delete(slot);
++    valToSlot.delete(val);
++  }
++
++  function assertAcceptableSyscallCapdataSize(_capdatas) {}
++
++  const maybeExportPromise = _vref => false;
++
++  return {
++    syscall,
++    allocateExportID,
++    allocateCollectionID,
++    getSlotForVal,
++    requiredValForSlot,
++    getValForSlot,
++    setValForSlot,
++    registerEntry,
++    valToSlot,
++    slotToVal,
++    convertValToSlot,
++    convertSlotToVal,
++    marshal,
++    deleteEntry,
++    FinalizationRegistry,
++    WeakRef,
++    addToPossiblyDeadSet,
++    addToPossiblyRetiredSet,
++    dumpStore,
++    setVrm,
++    assertAcceptableSyscallCapdataSize,
++    maybeExportPromise,
++  };
++}
++
++export function makeFakeVirtualReferenceManager(
++  fakeStuff,
++  relaxDurabilityRules = true,
++) {
++  return makeVirtualReferenceManager(
++    fakeStuff.syscall,
++    fakeStuff.getSlotForVal,
++    fakeStuff.getValForSlot,
++    fakeStuff.FinalizationRegistry,
++    fakeStuff.WeakRef,
++    fakeStuff.addToPossiblyDeadSet,
++    fakeStuff.addToPossiblyRetiredSet,
++    relaxDurabilityRules,
++  );
++}
++
++export function makeFakeWatchedPromiseManager(
++  vrm,
++  vom,
++  collectionManager,
++  fakeStuff,
++) {
++  return makeWatchedPromiseManager({
++    syscall: fakeStuff.syscall,
++    vrm,
++    vom,
++    collectionManager,
++    convertValToSlot: fakeStuff.convertValToSlot,
++    convertSlotToVal: fakeStuff.convertSlotToVal,
++    maybeExportPromise: fakeStuff.maybeExportPromise,
++  });
++}
++/**
++ * Configure virtual stuff with relaxed durability rules and fake liveslots
++ *
++ * @param {object} [options]
++ * @param {number} [options.cacheSize=3]
++ * @param {boolean} [options.relaxDurabilityRules=true]
++ */
++export function makeFakeVirtualStuff(options = {}) {
++  const actualOptions = {
++    relaxDurabilityRules: true,
++    ...options,
++  };
++  const { relaxDurabilityRules } = actualOptions;
++  const fakeStuff = makeFakeLiveSlotsStuff(actualOptions);
++  const vrm = makeFakeVirtualReferenceManager(fakeStuff, relaxDurabilityRules);
++  const vom = makeFakeVirtualObjectManager(vrm, fakeStuff);
++  vom.initializeKindHandleKind();
++  fakeStuff.setVrm(vrm);
++  const cm = makeFakeCollectionManager(vrm, fakeStuff, actualOptions);
++  const wpm = makeFakeWatchedPromiseManager(vrm, vom, cm, fakeStuff);
++  return { fakeStuff, vrm, vom, cm, wpm };
++}
++
++export function makeStandaloneFakeVirtualObjectManager(options = {}) {
++  const fakeStuff = makeFakeLiveSlotsStuff(options);
++  const { relaxDurabilityRules = true } = options;
++  const vrm = makeFakeVirtualReferenceManager(fakeStuff, relaxDurabilityRules);
++  const vom = makeFakeVirtualObjectManager(vrm, fakeStuff);
++  vom.initializeKindHandleKind();
++  fakeStuff.setVrm(vrm);
++  return vom;
++}
++
++export function makeStandaloneFakeCollectionManager(options = {}) {
++  const fakeStuff = makeFakeLiveSlotsStuff(options);
++  const { relaxDurabilityRules = true } = options;
++  const vrm = makeFakeVirtualReferenceManager(fakeStuff, relaxDurabilityRules);
++  return makeFakeCollectionManager(vrm, fakeStuff, options);
++}
++
++export {
++  makeStandaloneFakeVirtualObjectManager as makeFakeVirtualObjectManager,
++  makeStandaloneFakeCollectionManager as makeFakeCollectionManager,
++};
+diff --git a/node_modules/@agoric/swingset-liveslots/tools/vo-test-harness.js b/node_modules/@agoric/swingset-liveslots/tools/vo-test-harness.js
+new file mode 100644
+index 0000000..4885246
+--- /dev/null
++++ b/node_modules/@agoric/swingset-liveslots/tools/vo-test-harness.js
+@@ -0,0 +1,143 @@
++import { Far } from '@endo/marshal';
++import { setupTestLiveslots } from '../test/liveslots-helpers.js';
++
++// This file contains a test harness for virtual objects. runVOTest()
++// is to to help verify that a VO can be garbage collected and then
++// reloaded from persistent storage while maintaining functionality.
++
++// Testing VO swapping with runVOTest:
++//
++// Step 1: import the necessary harness paraphernalia
++//
++//   import { test, runVOTest } from '@agoric/swingset-vat/tools/vo-test-harness.js';
++//
++// `test` is the regular Ava test object that you'd normally import from
++// `@agoric/swingset-vat/tools/prepare-test-env-ava.js`.  The test harness will
++// import it for you, since it needs to set up some test things itself.
++//
++// Step 2: write three functions that you will pass to the test harness
++//
++// `prepare(VatData)` should perform any necessary environmental setup that the
++// virtual object kind under test will require.  In particular, this includes
++// executing any necessary `defineKind` or `defineDurableKind` calls to
++// establish the VO itself.  The `VatData` parameter is a regular `VatData`
++// object that can be used to obtain functions like `defineKind`.
++//
++// `makeTestObject()` should create and return an instance of the VO to be tested.
++//
++// `testTestObject(obj, phase)` should execute whatever actual testing and test
++// assertions you care to perform to verify your VO kind.  `obj` will be a
++// reference to an in-memory representative of the virtual object being tested
++// and `phase` will be a string, either 'before' or 'after', indicating whether
++// this instance of the object is before or after having been swapped out of
++// memory and then reloaded.  A correctly functioning VO should, among other
++// things, behave exactly the same in both cases.
++//
++// Step 3: write an Ava test that invokes the test harness
++//
++// The outer portion of this should be a conventional Ava test written in the
++// conventional way, e.g.:
++//
++// test('test name', async t => {
++//   ...your test here...
++// });
++//
++// The body of your test most likely will enclose the three functions described
++// above, since your `testTestObject` function (and possibly the others,
++// depending on how you code things) will need access to the `t` object in order
++// to execute test assertions.  Then, from inside your test invoke:
++//
++//   await runVOTest(t, prepare, makeTestObject, testTestObject);
++//
++// This will:
++//   1 - execute the `prepare` function
++//   2 - create a test object instance via `makeTestObject`
++//   3 - run `testTestObject` on the test object (this is the 'before' phase)
++//   4 - drop all in-memory references to the test object and force a GC pass
++//   5 - run `testTestObject` on the test object *again* (this is the 'after' phase)
++//
++// The key thing that the test harness provides for you is step 4, which
++// packages up some awkward boilerplate that's a bit of mysterious if you're not
++// already pretty familiar with how the VO GC mechanism works (or perhaps even
++// if you are).
++//
++// Note: It is critical that none of your own code retain any in-memory
++// references to the test object beyond step 3.  However, another key service
++// that the test harness provides is to detect if you did this and if so fail
++// the test.  One use of the test harness is to verify that you aren't
++// accidentally holding such references when you didn't mean to.
++//
++// The SwingSet test `vo-test-harness/test-vo-test-harness.js` is a test of the
++// VO test harness itself, but can be used as a simple example of how to set
++// things up.
++
++export async function runVOTest(t, prepare, makeTestObject, testTestObject) {
++  function buildRootObject(vatPowers) {
++    const { VatData } = vatPowers;
++    const { defineKind } = VatData;
++
++    const freeChecker = new WeakSet();
++
++    const makeSlug = defineKind('slug', label => ({ label }), {
++      getLabel: ({ state }) => state.label,
++    });
++    const cacheDisplacer = makeSlug('cacheDisplacer');
++
++    const makeHolder = defineKind('holder', (held = null) => ({ held }), {
++      setValue: ({ state }, value) => {
++        state.held = value;
++      },
++      getValue: ({ state }) => state.held,
++    });
++    const holder = makeHolder();
++
++    let held = null;
++
++    prepare(VatData);
++
++    function displaceCache() {
++      return cacheDisplacer.getLabel();
++    }
++
++    return Far('root', {
++      makeAndHold() {
++        held = makeTestObject();
++        freeChecker.add(held);
++        displaceCache();
++      },
++      storeHeld() {
++        holder.setValue(held);
++        displaceCache();
++      },
++      dropHeld() {
++        held = null;
++        displaceCache();
++      },
++      fetchAndHold() {
++        held = holder.getValue();
++        t.falsy(
++          freeChecker.has(held),
++          'somebody continues to hold test object',
++        );
++        displaceCache();
++      },
++      testHeld(phase) {
++        testTestObject(held, phase);
++      },
++    });
++  }
++
++  const { dispatchMessage } = await setupTestLiveslots(
++    t,
++    buildRootObject,
++    'bob',
++    { forceGC: true, skipLogging: true },
++  );
++
++  await dispatchMessage('makeAndHold');
++  await dispatchMessage('testHeld', 'before');
++  await dispatchMessage('storeHeld');
++  await dispatchMessage('dropHeld');
++  await dispatchMessage('fetchAndHold');
++  await dispatchMessage('testHeld', 'after');
++}
