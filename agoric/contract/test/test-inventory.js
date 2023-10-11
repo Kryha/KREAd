@@ -1,5 +1,5 @@
-// eslint-disable-next-line import/order
 import { test } from './prepare-test-env-ava.js';
+
 import { E } from '@endo/eventual-send';
 import { AmountMath } from '@agoric/ertp';
 import { bootstrapContext } from './bootstrap.js';
@@ -16,16 +16,8 @@ test.before(async (t) => {
 
 const unequipOffer = async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
-  const {
-    characterName,
-    unequip: { message },
-  } = flow.inventory;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
+  const { characterName } = flow.inventory;
 
   const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
@@ -81,14 +73,8 @@ const unequipOffer = async (t) => {
 
 test.serial('| INVENTORY - Unequip Item', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    purses,
-  } = t.context;
-  const {
-    characterName,
-    unequip: { message },
-  } = flow.inventory;
+  const { publicFacet, purses } = t.context;
+  const { characterName } = flow.inventory;
 
   await unequipOffer(t);
 
@@ -114,12 +100,7 @@ test.serial('| INVENTORY - Unequip Item', async (t) => {
 
 test.serial('| INVENTORY - Unequip already unequipped item', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
   const { characterName } = flow.inventory;
 
   const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
@@ -181,20 +162,12 @@ test.serial('| INVENTORY - Unequip already unequipped item', async (t) => {
 
 test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
-  const {
-    characterName,
-    unequip: { message },
-  } = flow.inventory;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
+  const { characterName } = flow.inventory;
   const initialItemsInPurse =
     purses.item.getCurrentAmount().value.payload.length;
 
-  let characterInventory = await E(publicFacet).getCharacterInventory(
+  const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
   const noseItem = characterInventory.items
@@ -210,7 +183,7 @@ test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
   );
   const unequipInvitation = await E(publicFacet).makeUnequipInvitation();
 
-  //incorrectly calculate wantedKeyId
+  // incorrectly calculate wantedKeyId
   const wantedKeyId =
     characterKeyAmount.value.payload[0][0].keyId === 1 ? 1 : 2;
 
@@ -264,12 +237,7 @@ test.serial('| INVENTORY - Unequip - wrong character', async (t) => {
 
 test.serial('| INVENTORY - Equip Item', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
   const {
     characterName,
     equip: { message },
@@ -359,12 +327,7 @@ test.serial('| INVENTORY - Equip Item', async (t) => {
 
 test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
   const { characterName } = flow.inventory;
 
   await addItemToBootstrap(t.context, {
@@ -465,12 +428,7 @@ test.serial('| INVENTORY - Equip Item duplicate category', async (t) => {
 
 test.serial('| INVENTORY - Swap Items', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
   const { characterName } = flow.inventory;
 
   const invitation = await E(publicFacet).makeItemSwapInvitation();
@@ -568,12 +526,7 @@ test.serial('| INVENTORY - Swap Items', async (t) => {
 
 test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
   const { characterName } = flow.inventory;
 
   await unequipOffer(t);
@@ -592,7 +545,7 @@ test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
       [
         purses.item
           .getCurrentAmount()
-          .value.payload.find(([item, supply]) => item.rarity > 59)[0],
+          .value.payload.find(([item, _supply]) => item.rarity > 59)[0],
         1n,
       ],
     ]),
@@ -662,12 +615,7 @@ test.serial('| INVENTORY - Swap Items - Initially empty', async (t) => {
 
 test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
   const { characterName } = flow.inventory;
 
   const invitation = await E(publicFacet).makeItemSwapInvitation();
@@ -684,7 +632,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
       [
         purses.item
           .getCurrentAmount()
-          .value.payload.find(([item, supply]) => item.rarity > 59)[0],
+          .value.payload.find(([item, _supply]) => item.rarity > 59)[0],
         1n,
       ],
     ]),
@@ -772,12 +720,7 @@ test.serial('| INVENTORY - Swap Items - Different categories', async (t) => {
 });
 
 test.serial('| INVENTORY - Unequip all', async (t) => {
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
   const { characterName } = flow.inventory;
 
   let characterInventory = await E(publicFacet).getCharacterInventory(
@@ -846,12 +789,7 @@ test.serial('| INVENTORY - Unequip all', async (t) => {
 });
 
 test.serial('| INVENTORY - UnequipAll empty inventory', async (t) => {
-  const {
-    instance: { publicFacet },
-    contractAssets,
-    purses,
-    zoe,
-  } = t.context;
+  const { publicFacet, contractAssets, purses, zoe } = t.context;
 
   const { characterName } = flow.inventory;
 

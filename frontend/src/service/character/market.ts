@@ -113,7 +113,11 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;
 
-  const itemGive: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
+  const itemGive: Item = {
+    ...item,
+    image: urlToCid(item.image),
+    thumbnail: urlToCid(item.thumbnail),
+};
 
   const spec = {
     id: "custom-id",
@@ -203,7 +207,11 @@ const sellItemBatch = async ({ itemCollection, pricePerItem, service, callback }
 const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAction): Promise<void> => {
   if (!entryId) return;
 
-  const itemWant: Item = { ...item, image: urlToCid(item.image), thumbnail: urlToCid(item.thumbnail) };
+  const itemWant: Item = {
+    ...item,
+    image: urlToCid(item.image),
+    thumbnail: urlToCid(item.thumbnail),
+  };
 
   const instance = service.kreadInstance;
   const itemBrand = service.itemBrand;

@@ -87,3 +87,4 @@ To run the application for more than one user follow these steps:
    3. `yarn start`
    4. Navigate to `localhost:3000` on each session and approve the app in both wallets
 10. Enjoy!
+

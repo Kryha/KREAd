@@ -1,5 +1,5 @@
-// eslint-disable-next-line import/order
 import { test } from './prepare-test-env-ava.js';
+
 import { E } from '@endo/eventual-send';
 import { AmountMath } from '@agoric/ertp';
 import { bootstrapContext } from './bootstrap.js';
@@ -40,7 +40,8 @@ test.before(async (t) => {
     contractAssets,
     assets,
     purses,
-    instance,
+    publicFacet,
+    creatorFacet,
     paymentAsset,
     royaltyPurse,
     platformFeePurse,
@@ -70,7 +71,8 @@ test.before(async (t) => {
   // bob.depositPayment(payoutBob);
 
   t.context = {
-    instance,
+    publicFacet,
+    creatorFacet,
     contractAssets,
     assets,
     purses,
@@ -87,7 +89,7 @@ test.before(async (t) => {
 test.serial('---| MARKET - Sell character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob },
@@ -125,9 +127,7 @@ test.serial('---| MARKET - Sell character', async (t) => {
     payment,
   );
 
-  const result = await E(userSeat).getOfferResult();
-  // TODO: Discuss to delete this check and omit the return
-  // t.deepEqual(result.characterMarket.length, 1, 'Offer returns market entry');
+  await E(userSeat).getOfferResult();
 
   bob.setMarketSeat(userSeat);
 
@@ -150,10 +150,10 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
-      users: { bob, alice },
+      users: { alice },
       paymentAsset,
     } = t.context;
     const {
@@ -166,12 +166,12 @@ test.serial(
 
     const initialBalance = alice.getPaymentBalance();
 
-    let charactersForSale = await E(publicFacet).getCharactersForSale();
+    const charactersForSale = await E(publicFacet).getCharactersForSale();
     const characterToBuy = charactersForSale.find(
-      (c) => c.object.name === character,
+      (c) => c.asset.name === character,
     );
 
-    const copyBagAmount = makeCopyBag(harden([[characterToBuy.object, 1n]]));
+    const copyBagAmount = makeCopyBag(harden([[characterToBuy.asset, 1n]]));
     const characterToBuyAmount = AmountMath.make(
       contractAssets.character.brand,
       copyBagAmount,
@@ -212,7 +212,7 @@ test.serial(
 test.serial('---| MARKET - Buy character', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob, alice },
@@ -232,13 +232,13 @@ test.serial('---| MARKET - Buy character', async (t) => {
 
   let charactersForSale = await E(publicFacet).getCharactersForSale();
   const characterToBuy = charactersForSale.find(
-    ({ object }) => object.name === character,
+    ({ asset }) => asset.name === character,
   );
 
   const royaltyPursePre = royaltyPurse.getCurrentAmount().value;
   const platformFeePursePre = platformFeePurse.getCurrentAmount().value;
 
-  const copyBagAmount = makeCopyBag(harden([[characterToBuy.object, 1n]]));
+  const copyBagAmount = makeCopyBag(harden([[characterToBuy.asset, 1n]]));
   const characterToBuyAmount = AmountMath.make(
     contractAssets.character.brand,
     copyBagAmount,
@@ -263,13 +263,7 @@ test.serial('---| MARKET - Buy character', async (t) => {
     payment,
   );
 
-  const result = await E(userSeat).getOfferResult();
-  // TODO: Discuss to delete this check and omit the return
-  // t.deepEqual(
-  //   result.characterMarket.length,
-  //   0,
-  //   'Offer returns empty market entry',
-  // );
+  await E(userSeat).getOfferResult();
 
   const characterPayout = await E(userSeat).getPayout('Character');
   alice.depositCharacters(characterPayout);
@@ -304,7 +298,7 @@ test.serial('---| MARKET - Buy character', async (t) => {
 test.serial('---| MARKET - Buy character not on market', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { alice },
@@ -358,7 +352,7 @@ test.serial('---| MARKET - Buy character not on market', async (t) => {
 test.serial('---| MARKET - Sell Item', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob },
@@ -384,8 +378,7 @@ test.serial('---| MARKET - Sell Item', async (t) => {
   const payment = { Item: bob.withdrawItems(itemToSell) };
 
   const userSeat = await E(zoe).offer(sellItemInvitation, proposal, payment);
-  const result = await E(userSeat).getOfferResult();
-  // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
+  await E(userSeat).getOfferResult();
 
   bob.setMarketSeat(userSeat);
 
@@ -400,22 +393,20 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
-      users: { bob, alice },
+      users: { alice },
       paymentAsset,
     } = t.context;
 
     const initialBalance = alice.getPaymentBalance();
 
-    let itemsForSale = await E(publicFacet).getItemsForSale();
+    const itemsForSale = await E(publicFacet).getItemsForSale();
     const itemToBuy = itemsForSale.find(
-      (itemEntry) => itemEntry.object.category === 'hair',
+      (itemEntry) => itemEntry.asset.category === 'hair',
     );
-    const itemToBuyCopyBagAmount = makeCopyBag(
-      harden([[itemToBuy.object, 1n]]),
-    );
+    const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
     const itemToBuyAmount = AmountMath.make(
       contractAssets.item.brand,
       itemToBuyCopyBagAmount,
@@ -456,7 +447,7 @@ test.serial(
 test.serial('---| MARKET - Buy item', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob, alice },
@@ -464,9 +455,9 @@ test.serial('---| MARKET - Buy item', async (t) => {
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
   const itemToBuy = itemsForSale.find(
-    (itemEntry) => itemEntry.object.category === 'hair',
+    (itemEntry) => itemEntry.asset.category === 'hair',
   );
-  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.object, 1n]]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
   const itemToBuyAmount = AmountMath.make(
     contractAssets.item.brand,
     itemToBuyCopyBagAmount,
@@ -509,7 +500,7 @@ test.serial('---| MARKET - Buy item', async (t) => {
 test.serial('---| MARKET - Buy item not on market', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { alice },
@@ -555,7 +546,7 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
       users: { bob, alice },
@@ -569,7 +560,7 @@ test.serial(
       },
     } = flow;
 
-    //alice puts character for sale
+    // alice puts character for sale
     const balanceAlice = alice.getPaymentBalance();
     const characterToSell = alice
       .getCharacters()
@@ -600,7 +591,7 @@ test.serial(
       proposal,
       payment,
     );
-    let result = await E(userSeat).getOfferResult();
+    await E(userSeat).getOfferResult();
 
     alice.setMarketSeat(userSeat);
 
@@ -611,12 +602,12 @@ test.serial(
       'Character is successfully added to market',
     );
 
-    //bob buys character
+    // bob buys character
     const characterToBuy = charactersForSale.find(
-      ({ object }) => object.name === character,
+      ({ asset }) => asset.name === character,
     );
     const characterToBuyCopyBagAmount = makeCopyBag(
-      harden([[characterToBuy.object, 1n]]),
+      harden([[characterToBuy.asset, 1n]]),
     );
     const characterToBuyAmount = AmountMath.make(
       contractAssets.character.brand,
@@ -640,8 +631,7 @@ test.serial(
     payment = { Price: bob.withdrawPayment(priceAmount) };
 
     userSeat = await E(zoe).offer(buyCharacterInvitation, proposal, payment);
-    result = await E(userSeat).getOfferResult();
-    // t.deepEqual(result.characterMarket.length, 0, "Offer returns empty market entry");
+    await E(userSeat).getOfferResult();
 
     const characterPayout = await E(userSeat).getPayout('Character');
     bob.depositCharacters(characterPayout);
@@ -673,7 +663,7 @@ test.serial(
   async (t) => {
     /** @type {Bootstrap} */
     const {
-      instance: { publicFacet },
+      publicFacet,
       contractAssets,
       zoe,
       users: { bob, alice },
@@ -700,20 +690,18 @@ test.serial(
     let payment = { Item: alice.withdrawItems(itemToSellAmount) };
 
     let userSeat = await E(zoe).offer(sellItemInvitation, proposal, payment);
-    let result = await E(userSeat).getOfferResult();
+    await E(userSeat).getOfferResult();
 
     alice.setMarketSeat(userSeat);
 
     let itemsForSale = await E(publicFacet).getItemsForSale();
     t.deepEqual(itemsForSale.length, 1, 'Item is successfully added to market');
 
-    //bob attempts to buy item
+    // bob attempts to buy item
     const itemToBuy = itemsForSale.find(
-      ({ object }) => object.category === 'hair',
+      ({ asset }) => asset.category === 'hair',
     );
-    const itemToBuyCopyBagAmount = makeCopyBag(
-      harden([[itemToBuy.object, 1n]]),
-    );
+    const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
     const itemToBuyAmount = AmountMath.make(
       contractAssets.item.brand,
       itemToBuyCopyBagAmount,
@@ -737,8 +725,7 @@ test.serial(
       payment,
       offerArgs,
     );
-    result = await E(userSeat).getOfferResult();
-    // t.deepEqual(result.itemMarket.length, 0, "Offer returns empty market entry");
+    await E(userSeat).getOfferResult();
 
     const itemPayout = await E(userSeat).getPayout('Item');
     bob.depositItems(itemPayout);
@@ -766,44 +753,24 @@ test.serial(
 
 test.serial('---| MARKET - Internal Sell Item Batch', async (t) => {
   /** @type {Bootstrap} */
-  const {
-    instance: { publicFacet, creatorFacet },
-    zoe,
-    paymentAsset,
-  } = t.context;
+  const { publicFacet, creatorFacet, zoe, paymentAsset } = t.context;
 
   const itemCollection = Object.values(defaultItems).map((item) => [item, 3n]);
   const itemsToSell = harden(itemCollection);
-
   const priceAmount = AmountMath.make(paymentAsset.brandMockIST, 5n);
 
-  const sellItemInvitation = await E(
-    creatorFacet,
-  ).makePublishItemCollectionInvitation();
-  const proposal = harden({
-    give: {},
-    want: { Price: priceAmount },
-  });
-
-  const userSeat = await E(zoe).offer(sellItemInvitation, proposal, undefined, {
-    itemsToSell,
-  });
-  const result = await E(userSeat).getOfferResult();
-  // t.deepEqual(result.itemMarket.length, 1, "Offer returns market entry");
+  await E(creatorFacet).publishItemCollection(priceAmount, itemsToSell);
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
-
   t.deepEqual(itemsForSale.length, 27, 'Item is successfully added to market');
 
   // t.deepEqual(bob.getItems().length, 0, "Item is no longer in bob's wallet");
 });
 
-// FIXME: this case works on a local testnet setup
-// figure out why it doesn't pass here. (storageNode vs contract getters?)
 test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
   /** @type {Bootstrap} */
   const {
-    instance: { publicFacet },
+    publicFacet,
     contractAssets,
     zoe,
     users: { bob },
@@ -812,9 +779,9 @@ test.serial('---| MARKET - Buy Batch Sold Item', async (t) => {
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
   const itemToBuy = itemsForSale.find(
-    ({ object }) => object.category === 'hair',
+    ({ asset }) => asset.category === 'background',
   );
-  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.object, 1n]]));
+  const itemToBuyCopyBagAmount = makeCopyBag(harden([[itemToBuy.asset, 1n]]));
 
   const itemToBuyAmount = AmountMath.make(
     contractAssets.item.brand,
