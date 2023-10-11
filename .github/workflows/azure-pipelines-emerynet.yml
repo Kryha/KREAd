@@ -24,7 +24,8 @@ jobs:
       shell: bash
 
     - name: Login to Container Registry
-      run: docker login -u _json_key -p "$(cat google-credentials.json)" https://gcr.io
+      run: |
+        echo "${{ secrets.GCP_AUTH_KEY }}" | docker login -u _json_key --password-stdin https://gcr.io
       env:
         DOCKER_CLI_ACI_SERVER: ${{ secrets.CONTAINER_REGISTRY_SERVER }}
       shell: bash
