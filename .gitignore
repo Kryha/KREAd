@@ -10,6 +10,9 @@ node_modules
 
 # production
 /build
+bundles
+dist
+*.out
 
 # misc
 .DS_Store
@@ -21,7 +24,6 @@ node_modules
 */.env
 backend/.env
 frontend/.env
-frontend/dist
 /agoric/_agstate
 .yarn
 
@@ -64,6 +66,5 @@ agoric/_agstate/yarn-links/
 .vscode/
 frontend/src/service/conf/defaults.js
 frontend/src/service/conf/defaults.js
-agoric/contract/src/proposal/chain-storage-proposal.js-clean.js
 
 agoric/Makefile.paths.local
