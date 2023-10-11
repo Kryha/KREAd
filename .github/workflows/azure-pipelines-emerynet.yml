@@ -17,11 +17,12 @@ jobs:
         sudo install skaffold /usr/local/bin/
       shell: bash
 
-    - name: Login to Container Registry 
-      run: |
-        echo "${{ secrets.GCP_AUTH_KEY }}" > web3-335312-5f8a650f4992.json
-        docker login -u _json_key --password-stdin https://gcr.io < web3-335312-5f8a650f4992.json
-      shell: bash
+    - name: Login to GCR
+        uses: docker/login-action@v3
+        with:
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.GCP_AUTH_KEY }}
 
     - name: Login to Kubernetes
       uses: azure/k8s-set-context@v1
