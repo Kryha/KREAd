@@ -25,7 +25,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v0
       with:
         service_account_key: ${{ secrets.GCP_AUTH_KEY }}  
-        project_id: web3-335312
+        project_id: ${{ secrets.PROJECT_ID }}
         export_default_credentials: true  
 
     - name: Activate Service Account
@@ -44,8 +44,8 @@ jobs:
       uses: azure/k8s-set-context@v1
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
-        cluster-context: "gke_web3-335312_europe-west1-b_web3-staging"
-        namespace: "agoric-makefile-automation"
+        cluster-context: ${{ secrets.CLUSTER_CONTEXT }}
+        namespace: ${{ secrets.K8S_NAMESPACE_EMERYNET }}
 
     - name: Build and push Docker images
       run: |
