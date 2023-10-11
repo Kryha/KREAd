@@ -15,7 +15,7 @@ jobs:
       run: |
         curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
         sudo install skaffold /usr/local/bin/
-        apt-get -y install google-cloud-sdk-gke-gcloud-auth-plugin
+        sudo apt-get -y install google-cloud-sdk-gke-gcloud-auth-plugin
       shell: bash
 
     - name: Authenticate with Google Cloud
