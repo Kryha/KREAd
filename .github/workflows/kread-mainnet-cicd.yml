@@ -25,10 +25,10 @@ jobs:
       uses: google-github-actions/setup-gcloud@v0
       with:
         service_account_key: ${{ secrets.GCP_AUTH_KEY }}  
-        project_id: web3-335312
+        project_id: ${{ secrets.PROJECT_ID }}
         export_default_credentials: true  
 
-    - name: Activate Service Account + Install GKE Plugin
+    - name: Activate Service Account
       run: |
          gcloud auth activate-service-account github-actions-187@web3-335312.iam.gserviceaccount.com --key-file=$GOOGLE_APPLICATION_CREDENTIALS
          gcloud components install gke-gcloud-auth-plugin
@@ -44,8 +44,8 @@ jobs:
       uses: azure/k8s-set-context@v1
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
-        cluster-context: "gke_web3-335312_europe-west1-b_web3-staging"
-        namespace: "character-builder-production"
+        cluster-context: ${{ secrets.CLUSTER_CONTEXT }}
+        namespace: ${{ secrets.K8S_NAMESPACE_MAINNET }}
 
     - name: Build and push Docker images
       run: |
