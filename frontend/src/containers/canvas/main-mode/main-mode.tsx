@@ -2,10 +2,7 @@ import { CharacterItems } from "../../../interfaces";
 import React, { FC } from "react";
 import { LeftEquippedItemCard, RightEquippedItemCard } from "../../../components";
 import { text } from "../../../assets";
-import { breakpoints } from "../../../design";
 import { LeftPane, RightPane } from "../character-canvas/styles";
-import { useIsMobile } from "../../../hooks";
-import { MainModeMobile } from "./main-mode-mobile";
 import { LeftItemContainer, LeftItems, RightItemContainer, RightItems, Row } from "./styles";
 import { CATEGORY } from "../../../constants";
 
@@ -14,11 +11,7 @@ interface Props {
   showItems: boolean;
 }
 export const MainMode: FC<Props> = ({ items, showItems }) => {
-  const isMobile = useIsMobile(breakpoints.tablet);
-
-  return isMobile ? (
-    <MainModeMobile />
-  ) : (
+  return (
     <>
       <LeftPane>
         <LeftItemContainer showItems={showItems}>

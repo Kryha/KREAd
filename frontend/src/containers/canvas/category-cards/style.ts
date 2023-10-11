@@ -30,16 +30,6 @@ export const CategoryCardsContainer = styled.div`
   flex-direction: column;
   padding: 16px;
   gap: 8px;
-
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    display: flex;
-    flex-direction: row;
-    overflow-x: scroll !important;
-    overflow-y: hidden;
-    ::-webkit-scrollbar {
-      display: none;
-    }
-  }
 `;
 
 export const CategoryImage = styled.div`
@@ -78,10 +68,5 @@ export const CategoryCard = styled.div<CategoryProps>`
     ${CategoryInfoCategory} {
       color: ${color.black};
     }
-  }
-
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    flex-direction: column;
-    gap: 8px;
   }
 `;
