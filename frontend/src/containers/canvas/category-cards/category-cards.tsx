@@ -1,11 +1,10 @@
 import React, { FC, useMemo } from "react";
-import { ButtonText, ItemCard, LoadingPage } from "../../../components";
+import { ItemCard, LoadingPage } from "../../../components";
 import { useGetItemsInInventory, useSelectedCharacter } from "../../../service";
 import { useIsMobile, useViewport } from "../../../hooks";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { CategoryCard, CategoryCardsContainer, CategoryCardsWrapper, CategoryImage, CategoryInfo, CategoryInfoCategory } from "./style";
 import { CATEGORY, ITEM_MODE } from "../../../constants";
-import { ItemCount } from "../../../components/equipped-item-card/styles";
 import { breakpoints } from "../../../design";
 
 export type ItemCategoryCounts = {
@@ -55,11 +54,6 @@ export const CategoryCards: FC = () => {
               }}
             >
               <CategoryImage>
-                {itemCategoryCounts[itemKey] !== undefined ? (
-                  <ItemCount>
-                    <ButtonText>{itemCategoryCounts[itemKey]}</ButtonText>
-                  </ItemCount>
-                ) : null}
                 <ItemCard key={itemKey} item={items[itemKey]} image={items[itemKey]?.thumbnail} />
               </CategoryImage>
               <CategoryInfo>
