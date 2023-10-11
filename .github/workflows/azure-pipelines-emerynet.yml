@@ -38,7 +38,7 @@ jobs:
       uses: azure/k8s-set-context@v1
       with:
         kubeconfig: ${{ secrets.KUBECONFIG }}
-        cluster-context: "gke-service-connection"
+        cluster-context: "gke_web3-335312_europe-west1-b_web3-staging"
         namespace: "agoric-makefile-automation"
 
     - name: Build and push Docker images
