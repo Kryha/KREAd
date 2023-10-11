@@ -30,7 +30,7 @@ jobs:
 
     - name: Activate Service Account
       run: |
-         gcloud auth activate-service-account github-actions-187@web3-335312.iam.gserviceaccount.com --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+         gcloud auth activate-service-account ${{ secrets.GCP_SA }} --key-file=$GOOGLE_APPLICATION_CREDENTIALS
          gcloud components install gke-gcloud-auth-plugin
 
     - name: Login to GCR
