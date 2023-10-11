@@ -23,7 +23,7 @@ jobs:
         service_account_key: ${{ secrets.GCP_AUTH_KEY }}  
         project_id: web3-335312
         export_default_credentials: true  
-        
+
     - name: Activate Service Account
       run: gcloud auth activate-service-account github-actions-187@web3-335312.iam.gserviceaccount.com --key-file=$GOOGLE_APPLICATION_CREDENTIALS
 
@@ -49,3 +49,4 @@ jobs:
         envsubst < skaffold.emerynet.template.yaml > skaffold.emerynet.yaml
         skaffold run --filename skaffold.emerynet.yaml
       shell: bash
+ 
