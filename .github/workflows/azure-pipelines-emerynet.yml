@@ -17,19 +17,11 @@ jobs:
         sudo install skaffold /usr/local/bin/
       shell: bash
 
-    - name: Configure Docker and Authenticate with Google Cloud
+    - name: Login to Container Registry 
       run: |
-        echo "${{ secrets.GCP_AUTH_KEY }}" > google-credentials.json
-        gcloud auth configure-docker
+        echo "${{ secrets.GCP_AUTH_KEY }}" > web3-335312-5f8a650f4992.json
+        docker login -u _json_key --password-stdin https://gcr.io < web3-335312-5f8a650f4992.json
       shell: bash
-
-    - name: Login to Container Registry
-      run: |
-        echo "${{ secrets.GCP_AUTH_KEY }}" | docker login -u _json_key --password-stdin https://gcr.io
-      env:
-        DOCKER_CLI_ACI_SERVER: ${{ secrets.CONTAINER_REGISTRY_SERVER }}
-      shell: bash
-
 
     - name: Login to Kubernetes
       uses: azure/k8s-set-context@v1
