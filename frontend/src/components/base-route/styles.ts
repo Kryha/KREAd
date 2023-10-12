@@ -23,7 +23,6 @@ export const TopbarContainer = styled.header<AnimationProps>`
   padding-top: ${margins.medium};
   padding-bottom: ${margins.medium};
   background: transparent;
-  backdrop-filter: blur(5px);
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding: ${margins.mini};

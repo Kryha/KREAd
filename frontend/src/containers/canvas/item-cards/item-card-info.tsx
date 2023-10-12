@@ -13,8 +13,9 @@ import { AssetTag } from "../../../components/asset-card/styles";
 
 interface ItemInfoProps {
   item: Item;
+  info?: boolean;
 }
-export const ItemCardInfo: FC<ItemInfoProps> = ({ item }) => {
+export const ItemCardInfo: FC<ItemInfoProps> = ({ item, info = true }) => {
   const { showItemDetails, setShowItemDetails } = useCharacterBuilder();
 
   const showDetails = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,11 +37,13 @@ export const ItemCardInfo: FC<ItemInfoProps> = ({ item }) => {
         </Badge>
       </ItemsRow>
       <ItemButtonContainer>
-        <ButtonInfoWrap>
-          <SecondaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => showDetails(event)}>
-            {text.general.info}
-          </SecondaryButton>
-        </ButtonInfoWrap>
+        {info && (
+          <ButtonInfoWrap>
+            <SecondaryButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => showDetails(event)}>
+              {text.general.info}
+            </SecondaryButton>
+          </ButtonInfoWrap>
+        )}
       </ItemButtonContainer>
     </ItemInfo>
   );
