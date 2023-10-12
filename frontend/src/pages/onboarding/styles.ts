@@ -211,6 +211,11 @@ export const TextContainer = styled.span`
   display: inline-block;
   color: ${color.darkGrey};
   white-space: pre-line;
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    font-size: 16px;
+    line-height: 20px;
+  }
 `;
 
 export const KreadLogo = styled(KreadIcon)`

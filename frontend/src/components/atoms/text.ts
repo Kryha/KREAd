@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { color, fontSize, fontWeight } from "../../design";
+import { breakpoints, color, fontSize, fontWeight } from "../../design";
 
 interface TextProps {
   customColor?: string;
@@ -82,6 +82,10 @@ export const TitleText = styled.h3<TextProps>`
     text-transform: capitalize;
   }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    font-size: 16px;
+  }
 `;
 
 export const BodyText = styled.p<TextProps>`

@@ -61,7 +61,7 @@ export const ConnectWallet: FC = () => {
     }
   };
   if (!service.walletConnection.address) return <LoadingPage spinner={false} />;
-  if (service.walletConnection.smartWalletProvisioned) navigate(routes.character);
+  if (service.walletConnection.makeOffer) navigate(routes.character);
 
   return (
     <>
