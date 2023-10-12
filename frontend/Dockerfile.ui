@@ -1,4 +1,4 @@
-FROM node:16-alpine as build
+FROM node:18-alpine as build
 
 RUN apk --no-cache add --update git python3 make g++
 
@@ -6,10 +6,22 @@ WORKDIR /usr/main/
 
 RUN yarn set version 2 --only-if-needed
 
-ENV GENERATE_SOURCEMAP false
+ENV GENERATE_SOURCEMAP true
 
-ARG VITE_DAPP_CONSTANTS_JSON
-ENV VITE_DAPP_CONSTANTS_JSON $VITE_DAPP_CONSTANTS_JSON
+ARG VITE_RPC
+ENV VITE_RPC $VITE_RPC
+
+ARG VITE_BRIDE_HREF
+ENV VITE_BRIDE_HREF $VITE_BRIDE_HREF
+
+ARG VITE_BASE_URL
+ENV VITE_BASE_URL $VITE_BASE_URL
+
+ARG PINATA_GATEWAY
+ENV PINATA_GATEWAY $PINATA_GATEWAY
+
+ARG VITE_NETWORK_CONFIG
+ENV VITE_NETWORK_CONFIG $VITE_NETWORK_CONFIG
 
 COPY .yarnrc.yml ./.yarnrc.yml
 COPY yarn.lock ./yarn.lock
@@ -18,9 +30,14 @@ COPY .yarn/ ./.yarn/
 COPY .eslintrc.json ./.eslintrc.json
 COPY .eslintignore ./.eslintignore
 
+COPY index.html ./index.html
+
 COPY package.json ./package.json
+
 COPY tsconfig.json ./tsconfig.json
-COPY config-overrides.js ./config-overrides.js
+COPY tsconfig.node.json ./tsconfig.node.json
+
+COPY vite.config.ts ./vite.config.ts
 
 COPY public/ ./public/
 COPY src/ ./src/
@@ -33,7 +50,7 @@ FROM nginx:1.21-alpine as run
 
 RUN sed -i '/location \//a try_files $uri $uri/ /index.html;' /etc/nginx/conf.d/default.conf
 
-COPY --from=build /usr/main/build/ /usr/share/nginx/html/
+COPY --from=build /usr/main/dist/ /usr/share/nginx/html/
 
 EXPOSE 80
 
