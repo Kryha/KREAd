@@ -1,6 +1,6 @@
-import React, { FC, useState } from "react";
-import { METRICS_ITEM, SECTION } from "../../constants";
-import { useGetItemInShopById, useGetItemMarketMetrics, useGetItemsInShop } from "../../service";
+import React, { FC, useMemo, useState } from "react";
+import { EXCLUDE_ITEMS_SHOP, METRICS_ITEM, SECTION } from "../../constants";
+import { getRarityString, useGetItemInShopById, useGetItemMarketMetrics, useGetItemsInShop } from "../../service";
 import { routes } from "../../navigation";
 import { AssetItemFilters } from "../../components/asset-item-filters/asset-item-filters";
 import { ItemDetailsMarket } from "../../components/asset-details/item-details-market";
@@ -12,6 +12,7 @@ import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../compo
 import { color } from "../../design";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
+import { ItemInMarket } from "../../interfaces";
 
 export const ItemsShop: FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
@@ -20,28 +21,43 @@ export const ItemsShop: FC = () => {
   const [item] = useGetItemInShopById(selectedId);
   const assetsCount = items.length;
 
-  let metricsData: any = [];
+  const filteredItems = useMemo(()=>{
+    let toRemove = [] as ItemInMarket[];
+    let filtered = items;
+    if(EXCLUDE_ITEMS_SHOP.length){
+      for(const filter of EXCLUDE_ITEMS_SHOP){
+        toRemove = items.filter(({ item }) => filter[0] === item.category && filter[1].includes(getRarityString(item.rarity)));
+      }
+      filtered = items.filter((entry) => !toRemove.includes(entry));
+    };
+    return filtered;
+  }, [items]);
 
-  if (metrics) {
-    let itemAverage = 0;
-    let itemMinimum = 0;
 
-    if (items.length != 0) {
-      itemMinimum = findMinimumValue(items.map((x) => uISTToIST(Number(x.sell.price))));
-      itemAverage = findAverageValue(items.map((x) => uISTToIST(Number(x.sell.price))));
+  const metricsData = useMemo(()=>{
+    if (metrics) {
+      let itemAverage = 0;
+      let itemMinimum = 0;
+  
+      if (filteredItems.length != 0) {
+        itemMinimum = findMinimumValue(filteredItems.map((x) => uISTToIST(Number(x.sell.price))));
+        itemAverage = findAverageValue(filteredItems.map((x) => uISTToIST(Number(x.sell.price))));
+      }
+  
+      return [
+        metrics.amountSold,
+        metrics.collectionSize,
+        toTwoDecimals(itemMinimum),
+        toTwoDecimals(itemAverage),
+        toTwoDecimals(metrics.averageLevel),
+        toTwoDecimals(metrics.marketplaceAverageLevel),
+      ];
     }
+    return [];
+  }, [filteredItems]);
 
-    metricsData = [
-      metrics.amountSold,
-      metrics.collectionSize,
-      toTwoDecimals(itemMinimum),
-      toTwoDecimals(itemAverage),
-      toTwoDecimals(metrics.averageLevel),
-      toTwoDecimals(metrics.marketplaceAverageLevel),
-    ];
-  }
+  if (!filteredItems) return <></>;
 
-  if (!items) return <></>;
   return (
     <>
       <AssetHeaderContainer>
@@ -51,8 +67,8 @@ export const ItemsShop: FC = () => {
       <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
       <HorizontalDivider />
       {selectedId && item && <ItemDetailsMarket itemInMarket={item} selectItemInMarket={(id: string) => setSelectedId(id)} />}
-      {items.length > 0 ? (
-        <ItemCardsMarket itemsInMarket={items} isLoading={fetched} selectItemInMarketId={(id: string) => setSelectedId(id)} />
+      {filteredItems.length > 0 ? (
+        <ItemCardsMarket itemsInMarket={filteredItems} isLoading={fetched} selectItemInMarketId={(id: string) => setSelectedId(id)} />
       ) : (
         <OverviewContainer>
           <OverviewEmpty
