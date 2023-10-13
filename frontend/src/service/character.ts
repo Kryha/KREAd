@@ -4,7 +4,7 @@ import { CharacterCreation, CharacterInMarket, ExtendedCharacter, MarketMetrics 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { ISTTouIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
+import { ISTTouIST, uISTToIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
 
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
@@ -25,7 +25,10 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
       }
       const selectedCharacter = characters.find((char) => char.nft.name === selected.nft.name);
       if (selectedCharacter) {
-        userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter.nft.name });
+        userStateDispatch({
+          type: "SET_SELECTED",
+          payload: selectedCharacter.nft.name,
+        });
       }
     } else if (characters.length > 0) {
       if (storedName) {
@@ -38,12 +41,18 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
         } else {
           const firstCharacter = characters[0];
           localStorage.setItem("selectedCharacter", firstCharacter.nft.name);
-          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter.nft.name });
+          userStateDispatch({
+            type: "SET_SELECTED",
+            payload: firstCharacter.nft.name,
+          });
         }
       } else {
         const firstCharacterName = characters[0].nft.name;
         localStorage.setItem("selectedCharacter", firstCharacterName);
-        userStateDispatch({ type: "SET_SELECTED", payload: characters[0].nft.name });
+        userStateDispatch({
+          type: "SET_SELECTED",
+          payload: characters[0].nft.name,
+        });
       }
     }
   }, [userStateDispatch, characters, selected]);
@@ -107,6 +116,22 @@ export const useGetCharacterMarketMetrics = (): MarketMetrics => {
   return metrics;
 };
 
+export const useGetCharacterMarketPrices = (): [number, number, number[]] => {
+  const { characters } = useCharacterMarketState();
+
+  const prices = useMemo(
+    () => characters.map((character) => uISTToIST(Number(character.sell.price + character.sell.royalty + character.sell.platformFee))),
+    [characters],
+  );
+
+  const lowestPrice = Math.min(...prices);
+  const highestPrice = Math.max(...prices);
+
+  console.log(lowestPrice, highestPrice);
+
+  return [lowestPrice, highestPrice, prices];
+};
+
 export const useMyCharacters = (): [ExtendedCharacter[], boolean] => {
   const { characters, fetched } = useUserState();
   const charactersForSale = useMyCharactersForSale();
@@ -151,7 +176,7 @@ export const useCreateCharacter = () => {
       callback: async () => {
         console.info("MintCharacter call settled");
       },
-      errorCallback: body.setError
+      errorCallback: body.setError,
     });
   });
 };

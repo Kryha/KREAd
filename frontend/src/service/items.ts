@@ -127,6 +127,14 @@ export const useGetItemMarketMetrics = (): MarketMetrics => {
   return metrics;
 };
 
+export const useGetItemMarketPrices = (): [number, number, number[]] => {
+  const { items } = useItemMarketState();
+  const prices = useMemo(() => items.map((item) => Number(item.sell.price + item.sell.royalty + item.sell.platformFee)), [items]);
+  const lowestPrice = Math.min(...prices);
+  const highestPrice = Math.max(...prices);
+  return [lowestPrice, highestPrice, prices];
+};
+
 export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {
   const [service] = useAgoricContext();
   const { items } = useUserState();

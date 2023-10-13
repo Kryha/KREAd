@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { AssetFilterContainer, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { SECTION } from "../../constants";
 import { Filters } from "../filters";
 import { ColorSelector, PriceSelector, Select } from "../input-fields";
 import { text } from "../../assets";
@@ -14,6 +14,7 @@ import {
   sortItemsMarketOptions,
 } from "../../assets/text/filter-options";
 import { useFilters } from "../../context/filter-context";
+import { useGetItemMarketPrices } from "../../service";
 
 interface Props {
   section: (typeof SECTION)[keyof typeof SECTION];
@@ -23,6 +24,7 @@ export const AssetItemFilters: FC<Props> = ({ section }) => {
   const { categories, origin, sort, rarity, reset, price, setOrigin, setCategories, setRarity, setSort, setColors, setPrice, onReset } =
     useFilters();
   const [filterId, setFilterId] = useState("");
+  const [lowestPrice, highestPrice, prices] = useGetItemMarketPrices();
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
@@ -63,7 +65,7 @@ export const AssetItemFilters: FC<Props> = ({ section }) => {
             </Filters>
             {section === SECTION.SHOP && (
               <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-                {price && <PriceSelector handleChange={onPriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
+                {price && <PriceSelector handleChange={onPriceChange} min={lowestPrice} max={highestPrice} prices={prices} />}
               </Filters>
             )}
             <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>

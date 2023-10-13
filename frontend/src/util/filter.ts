@@ -44,7 +44,7 @@ export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
   const filteredColors = colors ? items.filter((item) => item.item.colors.includes(colors)) : items;
   const filteredPrice = price
     ? items.filter(({ sell }) => {
-        const priceValue = uISTToIST(Number(sell.price));
+        const priceValue = Number(sell.price);
         return priceValue > price.min && priceValue < price.max;
       })
     : items;

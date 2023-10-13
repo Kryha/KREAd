@@ -104,6 +104,12 @@ export const RangeContainer = styled.div`
   }
 `;
 
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
 interface RangeProps {
   width?: number;
   left?: number;
@@ -118,6 +124,7 @@ export const SliderTrack = styled.div`
   height: 1px;
   position: absolute;
   border-bottom: 1px solid ${color.grey};
+  border-radius: 3px;
   width: 100%;
   z-index: 1;
 `;
@@ -151,7 +158,7 @@ export const ThumbLeft = styled.input`
     margin-top: 4px;
     -webkit-appearance: none;
     appearance: none;
-    border: 0;
+    border: none;
     background: url(${RangeIcon});
     pointer-events: all;
     position: relative;
@@ -198,7 +205,6 @@ export const TextLabel = styled(BodyText)`
   ::before {
     position: absolute;
     content: "IST";
-    font-family: aktiv-grotesk;
     font-weight: ${fontWeight.light};
     font-size: 14px;
     line-height: 18px;

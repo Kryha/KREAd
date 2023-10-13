@@ -4,9 +4,10 @@ import { originOptions, sortCharactersInventoryOptions, sortCharactersMarketOpti
 import { color } from "../../design";
 import { ButtonText, ColorSelector, Filters, Label, PriceSelector, PrimaryButton, Select } from "../../components";
 import { text } from "../../assets";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { SECTION } from "../../constants";
 import { useFilters } from "../../context/filter-context";
 import { AssetFilterContainer, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "../asset-item-filters/styles";
+import { useGetCharacterMarketPrices } from "../../service";
 
 interface Props {
   section: (typeof SECTION)[keyof typeof SECTION];
@@ -15,7 +16,7 @@ interface Props {
 export const AssetCharacterFilters: FC<Props> = ({ section }) => {
   const { title, origin, sort, reset, price, setOrigin, setTitle, setSort, setColors, setPrice, onReset } = useFilters();
   const [filterId, setFilterId] = useState("");
-
+  const [lowestPrice, highestPrice, prices] = useGetCharacterMarketPrices();
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
   };
@@ -47,7 +48,7 @@ export const AssetCharacterFilters: FC<Props> = ({ section }) => {
             </Filters>
             {section === SECTION.SHOP && (
               <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-                {price && <PriceSelector handleChange={onPriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
+                {price && <PriceSelector handleChange={onPriceChange} min={lowestPrice} max={highestPrice} prices={prices} />}
               </Filters>
             )}
             <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
