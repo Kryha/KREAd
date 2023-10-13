@@ -14,13 +14,11 @@ import {
   SliderContainer,
   SliderRange,
   SliderTrack,
-  SpinnerContainer,
   TextLabel,
   ThumbLeft,
   ThumbRight,
 } from "./styles";
 import { uISTToIST } from "../../util";
-import { Spinner } from "../content-loader/styles";
 
 interface PriceSelectorProps {
   handleChange: (min: number, max: number) => void;
@@ -40,13 +38,6 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
   const maxValRef = useRef(max);
   const { height } = useViewport();
 
-  console.log("minVal", minVal);
-  console.log("maxVal", maxVal);
-  console.log("minValRef", minValRef);
-  console.log("maxValRef", maxValRef);
-  console.log("leftRange", leftRange);
-  console.log("widthRange", widthRange);
-
   const getPercent = useCallback((value: number) => Math.round(((value - min) / (max - min)) * 100), [min, max]);
 
   useEffect(() => {
@@ -65,12 +56,12 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
   }, [maxVal, getPercent]);
 
   const setMaxValue = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(Number(event.target.value), minVal + 1);
+    const value = Math.max(Number(event.target.value), minVal);
     setMaxVal(value);
     maxValRef.current = value;
   };
   const setMinValue = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = Math.min(Number(event.target.value), maxVal - 1);
+    const value = Math.min(Number(event.target.value), maxVal);
     setMinVal(value);
     minValRef.current = value;
   };
@@ -91,34 +82,26 @@ export const PriceSelector: FC<PriceSelectorProps> = ({ handleChange, min, max }
   return (
     <ColorBox height={height}>
       <RangeContainer>
-        {min === Infinity && max === -Infinity ? (
-          <SpinnerContainer>
-            <Spinner />
-          </SpinnerContainer>
-        ) : (
-          <>
-            <InputWrapper>
-              <InputContainer>
-                <BoldLabel>{text.store.min}</BoldLabel>
-                <TextLabel>
-                  <MinInput type="number" placeholder={`${uISTToIST(minVal)}`} onChange={setMinValue} />
-                </TextLabel>
-              </InputContainer>
-              <InputContainer>
-                <BoldLabel>{text.store.max}</BoldLabel>
-                <TextLabel>
-                  <MaxInput type="number" placeholder={`${uISTToIST(maxVal)}`} onChange={setMaxValue} />
-                </TextLabel>
-              </InputContainer>
-            </InputWrapper>
-            <ThumbLeft type="range" min={min} max={max} value={minVal} onChange={setMinValue} />
-            <ThumbRight type="range" min={min} max={max} value={maxVal} onChange={setMaxValue} />
-            <SliderContainer>
-              <SliderTrack />
-              <SliderRange width={widthRange} left={leftRange} />
-            </SliderContainer>
-          </>
-        )}
+        <InputWrapper>
+          <InputContainer>
+            <BoldLabel>{text.store.min}</BoldLabel>
+            <TextLabel>
+              <MinInput type="number" placeholder={`${uISTToIST(minVal)}`} onChange={setMinValue} />
+            </TextLabel>
+          </InputContainer>
+          <InputContainer>
+            <BoldLabel>{text.store.max}</BoldLabel>
+            <TextLabel>
+              <MaxInput type="number" placeholder={`${uISTToIST(maxVal)}`} onChange={setMaxValue} />
+            </TextLabel>
+          </InputContainer>
+        </InputWrapper>
+        <ThumbLeft type="range" min={min} max={max} value={minVal} onChange={setMinValue} />
+        <ThumbRight type="range" min={min} max={max} value={maxVal} onChange={setMaxValue} />
+        <SliderContainer>
+          <SliderTrack />
+          <SliderRange width={widthRange} left={leftRange} />
+        </SliderContainer>
       </RangeContainer>
       <ButtonContainer>
         <SecondaryButton
