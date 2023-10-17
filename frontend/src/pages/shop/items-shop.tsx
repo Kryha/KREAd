@@ -19,7 +19,6 @@ export const ItemsShop: FC = () => {
   const [items, fetched] = useGetItemsInShop();
   const metrics = useGetItemMarketMetrics();
   const [item] = useGetItemInShopById(selectedId);
-  const assetsCount = items.length;
 
   const filteredItems = useMemo(()=>{
     let toRemove = [] as ItemInMarket[];
@@ -57,6 +56,7 @@ export const ItemsShop: FC = () => {
   }, [filteredItems]);
 
   if (!filteredItems) return <></>;
+  const assetsCount = filteredItems.length;
 
   return (
     <>
