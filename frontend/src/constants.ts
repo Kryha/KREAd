@@ -1,3 +1,5 @@
+import { Category, Rarity } from "./interfaces";
+
 export const GO_BACK = -1 as const;
 export const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5001";
 export const MIN_PRICE = 0 as const;
@@ -92,6 +94,11 @@ export const METRICS_CHARACTER = [
 ];
 
 export const METRICS_ITEM = ["sales", "collection size", "floor price", "avg. item price", "avg. item level", "avg. marketplace level"];
+
+export const EXCLUDE_ITEMS_SHOP = [
+  ["hair", ["legendary"]],
+] as [[Category, Rarity[]]];
+
 /***************************************************************************/
 
 export const AGORIC_LINK = "https://agoric.com/" as const;
