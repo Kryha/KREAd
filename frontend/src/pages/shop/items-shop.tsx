@@ -25,7 +25,7 @@ export const ItemsShop: FC = () => {
     let filtered = items;
     if(EXCLUDE_ITEMS_SHOP.length){
       for(const filter of EXCLUDE_ITEMS_SHOP){
-        toRemove = items.filter(({ item }) => filter[0] === item.category && filter[1].includes(getRarityString(item.rarity)));
+        toRemove = [...toRemove, items.filter(({ item }) => filter[0] === item.category && filter[1].includes(getRarityString(item.rarity)))];
       }
       filtered = items.filter((entry) => !toRemove.includes(entry));
     };
