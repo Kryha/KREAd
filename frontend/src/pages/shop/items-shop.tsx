@@ -20,12 +20,15 @@ export const ItemsShop: FC = () => {
   const metrics = useGetItemMarketMetrics();
   const [item] = useGetItemInShopById(selectedId);
 
-  const filteredItems = useMemo(()=>{
+  const filteredItems = useMemo(() => {
     let toRemove = [] as ItemInMarket[];
     let filtered = items;
-    if(EXCLUDE_ITEMS_SHOP.length){
-      for(const filter of EXCLUDE_ITEMS_SHOP){
-        toRemove = [...toRemove, items.filter(({ item }) => filter[0] === item.category && filter[1].includes(getRarityString(item.rarity)))];
+    if (EXCLUDE_ITEMS_SHOP.length) {
+      for (const filter of EXCLUDE_ITEMS_SHOP) {
+        toRemove = [
+          ...toRemove,
+          ...items.filter(({ item }) => filter[0] === item.category && filter[1].includes(getRarityString(item.rarity))),
+        ];
       }
       filtered = items.filter((entry) => !toRemove.includes(entry));
     };
