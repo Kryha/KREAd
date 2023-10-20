@@ -21,6 +21,7 @@ import { SellData, SellStep } from "./types";
 import { ISTTouIST } from "../../util";
 import { SellDescription } from "../../components/sell-description/sell-description";
 import { useCharacterBuilder } from "../../context/character-builder-context";
+import { ButtonWrapper } from "../create-character/styles";
 
 interface SellFormProps {
   data: SellData;
@@ -73,19 +74,21 @@ export const SellForm: FC<SellFormProps> = ({ data, changeStep, onSubmit, isPlac
           )}
         </Step>
       </StepContainer>
-      {isOnFirstStep && (
-        <PreviousButtonContainer onClick={() => changeStep(INFORMATION_STEP)}>
-          <SecondaryButton>
-            <ButtonText>{text.mint.previous}</ButtonText>
-          </SecondaryButton>
-        </PreviousButtonContainer>
-      )}
-      <ButtonContainer>
-        <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isPlacedInShop}>
-          <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
-          {isOfferPending ? <LoadingPage /> : <ArrowUp />}
-        </PrimaryButton>
-      </ButtonContainer>
+      <ButtonWrapper>
+        {isOnFirstStep && (
+          <PreviousButtonContainer onClick={() => changeStep(INFORMATION_STEP)}>
+            <SecondaryButton>
+              <ButtonText>{text.mint.previous}</ButtonText>
+            </SecondaryButton>
+          </PreviousButtonContainer>
+        )}
+        <ButtonContainer>
+          <PrimaryButton onClick={() => changeStep(CONFIRMATION_STEP)} disabled={!isPlacedInShop}>
+            <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
+            {isOfferPending ? <LoadingPage /> : <ArrowUp />}
+          </PrimaryButton>
+        </ButtonContainer>
+      </ButtonWrapper>
     </>
   );
 };
