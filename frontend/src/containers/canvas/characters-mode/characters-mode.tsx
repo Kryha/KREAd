@@ -57,7 +57,12 @@ export const CharactersMode: FC = () => {
                   </ISTButton>
                 </PrimaryButton>
               </CharacterActions>
-              <PrimaryButton onClick={() => sell(selectedCharacter)}>
+              <PrimaryButton
+                onClick={() => {
+                  setInteractionMode(MAIN_MODE);
+                  sell(selectedCharacter);
+                }}
+              >
                 <ButtonText customColor={color.white}>sell</ButtonText>
               </PrimaryButton>
               <Store>
