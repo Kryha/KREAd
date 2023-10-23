@@ -4,7 +4,7 @@ import { Category, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfac
 import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
-import { INVENTORY_CALL_FETCH_DELAY, ITEM_PURSE_NAME } from "../constants";
+import { INVENTORY_CALL_FETCH_DELAY, ITEM_PURSE_NAME, MAX_PRICE, MIN_PRICE } from "../constants";
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { marketService } from "./character/market";
@@ -127,12 +127,14 @@ export const useGetItemMarketMetrics = (): MarketMetrics => {
   return metrics;
 };
 
-export const useGetItemMarketPrices = (): [number, number, number[]] => {
-  const { items } = useItemMarketState();
-  const prices = useMemo(() => items.map((item) => Number(item.sell.price + item.sell.royalty + item.sell.platformFee)), [items]);
-  const lowestPrice = Math.min(...prices);
-  const highestPrice = Math.max(...prices);
-  return [lowestPrice, highestPrice, prices];
+export const useGetItemMarketPrices = (): [number[], boolean] => {
+  const { items, fetched } = useItemMarketState();
+  const prices = useMemo(
+    () => (fetched ? items.map((item) => Number(item.sell.price + item.sell.royalty + item.sell.platformFee)) : [MIN_PRICE, MAX_PRICE]),
+    [items, fetched],
+  );
+
+  return [prices, fetched];
 };
 
 export const useSellItem = (itemName: string | undefined, itemCategory: Category | undefined) => {

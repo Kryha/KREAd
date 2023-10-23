@@ -4,13 +4,14 @@ import { CharacterCreation, CharacterInMarket, ExtendedCharacter, MarketMetrics 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
-import { ISTTouIST, uISTToIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
+import { ISTTouIST, useFilterCharacters, useFilterCharactersMarket } from "../util";
 
 import { useUserState, useUserStateDispatch } from "../context/user";
 import { useWalletState } from "../context/wallet";
 import { mintCharacter } from "./character/mint";
 import { marketService } from "./character/market";
 import { useCharacterMarketState } from "../context/character-shop-context";
+import { MAX_PRICE, MIN_PRICE } from "../constants";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
@@ -84,9 +85,7 @@ export const useMyCharactersForSale = () => {
     extend();
   }, [wallet.characterProposals, publicFacet]);
 
-  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
-
-  return parsedCharacters;
+  return useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
 };
 
 export const useMyCharacter = (id?: number): [ExtendedCharacter | undefined, boolean] => {
@@ -116,20 +115,17 @@ export const useGetCharacterMarketMetrics = (): MarketMetrics => {
   return metrics;
 };
 
-export const useGetCharacterMarketPrices = (): [number, number, number[]] => {
-  const { characters } = useCharacterMarketState();
+export const useGetCharacterMarketPrices = (): [number[], boolean] => {
+  const { characters, fetched } = useCharacterMarketState();
 
   const prices = useMemo(
-    () => characters.map((character) => uISTToIST(Number(character.sell.price + character.sell.royalty + character.sell.platformFee))),
-    [characters],
+    () =>
+      fetched
+        ? characters.map((character) => Number(character.sell.price + character.sell.royalty + character.sell.platformFee))
+        : [MIN_PRICE, MAX_PRICE],
+    [characters, fetched],
   );
-
-  const lowestPrice = Math.min(...prices);
-  const highestPrice = Math.max(...prices);
-
-  console.log(lowestPrice, highestPrice);
-
-  return [lowestPrice, highestPrice, prices];
+  return [prices, fetched];
 };
 
 export const useMyCharacters = (): [ExtendedCharacter[], boolean] => {
