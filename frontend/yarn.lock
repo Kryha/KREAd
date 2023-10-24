@@ -6324,8 +6324,9 @@ eslint@^8.48.0:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-"esm@github:agoric-labs/esm#Agoric-built":
+esm@agoric-labs/esm#Agoric-built:
   version "3.2.25"
+  uid "3603726ad4636b2f865f463188fcaade6375638e"
   resolved "https://codeload.github.com/agoric-labs/esm/tar.gz/3603726ad4636b2f865f463188fcaade6375638e"
 
 espree@^9.6.0, espree@^9.6.1:
@@ -9187,10 +9188,10 @@ semver@^7.3.5, semver@^7.3.7, semver@^7.5.3, semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
-ses@^0.15.16:
-  version "0.15.24"
-  resolved "https://registry.yarnpkg.com/ses/-/ses-0.15.24.tgz#540085a8ae74c8ab94bfa46f527e79e0339ed26a"
-  integrity sha512-6+dBOc3zRGBBuKwSrXdXIej/Etvh4hSaoxf4NqqixHJ4lRJJbna9ATv9QgoEneIABwXX0opKWs5qVdpVXlQX2w==
+ses@^0.16.1:
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/ses/-/ses-0.16.1.tgz#b447aa8a6f7f5826e2ba8ff66a566f1e1a74cca6"
+  integrity sha512-yLgBL+IC7cfMz7DWlTAbZaZUVavO3U14G8gqKPE0jqQgxkvN1KDx3c1UW9q/YgU3UpxuhxnjUMOfyAfEF9pNxA==
 
 ses@^0.17.0:
   version "0.17.1"
