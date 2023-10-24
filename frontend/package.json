@@ -24,7 +24,7 @@
     "react-konva": "^18.2.10",
     "react-query": "^3.39.0",
     "react-router-dom": "^6.3.0",
-    "ses": "^0.15.16",
+    "ses": "^0.16.1",
     "three": "^0.144.0",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4",
