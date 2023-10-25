@@ -126,7 +126,7 @@ export function useCharacterDownloader(initialDownloadSize = "original") {
               pixelRatio: selected === "original" ? 1 : 5,
               quality: 1,
               mimeType: "image/png",
-              callback: (blob: Blob | PromiseLike<Blob>) => resolve(blob),
+              callback: (blob?: (Blob | null) | PromiseLike<Blob>) => blob && resolve(blob),
             });
           });
 
