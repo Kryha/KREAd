@@ -47,9 +47,9 @@ export const CharactersShop: FC = () => {
       <AssetHeaderContainer>
         <AssetHeader>{metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_CHARACTER} /> : <></>}</AssetHeader>
         <AssetCharacterFilters section={SECTION.SHOP} />
+        <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
+        <HorizontalDivider />
       </AssetHeaderContainer>
-      <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
-      <HorizontalDivider />
       {selectedId && <CharacterDetailsMarket characterInMarket={character} selectCharacter={(id: string) => setSelectedId(id)} />}
       {characters.length > 0 ? (
         <CharacterCardsMarket charactersInMarket={characters} isLoading={isLoading} selectCharacterId={(id: string) => setSelectedId(id)} />
