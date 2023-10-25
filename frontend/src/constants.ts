@@ -139,8 +139,8 @@ export type InteractionMode = typeof ITEM_MODE | typeof MAIN_MODE | typeof CATEG
 export const CHARACTER_HEIGHT = 1190.5511 as const;
 export const CHARACTER_WIDTH = 841.8898 as const;
 
-// export const NETWORK_CONFIG = import.meta.env.VITE_NETWORK_CONFIG || ("https://emerynet.agoric.net/network-config" as const);
-export const NETWORK_CONFIG = import.meta.env.VITE_NETWORK_CONFIG || ("https://main.agoric.net/network-config" as const);
+export const NETWORK_CONFIG = import.meta.env.VITE_NETWORK_CONFIG || ("https://emerynet.agoric.net/network-config" as const);
+// export const NETWORK_CONFIG = import.meta.env.VITE_NETWORK_CONFIG || ("https://main.agoric.net/network-config" as const);
 
 export const localBridgeHref = "http://localhost:3000/wallet/bridge.html" as const;
 export const prodBridgeHref = "https://wallet.agoric.app/wallet/bridge.html" as const;
