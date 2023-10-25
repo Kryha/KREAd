@@ -25,7 +25,6 @@ ENV VITE_NETWORK_CONFIG $VITE_NETWORK_CONFIG
 
 COPY .yarnrc.yml ./.yarnrc.yml
 COPY yarn.lock ./yarn.lock
-COPY .yarn/ ./.yarn/
 
 COPY .eslintrc.json ./.eslintrc.json
 COPY .eslintignore ./.eslintignore
