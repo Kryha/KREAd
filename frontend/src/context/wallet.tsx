@@ -143,7 +143,8 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     });
 
     if (!walletState.fetched && chainStorageWatcher) {
-      watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
+      if (tokenInfo.character.brand && tokenInfo.item.brand)
+        watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
       watchExistingCharacterPaths();
     }
 
@@ -154,7 +155,8 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     pursesNotifier,
     walletState.fetched,
     chainStorageWatcher,
-    tokenInfo,
+    tokenInfo.character.brand,
+    tokenInfo.item.brand,
     agoric.contracts.kread.instance,
     agoric.walletConnection.pursesNotifier,
     walletAddress,
