@@ -1,12 +1,3 @@
-export interface AgoricService {
-  zoe: any;
-  board: any;
-  zoeInvitationDepositFacetId?: any;
-  invitationIssuer: any;
-  walletP: any;
-  apiSend: any;
-}
-
 interface Contracts {
   kread: {
     instance: any;
@@ -27,7 +18,6 @@ export interface Purses {
 export interface AgoricState {
   status: Status;
   contracts: Contracts;
-  agoric: AgoricService;
   addOffer: any;
   walletConnection: WalletConnection;
   notifiers: NotifiersState;
@@ -37,6 +27,7 @@ export interface AgoricState {
   isReady: boolean;
   chainStorageWatcher: any;
 }
+
 export interface TokenInfo {
   character: { issuer: any; brand: any; petName?: string };
   item: { issuer: any; brand: any; petName?: string };
@@ -80,14 +71,9 @@ interface SetOffers {
   payload: any[];
 }
 
-interface SetAgoric {
-  type: "SET_AGORIC";
-  payload: Omit<AgoricService, "apiSend">;
-}
-
-interface SetKreadContract {
-  type: "SET_KREAD_CONTRACT";
-  payload: Contract;
+interface SetKreadInstance {
+  type: "SET_KREAD_INSTANCE";
+  payload: any;
 }
 
 interface SetApiSend {
@@ -135,8 +121,7 @@ export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 
 export type AgoricStateActions =
   | Reset
-  | SetAgoric
-  | SetKreadContract
+  | SetKreadInstance
   | SetApiSend
   | SetLoading
   | SetTokenInfo

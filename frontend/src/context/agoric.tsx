@@ -19,14 +19,6 @@ const initialState: AgoricState = {
     },
   },
   addOffer: undefined,
-  agoric: {
-    zoe: undefined,
-    board: undefined,
-    zoeInvitationDepositFacetId: undefined,
-    invitationIssuer: undefined,
-    walletP: undefined,
-    apiSend: undefined,
-  },
   walletConnection: {
     pursesNotifier: undefined,
     makeOffer: undefined,
@@ -69,14 +61,8 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
     case "SET_OFFERS":
       return { ...state, offers: action.payload };
 
-    case "SET_AGORIC":
-      return { ...state, agoric: { ...state.agoric, ...action.payload } };
-
-    case "SET_APISEND":
-      return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
-
-    case "SET_KREAD_CONTRACT":
-      return { ...state, contracts: { ...state.contracts, kread: action.payload } };
+    case "SET_KREAD_INSTANCE":
+      return { ...state, contracts: { ...state.contracts, kread: { instance: action.payload }} };
 
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
@@ -158,7 +144,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const instances: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
-      dispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1] } });
+      dispatch({ type: "SET_KREAD_INSTANCE", payload: instance[0][1] });
     };
 
     const fetchTokenInfo = async () => {

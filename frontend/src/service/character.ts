@@ -54,16 +54,13 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
 export const useMyCharactersForSale = () => {
   const [
     {
-      contracts: {
-        kread: { publicFacet },
-      },
       chainStorageWatcher,
     },
   ] = useAgoricContext();
   const wallet = useWalletState();
 
   // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
-  const [offerCharacters, setOfferCharacters] = useState<string>("[]"); // TODO: ideally use the commented line underneath
+  const [offerCharacters, setOfferCharacters] = useState<string>("[]"); 
 
   // adding items to characters from offers
   useEffect(() => {
@@ -73,7 +70,7 @@ export const useMyCharactersForSale = () => {
       setOfferCharacters(JSON.stringify(extendedCharacters));
     };
     extend();
-  }, [wallet.characterProposals, publicFacet]);
+  }, [wallet.characterProposals]);
 
   const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
 
@@ -208,7 +205,7 @@ export const useBuyCharacter = (characterId: string) => {
 
   useEffect(() => {
     setIsLoading(false);
-  }, [characterId, service.contracts.kread.publicFacet, service.offers]);
+  }, [characterId, service.offers]);
 
   const callback = useCallback(async () => {
     const found = characters.find((character) => character.id === characterId);
