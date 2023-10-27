@@ -1,6 +1,5 @@
 import React, { FC, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { KeplerIcon, text } from "../../assets";
 import { breakpoints, color } from "../../design";
 import {
@@ -33,8 +32,6 @@ import { routes } from "../../navigation";
 import { ButtonRow } from "../onboarding/styles";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 
-// TODO: Update to designs, Update stylings
-
 export const ConnectWallet: FC = () => {
   const [service, _] = useAgoricContext();
   const navigate = useNavigate();
@@ -60,8 +57,9 @@ export const ConnectWallet: FC = () => {
       setShowToast(true);
     }
   };
+
   if (!service.walletConnection.address) return <LoadingPage spinner={false} />;
-  if (service.walletConnection.makeOffer) navigate(routes.character);
+  if (service.status.walletProvisioned) navigate(routes.character);
 
   return (
     <>

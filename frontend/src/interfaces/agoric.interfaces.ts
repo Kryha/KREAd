@@ -7,19 +7,14 @@ export interface AgoricService {
   apiSend: any;
 }
 
-interface Contract {
-  instance: any;
-  publicFacet?: any;
-}
-
 interface Contracts {
-  kread: Contract;
+  kread: {
+    instance: any;
+  }
 }
 
 interface Status {
-  walletConnected: boolean;
-  dappApproved: boolean;
-  showApproveDappModal: boolean;
+  walletProvisioned: boolean;
 }
 
 export interface Purses {
@@ -74,20 +69,11 @@ interface NotifiersState {
   };
 }
 
-interface SetDappApproved {
-  type: "SET_DAPP_APPROVED";
-  payload: boolean;
+interface UpdateStatus {
+  type: "UPDATE_STATUS";
+  payload: { [key: string]: boolean };
 }
 
-interface SetWalletConnected {
-  type: "SET_WALLET_CONNECTED";
-  payload: boolean;
-}
-
-interface SetShowApproveDappModal {
-  type: "SET_SHOW_APPROVE_DAPP_MODAL";
-  payload: boolean;
-}
 
 interface SetOffers {
   type: "SET_OFFERS";
@@ -149,9 +135,6 @@ export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 
 export type AgoricStateActions =
   | Reset
-  | SetDappApproved
-  | SetWalletConnected
-  | SetShowApproveDappModal
   | SetAgoric
   | SetKreadContract
   | SetApiSend
@@ -161,7 +144,8 @@ export type AgoricStateActions =
   | SetWalletConnection
   | SetChainStorageWatcher
   | SetOffers
-  | SetSmartWalletStatus;
+  | SetSmartWalletStatus
+  | UpdateStatus;
 
 export interface OfferProposal {
   give: any;
