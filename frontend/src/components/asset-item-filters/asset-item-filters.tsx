@@ -1,8 +1,8 @@
 import React, { FC, useState } from "react";
 import { AssetFilterContainer, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "./styles";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { SECTION } from "../../constants";
 import { Filters } from "../filters";
-import { ColorSelector, PriceSelector, Select } from "../input-fields";
+import { ColorSelector, Select } from "../input-fields";
 import { text } from "../../assets";
 import { ButtonText, Label, PrimaryButton } from "../atoms";
 import { color } from "../../design";
@@ -14,22 +14,21 @@ import {
   sortItemsMarketOptions,
 } from "../../assets/text/filter-options";
 import { useFilters } from "../../context/filter-context";
+import { useGetItemMarketPrices } from "../../service";
+import { PriceRangeSlider } from "../price-range-slider/price-range-slider";
 
 interface Props {
   section: (typeof SECTION)[keyof typeof SECTION];
 }
 
 export const AssetItemFilters: FC<Props> = ({ section }) => {
-  const { categories, origin, sort, rarity, reset, price, setOrigin, setCategories, setRarity, setSort, setColors, setPrice, onReset } =
+  const { categories, origin, sort, rarity, reset, setOrigin, setItemPrice, setCategories, setRarity, setSort, setColors, onReset } =
     useFilters();
   const [filterId, setFilterId] = useState("");
+  const [prices, fetched] = useGetItemMarketPrices();
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
-  };
-
-  const onPriceChange = (min: number, max: number) => {
-    setPrice({ min, max });
   };
 
   return (
@@ -63,7 +62,7 @@ export const AssetItemFilters: FC<Props> = ({ section }) => {
             </Filters>
             {section === SECTION.SHOP && (
               <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-                {price && <PriceSelector handleChange={onPriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
+                {fetched && <PriceRangeSlider prices={prices} setPrice={setItemPrice} />}
               </Filters>
             )}
             <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
