@@ -1,8 +1,8 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { KeplerIcon, text } from "../../assets";
-import { breakpoints, color } from "../../design";
+import { color } from "../../design";
 import {
   ButtonText,
   FadeInOut,
@@ -10,47 +10,42 @@ import {
   Kado,
   KeplerIconWrapper,
   LoadingPage,
-  MenuText,
   NotificationDetail,
   OnboardingCharacter,
   Overlay,
   PrimaryButton,
-  TitleText,
 } from "../../components";
+import { ArrowUp, FooterContainer } from "./styles";
+import { useViewport } from "../../hooks";
+import { useAgoricContext } from "../../context/agoric";
 import {
-  ArrowUp,
-  ButtonContainer,
-  FooterContainer,
-  InfoText,
+  ButtonRow,
   KreadLogo,
+  LeftContent,
   LogoContainer,
   OnboardingContainer,
   OnboardingWrapper,
-  SectionContainer,
-} from "./styles";
-import { useIsMobile, useOnScreen, useViewport } from "../../hooks";
-import { useAgoricContext } from "../../context/agoric";
-import { routes } from "../../navigation";
-import { ButtonRow } from "../onboarding/styles";
+  RightContent,
+  SectionHeading,
+  SectionText,
+} from "../onboarding/styles";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { Section } from "../onboarding";
+import { routes } from "../../navigation";
 
 // TODO: Update to designs, Update stylings
 
 export const ConnectWallet: FC = () => {
   const [service, _] = useAgoricContext();
   const navigate = useNavigate();
-  const { width, height } = useViewport();
+  const { height } = useViewport();
   const [isLoading, setIsLoading] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const isConnectButtonVisible = useOnScreen(ref);
-  const isMobile = useIsMobile(breakpoints.tablet);
   const [showWidget, setShowWidget] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
   const toggleWidget = () => {
     setShowWidget(!showWidget);
   };
-  const showAnimation = false;
 
   const provisionWallet = async () => {
     setIsLoading(true);
@@ -65,9 +60,19 @@ export const ConnectWallet: FC = () => {
   if (service.walletConnection.makeOffer) navigate(routes.character);
 
   return (
-    <>
-      <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
-        <ButtonContainer isVisible={isConnectButtonVisible}>
+    <OnboardingWrapper>
+      <LogoContainer>
+        <KreadLogo />
+      </LogoContainer>
+      <OnboardingContainer height={height}>
+        <Section>
+          <LeftContent>
+            <SectionHeading>{text.general.activateSmartWallet}</SectionHeading>
+            <SectionText customColor={color.darkGrey}>{text.general.activateSmartWalletDescription}</SectionText>
+          </LeftContent>
+          <RightContent>
+            <OnboardingCharacter />
+          </RightContent>
           <ButtonRow>
             <PrimaryButton onClick={() => provisionWallet()}>
               <KeplerIconWrapper>
@@ -81,23 +86,11 @@ export const ConnectWallet: FC = () => {
               <ArrowUp />
             </PrimaryButton>
           </ButtonRow>
-        </ButtonContainer>
-        <OnboardingWrapper>
-          <InfoText height={height}>
-            <SectionContainer>
-              <MenuText>{text.general.activateSmartWallet}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.activateSmartWalletDescription}</TitleText>
-            </SectionContainer>
-          </InfoText>
-        </OnboardingWrapper>
-        {!isMobile && <OnboardingCharacter size={"large"} isZoomed={true} />}
+        </Section>
         <FooterContainer>
           <Footer />
         </FooterContainer>
       </OnboardingContainer>
-      <LogoContainer>
-        <KreadLogo />
-      </LogoContainer>
       <FadeInOut show={showWidget}>
         <Kado show={showWidget} toggleWidget={toggleWidget} />
         <Overlay />
@@ -113,6 +106,6 @@ export const ConnectWallet: FC = () => {
           />
         </NotificationWrapper>
       </FadeInOut>
-    </>
+    </OnboardingWrapper>
   );
 };

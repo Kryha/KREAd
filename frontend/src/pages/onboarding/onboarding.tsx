@@ -1,67 +1,53 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { DiscordIcon, KeplerIcon, text, TwitterIcon } from "../../assets";
-import { breakpoints, color } from "../../design";
+import { color } from "../../design";
+import { AnimatedLogo, ButtonText, Footer, OnboardingCharacter, PrimaryButton } from "../../components";
 import {
-  AnimatedLogo,
-  ButtonText,
-  FadeInOut,
-  Footer,
-  Kado,
-  KeplerIconWrapper,
-  MenuText,
-  OnboardingCharacter,
-  Overlay,
-  PrimaryButton,
-  TitleText,
-} from "../../components";
-import {
-  ArrowDown,
   ArrowUp,
-  ButtonContainer,
   ButtonRow,
+  Discord,
   EndContent,
   FooterContainer,
-  GeneralSectionContainer,
-  InfoText,
   KreadContainer,
   KreadLogo,
   KryhaLink,
+  LeftContent,
   Link,
   LogoContainer,
-  MiddleContent,
   OnboardingContainer,
   OnboardingWrapper,
-  ScrollContainer,
+  RightContent,
   SectionContainer,
+  SectionHeading,
+  SectionText,
+  SectionWrapper,
+  SocialLink,
   SocialsContainer,
   TextContainer,
+  Twitter,
 } from "./styles";
-import { useIsMobile, useOnScreen, useTimer, useViewport } from "../../hooks";
+import { useTimer, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, DISCORD_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME, TWITTER_LINK } from "../../constants";
+import { useInView } from "framer-motion";
+import { KeplerIcon, text } from "../../assets";
 
 export const Onboarding: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
-  const isMobile = useIsMobile(breakpoints.tablet);
-  const ref = useRef<HTMLDivElement>(null);
-  const isConnectButtonVisible = useOnScreen(ref);
   const [showAnimation, setShowAnimation] = useState(true);
   const isFirstTime = localStorage.getItem(FIRST_TIME) === null;
-  const [showWidget, setShowWidget] = useState(false);
-
-  const toggleWidget = () => {
-    setShowWidget(!showWidget);
-  };
 
   useEffect(() => {
+    if (showSlider) {
+      setShowAnimation(false);
+    }
+
     if (!isFirstTime) {
       setShowAnimation(false);
     }
-  }, [isFirstTime]);
+  }, [showSlider, isFirstTime]);
 
   const connectWallet = () => {
     navigate(routes.connectWallet);
@@ -70,93 +56,124 @@ export const Onboarding: FC = () => {
   };
 
   return (
-    <>
-      <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
-        <ButtonContainer isVisible={isConnectButtonVisible}>
-          <ButtonRow>
-            <PrimaryButton onClick={() => connectWallet()}>
-              <KeplerIconWrapper>
-                <KeplerIcon />
-              </KeplerIconWrapper>
-              <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-              <ArrowUp />
-            </PrimaryButton>
-          </ButtonRow>
-        </ButtonContainer>
-        <OnboardingWrapper>
-          <InfoText height={height}>
-            <SectionContainer>
-              <MenuText>{text.general.logo}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-            </SectionContainer>
-            <SectionContainer>
-              <MenuText>{text.general.sagesBy}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.sagesIsTheFirst}</TitleText>
-            </SectionContainer>
-            <ScrollContainer>
-              <ButtonText>{text.general.scroll}</ButtonText>
-              <ArrowDown />
-            </ScrollContainer>
-          </InfoText>
-          <MiddleContent height={height} ref={ref}>
-            <GeneralSectionContainer>
-              <MenuText>{text.general.whoWeAre}</MenuText>
-              <TextContainer>
-                {text.general.isPartOfAgoric}
-                <Link href={AGORIC_LINK} target="_blank">
-                  {text.general.agoric}
-                </Link>
-                {text.general.anOpenSource}
-                <KryhaLink href={KRYHA_LINK} target="_blank">
-                  {text.general.kryha}.
-                </KryhaLink>
-              </TextContainer>
-              <TextContainer>{text.general.theSagesArt}</TextContainer>
-              <TextContainer>{text.general.ourLeadership}</TextContainer>
-            </GeneralSectionContainer>
-          </MiddleContent>
-          <EndContent height={height}>
-            <GeneralSectionContainer>
-              <MenuText>{text.general.contactUs}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-              <TextContainer>
-                {text.general.sendEmailTo}
-                <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
-              </TextContainer>
-            </GeneralSectionContainer>
-            <GeneralSectionContainer>
-              <MenuText>{text.general.followUs}</MenuText>
-              <SocialsContainer>
-                <Link href={DISCORD_LINK} target="_blank">
-                  <DiscordIcon />
-                  {text.general.discord}
-                </Link>
-                <Link href={TWITTER_LINK} target="_blank">
-                  <TwitterIcon />
-                  {text.general.twitter}
-                </Link>
-              </SocialsContainer>
-            </GeneralSectionContainer>
-          </EndContent>
-        </OnboardingWrapper>
-        {!isMobile && <OnboardingCharacter />}
-        <FooterContainer>
-          <Footer />
-        </FooterContainer>
-      </OnboardingContainer>
+    <OnboardingWrapper>
       {showAnimation ? (
         <KreadContainer height={height} width={width} showSlider={showSlider}>
-          <AnimatedLogo iteration={1} />
+          <AnimatedLogo iteration={2} />
         </KreadContainer>
       ) : (
-        <LogoContainer>
-          <KreadLogo />
-        </LogoContainer>
+        <>
+          <LogoContainer>
+            <KreadLogo />
+          </LogoContainer>
+          <OnboardingContainer height={height}>
+            <ConnectButton connectWallet={connectWallet} />
+            <Section>
+              <LeftContent>
+                <SectionHeading>{text.general.logo}</SectionHeading>
+                <SectionText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</SectionText>
+              </LeftContent>
+              <RightContent>
+                <OnboardingCharacter />
+              </RightContent>
+            </Section>
+            <Section>
+              <LeftContent>
+                <SectionHeading>{text.general.sagesBy}</SectionHeading>
+                <SectionText customColor={color.darkGrey}>{text.general.sagesIsTheFirst}</SectionText>
+              </LeftContent>
+            </Section>
+            <Section>
+              <LeftContent>
+                <SectionHeading>{text.general.whoWeAre}</SectionHeading>
+                <TextContainer>
+                  {text.general.isPartOfAgoric}
+                  <Link href={AGORIC_LINK} target="_blank">
+                    {text.general.agoric}
+                  </Link>
+                  {text.general.anOpenSource}
+                  <KryhaLink href={KRYHA_LINK} target="_blank">
+                    {text.general.kryha}.
+                  </KryhaLink>
+                </TextContainer>
+                <TextContainer>{text.general.theSagesArt}</TextContainer>
+                <TextContainer>{text.general.ourLeadership}</TextContainer>
+              </LeftContent>
+            </Section>
+            <Section>
+              <LeftContent>
+                <SectionHeading>{text.general.contactUs}</SectionHeading>
+                <SectionText customColor={color.darkGrey}>{text.general.questionsBug}</SectionText>
+                <TextContainer>
+                  {text.general.sendEmailTo}
+                  <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
+                </TextContainer>
+              </LeftContent>
+            </Section>
+            <Section last={true}>
+              <EndContent>
+                <SectionHeading>{text.general.followUs}</SectionHeading>
+                <SocialsContainer>
+                  <Link href={DISCORD_LINK} target="_blank">
+                    <SocialLink>
+                      <Discord />
+                      <ButtonText customColor={color.darkGrey}>{text.general.discord}</ButtonText>
+                    </SocialLink>
+                  </Link>
+                  <Link href={TWITTER_LINK} target="_blank">
+                    <SocialLink>
+                      <Twitter />
+                      <ButtonText customColor={color.darkGrey}>{text.general.twitter}</ButtonText>
+                    </SocialLink>
+                  </Link>
+                </SocialsContainer>
+              </EndContent>
+              <FooterContainer>
+                <Footer />
+              </FooterContainer>
+            </Section>
+          </OnboardingContainer>
+        </>
       )}
-      <FadeInOut show={showWidget}>
-        <Kado show={showWidget} toggleWidget={toggleWidget} />
-        <Overlay />
-      </FadeInOut>
-    </>
+    </OnboardingWrapper>
+  );
+};
+
+interface SectionProps {
+  children: React.ReactNode;
+  last?: boolean;
+}
+export const Section: FC<SectionProps> = ({ children, last = false }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  return (
+    <SectionWrapper ref={ref} last={last}>
+      <SectionContainer
+        last={last}
+        style={{
+          transform: isInView ? "none" : "translateX(-200px)",
+          opacity: isInView ? 1 : 0,
+          transition: "all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1) 0.5s",
+        }}
+      >
+        {children}
+      </SectionContainer>
+    </SectionWrapper>
+  );
+};
+
+interface ConnectButton {
+  connectWallet: () => void;
+}
+export const ConnectButton: FC<ConnectButton> = ({ connectWallet }) => {
+  return (
+    <ButtonRow>
+      <PrimaryButton onClick={() => connectWallet()}>
+        <KeplerIcon />
+        <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+        <ArrowUp />
+      </PrimaryButton>
+    </ButtonRow>
   );
 };

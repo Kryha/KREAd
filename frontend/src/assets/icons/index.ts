@@ -1,6 +1,7 @@
 import { ReactComponent as ErrorIcon } from "./error.svg";
 import { ReactComponent as SelectArrowIcon } from "./select-arrow.svg";
 import { ReactComponent as ArrowUpRightIcon } from "./arrow-up-right.svg";
+import { ReactComponent as ArrowUpIcon } from "./arrow-up.svg";
 import { ReactComponent as MenuIcon } from "./menu.svg";
 import { ReactComponent as CloseIcon } from "./close.svg";
 import { ReactComponent as ExpandIcon } from "./expand.svg";
@@ -46,6 +47,7 @@ import { ReactComponent as StoreIcon } from "./store.svg";
 
 export {
   StoreIcon,
+  ArrowUpIcon,
   ISTIcon,
   KeplerIcon,
   DiagonalIcon,
