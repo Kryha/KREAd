@@ -8,6 +8,7 @@ import {
   FadeInOut,
   Footer,
   Kado,
+  KeplerIconWrapper,
   LoadingPage,
   MenuText,
   NotificationDetail,
@@ -69,7 +70,9 @@ export const ConnectWallet: FC = () => {
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <ButtonRow>
             <PrimaryButton onClick={() => provisionWallet()}>
-              <KeplerIcon />
+              <KeplerIconWrapper>
+                <KeplerIcon />
+              </KeplerIconWrapper>
               <ButtonText customColor={color.white}>{text.general.activateWallet}</ButtonText>
               {isLoading ? <LoadingPage /> : <ArrowUp />}
             </PrimaryButton>

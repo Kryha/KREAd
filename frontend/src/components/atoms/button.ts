@@ -11,6 +11,8 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
+export const KeplerIconWrapper = styled.div``;
+
 export const PrimaryButton = styled.button<ButtonProps>`
   max-height: 35px;
   transition: all 0.4s ease 0s;
@@ -36,6 +38,9 @@ export const PrimaryButton = styled.button<ButtonProps>`
     box-sizing: border-box;
     ${ButtonText} {
       color: ${(props): string => props.fontColor || color.black};
+    }
+    ${KeplerIconWrapper} svg {
+      filter: invert(100%);
     }
   }
   &:active {
