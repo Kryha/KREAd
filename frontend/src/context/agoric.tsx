@@ -3,9 +3,10 @@ import React, { createContext, useContext, useEffect, useReducer, useState } fro
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NETWORK_CONFIG } from "../constants";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER } from "../constants";
 import { fetchChainInfo } from "./util";
 import { AgoricChainStoragePathKind as Kind, ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
+import { useNetworkConfig } from "../hooks/useNetwork";
 
 const initialState: AgoricState = {
   status: {
@@ -127,6 +128,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
   const [currentStatus, setCurrentStatus] = useState<Status>(status.initialState);
   const [walletProvisioned, setWalletProvisioned] = useState<boolean>(false);
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
+  const { network } = useNetworkConfig();
 
   const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
     if (!offers.length) return;
@@ -236,7 +238,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         return;
       }
       try {
-        const { rpc, chainName } = await fetchChainInfo(NETWORK_CONFIG);
+        const { rpc, chainName } = await fetchChainInfo(network as string);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
           console.error(e);
           return;
@@ -262,7 +264,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     return () => {
       setIsCancelled(true);
     };
-  }, [currentStatus, isCancelled, walletProvisioned, state.chainStorageWatcher]);
+  }, [network, currentStatus, isCancelled, walletProvisioned, state.chainStorageWatcher]);
 
   return (
     <Context.Provider value={state}>

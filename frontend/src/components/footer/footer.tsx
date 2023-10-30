@@ -1,29 +1,40 @@
-import { FC } from "react";
+import React, { FC, useState } from "react";
 import { useMatch, useResolvedPath } from "react-router-dom";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { routes } from "../../navigation";
 
-import { AboutText, AgoricText, FooterContainer, FooterWrapper, Link, PrivacyText } from "./styles";
+import { AgoricText, FooterContainer, FooterWrapper, Link, PrivacyText } from "./styles";
+import { NetworkSelect } from "../network-selector/network-select";
+import { useNetworkConfig } from "../../hooks/useNetwork";
+import { getLabelForNetwork, NetworkSelector } from "../network-selector/network-selector";
+import { networkOptions } from "../../constants";
 
 export const Footer: FC = () => {
   const resolvedShop = useResolvedPath(routes.shop);
-  const resolvedLanding = useResolvedPath(routes.root);
   const matchShop = useMatch({ path: resolvedShop.pathname, end: true });
-  const matchLanding = useMatch({ path: resolvedLanding.pathname, end: true });
+  const { network, setNetworkValue } = useNetworkConfig();
+
+  const label = getLabelForNetwork(network);
+
+  const [filterId, setFilterId] = useState("");
+
+  const openFilter = (id: string) => {
+    setFilterId(id !== filterId ? id : "");
+  };
 
   return (
     <FooterWrapper isShop={!!matchShop}>
+      <NetworkSelector label={label} openNetworkSelector={openFilter} id={filterId} hasValue={!!network}>
+        <NetworkSelect label={network} onChange={setNetworkValue} options={networkOptions} />
+      </NetworkSelector>
       <FooterContainer>
-        {!matchLanding && (
-          <Link to={routes.root}>
-            <AboutText customColor={color.darkGrey}>{text.navigation.about}</AboutText>
-          </Link>
-        )}
         <Link to={routes.privacy}>
           <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
         </Link>
-        <AgoricText customColor={color.darkGrey}>{text.navigation.agoricCopyright(new Date().getFullYear())}</AgoricText>
+        <Link to={routes.root}>
+          <AgoricText customColor={color.darkGrey}>{text.navigation.agoricCopyright(new Date().getFullYear())}</AgoricText>
+        </Link>
       </FooterContainer>
     </FooterWrapper>
   );
