@@ -30,20 +30,22 @@ export const InternalAppRoutes: FC = () => {
   if (service.isLoading) return <LoadingPage spinner={false} />;
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
-      <Routes>
-        <Route path={routes.connectWallet} element={<ConnectWallet />} />
-        <Route path={routes.character} element={<Landing />} />
-        <Route path={routes.createCharacter} element={<CreateCharacter />} />
-        <Route path={`${routes.shop}/:section`} element={isMobile ? <MobileNotAvailable /> : <Shop />} />
-        <Route path={`${routes.inventory}/:section`} element={isMobile ? <MobileNotAvailable /> : <Inventory />} />
-        <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
-        <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
-        <Route path={`${routes.sellItem}/:category/:name`} element={<ItemSell />} />
-        <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
-        <Route path="*" element={<ErrorView />} />
-      </Routes>
-    </ErrorBoundary>
+    <MainContainer>
+      <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
+        <Routes>
+          <Route path={routes.connectWallet} element={<ConnectWallet />} />
+          <Route path={routes.character} element={<Landing />} />
+          <Route path={routes.createCharacter} element={<CreateCharacter />} />
+          <Route path={`${routes.shop}/:section`} element={isMobile ? <MobileNotAvailable /> : <Shop />} />
+          <Route path={`${routes.inventory}/:section`} element={isMobile ? <MobileNotAvailable /> : <Inventory />} />
+          <Route path={`${routes.buyItem}/:id`} element={<ItemBuy />} />
+          <Route path={`${routes.buyCharacter}/:id`} element={<CharacterBuy />} />
+          <Route path={`${routes.sellItem}/:category/:name`} element={<ItemSell />} />
+          <Route path={`${routes.sellCharacter}/:id`} element={<CharacterSell />} />
+          <Route path="*" element={<ErrorView />} />
+        </Routes>
+      </ErrorBoundary>
+    </MainContainer>
   );
 };
 
@@ -52,13 +54,11 @@ export const ExternalAppRoutes: FC = () => {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
-      <MainContainer>
-        <Routes>
-          <Route path={routes.root} element={<Onboarding />} />
-          <Route path={routes.privacy} element={<Privacy />} />
-          <Route path="*" element={<InternalAppWrapper />} />
-        </Routes>
-      </MainContainer>
+      <Routes>
+        <Route path={routes.root} element={<Onboarding />} />
+        <Route path={routes.privacy} element={<Privacy />} />
+        <Route path="*" element={<InternalAppWrapper />} />
+      </Routes>
     </ErrorBoundary>
   );
 };

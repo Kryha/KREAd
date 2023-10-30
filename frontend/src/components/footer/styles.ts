@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
-import { color } from "../../design";
+import { breakpoints, color } from "../../design";
 import { ButtonText } from "../atoms";
 
 interface FooterProps {
@@ -9,29 +9,17 @@ interface FooterProps {
 
 export const FooterWrapper = styled.div<FooterProps>`
   display: flex;
+  position: relative;
   flex-direction: row;
   justify-content: flex-end;
-  align-items: flex-start;
-  gap: 20px;
-  position: relative;
+  align-items: center;
   z-index: 1000;
-  ${({ isShop }): string => {
-    return isShop
-      ? `
-      background: linear-gradient(294.15deg, #FAFAFA 10.87%, #FAFAFA 41.93%);
-      &:hover {
-        background: linear-gradient(294.15deg, #FAFAFA 10.87%, #FAFAFA 41.93%);
-      }
-        `
-      : `
-      background: linear-gradient(294.15deg, #FAFAFA 10.87%, rgba(250, 250, 250, 0) 41.93%);
-      &:hover {
-        background: linear-gradient(294.15deg, #FAFAFA 10.87%, #FAFAFA 41.93%);
-      }
-      `;
-  }};
+  flex-grow: 1;
 
-  border-radius: 100px;
+  @media (max-width: ${breakpoints.tablet}) {
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const FooterContainer = styled.div`
