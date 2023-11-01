@@ -1,7 +1,6 @@
 import { Far, deeplyFulfilled } from '@endo/marshal';
 import { E } from '@endo/eventual-send';
 import { makeFakeStorageKit } from '@agoric/internal/src/storage-test-utils';
-import { makeNameHubKit } from '@agoric/vats';
 import { buildManualTimer } from '@agoric/swingset-vat/tools/manual-timer';
 import { makeFakeBoard } from '@agoric/vats/tools/board-utils';
 import { makeTracer } from '@agoric/internal';
@@ -12,7 +11,22 @@ import { makePromiseKit } from '@endo/promise-kit';
 import { defaultCharacters } from '../../characters.js';
 import { defaultItems } from '../../items.js';
 import { mintCharacterExpectedFlow } from './bootstrap-mint.js';
-import { setupMarketTests, sellCharacter, buyCharacterOfferLessThanAskingPrice } from './bootstrap-market.js';
+import {
+  setupMarketTests,
+  sellCharacter,
+  buyCharacterOfferLessThanAskingPrice,
+  buyCharacter,
+  buyCharacterNotOnMarket,
+  sellItem,
+  buyItemOfferLessThanAskingPrice,
+  buyItem,
+  buyItemNotOnMarket,
+  buyCharacterOfferMoreThanAskingPrice,
+  buyItemOfferMoreThanAskingPrice,
+  internalSellItemBatch,
+  buyBatchSoldItem,
+} from './bootstrap-market.js';
+import { makeRatio } from '@agoric/zoe/src/contractSupport/index.js';
 
 const trace = makeTracer('kreadBootUpgrade');
 
@@ -33,7 +47,6 @@ export const buildRootObject = async () => {
   let context;
 
   const storageKit = makeFakeStorageKit('kread');
-  const { nameAdmin: namesByAddressAdmin } = makeNameHubKit();
   const timer = buildManualTimer();
   const clock = await E(timer).getClock();
   const marshaller = makeFakeBoard().getReadonlyMarshaller();
@@ -244,20 +257,65 @@ export const buildRootObject = async () => {
           brandMockIST,
         },
         publicFacet,
+        creatorFacet,
         zoe,
+        royaltyPurse,
+        platformFeePurse,
+        royaltyRate: makeRatio(
+          royaltyRate.numerator,
+          brandMockIST,
+          royaltyRate.denominator,
+          brandMockIST,
+        ),
+        platformFeeRate: makeRatio(
+          platformFeeRate.numerator,
+          brandMockIST,
+          platformFeeRate.denominator,
+          brandMockIST,
+        ),
       };
     },
     mintCharacter: async (name) => {
       await mintCharacterExpectedFlow(context, name);
     },
     setupMarketTests: async () => {
-      context = await setupMarketTests(context)
+      context = await setupMarketTests(context);
     },
     sellCharacter: async () => {
       await sellCharacter(context);
     },
     buyCharacterOfferLessThanAskingPrice: async () => {
       await buyCharacterOfferLessThanAskingPrice(context);
+    },
+    buyCharacter: async () => {
+      await buyCharacter(context);
+    },
+    buyCharacterNotOnMarket: async () => {
+      await buyCharacterNotOnMarket(context)
+    },
+    sellItem: async () => {
+      await sellItem(context);
+    },
+    buyItemOfferLessThanAskingPrice: async () => {
+      await buyItemOfferLessThanAskingPrice(context)
+    },
+    buyItem: async () => {
+      await buyItem(context)
+    },
+    buyItemNotOnMarket: async () => {
+      await buyItemNotOnMarket(context)
+    },
+    buyCharacterOfferMoreThanAskingPrice: async () => {
+      await buyCharacterOfferMoreThanAskingPrice(context)
+    },
+    buyItemOfferMoreThanAskingPrice: async () => {
+      await buyItemOfferMoreThanAskingPrice(context)
+    },
+    internalSellItemBatch: async () => {
+      await internalSellItemBatch(context)
+    },
+    buyBatchSoldItem: async () => {
+      await buyBatchSoldItem(context)
     },
     nullUpgrade: async () => {
       trace('start null upgrade');

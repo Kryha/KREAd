@@ -44,11 +44,11 @@ export const addCharacterToContext = async (context) => {
 /**
  * Mint item and deposit on Bootstrap item purse
  *
- * @param {Bootstrap} bootstrap
+ * @param {Context} context
  */
-export const addItemToBootstrap = async (bootstrap, item) => {
-  /** @type {Bootstrap} */
-  const { creatorFacet, contractAssets, purses, zoe } = bootstrap;
+export const addItemToContext = async (context, item) => {
+  /** @type {Context} */
+  const { creatorFacet, contractAssets, purses, zoe } = context;
 
   const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
   const itemAmount = AmountMath.make(
@@ -62,9 +62,9 @@ export const addItemToBootstrap = async (bootstrap, item) => {
 
   const userSeat = await E(zoe).offer(mintItemInvitation, proposal);
   const payout = await E(userSeat).getPayout('Asset');
-  purses.item.deposit(payout);
+  await E(purses.item).deposit(payout);
 };
-harden(addItemToBootstrap);
+harden(addItemToContext);
 
 /**
  * @param {AssetConf} [conf]

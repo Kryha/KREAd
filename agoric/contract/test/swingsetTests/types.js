@@ -40,6 +40,32 @@
  * }} ContractAssets
  */
 
+/**
+ * @typedef {{
+ * character: Purse
+ * item: Purse
+ * payment: Purse
+ * }} Purses
+ */
+
+/**
+ * @typedef {{
+ *  name: string
+ *  purses: Purses
+ *  getItems: () => Item[]
+ *  getCharacters: () => any[]
+ *  getPaymentBalance: async () => bigint
+ *  depositItems: (items) => void
+ *  depositCharacters: (characters) => void
+ *  depositPayment: (payment) => void
+ *  withdrawItems: (items) => Payment
+ *  withdrawCharacters: (characters) => Payment
+ *  withdrawPayment: (payment) => Payment
+ *  getSeat: () => any
+ *  setMarketSeat: (seat) => void
+ * }} KreadUser
+ */
+
 // XXX approximate
 /**
  * Testing context
@@ -55,5 +81,6 @@
  *    item: any
  *    payment: any
  *  };
+ *  users: Object.<string, KreadUser>
  * }} Context
  */

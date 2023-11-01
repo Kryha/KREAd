@@ -1,14 +1,6 @@
 import { E } from '@endo/eventual-send';
 
 /**
- * @typedef {{
- * character: Purse
- * item: Purse
- * payment: Purse
- * }} Purses
- */
-
-/**
  * Creates a user with its own purses and seats
  * includes methods for checking balances and
  * depositing/widthdrawing assets
@@ -19,21 +11,7 @@ import { E } from '@endo/eventual-send';
  *
  * @param {string} name
  * @param {Purses} purses
- * @returns {{
- *  name: string
- *  purses: Purses
- *  getItems: () => Item[]
- *  getCharacters: () => any[]
- *  getPaymentBalance: () => bigint
- *  depositItems: (items) => void
- *  depositCharacters: (characters) => void
- *  depositPayment: (payment) => void
- *  withdrawItems: (items) => Payment
- *  withdrawCharacters: (characters) => Payment
- *  withdrawPayment: (payment) => Payment
- *  getSeat: () => any
- *  setMarketSeat: (seat) => void
- * }}
+ * @returns {KreadUser} 
  */
 export const makeKreadUser = (name, purses) => {
   const seat = {
@@ -51,8 +29,8 @@ export const makeKreadUser = (name, purses) => {
     (await E(purses.payment).getCurrentAmount()).value;
 
   const depositItems = async (items) => E(purses.item).deposit(items);
-  const depositCharacters = (characters) =>
-    purses.character.deposit(characters);
+  const depositCharacters = async (characters) =>
+    E(purses.character).deposit(characters);
   const depositPayment = async (payment) => E(purses.payment).deposit(payment);
 
   const withdrawItems = async (items) => E(purses.item).withdraw(items);
