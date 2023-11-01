@@ -76,5 +76,5 @@ export async function setup() {
   c.pinVatRoot('bootstrap');
   await c.run();
 
-  await run('buildV1', []);
+  return run('buildV1', []);
 }

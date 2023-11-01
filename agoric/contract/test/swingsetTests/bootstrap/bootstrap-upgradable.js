@@ -10,7 +10,7 @@ import { CONTRACT_ELECTORATE, ParamTypes } from '@agoric/governance';
 import { makePromiseKit } from '@endo/promise-kit';
 import { defaultCharacters } from '../../characters.js';
 import { defaultItems } from '../../items.js';
-import { mintCharacterExpectedFlow } from './bootstrap-mint.js';
+import { mintCharacterExpectedFlow, setupMintTests } from './bootstrap-mint.js';
 import {
   setupMarketTests,
   sellCharacter,
@@ -275,8 +275,11 @@ export const buildRootObject = async () => {
         ),
       };
     },
-    mintCharacter: async (name) => {
-      await mintCharacterExpectedFlow(context, name);
+    setupMintTests: async () => {
+      context = await setupMintTests(context);
+    },
+    mintCharacter: async () => {
+      await mintCharacterExpectedFlow(context);
     },
     setupMarketTests: async () => {
       context = await setupMarketTests(context);
@@ -291,31 +294,31 @@ export const buildRootObject = async () => {
       await buyCharacter(context);
     },
     buyCharacterNotOnMarket: async () => {
-      await buyCharacterNotOnMarket(context)
+      await buyCharacterNotOnMarket(context);
     },
     sellItem: async () => {
       await sellItem(context);
     },
     buyItemOfferLessThanAskingPrice: async () => {
-      await buyItemOfferLessThanAskingPrice(context)
+      await buyItemOfferLessThanAskingPrice(context);
     },
     buyItem: async () => {
-      await buyItem(context)
+      await buyItem(context);
     },
     buyItemNotOnMarket: async () => {
-      await buyItemNotOnMarket(context)
+      await buyItemNotOnMarket(context);
     },
     buyCharacterOfferMoreThanAskingPrice: async () => {
-      await buyCharacterOfferMoreThanAskingPrice(context)
+      await buyCharacterOfferMoreThanAskingPrice(context);
     },
     buyItemOfferMoreThanAskingPrice: async () => {
-      await buyItemOfferMoreThanAskingPrice(context)
+      await buyItemOfferMoreThanAskingPrice(context);
     },
     internalSellItemBatch: async () => {
-      await internalSellItemBatch(context)
+      await internalSellItemBatch(context);
     },
     buyBatchSoldItem: async () => {
-      await buyBatchSoldItem(context)
+      await buyBatchSoldItem(context);
     },
     nullUpgrade: async () => {
       trace('start null upgrade');
