@@ -9,6 +9,13 @@ const kreadV1BundleName = 'kreadV1';
 
 let c;
 
+/**
+ * Queues a function into the bootstrap vat with the given arguments
+ *
+ * @param {string} name
+ * @param {any} args
+ * @returns
+ */
 export const run = async (name, args = []) => {
   assert(Array.isArray(args));
   const kpid = c.queueToVatRoot('bootstrap', name, args);
@@ -18,6 +25,9 @@ export const run = async (name, args = []) => {
   return [status, capdata];
 };
 
+/**
+ * Sets up swingset and starts v1 of kread contract
+ */
 export async function setup() {
   const config = {
     includeDevDependencies: true,
