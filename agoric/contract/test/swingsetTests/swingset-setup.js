@@ -7,20 +7,25 @@ import { assert } from '@agoric/assert';
 const bfile = (name) => new URL(name, import.meta.url).pathname;
 const kreadV1BundleName = 'kreadV1';
 
-const modulePath = async (sourceRoot) => {
-  const url = await importMetaResolve(sourceRoot, import.meta.url);
-  return new URL(url).pathname;
+let c;
+
+export const run = async (name, args = []) => {
+  assert(Array.isArray(args));
+  const kpid = c.queueToVatRoot('bootstrap', name, args);
+  await c.run();
+  const status = c.kpStatus(kpid);
+  const capdata = c.kpResolution(kpid);
+  return [status, capdata];
 };
 
-test('kread upgrade', async (t) => {
-  /** @type {SwingSetConfig} */
+export async function setup() {
   const config = {
     includeDevDependencies: true,
     defaultManagerType: 'local',
     bootstrap: 'bootstrap',
     vats: {
       bootstrap: {
-        sourceSpec: bfile('bootstrap-upgradable.js'),
+        sourceSpec: bfile('bootstrap/bootstrap-upgradable.js'),
       },
       zoe: {
         sourceSpec: await importMetaResolve(
@@ -57,36 +62,9 @@ test('kread upgrade', async (t) => {
     },
   };
 
-  t.log('buildVatController');
-  const c = await buildVatController(config);
-  t.log(c.vatNameToID('bootstrap'));
-
+  c = await buildVatController(config);
   c.pinVatRoot('bootstrap');
-  t.log('run-controller');
   await c.run();
 
-  const run = async (name, args = []) => {
-    assert(Array.isArray(args));
-    const kpid = c.queueToVatRoot('bootstrap', name, args);
-    await c.run();
-    const status = c.kpStatus(kpid);
-    const capdata = c.kpResolution(kpid);
-    return [status, capdata];
-  };
-
-  t.log('create initial version');
-  const [buildV1] = await run('buildV1', []);
-  t.is(buildV1, 'fulfilled');
-
-  t.log('test functionality');
-  const [mintCharacter] = await run('mintCharacter', ["example"]);
-  t.is(mintCharacter, 'fulfilled');
-
-  t.log('test null upgrade');
-  const [nullUpgrade] = await run('nullUpgrade', []);
-  t.is(nullUpgrade, 'fulfilled');
-
-  t.log('test functionality after upgrade');
-  const [mintCharacterAfterUpgrade] = await run('mintCharacter', ["example"]);
-  t.is(mintCharacterAfterUpgrade, 'rejected'); // name has already been minted
-});
+  await run('buildV1', []);
+}

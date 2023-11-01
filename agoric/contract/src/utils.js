@@ -48,7 +48,7 @@ export const provideRecorderKits = async (
   paths,
   typeMatchers,
 ) => {
-  console.log('provideRecorderKits', paths, typeMatchers);
+  // console.log('provideRecorderKits', paths, typeMatchers);
   const keys = Object.keys(paths);
   // assume if any keys are defined they all are
   const inBaggage = baggage.has(keys[0]);

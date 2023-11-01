@@ -6,12 +6,13 @@ import { buildManualTimer } from '@agoric/swingset-vat/tools/manual-timer';
 import { makeFakeBoard } from '@agoric/vats/tools/board-utils';
 import { makeTracer } from '@agoric/internal';
 import { Fail, NonNullish } from '@agoric/assert';
-import { AmountMath, makeIssuerKit } from '@agoric/ertp';
+import { makeIssuerKit } from '@agoric/ertp';
 import { CONTRACT_ELECTORATE, ParamTypes } from '@agoric/governance';
 import { makePromiseKit } from '@endo/promise-kit';
-import { defaultCharacters } from '../characters.js';
-import { defaultItems } from '../items.js';
-import { AdminFacetI } from '@agoric/zoe/src/typeGuards.js';
+import { defaultCharacters } from '../../characters.js';
+import { defaultItems } from '../../items.js';
+import { mintCharacterExpectedFlow } from './bootstrap-mint.js';
+import { setupMarketTests, sellCharacter, buyCharacterOfferLessThanAskingPrice } from './bootstrap-market.js';
 
 const trace = makeTracer('kreadBootUpgrade');
 
@@ -28,6 +29,8 @@ export const buildRootObject = async () => {
   let contractAssets;
   let purses;
   let governorFacets;
+
+  let context;
 
   const storageKit = makeFakeStorageKit('kread');
   const { nameAdmin: namesByAddressAdmin } = makeNameHubKit();
@@ -232,59 +235,43 @@ export const buildRootObject = async () => {
         item: await E(itemIssuer).makeEmptyPurse(),
         payment: issuerMockIST.makeEmptyPurse(),
       };
+      context = {
+        contractAssets,
+        purses,
+        paymentAsset: {
+          mintMockIST,
+          issuerMockIST,
+          brandMockIST,
+        },
+        publicFacet,
+        zoe,
+      };
     },
     mintCharacter: async (name) => {
-      const purse = issuerMockIST.makeEmptyPurse();
-      const payout = mintMockIST.mintPayment(
-        AmountMath.make(brandMockIST, harden(100000000000n)),
-      );
-      purse.deposit(payout);
-
-      const mintCharacterInvitation = await E(
-        publicFacet,
-      ).makeMintCharacterInvitation();
-
-      const priceAmount = AmountMath.make(brandMockIST, 30000000n);
-
-      const proposal = harden({
-        give: { Price: priceAmount },
-      });
-
-      const payment = { Price: purse.withdraw(priceAmount) };
-      const offerArgs = harden({ name });
-
-      const userSeat = await E(zoe).offer(
-        mintCharacterInvitation,
-        proposal,
-        payment,
-        offerArgs,
-      );
-
-      const result = await E(userSeat).getOfferResult();
-      assert(result, 'Character NFT minted successfully!');
-
-      const characters = await E(publicFacet).getCharacters();
-      assert(characters[0].name, offerArgs.name);
-
-      const payout2 = await E(userSeat).getPayout('Asset');
-
-      await E(purses.character).deposit(payout2);
-      assert(
-        offerArgs.name,
-        (await E(purses.character).getCurrentAmount()).value.payload[0][0].name,
-      );
+      await mintCharacterExpectedFlow(context, name);
+    },
+    setupMarketTests: async () => {
+      context = await setupMarketTests(context)
+    },
+    sellCharacter: async () => {
+      await sellCharacter(context);
+    },
+    buyCharacterOfferLessThanAskingPrice: async () => {
+      await buyCharacterOfferLessThanAskingPrice(context);
     },
     nullUpgrade: async () => {
-      trace("start null upgrade")
+      trace('start null upgrade');
       const bundleId = await E(vatAdmin).getBundleIDByName(kreadV1BundleName);
 
-      const kreadAdminFacet = await E(governorFacets.creatorFacet).getAdminFacet();
+      const kreadAdminFacet = await E(
+        governorFacets.creatorFacet,
+      ).getAdminFacet();
       const upgradeResult = await E(kreadAdminFacet).upgradeContract(bundleId, {
         ...staticPrivateArgs,
-        initialPoserInvitation
-      })
-      assert.equal(upgradeResult.incarnationNumber, 1)
-      trace("null upgrade completed")
-    }
+        initialPoserInvitation,
+      });
+      assert.equal(upgradeResult.incarnationNumber, 1);
+      trace('null upgrade completed');
+    },
   });
 };
