@@ -14,8 +14,6 @@ test.before(async (t) => {
   t.context = bootstrap;
 });
 
-
-
 const unequipOffer = async (t) => {
   /** @type {Bootstrap} */
   const { publicFacet, contractAssets, purses, zoe } = t.context;

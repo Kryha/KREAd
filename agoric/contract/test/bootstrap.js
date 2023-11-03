@@ -103,6 +103,7 @@ export const bootstrapContext = async (conf = undefined) => {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
   };
+  
   const purses = {
     character: characterIssuer.makeEmptyPurse(),
     item: itemIssuer.makeEmptyPurse(),
