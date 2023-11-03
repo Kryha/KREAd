@@ -256,7 +256,6 @@ export async function buyCharacter(context) {
     'Character was not removed from market',
   );
 
-  console.log(characterToBuy.askingPrice);
   assert.equal(
     royaltyPurse.getCurrentAmount().value,
     royaltyPursePre + multiplyBy(characterToBuy.askingPrice, royaltyRate).value,

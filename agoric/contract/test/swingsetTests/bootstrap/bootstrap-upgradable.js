@@ -55,6 +55,15 @@ import {
   equipItemDuplicateCategory,
   equipItem,
 } from './bootstrap-inventory.js';
+import {
+  initialization,
+  setupMarketMetricsTests,
+  collectionSize,
+  averageLevelsCharacter,
+  amountSoldCharacter,
+  latestSalePriceCharacter,
+} from './bootstrap-market-metrics.js';
+import { blockMethods } from './bootstrap-governance.js';
 import { makeRatio } from '@agoric/zoe/src/contractSupport/index.js';
 
 const trace = makeTracer('kreadBootUpgrade');
@@ -65,21 +74,20 @@ export const buildRootObject = async () => {
   let vatAdmin;
   let initialPoserInvitation;
   let electorateInvitationAmount;
-  let zoe;
   let governedInstance;
-  let creatorFacet;
-  let publicFacet;
-  let contractAssets;
-  let purses;
-  let governorFacets;
-
+  /** @type {Context} */
   let context;
+  /** @type {import('@agoric/governance/tools/puppetContractGovernor').PuppetContractGovernorKit<import('../../../src/index.js').prepare>} */
+  let governorFacets;
 
   const storageKit = makeFakeStorageKit('kread');
   const timer = buildManualTimer();
   const clock = await E(timer).getClock();
   const marshaller = makeFakeBoard().getReadonlyMarshaller();
   const installations = {};
+
+  /** @type {PromiseKit<ZoeService>} */
+  const { promise: zoe, ...zoePK } = makePromiseKit();
   const { promise: committeeCreator, ...ccPK } = makePromiseKit();
 
   const {
@@ -166,7 +174,7 @@ export const buildRootObject = async () => {
         undefined,
         'zcf',
       );
-      zoe = zoeService;
+      zoePK.resolve(zoeService);
       trace('Starting!');
 
       const v1BundleId = await E(vatAdmin).getBundleIDByName(kreadV1BundleName);
@@ -252,8 +260,8 @@ export const buildRootObject = async () => {
       trace('BOOT buildV1 started instance');
       governedInstance = E(governorFacets.creatorFacet).getInstance();
 
-      publicFacet = await E(governorFacets.creatorFacet).getPublicFacet();
-      creatorFacet = await E(governorFacets.creatorFacet).getCreatorFacet();
+      const publicFacet = await E(governorFacets.creatorFacet).getPublicFacet();
+      const creatorFacet = await E(governorFacets.creatorFacet).getCreatorFacet();
 
       await E(creatorFacet).initializeBaseAssets(
         defaultCharacters,
@@ -268,18 +276,16 @@ export const buildRootObject = async () => {
         brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
       } = terms;
 
-      contractAssets = {
-        character: { issuer: characterIssuer, brand: characterBrand },
-        item: { issuer: itemIssuer, brand: itemBrand },
-      };
-      purses = {
-        character: await E(characterIssuer).makeEmptyPurse(),
-        item: await E(itemIssuer).makeEmptyPurse(),
-        payment: issuerMockIST.makeEmptyPurse(),
-      };
       context = {
-        contractAssets,
-        purses,
+        contractAssets: {
+          character: { issuer: characterIssuer, brand: characterBrand },
+          item: { issuer: itemIssuer, brand: itemBrand },
+        },
+        purses: {
+          character: await E(characterIssuer).makeEmptyPurse(),
+          item: await E(itemIssuer).makeEmptyPurse(),
+          payment: issuerMockIST.makeEmptyPurse(),
+        },
         paymentAsset: {
           mintMockIST,
           issuerMockIST,
@@ -287,6 +293,7 @@ export const buildRootObject = async () => {
         },
         publicFacet,
         creatorFacet,
+        governorFacets,
         zoe,
         royaltyPurse,
         platformFeePurse,
@@ -420,6 +427,27 @@ export const buildRootObject = async () => {
     },
     unequipAllEmptyInventory: async () => {
       await unequipAllEmptyInventory(context);
+    },
+    setupMarketMetricsTests: async () => {
+      context = await setupMarketMetricsTests(context);
+    },
+    initialization: async () => {
+      await initialization(context);
+    },
+    collectionSize: async () => {
+      await collectionSize(context);
+    },
+    averageLevelsCharacter: async () => {
+      await averageLevelsCharacter(context);
+    },
+    amountSoldCharacter: async () => {
+      await amountSoldCharacter(context);
+    },
+    latestSalePriceCharacter: async () => {
+      await latestSalePriceCharacter(context);
+    },
+    blockMethods: async () => {
+      await blockMethods(context);
     },
     nullUpgrade: async () => {
       trace('start null upgrade');

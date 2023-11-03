@@ -75,6 +75,7 @@
  *  creatorFacet: unknown;
  *  contractAssets: ContractAssets;
  *  publicFacet: unknown;
+ *  governorFacets: import('@agoric/governance/tools/puppetContractGovernor').PuppetContractGovernorKit<import('../../src/index.js').prepare>;
  *  zoe: ZoeService;
  *  purses: {
  *    character: any
