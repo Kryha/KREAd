@@ -10,7 +10,23 @@ import { CONTRACT_ELECTORATE, ParamTypes } from '@agoric/governance';
 import { makePromiseKit } from '@endo/promise-kit';
 import { defaultCharacters } from '../../characters.js';
 import { defaultItems } from '../../items.js';
-import { mintCharacterExpectedFlow, setupMintTests } from './bootstrap-mint.js';
+import {
+  setupMintTests,
+  mintTooLongName,
+  mintInvalidCharsInname,
+  mintDuplicateName,
+  mintExpectedFlow,
+  mintFeeTooLow,
+  mintForbiddenName,
+  mintInventoryCheck,
+  mintItemExpectedFlow,
+  mintItemMultipleDifferentFlow,
+  mintNoName,
+  mintNoCharactersAvailable,
+  mintSameItemSFT,
+  mintItemMultipleFlow,
+  mintNoOfferArgs,
+} from './bootstrap-mint.js';
 import {
   setupMarketTests,
   sellCharacter,
@@ -26,6 +42,19 @@ import {
   internalSellItemBatch,
   buyBatchSoldItem,
 } from './bootstrap-market.js';
+import {
+  unequipAll,
+  unequipAllEmptyInventory,
+  unequipAlreadyUnequippedItem,
+  unequipWithWrongCharacter,
+  unequipItem,
+  swapItems,
+  swapItemsDifferentCategories,
+  swapItemsInitiallyEmpty,
+  setupInventoryTests,
+  equipItemDuplicateCategory,
+  equipItem,
+} from './bootstrap-inventory.js';
 import { makeRatio } from '@agoric/zoe/src/contractSupport/index.js';
 
 const trace = makeTracer('kreadBootUpgrade');
@@ -278,8 +307,47 @@ export const buildRootObject = async () => {
     setupMintTests: async () => {
       context = await setupMintTests(context);
     },
-    mintCharacter: async () => {
-      await mintCharacterExpectedFlow(context);
+    mintTooLongName: async () => {
+      await mintTooLongName(context);
+    },
+    mintInvalidCharsInname: async () => {
+      await mintInvalidCharsInname(context);
+    },
+    mintForbiddenName: async () => {
+      await mintForbiddenName(context);
+    },
+    mintExpectedFlow: async () => {
+      await mintExpectedFlow(context);
+    },
+    mintFeeTooLow: async () => {
+      await mintFeeTooLow(context);
+    },
+    mintDuplicateName: async () => {
+      await mintDuplicateName(context);
+    },
+    mintNoOfferArgs: async () => {
+      await mintNoOfferArgs(context);
+    },
+    mintNoName: async () => {
+      await mintNoName(context);
+    },
+    mintNoCharactersAvailable: async () => {
+      await mintNoCharactersAvailable(context);
+    },
+    mintInventoryCheck: async () => {
+      await mintInventoryCheck(context);
+    },
+    mintItemExpectedFlow: async () => {
+      await mintItemExpectedFlow(context);
+    },
+    mintSameItemSFT: async () => {
+      await mintSameItemSFT(context);
+    },
+    mintItemMultipleFlow: async () => {
+      await mintItemMultipleFlow(context);
+    },
+    mintItemMultipleDifferentFlow: async () => {
+      await mintItemMultipleDifferentFlow(context);
     },
     setupMarketTests: async () => {
       context = await setupMarketTests(context);
@@ -319,6 +387,39 @@ export const buildRootObject = async () => {
     },
     buyBatchSoldItem: async () => {
       await buyBatchSoldItem(context);
+    },
+    setupInventoryTests: async () => {
+      context = await setupInventoryTests(context);
+    },
+    unequipItem: async () => {
+      await unequipItem(context);
+    },
+    unequipAlreadyUnequippedItem: async () => {
+      await unequipAlreadyUnequippedItem(context);
+    },
+    unequipWithWrongCharacter: async () => {
+      await unequipWithWrongCharacter(context);
+    },
+    equipItem: async () => {
+      await equipItem(context);
+    },
+    equipItemDuplicateCategory: async () => {
+      await equipItemDuplicateCategory(context);
+    },
+    swapItems: async () => {
+      await swapItems(context);
+    },
+    swapItemsDifferentCategories: async () => {
+      await swapItemsDifferentCategories(context);
+    },
+    swapItemsInitiallyEmpty: async () => {
+      await swapItemsInitiallyEmpty(context);
+    },
+    unequipAll: async () => {
+      await unequipAll(context);
+    },
+    unequipAllEmptyInventory: async () => {
+      await unequipAllEmptyInventory(context);
     },
     nullUpgrade: async () => {
       trace('start null upgrade');
