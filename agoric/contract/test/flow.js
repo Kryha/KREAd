@@ -1,4 +1,4 @@
-import { errors } from '../src/errors.js';
+import { errors } from '../src/kreadV2/errors.js';
 import { text } from './text.js';
 import { defaultItems } from './items.js';
 

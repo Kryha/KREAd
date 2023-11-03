@@ -51,7 +51,7 @@ export const bootstrapContext = async (conf = undefined) => {
 
   const timerService = buildManualTimer();
   // Bundle and install contract
-  const contractBundle = await bundleSource('./src/index.js');
+  const contractBundle = await bundleSource('./src/kreadV1/index.js');
   const installation = await E(zoe).install(contractBundle);
   const privateArgs = {
     powers: {
@@ -103,7 +103,7 @@ export const bootstrapContext = async (conf = undefined) => {
     character: { issuer: characterIssuer, brand: characterBrand },
     item: { issuer: itemIssuer, brand: itemBrand },
   };
-  
+
   const purses = {
     character: characterIssuer.makeEmptyPurse(),
     item: itemIssuer.makeEmptyPurse(),

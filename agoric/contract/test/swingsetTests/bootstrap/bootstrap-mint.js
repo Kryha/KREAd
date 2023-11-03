@@ -193,6 +193,8 @@ export async function mintExpectedFlow(context) {
     offerArgs.name,
     'New character is added to contract registry',
   );
+  //   console.log("STORAGE NODE: ")
+  // console.log(storageNode.getPath("kread.character"))
 
   const payout = await E(userSeat).getPayout('Asset');
   await E(purses.character).deposit(payout);
@@ -384,7 +386,7 @@ export async function mintNoCharactersAvailable(context) {
     zoe,
   } = context;
   const { offerArgs, message, give } = flow.mintCharacter.noAvailability;
-
+  
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();

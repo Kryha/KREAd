@@ -3,7 +3,7 @@ import { flow } from '../flow.js';
 import { E } from '@endo/eventual-send';
 import { makeCopyBag, mustMatch } from '@agoric/store';
 import { AmountMath } from '@agoric/ertp';
-import { errors } from '../../../src/errors.js';
+import { errors } from '../../../src/kreadV2/errors.js';
 
 export async function setupInventoryTests(context) {
   await addCharacterToContext(context);
@@ -257,7 +257,7 @@ export async function equipItem(context) {
   const initialInventorySize = characterInventory.items.length;
 
   const item = (await E(purses.item).getCurrentAmount()).value.payload[0];
-  
+
   const itemCopyBagAmount = makeCopyBag(harden([[item[0], 1n]]));
   const invitation = await E(publicFacet).makeEquipInvitation();
   const characterCopyBagAmount = makeCopyBag(
@@ -338,8 +338,8 @@ export async function equipItemDuplicateCategory(context) {
   /** @type {Context} */
   const { publicFacet, contractAssets, purses, zoe } = context;
   const { characterName } = flow.inventory;
-    const inventory = await E(publicFacet).getCharacterInventory(characterName)
-    const existingCategory = inventory.items[0][0].category;
+  const inventory = await E(publicFacet).getCharacterInventory(characterName);
+  const existingCategory = inventory.items[0][0].category;
   await addItemToContext(context, {
     name: 'New item',
     category: existingCategory,
@@ -473,9 +473,7 @@ export async function swapItems(context) {
   const itemWantValue = characterInventory.items
     .map((i) => i[0])
     .find(({ rarity }) => rarity > 19);
-  const itemWantCopyBagAmount = makeCopyBag(
-    harden([[itemWantValue, 1n]]),
-  );
+  const itemWantCopyBagAmount = makeCopyBag(harden([[itemWantValue, 1n]]));
   const itemWant = AmountMath.make(
     contractAssets.item.brand,
     itemWantCopyBagAmount,

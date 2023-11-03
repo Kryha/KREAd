@@ -75,13 +75,14 @@
  *  creatorFacet: unknown;
  *  contractAssets: ContractAssets;
  *  publicFacet: unknown;
- *  governorFacets: import('@agoric/governance/tools/puppetContractGovernor').PuppetContractGovernorKit<import('../../src/index.js').prepare>;
+ *  governorFacets: import('@agoric/governance/tools/puppetContractGovernor').PuppetContractGovernorKit<import('../../src/kreadV2/index.js').prepare>;
  *  zoe: ZoeService;
  *  purses: {
  *    character: any
  *    item: any
  *    payment: any
  *  };
- *  users: Object.<string, KreadUser>
+ *  users: Object.<string, KreadUser>;
+ *  storageNode: StorageNode;
  * }} Context
  */

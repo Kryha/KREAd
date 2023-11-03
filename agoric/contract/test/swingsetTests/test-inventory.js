@@ -2,8 +2,10 @@ import { test } from '../prepare-test-env-ava.js';
 import { run, setup } from './swingset-setup.js';
 
 test.before(async (t) => {
-  const [result] = await setup();
-  t.is(result, 'fulfilled');
+  await setup();
+
+  const [build] = await run('buildV1');
+  t.is(build, "fulfilled")
 
   const [setupInventoryTests] = await run('setupInventoryTests');
   t.is(setupInventoryTests, 'fulfilled');

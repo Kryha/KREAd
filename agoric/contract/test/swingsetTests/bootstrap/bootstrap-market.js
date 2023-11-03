@@ -4,7 +4,7 @@ import { flow } from '../flow.js';
 import { makeCopyBag } from '@agoric/store';
 import { addCharacterToContext, addItemToContext } from './utils.js';
 import { makeKreadUser } from './make-bootstrap-users.js';
-import { errors } from '../../../src/errors.js';
+import { errors } from '../../../src/kreadV2/errors.js';
 import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 import { defaultItems } from '../items.js';
 
@@ -457,18 +457,22 @@ export async function buyItem(context) {
 
   const itemPayout = await E(userSeat).getPayout('Item');
   await alice.depositItems(itemPayout);
-  assert.equal((await alice.getItems()).length, 1, "Item is not in alice's wallet");
+  assert.equal(
+    (await alice.getItems()).length,
+    1,
+    "Item is not in alice's wallet",
+  );
 
   const bobsPayout = await E(bob.getSeat().market).getPayout('Price');
   await bob.depositPayment(bobsPayout);
-  assert.equal(await bob.getPaymentBalance(), 45n, 'Bob did not received payout');
+  assert.equal(
+    await bob.getPaymentBalance(),
+    45n,
+    'Bob did not received payout',
+  );
 
   itemsForSale = await E(publicFacet).getItemsForSale();
-  assert.equal(
-    itemsForSale.length,
-    0,
-    'Item was not removed from market',
-  );
+  assert.equal(itemsForSale.length, 0, 'Item was not removed from market');
 }
 
 export async function buyItemNotOnMarket(context) {
@@ -711,11 +715,7 @@ export async function buyItemOfferMoreThanAskingPrice(context) {
   );
 
   itemsForSale = await E(publicFacet).getItemsForSale();
-  assert.equal(
-    itemsForSale.length,
-    0,
-    'Item was not removed to market',
-  );
+  assert.equal(itemsForSale.length, 0, 'Item was not removed to market');
 }
 
 export async function internalSellItemBatch(context) {
