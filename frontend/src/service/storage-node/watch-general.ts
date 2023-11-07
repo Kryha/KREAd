@@ -108,7 +108,7 @@ chainStorageWatcher.watchLatest(
       return;
     }
     const instance = value.filter((i: any) => i[0] === "kread");
-    agoricDispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1], publicFacet: undefined } });
+    agoricDispatch({ type: "SET_KREAD_INSTANCE", payload: instance[0][1] });
   },
   (log: any) => {
     console.error("Error watching vbank assets", log);
