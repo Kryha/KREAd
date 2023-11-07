@@ -6,6 +6,7 @@ import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifi
 import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NETWORK_CONFIG, NO_SMART_WALLET_ERROR } from "../constants";
 import { fetchChainInfo } from "./util";
 import { AgoricChainStoragePathKind as Kind, ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
+import { useNetworkConfig } from "../hooks/useNetwork";
 
 const initialState: AgoricState = {
   status: {
@@ -90,6 +91,7 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
+  const { network } = useNetworkConfig();
 
   useEffect(() => {
     if (isCancelled) return;
@@ -223,7 +225,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     return () => {
       setIsCancelled(true);
     };
-  }, [isCancelled, state.status.walletProvisioned, state.chainStorageWatcher]);
+  }, [network, isCancelled, state.chainStorageWatcher]);
 
   return (
     <Context.Provider value={state}>

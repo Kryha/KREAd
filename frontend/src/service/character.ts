@@ -11,6 +11,7 @@ import { useWalletState } from "../context/wallet";
 import { mintCharacter } from "./character/mint";
 import { marketService } from "./character/market";
 import { useCharacterMarketState } from "../context/character-shop-context";
+import { MAX_PRICE, MIN_PRICE } from "../constants";
 
 export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean] => {
   const { characters, selected, fetched } = useUserState();
@@ -25,7 +26,10 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
       }
       const selectedCharacter = characters.find((char) => char.nft.name === selected.nft.name);
       if (selectedCharacter) {
-        userStateDispatch({ type: "SET_SELECTED", payload: selectedCharacter.nft.name });
+        userStateDispatch({
+          type: "SET_SELECTED",
+          payload: selectedCharacter.nft.name,
+        });
       }
     } else if (characters.length > 0) {
       if (storedName) {
@@ -38,12 +42,18 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
         } else {
           const firstCharacter = characters[0];
           localStorage.setItem("selectedCharacter", firstCharacter.nft.name);
-          userStateDispatch({ type: "SET_SELECTED", payload: firstCharacter.nft.name });
+          userStateDispatch({
+            type: "SET_SELECTED",
+            payload: firstCharacter.nft.name,
+          });
         }
       } else {
         const firstCharacterName = characters[0].nft.name;
         localStorage.setItem("selectedCharacter", firstCharacterName);
-        userStateDispatch({ type: "SET_SELECTED", payload: characters[0].nft.name });
+        userStateDispatch({
+          type: "SET_SELECTED",
+          payload: characters[0].nft.name,
+        });
       }
     }
   }, [userStateDispatch, characters, selected]);
@@ -72,9 +82,7 @@ export const useMyCharactersForSale = () => {
     extend();
   }, [wallet.characterProposals]);
 
-  const parsedCharacters = useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
-
-  return parsedCharacters;
+  return useMemo(() => JSON.parse(offerCharacters) as ExtendedCharacter[], [offerCharacters]);
 };
 
 export const useMyCharacter = (id?: number): [ExtendedCharacter | undefined, boolean] => {
@@ -102,6 +110,19 @@ export const useGetCharacterNames = (): [string[]] => {
 export const useGetCharacterMarketMetrics = (): MarketMetrics => {
   const { metrics } = useCharacterMarketState();
   return metrics;
+};
+
+export const useGetCharacterMarketPrices = (): [number[], boolean] => {
+  const { characters, fetched } = useCharacterMarketState();
+
+  const prices = useMemo(
+    () =>
+      fetched
+        ? characters.map((character) => Number(character.sell.price + character.sell.royalty + character.sell.platformFee))
+        : [MIN_PRICE, MAX_PRICE],
+    [characters, fetched],
+  );
+  return [prices, fetched];
 };
 
 export const useMyCharacters = (): [ExtendedCharacter[], boolean] => {
@@ -148,7 +169,7 @@ export const useCreateCharacter = () => {
       callback: async () => {
         console.info("MintCharacter call settled");
       },
-      errorCallback: body.setError
+      errorCallback: body.setError,
     });
   });
 };
