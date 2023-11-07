@@ -1,9 +1,8 @@
 import React, { FC, useState } from "react";
-import { useMatch, useResolvedPath } from "react-router-dom";
+import { useLocation, useMatch, useResolvedPath } from "react-router-dom";
 import { text } from "../../assets";
 import { color } from "../../design";
 import { routes } from "../../navigation";
-
 import { AgoricText, FooterContainer, FooterWrapper, Link, PrivacyText } from "./styles";
 import { NetworkSelect } from "../network-selector/network-select";
 import { useNetworkConfig } from "../../hooks/useNetwork";
@@ -15,6 +14,9 @@ export const Footer: FC = () => {
   const matchShop = useMatch({ path: resolvedShop.pathname, end: true });
   const { network, setNetworkValue } = useNetworkConfig();
 
+  const location = useLocation();
+  const pathsWithNetworkSelector = [routes.root, routes.connectWallet];
+
   const label = getLabelForNetwork(network);
 
   const [filterId, setFilterId] = useState("");
@@ -25,9 +27,11 @@ export const Footer: FC = () => {
 
   return (
     <FooterWrapper isShop={!!matchShop}>
-      <NetworkSelector label={label} openNetworkSelector={openFilter} id={filterId} hasValue={!!network}>
-        <NetworkSelect label={network} onChange={setNetworkValue} options={networkOptions} />
-      </NetworkSelector>
+      { pathsWithNetworkSelector.includes(location.pathname as any) && 
+        <NetworkSelector label={label} openNetworkSelector={openFilter} id={filterId} hasValue={!!network}>
+          <NetworkSelect label={network} onChange={setNetworkValue} options={networkOptions} />
+        </NetworkSelector>
+      }
       <FooterContainer>
         <Link to={routes.privacy}>
           <PrivacyText customColor={color.darkGrey}>{text.navigation.privacyAndTerms}</PrivacyText>
