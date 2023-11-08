@@ -27,7 +27,7 @@ jobs:
         cd frontend
         export $(grep -v '^#' .env.emerynet | xargs)
         envsubst < skaffold.emerynet.precheck.yaml > skaffold.precheck.yaml
-        skaffold run --filename skaffold.precheck.yaml
+        skaffold build --filename skaffold.precheck.yaml
       shell: bash
  
 
