@@ -1,0 +1,20 @@
+name: Skaffold Build PR Check
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Skaffold build precheck
+      run: |
+        cd frontend
+        export $(grep -v '^#' .env.emerynet | xargs)
+        envsubst < ../deployment/emerynet/workloads/config/ui-config.template.yaml > ../deployment/emerynet/workloads/config/ui-config.yaml
+        envsubst < skaffold.emerynet.template.yaml > skaffold.emerynet.yaml
+        skaffold run --filename skaffold.emerynet.yaml --push false
+      shell: bash
+ 
+
