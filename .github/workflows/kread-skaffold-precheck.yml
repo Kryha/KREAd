@@ -23,7 +23,7 @@ jobs:
         export $(grep -v '^#' .env.emerynet | xargs)
         envsubst < ../deployment/emerynet/workloads/config/ui-config.template.yaml > ../deployment/emerynet/workloads/config/ui-config.yaml
         envsubst < skaffold.emerynet.template.yaml > skaffold.emerynet.yaml
-        skaffold run --filename skaffold.emerynet.yaml --push false
+        skaffold run --filename skaffold.emerynet.yaml --push=false
       shell: bash
  
 
