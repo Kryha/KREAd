@@ -122,8 +122,14 @@ export async function sellCharacter(context) {
   const vStorageCharacterMarket = getFromVStorage(
     `kread.market-characters.character-${characterToSell.name}`,
   );
-  // 
-  mustMatch(vStorageCharacterMarket.asset, harden({...characterToSell, date: {...characterToSell.date, timerBrand: TimerBrandShape}}));
+  //
+  mustMatch(
+    vStorageCharacterMarket.asset,
+    harden({
+      ...characterToSell,
+      date: { ...characterToSell.date, timerBrand: TimerBrandShape },
+    }),
+  );
   assert.equal(vStorageCharacterMarket.id, characterToSell.name);
   assert.equal(vStorageCharacterMarket.askingPrice.value, priceAmount.value);
   assert.equal(
@@ -208,7 +214,7 @@ export async function buyCharacter(context) {
     platformFeePurse,
     royaltyRate,
     platformFeeRate,
-    getFromVStorage
+    getFromVStorage,
   } = context;
 
   const {
@@ -291,7 +297,10 @@ export async function buyCharacter(context) {
       `kread.market-characters.character-${characterToBuy.asset.name}`,
     );
   } catch (error) {
-    assert.equal(error.message, `no data for "kread.market-characters.character-${characterToBuy.asset.name}"`)
+    assert.equal(
+      error.message,
+      `no data for "kread.market-characters.character-${characterToBuy.asset.name}"`,
+    );
   }
 }
 
@@ -358,7 +367,7 @@ export async function sellItem(context) {
     paymentAsset,
     getFromVStorage,
     royaltyRate,
-    platformFeeRate
+    platformFeeRate,
   } = context;
 
   const itemToSellValue = (await bob.getItems()).find(
@@ -392,7 +401,7 @@ export async function sellItem(context) {
     0,
     "Item is still in bob's wallet",
   );
-  const vStorageItemMarket = getFromVStorage(`kread.market-items.item-0`) // this is the first item on sale so we know it will be assigned id 0
+  const vStorageItemMarket = getFromVStorage(`kread.market-items.item-0`); // this is the first item on sale so we know it will be assigned id 0
   mustMatch(vStorageItemMarket.asset, itemToSellValue);
   assert.equal(vStorageItemMarket.id, 0);
   assert.equal(vStorageItemMarket.askingPrice.value, priceAmount.value);
@@ -465,7 +474,7 @@ export async function buyItem(context) {
     contractAssets,
     zoe,
     users: { bob, alice },
-    getFromVStorage
+    getFromVStorage,
   } = context;
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
@@ -520,11 +529,9 @@ export async function buyItem(context) {
   assert.equal(itemsForSale.length, 0, 'Item was not removed from market');
 
   try {
-    getFromVStorage(
-      `kread.market-items.item-0`,
-    );
+    getFromVStorage(`kread.market-items.item-0`);
   } catch (error) {
-    assert.equal(error.message, `no data for "kread.market-items.item-0"`)
+    assert.equal(error.message, `no data for "kread.market-items.item-0"`);
   }
 }
 
@@ -773,7 +780,14 @@ export async function buyItemOfferMoreThanAskingPrice(context) {
 
 export async function internalSellItemBatch(context) {
   /** @type {Context} */
-  const { publicFacet, creatorFacet, paymentAsset } = context;
+  const {
+    publicFacet,
+    creatorFacet,
+    paymentAsset,
+    getFromVStorage,
+    royaltyRate,
+    platformFeeRate,
+  } = context;
 
   const itemCollection = Object.values(defaultItems).map((item) => [item, 3n]);
   const itemsToSell = harden(itemCollection);
@@ -784,7 +798,26 @@ export async function internalSellItemBatch(context) {
   const itemsForSale = await E(publicFacet).getItemsForSale();
   assert.equal(itemsForSale.length, 27, 'Item was not added to market');
 
-  // assert.equal((await bob.getItems()).length, 0, "Item is no longer in bob's wallet");
+  itemCollection.forEach((value, i) => {
+    [0, 1, 2].forEach((j) => {
+      const id = 2 + j + 3 * i;
+      const vStorageItemMarket = getFromVStorage(
+        `kread.market-items.item-${id}`,
+      );
+      mustMatch(vStorageItemMarket.asset, value[0]);
+      assert.equal(vStorageItemMarket.id, id);
+      assert.equal(vStorageItemMarket.askingPrice.value, priceAmount.value);
+      assert.equal(
+        vStorageItemMarket.royalty.value,
+        multiplyBy(priceAmount, royaltyRate).value,
+      );
+      assert.equal(
+        vStorageItemMarket.platformFee.value,
+        multiplyBy(priceAmount, platformFeeRate).value,
+      );
+      assert.equal(vStorageItemMarket.isFirstSale, true);
+    });
+  });
 }
 
 export async function buyBatchSoldItem(context) {
@@ -795,6 +828,7 @@ export async function buyBatchSoldItem(context) {
     zoe,
     users: { bob },
     paymentAsset,
+    getFromVStorage
   } = context;
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
@@ -851,4 +885,15 @@ export async function buyBatchSoldItem(context) {
     itemsForSale.length - 1,
     'Item was not removed from the market',
   );
+
+  try {
+    getFromVStorage(
+      `kread.market-items.item-${itemToBuy.id}`,
+    );
+  } catch (error) {
+    assert.equal(
+      error.message,
+      `no data for "kread.market-items.item-${itemToBuy.id}"`,
+    );
+  }
 }
