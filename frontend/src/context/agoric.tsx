@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useReducer, useState } fro
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NETWORK_CONFIG, NO_SMART_WALLET_ERROR } from "../constants";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NO_SMART_WALLET_ERROR } from "../constants";
 import { fetchChainInfo } from "./util";
 import { AgoricChainStoragePathKind as Kind, ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
 import { useNetworkConfig } from "../hooks/useNetwork";
@@ -92,7 +92,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
   const [state, dispatch] = useReducer(Reducer, initialState);
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const { network } = useNetworkConfig();
-
   useEffect(() => {
     if (isCancelled) return;
     // TODO: consider implementing terms agreement
@@ -204,7 +203,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
       try {
 
-        const { rpc, chainName } = await fetchChainInfo(NETWORK_CONFIG);
+        const { rpc, chainName } = await fetchChainInfo(network);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, backendError);
         dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
         dispatch({ type: "UPDATE_STATUS", payload: { walletProvisioned: true }});
