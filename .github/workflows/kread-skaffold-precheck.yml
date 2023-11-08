@@ -11,6 +11,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Install Skaffold 
+      run: |
+        curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64
+        sudo install skaffold /usr/local/bin/
+      shell: bash
+
     - name: Skaffold build precheck
       run: |
         cd frontend
