@@ -70,6 +70,7 @@ import {
   testFunctionalityAfterUpgrade,
   testFunctionalityBeforeUpgrade,
 } from './bootstrap-upgrade-v2.js';
+import { unmarshalFromVstorage } from '@agoric/internal/src/lib-chainStorage.js';
 
 const trace = makeTracer('kreadBootUpgrade');
 
@@ -161,6 +162,14 @@ export const buildRootObject = async () => {
     assertPathSegment(candidate);
     return candidate;
   };
+  /**
+   * Reads the data from the vstorage at the given path
+   * Will throw an error if path doesnt exist
+   * @param {string} path 
+   */
+  const getFromVStorage = (path) => {
+    return unmarshalFromVstorage(storageKit.data, path, marshaller.fromCapData.bind(marshaller))
+  }
 
   const committeeName = 'KREAd Committee';
 
@@ -288,7 +297,7 @@ export const buildRootObject = async () => {
       } = terms;
 
       context = {
-        storageNode: storageKit.rootNode,
+        getFromVStorage,
         contractAssets: {
           character: { issuer: characterIssuer, brand: characterBrand },
           item: { issuer: itemIssuer, brand: itemBrand },

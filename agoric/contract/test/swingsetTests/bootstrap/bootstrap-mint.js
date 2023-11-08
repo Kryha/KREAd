@@ -2,7 +2,8 @@ import { E } from '@endo/eventual-send';
 import { AmountMath } from '@agoric/ertp';
 import { flow } from '../flow.js';
 import { makeKreadUser } from './make-bootstrap-users.js';
-import { makeCopyBag } from '@agoric/store';
+import { makeCopyBag, mustMatch } from '@agoric/store';
+import { TimestampRecordShape } from '@agoric/time';
 
 export async function setupMintTests(context) {
   const { contractAssets, paymentAsset } = context;
@@ -163,6 +164,7 @@ export async function mintExpectedFlow(context) {
     paymentAsset,
     users: { alice },
     zoe,
+    getFromVStorage,
   } = context;
   const { message, give, offerArgs } = flow.mintCharacter.expected;
 
@@ -193,8 +195,13 @@ export async function mintExpectedFlow(context) {
     offerArgs.name,
     'New character is added to contract registry',
   );
-  //   console.log("STORAGE NODE: ")
-  // console.log(storageNode.getPath("kread.character"))
+  const vStorageCharacterData = getFromVStorage('kread.character');
+  assert.equal(vStorageCharacterData.name, offerArgs.name);
+  const vStorageInventoryData = getFromVStorage(
+    `kread.character.inventory-${offerArgs.name}`,
+  );
+
+  assert.equal(vStorageInventoryData.length, 3);
 
   const payout = await E(userSeat).getPayout('Asset');
   await E(purses.character).deposit(payout);
@@ -386,7 +393,7 @@ export async function mintNoCharactersAvailable(context) {
     zoe,
   } = context;
   const { offerArgs, message, give } = flow.mintCharacter.noAvailability;
-  
+
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
@@ -422,7 +429,7 @@ export async function mintNoCharactersAvailable(context) {
 
 export async function mintInventoryCheck(context) {
   /** @type {Context} */
-  const { publicFacet } = context;
+  const { publicFacet, getFromVStorage } = context;
   const { offerArgs } = flow.mintCharacter.expected;
 
   const characterInventory = await E(publicFacet).getCharacterInventory(
@@ -443,22 +450,16 @@ export async function mintInventoryCheck(context) {
     'Two or more items have the same category',
   );
 
-  assert.equal(
-    mappedInventory.filter((i) => i.rarity < 20).length,
-    2,
-    'No two common items',
+  const vStorageInventoryItems = getFromVStorage(
+    `kread.character.inventory-${offerArgs.name}`,
   );
-
-  assert.equal(
-    mappedInventory.filter((i) => i.rarity > 19).length,
-    1,
-    'No uncommon to legendary item found.',
-  );
+  mustMatch(vStorageInventoryItems, characterInventory.items);
 }
 
 export async function mintItemExpectedFlow(context) {
   /** @type {Context} */
-  const { creatorFacet, contractAssets, purses, zoe } = context;
+  const { creatorFacet, contractAssets, purses, zoe, getFromVStorage } =
+    context;
   const { want, message } = flow.mintItem.expected;
 
   const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
@@ -483,11 +484,30 @@ export async function mintItemExpectedFlow(context) {
     want.name,
     'New Item was not added to character purse',
   );
+
+  const vStorageItem = getFromVStorage('kread.item');
+  mustMatch(
+    harden(Object.keys(vStorageItem).sort()),
+    harden(['history', 'id', 'item']),
+  );
+
+  mustMatch(vStorageItem.item, want);
+  assert.equal(vStorageItem.id, 3);
+  mustMatch(
+    vStorageItem.history,
+    harden([
+      {
+        type: 'mint',
+        data: want,
+        timestamp: TimestampRecordShape,
+      },
+    ]),
+  );
 }
 
 export async function mintSameItemSFT(context) {
   /** @type {Context} */
-  const { creatorFacet, contractAssets, purses, zoe } = context;
+  const { creatorFacet, contractAssets, purses, zoe, getFromVStorage } = context;
   const { want, message } = flow.mintItem.expected;
 
   const mintItemInvitation = await E(creatorFacet).makeMintItemInvitation();
@@ -518,7 +538,15 @@ export async function mintSameItemSFT(context) {
     2n,
     'Supply of item not increased to 2',
   );
-  assert.equal((await E(purses.item).getCurrentAmount()).value.payload.length, 1);
+  assert.equal(
+    (await E(purses.item).getCurrentAmount()).value.payload.length,
+    1,
+  );
+
+  const vStorageItem = getFromVStorage('kread.item');
+  mustMatch(vStorageItem.item, want)
+  assert.equal(vStorageItem.id, 4)
+
 }
 
 export async function mintItemMultipleFlow(context) {
@@ -545,13 +573,16 @@ export async function mintItemMultipleFlow(context) {
 
   await E(purses.item).deposit(payout);
 
-  const totalItems = (await E(purses.item)
-    .getCurrentAmount())
-    .value.payload.reduce((acc, [_item, supply]) => {
-      return acc + supply;
-    }, 0n);
+  const totalItems = (
+    await E(purses.item).getCurrentAmount()
+  ).value.payload.reduce((acc, [_item, supply]) => {
+    return acc + supply;
+  }, 0n);
   assert.equal(totalItems, 4n);
-  assert.equal((await E(purses.item).getCurrentAmount()).value.payload.length, 2);
+  assert.equal(
+    (await E(purses.item).getCurrentAmount()).value.payload.length,
+    2,
+  );
 }
 
 export async function mintItemMultipleDifferentFlow(context) {
@@ -577,5 +608,8 @@ export async function mintItemMultipleDifferentFlow(context) {
   const payout = await E(userSeat).getPayout('Asset');
 
   await E(purses.item).deposit(payout);
-  assert.equal((await E(purses.item).getCurrentAmount()).value.payload.length, 4);
+  assert.equal(
+    (await E(purses.item).getCurrentAmount()).value.payload.length,
+    4,
+  );
 }
