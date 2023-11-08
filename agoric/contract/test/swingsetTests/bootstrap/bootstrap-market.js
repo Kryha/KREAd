@@ -1,12 +1,13 @@
 import { AmountMath } from '@agoric/ertp';
 import { E } from '@endo/eventual-send';
 import { flow } from '../flow.js';
-import { makeCopyBag } from '@agoric/store';
+import { makeCopyBag, mustMatch } from '@agoric/store';
 import { addCharacterToContext, addItemToContext } from './utils.js';
 import { makeKreadUser } from './make-bootstrap-users.js';
 import { errors } from '../../../src/kreadV2/errors.js';
 import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 import { defaultItems } from '../items.js';
+import { TimerBrandShape } from '@agoric/time';
 
 export async function setupMarketTests(context) {
   await addCharacterToContext(context);
@@ -58,6 +59,10 @@ export async function sellCharacter(context) {
     zoe,
     users: { bob },
     paymentAsset,
+    getFromVStorage,
+    royaltyRate,
+    platformFeeRate,
+    storageKit,
   } = context;
   const {
     market: {
@@ -109,12 +114,27 @@ export async function sellCharacter(context) {
     1,
     'Character was not added to market',
   );
-
   assert.equal(
     (await bob.getCharacters()).length,
     0,
     "Character is still in bob's wallet",
   );
+  const vStorageCharacterMarket = getFromVStorage(
+    `kread.market-characters.character-${characterToSell.name}`,
+  );
+  // 
+  mustMatch(vStorageCharacterMarket.asset, harden({...characterToSell, date: {...characterToSell.date, timerBrand: TimerBrandShape}}));
+  assert.equal(vStorageCharacterMarket.id, characterToSell.name);
+  assert.equal(vStorageCharacterMarket.askingPrice.value, priceAmount.value);
+  assert.equal(
+    vStorageCharacterMarket.royalty.value,
+    multiplyBy(priceAmount, royaltyRate).value,
+  );
+  assert.equal(
+    vStorageCharacterMarket.platformFee.value,
+    multiplyBy(priceAmount, platformFeeRate).value,
+  );
+  assert.equal(vStorageCharacterMarket.isFirstSale, false);
 }
 
 export async function buyCharacterOfferLessThanAskingPrice(context) {
@@ -188,6 +208,7 @@ export async function buyCharacter(context) {
     platformFeePurse,
     royaltyRate,
     platformFeeRate,
+    getFromVStorage
   } = context;
 
   const {
@@ -265,6 +286,13 @@ export async function buyCharacter(context) {
     platformFeePursePre +
       multiplyBy(characterToBuy.askingPrice, platformFeeRate).value,
   );
+  try {
+    getFromVStorage(
+      `kread.market-characters.character-${characterToBuy.asset.name}`,
+    );
+  } catch (error) {
+    assert.equal(error.message, `no data for "kread.market-characters.character-${characterToBuy.asset.name}"`)
+  }
 }
 
 export async function buyCharacterNotOnMarket(context) {
@@ -328,6 +356,9 @@ export async function sellItem(context) {
     zoe,
     users: { bob },
     paymentAsset,
+    getFromVStorage,
+    royaltyRate,
+    platformFeeRate
   } = context;
 
   const itemToSellValue = (await bob.getItems()).find(
@@ -361,6 +392,19 @@ export async function sellItem(context) {
     0,
     "Item is still in bob's wallet",
   );
+  const vStorageItemMarket = getFromVStorage(`kread.market-items.item-0`) // this is the first item on sale so we know it will be assigned id 0
+  mustMatch(vStorageItemMarket.asset, itemToSellValue);
+  assert.equal(vStorageItemMarket.id, 0);
+  assert.equal(vStorageItemMarket.askingPrice.value, priceAmount.value);
+  assert.equal(
+    vStorageItemMarket.royalty.value,
+    multiplyBy(priceAmount, royaltyRate).value,
+  );
+  assert.equal(
+    vStorageItemMarket.platformFee.value,
+    multiplyBy(priceAmount, platformFeeRate).value,
+  );
+  assert.equal(vStorageItemMarket.isFirstSale, false);
 }
 
 export async function buyItemOfferLessThanAskingPrice(context) {
@@ -421,6 +465,7 @@ export async function buyItem(context) {
     contractAssets,
     zoe,
     users: { bob, alice },
+    getFromVStorage
   } = context;
 
   let itemsForSale = await E(publicFacet).getItemsForSale();
@@ -473,6 +518,14 @@ export async function buyItem(context) {
 
   itemsForSale = await E(publicFacet).getItemsForSale();
   assert.equal(itemsForSale.length, 0, 'Item was not removed from market');
+
+  try {
+    getFromVStorage(
+      `kread.market-items.item-0`,
+    );
+  } catch (error) {
+    assert.equal(error.message, `no data for "kread.market-items.item-0"`)
+  }
 }
 
 export async function buyItemNotOnMarket(context) {
