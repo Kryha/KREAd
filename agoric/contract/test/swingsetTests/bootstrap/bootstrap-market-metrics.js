@@ -34,7 +34,7 @@ async function sellCharacter(context, user, characterName, askingPrice) {
     proposal,
     payment,
   );
-  await E(userSeat).getOfferResult()
+  await E(userSeat).getOfferResult();
 
   user.setMarketSeat(userSeat);
 
@@ -100,7 +100,7 @@ export async function setupMarketMetricsTests(context) {
 
 export async function initialization(context) {
   /** @type {Context} */
-  const { publicFacet } = context;
+  const { publicFacet, getFromVStorage } = context;
 
   const metrics = await E(publicFacet).getMarketMetrics();
 
@@ -108,6 +108,15 @@ export async function initialization(context) {
     for (const value of Object.values(collection)) {
       assert.equal(value, 0);
     }
+  }
+  const vStorageCharacterMetrics = getFromVStorage('kread.market-metrics-character');
+  for (const value of Object.values(vStorageCharacterMetrics)) {
+    assert.equal(value, 0);
+  }
+
+  const vStorageItemMetrics = getFromVStorage('kread.market-metrics-item');
+  for (const value of Object.values(vStorageItemMetrics)) {
+    assert.equal(value, 0);
   }
 }
 
@@ -118,6 +127,7 @@ export async function collectionSize(context) {
     paymentAsset,
     zoe,
     users: { bob },
+    getFromVStorage
   } = context;
 
   const { give, offerArgs } = flow.mintCharacter.expected;
@@ -149,12 +159,19 @@ export async function collectionSize(context) {
   const metrics = await E(publicFacet).getMarketMetrics();
   assert.equal(metrics.character.collectionSize, 1);
   assert.equal(metrics.item.collectionSize, 3);
+
+  const vStorageCharacterMetrics = getFromVStorage('kread.market-metrics-character');
+  assert.equal(vStorageCharacterMetrics.collectionSize, 1)
+
+  const vStorageItemMetrics = getFromVStorage('kread.market-metrics-item');
+  assert.equal(vStorageItemMetrics.collectionSize, 3)
 }
 
 export async function averageLevelsCharacter(context) {
   /** @type {Context} */
   const {
     publicFacet,
+    getFromVStorage,
     users: { bob },
   } = context;
 
@@ -171,7 +188,7 @@ export async function averageLevelsCharacter(context) {
   );
 
   await sellCharacter(context, bob, characterName, 40n);
-  
+
   const metrics = await E(publicFacet).getMarketMetrics();
   const characterLevel = await E(publicFacet).getCharacterLevel(characterName);
   assert.equal(metrics.character.averageLevel, character.level);
@@ -181,6 +198,14 @@ export async function averageLevelsCharacter(context) {
   const defaultItemsAverageLevel = 0;
 
   assert.equal(metrics.item.averageLevel, defaultItemsAverageLevel);
+
+  const vStorageCharacterMetrics = getFromVStorage('kread.market-metrics-character');
+  assert.equal(vStorageCharacterMetrics.averageLevel, character.level)
+  assert.equal(vStorageCharacterMetrics.marketplaceAverageLevel, characterLevel)
+  assert.equal(vStorageCharacterMetrics.putForSaleCount, 1)
+
+  const vStorageItemMetrics = getFromVStorage('kread.market-metrics-item');
+  assert.equal(vStorageItemMetrics.averageLevel, defaultItemsAverageLevel)
 }
 
 export async function amountSoldCharacter(context) {
@@ -188,6 +213,7 @@ export async function amountSoldCharacter(context) {
   const {
     publicFacet,
     users: { bob },
+    getFromVStorage
   } = context;
 
   const {
@@ -212,6 +238,16 @@ export async function amountSoldCharacter(context) {
 
   assert.equal(metrics.item.amountSold, 0);
   assert.equal(metrics.item.latestSalePrice, 0);
+
+  const vStorageCharacterMetrics = getFromVStorage('kread.market-metrics-character');
+  assert.equal(vStorageCharacterMetrics.averageLevel, character.level)
+  assert.equal(vStorageCharacterMetrics.marketplaceAverageLevel, 0)
+  assert.equal(vStorageCharacterMetrics.amountSold, 1)
+  assert.equal(vStorageCharacterMetrics.latestSalePrice, 40)
+
+  const vStorageItemMetrics = getFromVStorage('kread.market-metrics-item');
+  assert.equal(vStorageItemMetrics.amountSold, 0)
+  assert.equal(vStorageItemMetrics.latestSalePrice, 0)
 }
 
 export async function latestSalePriceCharacter(context) {
@@ -219,6 +255,7 @@ export async function latestSalePriceCharacter(context) {
   const {
     publicFacet,
     users: { bob },
+    getFromVStorage
   } = context;
 
   const {
@@ -247,4 +284,15 @@ export async function latestSalePriceCharacter(context) {
 
   assert.equal(metrics.item.amountSold, 0);
   assert.equal(metrics.item.latestSalePrice, 0);
+
+  const vStorageCharacterMetrics = getFromVStorage('kread.market-metrics-character');
+  assert.equal(vStorageCharacterMetrics.averageLevel, character.level)
+  assert.equal(vStorageCharacterMetrics.marketplaceAverageLevel, 0)
+  assert.equal(vStorageCharacterMetrics.amountSold, 2)
+  assert.equal(vStorageCharacterMetrics.putForSaleCount, 2)
+  assert.equal(vStorageCharacterMetrics.latestSalePrice, 20)
+
+  const vStorageItemMetrics = getFromVStorage('kread.market-metrics-item');
+  assert.equal(vStorageItemMetrics.amountSold, 0)
+  assert.equal(vStorageItemMetrics.latestSalePrice, 0)
 }

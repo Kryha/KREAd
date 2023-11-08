@@ -12,7 +12,7 @@ test.before(async (t) => {
 });
 
 test.serial('---| METRICS - Initialization', async (t) => {
-  const [result] = await run('setupMarketMetricsTests');
+  const [result] = await run('initialization');
   t.is(result, 'fulfilled');
 });
 
