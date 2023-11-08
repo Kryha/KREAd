@@ -1,7 +1,12 @@
 name: Skaffold Build PR Check
 
 on:
-  push
+  pull_request:
+    branches:
+      - develop
+    types:
+      - opened
+      - synchronize
 
 jobs:
   build:
