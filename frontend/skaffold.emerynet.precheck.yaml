@@ -1,0 +1,19 @@
+apiVersion: skaffold/v2beta27
+kind: Config
+metadata:
+  name: character-builder-ui
+build:
+  tagPolicy:
+    sha256: {}
+  local:
+    concurrency: 0
+    push: false
+  artifacts:
+    - image: eu.gcr.io/web3-335312/kread/frontend-staging/frontend
+      docker:
+        dockerfile: Dockerfile.ui
+        buildArgs:
+          VITE_RPC: "emerynet.rpc.agoric.net"
+          VITE_BRIDGE_HREF: "" 
+          VITE_BASE_URL: "kryha.kread.dev"
+          VITE_NETWORK_CONFIG: "https://emerynet.agoric.net/network-config"
