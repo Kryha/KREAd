@@ -62,7 +62,7 @@ export const AssetItemFilters: FC<Props> = ({ section }) => {
             </Filters>
             {section === SECTION.SHOP && (
               <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-                {fetched && <PriceRangeSlider prices={prices} setPrice={setItemPrice} />}
+                {fetched && <PriceRangeSlider prices={prices} setPrice={setItemPrice} reset={reset}/>}
               </Filters>
             )}
             <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>

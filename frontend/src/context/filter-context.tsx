@@ -47,7 +47,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
   const [itemPrice, setItemPrice] = useState<{
     min: number;
     max: number;
-  }>({ min: Math.min(...pricesOfItems), max: Math.max(...pricesOfItems) });
+  }>({ min: uISTToIST(Math.min(...pricesOfItems)), max: uISTToIST(Math.max(...pricesOfItems)) });
   const [characterPrice, setCharacterPrice] = useState<{
     min: number;
     max: number;

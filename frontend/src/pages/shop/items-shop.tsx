@@ -13,10 +13,12 @@ import { color } from "../../design";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 import { ItemInMarket } from "../../interfaces";
+import { useItemMarketState } from "../../context/item-shop-context";
 
 export const ItemsShop: FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
   const [items, fetched] = useGetItemsInShop();
+  const { items: allMarketItems } = useItemMarketState();
   const metrics = useGetItemMarketMetrics();
   const [item] = useGetItemInShopById(selectedId);
 
@@ -41,8 +43,8 @@ export const ItemsShop: FC = () => {
       let itemMinimum = 0;
 
       if (filteredItems.length != 0) {
-        itemMinimum = findMinimumValue(filteredItems.map((x) => uISTToIST(Number(x.sell.price))));
-        itemAverage = findAverageValue(filteredItems.map((x) => uISTToIST(Number(x.sell.price))));
+        itemMinimum = findMinimumValue(allMarketItems.map((x) => uISTToIST(Number(x.sell.price))));
+        itemAverage = findAverageValue(allMarketItems.map((x) => uISTToIST(Number(x.sell.price))));
       }
 
       return [

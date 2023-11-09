@@ -37,7 +37,10 @@ export const useFilterItems = (items: Item[]): Item[] => {
 export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
   const { origin, categories, rarity, itemPrice, colors, sort } = useFilters();
   if (items.length === 0) return [];
-
+  const priceFilterRange = {
+    max: ISTTouIST(itemPrice.max),
+    min: ISTTouIST(itemPrice.min)
+  }
   const filteredOrigins = origin.length > 0 ? items.filter((item) => origin.includes(<Origin>item.item.origin.toLowerCase())) : items;
   const filteredCategories = categories.length > 0 ? items.filter((item) => categories.includes(item.item.category)) : items;
   const filteredRarity = rarity.length > 0 ? items.filter((item) => rarity.includes(getRarityString(item.item.rarity))) : items;
@@ -45,7 +48,7 @@ export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
   const filteredPrice = itemPrice
     ? items.filter(({ sell }) => {
         const priceValue = Number(sell.price + sell.royalty + sell.platformFee);
-        return priceValue >= itemPrice.min && priceValue <= itemPrice.max;
+        return priceValue >= priceFilterRange.min && priceValue <= priceFilterRange.max;
       })
     : items;
 
