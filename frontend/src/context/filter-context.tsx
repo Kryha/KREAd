@@ -2,6 +2,7 @@ import React, { createContext, FC, useMemo, useState } from "react";
 import { useAndRequireContext } from "../hooks";
 import { Category, Origin, Rarity, Title } from "../interfaces";
 import { useGetCharacterMarketPrices, useGetItemMarketPrices } from "../service";
+import { uISTToIST } from "../util";
 
 interface Context {
   title: Title[];
@@ -50,7 +51,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
   const [characterPrice, setCharacterPrice] = useState<{
     min: number;
     max: number;
-  }>({ min: Math.min(...pricesOfCharacters), max: Math.max(...pricesOfCharacters) });
+  }>({ min: uISTToIST(Math.min(...pricesOfCharacters)), max: uISTToIST(Math.max(...pricesOfCharacters)) });
 
   const [rarity, setRarity] = useState<Rarity[]>([]);
   const [equippedTo, setEquippedTo] = useState<string>("");

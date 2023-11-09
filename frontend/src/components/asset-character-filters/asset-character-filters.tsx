@@ -18,10 +18,14 @@ export const AssetCharacterFilters: FC<Props> = ({ section }) => {
   const { title, origin, sort, reset, setOrigin, setTitle, setCharacterPrice, setSort, setColors, onReset } = useFilters();
   const [filterId, setFilterId] = useState("");
   const [prices, fetched] = useGetCharacterMarketPrices();
+
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
   };
 
+  const handlePriceFilter = (range: {min: number, max: number}) => {
+    setCharacterPrice(range);
+  }
   return (
     <>
       <AssetFilterWrapper>
@@ -45,7 +49,7 @@ export const AssetCharacterFilters: FC<Props> = ({ section }) => {
             </Filters>
             {section === SECTION.SHOP && (
               <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-                {fetched && <PriceRangeSlider prices={prices} setPrice={setCharacterPrice} />}
+                {fetched && <PriceRangeSlider prices={prices} setPrice={handlePriceFilter} reset={reset} />}
               </Filters>
             )}
             <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>
