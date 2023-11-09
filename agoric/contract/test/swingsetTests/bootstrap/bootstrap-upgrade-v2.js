@@ -16,7 +16,7 @@ export async function setupUpgradeTests(context) {
 
 export async function testFunctionalityBeforeUpgrade(context) {
   /** @type {Context} */
-  const { publicFacet, zoe, purses, paymentAsset } = context;
+  const { publicFacet, zoe, purses, paymentAsset, getFromVStorage } = context;
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
@@ -43,11 +43,16 @@ export async function testFunctionalityBeforeUpgrade(context) {
     'example',
   );
   assert.equal(characterInventory.items.length, 3);
+
+  const vStorageInventory = getFromVStorage(
+    `kread.character.inventory-example`,
+  );
+  assert.equal(vStorageInventory.length, 3);
 }
 
 export async function testFunctionalityAfterUpgrade(context) {
   /** @type {Context} */
-  const { publicFacet, zoe, purses, paymentAsset } = context;
+  const { publicFacet, zoe, purses, paymentAsset, getFromVStorage } = context;
   const mintCharacterInvitation = await E(
     publicFacet,
   ).makeMintCharacterInvitation();
@@ -74,4 +79,9 @@ export async function testFunctionalityAfterUpgrade(context) {
     'example2',
   );
   assert.equal(characterInventory.items.length, 4);
+
+  const vStorageInventory = getFromVStorage(
+    `kread.character.inventory-example2`,
+  );
+  assert.equal(vStorageInventory.length, 4);
 }

@@ -2,10 +2,7 @@ import { Far, deeplyFulfilled, makeMarshal } from '@endo/marshal';
 import { E } from '@endo/eventual-send';
 import { makeFakeStorageKit } from '@agoric/internal/src/storage-test-utils';
 import { buildManualTimer } from '@agoric/swingset-vat/tools/manual-timer';
-import {
-  makeFakeBoard,
-  slotToBoardRemote,
-} from '@agoric/vats/tools/board-utils';
+import { makeFakeBoard } from '@agoric/vats/tools/board-utils';
 import { makeTracer } from '@agoric/internal';
 import { Fail, NonNullish } from '@agoric/assert';
 import { makeIssuerKit } from '@agoric/ertp';

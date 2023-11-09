@@ -14,7 +14,6 @@ const unequipOffer = async (context) => {
   /** @type {Context} */
   const { publicFacet, contractAssets, purses, zoe } = context;
   const { characterName } = flow.inventory;
-
   const characterInventory = await E(publicFacet).getCharacterInventory(
     characterName,
   );
@@ -73,7 +72,7 @@ const unequipOffer = async (context) => {
 
 export async function unequipItem(context) {
   /** @type {Context} */
-  const { publicFacet, purses } = context;
+  const { publicFacet, purses, getFromVStorage } = context;
   const { characterName } = flow.inventory;
 
   await unequipOffer(context);
@@ -96,6 +95,11 @@ export async function unequipItem(context) {
     2,
     'Character Inventory does not contain 2 items',
   );
+
+  const vStorageInventory = getFromVStorage(
+    `kread.character.inventory-${characterName}`,
+  );
+  assert.equal(vStorageInventory.length, 2);
 }
 
 export async function unequipAlreadyUnequippedItem(context) {
@@ -245,7 +249,7 @@ export async function unequipWithWrongCharacter(context) {
 
 export async function equipItem(context) {
   /** @type {Context} */
-  const { publicFacet, contractAssets, purses, zoe } = context;
+  const { publicFacet, contractAssets, purses, zoe, getFromVStorage } = context;
   const {
     characterName,
     equip: { message },
@@ -331,6 +335,15 @@ export async function equipItem(context) {
     'Character Inventory size did not increase by one item',
   );
 
+  const vStorageInventory = getFromVStorage(
+    `kread.character.inventory-${characterName}`,
+  );
+  mustMatch(
+    vStorageInventory.find(
+      ([inventoryItem, _]) => inventoryItem.category === item[0].category,
+    ),
+    item,
+  );
   // t.not(characterInventory.items.find(item => item.id === hairItem.id), undefined, "Character Inventory contains new item")
 }
 
@@ -443,7 +456,7 @@ export async function equipItemDuplicateCategory(context) {
 
 export async function swapItems(context) {
   /** @type {Context} */
-  const { publicFacet, contractAssets, purses, zoe } = context;
+  const { publicFacet, contractAssets, purses, zoe, getFromVStorage } = context;
   const { characterName } = flow.inventory;
 
   const invitation = await E(publicFacet).makeItemSwapInvitation();
@@ -536,11 +549,19 @@ export async function swapItems(context) {
     itemGive.value.payload[0][0],
   );
   assert.equal(updatedCharacterInventory.items.length, 3);
+
+  const vStorageInventory = getFromVStorage(
+    `kread.character.inventory-${characterName}`,
+  ).filter(
+    ([inventoryItem, _]) => inventoryItem.category === itemWantValue.category,
+  );
+  assert.equal(vStorageInventory.length, 1);
+  mustMatch(vStorageInventory[0][0], item);
 }
 
 export async function swapItemsInitiallyEmpty(context) {
   /** @type {Context} */
-  const { publicFacet, contractAssets, purses, zoe } = context;
+  const { publicFacet, contractAssets, purses, zoe, getFromVStorage } = context;
   const { characterName } = flow.inventory;
 
   await unequipOffer(context);
@@ -629,6 +650,17 @@ export async function swapItemsInitiallyEmpty(context) {
       .find((inventoryItem) => inventoryItem.rarity > 19),
     otherItemGive.value.payload[0][0],
     'New Item was not added to inventory',
+  );
+
+  const vStorageInventory = getFromVStorage(
+    `kread.character.inventory-${characterName}`,
+  );
+
+  mustMatch(
+    vStorageInventory
+      .map((i) => i[0])
+      .find((inventoryItem) => inventoryItem.rarity > 19),
+    otherItemGive.value.payload[0][0],
   );
 }
 
@@ -742,7 +774,7 @@ export async function swapItemsDifferentCategories(context) {
 }
 
 export async function unequipAll(context) {
-  const { publicFacet, contractAssets, purses, zoe } = context;
+  const { publicFacet, contractAssets, purses, zoe, getFromVStorage } = context;
   const { characterName } = flow.inventory;
 
   let characterInventory = await E(publicFacet).getCharacterInventory(
@@ -811,10 +843,15 @@ export async function unequipAll(context) {
     characterName,
   );
   assert.equal(characterInventory.items.length, 0);
+
+  mustMatch(
+    getFromVStorage(`kread.character.inventory-${characterName}`),
+    harden([]),
+  );
 }
 
 export async function unequipAllEmptyInventory(context) {
-  const { publicFacet, contractAssets, purses, zoe } = context;
+  const { publicFacet, contractAssets, purses, zoe, getFromVStorage } = context;
 
   const { characterName } = flow.inventory;
 
@@ -870,5 +907,9 @@ export async function unequipAllEmptyInventory(context) {
     (await E(purses.character).getCurrentAmount()).value.payload[0][0].name,
     characterName,
     'CharacterKey was not returned to character purse',
+  );
+  mustMatch(
+    getFromVStorage(`kread.character.inventory-${characterName}`),
+    harden([]),
   );
 }
