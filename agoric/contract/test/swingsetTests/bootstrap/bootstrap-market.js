@@ -122,7 +122,9 @@ export async function sellCharacter(context) {
   const vStorageCharacterMarket = getFromVStorage(
     `kread.market-characters.character-${characterToSell.name}`,
   );
-  //
+  // Due to ocaps the remotable objects read from the storage node are not correct references and hence comparing
+  // them to the actual remote objects does not work. (brands in this case)
+  // That is why here we deconstruct the amounts and compare the actual values.
   mustMatch(
     vStorageCharacterMarket.asset,
     harden({
@@ -402,6 +404,9 @@ export async function sellItem(context) {
     "Item is still in bob's wallet",
   );
   const vStorageItemMarket = getFromVStorage(`kread.market-items.item-0`); // this is the first item on sale so we know it will be assigned id 0
+  // Due to ocaps the remotable objects read from the storage node are not correct references and hence comparing
+  // them to the actual remote objects does not work. (brands in this case)
+  // That is why here we deconstruct the amounts and compare the actual values.
   mustMatch(vStorageItemMarket.asset, itemToSellValue);
   assert.equal(vStorageItemMarket.id, 0);
   assert.equal(vStorageItemMarket.askingPrice.value, priceAmount.value);
@@ -828,7 +833,7 @@ export async function buyBatchSoldItem(context) {
     zoe,
     users: { bob },
     paymentAsset,
-    getFromVStorage
+    getFromVStorage,
   } = context;
 
   const itemsForSale = await E(publicFacet).getItemsForSale();
@@ -887,9 +892,7 @@ export async function buyBatchSoldItem(context) {
   );
 
   try {
-    getFromVStorage(
-      `kread.market-items.item-${itemToBuy.id}`,
-    );
+    getFromVStorage(`kread.market-items.item-${itemToBuy.id}`);
   } catch (error) {
     assert.equal(
       error.message,
