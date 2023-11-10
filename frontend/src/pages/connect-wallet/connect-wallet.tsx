@@ -1,6 +1,5 @@
 import React, { FC, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { KeplerIcon, text } from "../../assets";
 import { breakpoints, color } from "../../design";
 import {
@@ -8,6 +7,7 @@ import {
   FadeInOut,
   Footer,
   Kado,
+  KeplerIconWrapper,
   LoadingPage,
   MenuText,
   NotificationDetail,
@@ -32,8 +32,6 @@ import { useAgoricContext } from "../../context/agoric";
 import { routes } from "../../navigation";
 import { ButtonRow } from "../onboarding/styles";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
-
-// TODO: Update to designs, Update stylings
 
 export const ConnectWallet: FC = () => {
   const [service, _] = useAgoricContext();
@@ -60,8 +58,9 @@ export const ConnectWallet: FC = () => {
       setShowToast(true);
     }
   };
+
   if (!service.walletConnection.address) return <LoadingPage spinner={false} />;
-  if (service.walletConnection.smartWalletProvisioned) navigate(routes.character);
+  if (service.status.walletProvisioned) navigate(routes.character);
 
   return (
     <>
@@ -69,7 +68,9 @@ export const ConnectWallet: FC = () => {
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <ButtonRow>
             <PrimaryButton onClick={() => provisionWallet()}>
-              <KeplerIcon />
+              <KeplerIconWrapper>
+                <KeplerIcon />
+              </KeplerIconWrapper>
               <ButtonText customColor={color.white}>{text.general.activateWallet}</ButtonText>
               {isLoading ? <LoadingPage /> : <ArrowUp />}
             </PrimaryButton>

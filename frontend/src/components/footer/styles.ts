@@ -10,34 +10,19 @@ interface FooterProps {
 export const FooterWrapper = styled.div<FooterProps>`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin-left: 16px;
+  margin-top: 16px;
   align-items: flex-start;
-  gap: 20px;
-  position: relative;
+  width: 100%;
   z-index: 1000;
-  ${({ isShop }): string => {
-    return isShop
-      ? `
-      background: linear-gradient(294.15deg, #FAFAFA 10.87%, #FAFAFA 41.93%);
-      &:hover {
-        background: linear-gradient(294.15deg, #FAFAFA 10.87%, #FAFAFA 41.93%);
-      }
-        `
-      : `
-      background: linear-gradient(294.15deg, #FAFAFA 10.87%, rgba(250, 250, 250, 0) 41.93%);
-      &:hover {
-        background: linear-gradient(294.15deg, #FAFAFA 10.87%, #FAFAFA 41.93%);
-      }
-      `;
-  }};
-
   border-radius: 100px;
 `;
 
 export const FooterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   padding: 10px 24px;
   gap: 20px;
 `;
@@ -49,7 +34,7 @@ export const AboutText = styled(ButtonText)`
 `;
 export const PrivacyText = styled(AboutText)``;
 
-export const AgoricText = styled(ButtonText)``;
+export const AgoricText = styled(AboutText)``;
 
 export const Link = styled(NavLink)`
   text-decoration: none;

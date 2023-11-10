@@ -41,7 +41,10 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
   const tokenInfo = agoric.tokenInfo;
 
   useEffect(() => {
-    let isCancelled = false;
+    if(!agoric.status.walletProvisioned) {
+      console.warn("Smartwallet is not provisioned");
+      return;
+    }
 
     // TODO: move watcher to service
     const watchExistingCharacterPaths = () => {
@@ -143,20 +146,19 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     });
 
     if (!walletState.fetched && chainStorageWatcher) {
-      watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
+      if (tokenInfo.character.brand && tokenInfo.item.brand)
+        watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
       watchExistingCharacterPaths();
     }
-
-    return () => {
-      isCancelled = true;
-    };
   }, [
     pursesNotifier,
     walletState.fetched,
     chainStorageWatcher,
-    tokenInfo,
+    tokenInfo.character.brand,
+    tokenInfo.item.brand,
     agoric.contracts.kread.instance,
     agoric.walletConnection.pursesNotifier,
+    agoric.status.walletProvisioned,
     walletAddress,
   ]);
 
