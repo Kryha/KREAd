@@ -101,7 +101,7 @@ export const ButtonContainer = styled.div`
 export const RangeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 40px;
+  margin-bottom: 0px;
   width: 100%;
   ${SecondaryButton} {
     width: 40px;

@@ -12,11 +12,13 @@ import { AssetFilterCount, AssetHeader, AssetHeaderContainer } from "../../compo
 import { color } from "../../design";
 import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
+import { useCharacterMarketState } from "../../context/character-shop-context";
 
 export const CharactersShop: FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
 
   const [characters, isLoading] = useGetCharactersInShop();
+  const {characters: allMarketCharacters} = useCharacterMarketState();
   const metrics = useGetCharacterMarketMetrics();
   const [character] = useGetCharacterInShopById(selectedId);
   const assetsCount = characters.length;
@@ -27,9 +29,9 @@ export const CharactersShop: FC = () => {
     let charAverage = 0;
     let charMinimum = 0;
 
-    if (characters.length != 0) {
-      charMinimum = findMinimumValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
-      charAverage = findAverageValue(characters.map((x) => uISTToIST(Number(x.sell.price))));
+    if (allMarketCharacters.length != 0) {
+      charMinimum = findMinimumValue(allMarketCharacters.map((x) => uISTToIST(Number(x.sell.price))));
+      charAverage = findAverageValue(allMarketCharacters.map((x) => uISTToIST(Number(x.sell.price))));
     }
 
     metricsData = [
