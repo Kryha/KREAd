@@ -24,7 +24,6 @@ import { provide } from '@agoric/vat-data';
 /** @typedef {import('@agoric/time/src/types').Clock} Clock */
 /** @typedef {import('./type-guards.js').RatioObject} RatioObject */
 
-/** @type {ContractMeta} */
 export const meta = {
   privateArgsShape: M.splitRecord({
     initialPoserInvitation: InvitationShape,

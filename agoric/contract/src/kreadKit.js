@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 // @ts-check
 import { updateCollectionMetrics } from './market-metrics.js';
-import { assert, details as X } from '@agoric/assert';
+import { assert } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
 import { prepareExoClassKit, M } from '@agoric/vat-data';
 import { makeDurableZone } from '@agoric/zone/durable.js';
@@ -41,6 +41,8 @@ import { atomicRearrange } from '@agoric/zoe/src/contractSupport/index.js';
 import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 
 import '@agoric/zoe/exported.js';
+
+/** @typedef {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart} TransferPart */
 
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
@@ -329,7 +331,7 @@ export const prepareKreadKit = (
               const royaltyFee = multiplyBy(give.Price, mintRoyaltyRate);
               const platformFee = multiplyBy(give.Price, mintPlatformFeeRate);
 
-              /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
+              /** @type {TransferPart[]} */
               const transfers = [];
               transfers.push([
                 seat,
@@ -467,7 +469,7 @@ export const prepareKreadKit = (
             characterFacet.validateInventoryState(inventory) ||
               assert.fail(errors.duplicateCategoryInInventory);
 
-            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
+            /** @type {TransferPart[]} */
             const transfers = [];
             transfers.push([seat, inventorySeat, { Item: providedItemAmount }]);
             transfers.push([
@@ -548,7 +550,7 @@ export const prepareKreadKit = (
               characterBrand,
             ) || assert.fail(errors.inventoryKeyMismatch);
 
-            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
+            /** @type {TransferPart[]} */
             const transfers = [];
             transfers.push([inventorySeat, seat, { Item: requestedItems }]);
             transfers.push([
@@ -652,7 +654,7 @@ export const prepareKreadKit = (
             characterFacet.validateInventoryState(inventory) ||
               assert.fail(errors.duplicateCategoryInInventory);
 
-            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
+            /** @type {TransferPart[]} */
             const transfers = [];
             transfers.push([
               seat,
@@ -745,7 +747,7 @@ export const prepareKreadKit = (
               characterBrand,
             ) || assert.fail(errors.inventoryKeyMismatch);
 
-            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
+            /** @type {TransferPart[]} */
             const transfers = [];
             transfers.push([inventorySeat, seat, { Item: items }]);
             transfers.push([
@@ -1067,12 +1069,22 @@ export const prepareKreadKit = (
         async makeMarketItemRecorderKit(id) {
           const path = `item-${String(id)}`;
           const node = await E(marketItemNode).makeChildNode(path);
-          return makeRecorderKit(node, MarketRecorderGuard);
+          return makeRecorderKit(
+            node,
+            /** @type {import('@agoric/zoe/src/contractSupport/recorder.js').TypedMatcher<MarketRecorder>}**/ (
+              MarketRecorderGuard
+            ),
+          );
         },
         async makeMarketCharacterRecorderKit(id) {
           const path = `character-${id}`;
           const node = await E(marketCharacterNode).makeChildNode(path);
-          return makeRecorderKit(node, MarketRecorderGuard);
+          return makeRecorderKit(
+            node,
+            /** @type {import('@agoric/zoe/src/contractSupport/recorder.js').TypedMatcher<MarketRecorder>}**/ (
+              MarketRecorderGuard
+            ),
+          );
         },
         /**
          * Caveat assumes parent is either `marketCharacterNode` or
@@ -1184,6 +1196,8 @@ export const prepareKreadKit = (
 
             paymentBrand === want.Price.brand ||
               assert.fail(errors.incorrectPaymentBrand(paymentBrand));
+
+              
             const askingPrice = {
               brand: want.Price.brand,
               value: want.Price.value,
@@ -1249,7 +1263,9 @@ export const prepareKreadKit = (
         },
         buyItem() {
           /**
-           * @param {ZCFSeat} seat
+           * @param {ZCFSeat} buyerSeat
+           * @param {object} offerArgs
+           * @param {number} offerArgs.entryId
            */
           const handler = async (buyerSeat, offerArgs) => {
             const { market: marketFacet } = this.facets;
@@ -1294,7 +1310,7 @@ export const prepareKreadKit = (
          *
          * @param {ZCFSeat} sellerSeat
          * @param {ZCFSeat} buyerSeat
-         * @param {ItemMarketRecord} sellRecord
+         * @param {MarketEntry} sellRecord
          * @returns {Promise<HelperFunctionReturn>}
          */
         async buyFirstSaleItem(sellerSeat, buyerSeat, sellRecord) {
@@ -1415,7 +1431,7 @@ export const prepareKreadKit = (
          *
          * @param {ZCFSeat} sellerSeat
          * @param {ZCFSeat} buyerSeat
-         * @param {ItemMarketRecord} sellRecord
+         * @param {MarketEntry} sellRecord
          * @returns {Promise<HelperFunctionReturn>}
          */
         async buySecondarySaleItem(sellerSeat, buyerSeat, sellRecord) {
@@ -1517,7 +1533,7 @@ export const prepareKreadKit = (
         },
         buyCharacter() {
           /**
-           * @param {ZCFSeat} seat
+           * @param {ZCFSeat} buyerSeat
            */
           const handler = async (buyerSeat) => {
             const { market: marketFacet } = this.facets;
@@ -1685,7 +1701,7 @@ export const prepareKreadKit = (
         },
         /**
          *
-         * @param {Amount<nat>} price
+         * @param {Amount<"nat">} price
          * @param {[Item, bigint][]} itemsToSell
          */
         async publishItemCollection(price, itemsToSell) {
@@ -1839,7 +1855,6 @@ harden(prepareKreadKit);
  * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {StorageNode} storageNode
  * @param {import('@agoric/zoe/src/contractSupport/recorder.js').MakeRecorderKit} makeRecorderKit
- * @returns
  */
 export const provideKreadKitRecorderKits = (
   baggage,

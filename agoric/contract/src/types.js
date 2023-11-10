@@ -99,7 +99,7 @@
  * @typedef {{
  *   id: number
  *   seat: ZCFSeat
- *   recorderKit: unknown
+ *   recorderKit: import('@agoric/zoe/src/contractSupport').RecorderKit<MarketRecorder>
  *   askingPrice: Amount<'nat'>
  *   royalty: Amount<'nat'>
  *   platformFee: Amount<'nat'>

@@ -3,7 +3,7 @@
 /** @file  This is a module for use with swingset.CoreEval. */
 
 // XXX this is unsupported, but it's already included in the bundle (statically linked)
-import { makeTracer } from '@agoric/internal';
+import { deeplyFulfilledObject, makeTracer } from '@agoric/internal';
 import { E } from '@endo/far';
 import { deeplyFulfilled, makeMarshal } from '@endo/marshal';
 
@@ -123,7 +123,7 @@ const startGovernedInstance = async (
     ]);
 
   trace('awaiting governorTerms');
-  const governorTerms = await deeplyFulfilled(
+  const governorTerms = await deeplyFulfilledObject(
     harden({
       timer,
       governedContractInstallation,
