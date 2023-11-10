@@ -30,8 +30,6 @@ const contractInfo = {
 
 const { Fail } = assert;
 
-/** @typedef {import('@agoric/deploy-script-support/src/coreProposalBehavior.js').BootstrapPowers} BootstrapPowers */
-
 export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
   /**
    * @param {ERef<import('@agoric/vats').NameAdmin>} nextAdmin
@@ -261,7 +259,7 @@ export const startKread = async (powers, config) => {
     numerator: 15n,
     denominator: 100n,
   };
-
+  /** @type {Powers} */
   const kreadPowers = await deeplyFulfilled(
     harden({
       storageNode: E(chainStorage).makeChildNode(contractInfo.storagePath),

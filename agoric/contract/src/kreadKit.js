@@ -140,34 +140,41 @@ export const prepareKreadKit = (
       const zone = makeDurableZone(baggage);
       return {
         character: harden({
+          /** @type {MapStore<string, CharacterEntry>} */
           entries: zone.mapStore('characters', {
             keyShape: M.string(),
             valueShape: M.or(CharacterEntryGuard, M.arrayOf(M.string())),
           }),
+          /** @type {MapStore<number, BaseCharacter>} */
           bases: zone.mapStore('baseCharacters', {
             keyShape: M.number(),
             valueShape: BaseCharacterGuard,
           }),
         }),
         item: harden({
+          /** @type {MapStore<number, ItemEntry} */
           entries: zone.mapStore('items', {
             keyShape: M.number(),
             valueShape: ItemRecorderGuard,
           }),
+          /** @type {MapStore<'common' | 'uncommonToLegendary', Item>} */
           bases: zone.mapStore('baseItems', {
             keyShape: RarityGuard,
             valueShape: M.arrayOf(ItemGuard),
           }),
         }),
         market: harden({
+          /** @type {MapStore<string, MarketEntry>} */
           characterEntries: zone.mapStore('characterMarket', {
             keyShape: M.string(),
             valueShape: MarketEntryGuard,
           }),
+          /** @type {MapStore<number, MarketEntry>} */
           itemEntries: zone.mapStore('itemMarket', {
             keyShape: M.number(),
             valueShape: MarketEntryGuard,
           }),
+          /** @type {MapStore<'character' | 'item', MarketMetrics>} */
           metrics: zone.mapStore('marketMetrics', {
             keyShape: M.or('character', 'item'),
             valueShape: MarketMetricsGuard,
@@ -218,6 +225,10 @@ export const prepareKreadKit = (
           );
           return Array.from(characterState.bases.keys())[number];
         },
+        /**
+         *
+         * @param {Array<[number, BaseCharacter]>} baseCharacters
+         */
         initializeBaseCharacters(baseCharacters) {
           const { character: characterState } = this.state;
           if (characterState.bases.getSize() > 0) return;
@@ -257,8 +268,7 @@ export const prepareKreadKit = (
             !characterState.entries.get('names').includes(newCharacterName) ||
               assert.fail(errors.nameTaken(newCharacterName));
 
-            characterState.bases.getSize() > 0 ||
-              assert.fail(errors.allMinted);
+            characterState.bases.getSize() > 0 || assert.fail(errors.allMinted);
 
             const re = /^[a-zA-Z0-9_-]*$/;
             (re.test(newCharacterName) && newCharacterName !== 'names') ||
@@ -507,8 +517,7 @@ export const prepareKreadKit = (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            providedCharacterKey ||
-              assert.fail(errors.invalidCharacterKey);
+            providedCharacterKey || assert.fail(errors.invalidCharacterKey);
 
             // Get reference to the wanted items and key
             const { want } = seat.getProposal();
@@ -589,8 +598,7 @@ export const prepareKreadKit = (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            providedCharacterKey ||
-              assert.fail(errors.invalidCharacterKey);
+            providedCharacterKey || assert.fail(errors.invalidCharacterKey);
 
             const { want } = seat.getProposal();
             const {
@@ -700,8 +708,7 @@ export const prepareKreadKit = (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            providedCharacterKey ||
-              assert.fail(errors.invalidCharacterKey);
+            providedCharacterKey || assert.fail(errors.invalidCharacterKey);
 
             // Get reference to the wanted item
             const { want } = seat.getProposal();
@@ -1214,8 +1221,7 @@ export const prepareKreadKit = (
 
             // Find store record based on wanted character
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
-            sellRecord ||
-              assert.fail(errors.itemNotFound(offerArgs.entryId));
+            sellRecord || assert.fail(errors.itemNotFound(offerArgs.entryId));
 
             const result = await (sellRecord.isFirstSale
               ? marketFacet.buyFirstSaleItem(

@@ -12,7 +12,6 @@ import { handleParamGovernance } from '@agoric/governance';
 
 import { prepareKreadKit, provideKreadKitRecorderKits } from './kreadKit.js';
 import { provide } from '@agoric/vat-data';
-import { provideRecorderKits } from './utils.js';
 
 /**
  * This contract handles the mint of KREAd characters,

@@ -54,24 +54,6 @@
  *   }
  * }} TokenInfo
  *
- * @typedef  {{
- *   sellerSeat: ZCFSeat
- *   name: string
- *   character: object[]
- *   askingPrice: any
- * }} CharacterMarketRecord
- *
- * @typedef  {{
- *   sellerSeat: ZCFSeat
- *   id: string
- *   asset: object[]
- *   askingPrice: any
- *   isFirstSale: boolean
- *   royalty: Amount<AssetKind>
- *   platformFee: Amount<AssetKind>
- *   recorderKit: import("./utils.js").RecorderKit
- * }} ItemMarketRecord
- *
  * @typedef {{
  *    storageNode: StorageNode
  *    marshaller: Marshaller
@@ -112,89 +94,78 @@
  * }} Notifiers
  *
  * @typedef {{
+ *   type: string,
+ *   data: any,
+ *   timestamp: object
+ * }} HistoryEntry
+ *
+ *  @typedef {{
+ *  title: string,
+ *  description: string,
+ *  origin: string,
+ *  level: number,
+ *  artistMetadata: string,
+ *  image: string,
+ *  characterTraits: string
+ * }} BaseCharacter
+ *
+ * @typedef {{
+ *  title: string,
+ *  description: string,
+ *  origin: string,
+ *  level: number,
+ *  artistMetadata: string,
+ *  image: string,
+ *  characterTraits: string,
+ *  name: string,
+ *  keyId: number,
+ *  id: number,
+ *  date: object
+ * }} Character
+ *
+ * @typedef {{
  *   name: string
- *   character: object
+ *   character: Character
  *   inventory: ZCFSeat
- *   seat?: ZCFSeat
- *   notifier?: Notifier
- *   publisher: Publisher<any>
- * }} CharacterRecord
- *
- * @typedef {{
- *   noseline?: Item;
- *   midBackground?: Item;
- *   mask?: Item;
- *   headPiece?: Item;
- *   hair?: Item;
- *   frontMask?: Item;
- *   liquid?: Item;
- *   background?: Item;
- *   airReservoir?: Item;
- *   clothing?: Item;
- * }} DefaultItem
- *
- * @typedef {{
- *   id: bigint
- *   character: object
- *   inventory: ZCFSeat
- *   seat?: ZCFSeat
- *   sell: {
- *     instance: Instance
- *     publicFacet: any
- *     price: bigint
- *   }
- * }} CharacterInMarket
+ *   inventoryKit: unknown
+ *   history: HistoryEntry[]
+ * }} CharacterEntry
  *
  * @typedef {{
  *   name: string;
  *   category: string;
- *   id: string;
  *   description: string;
+ *   functional: boolean;
+ *   origin: string;
  *   image: string;
- *   level: number;
+ *   thumbnail: string;
  *   rarity: number;
- *   effectiveness?: number;
- *   layerComplexity?: number;
- *   forged: string;
- *   baseMaterial: string;
+ *   level: number;
+ *   filtering: number;
+ *   weight: number;
+ *   sense: number;
+ *   reserves: number;
+ *   durability: number;
  *   colors: string[];
- *   projectDescription: string;
- *   price: number;
- *   details: any;
- *   date: string;
- *   activity: any[];
+ *   artistMetadata: string;
  * }} Item
  *
  * @typedef {{
- *   id: bigint
- *   item: object
- * }} ItemRecord
- *
- * @typedef {{
- *   id: bigint
+ *   id: number
  *   item: Item
- *   sell: {
- *     instance: Instance
- *     publicFacet: any
- *     price: bigint
- *  }
- * }} ItemInMarket
- *
- * // PRIVATE STORAGE
- * @typedef {{
- *   id: bigint;
- *   add?: string[];
- *   remove?: string[];
- * }} InventoryEvent
+ *   history: HistoryEntry[]
+ * }} ItemEntry
  *
  * @typedef {{
- *   seat?: ZCFSeat;
- *   name: string;
- *   history: InventoryEvent[];
- * }} InventoryKeyRecord
- *
- * @typedef {InventoryKeyRecord[]} InventoryKeyStorage
- *
+ *   id: number
+ *   seat: ZCFSeat
+ *   recorderKit: unknown
+ *   askingPrice: Amount<'nat'>
+ *   royalty: Amount<'nat'>
+ *   platformFee: Amount<'nat'>
+ *   asset: Character | Item
+ *   isFirstSale: boolean
+ * }} MarketEntry
  *
  * @typedef {{
  *  isReady: () => boolean
@@ -277,6 +248,15 @@
  *     amountSold: boolean,
  *     putForSaleCount: boolean
  * }>} UpdateMetrics
+ *
+ * @typedef {{
+ *  amountSold: number
+ *  collectionSize: number
+ *  averageLevel: number
+ *  marketplaceAverageLevel: number
+ *  latestSalePrice: number
+ *  putForSaleCount: number
+ * }} MarketMetrics
  *
  * @typedef {{
  *     type: ("add" | "remove")
