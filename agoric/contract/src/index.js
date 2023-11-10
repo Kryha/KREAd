@@ -110,6 +110,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers.marshaller,
   );
 
+  /** @type {KreadKitRecorderKits} */
   const recorderKits = await provideKreadKitRecorderKits(
     baggage,
     powers.storageNode,

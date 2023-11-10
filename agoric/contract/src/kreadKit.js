@@ -69,14 +69,7 @@ import '@agoric/zoe/exported.js';
  *   itemMint: ZCFMint<"copyBag">
  *   clock: import('@agoric/time/src/types.js').Clock
  *   makeRecorderKit: import('@agoric/zoe/src/contractSupport').MakeRecorderKit,
- *   recorderKits: {
- *     characterKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     itemKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketCharacterKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketItemKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketCharacterMetricsKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketItemMetricsKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *   };
+ *   recorderKits: KreadKitRecorderKits
  * }} powers
  */
 export const prepareKreadKit = (
@@ -157,7 +150,7 @@ export const prepareKreadKit = (
             keyShape: M.number(),
             valueShape: ItemRecorderGuard,
           }),
-          /** @type {MapStore<'common' | 'uncommonToLegendary', Item>} */
+          /** @type {MapStore<'common' | 'uncommonToLegendary', Item[]>} */
           bases: zone.mapStore('baseItems', {
             keyShape: RarityGuard,
             valueShape: M.arrayOf(ItemGuard),
@@ -234,13 +227,26 @@ export const prepareKreadKit = (
           if (characterState.bases.getSize() > 0) return;
           addAllToMap(characterState.bases, baseCharacters);
         },
+        /**
+         * @param {string} path
+         */
         async makeInventoryRecorderKit(path) {
           const node = await E(characterNode).makeChildNode(
             `inventory-${path}`,
           );
-          return makeRecorderKit(node, M.arrayOf([ItemGuard, M.nat()]));
+          return makeRecorderKit(
+            node,
+            /** @type {import('@agoric/zoe/src/contractSupport/recorder.js').TypedMatcher<Array<[Item, bigint]>>} */ (
+              M.arrayOf([ItemGuard, M.nat()])
+            ),
+          );
         },
         mint() {
+          /**
+           * @param {ZCFSeat} seat
+           * @param {object} offerArgs
+           * @param {string} offerArgs.name
+           */
           const handler = async (seat, offerArgs) => {
             const {
               helper,
@@ -323,7 +329,7 @@ export const prepareKreadKit = (
               const royaltyFee = multiplyBy(give.Price, mintRoyaltyRate);
               const platformFee = multiplyBy(give.Price, mintPlatformFeeRate);
 
-              /** @type {TransferPart[]} */
+              /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
               const transfers = [];
               transfers.push([
                 seat,
@@ -415,6 +421,9 @@ export const prepareKreadKit = (
           );
         },
         equip() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = (seat) => {
             const { character: characterFacet } = this.facets;
             const { character: characterState } = this.state;
@@ -458,7 +467,7 @@ export const prepareKreadKit = (
             characterFacet.validateInventoryState(inventory) ||
               assert.fail(errors.duplicateCategoryInInventory);
 
-            /** @type {TransferPart[]} */
+            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
             const transfers = [];
             transfers.push([seat, inventorySeat, { Item: providedItemAmount }]);
             transfers.push([
@@ -504,6 +513,9 @@ export const prepareKreadKit = (
           );
         },
         unequip() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { character: characterState } = this.state;
 
@@ -536,7 +548,7 @@ export const prepareKreadKit = (
               characterBrand,
             ) || assert.fail(errors.inventoryKeyMismatch);
 
-            /** @type {TransferPart[]} */
+            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
             const transfers = [];
             transfers.push([inventorySeat, seat, { Item: requestedItems }]);
             transfers.push([
@@ -582,6 +594,9 @@ export const prepareKreadKit = (
           );
         },
         swap() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = (seat) => {
             const { character: characterFacet } = this.facets;
             const { character: characterState } = this.state;
@@ -637,7 +652,7 @@ export const prepareKreadKit = (
             characterFacet.validateInventoryState(inventory) ||
               assert.fail(errors.duplicateCategoryInInventory);
 
-            /** @type {TransferPart[]} */
+            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
             const transfers = [];
             transfers.push([
               seat,
@@ -695,6 +710,9 @@ export const prepareKreadKit = (
           );
         },
         unequipAll() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = (seat) => {
             const { character: characterState } = this.state;
 
@@ -727,7 +745,7 @@ export const prepareKreadKit = (
               characterBrand,
             ) || assert.fail(errors.inventoryKeyMismatch);
 
-            /** @type {TransferPart[]} */
+            /** @type {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart[]} */
             const transfers = [];
             transfers.push([inventorySeat, seat, { Item: items }]);
             transfers.push([
@@ -771,6 +789,9 @@ export const prepareKreadKit = (
         },
       },
       item: {
+        /**
+         * @param {Item[]} baseItems
+         */
         initializeBaseItems(baseItems) {
           const { item: itemState } = this.state;
           if (itemState.bases.getSize() > 0) return;
@@ -789,6 +810,9 @@ export const prepareKreadKit = (
           ]);
         },
         // Mints the default set of items to a seat that doesn't exit
+        /**
+         * @param {ZCFSeat} seat
+         */
         async mintDefaultBatch(seat) {
           const { helper, market: marketFacet } = this.facets;
           const { item: itemState } = this.state;
@@ -912,6 +936,9 @@ export const prepareKreadKit = (
           return text.mintItemReturn;
         },
         mint() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { helper, market: marketFacet } = this.facets;
             const { item: itemState } = this.state;
@@ -1069,6 +1096,9 @@ export const prepareKreadKit = (
           await E(deletable).setValue('');
         },
         sellItem() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { market } = this.state;
             const { market: marketFacet } = this.facets;
@@ -1140,6 +1170,9 @@ export const prepareKreadKit = (
           );
         },
         sellCharacter() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { market } = this.state;
             const { character: characterFacet, market: marketFacet } =
@@ -1215,6 +1248,9 @@ export const prepareKreadKit = (
           );
         },
         buyItem() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (buyerSeat, offerArgs) => {
             const { market: marketFacet } = this.facets;
             const { market } = this.state;
@@ -1480,6 +1516,9 @@ export const prepareKreadKit = (
           };
         },
         buyCharacter() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (buyerSeat) => {
             const { market: marketFacet } = this.facets;
             const { market, character: characterState } = this.state;
