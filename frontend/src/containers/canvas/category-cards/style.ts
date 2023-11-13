@@ -20,9 +20,8 @@ export const CategoryInfoCategory = styled.span`
 
 export const CategoryInfo = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 export const CategoryCardsContainer = styled.div`
@@ -30,12 +29,18 @@ export const CategoryCardsContainer = styled.div`
   flex-direction: column;
   padding: 16px;
   gap: 8px;
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll !important;
+    overflow-y: hidden;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
-export const CategoryImage = styled.div`
-  display: flex;
-  position: relative;
-`;
 export const CategoryCardsWrapper = styled.div<StyleProps>`
   overflow-y: scroll;
   ${({ height }): string => `height: ${height - 190}px;`};
@@ -60,7 +65,6 @@ interface CategoryProps {
 
 export const CategoryCard = styled.div<CategoryProps>`
   display: flex;
-  position: relative;
   gap: 16px;
   transition: transform 0.3s ease; /* Add CSS transition for smooth animation */
 
@@ -68,5 +72,10 @@ export const CategoryCard = styled.div<CategoryProps>`
     ${CategoryInfoCategory} {
       color: ${color.black};
     }
+  }
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    flex-direction: column;
+    gap: 8px;
   }
 `;

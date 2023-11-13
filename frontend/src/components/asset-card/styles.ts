@@ -92,7 +92,6 @@ export const AssetImageContainer = styled.div`
 export const AssetImage = styled(Img)<ImageProps>`
   width: 100%;
   height: 100%;
-  padding: 24px;
 `;
 export const AssetInfoContainer = styled.div`
   display: flex;

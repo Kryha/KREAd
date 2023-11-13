@@ -62,7 +62,7 @@ export const updateCollectionMetrics = (collection, state, updateMetrics) => {
     metrics.marketplaceAverageLevel = updateAverage(
       updateMetrics.marketplaceAverageLevel.type,
       metrics.marketplaceAverageLevel,
-      state.market[`${collection}Entries`].getSize(),
+      state.market.characterEntries.getSize(),
       updateMetrics.marketplaceAverageLevel.value,
     );
   }

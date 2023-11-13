@@ -16,7 +16,6 @@ export const ModeScroller: React.FC = () => {
     setSelectedAssetCategory,
     setSelectedAsset,
     onAssetChange,
-    setOnAssetChange,
     setShowWarning,
     interactionMode,
     setInteractionMode,
@@ -51,14 +50,12 @@ export const ModeScroller: React.FC = () => {
     if (interactionMode === CATEGORY_MODE) {
       setSelectedAssetCategory(null);
       setSelectedAsset(null);
-      setOnAssetChange(false);
       setInteractionMode(MAIN_MODE);
     }
 
     if (interactionMode === ITEM_MODE) {
       if (!onAssetChange) {
         isMobile ? setInteractionMode(MAIN_MODE) : setInteractionMode(CATEGORY_MODE);
-        setOnAssetChange(false);
       } else {
         setShowWarning(true);
       }

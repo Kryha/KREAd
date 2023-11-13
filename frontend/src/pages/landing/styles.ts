@@ -43,6 +43,7 @@ export const DetailContainer = styled.div`
   height: fit-content;
 
   background: transparent;
+  backdrop-filter: blur(5px);
 
   ${SecondaryButton} {
     background: ${color.white};

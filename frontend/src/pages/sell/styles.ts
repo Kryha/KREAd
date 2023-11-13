@@ -55,6 +55,7 @@ export const Header = styled.div`
   margin-top: 16px;
 `;
 export const ArrowUp = styled(ArrowUpRightIcon)`
+  padding-left: 13px;
   path {
     stroke: ${color.white};
   }
@@ -97,7 +98,7 @@ export const InputWrapper = styled.div`
 `;
 
 export const StepContainer = styled.div`
-  margin-top: ${margins.small};
+  margin-top: ${margins.big};
 `;
 
 export const StepText = styled(ButtonText)`
@@ -113,7 +114,7 @@ export const Step = styled.div<ActiveProps>`
   padding: ${margins.medium};
   position: static;
   width: 100%;
-  height: 82px;
+  height: 88px;
   left: 0;
   top: 0;
   background: ${color.white};
@@ -140,10 +141,10 @@ export const Step = styled.div<ActiveProps>`
 `;
 
 export const Line = styled.div`
-  width: ${margins.mini};
+  width: ${margins.small};
   border: 0.5px solid ${color.darkGrey};
   transform: rotate(90deg);
-  margin: ${margins.mini} 20px ${margins.mini} 39px;
+  margin: ${margins.small} 20px ${margins.small} 39px;
 `;
 
 interface NumberProps {
@@ -184,6 +185,7 @@ export const NumberContainer = styled.div<NumberProps>`
 `;
 
 export const PreviousButtonContainer = styled.div`
+  position: absolute;
   bottom: ${margins.big};
   :hover {
     ${ArrowUp} {
@@ -284,7 +286,7 @@ export const GeneralInfo = styled.div<ActiveProps>`
   padding: ${margins.medium};
   position: static;
   width: 100%;
-  height: 82px;
+  height: 88px;
   left: 0;
   top: 0;
   background: ${color.white};

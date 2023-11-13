@@ -28,9 +28,9 @@ export const CharactersInventory: FC = () => {
     <>
       <AssetHeaderContainer>
         <AssetCharacterFilters section={SECTION.INVENTORY} />
-        <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
-        <HorizontalDivider />
       </AssetHeaderContainer>
+      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfCharacters(assetsCount)}</AssetFilterCount>
+      <HorizontalDivider />
       {character && <CharacterDetailsInventory character={character} selectedId={(id: number | undefined) => setSelectedId(id)} />}
       {characters.length > 0 ? (
         <CharacterCardsInventory characters={characters} isLoading={isLoading} selectCharacter={(id: number) => setSelectedId(id)} />

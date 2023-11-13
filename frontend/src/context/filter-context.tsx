@@ -1,8 +1,7 @@
 import React, { createContext, FC, useMemo, useState } from "react";
 import { useAndRequireContext } from "../hooks";
 import { Category, Origin, Rarity, Title } from "../interfaces";
-import { useGetCharacterMarketPrices, useGetItemMarketPrices } from "../service";
-import { uISTToIST } from "../util";
+import { MAX_PRICE, MIN_PRICE } from "../constants";
 
 interface Context {
   title: Title[];
@@ -14,8 +13,7 @@ interface Context {
   colors: string;
   forSale: boolean;
   equippedTo: string;
-  itemPrice: { min: number; max: number };
-  characterPrice: { min: number; max: number };
+  price: { min: number; max: number };
   setEquippedTo: (value: string) => void;
   setOrigin: (value: Origin[]) => void;
   setCategories: (value: Category[]) => void;
@@ -24,8 +22,7 @@ interface Context {
   setTitle: (value: Title[]) => void;
   setColors: (value: string) => void;
   setForSale: (value: boolean) => void;
-  setItemPrice: (value: { min: number; max: number }) => void;
-  setCharacterPrice: (value: { min: number; max: number }) => void;
+  setPrice: (value: { min: number; max: number }) => void;
   onReset: () => void;
   showKadoWidget: boolean;
   toggleWidget: () => void;
@@ -41,18 +38,10 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
   const [title, setTitle] = useState<Title[]>([]);
   const [origin, setOrigin] = useState<Origin[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [pricesOfItems] = useGetItemMarketPrices();
-  const [pricesOfCharacters] = useGetCharacterMarketPrices();
-
-  const [itemPrice, setItemPrice] = useState<{
+  const [price, setPrice] = useState<{
     min: number;
     max: number;
-  }>({ min: uISTToIST(Math.min(...pricesOfItems)), max: uISTToIST(Math.max(...pricesOfItems)) });
-  const [characterPrice, setCharacterPrice] = useState<{
-    min: number;
-    max: number;
-  }>({ min: uISTToIST(Math.min(...pricesOfCharacters)), max: uISTToIST(Math.max(...pricesOfCharacters)) });
-
+  }>({ min: MIN_PRICE, max: MAX_PRICE });
   const [rarity, setRarity] = useState<Rarity[]>([]);
   const [equippedTo, setEquippedTo] = useState<string>("");
   const [forSale, setForSale] = useState<boolean>(false);
@@ -77,6 +66,28 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
     setShowKadoWidget(!showKadoWidget);
   };
 
+  //TODO: Needs to be improved. not necessary now but will be in the future
+
+  // const [, setSearchParams] = useSearchParams();
+  //
+  // useEffect(() => {
+  //   setSearchParams(
+  //     {
+  //       character,
+  //       categories,
+  //       origin,
+  //       rarity,
+  //       sort,
+  //       colors,
+  //       forSale: forSale ? "true" : "false",
+  //       equippedTo,
+  //     },
+  //     {
+  //       relative: "path",
+  //     },
+  //   );
+  // }, [character, categories, origin, rarity, colors, equippedTo, forSale, sort]);
+
   const contextValue = useMemo(
     () => ({
       origin,
@@ -89,8 +100,7 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
       colors,
       forSale,
       equippedTo,
-      itemPrice,
-      characterPrice,
+      price,
       showKadoWidget,
       setTitle,
       setCharacter,
@@ -101,13 +111,12 @@ export const FiltersContextProvider: FC<Props> = ({ children }) => {
       setSort,
       setColors,
       setForSale,
-      setItemPrice,
-      setCharacterPrice,
+      setPrice,
       setReset,
       onReset,
       toggleWidget,
     }),
-    [origin, character, title, rarity, categories, sort, reset, colors, forSale, equippedTo, itemPrice, characterPrice, showKadoWidget],
+    [character, categories, colors, equippedTo, forSale, origin, price, rarity, reset, sort, title, showKadoWidget],
   );
 
   return <ContextRef.Provider value={contextValue}>{children}</ContextRef.Provider>;

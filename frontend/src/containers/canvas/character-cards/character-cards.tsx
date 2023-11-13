@@ -24,7 +24,7 @@ import { calculateCharacterLevels } from "../../../util";
 import { AssetTag } from "../../../components/asset-card/styles";
 
 export const CharacterCards: FC = () => {
-  const { selectedAsset, setSelectedAsset } = useCharacterBuilder();
+  const { selectedAsset, setOnAssetChange, setSelectedAsset } = useCharacterBuilder();
   const { height } = useViewport();
   const { parentRef, parentWidth, parentHeight } = useParentViewport();
   const [selectedCharacter] = useSelectedCharacter();
@@ -56,6 +56,7 @@ export const CharacterCards: FC = () => {
             isSelected={selectedAsset === character.nft.name}
             onClick={() => {
               setSelectedAsset(character.nft.name);
+              setOnAssetChange(true);
               select(character);
             }}
           >

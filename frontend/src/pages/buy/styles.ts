@@ -42,6 +42,7 @@ export const ContentWrapper = styled.div<ViewProps>`
 `;
 
 export const ArrowUp = styled(ArrowUpRightIcon)`
+  padding-left: 13px;
   path {
     stroke: ${color.white};
   }

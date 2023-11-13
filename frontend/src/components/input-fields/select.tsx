@@ -77,8 +77,10 @@ export const Select: FC<SelectProps> = ({ options, onChange, onArrayChange, isMu
 
   return (
     <SelectBox height={height}>
-      <ClearButton onClick={resetComponent}>
-        <ButtonText customColor={color.darkGrey}>reset</ButtonText>
+      <ClearButton>
+        <ButtonText onClick={resetComponent} customColor={color.darkGrey}>
+          reset
+        </ButtonText>
         <CloseIcon />
       </ClearButton>
       <HorizontalDivider />

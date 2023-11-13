@@ -9,14 +9,11 @@ build:
     concurrency: 0
     push: true
   artifacts:
-    - image: eu.gcr.io/web3-335312/kread/frontend-production/frontend
+    - image: $DOCKER_REPO
       docker:
         dockerfile: Dockerfile.ui
         buildArgs:
-          VITE_RPC: "main.rpc.agoric.net"
-          VITE_BRIDGE_HREF: ""
-          VITE_BASE_URL: "kread.app"
-          VITE_NETWORK_CONFIG: "https://main.agoric.net/network-config"
+          VITE_DAPP_CONSTANTS_JSON: "" # TODO: provide actual value
 deploy:
   kustomize:
     paths:

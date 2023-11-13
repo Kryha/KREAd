@@ -3,14 +3,15 @@ import React, { createContext, useContext, useEffect, useReducer, useState } fro
 import { AgoricDispatch, AgoricState, AgoricStateActions, TokenInfo } from "../interfaces";
 import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } from "@agoric/web-components";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NO_SMART_WALLET_ERROR } from "../constants";
+import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NETWORK_CONFIG } from "../constants";
 import { fetchChainInfo } from "./util";
 import { AgoricChainStoragePathKind as Kind, ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
-import { useNetworkConfig } from "../hooks/useNetwork";
 
 const initialState: AgoricState = {
   status: {
-    walletProvisioned: false,
+    walletConnected: false,
+    dappApproved: false,
+    showApproveDappModal: false,
   },
   offers: [],
   notifiers: {
@@ -20,6 +21,14 @@ const initialState: AgoricState = {
     },
   },
   addOffer: undefined,
+  agoric: {
+    zoe: undefined,
+    board: undefined,
+    zoeInvitationDepositFacetId: undefined,
+    invitationIssuer: undefined,
+    walletP: undefined,
+    apiSend: undefined,
+  },
   walletConnection: {
     pursesNotifier: undefined,
     makeOffer: undefined,
@@ -48,6 +57,16 @@ const initialState: AgoricState = {
   chainStorageWatcher: undefined,
 };
 
+type Status = "initialState" | "keplrReady" | "storageWatcherReady" | "watchingCharacters" | "ready";
+
+const status = {
+  initialState: "initialState",
+  keplrReady: "keplrReady",
+  storageWatcherReady: "storageWatcherReady",
+  watchingCharacters: "watchingCharacters",
+  ready: "ready",
+} as const;
+
 export type ServiceDispatch = React.Dispatch<AgoricStateActions>;
 type ProviderProps = Omit<React.ProviderProps<AgoricState>, "value">;
 
@@ -56,14 +75,26 @@ const DispatchContext = createContext<ServiceDispatch | undefined>(undefined);
 
 const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState => {
   switch (action.type) {
-    case "UPDATE_STATUS":
-      return { ...state, status: { ...state.status, ...action.payload } };
+    case "SET_DAPP_APPROVED":
+      return { ...state, status: { ...state.status, dappApproved: action.payload } };
+
+    case "SET_SHOW_APPROVE_DAPP_MODAL":
+      return { ...state, status: { ...state.status, showApproveDappModal: action.payload } };
+
+    case "SET_WALLET_CONNECTED":
+      return { ...state, status: { ...state.status, walletConnected: action.payload } };
 
     case "SET_OFFERS":
       return { ...state, offers: action.payload };
 
-    case "SET_KREAD_INSTANCE":
-      return { ...state, contracts: { ...state.contracts, kread: { instance: action.payload }} };
+    case "SET_AGORIC":
+      return { ...state, agoric: { ...state.agoric, ...action.payload } };
+
+    case "SET_APISEND":
+      return { ...state, agoric: { ...state.agoric, apiSend: action.payload } };
+
+    case "SET_KREAD_CONTRACT":
+      return { ...state, contracts: { ...state.contracts, kread: action.payload } };
 
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
@@ -76,6 +107,9 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
     case "SET_WALLET_CONNECTION":
       return { ...state, walletConnection: action.payload };
+
+    case "SET_SMART_WALLET_STATUS":
+      return { ...state, walletConnection: { ...state.walletConnection, smartWalletProvisioned: action.payload } };
 
     case "SET_CHAIN_STORAGE_WATCHER":
       return { ...state, chainStorageWatcher: action.payload };
@@ -90,8 +124,15 @@ const Reducer = (state: AgoricState, action: AgoricStateActions): AgoricState =>
 
 export const AgoricStateProvider = (props: ProviderProps): React.ReactElement => {
   const [state, dispatch] = useReducer(Reducer, initialState);
+  const [currentStatus, setCurrentStatus] = useState<Status>(status.initialState);
+  const [walletProvisioned, setWalletProvisioned] = useState<boolean>(false);
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
-  const { network } = useNetworkConfig();
+
+  const processOffers = async (offers: any[], agoricDispatch: AgoricDispatch) => {
+    if (!offers.length) return;
+    agoricDispatch({ type: "SET_OFFERS", payload: offers });
+  };
+
   useEffect(() => {
     if (isCancelled) return;
     // TODO: consider implementing terms agreement
@@ -101,16 +142,19 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     // }
 
     let chainStorageWatcher: ChainStorageWatcher;
+    // dispatch({ type: "SET_LOADING", payload: true });
     let connection: any;
 
     const connectAgoric = async () => {
       try {
         connection = await makeAgoricWalletConnection(chainStorageWatcher);
         connection = { ...connection };
+        console.log(connection);
         dispatch({ type: "SET_WALLET_CONNECTION", payload: connection });
         await updateSmartWalletStatus();
+        setCurrentStatus(status.keplrReady);
       } catch (e: any) {
-        console.error(e);
+        console.log(e);
         switch (e.message) {
           case Errors.enableKeplr:
             console.error("Enable the connection in Keplr to continue.");
@@ -124,14 +168,13 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
     const updateSmartWalletStatus = async () => {
       const smartWalletStatusNotifierKit = connection.smartWalletStatusNotifier;
-      console.info("✅ LISTENING FOR SMART-WALLET CHANGES", smartWalletStatusNotifierKit);
+      console.info("✅ LISTENING FOR SMART-WALLET changes", smartWalletStatusNotifierKit);
       const watch = async () => {
         for await (const status of iterateNotifier(smartWalletStatusNotifierKit)) {
-          if (state.status.walletProvisioned) return;
+          if (walletProvisioned) return;
           if (status && status.provisioned) {
-            dispatch({ type: "UPDATE_STATUS", payload: { walletProvisioned: true }});
-          } else {
-            dispatch({ type: "UPDATE_STATUS", payload: { walletProvisioned: false }});
+            dispatch({ type: "SET_SMART_WALLET_STATUS", payload: status.provisioned });
+            setWalletProvisioned(status.provisioned);
           }
         }
       };
@@ -145,7 +188,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       const instances: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
-      dispatch({ type: "SET_KREAD_INSTANCE", payload: instance[0][1] });
+      // TODO: remove publicFacet from state
+      dispatch({ type: "SET_KREAD_CONTRACT", payload: { instance: instance[0][1], publicFacet: undefined } });
     };
 
     const fetchTokenInfo = async () => {
@@ -187,36 +231,30 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const startWatching = async () => {
-      if (isCancelled) return;
-      if (state.chainStorageWatcher && state.status.walletProvisioned) {
+      if (state.chainStorageWatcher) {
         console.info("Storagewatcher found, skipping startWatching");
         return;
       }
-      const backendError = (e: any) => {
-        if (e.message === NO_SMART_WALLET_ERROR) {
-          dispatch({ type: "UPDATE_STATUS", payload: { walletProvisioned: false }});
-        } else {
-          console.error('Error in wallet backend', e);
-        }
-        return;
-      };
-
       try {
-
-        const { rpc, chainName } = await fetchChainInfo(network);
-        chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, backendError);
+        const { rpc, chainName } = await fetchChainInfo(NETWORK_CONFIG);
+        chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, (e) => {
+          console.error(e);
+          return;
+        });
         dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
-        dispatch({ type: "UPDATE_STATUS", payload: { walletProvisioned: true }});
         connectAgoric();
         fetchInstance();
         fetchTokenInfo();
       } catch (e) {
+        if (isCancelled) return;
         console.error(e);
       }
     };
 
     const runEffects = async () => {
       await startWatching();
+
+      setCurrentStatus(status.ready);
     };
 
     runEffects();
@@ -224,7 +262,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     return () => {
       setIsCancelled(true);
     };
-  }, [network, isCancelled, state.chainStorageWatcher]);
+  }, [currentStatus, isCancelled, walletProvisioned, state.chainStorageWatcher]);
 
   return (
     <Context.Provider value={state}>
