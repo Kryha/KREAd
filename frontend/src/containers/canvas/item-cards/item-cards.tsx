@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ButtonText, HorizontalDivider, Img } from "../../../components";
 import { color } from "../../../design";
 import { useViewport } from "../../../hooks";
@@ -19,14 +19,23 @@ interface Props {
   selectedItemIsEquipped: boolean;
 }
 export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, setEquippedSelected, selectedItemIsEquipped }) => {
-  const { selectedAssetCategory, selectedAsset, setOnAssetChange, setSelectedAsset, setCharacterName } = useCharacterBuilder();
+  const { selectedAssetCategory, setOnAssetChange, setSelectedAsset, setCharacterName } = useCharacterBuilder();
   const { height } = useViewport();
   const category = selectedAssetCategory ? selectedAssetCategory : "";
   const [items] = useGetItemsInInventoryByCategory(selectedAssetCategory);
 
+  //If two items in the inventory have the same name, we will distinguish them by their index in the array
+  const [selectedAssetIndex, setSelectedAssetIndex] = useState<number | null>(null);
+
   // Filter out the selectedItem from the items array
   const filteredItems = items.filter((item) => item.equippedTo === "");
   const itemsCount = filteredItems.length;
+
+  useEffect(() => {
+    if (selectedItemIsEquipped) {
+      setEquippedSelected(true);
+    }
+  }, [equipped.inCategory, selectedItemIsEquipped]);
 
   return (
     <ItemCardsContainer>
@@ -34,7 +43,7 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
         <>
           <AssetFilterCount customColor={color.darkGrey}>Equipped {(text.param.categories as any)[category]}</AssetFilterCount>
           <ItemCardContainer
-            isSelected={equippedSelected && selectedItemIsEquipped}
+            isSelected={selectedItemIsEquipped}
             onClick={() => {
               setEquippedSelected(true);
               setSelectedAsset(equipped.inCategory?.name || null);
@@ -67,12 +76,13 @@ export const ItemCards: FC<Props> = ({ equipped, unequipped, equippedSelected, s
           ? unequipped.inCategory.map((item, index) => (
               <ItemCardContainer
                 key={index}
-                isSelected={!equippedSelected && item.name === selectedAsset}
+                isSelected={!equippedSelected && index === selectedAssetIndex}
                 onClick={() => {
                   setEquippedSelected(false);
                   setSelectedAsset(item.name);
                   setOnAssetChange(true);
                   setCharacterName(item.equippedTo);
+                  setSelectedAssetIndex(index);
                 }}
               >
                 <ItemImageCard>

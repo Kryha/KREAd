@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { breakpoints, color, fontSize, margins } from "../../../design";
+import { color, fontSize, margins } from "../../../design";
 import { HelpIcon, NextIcon, PreviousIcon } from "../../../assets";
 import { ButtonText, disappear, fadeIn, SecondaryButton } from "../../../components";
 
@@ -15,16 +15,8 @@ export const Layout = styled.div<StyleProps>`
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "canvas";
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 0fr;
-    grid-template-areas: "canvas" "bottom-pane";
-    width: ${(props) => props.width};
-  }
+  width: 100vw;
+  height: 100vh;
 `;
 
 export const LeftPane = styled.div`

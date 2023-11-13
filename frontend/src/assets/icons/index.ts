@@ -18,7 +18,7 @@ import { ReactComponent as TriangleIcon } from "./triangle.svg";
 import { ReactComponent as TickIcon } from "./tick.svg";
 import { ReactComponent as ExclamationIcon } from "./exclamation.svg";
 import { ReactComponent as CheveronLeftRightIcon } from "./chevron-left-right.svg";
-import RangeIcon from "./range.png";
+import { ReactComponent as RangeIcon } from "./range.svg";
 import DefaultIcon from "./default-character.png";
 import { ReactComponent as DownArrowIcon } from "./down-arrow.svg";
 import { ReactComponent as BellIcon } from "./bell.svg";
