@@ -1,5 +1,5 @@
-import { Category, Item } from "../../interfaces";
-import React, { FC } from "react";
+import { Item, Category } from "../../interfaces";
+import { FC } from "react";
 
 import { ItemCard } from "../item-card";
 import { VerticalInfo } from "../vertical-info";

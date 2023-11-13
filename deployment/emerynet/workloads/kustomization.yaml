@@ -1,7 +1,0 @@
-bases:
-  - ../../base
-resources:
-  - namespace/namespace.yaml
-patchesStrategicMerge:
-  - config/ui-config.yaml
-namespace: agoric-makefile-automation

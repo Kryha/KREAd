@@ -22,7 +22,6 @@ export const AssetHeader = styled.div`
   margin-bottom: 24px;
 `;
 export const AssetFilterCount = styled(ButtonText)`
-  margin-top: ${margins.mini};
   margin-left: ${margins.mini};
   margin-bottom: ${margins.mini};
 `;

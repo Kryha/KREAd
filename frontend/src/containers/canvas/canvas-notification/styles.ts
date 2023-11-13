@@ -1,24 +1,8 @@
 import styled from "@emotion/styled";
 import { HeaderHorizontalDivider, NavigationTitle } from "../../../components";
 import { color, margins } from "../../../design";
-import { CloseIcon, TickIcon } from "../../../assets";
+import { CloseIcon, ExclamationIcon, TickIcon } from "../../../assets";
 
-export const ToastContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: ${margins.medium};
-  width: 100%;
-`;
-
-export const NotificationContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: ${margins.medium};
-`;
 export const ToastContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,7 +23,6 @@ export const ToastHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
   gap: ${margins.medium};
 `;
 
@@ -47,7 +30,6 @@ export const ToastActions = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
 `;
 
 export const Tick = styled(TickIcon)`
@@ -56,15 +38,23 @@ export const Tick = styled(TickIcon)`
   height: 6px;
 `;
 
+export const Exclamation = styled(ExclamationIcon)`
+  width: 2px;
+  height: 8px;
+  margin: 0;
+`;
+
 export const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: ${margins.nano};
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   border: 1px solid ${color.black};
+  min-width: 18px;
 `;
 
 export const ToastTitle = styled(NavigationTitle)``;

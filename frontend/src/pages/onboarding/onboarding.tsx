@@ -9,7 +9,6 @@ import {
   FadeInOut,
   Footer,
   Kado,
-  KeplerIconWrapper,
   MenuText,
   OnboardingCharacter,
   Overlay,
@@ -75,9 +74,7 @@ export const Onboarding: FC = () => {
         <ButtonContainer isVisible={isConnectButtonVisible}>
           <ButtonRow>
             <PrimaryButton onClick={() => connectWallet()}>
-              <KeplerIconWrapper>
-                <KeplerIcon />
-              </KeplerIconWrapper>
+              <KeplerIcon />
               <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
               <ArrowUp />
             </PrimaryButton>

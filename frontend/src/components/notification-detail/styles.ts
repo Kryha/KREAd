@@ -21,7 +21,7 @@ export const ToastContainer = styled.div`
 `;
 
 export const Tick = styled(TickIcon)`
-  margin: 0;
+  margin: 0px;
   width: 9px;
   height: 6px;
 `;
@@ -29,7 +29,7 @@ export const Tick = styled(TickIcon)`
 export const Exclamation = styled(ExclamationIcon)`
   width: 2px;
   height: 8px;
-  margin: 0;
+  margin: 0px;
 `;
 
 export const IconContainer = styled.div`
@@ -62,14 +62,6 @@ export const ArrowContainer = styled.div`
   margin-right: 14px;
 `;
 
-export const NotificationItemCardContainer = styled.div`
-  display: flex;
-  transition: transform 0.3s ease; /* Add CSS transition for smooth animation */
-  border-radius: ${margins.medium};
-  border: 1px solid ${color.grey};
-  width: 100%;
-`;
-
 export const Close = styled(CloseIcon)`
   width: ${margins.small};
   height: ${margins.small};
@@ -80,14 +72,14 @@ export const ReturnContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0;
+  padding: 0px;
 `;
 
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0;
+  padding: 0px;
   gap: 4px;
 `;
 

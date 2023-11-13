@@ -36,9 +36,9 @@ export const ItemsInventory: FC = () => {
     <>
       <AssetHeaderContainer>
         <AssetItemFilters section={SECTION.INVENTORY} />
-        <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
-        <HorizontalDivider />
       </AssetHeaderContainer>
+      <AssetFilterCount customColor={color.darkGrey}>Inventory: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
+      <HorizontalDivider />
       {item && (
         <ItemDetailsInventory
           item={item}

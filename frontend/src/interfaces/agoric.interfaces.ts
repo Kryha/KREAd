@@ -1,11 +1,25 @@
+export interface AgoricService {
+  zoe: any;
+  board: any;
+  zoeInvitationDepositFacetId?: any;
+  invitationIssuer: any;
+  walletP: any;
+  apiSend: any;
+}
+
+interface Contract {
+  instance: any;
+  publicFacet?: any;
+}
+
 interface Contracts {
-  kread: {
-    instance: any;
-  }
+  kread: Contract;
 }
 
 interface Status {
-  walletProvisioned: boolean;
+  walletConnected: boolean;
+  dappApproved: boolean;
+  showApproveDappModal: boolean;
 }
 
 export interface Purses {
@@ -18,6 +32,7 @@ export interface Purses {
 export interface AgoricState {
   status: Status;
   contracts: Contracts;
+  agoric: AgoricService;
   addOffer: any;
   walletConnection: WalletConnection;
   notifiers: NotifiersState;
@@ -27,7 +42,6 @@ export interface AgoricState {
   isReady: boolean;
   chainStorageWatcher: any;
 }
-
 export interface TokenInfo {
   character: { issuer: any; brand: any; petName?: string };
   item: { issuer: any; brand: any; petName?: string };
@@ -60,20 +74,34 @@ interface NotifiersState {
   };
 }
 
-interface UpdateStatus {
-  type: "UPDATE_STATUS";
-  payload: { [key: string]: boolean };
+interface SetDappApproved {
+  type: "SET_DAPP_APPROVED";
+  payload: boolean;
 }
 
+interface SetWalletConnected {
+  type: "SET_WALLET_CONNECTED";
+  payload: boolean;
+}
+
+interface SetShowApproveDappModal {
+  type: "SET_SHOW_APPROVE_DAPP_MODAL";
+  payload: boolean;
+}
 
 interface SetOffers {
   type: "SET_OFFERS";
   payload: any[];
 }
 
-interface SetKreadInstance {
-  type: "SET_KREAD_INSTANCE";
-  payload: any;
+interface SetAgoric {
+  type: "SET_AGORIC";
+  payload: Omit<AgoricService, "apiSend">;
+}
+
+interface SetKreadContract {
+  type: "SET_KREAD_CONTRACT";
+  payload: Contract;
 }
 
 interface SetApiSend {
@@ -121,7 +149,11 @@ export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 
 export type AgoricStateActions =
   | Reset
-  | SetKreadInstance
+  | SetDappApproved
+  | SetWalletConnected
+  | SetShowApproveDappModal
+  | SetAgoric
+  | SetKreadContract
   | SetApiSend
   | SetLoading
   | SetTokenInfo
@@ -129,8 +161,7 @@ export type AgoricStateActions =
   | SetWalletConnection
   | SetChainStorageWatcher
   | SetOffers
-  | SetSmartWalletStatus
-  | UpdateStatus;
+  | SetSmartWalletStatus;
 
 export interface OfferProposal {
   give: any;

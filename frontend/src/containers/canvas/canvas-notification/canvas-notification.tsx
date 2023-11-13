@@ -6,12 +6,13 @@ import {
   Close,
   Divider,
   DividerContainer,
+  Exclamation,
   IconContainer,
   InfoContainer,
   ReturnContainer,
   Tick,
+  ToastActions,
   ToastContainer,
-  ToastContent,
   ToastHeader,
   ToastTitle,
 } from "./styles";
@@ -29,7 +30,7 @@ export const CanvasNotification: FC<NotificationDetailProps> = ({ isError, title
   return (
     <ToastContainer>
       <ToastHeader>
-        <IconContainer>{isError ? "!" : <Tick />}</IconContainer>
+        <IconContainer>{isError ? <Exclamation /> : <Tick />}</IconContainer>
         <InfoContainer>
           <ToastTitle>{title}</ToastTitle>
           <ButtonText>{info}</ButtonText>
@@ -43,7 +44,7 @@ export const CanvasNotification: FC<NotificationDetailProps> = ({ isError, title
           </ReturnContainer>
         </DividerContainer>
       </ToastHeader>
-      <ToastContent>{children}</ToastContent>
+      <ToastActions>{children}</ToastActions>
     </ToastContainer>
   );
 };

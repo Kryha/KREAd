@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { ButtonText, HorizontalDivider, PrimaryButton, SecondaryButton } from "../../../components";
@@ -24,10 +24,19 @@ import { ISTButton, ISTButtonIcon } from "../../../components/asset-card/styles"
 export const CharactersMode: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedAsset, setInteractionMode } = useCharacterBuilder();
+  const { selectedAsset, setInteractionMode, showWarning } = useCharacterBuilder();
   const [characters] = useMyCharacters();
 
   const selectedCharacter = characters.find((character) => character.nft.name === selectedAsset);
+  const [, setShowToast] = useState(false);
+
+  useEffect(() => {
+    if (showWarning) {
+      setShowToast(true);
+    } else {
+      setShowToast(false);
+    }
+  }, [showWarning]);
 
   const sell = (character: ExtendedCharacter | undefined) => {
     if (!character) return;
@@ -57,12 +66,7 @@ export const CharactersMode: FC = () => {
                   </ISTButton>
                 </PrimaryButton>
               </CharacterActions>
-              <PrimaryButton
-                onClick={() => {
-                  setInteractionMode(MAIN_MODE);
-                  sell(selectedCharacter);
-                }}
-              >
+              <PrimaryButton onClick={() => sell(selectedCharacter)}>
                 <ButtonText customColor={color.white}>sell</ButtonText>
               </PrimaryButton>
               <Store>

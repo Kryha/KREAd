@@ -40,7 +40,7 @@ export const general = {
   activateWallet: "activate Wallet",
   whoWeAre: "who we are",
   ourLeadership: "Our leadership includes some of\nthe most inventive and\nexperienced executives in the technology industry.",
-  isPartOfAgoric: "KREAd is a decentralized application deployed on ",
+  isPartOfAgoric: "KREAd is part of",
   anOpenSource:
     ", an open-source development company launching an interoperable Proof-\nof-Stake chain and economy. The dApp is imagined, built, and\ndesigned by ",
   agoric: "Agoric",
