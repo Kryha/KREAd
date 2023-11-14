@@ -90,7 +90,7 @@ const ParamTypes = {
  * @template {GovernableStartFn} SF
  * @param {{
  *   zoe: ERef<ZoeService>;
- *   governedContractInstallation: ERef<Installation<SF>>;
+ *   governedContractInstallation:  Promise<Installation<import('../index.js')['start']>>;
  *   issuerKeywordRecord?: IssuerKeywordRecord;
  *   terms: Record<string, unknown>;
  *   privateArgs: any; // TODO: connect with Installation type
@@ -99,7 +99,7 @@ const ParamTypes = {
  * @param {{
  *   governedParams: Record<string, unknown>;
  *   timer: ERef<import('@agoric/time/src/types').TimerService>;
- *   contractGovernor: ERef<Installation>;
+ *   contractGovernor: Promise<Installation<import('@agoric/governance/src/contractGovernor.js')['prepare']>>,
  *   committeeCreator: import('@agoric/inter-protocol/src/proposals/econ-behaviors.js').EconomyBootstrapPowers['consume']['economicCommitteeCreatorFacet'];
  * }} govArgs
  * @returns {Promise<GovernanceFacetKit<SF>>}
@@ -187,7 +187,7 @@ const startGovernedInstance = async (
  * BLDer DAO governance using arbitrary code injection: swingset.CoreEval
  * https://community.agoric.com/t/blder-dao-governance-using-arbitrary-code-injection-swingset-coreeval/99
  *
- * @param {BootstrapPowers} powers
+ * @param {BootstrapPowers & KreadSpace & KreadBootstrapSpace} powers
  * @param {object} config
  * @param {{ royaltyAddr: string, platformFeeAddr: string }} config.options
  */

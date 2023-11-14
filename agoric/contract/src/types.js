@@ -162,4 +162,36 @@
  * @typedef {Object.<keyof KreadKitRecorderKits, Pattern>} KreadKitRecorderKitPaths
  * @typedef {Object.<keyof KreadKitRecorderKits, string>} KreadKitRecorderKitMatchers
  *
+ * @typedef {{
+ *   installation:{
+ *     consume: {
+ *       kreadKit: Promise<Installation<import('./index.js')['start']>>,
+ *     },
+ *   },
+ *  brand: {
+ *     produce: { KREAdCHARACTER: Producer<Brand> } &
+ *              { KREAdITEM: Producer<Brand> },
+ *   },
+ *  issuer: {
+ *     produce: { KREAdCHARACTER: Producer<Issuer> } &
+ *              { KREAdITEM: Producer<Issuer> },
+ *   },
+ * }} KreadSpace
+ *
+ * @typedef {PromiseSpaceOf<{
+ *   kreadCommitteeCreatorFacet: import('@agoric/governance/src/committee.js').CommitteeElectorateCreatorFacet
+ *   kreadKit: MapStore<Brand, KREAdKit>,
+ * }>
+ * } KreadBootstrapSpace
+ *
+ *
+ * @typedef {object} KREAdKit
+ * @property {string} label
+ * @property {Instance} kread
+ * @property {Instance} kreadGovernor
+ * @property {Awaited<ReturnType<Awaited<ReturnType<import('./index.js')['start']>>['creatorFacet']['getLimitedCreatorFacet']>>} psmCreatorFacet
+ * @property {GovernorCreatorFacet<import('./index.js')['start']>} kreadGovernorCreatorFacet
+ * @property {AdminFacet} kreadAdminFacet
+ *
+ *
  */

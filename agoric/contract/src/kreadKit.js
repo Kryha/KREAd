@@ -135,7 +135,7 @@ export const prepareKreadKit = (
       const zone = makeDurableZone(baggage);
       return {
         character: harden({
-          /** @type {MapStore<string, CharacterEntry>} */
+          /** @type {MapStore<string, CharacterEntry | string[]>} */
           entries: zone.mapStore('characters', {
             keyShape: M.string(),
             valueShape: M.or(CharacterEntryGuard, M.arrayOf(M.string())),
