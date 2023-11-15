@@ -3,7 +3,7 @@ import { Category, Rarity } from "./interfaces";
 export const GO_BACK = -1 as const;
 export const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:5001";
 export const MIN_PRICE = 0 as const;
-export const MAX_PRICE = 1000000000000 as const;
+export const MAX_PRICE = 100000 as const;
 export const INFORMATION_STEP = 0 as const;
 export const WALLET_INTERACTION_STEP = 1 as const;
 export const CONFIRMATION_STEP = 2 as const;

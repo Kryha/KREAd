@@ -50,9 +50,9 @@ jobs:
     - name: Build and push Docker images
       run: |
         cd frontend
-        export $(grep -v '^#' .env.mainnet | xargs)
-        envsubst < ../deployment/mainnet/workloads/config/ui-config.template.yaml > ../deployment/mainnet/workloads/config/ui-config.yaml
-        envsubst < skaffold.mainnet.template.yaml > skaffold.mainnet.yaml
-        skaffold run --filename skaffold.mainnet.yaml
+        export $(grep -v '^#' .env.production | xargs)
+        envsubst < ../deployment/production/workloads/config/ui-config.template.yaml > ../deployment/production/workloads/config/ui-config.yaml
+        envsubst < skaffold.production.template.yaml > skaffold.production.yaml
+        skaffold run --filename skaffold.production.yaml
       shell: bash
  

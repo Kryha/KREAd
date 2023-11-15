@@ -2,6 +2,7 @@ import { CharacterInMarket, ExtendedCharacter, Item, ItemInMarket, Origin, Title
 import { sortCharacters, sortCharactersMarket, sortItems, sortItemsMarket } from "./sort";
 import { getRarityString } from "../service";
 import { useFilters } from "../context/filter-context";
+import { ISTTouIST } from "./math";
 
 export interface OfferFilters {
   description?: string;
@@ -36,7 +37,10 @@ export const useFilterItems = (items: Item[]): Item[] => {
 export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
   const { origin, categories, rarity, itemPrice, colors, sort } = useFilters();
   if (items.length === 0) return [];
-
+  const priceFilterRange = {
+    max: ISTTouIST(itemPrice.max),
+    min: ISTTouIST(itemPrice.min)
+  }
   const filteredOrigins = origin.length > 0 ? items.filter((item) => origin.includes(<Origin>item.item.origin.toLowerCase())) : items;
   const filteredCategories = categories.length > 0 ? items.filter((item) => categories.includes(item.item.category)) : items;
   const filteredRarity = rarity.length > 0 ? items.filter((item) => rarity.includes(getRarityString(item.item.rarity))) : items;
@@ -44,7 +48,7 @@ export const useFilterItemsInShop = (items: ItemInMarket[]): ItemInMarket[] => {
   const filteredPrice = itemPrice
     ? items.filter(({ sell }) => {
         const priceValue = Number(sell.price + sell.royalty + sell.platformFee);
-        return priceValue >= itemPrice.min && priceValue <= itemPrice.max;
+        return priceValue >= priceFilterRange.min && priceValue <= priceFilterRange.max;
       })
     : items;
 
@@ -77,13 +81,17 @@ export const useFilterCharactersMarket = (characters: CharacterInMarket[]): Char
   const { origin, title, sort, characterPrice } = useFilters();
   if (characters.length === 0) return [];
 
+  const priceFilterRange = {
+    max: ISTTouIST(characterPrice.max),
+    min: ISTTouIST(characterPrice.min)
+  }
   const filteredOrigins =
-    origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.character.origin.toLowerCase())) : characters;
+  origin.length > 0 ? characters.filter((character) => origin.includes(<Origin>character.character.origin.toLowerCase())) : characters;
   const filteredTitles = title.length > 0 ? characters.filter((character) => title.includes(character.character.title)) : characters;
   const filteredPrice = characterPrice
-    ? characters.filter(({ sell }) => {
-        const priceValue = Number(sell.price + sell.royalty + sell.platformFee);
-        return priceValue >= characterPrice.min && priceValue <= characterPrice.max;
+  ? characters.filter(({ sell }) => {
+    const priceValue = Number(sell.price + sell.royalty + sell.platformFee);
+    return priceValue >= priceFilterRange.min && priceValue <= priceFilterRange.max;
       })
     : characters;
 
