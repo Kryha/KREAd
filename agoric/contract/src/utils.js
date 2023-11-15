@@ -10,7 +10,7 @@ const { Fail } = assert;
  * @param {object} randomCharacterBase
  * @param {number} newCharacterId
  * @param {object} currentTime
- * @returns {object[]}
+ * @returns {Character[]}
  */
 export const makeCharacterNftObjs = (
   name,
@@ -37,9 +37,9 @@ export const makeCharacterNftObjs = (
  * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {ERef<StorageNode>} storageNode
  * @param {import('@agoric/zoe/src/contractSupport').MakeRecorderKit} makeRecorderKit
- * @param {{[key: string]: string}} paths
- * @param {{[key: string]: Pattern}} typeMatchers
- * @returns {Promise<{[key: string]: import('@agoric/zoe/src/contractSupport').RecorderKit<unknown>}>}
+ * @param {KreadKitRecorderKitPaths} paths
+ * @param {KreadKitRecorderKitMatchers} typeMatchers
+ * @returns {Promise<KreadKitRecorderKits>}
  */
 export const provideRecorderKits = async (
   baggage,
