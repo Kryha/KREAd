@@ -3,6 +3,7 @@ import { breakpoints, color, fontSize, fontWeight } from "../../design";
 
 interface TextProps {
   customColor?: string;
+  preserveCase?: boolean;
 }
 
 export const Heading = styled.h1<TextProps>`
@@ -12,7 +13,7 @@ export const Heading = styled.h1<TextProps>`
   white-space: pre-wrap;
   font-weight: ${fontWeight.light};
   :first-letter {
-    text-transform: capitalize;
+    ${({ preserveCase }): string => `text-transform: ${preserveCase ? "none" : "capitalize"};`};
   }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
@@ -35,7 +36,7 @@ export const Label = styled.p<TextProps>`
   line-height: 15px;
   letter-spacing: 0.04em;
   :first-letter {
-    text-transform: capitalize;
+    ${({ preserveCase }): string => `text-transform: ${preserveCase ? "none" : "capitalize"};`};
   }
   ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};
 `;
@@ -54,7 +55,7 @@ export const MenuItemName = styled.h3<TextProps>`
   font-size: ${fontSize.title};
   line-height: 22px;
   :first-letter {
-    text-transform: capitalize;
+    ${({ preserveCase }): string => `text-transform: ${preserveCase ? "none" : "capitalize"};`};
   }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;

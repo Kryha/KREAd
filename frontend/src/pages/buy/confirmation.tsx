@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { ButtonText, FormTable, FormTableRow, FormText, PrimaryButton, TitleText } from "../../components";
 import { color } from "../../design";
-import { ArrowUp, ButtonContainer, InfoContainer, Tick, TickContainer } from "./styles";
+import { ArrowUp, ButtonContainer, ConfirmationContainer, InfoContainer, Tick, TickContainer } from "./styles";
 import { BuyData, BuyText } from "./types";
-import { ConfirmationContainer } from "../sell/confirmation";
 import { Header } from "../sell/styles";
 
 interface Props {
