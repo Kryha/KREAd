@@ -6,7 +6,7 @@ import { bootstrapContext } from './bootstrap.js';
 import { flow } from './flow.js';
 import { addCharacterToBootstrap, addItemToBootstrap } from './setup.js';
 import { makeCopyBag } from '@agoric/store';
-import { errors } from '../src/errors.js';
+import { errors } from '../src/kreadV2/errors.js';
 
 test.before(async (t) => {
   const bootstrap = await bootstrapContext();
