@@ -71,6 +71,7 @@ import {
   testFunctionalityBeforeUpgrade,
 } from './bootstrap-upgrade-v2.js';
 import { unmarshalFromVstorage } from '@agoric/vats/tools/board-utils';
+import { mint } from './bootstrap-null-upgrade.js';
 
 const trace = makeTracer('kreadBootUpgrade');
 
@@ -511,5 +512,8 @@ export const buildRootObject = async () => {
     testFunctionalityAfterUpgrade: async () => {
       await testFunctionalityAfterUpgrade(context);
     },
+    mint: async () => {
+      await mint(context)
+    }
   });
 };
