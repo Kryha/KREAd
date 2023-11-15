@@ -130,12 +130,12 @@ export const ButtonText = styled.h3<TextProps>`
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;
 
-export const SectionHeader = styled.h1`
+export const SectionHeader = styled.h1<TextProps>`
   font-size: 32px;
   font-weight: ${fontWeight.regular};
   line-height: 40px;
   :first-letter {
-    text-transform: capitalize;
+    ${({ preserveCase }): string => `text-transform: ${preserveCase ? "none" : "capitalize"};`};
   }
   min-width: 200px;
 `;
