@@ -10,11 +10,11 @@ export const UseWithContext: FunctionComponent<PropsWithChildren> = ({ children 
   <WalletContextProvider>
     <UserContextProvider>
       <CharacterBuilderContextProvider>
-        <FiltersContextProvider>
-          <CharacterMarketContextProvider>
-            <ItemMarketContextProvider>{children}</ItemMarketContextProvider>
-          </CharacterMarketContextProvider>
-        </FiltersContextProvider>
+        <CharacterMarketContextProvider>
+          <ItemMarketContextProvider>
+            <FiltersContextProvider>{children}</FiltersContextProvider>
+          </ItemMarketContextProvider>
+        </CharacterMarketContextProvider>
       </CharacterBuilderContextProvider>
     </UserContextProvider>
   </WalletContextProvider>

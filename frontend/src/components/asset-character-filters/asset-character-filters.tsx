@@ -2,28 +2,30 @@ import React, { FC, useState } from "react";
 
 import { originOptions, sortCharactersInventoryOptions, sortCharactersMarketOptions, titleOptions } from "../../assets/text/filter-options";
 import { color } from "../../design";
-import { ButtonText, ColorSelector, Filters, Label, PriceSelector, PrimaryButton, Select } from "../../components";
+import { ButtonText, ColorSelector, Filters, Label, PrimaryButton, Select } from "../../components";
 import { text } from "../../assets";
-import { MAX_PRICE, MIN_PRICE, SECTION } from "../../constants";
+import { SECTION } from "../../constants";
 import { useFilters } from "../../context/filter-context";
 import { AssetFilterContainer, AssetFilterWrapper, AssetSelectorContainer, SortAssetsByContainer } from "../asset-item-filters/styles";
+import { useGetCharacterMarketPrices } from "../../service";
+import { PriceRangeSlider } from "../price-range-slider/price-range-slider";
 
 interface Props {
   section: (typeof SECTION)[keyof typeof SECTION];
 }
 
 export const AssetCharacterFilters: FC<Props> = ({ section }) => {
-  const { title, origin, sort, reset, price, setOrigin, setTitle, setSort, setColors, setPrice, onReset } = useFilters();
+  const { title, origin, sort, reset, setOrigin, setTitle, setCharacterPrice, setSort, setColors, onReset } = useFilters();
   const [filterId, setFilterId] = useState("");
+  const [prices, fetched] = useGetCharacterMarketPrices();
 
   const openFilter = (id: string) => {
     setFilterId(id !== filterId ? id : "");
   };
 
-  const onPriceChange = (min: number, max: number) => {
-    setPrice({ min, max });
-  };
-
+  const handlePriceFilter = (range: {min: number, max: number}) => {
+    setCharacterPrice(range);
+  }
   return (
     <>
       <AssetFilterWrapper>
@@ -47,7 +49,7 @@ export const AssetCharacterFilters: FC<Props> = ({ section }) => {
             </Filters>
             {section === SECTION.SHOP && (
               <Filters label={text.filters.price} openFilter={openFilter} id={filterId}>
-                {price && <PriceSelector handleChange={onPriceChange} min={MIN_PRICE} max={MAX_PRICE} />}
+                {fetched && <PriceRangeSlider prices={prices} setPrice={handlePriceFilter} reset={reset} />}
               </Filters>
             )}
             <Filters label={text.filters.color} openFilter={openFilter} id={filterId}>

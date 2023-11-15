@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { RangeIcon, TickIcon } from "../../assets";
+import { TickIcon } from "../../assets";
 import { DetailSectionColorPaletteWrap } from "../../containers/detail-section/detail-section-color-palette/styles";
 import { color, fontWeight, margins } from "../../design";
 import { BodyText, ButtonText, Input, SecondaryButton } from "../atoms";
@@ -77,6 +77,7 @@ export const SelectBox = styled.div<ViewProps>`
 
 export const ColorBox = styled(SelectBox)`
   width: 350px;
+  overflow: hidden;
   z-index: 10000000;
 `;
 
@@ -98,82 +99,36 @@ export const ButtonContainer = styled.div`
 `;
 
 export const RangeContainer = styled.div`
-  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0px;
+  width: 100%;
   ${SecondaryButton} {
     width: 40px;
   }
 `;
 
-interface RangeProps {
-  width?: number;
-  left?: number;
-}
-
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
 export const SliderContainer = styled.div`
+  display: flex;
   position: relative;
-  width: 278px;
+  align-items: center;
+  width: 100%;
 `;
 
 export const SliderTrack = styled.div`
-  height: 1px;
+  height: 4px;
   position: absolute;
-  border-bottom: 1px solid ${color.grey};
+  background: ${color.grey};
+  border-radius: 3px;
   width: 100%;
   z-index: 1;
 `;
-
-export const SliderRange = styled.div<RangeProps>`
-  border-radius: 0;
-  height: 4px;
-  width: ${(props): string => `${props.width}%;`};
-  left: ${(props): string => `${props.left}%;`};
-  position: absolute;
-  background-color: ${color.black};
-  z-index: 2;
-`;
-
-export const ThumbLeft = styled.input`
-  -webkit-appearance: none;
-  appearance: none;
-  ::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-  pointer-events: none;
-  position: absolute;
-  height: 0;
-  width: 278px;
-  outline: none;
-  ::-webkit-slider-thumb {
-    cursor: pointer;
-    height: 32px;
-    width: 40px;
-    margin-top: 4px;
-    -webkit-appearance: none;
-    appearance: none;
-    border: 0;
-    background: url(${RangeIcon});
-    pointer-events: all;
-    position: relative;
-  }
-  ::-moz-range-thumb {
-    cursor: pointer;
-    height: 32px;
-    width: 40px;
-    margin-top: 4px;
-    pointer-events: all;
-    position: relative;
-    border: 0;
-    background: url(${RangeIcon});
-  }
-
-  z-index: 3;
-`;
-
-export const ThumbRight = styled(ThumbLeft)`
-  z-index: 4;
-`;
-
 export const MaxInput = styled(Input)`
   width: 119px;
   padding: 3px 0 16px 33px;
@@ -198,7 +153,6 @@ export const TextLabel = styled(BodyText)`
   ::before {
     position: absolute;
     content: "IST";
-    font-family: aktiv-grotesk;
     font-weight: ${fontWeight.light};
     font-size: 14px;
     line-height: 18px;
