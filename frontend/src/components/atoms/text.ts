@@ -125,7 +125,7 @@ export const ButtonText = styled.h3<TextProps>`
   font-size: 14px;
   line-height: 15px;
   :first-letter {
-    text-transform: capitalize;
+    ${({ preserveCase }): string => `text-transform: ${preserveCase ? "none" : "capitalize"};`};
   }
   ${({ customColor }): string => `color: ${customColor || color.black};`};
 `;

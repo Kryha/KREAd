@@ -31,7 +31,7 @@ export const Confirmation: FC<Props> = ({ text, link, data }) => {
         </FormTableRow>
         <FormTableRow>
           <FormText>name</FormText>
-          <ButtonText>{data.name}</ButtonText>
+          <ButtonText preserveCase>{data.name}</ButtonText>
         </FormTableRow>
       </FormTable>
       <InfoContainer>
