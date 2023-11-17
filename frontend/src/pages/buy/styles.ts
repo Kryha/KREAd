@@ -235,3 +235,10 @@ export const PricingContainer = styled.div`
 export const ErrorContainerMarginTop = styled(ErrorContainer)`
   margin-top: 20px;
 `;
+
+export const ConfirmationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;

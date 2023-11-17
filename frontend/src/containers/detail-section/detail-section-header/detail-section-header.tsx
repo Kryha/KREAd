@@ -22,7 +22,7 @@ export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, action
   return (
     <DetailSectionHeaderWrap>
       <DetailSectionHeaderTop>
-        <SectionHeader>{data.name}</SectionHeader>
+        <SectionHeader preserveCase>{data.name}</SectionHeader>
         <DetailSectionHeaderNavigation actions={actions} />
       </DetailSectionHeaderTop>
 
