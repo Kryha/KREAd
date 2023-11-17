@@ -2,9 +2,8 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { ButtonText, FormTable, FormTableRow, FormText, PrimaryButton, TitleText } from "../../components";
 import { color } from "../../design";
-import { ArrowUp, ButtonContainer, Header, InfoContainer, Tick, TickContainer } from "./styles";
+import { ArrowUp, AssetName, ButtonContainer, Header, InfoContainer, Tick, TickContainer, ConfirmationContainer } from "./styles";
 import { SellData, SellText } from "./types";
-import styled from "@emotion/styled";
 
 interface Props {
   text: SellText;
@@ -30,7 +29,7 @@ export const Confirmation: FC<Props> = ({ text, confirmationPath, data }) => {
         </FormTableRow>
         <FormTableRow>
           <FormText>name</FormText>
-          <ButtonText>{data.name}</ButtonText>
+          <AssetName>{data.name}</AssetName>
         </FormTableRow>
       </FormTable>
       <InfoContainer>
@@ -46,9 +45,3 @@ export const Confirmation: FC<Props> = ({ text, confirmationPath, data }) => {
   );
 };
 
-export const ConfirmationContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-`;
