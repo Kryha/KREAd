@@ -78,3 +78,13 @@ export const CharacterCardContainer = styled.div<CharacterProps>`
     border: 1px solid ${color.black};
   }
 `;
+
+interface TextProps {
+  customColor?: string;
+}
+export const CharacterName = styled.h3<TextProps>`
+  font-weight: ${fontWeight.medium};
+  font-size: 14px;
+  line-height: 15px;
+  ${({ customColor }): string => `color: ${customColor || color.black};`};
+`;

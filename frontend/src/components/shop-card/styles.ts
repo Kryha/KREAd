@@ -158,3 +158,8 @@ export const Product = styled.div<ViewProps>`
     }
   }
 `;
+
+export const CharacterTitle = styled(TitleText)`
+  :first-letter {
+    text-transform: none;
+  }`;

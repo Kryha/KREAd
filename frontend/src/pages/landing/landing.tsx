@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { text } from "../../assets";
+import { CharacterTitle } from './styles'
 import {
   BaseRoute,
   BoldLabel,
@@ -134,7 +135,7 @@ export const Landing: FC = () => {
           {/* character info */}
           {interactionMode === MAIN_MODE ? (
             <DetailContainer>
-              <PageTitle>{selectedCharacter?.nft.name}</PageTitle>
+              <CharacterTitle>{selectedCharacter?.nft.name}</CharacterTitle>
               <PageSubTitle>{selectedCharacter?.nft.title}</PageSubTitle>
               <ButtonContainer>
                 <ButtonInfoWrap onClick={() => setShowDetails(true)}>
@@ -148,7 +149,7 @@ export const Landing: FC = () => {
             </DetailContainer>
           ) : (
             <DetailContainer>
-              <PageTitle>{selectedCharacter?.nft.name}</PageTitle>
+              <CharacterTitle>{selectedCharacter?.nft.name}</CharacterTitle>
               <PageSubTitle>{selectedCharacter?.nft.title}</PageSubTitle>
               <ButtonContainer>
                 <AssetTag>

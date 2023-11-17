@@ -5,7 +5,7 @@ import { text } from "../../assets";
 import { ButtonText, FormTable, FormTableRow, FormText, Input, Label, PrimaryButton } from "../../components";
 import { ButtonInfo } from "../../components/button-info";
 import { color } from "../../design";
-import { ButtonContainer, ErrorContainer, FormFields, InputContainer, InputWrapper, TextLabel, Tick, Warning } from "./styles";
+import { ButtonContainer, ErrorContainer, FormFields, InputContainer, InputWrapper, TextLabel, Tick, Warning, AssetName } from "./styles";
 import { SellData } from "./types";
 import { FormContainer } from "../create-character/styles";
 import { SellDescription } from "../../components/sell-description/sell-description";
@@ -34,7 +34,7 @@ export const Information: FC<InformationProps> = ({ setData, data }) => {
           </FormTableRow>
           <FormTableRow>
             <FormText>name</FormText>
-            <ButtonText>{data.name}</ButtonText>
+            <AssetName>{data.name}</AssetName>
           </FormTableRow>
         </FormTable>
         <FormFields>

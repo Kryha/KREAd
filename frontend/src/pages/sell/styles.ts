@@ -4,7 +4,7 @@ import { Badge, BodyText, ButtonText, fadeUp, Input, MenuItemName, PrimaryButton
 import { EquippedLabel } from "../../components/character-item/styles";
 import { LoadingPageContainer, Spinner } from "../../components/content-loader/styles";
 import { EquippedLabel as ItemLabel, Info } from "../../components/menu-item/styles";
-import { color, margins } from "../../design";
+import { color, fontWeight, margins } from "../../design";
 import { FormCard } from "../create-character/styles";
 
 interface ActiveProps {
@@ -316,4 +316,17 @@ export const PricingContainer = styled.div`
   flex-direction: row;
   align-items: center;
   position: static;
+`;
+
+export const AssetName = styled.h3`
+  font-weight: ${fontWeight.medium};
+  font-size: 14px;
+  line-height: 15px;
+`;
+
+export const ConfirmationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 `;
