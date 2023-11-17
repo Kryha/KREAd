@@ -21,6 +21,7 @@ Make sure all items are checked before submitting the pull request. Remove any i
 - [ ] I have added/updated unit tests to cover the changes.
 - [ ] All existing tests pass.
 - [ ] The PR title is clear and concise.
+- [ ] Are there changes in the /fronted folder? Make sure `cd frontend && yarn build` runs successfully.;
 
 ## Additional Notes
 

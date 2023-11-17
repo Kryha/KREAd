@@ -18,7 +18,7 @@ body:
   - type: textarea
     attributes:
       label: Acceptance criteria
-      description: Descibe what should be done for this issue to be considered closed. 
+      description: Describe what should be done for this issue to be considered closed. 
     validations:
       required: true
   - type: textarea
