@@ -1,0 +1,60 @@
+name: Bug Report
+description: "Use this template to report a frontend side bug."
+title: "BUG: FRONTEND: [BUG DESCRIPTION]"
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Bug description
+      description: Provide a clear description of the bug you encountered.
+      placeholder: Unequipping mask items is not working. Clicking the unequip button from the inventory page on a mask item has no effect.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Repro
+      description: List the steps needed to reproduce the bug. Be as clear and detailed as possible.
+      placeholder: |
+        1. Go to the inventory page
+        2. Find a mask item that is equipped to some character
+        3. Click the unequip button
+        4. Observe that nothing happens
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: Describe the expected behavior.
+      placeholder: Clicking the unequip button should trigger the kepler wallet to approve my transaction and remove the item from the characters inventory.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Branch
+      description: If you ran the frontend locally, what branch are you on?
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: Connected Network
+      description: What network is the frontend connected to (local, emerynet, mainnet).
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Contract branch
+      description: If connected to a local chain, what branch are you on when running the chain?
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Screenshots/Videos
+      description: Optionally provide a screenshot or demo of the bug.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Additional info
+      description: For anything else you want to add!
+    validations:
+      required: false
