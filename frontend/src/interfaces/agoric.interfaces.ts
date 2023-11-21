@@ -1,7 +1,7 @@
 interface Contracts {
   kread: {
     instance: any;
-  }
+  };
 }
 
 interface Status {
@@ -64,7 +64,6 @@ interface UpdateStatus {
   type: "UPDATE_STATUS";
   payload: { [key: string]: boolean };
 }
-
 
 interface SetOffers {
   type: "SET_OFFERS";
@@ -135,4 +134,12 @@ export type AgoricStateActions =
 export interface OfferProposal {
   give: any;
   want: any;
+}
+
+export interface HandleOfferResultBuilderFunction {
+  (
+    errorCallback: (data: string, ...rest: any[]) => any,
+    refundCallback: Function,
+    successCallback: Function,
+  ): ({ status, data }: { status: string; data: object }) => any;
 }

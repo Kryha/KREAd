@@ -15,6 +15,7 @@ import { breakpoints } from "../../design";
 import { useUserState } from "../../context/user";
 import { useWalletState } from "../../context/wallet";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 export const CreateCharacter: FC = () => {
   const createCharacter = useCreateCharacter();
@@ -33,8 +34,8 @@ export const CreateCharacter: FC = () => {
   const mobile = useIsMobile(breakpoints.desktop);
   const { ist } = useWalletState();
 
-  const notEnoughIST = useMemo(()=>{
-    if(ist < MINTING_COST || !ist) {
+  const notEnoughIST = useMemo(() => {
+    if (ist < MINTING_COST || !ist) {
       return true;
     }
     return false;
@@ -53,14 +54,21 @@ export const CreateCharacter: FC = () => {
     setCurrentStep(step);
   };
 
-  const handleError = (error: string) => {
+  const errorCallback = (error: string) => {
     setError(error);
     setShowToast(true);
-  }
+  };
+
+  const successCallback = () => {
+    console.info("MintCharacter call settled");
+  };
 
   const sendOfferHandler = async (): Promise<void> => {
     setIsLoading(true);
-    await createCharacter.mutateAsync({ name: characterData.name, setError: handleError });
+    await createCharacter.mutateAsync({
+      name: characterData.name,
+      callback: handleOfferResultBuilder(errorCallback, errorCallback, successCallback),
+    });
   };
 
   const setData = async (data: CharacterCreation): Promise<void> => {

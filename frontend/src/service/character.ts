@@ -166,10 +166,7 @@ export const useCreateCharacter = () => {
         istBrand: istBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => {
-        console.info("MintCharacter call settled");
-      },
-      errorCallback: body.setError,
+      callback: body.callback,
     });
   });
 };

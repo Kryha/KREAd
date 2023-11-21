@@ -1,5 +1,6 @@
 import { CATEGORY, ORIGIN, TITLE } from "../constants";
 import { ActivityEvent } from "./activity.interfaces";
+import { HandleOfferResultBuilderFunction } from "./agoric.interfaces";
 import { Item } from "./item.interfaces";
 
 export type Origin = (typeof ORIGIN)[keyof typeof ORIGIN];
@@ -99,5 +100,5 @@ export interface CharacterInMarketBackend {
 
 export interface CharacterCreation {
   name: string;
-  setError?: (error: string) => void
+  callback: ReturnType<HandleOfferResultBuilderFunction>;
 }
