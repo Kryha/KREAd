@@ -1,4 +1,4 @@
-name: Bug Report
+name: Frontend Bug Report
 description: "Use this template to report a frontend side bug."
 title: "BUG: FRONTEND: [BUG DESCRIPTION]"
 labels: [bug]
