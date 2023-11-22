@@ -1,6 +1,6 @@
 import { HandleOfferResultBuilderFunction } from "../interfaces";
 
-export const handleOfferResultBuilder: HandleOfferResultBuilderFunction = (errorCallback, refundCallback, successCallback) => {
+export const handleOfferResultBuilder: HandleOfferResultBuilderFunction = (errorCallback?, refundCallback?, successCallback?) => {
     return ({ status, data }: { status: string; data: object }) => {
       if (status === "error") {
         console.error("Offer error", data);

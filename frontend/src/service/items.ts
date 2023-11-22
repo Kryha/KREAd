@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Category, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
+import { Category, HandleOfferResultFunction, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
 import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -10,6 +10,7 @@ import { useWalletState } from "../context/wallet";
 import { marketService } from "./character/market";
 import { inventoryService } from "./character/inventory";
 import { useItemMarketState } from "../context/item-shop-context";
+import { handleOfferResultBuilder } from "../util/contract-callbacks";
 
 export function getRarityString(rarity: number) {
   if (rarity > 79) return "exotic" as Rarity;
@@ -230,7 +231,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
   return { callback, isLoading, isError };
 };
 
-export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item | undefined>>) => {
+export const useEquipItem = () => {
   const [service] = useAgoricContext();
   const { selected: character } = useUserState();
   const { character: charactersInWallet } = useWalletState();
@@ -239,7 +240,7 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
   const characterBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { item: Item; currentlyEquipped?: Item }): Promise<void> => {
+  return useMutation(async (body: { item: Item; currentlyEquipped?: Item; callback: HandleOfferResultFunction }): Promise<void> => {
     if (!character || !body.item) {
       console.error("Could not find item or character");
       return;
@@ -262,14 +263,12 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
           itemBrand,
           makeOffer: service.walletConnection.makeOffer,
         },
-        callback: async () => {
+        callback: handleOfferResultBuilder(body.callback.arguments[0], body.callback.arguments[1], () => {
           console.info("Swap call settled");
-
-          if (callback) callback(body.item);
-
+          if (body.callback.arguments[2]) body.callback.arguments[2]();
           // Using a delay to prevent the character from disappearing when making inventory calls
           setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-        },
+        }),
       });
     } else {
       await inventoryService.equipItem({
@@ -281,20 +280,18 @@ export const useEquipItem = (callback?: React.Dispatch<React.SetStateAction<Item
           itemBrand,
           makeOffer: service.walletConnection.makeOffer,
         },
-        callback: async () => {
+        callback: handleOfferResultBuilder(body.callback.arguments[0], body.callback.arguments[1], () => {
           console.info("Equip call settled");
-
-          if (callback) callback(body.item);
-
+          if (body.callback.arguments[2]) body.callback.arguments[2]();
           // Using a delay to prevent the character from disappearing when making inventory calls
           setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-        },
+        }),
       });
     }
   });
 };
 
-export const useUnequipItem = (callback?: () => void) => {
+export const useUnequipItem = () => {
   const [service] = useAgoricContext();
   const { characters: ownedCharacters } = useUserState();
   const userStateDispatch = useUserStateDispatch();
@@ -302,7 +299,7 @@ export const useUnequipItem = (callback?: () => void) => {
   const charBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { item: Item }) => {
+  return useMutation(async (body: { item: Item, callback: HandleOfferResultFunction }) => {
     if (!body.item) return;
     userStateDispatch({ type: "START_INVENTORY_CALL" });
 
@@ -322,13 +319,11 @@ export const useUnequipItem = (callback?: () => void) => {
         itemBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => {
+      callback: handleOfferResultBuilder(body.callback.arguments[0], body.callback.arguments[1], () => {
         console.info("Unequip call settled");
-        if (callback) callback();
-
-        // Using a delay to prevent the character from disappearing when making inventory calls
+        if (body.callback.arguments[2]) body.callback.arguments[2]();
         setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-      },
+      }),
     });
   });
 };

@@ -11,6 +11,7 @@ import { ErrorView } from "../error-view";
 import { Item } from "../../interfaces";
 import { NotificationWrapper } from "../notification-detail/styles";
 import { NotificationDetail } from "../notification-detail";
+import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 interface ItemDetailsInventoryProps {
   item: Item;
@@ -32,12 +33,12 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
   const equipAsset = () => {
     setShowToast(!showToast);
-    equipItem.mutate({ item });
+    equipItem.mutate({ item, callback: handleOfferResultBuilder() });
   };
 
   const unequipAsset = () => {
     setShowToast(!showToast);
-    unequipItem.mutate({ item });
+    unequipItem.mutate({ item, callback: handleOfferResultBuilder() });
   };
 
   const sellAsset = () => {
