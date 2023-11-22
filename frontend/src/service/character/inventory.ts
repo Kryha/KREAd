@@ -1,5 +1,5 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, HandleOfferResultFunction, Item } from "../../interfaces";
+import { Character, HandleOfferResult, Item } from "../../interfaces";
 import { urlToCid } from "../../util/other";
 
 // TODO: Use makeOffer status callback for errors
@@ -13,7 +13,7 @@ interface UnequipItem {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResultFunction
+  callback: HandleOfferResult;
 }
 
 const unequipItem = async ({ item, character, service, callback }: UnequipItem): Promise<void> => {
@@ -54,7 +54,6 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     want,
     give,
   };
-
 
   service.makeOffer(spec, proposal, undefined, callback);
 };
@@ -108,7 +107,7 @@ interface EquipItem {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResultFunction;
+  callback: HandleOfferResult;
 }
 
 const equipItem = async ({ item, character, service, callback }: EquipItem): Promise<void> => {
@@ -161,7 +160,7 @@ interface SwapItems {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResultFunction
+  callback: HandleOfferResult;
 }
 
 const swapItems = async ({ giveItem, wantItem, character, service, callback }: SwapItems): Promise<void> => {
@@ -182,7 +181,6 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
     image: urlToCid(wantItem.image),
     thumbnail: urlToCid(wantItem.thumbnail),
   };
-
 
   const spec = {
     source: "contract",

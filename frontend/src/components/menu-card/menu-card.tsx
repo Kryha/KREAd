@@ -45,10 +45,10 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
   const [showToast, setShowToast] = useState(false);
   const [equippedItem, setEquippedItem] = useState(equippedItemProp);
 
-  const equipItem = useEquipItem(setEquippedItem);
+  const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
 
-  const successCallback = () => setEquippedItem(undefined)
+  const unequipSuccessCallback = () => setEquippedItem(undefined);
 
   const allItems = useMemo(() => {
     if (equippedItem) return [equippedItem, ...unequippedItems];
@@ -61,14 +61,14 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
     event.stopPropagation();
     setShowToast(!showToast);
     if (!selectedItem) return;
-    equipItem.mutate({ item: selectedItem, callback: handleOfferResultBuilder() });
+    equipItem.mutate({ item: selectedItem, callback: handleOfferResultBuilder(undefined, undefined, setEquippedItem) });
   };
 
   const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
     if (!equippedItem) return;
-    unequipItem.mutate({ item: equippedItem, callback: handleOfferResultBuilder(undefined, undefined, successCallback) });
+    unequipItem.mutate({ item: equippedItem, callback: handleOfferResultBuilder(undefined, undefined, unequipSuccessCallback) });
   };
 
   const primaryActions = () => {

@@ -1,5 +1,5 @@
 import { MINTING_COST } from "../../constants";
-import { HandleOfferResultFunction } from "../../interfaces";
+import { HandleOfferResult } from "../../interfaces";
 
 // TODO: Use makeOffer status callback for errors
 
@@ -10,7 +10,7 @@ interface MintCharacter {
     istBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResultFunction;
+  callback: HandleOfferResult;
 }
 
 export const mintCharacter = async ({ name, service, callback }: MintCharacter): Promise<void> => {
@@ -30,6 +30,6 @@ export const mintCharacter = async ({ name, service, callback }: MintCharacter):
   const proposal = {
     give,
   };
-
+  console.log(callback)
   service.makeOffer(spec, proposal, offerArgs, callback);
 };

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Category, HandleOfferResultFunction, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
+import { Category, HandleOfferResultBuilder, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
 import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -240,7 +240,7 @@ export const useEquipItem = () => {
   const characterBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { item: Item; currentlyEquipped?: Item; callback: HandleOfferResultFunction }): Promise<void> => {
+  return useMutation(async (body: { item: Item; currentlyEquipped?: Item; callback: HandleOfferResultBuilder }): Promise<void> => {
     if (!character || !body.item) {
       console.error("Could not find item or character");
       return;
@@ -253,6 +253,12 @@ export const useEquipItem = () => {
     const { forSale, equippedTo, activity, ...itemToEquip } = body.item;
     if (body.currentlyEquipped) {
       const { forSale: f_, equippedTo: e_, activity: a_, ...itemToUnequip } = body.currentlyEquipped;
+
+      body.callback.errorCallbackFunction = (data) => {
+        console.info("Swap call settled");
+        if (body.callback.errorCallbackFunction) body.callback.errorCallbackFunction(data);
+        setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+      };
       await inventoryService.swapItems({
         character: characterInWallet,
         giveItem: itemToEquip,
@@ -263,14 +269,14 @@ export const useEquipItem = () => {
           itemBrand,
           makeOffer: service.walletConnection.makeOffer,
         },
-        callback: handleOfferResultBuilder(body.callback.arguments[0], body.callback.arguments[1], () => {
-          console.info("Swap call settled");
-          if (body.callback.arguments[2]) body.callback.arguments[2]();
-          // Using a delay to prevent the character from disappearing when making inventory calls
-          setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-        }),
+        callback: body.callback.getHandleOfferResult(),
       });
     } else {
+      body.callback.errorCallbackFunction = (data) => {
+        console.info("Equip call settled");
+        if (body.callback.errorCallbackFunction) body.callback.errorCallbackFunction(data);
+        setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+      };
       await inventoryService.equipItem({
         character: characterInWallet,
         item: itemToEquip,
@@ -280,12 +286,7 @@ export const useEquipItem = () => {
           itemBrand,
           makeOffer: service.walletConnection.makeOffer,
         },
-        callback: handleOfferResultBuilder(body.callback.arguments[0], body.callback.arguments[1], () => {
-          console.info("Equip call settled");
-          if (body.callback.arguments[2]) body.callback.arguments[2]();
-          // Using a delay to prevent the character from disappearing when making inventory calls
-          setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-        }),
+        callback: body.callback.getHandleOfferResult(),
       });
     }
   });
@@ -299,7 +300,7 @@ export const useUnequipItem = () => {
   const charBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { item: Item, callback: HandleOfferResultFunction }) => {
+  return useMutation(async (body: { item: Item; callback: HandleOfferResultBuilder }) => {
     if (!body.item) return;
     userStateDispatch({ type: "START_INVENTORY_CALL" });
 
@@ -309,6 +310,15 @@ export const useUnequipItem = () => {
       console.error("Could find character to unequip from");
       return;
     }
+    console.log("BEFORE:", body.callback.errorCallbackFunction)
+
+    body.callback.errorCallbackFunction = (data) => {
+      console.info("Unequip call settled");
+      if (body.callback.errorCallbackFunction) body.callback.errorCallbackFunction(data);
+      setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+    };
+
+    // console.log("AFTER: ", body.callback.getHandleOfferResult())
 
     await inventoryService.unequipItem({
       item: itemToUnequip,
@@ -319,11 +329,7 @@ export const useUnequipItem = () => {
         itemBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: handleOfferResultBuilder(body.callback.arguments[0], body.callback.arguments[1], () => {
-        console.info("Unequip call settled");
-        if (body.callback.arguments[2]) body.callback.arguments[2]();
-        setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-      }),
+      callback: body.callback.getHandleOfferResult(),
     });
   });
 };

@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterInMarket, ExtendedCharacter, MarketMetrics } from "../interfaces";
+import { CharacterInMarket, ExtendedCharacter, HandleOfferResultBuilder, MarketMetrics } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
@@ -62,15 +62,11 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
 };
 
 export const useMyCharactersForSale = () => {
-  const [
-    {
-      chainStorageWatcher,
-    },
-  ] = useAgoricContext();
+  const [{ chainStorageWatcher }] = useAgoricContext();
   const wallet = useWalletState();
 
   // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
-  const [offerCharacters, setOfferCharacters] = useState<string>("[]"); 
+  const [offerCharacters, setOfferCharacters] = useState<string>("[]");
 
   // adding items to characters from offers
   useEffect(() => {
@@ -157,7 +153,7 @@ export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
   const istBrand = service.tokenInfo.ist.brand;
-  return useMutation(async (body: CharacterCreation): Promise<void> => {
+  return useMutation(async (body: { name: string; callback: HandleOfferResultBuilder }): Promise<void> => {
     if (!body.name) throw new Error("Name not specified");
     await mintCharacter({
       name: body.name,
@@ -166,7 +162,7 @@ export const useCreateCharacter = () => {
         istBrand: istBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: body.callback,
+      callback: body.callback.getHandleOfferResult(),
     });
   });
 };

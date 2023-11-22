@@ -136,8 +136,15 @@ export interface OfferProposal {
   want: any;
 }
 
-export interface HandleOfferResultFunction {
+export interface HandleOfferResult {
   ({ status, data }: { status: string; data: object }): any;
+}
+
+export interface HandleOfferResultBuilder {
+  errorCallbackFunction?: (data: string, ...rest: any[]) => any;
+  refundCallbackFunction?: Function;
+  successCallbackFunction?: Function;
+  getHandleOfferResult: () => HandleOfferResult;
 }
 
 export interface HandleOfferResultBuilderFunction {
@@ -145,5 +152,5 @@ export interface HandleOfferResultBuilderFunction {
     errorCallback?: (data: string, ...rest: any[]) => any,
     refundCallback?: Function,
     successCallback?: Function,
-  ): HandleOfferResultFunction;
+  ): HandleOfferResultBuilder;
 }
