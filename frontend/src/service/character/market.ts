@@ -1,5 +1,5 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, Item } from "../../interfaces";
+import { Character, HandleOfferResult, Item } from "../../interfaces";
 import { urlToCid } from "../../util/other";
 // TODO: Use makeOffer status callback for errors
 
@@ -12,7 +12,7 @@ interface CharacterMarketAction {
     istBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: HandleOfferResult;
 }
 
 const sellCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
@@ -40,19 +40,7 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  service.makeOffer(spec, proposal, undefined, callback);
 };
 
 const buyCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
@@ -81,19 +69,7 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  service.makeOffer(spec, proposal, undefined, callback);
 };
 
 interface ItemMarketAction {
@@ -106,7 +82,7 @@ interface ItemMarketAction {
     istBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: HandleOfferResult;
 }
 
 const sellItem = async ({ item, price, service, callback }: ItemMarketAction): Promise<void> => {
@@ -139,19 +115,7 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  service.makeOffer(spec, proposal, undefined, callback);
 };
 
 interface SellItemBatchAction {
@@ -236,19 +200,7 @@ const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAc
     give,
   };
 
-  service.makeOffer(spec, proposal, { entryId: Number(entryId) }, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  service.makeOffer(spec, proposal, { entryId: Number(entryId) }, callback);
 };
 
 export const marketService = { sellCharacter, buyCharacter, sellItem, sellItemBatch, buyItem };

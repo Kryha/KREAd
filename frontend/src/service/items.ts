@@ -144,7 +144,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
   const [isLoading, setIsLoading] = useState(false);
 
   const callback = useCallback(
-    async (price: number, setPlacedInShop: () => void) => {
+    async (price: number, setPlacedInShop: () => void, callback: HandleOfferResultBuilder) => {
       try {
         const found = items.find((item) => item.name === itemName && item.category === itemCategory);
         if (!found) return;
@@ -153,8 +153,18 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
         const itemBrand = service.tokenInfo.item.brand;
         const uISTPrice = ISTTouIST(price);
 
-        setIsLoading(true);
+        callback.successCallbackFunction = () => {
+          if (callback.successCallbackFunction) callback.successCallbackFunction();
+          console.info("SellItem call settled");
+          setIsLoading(false);
+        };
+        callback.refundCallbackFunction = () => {
+          if (callback.refundCallbackFunction) callback.refundCallbackFunction();
+          console.info("SellItem call settled");
+          setIsLoading(false);
+        };
 
+        setIsLoading(true);
         await marketService.sellItem({
           item: itemToSell,
           price: BigInt(uISTPrice),
@@ -164,10 +174,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
             makeOffer: service.walletConnection.makeOffer,
             istBrand: service.tokenInfo.ist.brand,
           },
-          callback: async () => {
-            console.info("SellItem call settled");
-            setIsLoading(false);
-          },
+          callback: callback.getHandleOfferResult(),
         });
         setPlacedInShop();
         return true;
@@ -195,14 +202,26 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
   const istBrand = service.tokenInfo.ist.brand;
 
   const callback = useCallback(
-    async (setIsAwaitingApprovalToFalse: () => void) => {
+    async (setIsAwaitingApprovalToFalse: () => void, callback: HandleOfferResultBuilder) => {
       try {
         if (!itemToBuy) return;
         const { forSale, equippedTo, activity, ...itemObject } = itemToBuy.item;
         itemToBuy.item = itemObject;
 
-        setIsLoading(true);
+        callback.successCallbackFunction = () => {
+          if (callback.successCallbackFunction) callback.successCallbackFunction();
+          console.info("BuyItem call settled");
+          setIsLoading(false);
+          setIsAwaitingApprovalToFalse();
+        };
+        callback.refundCallbackFunction = () => {
+          if (callback.refundCallbackFunction) callback.refundCallbackFunction();
+          console.info("BuyItem call settled");
+          setIsLoading(false);
+          setIsAwaitingApprovalToFalse();
+        };
 
+        setIsLoading(true);
         return await marketService.buyItem({
           entryId: itemToBuy.id,
           item: itemToBuy.item,
@@ -213,11 +232,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
             makeOffer: service.walletConnection.makeOffer,
             istBrand,
           },
-          callback: async () => {
-            console.info("BuyItem call settled");
-            setIsLoading(false);
-            setIsAwaitingApprovalToFalse();
-          },
+          callback: callback.getHandleOfferResult(),
         });
       } catch (error) {
         console.warn(error);

@@ -20,6 +20,10 @@ export const handleOfferResultBuilder: HandleOfferResultBuilderFunction = (error
           console.info("Offer accepted", data);
           if (this.successCallbackFunction) this.successCallbackFunction();
         }
+        if (status === "seated") {
+          console.info("Offer accepted", data);
+          if (this.successCallbackFunction) this.successCallbackFunction();
+        }
       }).bind<HandleOfferResult>(this);
     },
   };

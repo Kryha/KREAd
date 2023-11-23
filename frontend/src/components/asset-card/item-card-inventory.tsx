@@ -48,7 +48,7 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
   const unequipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(true);
-    unequipItem.mutate({ item, callback: handleOfferResultBuilder() });
+    unequipItem.mutate({ item, callback: handleOfferResultBuilder(undefined, undefined, () => console.log("YURR")) });
   };
 
   const sellAsset = (event: React.MouseEvent<HTMLButtonElement>) => {

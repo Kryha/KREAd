@@ -5,6 +5,7 @@ import { ErrorView } from "../../components";
 import { useMyCharacter, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
+import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
@@ -19,7 +20,7 @@ export const CharacterSell = () => {
 
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellCharacter.callback(data.price, () => setIsPlacedInShop(true));
+    await sellCharacter.callback(data.price, handleOfferResultBuilder(), () => setIsPlacedInShop(true));
   };
 
   const characterName = useMemo(() => character?.nft.name, [character]);
