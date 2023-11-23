@@ -184,14 +184,16 @@ export const useSellCharacter = (characterId: number) => {
       const characterToSell = { ...found.nft, id: Number(found.nft.id) };
       const uISTPrice = ISTTouIST(price);
 
+      const originalSuccessCallbackFunction = callback.successCallbackFunction;
       callback.successCallbackFunction = () => {
-        if (callback.successCallbackFunction) callback.successCallbackFunction();
+        if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
         console.info("SellCharacter call settled");
         setIsLoading(false);
         userDispatch({ type: "SET_SELECTED", payload: "" });
       };
+      const originalRefundCallbackFunction = callback.refundCallbackFunction;
       callback.refundCallbackFunction = () => {
-        if (callback.refundCallbackFunction) callback.refundCallbackFunction();
+        if (originalRefundCallbackFunction) originalRefundCallbackFunction();
         console.info("SellCharacter call settled");
         setIsLoading(false);
         userDispatch({ type: "SET_SELECTED", payload: "" });
@@ -238,14 +240,15 @@ export const useBuyCharacter = (characterId: string) => {
         ...found,
         character: found.character,
       };
-
+      const originalSuccessCallbackFunction = callback.successCallbackFunction;
       callback.successCallbackFunction = () => {
-        if (callback.successCallbackFunction) callback.successCallbackFunction();
+        if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
         console.info("BuyCharacter call settled");
         setIsLoading(false);
       };
+      const originalRefundCallbackFunction = callback.refundCallbackFunction;
       callback.refundCallbackFunction = () => {
-        if (callback.refundCallbackFunction) callback.refundCallbackFunction();
+        if (originalRefundCallbackFunction) originalRefundCallbackFunction();
         console.info("BuyCharacter call settled");
         setIsLoading(false);
       };

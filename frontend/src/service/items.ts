@@ -153,13 +153,15 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
         const itemBrand = service.tokenInfo.item.brand;
         const uISTPrice = ISTTouIST(price);
 
+        const originalSuccessCallbackFunction = callback.successCallbackFunction;
         callback.successCallbackFunction = () => {
-          if (callback.successCallbackFunction) callback.successCallbackFunction();
+          if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
           console.info("SellItem call settled");
           setIsLoading(false);
         };
+        const originalRefundCallbackFunction = callback.refundCallbackFunction;
         callback.refundCallbackFunction = () => {
-          if (callback.refundCallbackFunction) callback.refundCallbackFunction();
+          if (originalRefundCallbackFunction) originalRefundCallbackFunction();
           console.info("SellItem call settled");
           setIsLoading(false);
         };
@@ -208,14 +210,16 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
         const { forSale, equippedTo, activity, ...itemObject } = itemToBuy.item;
         itemToBuy.item = itemObject;
 
+        const originalSuccessCallbackFunction = callback.successCallbackFunction;
         callback.successCallbackFunction = () => {
-          if (callback.successCallbackFunction) callback.successCallbackFunction();
+          if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
           console.info("BuyItem call settled");
           setIsLoading(false);
           setIsAwaitingApprovalToFalse();
         };
+        const originalRefundCallbackFunction = callback.refundCallbackFunction;
         callback.refundCallbackFunction = () => {
-          if (callback.refundCallbackFunction) callback.refundCallbackFunction();
+          if (originalRefundCallbackFunction) originalRefundCallbackFunction();
           console.info("BuyItem call settled");
           setIsLoading(false);
           setIsAwaitingApprovalToFalse();
@@ -269,9 +273,10 @@ export const useEquipItem = () => {
     if (body.currentlyEquipped) {
       const { forSale: f_, equippedTo: e_, activity: a_, ...itemToUnequip } = body.currentlyEquipped;
 
-      body.callback.errorCallbackFunction = (data) => {
+      const originalSuccessCallbackFunction = body.callback.successCallbackFunction;
+      body.callback.successCallbackFunction = () => {
         console.info("Swap call settled");
-        if (body.callback.errorCallbackFunction) body.callback.errorCallbackFunction(data);
+        if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
         setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
       };
       await inventoryService.swapItems({
@@ -287,9 +292,10 @@ export const useEquipItem = () => {
         callback: body.callback.getHandleOfferResult(),
       });
     } else {
-      body.callback.errorCallbackFunction = (data) => {
+      const originalSuccessCallbackFunction = body.callback.successCallbackFunction;
+      body.callback.successCallbackFunction = () => {
         console.info("Equip call settled");
-        if (body.callback.errorCallbackFunction) body.callback.errorCallbackFunction(data);
+        if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
         setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
       };
       await inventoryService.equipItem({
@@ -325,15 +331,13 @@ export const useUnequipItem = () => {
       console.error("Could find character to unequip from");
       return;
     }
-    console.log("BEFORE:", body.callback.errorCallbackFunction)
 
-    body.callback.errorCallbackFunction = (data) => {
+    const originalSuccessCallbackFunction = body.callback.successCallbackFunction
+    body.callback.successCallbackFunction = () => {
       console.info("Unequip call settled");
-      if (body.callback.errorCallbackFunction) body.callback.errorCallbackFunction(data);
+      if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
       setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
     };
-
-    // console.log("AFTER: ", body.callback.getHandleOfferResult())
 
     await inventoryService.unequipItem({
       item: itemToUnequip,

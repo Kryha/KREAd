@@ -1,4 +1,4 @@
-import { HandleOfferResult, HandleOfferResultBuilderFunction } from "../interfaces";
+import { HandleOfferResult, HandleOfferResultBuilderFunction, OFFER_STATUS, OfferStatusType } from "../interfaces";
 
 export const handleOfferResultBuilder: HandleOfferResultBuilderFunction = (errorCallback, refundCallback, successCallback) => { 
   return {
@@ -6,23 +6,28 @@ export const handleOfferResultBuilder: HandleOfferResultBuilderFunction = (error
     refundCallbackFunction: refundCallback,
     successCallbackFunction: successCallback,
     getHandleOfferResult() {
-      return (({ status, data }: { status: string; data: object }) => {
-        console.log("HERE WITH STATUS: ", status)
-        if (status === "error") {
-          console.error("Offer error", data);
-          if (this.errorCallbackFunction) this.errorCallbackFunction(JSON.stringify(data));
-        }
-        if (status === "refunded") {
-          console.error("Offer refunded", data);
-          if (this.refundCallbackFunction) this.refundCallbackFunction();
-        }
-        if (status === "accepted") {
-          console.info("Offer accepted", data);
-          if (this.successCallbackFunction) this.successCallbackFunction();
-        }
-        if (status === "seated") {
-          console.info("Offer accepted", data);
-          if (this.successCallbackFunction) this.successCallbackFunction();
+      return (({ status, data }: { status: OfferStatusType; data: object }) => {
+        switch (status) {
+          case OFFER_STATUS.error: {
+            console.error("Offer error", data);
+            if (this.errorCallbackFunction) this.errorCallbackFunction(JSON.stringify(data));
+            break;
+          }
+          case OFFER_STATUS.refunded: {
+            console.error("Offer refunded", data);
+            if (this.refundCallbackFunction) this.refundCallbackFunction();
+            break;
+          }
+          case OFFER_STATUS.accepted: {
+            console.info("Offer accepted", data);
+            if (this.successCallbackFunction) this.successCallbackFunction();
+            break;
+          }
+          case OFFER_STATUS.seated: {
+            console.info("Offer accepted", data);
+            if (this.successCallbackFunction) this.successCallbackFunction();
+            break;
+          }
         }
       }).bind<HandleOfferResult>(this);
     },

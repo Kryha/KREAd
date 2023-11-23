@@ -30,6 +30,5 @@ export const mintCharacter = async ({ name, service, callback }: MintCharacter):
   const proposal = {
     give,
   };
-  console.log(callback)
   service.makeOffer(spec, proposal, offerArgs, callback);
 };
