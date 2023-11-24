@@ -23,11 +23,6 @@ export const handleOfferResultBuilder: HandleOfferResultBuilderFunction = (error
             if (this.successCallbackFunction) this.successCallbackFunction();
             break;
           }
-          case OFFER_STATUS.seated: {
-            console.info("Offer accepted", data);
-            if (this.successCallbackFunction) this.successCallbackFunction();
-            break;
-          }
         }
       }).bind<HandleOfferResult>(this);
     },

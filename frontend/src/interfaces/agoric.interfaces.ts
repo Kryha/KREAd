@@ -136,12 +136,11 @@ export interface OfferProposal {
   want: any;
 }
 
-export type OfferStatusType = "error" | "refunded" | "accepted" | "seated";
+export type OfferStatusType = "error" | "refunded" | "accepted";
 export const OFFER_STATUS = {
   error: "error",
   refunded: "refunded",
   accepted: "accepted",
-  seated: "seated",
 };
 
 export interface HandleOfferResult {
