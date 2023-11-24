@@ -102,5 +102,5 @@
     "vite-plugin-svgr": "^2.2.1",
     "vite-tsconfig-paths": "^3.5.0"
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@4.0.0"
 }
