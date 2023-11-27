@@ -39,7 +39,7 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
     want,
     give,
   };
-
+  console.log(callback)
   if(callback.setIsLoading) callback.setIsLoading(true);
   service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };

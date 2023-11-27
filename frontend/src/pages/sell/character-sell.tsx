@@ -12,7 +12,6 @@ import { useUserStateDispatch } from "../../context/user";
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
   const idString = String(id);
-  const userDispatch = useUserStateDispatch();
 
   const sellCharacter = useSellCharacter(Number(idString));
   const [character] = useMyCharacter(Number(idString));
@@ -21,13 +20,17 @@ export const CharacterSell = () => {
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
 
+  //define callbacks here
   const handleResult: AddOfferCallback = {
     settled: () => {
       // Currently calling this logic on settled due to an issue with the status returned by the sell method,
       // TODO: move this logic to a more specific callback
-      setIsPlacedInShop(true),
-      userDispatch({ type: "SET_SELECTED", payload: "" });
+      setIsPlacedInShop(true);
+      console.log("VIEW LOGIC")
     },
+    error: () => {
+      console.log("ERROR")
+    }
   };
 
   const sendOfferHandler = async (data: SellData) => {

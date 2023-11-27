@@ -172,6 +172,7 @@ export const useSellCharacter = (characterId: number) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [characters] = useMyCharacters();
+  const userDispatch = useUserStateDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const instance = service.contracts.kread.instance;
   const charBrand = service.tokenInfo.character.brand;
@@ -182,7 +183,17 @@ export const useSellCharacter = (characterId: number) => {
       if (!found) return;
       const characterToSell = { ...found.nft, id: Number(found.nft.id) };
       const uISTPrice = ISTTouIST(price);
-      callback.setIsLoading = setIsLoading;
+
+      // if needed can add common functionality here like so
+      const makeOfferCallback: AddOfferCallback = {
+        ...callback,
+        settled: () => {
+          if (callback.settled) callback.settled();
+          userDispatch({ type: "SET_SELECTED", payload: "" });
+          console.log("HOOK LOGIC")
+        },
+        setIsLoading: setIsLoading
+      }
 
       // const originalSuccessCallbackFunction = callback.successCallbackFunction;
       // callback.successCallbackFunction = () => {
@@ -208,7 +219,7 @@ export const useSellCharacter = (characterId: number) => {
           makeOffer: service.walletConnection.makeOffer,
           istBrand: service.tokenInfo.ist.brand,
         },
-        callback: callback
+        callback: makeOfferCallback
       });
     },
     [characterId, characters, wallet, service],
