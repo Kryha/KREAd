@@ -1,7 +1,7 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, HandleOfferResult, Item } from "../../interfaces";
+import { AddOfferCallback, Character, HandleOfferResult, Item } from "../../interfaces";
 import { urlToCid } from "../../util/other";
-// TODO: Use makeOffer status callback for errors
+import { formOfferResultCallback } from "../../util/contract-callbacks";
 
 interface CharacterMarketAction {
   character: Character;
@@ -12,7 +12,7 @@ interface CharacterMarketAction {
     istBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResult;
+  callback: AddOfferCallback;
 }
 
 const sellCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
@@ -40,7 +40,8 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, callback);
+  if(callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 const buyCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {

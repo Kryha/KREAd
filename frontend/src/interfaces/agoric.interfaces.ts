@@ -143,6 +143,14 @@ export const OFFER_STATUS = {
   accepted: "accepted",
 };
 
+export interface AddOfferCallback {
+  accepted?: () => void,
+  refunded?: () => void,
+  error?: () => void,
+  settled?: () => void,
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>
+};
+
 export interface HandleOfferResult {
   ({ status, data }: { status: OfferStatusType; data: object }): any;
 }

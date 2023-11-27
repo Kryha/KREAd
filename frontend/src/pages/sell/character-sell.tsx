@@ -5,11 +5,14 @@ import { ErrorView } from "../../components";
 import { useMyCharacter, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
-import { handleOfferResultBuilder } from "../../util/contract-callbacks";
+// import { handleOfferResultBuilder } from "../../util/contract-callbacks";
+import { AddOfferCallback } from "../../interfaces";
+import { useUserStateDispatch } from "../../context/user";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
   const idString = String(id);
+  const userDispatch = useUserStateDispatch();
 
   const sellCharacter = useSellCharacter(Number(idString));
   const [character] = useMyCharacter(Number(idString));
@@ -18,9 +21,17 @@ export const CharacterSell = () => {
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
 
+  const handleResult: AddOfferCallback = {
+    settled: () => {
+      // Currently calling this logic on settled due to an issue with the status returned by the sell method,
+      // TODO: move this logic to a more specific callback
+      setIsPlacedInShop(true),
+      userDispatch({ type: "SET_SELECTED", payload: "" });
+    },
+  };
+
   const sendOfferHandler = async (data: SellData) => {
-    if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellCharacter.callback(data.price, handleOfferResultBuilder(), () => setIsPlacedInShop(true));
+    await sellCharacter.sendOffer(data.price, handleResult);
   };
 
   const characterName = useMemo(() => character?.nft.name, [character]);
