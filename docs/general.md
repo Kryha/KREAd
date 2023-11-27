@@ -45,7 +45,7 @@ For a full list of the properties contained in KREAd Character and Item sfts ref
 
 Character and Item objects taken from KREAd's frontend:
 ```js
-Character = {
+Item = {
   "artistMetadata": "https://instagram.com/enmanueljrperez?igshid=MzRlODBiNWFlZA==",
   "category": "background",
   "colors": [],
@@ -61,12 +61,12 @@ Character = {
   "reserves": 0,
   "sense": 0,
   "thumbnail": "https://pink-defensive-jay-557.mypinata.cloud/ipfs/QmfW1CGtyn3t5MUfwk86n936og7Q3ruhKda5nu6ExJAp8N/Sky%20gray.png",
-  "weight": 0,
+  "weight": 0,  
   "equippedTo": "",
   "forSale": false
 }
 
-Item = {
+Character = {
   "artistMetadata": "https://instagram.com/enmanueljrperez?igshid=MzRlODBiNWFlZA==",
   "characterTraits": "",
   "date": {
