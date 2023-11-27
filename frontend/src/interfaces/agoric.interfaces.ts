@@ -136,19 +136,21 @@ export interface OfferProposal {
   want: any;
 }
 
-export type OfferStatusType = "error" | "refunded" | "accepted";
+export type OfferStatusType = "error" | "refunded" | "accepted" | "seated";
 export const OFFER_STATUS = {
   error: "error",
   refunded: "refunded",
   accepted: "accepted",
+  seated: "seated"
 };
 
 export interface AddOfferCallback {
-  accepted?: () => void,
-  refunded?: () => void,
-  error?: () => void,
-  settled?: () => void,
-  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>
+  accepted?: () => void, // offer was successful
+  refunded?: () => void, // strangely seems to behave the same way as accepted
+  error?: () => void, // offer failed
+  seated?: () => void, // returned exclusively by the KREAd sell method, likely has to do with the offer being long-lived
+  settled?: () => void, // gets called when a response is received, regardless of the status
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>> 
 };
 
 export interface HandleOfferResult {
