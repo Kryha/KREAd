@@ -1,6 +1,7 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, HandleOfferResult, Item } from "../../interfaces";
+import { Character, Item, MakeOfferCallback } from "../../interfaces";
 import { urlToCid } from "../../util/other";
+import { formOfferResultCallback } from "../../util/contract-callbacks";
 
 // TODO: Use makeOffer status callback for errors
 interface UnequipItem {
@@ -13,7 +14,7 @@ interface UnequipItem {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResult;
+  callback: MakeOfferCallback;
 }
 
 const unequipItem = async ({ item, character, service, callback }: UnequipItem): Promise<void> => {
@@ -55,7 +56,8 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, callback);
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface UnequipAllItems {
@@ -65,7 +67,7 @@ interface UnequipAllItems {
     characterBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: MakeOfferCallback;
 }
 
 const unequipAll = async ({ character, service, callback }: UnequipAllItems): Promise<void> => {
@@ -95,7 +97,8 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, callback);
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface EquipItem {
@@ -107,7 +110,7 @@ interface EquipItem {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResult;
+  callback: MakeOfferCallback;
 }
 
 const equipItem = async ({ item, character, service, callback }: EquipItem): Promise<void> => {
@@ -147,7 +150,8 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, callback);
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface SwapItems {
@@ -160,7 +164,7 @@ interface SwapItems {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResult;
+  callback: MakeOfferCallback;
 }
 
 const swapItems = async ({ giveItem, wantItem, character, service, callback }: SwapItems): Promise<void> => {
@@ -206,7 +210,8 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, callback);
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 export const inventoryService = { unequipItem, equipItem, unequipAll, swapItems };

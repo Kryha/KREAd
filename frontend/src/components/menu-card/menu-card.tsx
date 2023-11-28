@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from "react";
-import { Item, Category } from "../../interfaces";
+import { Item, Category, MakeOfferCallback } from "../../interfaces";
 import { text } from "../../assets";
 import {
   ArrowContainer,
@@ -27,7 +27,6 @@ import { useEquipItem, useUnequipItem } from "../../service";
 import { FadeInOut } from "../fade-in-out";
 import { NotificationDetail } from "../notification-detail";
 import { NotificationWrapper } from "../notification-detail/styles";
-import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 interface MenuCardProps {
   title: string;
@@ -48,7 +47,13 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
 
-  const unequipSuccessCallback = () => setEquippedItem(undefined);
+  const handleEquipResult: MakeOfferCallback = {
+    accepted: () => setEquippedItem(undefined),
+  };
+
+  const handleUnequipResult: MakeOfferCallback = {
+    accepted: setEquippedItem,
+  };
 
   const allItems = useMemo(() => {
     if (equippedItem) return [equippedItem, ...unequippedItems];
@@ -61,14 +66,14 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
     event.stopPropagation();
     setShowToast(!showToast);
     if (!selectedItem) return;
-    equipItem.mutate({ item: selectedItem, callback: handleOfferResultBuilder(undefined, undefined, setEquippedItem) });
+    equipItem.mutate({ item: selectedItem, callback: handleEquipResult });
   };
 
   const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
     if (!equippedItem) return;
-    unequipItem.mutate({ item: equippedItem, callback: handleOfferResultBuilder(undefined, undefined, unequipSuccessCallback) });
+    unequipItem.mutate({ item: equippedItem, callback: handleUnequipResult });
   };
 
   const primaryActions = () => {

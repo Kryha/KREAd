@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 
-import { AddOfferCallback, CharacterInMarket, ExtendedCharacter, HandleOfferResultBuilder, MarketMetrics } from "../interfaces";
+import { MakeOfferCallback, CharacterInMarket, ExtendedCharacter, MarketMetrics } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
@@ -153,7 +153,7 @@ export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
   const istBrand = service.tokenInfo.ist.brand;
-  return useMutation(async (body: { name: string; callback: HandleOfferResultBuilder }): Promise<void> => {
+  return useMutation(async (body: { name: string; callback: MakeOfferCallback }): Promise<void> => {
     if (!body.name) throw new Error("Name not specified");
     await mintCharacter({
       name: body.name,
@@ -162,7 +162,7 @@ export const useCreateCharacter = () => {
         istBrand: istBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: body.callback.getHandleOfferResult(),
+      callback: body.callback,
     });
   });
 };
@@ -178,38 +178,12 @@ export const useSellCharacter = (characterId: number) => {
   const charBrand = service.tokenInfo.character.brand;
 
   const sendOffer = useCallback(
-    async (price: number, callback: AddOfferCallback) => {
+    async (price: number, callback: MakeOfferCallback) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
       const characterToSell = { ...found.nft, id: Number(found.nft.id) };
       const uISTPrice = ISTTouIST(price);
-
-      // if needed can add common functionality here like so
-      const makeOfferCallback: AddOfferCallback = {
-        ...callback,
-        settled: () => {
-          if (callback.settled) callback.settled();
-          userDispatch({ type: "SET_SELECTED", payload: "" });
-          console.log("HOOK LOGIC")
-        },
-        setIsLoading: setIsLoading
-      }
-
-      // const originalSuccessCallbackFunction = callback.successCallbackFunction;
-      // callback.successCallbackFunction = () => {
-      //   if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
-      //   console.info("SellCharacter call settled");
-      //   setIsLoading(false);
-      //   userDispatch({ type: "SET_SELECTED", payload: "" });
-      // };
-      // const originalRefundCallbackFunction = callback.refundCallbackFunction;
-      // callback.refundCallbackFunction = () => {
-      //   if (originalRefundCallbackFunction) originalRefundCallbackFunction();
-      //   console.info("SellCharacter call settled");
-      //   setIsLoading(false);
-      //   userDispatch({ type: "SET_SELECTED", payload: "" });
-      // };
-
+      
       await marketService.sellCharacter({
         character: characterToSell,
         price: BigInt(uISTPrice),
@@ -219,7 +193,14 @@ export const useSellCharacter = (characterId: number) => {
           makeOffer: service.walletConnection.makeOffer,
           istBrand: service.tokenInfo.ist.brand,
         },
-        callback: makeOfferCallback
+        callback: {
+          ...callback,
+          settled: () => {
+            if (callback.settled) callback.settled();
+            userDispatch({ type: "SET_SELECTED", payload: "" });
+          },
+          setIsLoading: setIsLoading
+        }
       });
     },
     [characterId, characters, wallet, service],
@@ -241,25 +222,13 @@ export const useBuyCharacter = (characterId: string) => {
     setIsLoading(false);
   }, [characterId, service.offers]);
 
-  const callback = useCallback(
-    async (callback: HandleOfferResultBuilder) => {
+  const sendOffer = useCallback(
+    async (callback: MakeOfferCallback) => {
       const found = characters.find((character) => character.id === characterId);
       if (!found) return;
       const characterToBuy = {
         ...found,
         character: found.character,
-      };
-      const originalSuccessCallbackFunction = callback.successCallbackFunction;
-      callback.successCallbackFunction = () => {
-        if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
-        console.info("BuyCharacter call settled");
-        setIsLoading(false);
-      };
-      const originalRefundCallbackFunction = callback.refundCallbackFunction;
-      callback.refundCallbackFunction = () => {
-        if (originalRefundCallbackFunction) originalRefundCallbackFunction();
-        console.info("BuyCharacter call settled");
-        setIsLoading(false);
       };
 
       setIsLoading(true);
@@ -272,13 +241,26 @@ export const useBuyCharacter = (characterId: string) => {
           makeOffer: service.walletConnection.makeOffer,
           istBrand,
         },
-        callback: callback.getHandleOfferResult()
+        callback: {
+          ...callback,
+          refunded: () => {
+            if (callback.refunded) callback.refunded();
+            console.info("BuyCharacter call settled");
+            setIsLoading(false);
+          },
+          accepted: () => {
+            if (callback.accepted) callback.accepted();
+            console.info("BuyCharacter call settled");
+            setIsLoading(false);
+          },
+          setIsLoading: setIsLoading,
+        },
       });
     },
     [characterId, characters, wallet, service],
   );
 
-  return { callback, isLoading };
+  return { sendOffer, isLoading };
 };
 
 export const useGetCharacterInShopById = (id: string): [CharacterInMarket | undefined, boolean] => {

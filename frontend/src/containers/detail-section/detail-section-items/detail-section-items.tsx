@@ -18,7 +18,6 @@ import {
   LevelLabel,
   ListContainer,
 } from "./styles";
-import { handleOfferResultBuilder } from "../../../util/contract-callbacks";
 
 interface ListItemProps {
   item: Item | undefined;
@@ -33,7 +32,7 @@ const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
 
   const unequip = () => {
     showToast();
-    unequipItem.mutate({ item, callback: handleOfferResultBuilder() });
+    unequipItem.mutate({ item, callback: {} });
   };
 
   return (

@@ -6,7 +6,6 @@ import { useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
 import { Category, isItemCategory } from "../../interfaces";
-import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 export const ItemSell = () => {
   const { name, category } = useParams<"category" | "name">();
@@ -16,7 +15,7 @@ export const ItemSell = () => {
 
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellItem.callback(data.price, () => setIsPlacedInShop(true), handleOfferResultBuilder());
+    await sellItem.sendOffer(data.price, () => setIsPlacedInShop(true), {});
   };
 
   if (!data || !isItemCategory(category)) return <ErrorView />;

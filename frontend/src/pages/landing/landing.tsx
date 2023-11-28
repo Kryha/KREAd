@@ -14,7 +14,6 @@ import {
   Overlay,
   OverviewEmpty,
   PageSubTitle,
-  PageTitle,
   SecondaryButton,
 } from "../../components";
 import { ButtonContainer, CharacterCardWrapper, DetailContainer, ItemCardWrapper } from "./styles";
@@ -27,7 +26,7 @@ import { CharacterCanvas } from "../../containers/canvas/character-canvas/charac
 import { useViewport } from "../../hooks";
 import { useCharacterBuilder } from "../../context/character-builder-context";
 import { CategoryMode } from "../../containers/canvas/category-mode/category-mode";
-import { CATEGORY_MODE, CHARACTER_SELECT_MODE, INVENTORY_CALL_FETCH_DELAY, ITEM_MODE, MAIN_MODE } from "../../constants";
+import { CATEGORY_MODE, CHARACTER_SELECT_MODE, ITEM_MODE, MAIN_MODE } from "../../constants";
 import { ItemsMode } from "../../containers/canvas/items-mode/items-mode";
 import { CharactersMode } from "../../containers/canvas/characters-mode/characters-mode";
 import { MainMode } from "../../containers/canvas/main-mode/main-mode";
@@ -35,8 +34,6 @@ import { calculateCharacterLevels } from "../../util";
 import { AssetTag } from "../../components/asset-card/styles";
 import { color } from "../../design";
 import { ButtonInfoWrap } from "../../components/button-info/styles";
-import { useUserStateDispatch } from "../../context/user";
-import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 export const Landing: FC = () => {
   const navigate = useNavigate();
@@ -61,19 +58,19 @@ export const Landing: FC = () => {
 
   const equipItem = useEquipItem();
   const unequipItem = useUnequipItem();
-  
+
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
   const equipAsset = () => {
     setShowToast(!showToast);
     if (item) {
-      equipItem.mutate({ item, callback: handleOfferResultBuilder() });
+      equipItem.mutate({ item, callback: {} });
     }
   };
 
   const unequipAsset = () => {
     setShowToast(!showToast);
     if (item) {
-      unequipItem.mutate({ item, callback: handleOfferResultBuilder(undefined, undefined, undefined) });
+      unequipItem.mutate({ item, callback: {} });
     }
   };
 

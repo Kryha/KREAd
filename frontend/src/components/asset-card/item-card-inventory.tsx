@@ -23,7 +23,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ErrorView } from "../error-view";
 import { routes } from "../../navigation";
 import { useCharacterBuilder } from "../../context/character-builder-context";
-import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 interface Props {
   item: Item;
@@ -42,13 +41,13 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
   const equipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(true);
-    equipItem.mutate({ item, callback: handleOfferResultBuilder() });
+    equipItem.mutate({ item, callback: {} });
   };
 
   const unequipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(true);
-    unequipItem.mutate({ item, callback: handleOfferResultBuilder(undefined, undefined, () => console.log("YURR")) });
+    unequipItem.mutate({ item, callback: {} });
   };
 
   const sellAsset = (event: React.MouseEvent<HTMLButtonElement>) => {

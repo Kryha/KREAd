@@ -6,7 +6,6 @@ import { useBuyItem } from "../../service";
 import { Buy } from "./buy";
 import { useItemMarketState } from "../../context/item-shop-context";
 import { ErrorView } from "../../components";
-import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 export const ItemBuy = () => {
   const { id } = useParams<"id">();
@@ -30,10 +29,10 @@ export const ItemBuy = () => {
 
   const handleSubmit = async () => {
     setIsAwaitingApproval(true);
-    await buyItem.callback(() => {
+    await buyItem.sendOffer(() => {
       setIsOfferAccepted(true);
       setIsAwaitingApproval(false);
-    }, handleOfferResultBuilder());
+    }, {});
   };
 
   if (!data) return <ErrorView />;

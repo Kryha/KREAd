@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useMutation } from "react-query";
-import { Category, HandleOfferResultBuilder, Item, ItemInMarket, MarketMetrics, Rarity } from "../interfaces";
+import { Category, Item, ItemInMarket, MakeOfferCallback, MarketMetrics, Rarity } from "../interfaces";
 import { ISTTouIST, mediate, useFilterItems, useFilterItemsInShop } from "../util";
 import { useAgoricContext } from "../context/agoric";
 import { useOffers } from "./offers";
@@ -10,7 +10,6 @@ import { useWalletState } from "../context/wallet";
 import { marketService } from "./character/market";
 import { inventoryService } from "./character/inventory";
 import { useItemMarketState } from "../context/item-shop-context";
-import { handleOfferResultBuilder } from "../util/contract-callbacks";
 
 export function getRarityString(rarity: number) {
   if (rarity > 79) return "exotic" as Rarity;
@@ -143,8 +142,8 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
   const { items } = useUserState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const callback = useCallback(
-    async (price: number, setPlacedInShop: () => void, callback: HandleOfferResultBuilder) => {
+  const sendOffer = useCallback(
+    async (price: number, setPlacedInShop: () => void, callback: MakeOfferCallback) => {
       try {
         const found = items.find((item) => item.name === itemName && item.category === itemCategory);
         if (!found) return;
@@ -153,20 +152,6 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
         const itemBrand = service.tokenInfo.item.brand;
         const uISTPrice = ISTTouIST(price);
 
-        const originalSuccessCallbackFunction = callback.successCallbackFunction;
-        callback.successCallbackFunction = () => {
-          if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
-          console.info("SellItem call settled");
-          setIsLoading(false);
-        };
-        const originalRefundCallbackFunction = callback.refundCallbackFunction;
-        callback.refundCallbackFunction = () => {
-          if (originalRefundCallbackFunction) originalRefundCallbackFunction();
-          console.info("SellItem call settled");
-          setIsLoading(false);
-        };
-
-        setIsLoading(true);
         await marketService.sellItem({
           item: itemToSell,
           price: BigInt(uISTPrice),
@@ -176,7 +161,20 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
             makeOffer: service.walletConnection.makeOffer,
             istBrand: service.tokenInfo.ist.brand,
           },
-          callback: callback.getHandleOfferResult(),
+          callback: {
+            ...callback,
+            refunded: () => {
+              if (callback.refunded) callback.refunded();
+              console.info("SellItem call settled");
+              setIsLoading(false);
+            },
+            accepted: () => {
+              if (callback.accepted) callback.accepted();
+              console.info("SellItem call settled");
+              setIsLoading(false);
+            },
+            setIsLoading: setIsLoading
+          }
         });
         setPlacedInShop();
         return true;
@@ -188,7 +186,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
     [itemName, itemCategory, items, service],
   );
 
-  return { callback, isLoading };
+  return { sendOffer, isLoading };
 };
 
 export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
@@ -203,29 +201,13 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
   const itemBrand = service.tokenInfo.item.brand;
   const istBrand = service.tokenInfo.ist.brand;
 
-  const callback = useCallback(
-    async (setIsAwaitingApprovalToFalse: () => void, callback: HandleOfferResultBuilder) => {
+  const sendOffer = useCallback(
+    async (setIsAwaitingApprovalToFalse: () => void, callback: MakeOfferCallback) => {
       try {
         if (!itemToBuy) return;
         const { forSale, equippedTo, activity, ...itemObject } = itemToBuy.item;
         itemToBuy.item = itemObject;
 
-        const originalSuccessCallbackFunction = callback.successCallbackFunction;
-        callback.successCallbackFunction = () => {
-          if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
-          console.info("BuyItem call settled");
-          setIsLoading(false);
-          setIsAwaitingApprovalToFalse();
-        };
-        const originalRefundCallbackFunction = callback.refundCallbackFunction;
-        callback.refundCallbackFunction = () => {
-          if (originalRefundCallbackFunction) originalRefundCallbackFunction();
-          console.info("BuyItem call settled");
-          setIsLoading(false);
-          setIsAwaitingApprovalToFalse();
-        };
-
-        setIsLoading(true);
         return await marketService.buyItem({
           entryId: itemToBuy.id,
           item: itemToBuy.item,
@@ -236,7 +218,22 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
             makeOffer: service.walletConnection.makeOffer,
             istBrand,
           },
-          callback: callback.getHandleOfferResult(),
+          callback: {
+            ...callback,
+            refunded: () => {
+              if (callback.refunded) callback.refunded();
+              console.info("BuyItem call settled");
+              setIsLoading(false);
+              setIsAwaitingApprovalToFalse();
+            },
+            accepted: () => {
+              if (callback.accepted) callback.accepted();
+              console.info("BuyItem call settled");
+              setIsLoading(false);
+              setIsAwaitingApprovalToFalse();
+            },
+            setIsLoading: setIsLoading
+          }
         });
       } catch (error) {
         console.warn(error);
@@ -247,7 +244,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
     [itemToBuy, items, wallet, service],
   );
 
-  return { callback, isLoading, isError };
+  return { sendOffer, isLoading, isError };
 };
 
 export const useEquipItem = () => {
@@ -259,7 +256,7 @@ export const useEquipItem = () => {
   const characterBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { item: Item; currentlyEquipped?: Item; callback: HandleOfferResultBuilder }): Promise<void> => {
+  return useMutation(async (body: { item: Item; currentlyEquipped?: Item; callback: MakeOfferCallback }): Promise<void> => {
     if (!character || !body.item) {
       console.error("Could not find item or character");
       return;
@@ -273,12 +270,6 @@ export const useEquipItem = () => {
     if (body.currentlyEquipped) {
       const { forSale: f_, equippedTo: e_, activity: a_, ...itemToUnequip } = body.currentlyEquipped;
 
-      const originalSuccessCallbackFunction = body.callback.successCallbackFunction;
-      body.callback.successCallbackFunction = () => {
-        console.info("Swap call settled");
-        if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
-        setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-      };
       await inventoryService.swapItems({
         character: characterInWallet,
         giveItem: itemToEquip,
@@ -289,15 +280,16 @@ export const useEquipItem = () => {
           itemBrand,
           makeOffer: service.walletConnection.makeOffer,
         },
-        callback: body.callback.getHandleOfferResult(),
+        callback: {
+          ...body.callback,
+          accepted: () => {
+            console.info("Swap call settled");
+            if (body.callback.accepted) body.callback.accepted();
+            setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+          }
+        }
       });
     } else {
-      const originalSuccessCallbackFunction = body.callback.successCallbackFunction;
-      body.callback.successCallbackFunction = () => {
-        console.info("Equip call settled");
-        if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
-        setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-      };
       await inventoryService.equipItem({
         character: characterInWallet,
         item: itemToEquip,
@@ -307,7 +299,14 @@ export const useEquipItem = () => {
           itemBrand,
           makeOffer: service.walletConnection.makeOffer,
         },
-        callback: body.callback.getHandleOfferResult(),
+        callback: {
+          ...body.callback,
+          accepted: () => {
+            console.info("Equip call settled");
+            if (body.callback.accepted) body.callback.accepted();
+            setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+          }
+        },
       });
     }
   });
@@ -321,7 +320,7 @@ export const useUnequipItem = () => {
   const charBrand = service.tokenInfo.character.brand;
   const itemBrand = service.tokenInfo.item.brand;
 
-  return useMutation(async (body: { item: Item; callback: HandleOfferResultBuilder }) => {
+  return useMutation(async (body: { item: Item; callback: MakeOfferCallback }) => {
     if (!body.item) return;
     userStateDispatch({ type: "START_INVENTORY_CALL" });
 
@@ -332,13 +331,6 @@ export const useUnequipItem = () => {
       return;
     }
 
-    const originalSuccessCallbackFunction = body.callback.successCallbackFunction
-    body.callback.successCallbackFunction = () => {
-      console.info("Unequip call settled");
-      if (originalSuccessCallbackFunction) originalSuccessCallbackFunction();
-      setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
-    };
-
     await inventoryService.unequipItem({
       item: itemToUnequip,
       character: characterToUnequipFrom.nft,
@@ -348,7 +340,14 @@ export const useUnequipItem = () => {
         itemBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: body.callback.getHandleOfferResult(),
+      callback: {
+        ...body.callback,
+        accepted: () => {
+          console.info("Unequip call settled");
+          if (body.callback.accepted) body.callback.accepted();
+          setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
+        }
+      }
     });
   });
 };

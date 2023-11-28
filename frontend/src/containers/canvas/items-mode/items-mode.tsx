@@ -19,7 +19,6 @@ import { ModeScroller } from "../mode-scroller/mode-scroller";
 import { color } from "../../../design";
 import { useGetItemSelectionForCharacter } from "../item-cards/hooks";
 import { ItemNotifications } from "./item-notifications";
-import { handleOfferResultBuilder } from "../../../util/contract-callbacks";
 
 export const ItemsMode: FC = () => {
   const navigate = useNavigate();
@@ -59,13 +58,13 @@ export const ItemsMode: FC = () => {
       equipItem.mutate({
         item: selected,
         currentlyEquipped: equipped.inCategory,
-        callback: handleOfferResultBuilder(),
+        callback: {},
       });
     }
     setOnAssetChange(false);
     setShowToast(!showToast);
     if (!equipped.inCategory && selected) {
-      equipItem.mutate({ item: selected, callback: handleOfferResultBuilder() });
+      equipItem.mutate({ item: selected, callback: {} });
     }
   };
 
@@ -74,7 +73,7 @@ export const ItemsMode: FC = () => {
     setOnAssetChange(false);
     setShowToast(!showToast);
     if (equipped.inCategory) {
-      unequipItem.mutate({ item: equipped.inCategory, callback: handleOfferResultBuilder() });
+      unequipItem.mutate({ item: equipped.inCategory, callback: {} });
     }
   };
 

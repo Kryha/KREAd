@@ -1,5 +1,5 @@
 import { makeCopyBag } from "@agoric/store";
-import { AddOfferCallback, Character, HandleOfferResult, Item } from "../../interfaces";
+import { Character, Item, MakeOfferCallback } from "../../interfaces";
 import { urlToCid } from "../../util/other";
 import { formOfferResultCallback } from "../../util/contract-callbacks";
 
@@ -12,7 +12,7 @@ interface CharacterMarketAction {
     istBrand: any;
     makeOffer: any;
   };
-  callback: AddOfferCallback;
+  callback: MakeOfferCallback;
 }
 
 const sellCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
@@ -39,8 +39,8 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
     want,
     give,
   };
-  console.log(callback)
-  if(callback.setIsLoading) callback.setIsLoading(true);
+
+  if (callback.setIsLoading) callback.setIsLoading(true);
   service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
@@ -70,7 +70,8 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, callback);
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface ItemMarketAction {
@@ -83,7 +84,7 @@ interface ItemMarketAction {
     istBrand: any;
     makeOffer: any;
   };
-  callback: HandleOfferResult;
+  callback: MakeOfferCallback;
 }
 
 const sellItem = async ({ item, price, service, callback }: ItemMarketAction): Promise<void> => {
@@ -94,7 +95,7 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
     ...item,
     image: urlToCid(item.image),
     thumbnail: urlToCid(item.thumbnail),
-};
+  };
 
   const spec = {
     id: "custom-id",
@@ -115,8 +116,8 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
     want,
     give,
   };
-
-  service.makeOffer(spec, proposal, undefined, callback);
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface SellItemBatchAction {
@@ -200,8 +201,8 @@ const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAc
     want,
     give,
   };
-
-  service.makeOffer(spec, proposal, { entryId: Number(entryId) }, callback);
+  if( callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, { entryId: Number(entryId) }, formOfferResultCallback(callback));
 };
 
 export const marketService = { sellCharacter, buyCharacter, sellItem, sellItemBatch, buyItem };

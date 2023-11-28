@@ -6,7 +6,6 @@ import { ErrorView, LoadingPage } from "../../components";
 import { CharacterInMarket } from "../../interfaces";
 import { useBuyCharacter, useCharacterFromMarket, useMyCharacter } from "../../service";
 import { Buy } from "./buy";
-import { handleOfferResultBuilder } from "../../util/contract-callbacks";
 
 export const CharacterBuy = () => {
   const { id } = useParams<"id">();
@@ -33,7 +32,7 @@ export const CharacterBuy = () => {
   const handleSubmit = async () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    await buyCharacter.callback(handleOfferResultBuilder());
+    await buyCharacter.sendOffer({});
   };
 
   if (isLoadingCharacter) return <LoadingPage spinner={false} />;

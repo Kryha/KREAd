@@ -136,38 +136,20 @@ export interface OfferProposal {
   want: any;
 }
 
-export type OfferStatusType = "error" | "refunded" | "accepted" | "seated";
 export const OFFER_STATUS = {
   error: "error",
   refunded: "refunded",
   accepted: "accepted",
   seated: "seated"
 };
+export type OfferStatusType = keyof typeof OFFER_STATUS
 
-export interface AddOfferCallback {
-  accepted?: () => void, // offer was successful
-  refunded?: () => void, // strangely seems to behave the same way as accepted
-  error?: () => void, // offer failed
-  seated?: () => void, // returned exclusively by the KREAd sell method, likely has to do with the offer being long-lived
-  settled?: () => void, // gets called when a response is received, regardless of the status
+export interface MakeOfferCallback {
+  accepted?: (args?: any) => void, // offer was successful
+  refunded?: (args?: any) => void, // strangely seems to behave the same way as accepted
+  error?: (args?: any) => void, // offer failed
+  seated?: (args?: any) => void, // returned exclusively by the KREAd sell method, likely has to do with the offer being long-lived
+  settled?: (args?: any) => void, // gets called when a response is received, regardless of the status
   setIsLoading?: React.Dispatch<React.SetStateAction<boolean>> 
 };
 
-export interface HandleOfferResult {
-  ({ status, data }: { status: OfferStatusType; data: object }): any;
-}
-
-export interface HandleOfferResultBuilder {
-  errorCallbackFunction?: (data: string, ...rest: any[]) => any;
-  refundCallbackFunction?: Function;
-  successCallbackFunction?: Function;
-  getHandleOfferResult: () => HandleOfferResult;
-}
-
-export interface HandleOfferResultBuilderFunction {
-  (
-    errorCallback?: (data: string, ...rest: any[]) => any,
-    refundCallback?: Function,
-    successCallback?: Function,
-  ): HandleOfferResultBuilder;
-}
