@@ -183,6 +183,20 @@ When a new entry is added using a sell method, the list of market entries on Ago
 
 
 #### Buy
+KREAd's marketplace can be used to buy Item and Character SFTs sold by the community or KREAd itself in the case of Items. It can be accessed via [kread.app/shop](https://kread.app/shop/items) and allows users to browse from a list of market entries and filter by color, rarity, category, price, and other properties of KREAd sfts. All payments are in IST and both artist (10%) and platform (2%) fees are included. 
+
+A buy offer follows the following format:
+```js
+const buyCharacter = {
+    give: {
+        // price must be equal or greater than the listing for the wanted character
+        Price: { brand: istBrand, value: price },
+    },
+    want: {
+        Character: { brand: characterBrand, value: makeCopyBag(harden([[characterToBuy, 1n]])) },
+    }
+}
+```
 
 
 #### Storage node
