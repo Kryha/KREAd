@@ -83,13 +83,15 @@ Each [Character](#character-sft) has an inventory used to store [Items](#item-sf
 3. Only KREAd Items can be equipped, no other token brands are accepted
 
 #### Equip
-Equipping an Item involves executing an offer that transfers the Item SFT from the wallet of a Character owner to the KREAd contract, specifically to the inventory seat of that Character (equipping to Characters you do not own is disallowed). Doing so will change the appearance of the character and add to the properties it already had (for as long as the Item is equipped). Note that ownership of the Character SFT is the only requirement for modifying its Inventory, so transferring a Character effectively transfers the rights to its inventory. An equip offer follows the following format:
+Equipping an Item involves executing an offer that transfers the Item SFT from the wallet of a Character owner to the KREAd contract, specifically to the inventory seat of that Character (equipping to Characters you do not own is disallowed). Doing so will change the appearance of the character and add to the properties it already had (for as long as the Item is equipped). Note that ownership of the Character SFT is the only requirement for modifying its Inventory, so transferring a Character effectively transfers the rights to its inventory. 
+
+An equip offer looks like this:
 
 ```js
 const equipProposal = {
     // the following assets are sent from your wallet to Zoe
     give: {
-        // the character SFT you wish to equip to, it's temporarily sent to Zoe as proof you own it and will be returned
+        // the character SFT you wish to equip to, it's temporarily sent to Zoe as proof of ownership and will be returned
         CharacterKey2: {
             brand: characterBrand,
             value: makeCopyBag([[characterToEquipTo, 1n]]),
@@ -110,12 +112,17 @@ const equipProposal = {
 ```
 
 #### Unequip
-TODO: write me
+The unequip action allows the owner of a [Character](#character-sft) to transfer an item from the Character's Inventory to their own wallet. Only one Item can be unequipped at a time and the only requiremnt is ownership of the Character. A user may want to unequip an item for the following reasons:
+1. To change the properties of a Character (look and stats)
+2. To manually equip a different item of the same category (consider using [swap](#swap) in this situation)
+3. To sell the item in the marketplace
+   
+An unequip proposal looks like this:
 ```js
 const unequipProposal = {
     // the following assets are sent from your wallet to Zoe
     give: {
-        // the character SFT you wish to equip to, it's temporarily sent to Zoe as proof you own it and will be returned
+        // the character SFT you wish to equip to, it's temporarily sent to Zoe as proof of ownership and will be returned
         CharacterKey1: { brand: charBrand, value: makeCopyBag([[characterToEquipTo, 1n]]) },
     }
     // the following assets must be received or the give will be returned
@@ -132,7 +139,38 @@ const unequipProposal = {
         },
     },
 };
+```
 
+#### Swap
+The swap action allows the owner of a [Character](#character-sft) to swap an [Inventory](#inventory) item for one from their wallet. Since only one Item per [category](#item-category) can be equipped at a time, replacing an equipped item would require two separate transaction (first unequip, then equip new item). The swap action combines it into a single transaction and allows users to replace an equipped item for anotherone of the same category. 
+   
+A swap proposal looks like this:
+```js
+const swapProposal = {
+    // the following assets are sent from your wallet to Zoe
+    give: {
+        // the character SFT you wish to perform a swap on, it's temporarily sent to Zoe as proof of ownership and will be returned
+        CharacterKey1: { brand: charBrand, value: makeCopyBag([[characterToEquipTo, 1n]]) },
+         // the item SFT you wish to equip (must be the same category as proposal.want.Item)
+        Item: {
+            brand: itemBrand,
+            value: makeCopyBag([[wantedItem, 1n]]),
+        },
+    },
+    // the following assets must be received or the give will be returned
+    want: {
+        // the character must be returned
+        CharacterKey2: {
+            brand: charBrand,
+            value: makeCopyBag([[characterToEquipTo, 1n]]),
+        },
+        // the item SFT you wish to unequip
+        Item: {
+            brand: itemBrand,
+            value: makeCopyBag([[wantedItem, 1n]]),
+        },
+    },
+};
 ```
 
 #### Item Category
@@ -185,7 +223,7 @@ When a new entry is added using a sell method, the list of market entries on Ago
 #### Buy
 KREAd's marketplace can be used to buy Item and Character SFTs sold by the community or KREAd itself in the case of Items. It can be accessed via [kread.app/shop](https://kread.app/shop/items) and allows users to browse from a list of market entries and filter by color, rarity, category, price, and other properties of KREAd sfts. All payments are in IST and both artist (10%) and platform (2%) fees are included. 
 
-A buy offer follows the following format:
+A buy offer looks like this:
 ```js
 const buyCharacter = {
     give: {
