@@ -244,13 +244,13 @@ export const useBuyCharacter = (characterId: string) => {
         callback: {
           ...callback,
           refunded: () => {
-            if (callback.refunded) callback.refunded();
             console.info("BuyCharacter call settled");
+            if (callback.refunded) callback.refunded();
             setIsLoading(false);
           },
           accepted: () => {
-            if (callback.accepted) callback.accepted();
             console.info("BuyCharacter call settled");
+            if (callback.accepted) callback.accepted();
             setIsLoading(false);
           },
           setIsLoading: setIsLoading,

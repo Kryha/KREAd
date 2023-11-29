@@ -143,7 +143,7 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
   const [isLoading, setIsLoading] = useState(false);
 
   const sendOffer = useCallback(
-    async (price: number, setPlacedInShop: () => void, callback: MakeOfferCallback) => {
+    async (price: number, callback: MakeOfferCallback) => {
       try {
         const found = items.find((item) => item.name === itemName && item.category === itemCategory);
         if (!found) return;
@@ -163,20 +163,14 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
           },
           callback: {
             ...callback,
-            refunded: () => {
-              if (callback.refunded) callback.refunded();
+            seated: () => {
               console.info("SellItem call settled");
-              setIsLoading(false);
-            },
-            accepted: () => {
-              if (callback.accepted) callback.accepted();
-              console.info("SellItem call settled");
+              if (callback.seated) callback.seated();
               setIsLoading(false);
             },
             setIsLoading: setIsLoading
           }
         });
-        setPlacedInShop();
         return true;
       } catch (error) {
         console.warn(error);
@@ -202,7 +196,7 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
   const istBrand = service.tokenInfo.ist.brand;
 
   const sendOffer = useCallback(
-    async (setIsAwaitingApprovalToFalse: () => void, callback: MakeOfferCallback) => {
+    async (callback: MakeOfferCallback) => {
       try {
         if (!itemToBuy) return;
         const { forSale, equippedTo, activity, ...itemObject } = itemToBuy.item;
@@ -221,16 +215,14 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
           callback: {
             ...callback,
             refunded: () => {
-              if (callback.refunded) callback.refunded();
               console.info("BuyItem call settled");
+              if (callback.refunded) callback.refunded();
               setIsLoading(false);
-              setIsAwaitingApprovalToFalse();
             },
             accepted: () => {
-              if (callback.accepted) callback.accepted();
               console.info("BuyItem call settled");
+              if (callback.accepted) callback.accepted();
               setIsLoading(false);
-              setIsAwaitingApprovalToFalse();
             },
             setIsLoading: setIsLoading
           }
@@ -238,7 +230,6 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
       } catch (error) {
         console.warn(error);
         setIsError(true);
-        setIsAwaitingApprovalToFalse();
       }
     },
     [itemToBuy, items, wallet, service],
@@ -282,9 +273,11 @@ export const useEquipItem = () => {
         },
         callback: {
           ...body.callback,
-          accepted: () => {
+          seated: () => {
             console.info("Swap call settled");
-            if (body.callback.accepted) body.callback.accepted();
+            if (body.callback.seated) body.callback.seated();
+          },
+          settled: () => {
             setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
           }
         }
@@ -301,9 +294,11 @@ export const useEquipItem = () => {
         },
         callback: {
           ...body.callback,
-          accepted: () => {
+          seated: () => {
             console.info("Equip call settled");
-            if (body.callback.accepted) body.callback.accepted();
+            if (body.callback.seated) body.callback.seated();
+          },
+          settled: () => {
             setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
           }
         },
@@ -342,9 +337,11 @@ export const useUnequipItem = () => {
       },
       callback: {
         ...body.callback,
-        accepted: () => {
+        seated: () => {
           console.info("Unequip call settled");
-          if (body.callback.accepted) body.callback.accepted();
+          if (body.callback.seated) body.callback.seated();
+        },
+        settled: () => {
           setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
         }
       }

@@ -48,11 +48,11 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
   const unequipItem = useUnequipItem();
 
   const handleEquipResult: MakeOfferCallback = {
-    accepted: () => setEquippedItem(undefined),
+    accepted: setEquippedItem,
   };
 
   const handleUnequipResult: MakeOfferCallback = {
-    accepted: setEquippedItem,
+    accepted: () => setEquippedItem(undefined),
   };
 
   const allItems = useMemo(() => {

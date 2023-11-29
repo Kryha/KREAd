@@ -29,10 +29,17 @@ export const ItemBuy = () => {
 
   const handleSubmit = async () => {
     setIsAwaitingApproval(true);
-    await buyItem.sendOffer(() => {
-      setIsOfferAccepted(true);
-      setIsAwaitingApproval(false);
-    }, {});
+    await buyItem.sendOffer({
+      refunded: () => {
+        setIsOfferAccepted(true);
+      },
+      accepted: () => {
+        setIsOfferAccepted(true);
+      },
+      settled: () => {
+        setIsAwaitingApproval(false);
+      }
+    });
   };
 
   if (!data) return <ErrorView />;
