@@ -1,6 +1,6 @@
 
 #### Semi-fungible token (SFT)
-Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFTs brands: [KREAd Characters](#character-sft) and KREAd Items.
+Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFT brands: [KREAd Characters](#character-sft) and KREAd Items.
 
 #### Character SFT
 Semi-fungible token representing a character in the SAGES universe. Each character can be identified by a unique image and a set of properties related to the SAGES story. Characters can be minted for a fee via KREAd's frontend. When minting, the user must choose a valid name for the character, and will reviece a randomly selected character from a predefined set. On their own, Character assets behave like any other sft on Agoric, meaning they can be used in offers and be recognized by other contracts. For example they can be sold and bought by anyone using the marketplace section of KREAd's frontend, or they can be sent to a different marketplace contract on the Agoric chain that handles sfts. KREAd extends the functionality of Characters by providing an Inventory in which to store [KREAd Items](#item-sft). 
@@ -36,7 +36,7 @@ CharacterSFT = {
   "url": "https://builder.agoric.kryha.dev/static/media/default-character.216ad02c.png"
 }
 ```
-> 💡 Properties containing links do not include the full url, prefix them with `https://pink-defensive-jay-557.mypinata.cloud/ipfs/` if you wish to access the link
+> 💡 Properties containing IPFS cids do not include the full url, prefix them with `https://pink-defensive-jay-557.mypinata.cloud/ipfs/` if you wish to access the document
 
 #### Item sft
 Semi-fungible token representing items that can be equipped to and from a Character's [Inventory](#character-inventory). Each Item contains a set of properties which relate to the SAGES universe, including an image showing how it looks. Items can be equipped to and unequpped from a Character's inventory by its owner, doing so results in changes to the Character's appearance and [dynamic] properties, such as the character level. It's important to understand that [equipping](#equip) an Item sft requires escrowing the token on contract, this ensures equipped items can only be equipped to a single Inventory at once, and preserves a Character's inventory when transferring the Character.
@@ -72,7 +72,7 @@ ItemSFT = {
   "thumbnail": "https://pink-defensive-jay-557.mypinata.cloud/ipfs/QmfW1CGtyn3t5MUfwk86n936og7Q3ruhKda5nu6ExJAp8N/Sky%20gray.png",
 }
 ```
-> 💡 Properties containing links do not include the full url, prefix them with `https://pink-defensive-jay-557.mypinata.cloud/ipfs/` if you wish to access the link
+> 💡 Properties containing IPFS cids do not include the full url, prefix them with `https://pink-defensive-jay-557.mypinata.cloud/ipfs/` if you wish to access the document
 
 
 #### Character Inventory
@@ -112,7 +112,7 @@ const equipProposal = {
 ```
 
 #### Unequip
-The unequip action allows the owner of a [Character](#character-sft) to transfer an item from the Character's Inventory to their own wallet. Only one Item can be unequipped at a time and the only requiremnt is ownership of the Character. A user may want to unequip an item for the following reasons:
+The unequip action allows the owner of a [Character](#character-sft) to transfer an item from the Character's Inventory to their own wallet. Only one Item can be unequipped at a time and the only requirement is ownership of the Character. A user may want to unequip an item for the following reasons:
 1. To change the properties of a Character (look and stats)
 2. To manually equip a different item of the same category (consider using [swap](#swap) in this situation)
 3. To sell the item in the marketplace
@@ -174,7 +174,7 @@ const swapProposal = {
 ```
 
 #### Item Category
-Item SFTs have a property `category` which determines how the item will fit (visually) when equipped onto a character's inventory. For example, items of category "mask" will be rendered on top of the character in the position of the character's mouth, while "background" items will be in the center behind the character. Character's are not required to have any items equipped and can only have a single item of a given category at once. Note that all KREAd items share a brand and issuer, despite the added functionality based on its property `category`. Currently, KREAd Items must be one of the following categories:
+Item SFTs have a property `category` which determines how the item will fit (visually) when equipped onto a character's inventory. For example, items of category `mask` will be rendered on top of the character in the position of the character's mouth, while `background` items will be in the center behind the character. Character's are not required to have any items equipped and can only have a single item of a given category at once. Note that all KREAd items share a brand and issuer, despite the added functionality based on its property `category`. Currently, KREAd Items must be one of the following categories:
 `background, patch, hair, headPiece, mask, perk1, perk2, filter1, filter2, garment`
 
 #### Marketplace 
