@@ -1,7 +1,6 @@
 
 #### Semi-fungible token (SFT)
-Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFT brands: [KREAd Characters](#character-sft) and KREAd Items.
-Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFTs [brands](https://docs.agoric.com/glossary/#brand): [KREAd Characters](#character-sft) and [KREAd Items](#item-sft).
+Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFT [brands](https://docs.agoric.com/glossary/#brand): [KREAd Characters](#character-sft) and [KREAd Items](#item-sft).
 
 #### Character SFT
 [Semi-fungible token](#semi-fungible-token-sft) representing a character in the SAGES universe. Each character can be identified by a unique image and a set of properties related to the SAGES story. Characters can be minted for a fee via KREAd's frontend. When minting, the user must choose a valid name for the character, and will reviece a randomly selected character from a predefined set. On their own, Character assets behave like any other SFT on Agoric, meaning they can be used in offers and be recognized by other contracts. For example they can be sold and bought by anyone using the marketplace section of KREAd's frontend, or they can be sent to a different marketplace contract on the Agoric chain that handles SFTs. KREAd extends the functionality of Characters by providing an Inventory in which to store [KREAd Items](#item-sft). 
@@ -40,7 +39,7 @@ CharacterSFT = {
 > 💡 Properties containing IPFS cids do not include the full url, prefix them with `https://pink-defensive-jay-557.mypinata.cloud/ipfs/` if you wish to access the document
 
 #### Item SFT
-Semi-fungible token representing items that can be equipped to and from a Character's [Inventory](#character-inventory). Each Item contains a set of properties which relate to the SAGES universe, including an image showing how it looks. Items can be equipped to and unequpped from a Character's inventory by its owner, doing so results in changes to the Character's appearance and [dynamic] properties, such as the character level. It's important to understand that [equipping](#equip) an Item SFT requires escrowing the token on contract, this ensures equipped items can only be equipped to a single Inventory at once, and preserves a Character's inventory when transferring the Character.
+Semi-fungible token representing items that can be equipped to and from a Character's [Inventory](#character-inventory). Each Item contains a set of properties which relate to the SAGES universe, including an image showing how it looks. Items can be equipped to and unequipped from a Character's inventory by its owner, doing so results in changes to the Character's appearance and [dynamic] properties, such as the character level. It's important to understand that [equipping](#equip) an Item SFT requires escrowing the token on contract, this ensures equipped items can only be equipped to a single Inventory at once, and preserves a Character's inventory when transferring the Character.
 
 See the table and example below for more information about the properties that make up KREAd Item SFTs:
 
@@ -215,7 +214,7 @@ const proposal {
 
 Once the market listing is created, it will be visible at kread.app/shop, where any user can buy it (provided they have enough IST to cover the set asking price + fees). The user sets the asking price via the offer's want property, then Agoric's [Offer Safety](https://docs.agoric.com/glossary/#offer-safety) guarantees they will either receive the asking price and transfer the asset to the buyer, or maintain the right to cancel the offer (and receive their asset back). 
 
-KREAd does not impose a time limit to market entries, as long as its creator does not cancel it it will be available for a counter party to fulfill the offer.
+KREAd does not impose a time limit to market entries. As long as its creator does not cancel it, it will be available for a counter party to fulfill the offer.
 
 When a new entry is added using a sell method, the list of market entries on Agoric's storage node is updated, allowing the KREAd frontend to display the new offer in kread.app/shop.
 
