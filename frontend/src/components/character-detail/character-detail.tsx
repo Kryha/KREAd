@@ -43,7 +43,7 @@ export const CharacterDetail: FC<EquippedItemCardProps> = ({ character, onClick 
           <DetailHeader>
             <DetailContainer>
               <TitleContainer>
-                <Heading>{character.name}</Heading>
+                <Heading preserveCase>{character.name}</Heading>
                 <SubTitleContainer>
                   <Badge>{character.origin}</Badge>
                   <BoldLabel customColor={color.black}>{text.param.id(character.id)}</BoldLabel>

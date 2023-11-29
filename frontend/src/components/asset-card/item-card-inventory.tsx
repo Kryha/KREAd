@@ -80,7 +80,7 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
                   <Equipped>
                     <EquippedIcon />
                   </Equipped>
-                  <BoldLabel>{item.equippedTo}</BoldLabel>
+                  <BoldLabel preserveCase>{item.equippedTo}</BoldLabel>
                 </AssetSubTitle>
               )}
             </AssetSubTitle>

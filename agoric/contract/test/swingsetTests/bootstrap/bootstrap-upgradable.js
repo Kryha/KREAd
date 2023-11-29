@@ -70,7 +70,7 @@ import {
   testFunctionalityAfterUpgrade,
   testFunctionalityBeforeUpgrade,
 } from './bootstrap-upgrade-v2.js';
-import { unmarshalFromVstorage } from '@agoric/vats/tools/board-utils';
+import { unmarshalFromVstorage } from '@agoric/internal/src/lib-chainStorage.js';
 import { mint } from './bootstrap-null-upgrade.js';
 
 const trace = makeTracer('kreadBootUpgrade');
@@ -167,9 +167,8 @@ export const buildRootObject = async () => {
    * Reads the data from the vstorage at the given path
    * Will throw an error if path doesnt exist
    * @param {string} path
-   * @param {number} index index of the desired value in a deserialized stream cell (-1 for latest)
    */
-  const getFromVStorage = (path, index = -1) => {
+  const getFromVStorage = (path) => {
     const { fromCapData } = makeMarshal(
       undefined,
       (slot, iface) => {
@@ -179,7 +178,7 @@ export const buildRootObject = async () => {
         serializeBodyFormat: 'smallcaps',
       },
     );
-    return unmarshalFromVstorage(storageKit.data, path, fromCapData, index);
+    return unmarshalFromVstorage(storageKit.data, path, fromCapData);
   };
 
   const committeeName = 'KREAd Committee';

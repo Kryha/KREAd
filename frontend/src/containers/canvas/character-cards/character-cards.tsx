@@ -14,6 +14,7 @@ import {
   CharacterCardsWrapper,
   CharacterInfo,
   CharacterInfoCharacter,
+  CharacterName,
 } from "./styles";
 import { useMyCharacters, useSelectedCharacter } from "../../../service";
 import { useUserStateDispatch } from "../../../context/user";
@@ -81,7 +82,7 @@ const CharacterInformation: FC<CharacterInfo> = ({ character }) => {
 
   return (
     <CharacterInfo>
-      <ButtonText customColor={color.black}>{character.nft.name}</ButtonText>
+      <CharacterName customColor={color.black}>{character.nft.name}</CharacterName>
       <CharacterInfoCharacter>Title: {character.nft.title}</CharacterInfoCharacter>
       <CharacterInfoCharacter>Origin: {character.nft.origin}</CharacterInfoCharacter>
       <AssetTag>
