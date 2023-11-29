@@ -172,7 +172,6 @@ export const useSellCharacter = (characterId: number) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [characters] = useMyCharacters();
-  const userDispatch = useUserStateDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const instance = service.contracts.kread.instance;
   const charBrand = service.tokenInfo.character.brand;
@@ -195,10 +194,6 @@ export const useSellCharacter = (characterId: number) => {
         },
         callback: {
           ...callback,
-          settled: () => {
-            if (callback.settled) callback.settled();
-            userDispatch({ type: "SET_SELECTED", payload: "" });
-          },
           setIsLoading: setIsLoading
         }
       });
@@ -243,16 +238,6 @@ export const useBuyCharacter = (characterId: string) => {
         },
         callback: {
           ...callback,
-          refunded: () => {
-            console.info("BuyCharacter call settled");
-            if (callback.refunded) callback.refunded();
-            setIsLoading(false);
-          },
-          accepted: () => {
-            console.info("BuyCharacter call settled");
-            if (callback.accepted) callback.accepted();
-            setIsLoading(false);
-          },
           setIsLoading: setIsLoading,
         },
       });

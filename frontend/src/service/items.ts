@@ -163,11 +163,6 @@ export const useSellItem = (itemName: string | undefined, itemCategory: Category
           },
           callback: {
             ...callback,
-            seated: () => {
-              console.info("SellItem call settled");
-              if (callback.seated) callback.seated();
-              setIsLoading(false);
-            },
             setIsLoading: setIsLoading
           }
         });
@@ -214,16 +209,6 @@ export const useBuyItem = (itemToBuy: ItemInMarket | undefined) => {
           },
           callback: {
             ...callback,
-            refunded: () => {
-              console.info("BuyItem call settled");
-              if (callback.refunded) callback.refunded();
-              setIsLoading(false);
-            },
-            accepted: () => {
-              console.info("BuyItem call settled");
-              if (callback.accepted) callback.accepted();
-              setIsLoading(false);
-            },
             setIsLoading: setIsLoading
           }
         });
@@ -273,10 +258,6 @@ export const useEquipItem = () => {
         },
         callback: {
           ...body.callback,
-          seated: () => {
-            console.info("Swap call settled");
-            if (body.callback.seated) body.callback.seated();
-          },
           settled: () => {
             setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
           }
@@ -294,11 +275,8 @@ export const useEquipItem = () => {
         },
         callback: {
           ...body.callback,
-          seated: () => {
-            console.info("Equip call settled");
-            if (body.callback.seated) body.callback.seated();
-          },
           settled: () => {
+            if (body.callback.settled) body.callback.settled();
             setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
           }
         },
@@ -337,11 +315,8 @@ export const useUnequipItem = () => {
       },
       callback: {
         ...body.callback,
-        seated: () => {
-          console.info("Unequip call settled");
-          if (body.callback.seated) body.callback.seated();
-        },
         settled: () => {
+          if (body.callback.settled) body.callback.settled();
           setTimeout(() => userStateDispatch({ type: "END_INVENTORY_CALL" }), INVENTORY_CALL_FETCH_DELAY);
         }
       }
