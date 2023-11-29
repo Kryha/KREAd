@@ -83,6 +83,10 @@ Each [Character](#character-sft) has an inventory used to store [Items](#item-sf
 2. Only the owner of a given Character can modify its inventory (equip/unequip/swap) 
 3. Only KREAd Items can be equipped, no other token brands are accepted
 
+#### Item Category
+Item SFTs have a property `category` which determines how the item will fit (visually) when equipped onto a character's inventory. For example, items of category `mask` will be rendered on top of the character in the position of the character's mouth, while `background` items will be in the center behind the character. Character's are not required to have any items equipped and can only have a single item of a given category at once. Note that all KREAd items share a brand and issuer, despite the added functionality based on its property `category`. Currently, KREAd Items must be one of the following categories:
+`background, patch, hair, headPiece, mask, perk1, perk2, filter1, filter2, garment`
+
 #### Equip
 Equipping an Item involves executing an offer that transfers the Item SFT from the wallet of a Character owner to the KREAd contract, specifically to the inventory seat of that Character (equipping to Characters you do not own is disallowed). Doing so will change the appearance of the character and add to the properties it already had (for as long as the Item is equipped). Note that ownership of the Character SFT is the only requirement for modifying its Inventory, so transferring a Character effectively transfers the rights to its inventory. 
 
@@ -174,9 +178,6 @@ const swapProposal = {
 };
 ```
 
-#### Item Category
-Item SFTs have a property `category` which determines how the item will fit (visually) when equipped onto a character's inventory. For example, items of category `mask` will be rendered on top of the character in the position of the character's mouth, while `background` items will be in the center behind the character. Character's are not required to have any items equipped and can only have a single item of a given category at once. Note that all KREAd items share a brand and issuer, despite the added functionality based on its property `category`. Currently, KREAd Items must be one of the following categories:
-`background, patch, hair, headPiece, mask, perk1, perk2, filter1, filter2, garment`
 
 #### Marketplace 
 The KREAd contract includes logic for buying and selling Character and Item assets in an unmanaged P2P marketplace. The marketplace can be used via `kread.app/shop` and allows users to list their Characters or Items for sale at a price of their choosing. From there, anyone with enough funds can buy it. Any sale via KREAd marketplace is subject to a platform fee of (3% of sale price) which goes to an address own by KREAd, as well as a royalty fee of (10% of sale price) paid to the artist. 
