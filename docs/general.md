@@ -1,10 +1,7 @@
 # About
-KREAd is a dynamic nft application showcasing the SAGES universe. It is built on Agoric, a blockchain and smart-contract platform in the Cosmos ecosystem.
-
-KREAd dynamic nfts provide new ways of showcasing and interacting with digital art by allowing users to customize a given nft by equipping or unequipping "item" nfts to its inventory. To understand how this works, let's define the two assets that KREAd introduces:
 KREAd is an dynamic NFT application showcasing the SAGES universe. It is build on [Agoric](https://docs.agoric.com/), a blockchain and smart-contract platform in the [Cosmos ecosystem](https://cosmos.network/).
 
-Dynamic NFTs provide new ways of showcasing and interacting with digital art by allowing users to customize a given NFT by equipping or unequipping "item" NFTs to its inventory. To understand how this works, let's define the two assets that KREAd introduces:
+KREAd dynamic NFTs provide new ways of showcasing and interacting with digital art by allowing users to customize a given NFT by equipping or unequipping "item" NFTs to its inventory. To understand how this works, let's define the two assets that KREAd introduces:
 
 **Character**: represents a character in the SAGES universe. Each character can be identified by a unique image and a set of properties related to the SAGES story. They can be minted for a flat fee via KREAd's frontend. When minting, the user must choose a valid name for the character, and will receive a randomly selected character from a predefined set. They can be sold and bought by anyone using the marketplace section of KREAd's frontend. Each KREAd Character has an Inventory, which can be used to store Items within it.
 
