@@ -1,11 +1,12 @@
 
 #### Semi-fungible token (SFT)
 Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFT brands: [KREAd Characters](#character-sft) and KREAd Items.
+Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFTs [brands](https://docs.agoric.com/glossary/#brand): [KREAd Characters](#character-sft) and [KREAd Items](#item-sft).
 
 #### Character SFT
-Semi-fungible token representing a character in the SAGES universe. Each character can be identified by a unique image and a set of properties related to the SAGES story. Characters can be minted for a fee via KREAd's frontend. When minting, the user must choose a valid name for the character, and will reviece a randomly selected character from a predefined set. On their own, Character assets behave like any other sft on Agoric, meaning they can be used in offers and be recognized by other contracts. For example they can be sold and bought by anyone using the marketplace section of KREAd's frontend, or they can be sent to a different marketplace contract on the Agoric chain that handles sfts. KREAd extends the functionality of Characters by providing an Inventory in which to store [KREAd Items](#item-sft). 
+[Semi-fungible token](#semi-fungible-token-sft) representing a character in the SAGES universe. Each character can be identified by a unique image and a set of properties related to the SAGES story. Characters can be minted for a fee via KREAd's frontend. When minting, the user must choose a valid name for the character, and will reviece a randomly selected character from a predefined set. On their own, Character assets behave like any other SFT on Agoric, meaning they can be used in offers and be recognized by other contracts. For example they can be sold and bought by anyone using the marketplace section of KREAd's frontend, or they can be sent to a different marketplace contract on the Agoric chain that handles SFTs. KREAd extends the functionality of Characters by providing an Inventory in which to store [KREAd Items](#item-sft). 
 
-See the table and example below for more information about the properties that make up KREAd Character sfts:
+See the table and example below for more information about the properties that make up KREAd Character SFTs:
 
 | Character | Description | Type                       | Example                                                                                                             |
 |-----------------|---------------------------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------|
@@ -38,10 +39,10 @@ CharacterSFT = {
 ```
 > 💡 Properties containing IPFS cids do not include the full url, prefix them with `https://pink-defensive-jay-557.mypinata.cloud/ipfs/` if you wish to access the document
 
-#### Item sft
-Semi-fungible token representing items that can be equipped to and from a Character's [Inventory](#character-inventory). Each Item contains a set of properties which relate to the SAGES universe, including an image showing how it looks. Items can be equipped to and unequpped from a Character's inventory by its owner, doing so results in changes to the Character's appearance and [dynamic] properties, such as the character level. It's important to understand that [equipping](#equip) an Item sft requires escrowing the token on contract, this ensures equipped items can only be equipped to a single Inventory at once, and preserves a Character's inventory when transferring the Character.
+#### Item SFT
+Semi-fungible token representing items that can be equipped to and from a Character's [Inventory](#character-inventory). Each Item contains a set of properties which relate to the SAGES universe, including an image showing how it looks. Items can be equipped to and unequpped from a Character's inventory by its owner, doing so results in changes to the Character's appearance and [dynamic] properties, such as the character level. It's important to understand that [equipping](#equip) an Item SFT requires escrowing the token on contract, this ensures equipped items can only be equipped to a single Inventory at once, and preserves a Character's inventory when transferring the Character.
 
-See the table and example below for more information about the properties that make up KREAd Item sfts:
+See the table and example below for more information about the properties that make up KREAd Item SFTs:
 
 | Item           | description                                                                                                           | type                       | example                                                                                                             |
 |----------------|-----------------------------------------------------------------------------------------------------------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------|
@@ -221,7 +222,7 @@ When a new entry is added using a sell method, the list of market entries on Ago
 
 
 #### Buy
-KREAd's marketplace can be used to buy Item and Character SFTs sold by the community or KREAd itself in the case of Items. It can be accessed via [kread.app/shop](https://kread.app/shop/items) and allows users to browse from a list of market entries and filter by color, rarity, category, price, and other properties of KREAd sfts. All payments are in IST and both artist (10%) and platform (2%) fees are included. 
+KREAd's marketplace can be used to buy Item and Character SFTs sold by the community or KREAd itself in the case of Items. It can be accessed via [kread.app/shop](https://kread.app/shop/items) and allows users to browse from a list of market entries and filter by color, rarity, category, price, and other properties of KREAd SFTs. All payments are in IST and both artist (10%) and platform (2%) fees are included. 
 
 A buy offer looks like this:
 ```js
