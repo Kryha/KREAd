@@ -1,0 +1,29 @@
+name: Feature request
+description: Use this template to request a new feature.
+title: "[FEATURE DESCRIPTION]"
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: Provide a clear description of the feature you would like to request.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed Solution
+      description: If you have a specific solution or implementation in mind, describe it here.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Acceptance criteria
+      description: Describe what should be done for this issue to be considered closed. 
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional info
+      description: For anything else you want to add!
+    validations:
+      required: false
