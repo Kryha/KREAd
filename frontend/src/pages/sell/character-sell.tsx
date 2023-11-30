@@ -21,9 +21,7 @@ export const CharacterSell = () => {
   const [data, setData] = useState<SellData>({ price: 0 });
 
   const handleResult: MakeOfferCallback = {
-    settled: () => {
-      // Currently calling this logic on settled due to an issue with the status returned by the sell method,
-      // TODO: move this logic to a more specific callback
+    seated: () => {
       setIsPlacedInShop(true);
       userDispatch({ type: "SET_SELECTED", payload: "" });
     },
