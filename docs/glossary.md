@@ -87,7 +87,7 @@ Item SFTs have a property `category` which determines how the item will fit (vis
 `background, patch, hair, headPiece, mask, perk1, perk2, filter1, filter2, garment`
 
 #### Equip
-Equipping an Item involves executing an offer that transfers the Item SFT from the wallet of a Character owner to the KREAd contract, specifically to the inventory seat of that Character (equipping to Characters you do not own is disallowed). Doing so will change the appearance of the character and add to the properties it already had (for as long as the Item is equipped). Note that ownership of the Character SFT is the only requirement for modifying its Inventory, so transferring a Character effectively transfers the rights to its inventory. 
+Equipping an Item involves executing an offer that transfers the Item SFT from the wallet of a Character owner to the KREAd contract (see figure 1), specifically to the inventory seat of that Character (equipping to Characters you do not own is disallowed). Doing so will change the appearance of the character and add to the properties it already had (for as long as the Item is equipped). Note that ownership of the Character SFT is the only requirement for modifying its Inventory, so transferring a Character effectively transfers the rights to its inventory. 
 
 An equip offer looks like this:
 
@@ -115,8 +115,11 @@ const equipProposal = {
 
 ```
 
+![](KREAd_equip_diagram.png)
+*Figure 1: Equipping flow*
+
 #### Unequip
-The unequip action allows the owner of a [Character](#character-sft) to transfer an item from the Character's Inventory to their own wallet. Only one Item can be unequipped at a time and the only requirement is ownership of the Character. A user may want to unequip an item for the following reasons:
+The unequip action allows the owner of a [Character](#character-sft) to transfer an item from the Character's Inventory to their own wallet (see figure 2). Only one Item can be unequipped at a time and the only requirement is ownership of the Character. A user may want to unequip an item for the following reasons:
 1. To change the properties of a Character (look and stats)
 2. To manually equip a different item of the same category (consider using [swap](#swap) in this situation)
 3. To sell the item in the marketplace
@@ -144,6 +147,9 @@ const unequipProposal = {
     },
 };
 ```
+![](KREAd_unequip_diagram.png)
+*Figure 2: Unequipping flow*
+
 
 #### Swap
 The swap action allows the owner of a [Character](#character-sft) to swap an [Inventory](#inventory) item for one from their wallet. Since only one Item per [category](#item-category) can be equipped at a time, replacing an equipped item would require two separate transaction (first unequip, then equip new item). The swap action combines it into a single transaction and allows users to replace an equipped item for anotherone of the same category. 
@@ -212,7 +218,7 @@ const proposal {
 ```
 >Assets specified on an Offer's give will be escrowed by Zoe (Agoric's smart contract platform) once they sign the offer transaction, meaning they will no longer be in the user's wallet the unless they cancel the offer before completion.
 
-Once the market listing is created, it will be visible at kread.app/shop, where any user can buy it (provided they have enough IST to cover the set asking price + fees). The user sets the asking price via the offer's want property, then Agoric's [Offer Safety](https://docs.agoric.com/glossary/#offer-safety) guarantees they will either receive the asking price and transfer the asset to the buyer, or maintain the right to cancel the offer (and receive their asset back). 
+Once the market listing is created, it will be visible at kread.app/shop (see figure 3), where any user can buy it (provided they have enough IST to cover the set asking price + fees). The user sets the asking price via the offer's want property, then Agoric's [Offer Safety](https://docs.agoric.com/glossary/#offer-safety) guarantees they will either receive the asking price and transfer the asset to the buyer, or maintain the right to cancel the offer (and receive their asset back). 
 
 KREAd does not impose a time limit to market entries. As long as its creator does not cancel it, it will be available for a counter party to fulfill the offer.
 
@@ -220,6 +226,8 @@ When a new entry is added using a sell method, the list of market entries on Ago
 
 >A 10% royalty fee and a 3% platform fee applies to every sale initiated via KREAd's sell invitations. For example, if a user sets an asking price of 100 IST, the buyer must pay 113 IST in order cover the fees.
 
+![](KREAd_buy_sell_diagram.png)
+*Figure 3: Sell/Buy Flow*
 
 #### Buy
 KREAd's marketplace can be used to buy Item and Character SFTs sold by the community or KREAd itself in the case of Items. It can be accessed via [kread.app/shop](https://kread.app/shop/items) and allows users to browse from a list of market entries and filter by color, rarity, category, price, and other properties of KREAd SFTs. All payments are in IST and both artist (10%) and platform (2%) fees are included. 
