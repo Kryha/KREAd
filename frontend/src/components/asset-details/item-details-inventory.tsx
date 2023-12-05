@@ -32,12 +32,12 @@ export const ItemDetailsInventory: FC<ItemDetailsInventoryProps> = ({ item, sele
   if (equipItem.isError || unequipItem.isError) return <ErrorView />;
   const equipAsset = () => {
     setShowToast(!showToast);
-    equipItem.mutate({ item });
+    equipItem.mutate({ item, callback: {} });
   };
 
   const unequipAsset = () => {
     setShowToast(!showToast);
-    unequipItem.mutate({ item });
+    unequipItem.mutate({ item, callback: {} });
   };
 
   const sellAsset = () => {

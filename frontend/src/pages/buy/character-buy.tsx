@@ -32,7 +32,7 @@ export const CharacterBuy = () => {
   const handleSubmit = async () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    await buyCharacter.callback();
+    await buyCharacter.sendOffer({});
   };
 
   if (isLoadingCharacter) return <LoadingPage spinner={false} />;

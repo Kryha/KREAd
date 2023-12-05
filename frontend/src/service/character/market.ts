@@ -1,7 +1,7 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, Item } from "../../interfaces";
+import { Character, Item, MakeOfferCallback } from "../../interfaces";
 import { urlToCid } from "../../util/other";
-// TODO: Use makeOffer status callback for errors
+import { formOfferResultCallback } from "../../util/contract-callbacks";
 
 interface CharacterMarketAction {
   character: Character;
@@ -12,7 +12,7 @@ interface CharacterMarketAction {
     istBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: MakeOfferCallback;
 }
 
 const sellCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
@@ -40,19 +40,8 @@ const sellCharacter = async ({ character, price, service, callback }: CharacterM
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 const buyCharacter = async ({ character, price, service, callback }: CharacterMarketAction): Promise<void> => {
@@ -81,19 +70,8 @@ const buyCharacter = async ({ character, price, service, callback }: CharacterMa
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface ItemMarketAction {
@@ -106,7 +84,7 @@ interface ItemMarketAction {
     istBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: MakeOfferCallback;
 }
 
 const sellItem = async ({ item, price, service, callback }: ItemMarketAction): Promise<void> => {
@@ -117,7 +95,7 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
     ...item,
     image: urlToCid(item.image),
     thumbnail: urlToCid(item.thumbnail),
-};
+  };
 
   const spec = {
     id: "custom-id",
@@ -138,20 +116,8 @@ const sellItem = async ({ item, price, service, callback }: ItemMarketAction): P
     want,
     give,
   };
-
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface SellItemBatchAction {
@@ -235,20 +201,8 @@ const buyItem = async ({ entryId, item, price, service, callback }: ItemMarketAc
     want,
     give,
   };
-
-  service.makeOffer(spec, proposal, { entryId: Number(entryId) }, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-      callback();
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if( callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, { entryId: Number(entryId) }, formOfferResultCallback(callback));
 };
 
 export const marketService = { sellCharacter, buyCharacter, sellItem, sellItemBatch, buyItem };
