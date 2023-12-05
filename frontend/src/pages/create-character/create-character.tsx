@@ -4,7 +4,7 @@ import { ErrorView, FadeInOut, FormHeader, LoadingPage, NotificationDetail, Over
 import { PageContainer } from "../../components/page-container";
 import { MINTING_COST, MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useIsMobile, useViewport } from "../../hooks";
-import { Character, CharacterCreation } from "../../interfaces";
+import { Character, CharacterCreation, MakeOfferCallback } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
 import { Confirmation } from "./confirmation";
@@ -33,8 +33,8 @@ export const CreateCharacter: FC = () => {
   const mobile = useIsMobile(breakpoints.desktop);
   const { ist } = useWalletState();
 
-  const notEnoughIST = useMemo(()=>{
-    if(ist < MINTING_COST || !ist) {
+  const notEnoughIST = useMemo(() => {
+    if (ist < MINTING_COST || !ist) {
       return true;
     }
     return false;
@@ -53,14 +53,24 @@ export const CreateCharacter: FC = () => {
     setCurrentStep(step);
   };
 
-  const handleError = (error: string) => {
+  const errorCallback = (error: string) => {
     setError(error);
     setShowToast(true);
-  }
+  };
 
+  const handleResult: MakeOfferCallback = {
+    error: errorCallback,
+    accepted: () => {
+      console.info("MintCharacter call settled");
+    }
+  };
+  
   const sendOfferHandler = async (): Promise<void> => {
     setIsLoading(true);
-    await createCharacter.mutateAsync({ name: characterData.name, setError: handleError });
+    await createCharacter.mutateAsync({
+      name: characterData.name,
+      callback: handleResult,
+    });
   };
 
   const setData = async (data: CharacterCreation): Promise<void> => {

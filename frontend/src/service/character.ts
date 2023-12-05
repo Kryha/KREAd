@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
 
-import { CharacterCreation, CharacterInMarket, ExtendedCharacter, MarketMetrics } from "../interfaces";
+import { MakeOfferCallback, CharacterInMarket, ExtendedCharacter, MarketMetrics } from "../interfaces";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { extendCharacters } from "./transform-character";
 import { useAgoricContext, useAgoricState } from "../context/agoric";
@@ -62,15 +62,11 @@ export const useSelectedCharacter = (): [ExtendedCharacter | undefined, boolean]
 };
 
 export const useMyCharactersForSale = () => {
-  const [
-    {
-      chainStorageWatcher,
-    },
-  ] = useAgoricContext();
+  const [{ chainStorageWatcher }] = useAgoricContext();
   const wallet = useWalletState();
 
   // stringified ExtendedCharacterBackend[], for some reason the state goes wild if I make it an array
-  const [offerCharacters, setOfferCharacters] = useState<string>("[]"); 
+  const [offerCharacters, setOfferCharacters] = useState<string>("[]");
 
   // adding items to characters from offers
   useEffect(() => {
@@ -157,7 +153,7 @@ export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
   const istBrand = service.tokenInfo.ist.brand;
-  return useMutation(async (body: CharacterCreation): Promise<void> => {
+  return useMutation(async (body: { name: string; callback: MakeOfferCallback }): Promise<void> => {
     if (!body.name) throw new Error("Name not specified");
     await mintCharacter({
       name: body.name,
@@ -166,10 +162,7 @@ export const useCreateCharacter = () => {
         istBrand: istBrand,
         makeOffer: service.walletConnection.makeOffer,
       },
-      callback: async () => {
-        console.info("MintCharacter call settled");
-      },
-      errorCallback: body.setError,
+      callback: body.callback,
     });
   });
 };
@@ -179,19 +172,17 @@ export const useSellCharacter = (characterId: number) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();
   const [characters] = useMyCharacters();
-  const userDispatch = useUserStateDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const instance = service.contracts.kread.instance;
   const charBrand = service.tokenInfo.character.brand;
 
-  const callback = useCallback(
-    async (price: number, successCallback: () => void) => {
+  const sendOffer = useCallback(
+    async (price: number, callback: MakeOfferCallback) => {
       const found = characters.find((character) => character.nft.id === characterId);
       if (!found) return;
       const characterToSell = { ...found.nft, id: Number(found.nft.id) };
       const uISTPrice = ISTTouIST(price);
-
-      setIsLoading(true);
+      
       await marketService.sellCharacter({
         character: characterToSell,
         price: BigInt(uISTPrice),
@@ -201,18 +192,16 @@ export const useSellCharacter = (characterId: number) => {
           makeOffer: service.walletConnection.makeOffer,
           istBrand: service.tokenInfo.ist.brand,
         },
-        callback: async () => {
-          console.info("SellCharacter call settled");
-          setIsLoading(false);
-          userDispatch({ type: "SET_SELECTED", payload: "" });
-        },
+        callback: {
+          ...callback,
+          setIsLoading: setIsLoading
+        }
       });
-      successCallback();
     },
-    [characterId, characters, wallet, service, userDispatch],
+    [characterId, characters, wallet, service],
   );
 
-  return { callback, isLoading };
+  return { sendOffer, isLoading };
 };
 
 export const useBuyCharacter = (characterId: string) => {
@@ -228,32 +217,35 @@ export const useBuyCharacter = (characterId: string) => {
     setIsLoading(false);
   }, [characterId, service.offers]);
 
-  const callback = useCallback(async () => {
-    const found = characters.find((character) => character.id === characterId);
-    if (!found) return;
-    const characterToBuy = {
-      ...found,
-      character: found.character,
-    };
+  const sendOffer = useCallback(
+    async (callback: MakeOfferCallback) => {
+      const found = characters.find((character) => character.id === characterId);
+      if (!found) return;
+      const characterToBuy = {
+        ...found,
+        character: found.character,
+      };
 
-    setIsLoading(true);
-    await marketService.buyCharacter({
-      character: characterToBuy.character,
-      price: BigInt(characterToBuy.sell.price + characterToBuy.sell.platformFee + characterToBuy.sell.royalty),
-      service: {
-        kreadInstance: instance,
-        characterBrand: charBrand,
-        makeOffer: service.walletConnection.makeOffer,
-        istBrand,
-      },
-      callback: async () => {
-        console.info("BuyCharacter call settled");
-        setIsLoading(false);
-      },
-    });
-  }, [characterId, characters, wallet, service]);
+      setIsLoading(true);
+      await marketService.buyCharacter({
+        character: characterToBuy.character,
+        price: BigInt(characterToBuy.sell.price + characterToBuy.sell.platformFee + characterToBuy.sell.royalty),
+        service: {
+          kreadInstance: instance,
+          characterBrand: charBrand,
+          makeOffer: service.walletConnection.makeOffer,
+          istBrand,
+        },
+        callback: {
+          ...callback,
+          setIsLoading: setIsLoading,
+        },
+      });
+    },
+    [characterId, characters, wallet, service],
+  );
 
-  return { callback, isLoading };
+  return { sendOffer, isLoading };
 };
 
 export const useGetCharacterInShopById = (id: string): [CharacterInMarket | undefined, boolean] => {

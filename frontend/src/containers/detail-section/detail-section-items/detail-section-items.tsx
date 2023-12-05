@@ -32,7 +32,7 @@ const ListItem: FC<ListItemProps> = ({ item, showToast }) => {
 
   const unequip = () => {
     showToast();
-    unequipItem.mutate({ item });
+    unequipItem.mutate({ item, callback: {} });
   };
 
   return (

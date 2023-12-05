@@ -14,7 +14,6 @@ import {
   Overlay,
   OverviewEmpty,
   PageSubTitle,
-  PageTitle,
   SecondaryButton,
 } from "../../components";
 import { ButtonContainer, CharacterCardWrapper, DetailContainer, ItemCardWrapper } from "./styles";
@@ -64,14 +63,14 @@ export const Landing: FC = () => {
   const equipAsset = () => {
     setShowToast(!showToast);
     if (item) {
-      equipItem.mutate({ item });
+      equipItem.mutate({ item, callback: {} });
     }
   };
 
   const unequipAsset = () => {
     setShowToast(!showToast);
     if (item) {
-      unequipItem.mutate({ item });
+      unequipItem.mutate({ item, callback: {} });
     }
   };
 

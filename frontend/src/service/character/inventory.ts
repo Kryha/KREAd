@@ -1,6 +1,7 @@
 import { makeCopyBag } from "@agoric/store";
-import { Character, Item } from "../../interfaces";
+import { Character, Item, MakeOfferCallback } from "../../interfaces";
 import { urlToCid } from "../../util/other";
+import { formOfferResultCallback } from "../../util/contract-callbacks";
 
 // TODO: Use makeOffer status callback for errors
 interface UnequipItem {
@@ -13,7 +14,7 @@ interface UnequipItem {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: MakeOfferCallback;
 }
 
 const unequipItem = async ({ item, character, service, callback }: UnequipItem): Promise<void> => {
@@ -55,19 +56,8 @@ const unequipItem = async ({ item, character, service, callback }: UnequipItem):
     give,
   };
 
-
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface UnequipAllItems {
@@ -77,7 +67,7 @@ interface UnequipAllItems {
     characterBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: MakeOfferCallback;
 }
 
 const unequipAll = async ({ character, service, callback }: UnequipAllItems): Promise<void> => {
@@ -107,18 +97,8 @@ const unequipAll = async ({ character, service, callback }: UnequipAllItems): Pr
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface EquipItem {
@@ -130,7 +110,7 @@ interface EquipItem {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: MakeOfferCallback;
 }
 
 const equipItem = async ({ item, character, service, callback }: EquipItem): Promise<void> => {
@@ -145,7 +125,7 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     ...item,
     image: urlToCid(item.image),
     thumbnail: urlToCid(item.thumbnail),
-};
+  };
 
   const spec = {
     source: "contract",
@@ -170,18 +150,8 @@ const equipItem = async ({ item, character, service, callback }: EquipItem): Pro
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 interface SwapItems {
@@ -194,7 +164,7 @@ interface SwapItems {
     itemBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
+  callback: MakeOfferCallback;
 }
 
 const swapItems = async ({ giveItem, wantItem, character, service, callback }: SwapItems): Promise<void> => {
@@ -209,13 +179,12 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
     ...giveItem,
     image: urlToCid(giveItem.image),
     thumbnail: urlToCid(giveItem.thumbnail),
-};
+  };
   const itemWant: Item = {
     ...wantItem,
     image: urlToCid(wantItem.image),
     thumbnail: urlToCid(wantItem.thumbnail),
-};
-
+  };
 
   const spec = {
     source: "contract",
@@ -241,18 +210,8 @@ const swapItems = async ({ giveItem, wantItem, character, service, callback }: S
     give,
   };
 
-  service.makeOffer(spec, proposal, undefined, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, undefined, formOfferResultCallback(callback));
 };
 
 export const inventoryService = { unequipItem, equipItem, unequipAll, swapItems };

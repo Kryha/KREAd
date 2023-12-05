@@ -7,8 +7,6 @@ export * from "./item-card";
 export * from "./input-fields";
 export * from "./switch-selector";
 export * from "./navigation-tab";
-export * from "./menu-card";
-export * from "./menu-item";
 export * from "./price-in-ist";
 export * from "./base-route";
 export * from "./equipped-item-card";
