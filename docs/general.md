@@ -49,13 +49,13 @@ Once you have access to your Agoric address using a wallet, you are ready to pro
    ![kado-on-ramp](./assets/kado-on-ramp.jpg)
 
 2. Navigate to https://kread.app/connect-wallet
-3. Hit 'Create' 
+3. Hit 'Activate Wallet' 
    ![activate-wallet](./assets/provision-wallet.jpg)
 4. Approve transaction in your Keplr wallet (or your Ledger)
 5. Once your smart wallet provisions you will should see your IST balance go up to 0.25, which can be used to pay for transaction fees. The page will automatically redirect to https://kread.app/character and you will be ready to use KREAd or any other Agoric dapp.
 
 ##### Mint a Character
-Anyone with an Agoric address and 5IST can mint a Character by clicking the "Mint new" button from https://kread.app/character. If you don't have any characters yet the button should be visible in the center of the page, if you already have some you can get to it by clicking "My characters" in the top right of the interface, then scrolling to the bottom of the sidebar on the right:
+Anyone with an Agoric address and 5 IST can mint a Character by clicking the "Mint new" button from https://kread.app/character. If you don't have any characters yet the button should be visible in the center of the page, if you already have some you can get to it by clicking "My characters" in the top right of the interface, then scrolling to the bottom of the sidebar on the right:
 
 ![create-new-character](./assets/mint-new.jpg)
 
