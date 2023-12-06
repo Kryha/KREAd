@@ -59,7 +59,7 @@ Anyone with an Agoric address and 5IST can mint a Character by clicking the "Min
 
 ![create-new-character](./assets/mint-new.jpg)
 
-That will take you to the mint character form, follow the prompts to mint a randomly generated KREAd Character. To learn more about the mint process check out [TODO: link to mint from glossary].
+That will take you to the mint character form, follow the prompts to mint a randomly generated KREAd Character. More details about KREAd Characters [here](./glossary.md#character-sft).
 
 > 💡 Although there is no mint item functionality, when a Character is minted, 3 randomly selected items will be minted and equipped to the Character before it gets sent to your wallet.
 
@@ -76,11 +76,11 @@ Besides the mint flow, there is one other way to obtain a Character: the KREAd M
 6. Approve the transaction on Keplr
 7. Await confirmation
 
-You can verify the purchase was successful by browsing the [inventory](https://kread.app/inventory). For more details check out (TODO: link to marketplace section of glossary)
+You can verify the purchase was successful by browsing the [inventory](https://kread.app/inventory). For more details check out [KREAd Marketplace](./glossary.md#marketplace).
 
 ##### Equip an Item
 
-With an unequipped item in your wallet, you are ready to use the equip feature. This allows you to customize a Character by adding an Item to its inventory, to learn more about how this works checkout (TODO: link to inventory section of glossary). In this section we will focus on the how-to:
+With an unequipped item in your wallet, you are ready to use the equip feature. This allows you to customize a Character by adding an Item to its inventory, to learn more about how this works checkout [Character Inventory](./glossary.md#character-inventory). In this section we will focus on the how-to:
 
 1. Navigate to the [character view](https://kread.app/character)
 2. Select the Character you wish to equip the item to (use "My Characters" button in the top-right of the interface to switch characters if you need to)
