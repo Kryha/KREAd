@@ -3,7 +3,7 @@
 Behaves like a non-fungible token, meaning it's a digital asset that can hold arbitrary data. However, unlike NFTs multiple SFTs with the same data can be minted. For example, 10 SFTs with data `{ type: "background" }` can exist, while in the case of NFTs only a single NFT can exist with the exact same data. The KREAd contract can mint two SFT [brands](https://docs.agoric.com/glossary/#brand): [KREAd Characters](#character-sft) and [KREAd Items](#item-sft).
 
 #### Character SFT
-[Semi-fungible token](#semi-fungible-token-sft) representing a character in the SAGES universe. Each character can be identified by a unique image and a set of properties related to the SAGES story. Characters can be minted for a fee via KREAd's frontend. When minting, the user must choose a valid name for the character, and will reviece a randomly selected character from a predefined set. On their own, Character assets behave like any other SFT on Agoric, meaning they can be used in offers and be recognized by other contracts. For example they can be sold and bought by anyone using the marketplace section of KREAd's frontend, or they can be sent to a different marketplace contract on the Agoric chain that handles SFTs. KREAd extends the functionality of Characters by providing an Inventory in which to store [KREAd Items](#item-sft). 
+[Semi-fungible token](#semi-fungible-token-sft) representing a character in the SAGES universe. Each character can be identified by a unique image and a set of properties related to the SAGES story. Characters can be minted for a fee via KREAd's frontend. When minting, the user must choose a valid name for the character, and will receive a randomly selected character from a predefined set. On their own, Character assets behave like any other SFT on Agoric, meaning they can be used in offers and be recognized by other contracts. For example they can be sold and bought by anyone using the marketplace section of KREAd's frontend, or they can be sent to a different marketplace contract on the Agoric chain that handles SFTs. KREAd extends the functionality of Characters by providing an Inventory in which to store [KREAd Items](#item-sft). 
 
 See the table and example below for more information about the properties that make up KREAd Character SFTs:
 
@@ -56,7 +56,7 @@ See the table and example below for more information about the properties that m
 | colors         | List of colors present in the item, used for filters                                                                  | string []                  | []                                                                                                                  |
 | reserves       | TODO                                                                                                                  | number                     | 0                                                                                                                   |
 | functional     | TODO                                                                                                                  | boolean                    | false                                                                                                               |
-| artistMetadata | Link to the artists Instagram account                                                                                 | string (linkt to IG page)  | 'https://www.instagram.com/enmanueljrperez/'                                                                        |
+| artistMetadata | Link to the artists Instagram account                                                                                 | string (link to IG page)  | 'https://www.instagram.com/enmanueljrperez/'                                                                        |
 | image          | Link to the character image                                                                                           | string (link to webp file) | 'pink-defensive-jay-557.mypinata.cloud/ipfs/Qmc55m7RrzZtB25mM9B2c9BdtXcLDbhSrErWMAa7azCet6/Citizen/images/001.webp' |
 
 
@@ -152,7 +152,7 @@ const unequipProposal = {
 
 
 #### Swap
-The swap action allows the owner of a [Character](#character-sft) to swap an [Inventory](#inventory) item for one from their wallet. Since only one Item per [category](#item-category) can be equipped at a time, replacing an equipped item would require two separate transaction (first unequip, then equip new item). The swap action combines it into a single transaction and allows users to replace an equipped item for anotherone of the same category. 
+The swap action allows the owner of a [Character](#character-sft) to swap an [Inventory](#inventory) item for one from their wallet. Since only one Item per [category](#item-category) can be equipped at a time, replacing an equipped item would require two separate transaction (first unequip, then equip new item). The swap action combines it into a single transaction and allows users to replace an equipped item for another one of the same category. 
    
 A swap proposal looks like this:
 ```js
