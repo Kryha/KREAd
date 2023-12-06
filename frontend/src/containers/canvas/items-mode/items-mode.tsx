@@ -42,9 +42,8 @@ export const ItemsMode: FC = () => {
   }, [selected, selectedCharacter]);
 
   const equippedItem = items.find((item) => item.equippedTo === characterName);
-  const [equippedItemState, setEquippedItemState] = useState(equipped.inCategory);
-  const equipItem = useEquipItem(setEquippedItemState);
-  const unequipItem = useUnequipItem(() => setEquippedItemState(undefined));
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
 
   // Always select the equipped item on default
   useEffect(() => {
@@ -59,12 +58,13 @@ export const ItemsMode: FC = () => {
       equipItem.mutate({
         item: selected,
         currentlyEquipped: equipped.inCategory,
+        callback: {},
       });
     }
     setOnAssetChange(false);
     setShowToast(!showToast);
     if (!equipped.inCategory && selected) {
-      equipItem.mutate({ item: selected });
+      equipItem.mutate({ item: selected, callback: {} });
     }
   };
 
@@ -72,8 +72,8 @@ export const ItemsMode: FC = () => {
     event.stopPropagation();
     setOnAssetChange(false);
     setShowToast(!showToast);
-    if (equippedItemState) {
-      unequipItem.mutate({ item: equippedItemState });
+    if (equipped.inCategory) {
+      unequipItem.mutate({ item: equipped.inCategory, callback: {} });
     }
   };
 

@@ -1,14 +1,8 @@
 import styled from "@emotion/styled";
-import { BellIcon, CloseIcon } from "../../assets";
-import { fadeUp, SecondaryButton } from "../../components";
-import { KreadIcon } from "../../components/logo/styles";
+import { CloseIcon } from "../../assets";
+import { fadeUp } from "../../components";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 import { breakpoints, color, margins } from "../../design";
-
-interface ViewProps {
-  width: number;
-  height: number;
-}
 
 export const OverviewContainer = styled.div`
   border: 1px solid #d0d0d0;
@@ -35,49 +29,6 @@ export const NotificationWrapper = styled.div`
 export const Close = styled(CloseIcon)`
   margin: 0 0 0 11px !important;
   width: 12px;
-`;
-
-export const Notification = styled(BellIcon)`
-  width: 15px;
-  height: 15px;
-`;
-
-interface NotificationProps {
-  open: boolean;
-}
-
-export const NotificationButton = styled(SecondaryButton)<NotificationProps>`
-  padding: ${margins.mini};
-  position: relative;
-  z-index: 1000;
-  ${Close} {
-    margin: 0 6px !important;
-    width: 15px;
-    height: 15px;
-  }
-  ${({ open }): string => {
-    return open
-      ? `
-        border-color: ${color.black} !important;
-        `
-      : `
-
-      `;
-  }};
-`;
-
-export const DetailWrapper = styled.section`
-  ${DetailSectionWrap} {
-    position: absolute;
-    right: 40px;
-    bottom: 40px;
-    height: 80vh;
-    max-width: 52.7%;
-  }
-`;
-
-export const NotificationContainer = styled.div`
-  position: relative;
 `;
 
 export const Tag = styled.div`
@@ -109,23 +60,17 @@ export const DetailContainer = styled.div`
   }
 `;
 
-export const KreadContainer = styled.div<ViewProps>`
-  ${KreadIcon} {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-    top: 24px;
-    width: 100px;
-    height: 24px;
-  }
-`;
 export const InventoryWrapper = styled.div`
+  flex: 2;
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
 
   ${DetailSectionWrap} {
-    position: relative;
-    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 25%;
     z-index: 1000;
   }
 

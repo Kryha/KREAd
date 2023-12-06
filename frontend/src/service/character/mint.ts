@@ -1,4 +1,6 @@
 import { MINTING_COST } from "../../constants";
+import { MakeOfferCallback } from "../../interfaces";
+import { formOfferResultCallback } from "../../util/contract-callbacks";
 
 // TODO: Use makeOffer status callback for errors
 
@@ -9,11 +11,10 @@ interface MintCharacter {
     istBrand: any;
     makeOffer: any;
   };
-  callback: () => Promise<void>;
-  errorCallback?: (error: string) => void;
+  callback: MakeOfferCallback;
 }
 
-export const mintCharacter = async ({ name, service, callback, errorCallback }: MintCharacter): Promise<void> => {
+export const mintCharacter = async ({ name, service, callback }: MintCharacter): Promise<void> => {
   const instance = service.kreadInstance;
   const spec = {
     source: "contract",
@@ -31,17 +32,6 @@ export const mintCharacter = async ({ name, service, callback, errorCallback }: 
     give,
   };
 
-  service.makeOffer(spec, proposal, offerArgs, ({ status, data }: { status: string; data: object }) => {
-    if (status === "error") {
-      console.error("Offer error", data);
-      if(errorCallback) errorCallback(JSON.stringify(data));
-    }
-    if (status === "refunded") {
-      console.error("Offer refunded", data);
-    }
-    if (status === "accepted") {
-      console.info("Offer accepted", data);
-      callback();
-    }
-  });
+  if (callback.setIsLoading) callback.setIsLoading(true);
+  service.makeOffer(spec, proposal, offerArgs, formOfferResultCallback(callback));
 };

@@ -13,10 +13,12 @@ import { color } from "../../design";
 import { MarketplaceMetrics } from "../../components/marketplace-metrics/marketplace-metrics";
 import { findAverageValue, findMinimumValue, toTwoDecimals, uISTToIST } from "../../util";
 import { ItemInMarket } from "../../interfaces";
+import { useItemMarketState } from "../../context/item-shop-context";
 
 export const ItemsShop: FC = () => {
   const [selectedId, setSelectedId] = useState<string>("");
   const [items, fetched] = useGetItemsInShop();
+  const { items: allMarketItems } = useItemMarketState();
   const metrics = useGetItemMarketMetrics();
   const [item] = useGetItemInShopById(selectedId);
 
@@ -31,21 +33,20 @@ export const ItemsShop: FC = () => {
         ];
       }
       filtered = items.filter((entry) => !toRemove.includes(entry));
-    };
+    }
     return filtered;
   }, [items]);
 
-
-  const metricsData = useMemo(()=>{
+  const metricsData = useMemo(() => {
     if (metrics) {
       let itemAverage = 0;
       let itemMinimum = 0;
-  
+
       if (filteredItems.length != 0) {
-        itemMinimum = findMinimumValue(filteredItems.map((x) => uISTToIST(Number(x.sell.price))));
-        itemAverage = findAverageValue(filteredItems.map((x) => uISTToIST(Number(x.sell.price))));
+        itemMinimum = findMinimumValue(allMarketItems.map((x) => uISTToIST(Number(x.sell.price))));
+        itemAverage = findAverageValue(allMarketItems.map((x) => uISTToIST(Number(x.sell.price))));
       }
-  
+
       return [
         metrics.amountSold,
         metrics.collectionSize,
@@ -56,7 +57,7 @@ export const ItemsShop: FC = () => {
       ];
     }
     return [];
-  }, [filteredItems]);
+  }, [metrics, filteredItems]);
 
   if (!filteredItems) return <></>;
   const assetsCount = filteredItems.length;
@@ -66,9 +67,9 @@ export const ItemsShop: FC = () => {
       <AssetHeaderContainer>
         <AssetHeader>{metrics ? <MarketplaceMetrics data={metricsData} asset={METRICS_ITEM} /> : <></>}</AssetHeader>
         <AssetItemFilters section={SECTION.SHOP} />
+        <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
+        <HorizontalDivider />
       </AssetHeaderContainer>
-      <AssetFilterCount customColor={color.darkGrey}>Market: {text.param.amountOfItems(assetsCount)}</AssetFilterCount>
-      <HorizontalDivider />
       {selectedId && item && <ItemDetailsMarket itemInMarket={item} selectItemInMarket={(id: string) => setSelectedId(id)} />}
       {filteredItems.length > 0 ? (
         <ItemCardsMarket itemsInMarket={filteredItems} isLoading={fetched} selectItemInMarketId={(id: string) => setSelectedId(id)} />

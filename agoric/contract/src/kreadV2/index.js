@@ -74,7 +74,7 @@ harden(meta);
  *
  * @param {Baggage} baggage
  */
-export const start = async (zcf, privateArgs, baggage) => {
+export const prepare = async (zcf, privateArgs, baggage) => {
   const terms = zcf.getTerms();
 
   // TODO: move to proposal
@@ -178,4 +178,4 @@ export const start = async (zcf, privateArgs, baggage) => {
   });
 };
 
-harden(start);
+harden(prepare);

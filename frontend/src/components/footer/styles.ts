@@ -25,7 +25,7 @@ export const FooterWrapper = styled.div<FooterProps>`
 export const FooterContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   padding: 10px 24px;
   gap: 20px;
 `;
@@ -37,7 +37,7 @@ export const AboutText = styled(ButtonText)`
 `;
 export const PrivacyText = styled(AboutText)``;
 
-export const AgoricText = styled(ButtonText)``;
+export const AgoricText = styled(AboutText)``;
 
 export const Link = styled(NavLink)`
   text-decoration: none;

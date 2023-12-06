@@ -29,9 +29,16 @@ export const ItemBuy = () => {
 
   const handleSubmit = async () => {
     setIsAwaitingApproval(true);
-    await buyItem.callback(() => {
-      setIsOfferAccepted(true);
-      setIsAwaitingApproval(false);
+    await buyItem.sendOffer({
+      refunded: () => {
+        setIsOfferAccepted(true);
+      },
+      accepted: () => {
+        setIsOfferAccepted(true);
+      },
+      settled: () => {
+        setIsAwaitingApproval(false);
+      }
     });
   };
 

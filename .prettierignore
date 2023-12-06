@@ -26,3 +26,4 @@
 /.pnp.js
 
 .env*
+frontend/**

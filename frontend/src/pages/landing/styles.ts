@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { CloseIcon, DownArrowIcon } from "../../assets";
 import { disappear, fadeIn, SecondaryButton } from "../../components";
 import { CharacterWrapper } from "../../components/base-character/styles";
-import { color, margins } from "../../design";
+import { color, fontWeight, margins } from "../../design";
 import { DetailSectionWrap } from "../../containers/detail-section/styles";
 
 interface ImageProps {
@@ -94,4 +94,11 @@ export const Tag = styled.div`
   background: ${color.black};
   border-radius: ${margins.medium};
   z-index: 1000;
+`;
+
+export const CharacterTitle = styled.h1`
+  color: ${color.black};
+  font-weight: ${fontWeight.medium};
+  font-size: 32px;
+  line-height: 52px;
 `;

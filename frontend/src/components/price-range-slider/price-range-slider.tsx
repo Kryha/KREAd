@@ -1,5 +1,4 @@
-import React, { ChangeEvent, FC, useState } from "react";
-import { Handles, Slider, Tracks } from "react-compound-slider";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import { useViewport } from "../../hooks";
 import {
   ButtonContainer,
@@ -9,8 +8,6 @@ import {
   MaxInput,
   MinInput,
   RangeContainer,
-  SliderContainer,
-  SliderTrack,
   TextLabel,
 } from "../input-fields/styles";
 import { BoldLabel, ButtonText, SecondaryButton } from "../atoms";
@@ -21,12 +18,12 @@ import { color } from "../../design";
 interface Props {
   prices: number[];
   setPrice: (value: { min: number; max: number }) => void;
+  reset: boolean;
 }
-export const PriceRangeSlider: FC<Props> = ({ prices, setPrice }) => {
-  const range = [Math.min(...prices), Math.max(...prices)];
+export const PriceRangeSlider: FC<Props> = ({ prices, setPrice, reset }) => {
+  const range = [uISTToIST(Math.min(...prices)), uISTToIST(Math.max(...prices))];
   const { height } = useViewport();
   const [domain] = useState(range);
-  const [values, setValues] = useState<readonly number[]>(range);
   const [, setUpdate] = useState<readonly number[]>(range);
   const [inputValues, setInputValues] = useState<readonly number[]>(domain);
 
@@ -36,36 +33,35 @@ export const PriceRangeSlider: FC<Props> = ({ prices, setPrice }) => {
   };
 
   const onValuesChange = (newValues: readonly number[]) => {
-    const min = newValues[0];
-    const max = newValues[1];
-    setValues(newValues);
+    const min = (newValues[0]);
+    const max = (newValues[1]);
     setPrice({ min, max });
   };
 
   const onStartPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     const newState = [value, inputValues[1]];
-    setInputValues(newState);
-    if (value && value >= domain[0]) {
-      setValues(newState);
-    }
+    onUpdate(newState);
+    onValuesChange(newState);
   };
 
   const onMaxPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     const newState = [inputValues[0], value];
-    setInputValues(newState);
-    if (value && value <= domain[1] && value >= values[0]) {
-      setValues(newState);
-    }
+    onUpdate(newState);
+    onValuesChange(newState);
   };
 
   const onReset = () => {
-    setValues(domain);
     setUpdate(domain);
     setInputValues(domain);
     setPrice({ min: domain[0], max: domain[1] });
   };
+
+  useEffect(()=> onReset(), []);
+  useEffect(()=>{
+    if(reset) onReset();
+  }, [reset]);
 
   return (
     <ColorBox height={height}>
@@ -74,17 +70,20 @@ export const PriceRangeSlider: FC<Props> = ({ prices, setPrice }) => {
           <InputContainer>
             <BoldLabel>{text.store.min}</BoldLabel>
             <TextLabel>
-              <MinInput type="number" placeholder={`${uISTToIST(inputValues[0])}`} onChange={onStartPriceChange} />
+              <MinInput type="number" placeholder={`${uISTToIST(inputValues[0])}`} value={inputValues[0]} onChange={onStartPriceChange} />
             </TextLabel>
           </InputContainer>
           <InputContainer>
             <BoldLabel>{text.store.max}</BoldLabel>
             <TextLabel>
-              <MaxInput type="number" placeholder={`${uISTToIST(inputValues[1])}`} onChange={onMaxPriceChange} />
+              <MaxInput type="number" placeholder={`${uISTToIST(inputValues[1])}`} value={inputValues[1]} onChange={onMaxPriceChange} />
             </TextLabel>
           </InputContainer>
         </InputWrapper>
-        <SliderContainer>
+        {/* Disaled until we decide how to handle large ranges, consider:
+            1. only show slider when the range is lower than 200 IST, or whatever max range we deem functional
+            2. increase the steps exponentially to fit larger ranges
+         <SliderContainer>
           <Slider
             mode={2}
             step={10000}
@@ -119,7 +118,7 @@ export const PriceRangeSlider: FC<Props> = ({ prices, setPrice }) => {
               )}
             </Tracks>
           </Slider>
-        </SliderContainer>
+        </SliderContainer> */}
       </RangeContainer>
       <ButtonContainer>
         <SecondaryButton onClick={onReset}>

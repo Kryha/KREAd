@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { text } from "../../assets";
+import { CharacterTitle } from './styles'
 import {
   BaseRoute,
   BoldLabel,
@@ -13,7 +14,6 @@ import {
   Overlay,
   OverviewEmpty,
   PageSubTitle,
-  PageTitle,
   SecondaryButton,
 } from "../../components";
 import { ButtonContainer, CharacterCardWrapper, DetailContainer, ItemCardWrapper } from "./styles";
@@ -63,14 +63,14 @@ export const Landing: FC = () => {
   const equipAsset = () => {
     setShowToast(!showToast);
     if (item) {
-      equipItem.mutate({ item });
+      equipItem.mutate({ item, callback: {} });
     }
   };
 
   const unequipAsset = () => {
     setShowToast(!showToast);
     if (item) {
-      unequipItem.mutate({ item });
+      unequipItem.mutate({ item, callback: {} });
     }
   };
 
@@ -134,7 +134,7 @@ export const Landing: FC = () => {
           {/* character info */}
           {interactionMode === MAIN_MODE ? (
             <DetailContainer>
-              <PageTitle>{selectedCharacter?.nft.name}</PageTitle>
+              <CharacterTitle>{selectedCharacter?.nft.name}</CharacterTitle>
               <PageSubTitle>{selectedCharacter?.nft.title}</PageSubTitle>
               <ButtonContainer>
                 <ButtonInfoWrap onClick={() => setShowDetails(true)}>
@@ -148,7 +148,7 @@ export const Landing: FC = () => {
             </DetailContainer>
           ) : (
             <DetailContainer>
-              <PageTitle>{selectedCharacter?.nft.name}</PageTitle>
+              <CharacterTitle>{selectedCharacter?.nft.name}</CharacterTitle>
               <PageSubTitle>{selectedCharacter?.nft.title}</PageSubTitle>
               <ButtonContainer>
                 <AssetTag>

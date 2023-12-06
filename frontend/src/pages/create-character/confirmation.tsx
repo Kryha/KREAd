@@ -37,7 +37,7 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
         <ButtonText customColor={color.darkGrey}>{text.mint.characterTitle}</ButtonText>
         <MenuItemName>{character.title}</MenuItemName>
         <ButtonText customColor={color.darkGrey}>{text.mint.characterName}</ButtonText>
-        <MenuItemName>{character.name}</MenuItemName>
+        <MenuItemName preserveCase>{character.name}</MenuItemName>
         <ButtonText customColor={color.darkGrey}>{text.mint.creationDate}</ButtonText>
         <MenuItemName>{getDatefromEpoch(Date.now())}</MenuItemName>
       </InfoContainer>

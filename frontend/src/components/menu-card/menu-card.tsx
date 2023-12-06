@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from "react";
-import { Item, Category } from "../../interfaces";
+import { Item, Category, MakeOfferCallback } from "../../interfaces";
 import { text } from "../../assets";
 import {
   ArrowContainer,
@@ -44,8 +44,16 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
   const [showToast, setShowToast] = useState(false);
   const [equippedItem, setEquippedItem] = useState(equippedItemProp);
 
-  const equipItem = useEquipItem(setEquippedItem);
-  const unequipItem = useUnequipItem(() => setEquippedItem(undefined));
+  const equipItem = useEquipItem();
+  const unequipItem = useUnequipItem();
+
+  const handleEquipResult: MakeOfferCallback = {
+    accepted: setEquippedItem,
+  };
+
+  const handleUnequipResult: MakeOfferCallback = {
+    accepted: () => setEquippedItem(undefined),
+  };
 
   const allItems = useMemo(() => {
     if (equippedItem) return [equippedItem, ...unequippedItems];
@@ -58,14 +66,14 @@ export const MenuCard: FC<MenuCardProps> = ({ title, category, equippedItemProp,
     event.stopPropagation();
     setShowToast(!showToast);
     if (!selectedItem) return;
-    equipItem.mutate({ item: selectedItem });
+    equipItem.mutate({ item: selectedItem, callback: handleEquipResult });
   };
 
   const unequip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(!showToast);
     if (!equippedItem) return;
-    unequipItem.mutate({ item: equippedItem });
+    unequipItem.mutate({ item: equippedItem, callback: handleUnequipResult });
   };
 
   const primaryActions = () => {

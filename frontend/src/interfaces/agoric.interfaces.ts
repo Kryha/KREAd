@@ -1,25 +1,11 @@
-export interface AgoricService {
-  zoe: any;
-  board: any;
-  zoeInvitationDepositFacetId?: any;
-  invitationIssuer: any;
-  walletP: any;
-  apiSend: any;
-}
-
-interface Contract {
-  instance: any;
-  publicFacet?: any;
-}
-
 interface Contracts {
-  kread: Contract;
+  kread: {
+    instance: any;
+  };
 }
 
 interface Status {
-  walletConnected: boolean;
-  dappApproved: boolean;
-  showApproveDappModal: boolean;
+  walletProvisioned: boolean;
 }
 
 export interface Purses {
@@ -32,7 +18,6 @@ export interface Purses {
 export interface AgoricState {
   status: Status;
   contracts: Contracts;
-  agoric: AgoricService;
   addOffer: any;
   walletConnection: WalletConnection;
   notifiers: NotifiersState;
@@ -42,6 +27,7 @@ export interface AgoricState {
   isReady: boolean;
   chainStorageWatcher: any;
 }
+
 export interface TokenInfo {
   character: { issuer: any; brand: any; petName?: string };
   item: { issuer: any; brand: any; petName?: string };
@@ -74,19 +60,9 @@ interface NotifiersState {
   };
 }
 
-interface SetDappApproved {
-  type: "SET_DAPP_APPROVED";
-  payload: boolean;
-}
-
-interface SetWalletConnected {
-  type: "SET_WALLET_CONNECTED";
-  payload: boolean;
-}
-
-interface SetShowApproveDappModal {
-  type: "SET_SHOW_APPROVE_DAPP_MODAL";
-  payload: boolean;
+interface UpdateStatus {
+  type: "UPDATE_STATUS";
+  payload: { [key: string]: boolean };
 }
 
 interface SetOffers {
@@ -94,14 +70,9 @@ interface SetOffers {
   payload: any[];
 }
 
-interface SetAgoric {
-  type: "SET_AGORIC";
-  payload: Omit<AgoricService, "apiSend">;
-}
-
-interface SetKreadContract {
-  type: "SET_KREAD_CONTRACT";
-  payload: Contract;
+interface SetKreadInstance {
+  type: "SET_KREAD_INSTANCE";
+  payload: any;
 }
 
 interface SetApiSend {
@@ -149,11 +120,7 @@ export type AgoricDispatch = React.Dispatch<AgoricStateActions>;
 
 export type AgoricStateActions =
   | Reset
-  | SetDappApproved
-  | SetWalletConnected
-  | SetShowApproveDappModal
-  | SetAgoric
-  | SetKreadContract
+  | SetKreadInstance
   | SetApiSend
   | SetLoading
   | SetTokenInfo
@@ -161,9 +128,28 @@ export type AgoricStateActions =
   | SetWalletConnection
   | SetChainStorageWatcher
   | SetOffers
-  | SetSmartWalletStatus;
+  | SetSmartWalletStatus
+  | UpdateStatus;
 
 export interface OfferProposal {
   give: any;
   want: any;
 }
+
+export const OFFER_STATUS = {
+  error: "error",
+  refunded: "refunded",
+  accepted: "accepted",
+  seated: "seated"
+};
+export type OfferStatusType = keyof typeof OFFER_STATUS
+
+export interface MakeOfferCallback {
+  accepted?: (args?: any) => void, // offer was successful
+  refunded?: (args?: any) => void, // strangely seems to behave the same way as accepted
+  error?: (args?: any) => void, // offer failed
+  seated?: (args?: any) => void, // returned exclusively by the KREAd sell method, likely has to do with the offer being long-lived
+  settled?: (args?: any) => void, // gets called when a response is received, regardless of the status
+  setIsLoading?: React.Dispatch<React.SetStateAction<boolean>> 
+};
+

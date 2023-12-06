@@ -3,7 +3,7 @@
 /** @file  This is a module for use with swingset.CoreEval. */
 
 // XXX this is unsupported, but it's already included in the bundle (statically linked)
-import { makeTracer } from '@agoric/internal';
+import { deeplyFulfilledObject, makeTracer } from '@agoric/internal';
 import { E } from '@endo/far';
 import { deeplyFulfilled, makeMarshal } from '@endo/marshal';
 
@@ -29,8 +29,6 @@ const contractInfo = {
 };
 
 const { Fail } = assert;
-
-/** @typedef {import('@agoric/deploy-script-support/src/coreProposalBehavior.js').BootstrapPowers} BootstrapPowers */
 
 export const reserveThenGetNamePaths = async (nameAdmin, paths) => {
   /**
@@ -92,7 +90,7 @@ const ParamTypes = {
  * @template {GovernableStartFn} SF
  * @param {{
  *   zoe: ERef<ZoeService>;
- *   governedContractInstallation: ERef<Installation<SF>>;
+ *   governedContractInstallation:  Promise<Installation<import('../index.js')['start']>>;
  *   issuerKeywordRecord?: IssuerKeywordRecord;
  *   terms: Record<string, unknown>;
  *   privateArgs: any; // TODO: connect with Installation type
@@ -101,7 +99,7 @@ const ParamTypes = {
  * @param {{
  *   governedParams: Record<string, unknown>;
  *   timer: ERef<import('@agoric/time/src/types').TimerService>;
- *   contractGovernor: ERef<Installation>;
+ *   contractGovernor: Promise<Installation<import('@agoric/governance/src/contractGovernor.js')['prepare']>>,
  *   committeeCreator: import('@agoric/inter-protocol/src/proposals/econ-behaviors.js').EconomyBootstrapPowers['consume']['economicCommitteeCreatorFacet'];
  * }} govArgs
  * @returns {Promise<GovernanceFacetKit<SF>>}
@@ -125,7 +123,7 @@ const startGovernedInstance = async (
     ]);
 
   trace('awaiting governorTerms');
-  const governorTerms = await deeplyFulfilled(
+  const governorTerms = await deeplyFulfilledObject(
     harden({
       timer,
       governedContractInstallation,
@@ -189,7 +187,7 @@ const startGovernedInstance = async (
  * BLDer DAO governance using arbitrary code injection: swingset.CoreEval
  * https://community.agoric.com/t/blder-dao-governance-using-arbitrary-code-injection-swingset-coreeval/99
  *
- * @param {BootstrapPowers} powers
+ * @param {BootstrapPowers & KreadSpace & KreadBootstrapSpace} powers
  * @param {object} config
  * @param {{ royaltyAddr: string, platformFeeAddr: string }} config.options
  */
@@ -261,7 +259,7 @@ export const startKread = async (powers, config) => {
     numerator: 15n,
     denominator: 100n,
   };
-
+  /** @type {Powers} */
   const kreadPowers = await deeplyFulfilled(
     harden({
       storageNode: E(chainStorage).makeChildNode(contractInfo.storagePath),
@@ -328,7 +326,6 @@ export const startKread = async (powers, config) => {
     issuers: { KREAdCHARACTER: characterIssuer, KREAdITEM: itemIssuer },
     brands: { KREAdCHARACTER: characterBrand, KREAdITEM: itemBrand },
   } = await E(zoe).getTerms(instance);
-
   trace('adding to boardAux');
   await publishBrandInfo(chainStorage, board, characterBrand);
   await publishBrandInfo(chainStorage, board, itemBrand);
