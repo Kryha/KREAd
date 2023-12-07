@@ -81,75 +81,73 @@ export const OnboardingMobile: FC = () => {
           <KreadLogo />
         </LogoContainer>
       )}
-      <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
-        {<OnboardingWrapper>
-          <InfoText>
-            <SectionContainer>
-              <MenuText>{text.general.logo}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-            </SectionContainer>
-            <OnboardingCharacterWrapper>
-              <OnboardingCharacter />
-            </OnboardingCharacterWrapper>
-            <ButtonContainer isVisible={isConnectButtonVisible}>
-          <ButtonRow>
-            <PrimaryButton onClick={() => connectWallet()}>
-              <KeplerIconWrapper>
-                <KeplerIcon />
-              </KeplerIconWrapper>
-              <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
-              <ArrowUp />
-            </PrimaryButton>
-          </ButtonRow>
-        </ButtonContainer>
-          </InfoText>
+      {<OnboardingWrapper>
+        <InfoText>
+          <SectionContainer>
+            <MenuText>{text.general.logo}</MenuText>
+            <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
+          </SectionContainer>
+          <OnboardingCharacterWrapper>
+            <OnboardingCharacter />
+          </OnboardingCharacterWrapper>
+          <ButtonContainer isVisible={isConnectButtonVisible}>
+            <ButtonRow>
+              <PrimaryButton onClick={() => connectWallet()}>
+                <KeplerIconWrapper>
+                  <KeplerIcon />
+                </KeplerIconWrapper>
+                <ButtonText customColor={color.white}>{text.general.connectWallet}</ButtonText>
+                <ArrowUp />
+              </PrimaryButton>
+            </ButtonRow>
+          </ButtonContainer>
+        </InfoText>
 
-          <MiddleContent height={height} ref={ref}>
-            <GeneralSectionContainer>
-              <MenuText>{text.general.whoWeAre}</MenuText>
-              <TextContainer>
-                {text.general.isPartOfAgoric}
-                <Link href={AGORIC_LINK} target="_blank">
-                  {text.general.agoric}
-                </Link>
-                {text.general.anOpenSource}
-                <KryhaLink href={KRYHA_LINK} target="_blank">
-                  {text.general.kryha}.
-                </KryhaLink>
-              </TextContainer>
-              <TextContainer>{text.general.theSagesArt}</TextContainer>
-              <TextContainer>{text.general.ourLeadership}</TextContainer>
-            </GeneralSectionContainer>
-          </MiddleContent>
-          <EndContent height={height}>
-            <GeneralSectionContainer>
-              <MenuText>{text.general.contactUs}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
-              <TextContainer>
-                {text.general.sendEmailTo}
-                <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
-              </TextContainer>
-            </GeneralSectionContainer>
-            <GeneralSectionContainer>
-              <MenuText>{text.general.followUs}</MenuText>
-              <SocialsContainer>
-                <Link href={DISCORD_LINK} target="_blank">
-                  <DiscordIcon />
-                  {text.general.discord}
-                </Link>
-                <Link href={TWITTER_LINK} target="_blank">
-                  <TwitterIcon />
-                  {text.general.twitter}
-                </Link>
-              </SocialsContainer>
-            </GeneralSectionContainer>
-          </EndContent>
-        </OnboardingWrapper>}
-        
-        <FooterContainer>
-          <Footer />
-        </FooterContainer>
-      </OnboardingContainer>
+        <MiddleContent height={height} ref={ref}>
+          <GeneralSectionContainer>
+            <MenuText>{text.general.whoWeAre}</MenuText>
+            <TextContainer>
+              {text.general.isPartOfAgoric}
+              <Link href={AGORIC_LINK} target="_blank">
+                {text.general.agoric}
+              </Link>
+              {text.general.anOpenSource}
+              <KryhaLink href={KRYHA_LINK} target="_blank">
+                {text.general.kryha}.
+              </KryhaLink>
+            </TextContainer>
+            <TextContainer>{text.general.theSagesArt}</TextContainer>
+            <TextContainer>{text.general.ourLeadership}</TextContainer>
+          </GeneralSectionContainer>
+        </MiddleContent>
+        <EndContent height={height}>
+          <GeneralSectionContainer>
+            <MenuText>{text.general.contactUs}</MenuText>
+            <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
+            <TextContainer>
+              {text.general.sendEmailTo}
+              <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
+            </TextContainer>
+          </GeneralSectionContainer>
+          <GeneralSectionContainer>
+            <MenuText>{text.general.followUs}</MenuText>
+            <SocialsContainer>
+              <Link href={DISCORD_LINK} target="_blank">
+                <DiscordIcon />
+                {text.general.discord}
+              </Link>
+              <Link href={TWITTER_LINK} target="_blank">
+                <TwitterIcon />
+                {text.general.twitter}
+              </Link>
+            </SocialsContainer>
+          </GeneralSectionContainer>
+        </EndContent>
+      </OnboardingWrapper>}
+      
+      <FooterContainer>
+        <Footer />
+      </FooterContainer>
 
       <FadeInOut show={showWidget}>
         <Kado show={showWidget} toggleWidget={toggleWidget} />

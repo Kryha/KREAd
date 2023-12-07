@@ -43,10 +43,9 @@ export const InfoText = styled.div`
   ${TitleText} {
     margin-top: 8px;
   }
-  // ${({ height }): string => `height: ${height}px; min-height: ${height}px;`};
   margin-bottom: 200px;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-size: cover;
   scroll-snap-align: start;
   transition: all 0.4s;
@@ -101,15 +100,14 @@ export const EndContent = styled.div<HeightProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-size: cover;
   scroll-snap-align: start;
-  padding-top: 110px;
+  padding-top: 30px;
   gap: 80px;
 `;
 
 export const MiddleContent = styled.div<HeightProps>`
-  ${({ height }): string => `height: ${height}px; min-height: ${height}px;`};
   ${TitleText} {
     margin-top: 16px;
   }
@@ -117,7 +115,7 @@ export const MiddleContent = styled.div<HeightProps>`
   height: 100vh;
   background-size: cover;
   scroll-snap-align: start;
-  padding-top: 110px;
+  padding-top: 30;
 `;
 
 export const FooterContainer = styled.div`
@@ -164,8 +162,8 @@ export const DefaultImage = styled(CharacterImgs)<ViewProps>`
 export const Link = styled.a`
   text-decoration: underline;
   font-weight: ${fontWeight.light};
-  font-size: 24px;
-  line-height: 31px;
+  font-size: 16px;
+  line-height: 20px;
   :first-letter {
     text-transform: capitalize;
   }
@@ -273,7 +271,6 @@ export const ArrowDown = styled(ArrowDownIcon)`
 export const SectionContainer = styled.div`
   padding-left: 40px;
   padding-top: 10px;
-  width: 460px;
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding-left: 16px;
     width: 100%;
@@ -288,7 +285,7 @@ export const ScrollContainer = styled.div`
 
 export const GeneralSectionContainer = styled.div`
   padding-left: 40px;
-  width: 460px;
+  width: 100%;
 `;
 
 export const ConnectContainer = styled.div<ButtonProps>`
