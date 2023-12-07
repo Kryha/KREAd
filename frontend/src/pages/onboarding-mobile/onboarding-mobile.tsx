@@ -42,7 +42,7 @@ import { useIsMobile, useOnScreen, useTimer, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, DISCORD_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME, TWITTER_LINK } from "../../constants";
 
-export const Onboarding: FC = () => {
+export const OnboardingMobile: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
@@ -71,8 +71,17 @@ export const Onboarding: FC = () => {
 
   return (
     <>
-      <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
-        <ButtonContainer isVisible={isConnectButtonVisible}>
+      {/* {showAnimation ? (
+        <KreadContainer height={height} width={width} showSlider={showSlider}>
+          <AnimatedLogo iteration={1} />
+        </KreadContainer>
+      ) : (
+        <LogoContainer>
+          <KreadLogo />
+        </LogoContainer>
+      )} */}
+      {/* <OnboardingContainer height={height} width={width} showAnimation={showAnimation}> */}
+        {/* <ButtonContainer isVisible={isConnectButtonVisible}>
           <ButtonRow>
             <PrimaryButton onClick={() => connectWallet()}>
               <KeplerIconWrapper>
@@ -82,8 +91,8 @@ export const Onboarding: FC = () => {
               <ArrowUp />
             </PrimaryButton>
           </ButtonRow>
-        </ButtonContainer>
-        <OnboardingWrapper>
+        </ButtonContainer> */}
+        {/* <OnboardingWrapper>
           <InfoText height={height}>
             <SectionContainer>
               <MenuText>{text.general.logo}</MenuText>
@@ -138,12 +147,13 @@ export const Onboarding: FC = () => {
               </SocialsContainer>
             </GeneralSectionContainer>
           </EndContent>
-        </OnboardingWrapper>
-        {!isMobile && <OnboardingCharacter />}
+        </OnboardingWrapper> */}
+        {/* {!isMobile && <OnboardingCharacter />}
         <FooterContainer>
           <Footer />
-        </FooterContainer>
-      </OnboardingContainer>
+        </FooterContainer> */}
+      {/* </OnboardingContainer> */}
+
       <FadeInOut show={showWidget}>
         <Kado show={showWidget} toggleWidget={toggleWidget} />
         <Overlay />

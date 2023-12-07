@@ -6,7 +6,7 @@ interface MainProps {
 
 export const MainWrap = styled.div<MainProps>`
   display: flex;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   flex-direction: column;
   overflow: hidden;

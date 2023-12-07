@@ -10,6 +10,7 @@ import { UseWithContext } from "../context/wrapper";
 import { MobileNotAvailable } from "../pages/mobile-not-available";
 import { useIsMobile } from "../hooks";
 import { breakpoints } from "../design";
+import { OnboardingMobile } from "../pages/onboarding-mobile/onboarding-mobile";
 
 export const InternalAppWrapper = () => {
   return (
@@ -66,7 +67,7 @@ export const ExternalAppRoutes: FC = () => {
     <ErrorBoundary FallbackComponent={ErrorFallback} onError={() => navigate(routes.character)}>
       <MainContainer>
         <Routes>
-          <Route path={routes.root} element={isMobile ? <Onboarding /> : <Onboarding />} />
+          <Route path={routes.root} element={isMobile ? <OnboardingMobile /> : <Onboarding />} />
           <Route path={routes.privacy} element={<Privacy />} />
           <Route path="*" element={<InternalAppWrapper />} />
         </Routes>
