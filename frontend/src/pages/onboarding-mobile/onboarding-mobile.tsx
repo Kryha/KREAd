@@ -31,6 +31,7 @@ import {
   Link,
   LogoContainer,
   MiddleContent,
+  OnboardingCharacterWrapper,
   OnboardingContainer,
   OnboardingWrapper,
   ScrollContainer,
@@ -81,7 +82,16 @@ export const OnboardingMobile: FC = () => {
         </LogoContainer>
       )}
       <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
-        <ButtonContainer isVisible={isConnectButtonVisible}>
+        {<OnboardingWrapper>
+          <InfoText>
+            <SectionContainer>
+              <MenuText>{text.general.logo}</MenuText>
+              <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
+            </SectionContainer>
+            <OnboardingCharacterWrapper>
+              <OnboardingCharacter />
+            </OnboardingCharacterWrapper>
+            <ButtonContainer isVisible={isConnectButtonVisible}>
           <ButtonRow>
             <PrimaryButton onClick={() => connectWallet()}>
               <KeplerIconWrapper>
@@ -92,15 +102,8 @@ export const OnboardingMobile: FC = () => {
             </PrimaryButton>
           </ButtonRow>
         </ButtonContainer>
-        {<OnboardingWrapper>
-          <InfoText>
-            <SectionContainer>
-              <MenuText>{text.general.logo}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
-            </SectionContainer>
-            <OnboardingCharacter />
-
           </InfoText>
+
           <MiddleContent height={height} ref={ref}>
             <GeneralSectionContainer>
               <MenuText>{text.general.whoWeAre}</MenuText>

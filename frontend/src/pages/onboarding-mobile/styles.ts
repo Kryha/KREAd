@@ -18,6 +18,26 @@ export const OnboardingWrapper = styled.div`
   scroll-snap-type: y mandatory;
 `;
 
+export const OnboardingCharacterWrapper = styled.div`
+  display: flex;
+  position: relative;
+  width: 50%;
+
+  @media screen and (max-width: ${breakpoints.tablet}) {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 800px;
+  }
+
+  @media screen and (max-width: ${breakpoints.mobile}) {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 500px;
+  }
+`;
+
 export const InfoText = styled.div`
   margin-top: 8px;
   ${TitleText} {
@@ -66,44 +86,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
       }
     }
   }
-  ${({ isVisible }): string => {
-    return isVisible
-      ? `
-      ${ButtonRow} {
-        -webkit-transition: 0.3s ease-out;
-        transition: 0.3s ease-out;
-        will-change: transform;
-        position: absolute;
-        left: 40px;
-        top: 40px;
-      };
-      background: rgba(255, 255, 255, 0.46);
-      backdrop-filter: blur(4px);
-      padding-top: 40px;
-      padding-bottom: 40px;
-      height: 120px;
-      width: 460px;
-      position: absolute;
-        `
-      : `
-      margin-top: 46px;
-      ${ButtonRow} {
-        position: fixed;
-        left: 40px;
-        top: 620px;
-        z-index: 100;
-      }
-      `;
-  }};
-
-  ${({ isVisible }) =>
-    isVisible === true
-      ? css``
-      : css`
-          animation: ${disappear}, ${fadeIn};
-          animation-duration: 0.5s, 0.5s;
-          animation-delay: 0s, 0.5s;
-        `};
+  
 `;
 
 export const ArrowUpRight = styled(ArrowUpRightIcon)`
@@ -289,7 +272,7 @@ export const ArrowDown = styled(ArrowDownIcon)`
 
 export const SectionContainer = styled.div`
   padding-left: 40px;
-  padding-top: 50px;
+  padding-top: 10px;
   width: 460px;
   @media screen and (max-width: ${breakpoints.tablet}) {
     padding-left: 16px;
