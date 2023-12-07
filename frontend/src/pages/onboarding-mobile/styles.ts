@@ -18,12 +18,12 @@ export const OnboardingWrapper = styled.div`
   scroll-snap-type: y mandatory;
 `;
 
-export const InfoText = styled.div<HeightProps>`
+export const InfoText = styled.div`
   margin-top: 8px;
   ${TitleText} {
     margin-top: 8px;
   }
-  ${({ height }): string => `height: ${height}px; min-height: ${height}px;`};
+  // ${({ height }): string => `height: ${height}px; min-height: ${height}px;`};
   margin-bottom: 200px;
   width: 100%;
   height: 100vh;

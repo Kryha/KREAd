@@ -71,7 +71,7 @@ export const OnboardingMobile: FC = () => {
 
   return (
     <>
-      {/* {showAnimation ? (
+      {showAnimation ? (
         <KreadContainer height={height} width={width} showSlider={showSlider}>
           <AnimatedLogo iteration={1} />
         </KreadContainer>
@@ -79,9 +79,9 @@ export const OnboardingMobile: FC = () => {
         <LogoContainer>
           <KreadLogo />
         </LogoContainer>
-      )} */}
-      {/* <OnboardingContainer height={height} width={width} showAnimation={showAnimation}> */}
-        {/* <ButtonContainer isVisible={isConnectButtonVisible}>
+      )}
+      <OnboardingContainer height={height} width={width} showAnimation={showAnimation}>
+        <ButtonContainer isVisible={isConnectButtonVisible}>
           <ButtonRow>
             <PrimaryButton onClick={() => connectWallet()}>
               <KeplerIconWrapper>
@@ -91,21 +91,15 @@ export const OnboardingMobile: FC = () => {
               <ArrowUp />
             </PrimaryButton>
           </ButtonRow>
-        </ButtonContainer> */}
-        {/* <OnboardingWrapper>
-          <InfoText height={height}>
+        </ButtonContainer>
+        {<OnboardingWrapper>
+          <InfoText>
             <SectionContainer>
               <MenuText>{text.general.logo}</MenuText>
               <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
             </SectionContainer>
-            <SectionContainer>
-              <MenuText>{text.general.sagesBy}</MenuText>
-              <TitleText customColor={color.darkGrey}>{text.general.sagesIsTheFirst}</TitleText>
-            </SectionContainer>
-            <ScrollContainer>
-              <ButtonText>{text.general.scroll}</ButtonText>
-              <ArrowDown />
-            </ScrollContainer>
+            <OnboardingCharacter />
+
           </InfoText>
           <MiddleContent height={height} ref={ref}>
             <GeneralSectionContainer>
@@ -147,12 +141,12 @@ export const OnboardingMobile: FC = () => {
               </SocialsContainer>
             </GeneralSectionContainer>
           </EndContent>
-        </OnboardingWrapper> */}
-        {/* {!isMobile && <OnboardingCharacter />}
+        </OnboardingWrapper>}
+        
         <FooterContainer>
           <Footer />
-        </FooterContainer> */}
-      {/* </OnboardingContainer> */}
+        </FooterContainer>
+      </OnboardingContainer>
 
       <FadeInOut show={showWidget}>
         <Kado show={showWidget} toggleWidget={toggleWidget} />
