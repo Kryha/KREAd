@@ -9,6 +9,7 @@ export * from "./switch-selector";
 export * from "./navigation-tab";
 export * from "./price-in-ist";
 export * from "./base-route";
+export * from "./base-route-mobile";
 export * from "./equipped-item-card";
 export * from "./content-loader";
 export * from "./base-character";
