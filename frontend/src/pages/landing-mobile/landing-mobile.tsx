@@ -6,6 +6,7 @@ import {
   BaseRouteMobile,
   BoldLabel,
   ButtonText,
+  ContentLoader,
   ErrorView,
   FadeInOut,
   LevelBoldLabel,
@@ -104,7 +105,7 @@ export const LandingMobile: FC = () => {
     const { totalLevel } = calculateCharacterLevels(selectedCharacter);
     level = totalLevel;
   }
-
+  
   return (
     <BaseRouteMobile
       isLanding

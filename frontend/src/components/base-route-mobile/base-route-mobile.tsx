@@ -9,7 +9,7 @@ import { useCharacterBuilder } from "../../context/character-builder-context";
 import { MAIN_MODE, Section } from "../../constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { SwitchSelector } from "../switch-selector";
-import { KreadContainer } from "../../pages/shop/styles";
+import { KreadContainer, KreadContainerMobile } from "../../pages/shop/styles";
 import { KreadIcon } from "../logo/styles";
 import { ButtonText, PrimaryButton } from "../atoms";
 import { color } from "../../design";
@@ -57,14 +57,14 @@ export const BaseRouteMobile: FC<BaseRouteProps> = ({ children, sideNavigation, 
               <NavigationTab title={text.navigation.character} route={isOnboarding} />
             </NavigationSection>
           </Box>
-          <KreadContainer onClick={home}>
+          <KreadContainerMobile onClick={home}>
             <KreadIcon />
-          </KreadContainer>
-          <RightBox>
+          </KreadContainerMobile>
+          {/* <RightBox>
             {isShop && <BuyCryptoButton />}
             {!isLanding && <>{pageSelector}</>}
             {sideNavigation}
-          </RightBox>
+          </RightBox> */}
         </TopbarContainer>
       )}
       <ChildrenContainer isLanding={isLanding}>{children}</ChildrenContainer>
