@@ -102,3 +102,7 @@ export const CharacterTitle = styled.h1`
   font-size: 32px;
   line-height: 52px;
 `;
+
+export const MarginTop = styled.div`
+  margin-top: 100px;
+`;

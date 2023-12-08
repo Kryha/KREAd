@@ -16,7 +16,9 @@ export const TopbarContainer = styled.header<AnimationProps>`
   width: 100vw;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
+  margin-top: 12px;
+  margin-bottom: -65px;
   align-items: flex-end;
   z-index: 100;
   top: 0;

@@ -52,11 +52,11 @@ export const BaseRouteMobile: FC<BaseRouteProps> = ({ children, sideNavigation, 
     <>
       {interactionMode === MAIN_MODE && (
         <TopbarContainer isLanding={isLanding}>
-          <Box>
+          {/* <Box>
             <NavigationSection route={isOnboarding}>
               <NavigationTab title={text.navigation.character} route={isOnboarding} />
             </NavigationSection>
-          </Box>
+          </Box> */}
           <KreadContainerMobile onClick={home}>
             <KreadIcon />
           </KreadContainerMobile>

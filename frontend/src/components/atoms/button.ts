@@ -9,6 +9,7 @@ interface ButtonProps {
   borderColor?: string;
   visible?: boolean;
   disabled?: boolean;
+  mobileWidth?: string;
 }
 
 export const KeplerIconWrapper = styled.div``;
@@ -88,6 +89,7 @@ export const PrimaryButton = styled.button<ButtonProps>`
 
   @media (max-width: ${breakpoints.mobile}) {
     font-size: 12px;
+    max-width: ${(props): string => props.mobileWidth || "none"};
   }
 `;
 
