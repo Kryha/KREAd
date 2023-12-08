@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { DiscordIcon, KeplerIcon, text, TwitterIcon } from "../../assets";
-import { breakpoints, color } from "../../design";
+import { color } from "../../design";
 import {
   AnimatedLogo,
   ButtonText,
@@ -14,15 +14,12 @@ import {
   OnboardingCharacter,
   Overlay,
   PrimaryButton,
-  TitleText,
 } from "../../components";
 import {
   ArrowUp,
   ButtonContainer,
   ButtonRow,
   EndContent,
-  FooterContainer,
-  GeneralSectionContainer,
   InfoText,
   KreadContainer,
   KreadLogo,
@@ -37,7 +34,7 @@ import {
   SocialsContainer,
   TextContainer,
 } from "./styles";
-import { useIsMobile, useOnScreen, useTimer, useViewport } from "../../hooks";
+import { useOnScreen, useTimer, useViewport } from "../../hooks";
 import { routes } from "../../navigation";
 import { AGORIC_LINK, DISCORD_LINK, FIRST_TIME, KRYHA_LINK, SLIDER_TIME, TWITTER_LINK } from "../../constants";
 
@@ -98,7 +95,6 @@ export const OnboardingMobile: FC = () => {
             </ButtonRow>
           </ButtonContainer>
         </InfoText>
-
         <MiddleContent height={height} ref={ref}>
           <SectionContainer>
             <MenuText>{text.general.whoWeAre}</MenuText>

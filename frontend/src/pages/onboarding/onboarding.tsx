@@ -144,6 +144,15 @@ export const Onboarding: FC = () => {
           <Footer />
         </FooterContainer>
       </OnboardingContainer>
+      {showAnimation ? (
+        <KreadContainer height={height} width={width} showSlider={showSlider}>
+          <AnimatedLogo iteration={1} />
+        </KreadContainer>
+      ) : (
+        <LogoContainer>
+          <KreadLogo />
+        </LogoContainer>
+      )}
       <FadeInOut show={showWidget}>
         <Kado show={showWidget} toggleWidget={toggleWidget} />
         <Overlay />
