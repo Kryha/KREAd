@@ -12,7 +12,6 @@ interface HeightProps {
 export const OnboardingWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 100vh;
   scroll-behavior: smooth;
   overflow: auto;
   scroll-snap-type: y mandatory;
@@ -46,6 +45,7 @@ export const InfoText = styled.div`
   margin-bottom: 200px;
   width: 100%;
   height: 100%;
+  max-height: 100vh - 24px;
   background-size: cover;
   scroll-snap-align: start;
   transition: all 0.4s;
@@ -112,7 +112,8 @@ export const MiddleContent = styled.div<HeightProps>`
     margin-top: 16px;
   }
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  max-height: 100vh - 24px;
   background-size: cover;
   scroll-snap-align: start;
   padding-top: 30;
@@ -209,7 +210,7 @@ export const LogoContainer = styled.div`
   display: flex;
   flex: 1;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 30px;
   ${KreadLogo} {
     width: 100px;
     height: 24px;
