@@ -17,7 +17,6 @@ import {
   TitleText,
 } from "../../components";
 import {
-  ArrowDown,
   ArrowUp,
   ButtonContainer,
   ButtonRow,
@@ -34,7 +33,6 @@ import {
   OnboardingCharacterWrapper,
   OnboardingContainer,
   OnboardingWrapper,
-  ScrollContainer,
   SectionContainer,
   SocialsContainer,
   TextContainer,
@@ -47,7 +45,6 @@ export const OnboardingMobile: FC = () => {
   const navigate = useNavigate();
   const { width, height } = useViewport();
   const [showSlider] = useTimer(SLIDER_TIME, true);
-  const isMobile = useIsMobile(breakpoints.tablet);
   const ref = useRef<HTMLDivElement>(null);
   const isConnectButtonVisible = useOnScreen(ref);
   const [showAnimation, setShowAnimation] = useState(true);
@@ -71,7 +68,7 @@ export const OnboardingMobile: FC = () => {
   };
 
   return (
-    <>
+    <OnboardingWrapper>
       {showAnimation ? (
         <KreadContainer height={height} width={width} showSlider={showSlider}>
           <AnimatedLogo iteration={1} />
@@ -81,11 +78,10 @@ export const OnboardingMobile: FC = () => {
           <KreadLogo />
         </LogoContainer>
       )}
-      {<OnboardingWrapper>
+      <OnboardingContainer>
         <InfoText>
           <SectionContainer>
-            <MenuText>{text.general.logo}</MenuText>
-            <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
+            <TextContainer customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TextContainer>
           </SectionContainer>
           <OnboardingCharacterWrapper>
             <OnboardingCharacter />
@@ -104,7 +100,7 @@ export const OnboardingMobile: FC = () => {
         </InfoText>
 
         <MiddleContent height={height} ref={ref}>
-          <GeneralSectionContainer>
+          <SectionContainer>
             <MenuText>{text.general.whoWeAre}</MenuText>
             <TextContainer>
               {text.general.isPartOfAgoric}
@@ -118,18 +114,18 @@ export const OnboardingMobile: FC = () => {
             </TextContainer>
             <TextContainer>{text.general.theSagesArt}</TextContainer>
             <TextContainer>{text.general.ourLeadership}</TextContainer>
-          </GeneralSectionContainer>
+          </SectionContainer>
         </MiddleContent>
         <EndContent height={height}>
-          <GeneralSectionContainer>
+          <SectionContainer>
             <MenuText>{text.general.contactUs}</MenuText>
-            <TitleText customColor={color.darkGrey}>{text.general.questionsBug}</TitleText>
+            <TextContainer customColor={color.darkGrey}>{text.general.questionsBug}</TextContainer>
             <TextContainer>
               {text.general.sendEmailTo}
               <Link href={`mailto:${text.general.contactEmail}`}>{text.general.contactEmail}</Link>
             </TextContainer>
-          </GeneralSectionContainer>
-          <GeneralSectionContainer>
+          </SectionContainer>
+          <SectionContainer>
             <MenuText>{text.general.followUs}</MenuText>
             <SocialsContainer>
               <Link href={DISCORD_LINK} target="_blank">
@@ -141,18 +137,14 @@ export const OnboardingMobile: FC = () => {
                 {text.general.twitter}
               </Link>
             </SocialsContainer>
-          </GeneralSectionContainer>
+          </SectionContainer>
         </EndContent>
-      </OnboardingWrapper>}
-      
-      <FooterContainer>
-        <Footer />
-      </FooterContainer>
-
+      </OnboardingContainer>
+      <Footer />
       <FadeInOut show={showWidget}>
         <Kado show={showWidget} toggleWidget={toggleWidget} />
         <Overlay />
       </FadeInOut>
-    </>
+    </OnboardingWrapper>
   );
 };

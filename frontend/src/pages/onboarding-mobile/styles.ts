@@ -10,31 +10,18 @@ interface HeightProps {
 }
 
 export const OnboardingWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  scroll-behavior: smooth;
-  overflow: auto;
-  scroll-snap-type: y mandatory;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+
 `;
 
 export const OnboardingCharacterWrapper = styled.div`
   display: flex;
   position: relative;
-  width: 50%;
-
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    display: flex;
-    position: relative;
-    width: 100%;
-    height: 800px;
-  }
-
-  @media screen and (max-width: ${breakpoints.mobile}) {
-    display: flex;
-    position: relative;
-    width: 100%;
-    height: 500px;
-  }
+  height: 50%;
+  margin: 17% 5% 7% 5%;
 `;
 
 export const InfoText = styled.div`
@@ -71,8 +58,7 @@ export const ButtonContainer = styled.div<ButtonProps>`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0;
-  gap: 16px;
+  justify-content: center;
   z-index: 100;
   ${PrimaryButton} {
     max-height: 45px;
@@ -93,7 +79,6 @@ export const ArrowUpRight = styled(ArrowUpRightIcon)`
 `;
 
 export const EndContent = styled.div<HeightProps>`
-  ${({ height }): string => `height: ${height - 100}px; min-height: ${height - 100}px;`};
   ${TitleText} {
     margin-top: 16px;
   }
@@ -103,8 +88,7 @@ export const EndContent = styled.div<HeightProps>`
   height: 100%;
   background-size: cover;
   scroll-snap-align: start;
-  padding-top: 30px;
-  gap: 80px;
+  gap: 40px;
 `;
 
 export const MiddleContent = styled.div<HeightProps>`
@@ -116,13 +100,13 @@ export const MiddleContent = styled.div<HeightProps>`
   max-height: 100vh - 24px;
   background-size: cover;
   scroll-snap-align: start;
-  padding-top: 30;
 `;
 
 export const FooterContainer = styled.div`
   position: absolute;
-  right: 0;
+  left: 0;
   bottom: 0;
+  width: 100%;
   z-index: ${zIndex.overCharacter};
 `;
 
@@ -132,26 +116,12 @@ interface ViewProps {
   showSlider?: boolean;
   showAnimation?: boolean;
 }
-export const OnboardingContainer = styled.div<ViewProps>`
-  ${({ height }): string => `height: ${height}px;`};
+export const OnboardingContainer = styled.div<HeightProps>`
+  ${({ height }): string => `height: ${height - 64}px;`};
+  scroll-behavior: smooth;
+  overflow: auto;
   scroll-snap-type: y mandatory;
-  max-height: 100vh;
-  transition: all 0.4s;
-  animation: ${disappear}, ${fadeIn};
-  animation-duration: 5s, 0.5s;
-  animation-delay: 0s, 5s;
-  ${({ showAnimation }) =>
-    showAnimation
-      ? css`
-          animation: ${disappear}, ${fadeIn};
-          animation-duration: 5s, 0.5s;
-          animation-delay: 0s, 5s;
-        `
-      : css`
-          animation: ${disappear}, ${fadeIn};
-          animation-duration: 0.8s, 0.5s;
-          animation-delay: 0s, 0.8s;
-        `};
+  padding: 10px 10px 10px 10px;
 `;
 
 export const DefaultImage = styled(CharacterImgs)<ViewProps>`
@@ -179,10 +149,13 @@ export const KryhaLink = styled(Link)`
   margin-left: 0;
 `;
 
-export const TextContainer = styled.span`
+interface TextProps {
+  customColor?: string;
+}
+export const TextContainer = styled.span<TextProps>`
   font-weight: ${fontWeight.light};
-  font-size: 24px;
-  line-height: 31px;
+  font-size: 16px;
+  line-height: 22px;
   :first-letter {
     text-transform: capitalize;
   }
@@ -191,13 +164,8 @@ export const TextContainer = styled.span`
   }
   margin-top: 24px;
   display: inline-block;
-  color: ${color.darkGrey};
+  ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};
   white-space: pre-line;
-
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    font-size: 16px;
-    line-height: 20px;
-  }
 `;
 
 export const KreadLogo = styled(KreadIcon)`
@@ -270,12 +238,8 @@ export const ArrowDown = styled(ArrowDownIcon)`
 `;
 
 export const SectionContainer = styled.div`
-  padding-left: 40px;
-  padding-top: 10px;
-  @media screen and (max-width: ${breakpoints.tablet}) {
-    padding-left: 16px;
-    width: 100%;
-  }
+  padding-left: 20px;
+  padding-top: 4%;
 `;
 
 export const ScrollContainer = styled.div`
@@ -285,7 +249,7 @@ export const ScrollContainer = styled.div`
 `;
 
 export const GeneralSectionContainer = styled.div`
-  padding-left: 40px;
+  padding-left: 30px;
   width: 100%;
 `;
 
@@ -316,6 +280,7 @@ export const ConnectContainer = styled.div<ButtonProps>`
 export const SocialsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 8px 0px;
 `;
 
 export const SocialLink = styled.div`
