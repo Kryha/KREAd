@@ -63,7 +63,7 @@ export const OnboardingMobile: FC = () => {
     localStorage.setItem(FIRST_TIME, "false");
     setShowAnimation(false);
   };
-
+  console.log(showSlider)
   return (
     <OnboardingWrapper>
       {showAnimation ? (
@@ -75,7 +75,7 @@ export const OnboardingMobile: FC = () => {
           <KreadLogo />
         </LogoContainer>
       )}
-      <OnboardingContainer>
+      <OnboardingContainer showAnimation={showAnimation}>
         <InfoText>
           <SectionContainer>
             <TextContainer customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TextContainer>

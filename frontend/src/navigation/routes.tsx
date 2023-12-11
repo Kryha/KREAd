@@ -11,6 +11,7 @@ import { MobileNotAvailable } from "../pages/mobile-not-available";
 import { useIsMobile } from "../hooks";
 import { breakpoints } from "../design";
 import { OnboardingMobile } from "../pages/onboarding-mobile/onboarding-mobile";
+import { ConnectWalletMobile } from "../pages/connect-wallet-mobile/connect-wallet-mobile";
 
 export const InternalAppWrapper = () => {
   return (
@@ -45,7 +46,7 @@ export const InternalAppRoutes: FC = () => {
   </>
   const mobileRoutes = <>
     {Object.values(desktopOnlyPaths).map((path, index) => <Route path={path} element={<MobileNotAvailable />} key={index} />)}
-    <Route path={routes.connectWallet} element={<ConnectWallet />} />
+    <Route path={routes.connectWallet} element={<ConnectWalletMobile />} />
     <Route path={routes.character} element={<LandingMobile />} />
     <Route path={routes.createCharacter} element={<CreateCharacterMobile />} />
     <Route path="*" element={<ErrorView />} />

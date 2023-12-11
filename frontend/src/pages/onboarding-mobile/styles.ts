@@ -16,12 +16,28 @@ export const OnboardingWrapper = styled.div`
   height: 100vh;
 `;
 
-export const OnboardingContainer = styled.div`
+export const OnboardingContainer = styled.div<ViewProps>`
   height: 100%;
   scroll-behavior: smooth;
   overflow: auto;
   scroll-snap-type: y mandatory;
   padding: 10px 10px 10px 10px;
+  transition: all 0.4s;
+  animation: ${disappear}, ${fadeIn};
+  animation-duration: 5s, 0.5s;
+  animation-delay: 0s, 5s;
+  ${({ showAnimation }) =>
+    showAnimation
+      ? css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 5s, 0.5s;
+          animation-delay: 0s, 5s;
+        `
+      : css`
+          animation: ${disappear}, ${fadeIn};
+          animation-duration: 0.8s, 0.5s;
+          animation-delay: 0s, 0.8s;
+        `};
 `;
 
 export const OnboardingCharacterWrapper = styled.div`
@@ -68,8 +84,8 @@ export const EndContent = styled.div<HeightProps>`
 `;
 
 interface ViewProps {
-  height: number;
-  width: number;
+  height?: number;
+  width?: number;
   showSlider?: boolean;
   showAnimation?: boolean;
 }
@@ -143,8 +159,7 @@ export const KreadContainer = styled.div<ViewProps>`
     position: absolute;
     left: 0;
     right: 0;
-    width: 500px;
-    height: 150px;
+    width: 80%;
     animation: ${changeSize} 4s 1;
     animation-fill-mode: forwards;
     animation-delay: 3.8s;
@@ -152,16 +167,12 @@ export const KreadContainer = styled.div<ViewProps>`
   ${({ showSlider }) =>
     showSlider &&
     css`
-      animation: ${slideUp};
-      animation-duration: 0.7s;
-      animation-delay: 0s;
-      animation-fill-mode: forwards;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    margin-top: 30px;
       ${KreadIcon} {
-        position: absolute;
-        left: 0;
-        transform: translate(-45%, 0);
-        top: 50%;
-        bottom: 50%;
+        position: relative;
         width: 100px;
         height: 24px;
       }
