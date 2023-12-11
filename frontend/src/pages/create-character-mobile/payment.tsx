@@ -8,13 +8,14 @@ import {
   NumberContainer,
   PreviousButtonContainer,
   PricingContainer,
+  PrimaryButtonMobile,
   Step,
   StepContainer,
   StepText,
   StepWrapper,
   Tick,
 } from "./styles";
-import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, PrimaryButton, SecondaryButton } from "../../components";
+import { Badge, ButtonText, FormText, LoadingPage, PriceInIst, SecondaryButton } from "../../components";
 import { text } from "../../assets";
 import { CONFIRMATION_STEP, INFORMATION_STEP, MINTING_COST } from "../../constants";
 import { color } from "../../design";
@@ -49,9 +50,9 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
             {!sendOffer && (
               <>
                 <PriceInIst price={MINTING_COST} />
-                <PrimaryButton onClick={sendOfferToWallet} disabled={disable}>
+                <PrimaryButtonMobile mobileWidth="100px" onClick={sendOfferToWallet} disabled={disable}>
                   <ButtonText customColor={color.white}>{text.mint.sendOffer}</ButtonText>
-                </PrimaryButton>
+                </PrimaryButtonMobile>
               </>
             )}
           </PricingContainer>
@@ -80,10 +81,10 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
           </PreviousButtonContainer>
         )}
         <ButtonContainer>
-          <PrimaryButton onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
+          <PrimaryButtonMobile mobileWidth="100px" onClick={() => submit(CONFIRMATION_STEP)} disabled={!isOfferAccepted}>
             <ButtonText customColor={color.white}>{text.mint.confirm}</ButtonText>
             {isLoading ? <LoadingPage /> : <ArrowUp />}
-          </PrimaryButton>
+          </PrimaryButtonMobile>
         </ButtonContainer>
       </ButtonWrapper>
     </ContentWrapper>

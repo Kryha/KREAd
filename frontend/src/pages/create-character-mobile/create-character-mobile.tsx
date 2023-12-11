@@ -1,24 +1,21 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
-import { ElephiaCitizen, text } from "../../assets";
+import { text } from "../../assets";
 import { ErrorView, FadeInOut, FormHeader, LoadingPage, NotificationDetail, Overlay } from "../../components";
 import { PageContainer } from "../../components/page-container";
 import { MINTING_COST, MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
-import { useIsMobile, useViewport } from "../../hooks";
 import { Character, CharacterCreation, MakeOfferCallback } from "../../interfaces";
 import { routes } from "../../navigation";
 import { useCreateCharacter } from "../../service";
 import { Confirmation } from "./confirmation";
 import { Information } from "./information";
 import { Payment } from "./payment";
-import { DefaultImage, FormCard } from "./styles";
-import { breakpoints } from "../../design";
+import { FormCard } from "./styles";
 import { useUserState } from "../../context/user";
 import { useWalletState } from "../../context/wallet";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 
 export const CreateCharacterMobile: FC = () => {
   const createCharacter = useCreateCharacter();
-  const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [mintedCharacter, setMintedCharacter] = useState<Character>();
   const [error, setError] = useState<string>();
@@ -30,7 +27,6 @@ export const CreateCharacterMobile: FC = () => {
   const isLoadingCharacters = !fetched;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
-  const mobile = useIsMobile(breakpoints.desktop);
   const { ist } = useWalletState();
 
   const notEnoughIST = useMemo(() => {
@@ -47,6 +43,8 @@ export const CreateCharacterMobile: FC = () => {
       setMintedCharacter(newCharacter.nft);
       setIsLoading(false);
     }
+    if(error) console.error(`Error in create-character-mobile: ${error}`);
+
   }, [characters, characterData, notEnoughIST]);
 
   const changeStep = async (step: number): Promise<void> => {
@@ -119,7 +117,6 @@ export const CreateCharacterMobile: FC = () => {
           />
         </NotificationWrapper>
       </FadeInOut>
-      {!mobile && <DefaultImage src={ElephiaCitizen} alt={text.character.defaultCharacter} height={height} width={width} />}
     </PageContainer>
   );
 };

@@ -1,12 +1,10 @@
 import React, { FC, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { text } from "../../assets";
 import { CharacterTitle } from './styles'
 import {
   BaseRouteMobile,
   BoldLabel,
   ButtonText,
-  ErrorView,
   FadeInOut,
   LevelBoldLabel,
   LoadingPage,
@@ -17,7 +15,7 @@ import {
   SecondaryButton,
 } from "../../components";
 import { ButtonContainer, DetailContainer, MarginTop } from "./styles";
-import { useEquipItem, useGetItemInInventoryByNameAndCategory, useSelectedCharacter, useUnequipItem } from "../../service";
+import { useSelectedCharacter } from "../../service";
 import { routes } from "../../navigation";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
 import { Layout } from "../../containers/canvas/character-canvas/styles";
@@ -40,13 +38,7 @@ export const LandingMobile: FC = () => {
   const {
     interactionMode,
     setInteractionMode,
-  } = useCharacterBuilder();
-
-  const equipItem = useEquipItem();
-  const unequipItem = useUnequipItem();
-
-  if (equipItem.isError || unequipItem.isError) return <ErrorView />;
-  
+  } = useCharacterBuilder();  
 
   let level = 0;
   if (selectedCharacter) {
