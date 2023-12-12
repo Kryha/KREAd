@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 
-import { CharacterContainer, CharacterSwitchIcon, FifthIcon, FirstIcon, FourthIcon, ThirdIcon } from "./styles";
+import { CharacterContainer, CharacterSwitchIcon, CharacterWrapper, FifthIcon, FirstIcon, FourthIcon, ThirdIcon } from "./styles";
 import { useViewport } from "../../hooks";
 import {
   ArmaCitizen,
@@ -27,7 +27,11 @@ const perk1Images = [ArmaPerk_I6, ArmaPerk_I7, Empty];
 const maskImages = [Mask_Mount_3, Mask_Elephia_24, Mask_Elephia_32];
 const garmentImages = [Legendary_Garment_Arma_7, Rare_Garment_Arma_2, Uncommon_Garment_Arma_1];
 
-export const OnboardingCharacter: FC = () => {
+interface Props {
+  size?: "mini" | "medium" | "half" | "normal" | "large" | "extraLarge";
+  isZoomed?: boolean;
+}
+export const OnboardingCharacter: FC<Props> = ({ size, isZoomed }) => {
   const { width, height } = useViewport();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -40,12 +44,32 @@ export const OnboardingCharacter: FC = () => {
   }, []);
 
   return (
-    <CharacterContainer>
-      <CharacterSwitchIcon src={characterImages[currentIndex] || ArmaCitizen} />
-      <FourthIcon src={perk1Images[currentIndex] || Empty} alt={text.character.perk1} width={width} height={height} zIndex={zIndex.perk1} />
-      <ThirdIcon src={headPieceImages[currentIndex] || Empty} alt={text.character.headPiece} zIndex={zIndex.headPiece} />
-      <FifthIcon src={maskImages[currentIndex] || Empty} alt={text.character.mask} width={width} height={height} zIndex={zIndex.mask} />
-      <FirstIcon src={garmentImages[currentIndex] || Empty} alt={text.character.garment} zIndex={zIndex.garment} />
-    </CharacterContainer>
+    <CharacterWrapper isZoomed={isZoomed} width={width} height={height}>
+      <CharacterContainer width={width} height={height} size={size} isZoomed isClothing={true}>
+        <CharacterSwitchIcon width={width} height={height} src={characterImages[currentIndex] || ArmaCitizen} />
+        <FourthIcon
+          src={perk1Images[currentIndex] || Empty}
+          alt={text.character.perk1}
+          width={width}
+          height={height}
+          zIndex={zIndex.perk1}
+        />
+        <ThirdIcon
+          src={headPieceImages[currentIndex] || Empty}
+          alt={text.character.headPiece}
+          width={width}
+          height={height}
+          zIndex={zIndex.headPiece}
+        />
+        <FifthIcon src={maskImages[currentIndex] || Empty} alt={text.character.mask} width={width} height={height} zIndex={zIndex.mask} />
+        <FirstIcon
+          src={garmentImages[currentIndex] || Empty}
+          alt={text.character.garment}
+          width={width}
+          height={height}
+          zIndex={zIndex.garment}
+        />
+      </CharacterContainer>
+    </CharacterWrapper>
   );
 };

@@ -164,7 +164,10 @@ export const KryhaLink = styled(Link)`
   margin-left: 0;
 `;
 
-export const TextContainer = styled.span`
+interface TextProps {
+  customColor?: string;
+}
+export const TextContainer = styled.span<TextProps>`
   font-weight: ${fontWeight.light};
   font-size: 16px;
   line-height: 22px;

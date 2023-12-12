@@ -11,15 +11,12 @@ import {
   LoadingPage,
   MenuText,
   NotificationDetail,
-  OnboardingCharacter,
   Overlay,
   PrimaryButton,
-  TitleText,
 } from "../../components";
 import {
   ArrowUp,
   ButtonContainer,
-  FooterContainer,
   InfoText,
   KreadLogo,
   LogoContainer,

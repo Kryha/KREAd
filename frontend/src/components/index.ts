@@ -27,6 +27,7 @@ export * from "./notification-detail";
 export * from "./footer";
 export * from "./fade-in-out";
 export * from "./onboarding-character";
+export * from "./onboarding-character-mobile";
 export * from "./logo";
 export * from "./load-more";
 export * from "./kado-on-ramp";

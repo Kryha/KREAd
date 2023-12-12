@@ -11,7 +11,7 @@ import {
   Kado,
   KeplerIconWrapper,
   MenuText,
-  OnboardingCharacter,
+  OnboardingCharacterMobile,
   Overlay,
   PrimaryButton,
 } from "../../components";
@@ -81,7 +81,7 @@ export const OnboardingMobile: FC = () => {
             <TextContainer customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TextContainer>
           </SectionContainer>
           <OnboardingCharacterWrapper>
-            <OnboardingCharacter />
+            <OnboardingCharacterMobile/>
           </OnboardingCharacterWrapper>
           <ButtonContainer isVisible={isConnectButtonVisible}>
             <ButtonRow>
