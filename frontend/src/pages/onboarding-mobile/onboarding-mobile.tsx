@@ -100,6 +100,8 @@ export const OnboardingMobile: FC = () => {
           <SectionContainer>
             <MenuText>{text.general.sagesBy}</MenuText>
             <TextContainer customColor={color.darkGrey}>{text.general.sagesIsTheFirst}</TextContainer>
+          </SectionContainer>
+          <SectionContainer>
             <MenuText>{text.general.whoWeAre}</MenuText>
             <TextContainer>
               {text.general.isPartOfAgoric}
