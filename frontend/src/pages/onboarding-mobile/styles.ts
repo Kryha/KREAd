@@ -125,9 +125,7 @@ export const TextContainer = styled.span<TextProps>`
   :first-letter {
     text-transform: capitalize;
   }
-  :first-of-type {
-    margin-top: 8px;
-  }
+
   margin-top: 24px;
   display: inline-block;
   ${({ customColor }): string => `color: ${customColor || color.darkGrey};`};

@@ -12,6 +12,7 @@ import { useIsMobile } from "../hooks";
 import { breakpoints } from "../design";
 import { OnboardingMobile } from "../pages/onboarding-mobile/onboarding-mobile";
 import { ConnectWalletMobile } from "../pages/connect-wallet-mobile/connect-wallet-mobile";
+import { PrivacyMobile } from "../pages/content-mobile";
 
 export const InternalAppWrapper = () => {
   return (
@@ -69,7 +70,7 @@ export const ExternalAppRoutes: FC = () => {
       <MainContainer>
         <Routes>
           <Route path={routes.root} element={isMobile ? <OnboardingMobile /> : <Onboarding />} />
-          <Route path={routes.privacy} element={<Privacy />} />
+          <Route path={routes.privacy} element={isMobile ? <PrivacyMobile /> : <Privacy />} />
           <Route path="*" element={<InternalAppWrapper />} />
         </Routes>
       </MainContainer>

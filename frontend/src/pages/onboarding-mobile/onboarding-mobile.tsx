@@ -14,6 +14,7 @@ import {
   OnboardingCharacterMobile,
   Overlay,
   PrimaryButton,
+  TitleText,
 } from "../../components";
 import {
   ArrowUp,
@@ -78,7 +79,7 @@ export const OnboardingMobile: FC = () => {
       <OnboardingContainer showAnimation={showAnimation}>
         <InfoText>
           <SectionContainer>
-            <TextContainer customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TextContainer>
+            <TitleText customColor={color.darkGrey}>{text.general.aCharcterBuilderApp}</TitleText>
           </SectionContainer>
           <OnboardingCharacterWrapper>
             <OnboardingCharacterMobile/>
@@ -97,6 +98,8 @@ export const OnboardingMobile: FC = () => {
         </InfoText>
         <MiddleContent height={height} ref={ref}>
           <SectionContainer>
+            <MenuText>{text.general.sagesBy}</MenuText>
+            <TextContainer customColor={color.darkGrey}>{text.general.sagesIsTheFirst}</TextContainer>
             <MenuText>{text.general.whoWeAre}</MenuText>
             <TextContainer>
               {text.general.isPartOfAgoric}
