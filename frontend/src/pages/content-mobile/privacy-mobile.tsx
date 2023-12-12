@@ -3,7 +3,7 @@ import { text } from "../../assets";
 import { Footer, FormText, MenuText, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
 import { color } from "../../design";
-import { ContentWrapper, FooterContainer, GeneralInfo, InfoContainer, KreadContainer, Title } from "./styles";
+import { ContentWrapper, GeneralInfo, InfoContainer, KreadContainer, Title } from "./styles";
 
 // TODO: make content for privacy page
 export const PrivacyMobile: FC = () => {
