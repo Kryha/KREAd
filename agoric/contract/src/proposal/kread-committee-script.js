@@ -31,7 +31,7 @@ export const defaultProposalBuilder = async (
         committeeName,
         kreadCommitteeCharterRef: publishRef(
           install(
-            '../kreadV1/kreadCommitteeCharter.js',
+            '../kreadCommitteeCharter.js',
             '../bundles/bundle-kreadCommitteeCharter.js',
             {
               persist: true,
