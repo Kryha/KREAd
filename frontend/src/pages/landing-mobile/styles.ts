@@ -41,8 +41,10 @@ export const DetailContainer = styled.div`
   animation-duration: 0.8s, 1s;
   animation-delay: 0s, 0.8s;
   height: fit-content;
-
   background: transparent;
+  max-width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   ${SecondaryButton} {
     background: ${color.white};

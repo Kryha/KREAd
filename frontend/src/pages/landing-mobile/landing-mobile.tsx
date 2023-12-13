@@ -96,8 +96,9 @@ export const LandingMobile: FC = () => {
               />
             </NotificationWrapper>
           </FadeInOut>
+          {/* canvas */}
           <Layout width={width} height={height}>
-            <CharacterCanvas width={width} height={height} />
+            <CharacterCanvas width={Math.floor(width*1.6)} height={Math.floor(height*1.6)} />
             {interactionMode === CATEGORY_MODE && <CategoryMode />}
             {interactionMode === ITEM_MODE && <ItemsMode />}
             {interactionMode === CHARACTER_SELECT_MODE && <CharactersMode />}

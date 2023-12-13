@@ -16,9 +16,8 @@ export const TopbarContainer = styled.header<AnimationProps>`
   width: 100vw;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   margin-top: 12px;
-  margin-bottom: -65px;
   align-items: flex-end;
   z-index: 100;
   top: 0;
@@ -26,7 +25,7 @@ export const TopbarContainer = styled.header<AnimationProps>`
   background: transparent;
 
   @media screen and (max-width: ${breakpoints.tablet}) {
-    padding: ${margins.mini};
+    padding: ${margins.medium};
   }
 `;
 
