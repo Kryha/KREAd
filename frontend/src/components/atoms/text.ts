@@ -86,6 +86,7 @@ export const TitleText = styled.h3<TextProps>`
 
   @media screen and (max-width: ${breakpoints.tablet}) {
     font-size: 16px;
+    line-height: 23px;
   }
 `;
 

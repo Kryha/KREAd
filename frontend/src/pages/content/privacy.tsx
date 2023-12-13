@@ -18,8 +18,6 @@ export const Privacy: FC = () => {
         <GeneralInfo>
           <Title>{text.content.whatInformationDoWe}</Title>
           <FormText customColor={color.darkGrey}>{text.content.weCollectPersonal}</FormText>
-          <Title>{text.content.whatInformationDoWe}</Title>
-          <FormText customColor={color.darkGrey}>{text.content.weUseTheInformation}</FormText>
         </GeneralInfo>
       </InfoContainer>
       <FooterContainer>

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { CloseIcon, ExclamationIcon, TickIcon } from "../../assets";
-import { color, margins } from "../../design";
+import { breakpoints, color, margins } from "../../design";
 import { HeaderHorizontalDivider, NavigationTitle } from "../atoms";
 
 export const ToastContainer = styled.div`
@@ -18,6 +18,10 @@ export const ToastContainer = styled.div`
   position: absolute;
   left: 40px;
   height: fit-content;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    width: 100vw;
+  }
 `;
 
 export const Tick = styled(TickIcon)`
