@@ -4,7 +4,7 @@ import { flow } from '../flow.js';
 import { makeCopyBag, mustMatch } from '@agoric/store';
 import { addCharacterToContext, addItemToContext } from './utils.js';
 import { makeKreadUser } from './make-bootstrap-users.js';
-import { errors } from '../../../src/kreadV2/errors.js';
+import { errors } from '../../../src/errors.js';
 import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 import { defaultItems } from '../items.js';
 import { TimerBrandShape } from '@agoric/time';

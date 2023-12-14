@@ -3,7 +3,7 @@ import { flow } from '../flow.js';
 import { E } from '@endo/eventual-send';
 import { makeCopyBag, mustMatch } from '@agoric/store';
 import { AmountMath } from '@agoric/ertp';
-import { errors } from '../../../src/kreadV2/errors.js';
+import { errors } from '../../../src/errors.js';
 
 export async function setupInventoryTests(context) {
   await addCharacterToContext(context);

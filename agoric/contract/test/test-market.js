@@ -7,7 +7,7 @@ import { flow } from './flow.js';
 import { makeKreadUser } from './make-user.js';
 import { addCharacterToBootstrap, addItemToBootstrap } from './setup.js';
 import { makeCopyBag } from '@agoric/store';
-import { errors } from '../src/kreadV2/errors.js';
+import { errors } from '../src/errors.js';
 import { defaultItems } from './items.js';
 import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 

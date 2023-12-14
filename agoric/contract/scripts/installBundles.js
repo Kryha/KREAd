@@ -27,6 +27,12 @@ const makeFeeObject = ({ denom, amount, gas }) => ({
   gas: gas ? String(gas) : 'auto',
 });
 
+/**
+ * Gets the wallet from the mnemonic and uses it to connect to the chain using a stargate client
+ * 
+ * @param {string} walletMnemonic the mnemonic of the wallet that signs the transaction
+ * @returns A stargate client
+ */
 const initializeStargateClient = async (walletMnemonic) => {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(walletMnemonic, {
     prefix: Agoric.Bech32MainPrefix,
@@ -42,6 +48,10 @@ const initializeStargateClient = async (walletMnemonic) => {
   });
 };
 
+/**
+ * Parse bundle, get wallet and send transaction 
+ * over stargate to install the bundle on chain
+ */
 async function installBundle() {
   const cosmicSwingsetPath = process.argv[2];
   const bundlePath = process.argv[3];
