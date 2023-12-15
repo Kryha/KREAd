@@ -2,5 +2,7 @@
 
 body {
   font-family: 'aktiv-grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 

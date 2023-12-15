@@ -64,7 +64,7 @@ export const OnboardingMobile: FC = () => {
     localStorage.setItem(FIRST_TIME, "false");
     setShowAnimation(false);
   };
-  console.log(showSlider)
+
   return (
     <OnboardingWrapper>
       {showAnimation ? (

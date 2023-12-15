@@ -13,20 +13,19 @@ export const NavBarDivider = styled.div`
 `;
 
 export const TopbarContainer = styled.header<AnimationProps>`
+  width: 100vw;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
+  margin-top: 12px;
   align-items: flex-end;
   z-index: 100;
   top: 0;
-  margin-left: ${margins.medium};
-  margin-right: ${margins.medium};
-  padding-top: ${margins.medium};
-  padding-bottom: ${margins.medium};
+  padding: ${margins.medium};
   background: transparent;
 
   @media screen and (max-width: ${breakpoints.tablet}) {
-    padding: ${margins.mini};
+    padding: ${margins.medium};
   }
 `;
 

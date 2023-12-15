@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { ArrowUpRightIcon } from "../../assets";
 import {  changeSize, CharacterImgs, disappear, fadeIn, PrimaryButton, slideUp, TitleText } from "../../components";
 import { KreadIcon } from "../../components/logo/styles";
-import { color, fontWeight } from "../../design";
+import { color, fontWeight, margins } from "../../design";
 
 interface HeightProps {
   height: number;
@@ -141,7 +141,8 @@ export const KreadLogo = styled(KreadIcon)`
 export const LogoContainer = styled.div`
   display: flex;
   flex: 1;
-  justify-content: center;
+  justify-content: start;
+  padding-left: 30px;
   margin-top: 30px;
   ${KreadLogo} {
     width: 100px;

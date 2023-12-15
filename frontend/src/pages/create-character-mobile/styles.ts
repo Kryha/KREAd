@@ -43,6 +43,7 @@ export const FormCard = styled.div`
     margin: auto;
     height: 100%;
     border-radius: 0;
+    max-width: 100vw;
   }
 
   animation: ${fadeUp} 1.2s ease-out 0s forwards;
@@ -290,6 +291,7 @@ export const ButtonWrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   height: 100%;
+  max-width: 100vw;
   align-items: flex-end;
   align-content: flex-end;
 `;
@@ -302,4 +304,8 @@ export const Step = styled.div`
 
 export const RedButtonText = styled(ButtonText)`
   color: red;
-`
+`;
+
+export const PrimaryButtonMobile = styled(PrimaryButton)`
+  max-width: 100px;
+`;

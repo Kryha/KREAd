@@ -15,23 +15,24 @@ a {
 
 body,
 html {
-  min-width: 800px !important;
+  min-width: 800px;
   padding: 0;
   margin: 0;
   height: 100%;
   overflow: hidden;
   @media (max-width: 768px) {
     max-width: 100vw;
-    min-width: auto !important;
+    min-width: auto;
   }
 }
+
 
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   @media (max-width: 768px) {
     max-width: 100vw;
-    min-width: auto;
+    min-width: none;
   }
 }
 
@@ -49,6 +50,10 @@ p, h1, h2, h3, h4, h5, h6 {
 
 #root, #__next {
   isolation: isolate;
+  @media (max-width: 768px) {
+    max-width: 100vw;
+    min-width: none;
+  }
 }
 
 /* Styles for the scrollbar */
