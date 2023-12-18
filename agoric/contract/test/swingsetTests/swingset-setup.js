@@ -6,7 +6,7 @@ import { assert } from '@agoric/assert';
 
 const bfile = (name) => new URL(name, import.meta.url).pathname;
 const kreadV1BundleName = 'kreadV1';
-const kreadV2BundleName = 'kreadV2';
+// const kreadV2BundleName = 'kreadV2';
 
 let c;
 
@@ -66,16 +66,16 @@ export async function setup() {
       },
       [kreadV1BundleName]: {
         sourceSpec: await importMetaResolve(
-          '../../src/kreadV1/index.js',
+          '../../src/index.js',
           import.meta.url,
         ).then((href) => new URL(href).pathname),
       },
-      [kreadV2BundleName]: {
-        sourceSpec: await importMetaResolve(
-          '../../src/kreadV2/index.js',
-          import.meta.url,
-        ).then((href) => new URL(href).pathname),
-      },
+      // [kreadV2BundleName]: {
+      //   sourceSpec: await importMetaResolve(
+      //     '../../src/kreadV2/index.js',
+      //     import.meta.url,
+      //   ).then((href) => new URL(href).pathname),
+      // },
     },
   };
 

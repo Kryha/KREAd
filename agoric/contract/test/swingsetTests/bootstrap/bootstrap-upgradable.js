@@ -76,7 +76,7 @@ import { mint } from './bootstrap-null-upgrade.js';
 const trace = makeTracer('kreadBootUpgrade');
 
 const kreadV1BundleName = 'kreadV1';
-const kreadV2BundleName = 'kreadV2';
+// const kreadV2BundleName = 'kreadV2';
 
 export const buildRootObject = async () => {
   let vatAdmin;
@@ -85,7 +85,7 @@ export const buildRootObject = async () => {
   let governedInstance;
   /** @type {Context} */
   let context;
-  /** @type {import('@agoric/governance/tools/puppetContractGovernor').PuppetContractGovernorKit<import('../../../src/kreadV2/index.js').prepare>} */
+  /** @type {import('@agoric/governance/tools/puppetContractGovernor').PuppetContractGovernorKit<import('../../../src/index.js').prepare>} */
   let governorFacets;
 
   const storageKit = makeFakeStorageKit('kread');
@@ -492,16 +492,16 @@ export const buildRootObject = async () => {
       assert.equal(upgradeResult.incarnationNumber, 1);
       trace('null upgrade completed');
     },
-    upgradeV2: async () => {
-      const bundleId = await E(vatAdmin).getBundleIDByName(kreadV2BundleName);
-      const kreadAdminFacet = await E(
-        governorFacets.creatorFacet,
-      ).getAdminFacet();
-      const upgradeResult = await E(kreadAdminFacet).upgradeContract(bundleId, {
-        ...staticPrivateArgs,
-        initialPoserInvitation,
-      });
-    },
+    // upgradeV2: async () => {
+    //   const bundleId = await E(vatAdmin).getBundleIDByName(kreadV2BundleName);
+    //   const kreadAdminFacet = await E(
+    //     governorFacets.creatorFacet,
+    //   ).getAdminFacet();
+    //   const upgradeResult = await E(kreadAdminFacet).upgradeContract(bundleId, {
+    //     ...staticPrivateArgs,
+    //     initialPoserInvitation,
+    //   });
+    // },
     testFunctionalityBeforeUpgrade: async () => {
       await testFunctionalityBeforeUpgrade(context);
     },

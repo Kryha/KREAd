@@ -37,14 +37,14 @@ test.serial('test functionality before upgrade', async (t) => {
   t.is(result, 'fulfilled');
 });
 
-test.serial('upgrade to V2', async (t) => {
-  const [result] = await run('upgradeV2');
-  t.is(result, 'fulfilled');
-});
+// test.serial('upgrade to V2', async (t) => {
+//   const [result] = await run('upgradeV2');
+//   t.is(result, 'fulfilled');
+// });
 
-test.serial('test functionality after upgrade', async (t) => {
-  const [result] = await run('testFunctionalityAfterUpgrade');
-  t.is(result, 'fulfilled');
-});
+// test.serial('test functionality after upgrade', async (t) => {
+//   const [result] = await run('testFunctionalityAfterUpgrade');
+//   t.is(result, 'fulfilled');
+// });
 
-// test.serial()
+// // test.serial()

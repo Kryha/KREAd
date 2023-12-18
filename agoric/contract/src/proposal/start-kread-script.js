@@ -28,7 +28,7 @@ export const defaultProposalBuilder = async (
         royaltyAddr,
         platformFeeAddr,
         kreadKitRef: publishRef(
-          install('../kreadV1/index.js', '../bundles/bundle-kreadKit.js', {
+          install('../index.js', '../bundles/bundle-kreadKit.js', {
             persist: true,
           }),
         ),
