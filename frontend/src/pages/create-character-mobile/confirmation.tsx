@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { text } from "../../assets";
-import { ButtonText, ErrorView, MenuItemName, PrimaryButton, TitleText } from "../../components";
+import { ButtonText, ErrorView, MenuItemName, TitleText } from "../../components";
 import { color } from "../../design";
 import { Character } from "../../interfaces";
 import { getDatefromEpoch } from "../../util";
-import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, Tick, TickContainer } from "./styles";
+import { ArrowUp, ButtonContainer, ContentWrapper, InfoContainer, PrimaryButtonMobile, Tick, TickContainer } from "./styles";
 import { useUserStateDispatch } from "../../context/user";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../navigation";
@@ -42,10 +42,10 @@ export const Confirmation: FC<ConfirmationProps> = ({ character }) => {
         <MenuItemName>{getDatefromEpoch(Date.now())}</MenuItemName>
       </InfoContainer>
       <ButtonContainer>
-        <PrimaryButton onClick={handleConfirm}>
+        <PrimaryButtonMobile onClick={handleConfirm} mobileWidth="100px">
           <ButtonText customColor={color.white}>{text.mint.goToCharacter}</ButtonText>
           <ArrowUp />
-        </PrimaryButton>
+        </PrimaryButtonMobile>
       </ButtonContainer>
     </ContentWrapper>
   );

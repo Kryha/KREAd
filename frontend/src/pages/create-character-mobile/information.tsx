@@ -1,5 +1,5 @@
 import { CharacterCreation } from "../../interfaces";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   ArrowUp,
@@ -10,10 +10,11 @@ import {
   FormContainer,
   FormFields,
   InputWrapper,
+  PrimaryButtonMobile,
   Tick,
   Warning,
 } from "./styles";
-import { ButtonText, FormText, Input, Label, PrimaryButton } from "../../components";
+import { ButtonText, FormText, Input, Label } from "../../components";
 import { text } from "../../assets";
 import { MAX_CHARACTER_LENGTH, MINTING_COST } from "../../constants";
 import { ButtonInfo } from "../../components/button-info";
@@ -103,10 +104,10 @@ export const Information: FC<InformationProps> = ({ setData, disabled }) => {
         <FormText>{text.mint.theCostsOfMinting}</FormText>
         <ButtonWrapper>
           <ButtonContainer>
-            <PrimaryButton type="submit" disabled={!isValid || disabled || notEnoughIST || nameTaken}>
+            <PrimaryButtonMobile mobileWidth="100px" type="submit" disabled={!isValid || disabled || notEnoughIST || nameTaken}>
               <ButtonText customColor={color.white}>{text.mint.next}</ButtonText>
               <ArrowUp />
-            </PrimaryButton>
+            </PrimaryButtonMobile>
           </ButtonContainer>
         </ButtonWrapper>
       </FormContainer>
