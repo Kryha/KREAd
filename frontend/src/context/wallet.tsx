@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAgoricState } from "./agoric";
 import { IST_IDENTIFIER, SELL_CHARACTER_INVITATION, SELL_ITEM_INVITATION } from "../constants";
-import { watchWalletVstorage } from "../service/storage-node/watch-general";
+import { watchExistingCharacterPaths, watchWalletVstorage } from "../service/storage-node/watch-general";
 import { Item, OfferProposal } from "../interfaces";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
@@ -45,32 +45,6 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       console.warn("Smartwallet is not provisioned");
       return;
     }
-
-    // TODO: move watcher to service
-    const watchExistingCharacterPaths = () => {
-      assert(chainStorageWatcher, "chainStorageWatcher not initialized");
-      const path = "published.kread.character";
-      chainStorageWatcher.watchLatest(
-        [Kind.Children, path],
-        async (value: any) => {
-          console.debug("got update", path, value);
-          if (!value) {
-            console.warn(`${path} returned undefined`);
-            return;
-          }
-
-          const characterNameList = value.map((char: string) => char.substring(10));
-
-          walletDispatch((prevState) => ({
-            ...prevState,
-            characterNameList,
-          }));
-        },
-        (log: any) => {
-          console.error("Error watching kread char market", log);
-        },
-      );
-    };
 
     const updateStateNonVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");
@@ -148,7 +122,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
     if (!walletState.fetched && chainStorageWatcher) {
       if (tokenInfo.character.brand && tokenInfo.item.brand)
         watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
-      watchExistingCharacterPaths();
+      watchExistingCharacterPaths(chainStorageWatcher, walletDispatch);
     }
   }, [
     pursesNotifier,
