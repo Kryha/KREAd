@@ -2,8 +2,6 @@ import { MINTING_COST } from "../../constants";
 import { MakeOfferCallback } from "../../interfaces";
 import { formOfferResultCallback } from "../../util/contract-callbacks";
 
-// TODO: Use makeOffer status callback for errors
-
 interface MintCharacter {
   name: string;
   service: {

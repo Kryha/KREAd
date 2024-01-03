@@ -94,11 +94,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
   const { network } = useNetworkConfig();
   useEffect(() => {
     if (isCancelled) return;
-    // TODO: consider implementing terms agreement
-    // if (checkTerms && !areLatestTermsAgreed) {
-    //   setIsTermsDialogOpen(true);
-    //   return;
-    // }
 
     let chainStorageWatcher: ChainStorageWatcher;
     let connection: any;
@@ -141,7 +136,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchInstance = async () => {
-      // TODO: consider typing the result
       const instances: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
@@ -149,7 +143,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchTokenInfo = async () => {
-      // TODO: consider typing the result
       const agoricNameBrands: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.brand"]);
       const payload: TokenInfo = {
         character: {

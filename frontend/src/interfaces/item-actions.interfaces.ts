@@ -1,6 +1,5 @@
 import { Item, ItemInMarket } from "./item.interfaces";
 
-// TODO: add fetched flag for each array
 export type ItemState = {
   items: Item[];
   owned: Item[];

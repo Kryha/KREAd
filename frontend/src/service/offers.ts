@@ -12,7 +12,7 @@ export const useOffers = (filters?: OfferFilters) => {
     const filtered = offers.filter((offer) => {
       try {
         const descriptionCondition = filters.description ? offer.invitationDetails.description === filters.description : true;
-        const statusCondition = filters.status ? offer.status === filters.status : true; // TODO: handle condition for offers without status
+        const statusCondition = filters.status ? offer.status === filters.status : true;
 
         return descriptionCondition && statusCondition;
       } catch (error) {

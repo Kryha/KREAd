@@ -3,11 +3,9 @@ import { Character, Item, MakeOfferCallback } from "../../interfaces";
 import { urlToCid } from "../../util/other";
 import { formOfferResultCallback } from "../../util/contract-callbacks";
 
-// TODO: Use makeOffer status callback for errors
 interface UnequipItem {
   item: any;
   character: Character;
-  // FIXME: add agoric types
   service: {
     kreadInstance: any;
     characterBrand: any;
