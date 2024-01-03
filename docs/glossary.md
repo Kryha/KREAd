@@ -48,7 +48,7 @@ See the table and example below for more information about the properties that m
 | origin         	| string                     	| 'Arma'                                                                                                              	|
 | description    	| string                     	| 'A Bounty Hunter from Wildlands.'                                                                                   	|
 | level          	| number                     	| 51                                                                                                                  	|
-| rarity         	| number (TODO: range)       	| 18                                                                                                                  	|
+| rarity         	| number       	| 18                                                                                                                  	|
 | category       	| string                     	| 'background'                                                                                                        	|
 | sense          	| number                     	| 0                                                                                                                   	|
 | weight         	| number                     	| 0                                                                                                                   	|
