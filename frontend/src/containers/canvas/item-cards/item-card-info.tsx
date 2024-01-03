@@ -1,5 +1,3 @@
-// TODO: Add the conditions for swapping items if the item is equipped to the character
-
 import React, { FC } from "react";
 import { useCharacterBuilder } from "../../../context/character-builder-context";
 import { ItemButtonContainer, ItemInfo, ItemInfoItem, ItemsRow } from "./style";

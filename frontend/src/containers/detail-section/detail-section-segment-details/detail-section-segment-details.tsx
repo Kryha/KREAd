@@ -17,15 +17,10 @@ interface DetailSectionSegmentDetailsProps {
   data: Data;
 }
 
-// TODO: Adjust flex view for smaller viewports
-// TODO: Fix missing brand
 export const DetailSectionSegmentDetails: FC<DetailSectionSegmentDetailsProps> = ({ data }) => {
   return (
     <DetailSectionSegmentDetailsWrap>
       <FlexRow>
-        <DetailSectionElement title={text.item.brand}>
-          {/* <DetailSectionBody>{truncateAddress(data.brand)}</DetailSectionBody> */}
-        </DetailSectionElement>
         <DetailSectionElement title={text.item.boardId}>
           <DetailSectionBody>
             {text.item.boardIdHash}

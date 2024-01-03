@@ -17,7 +17,6 @@ interface DetailSectionHeaderProps {
   actions?: DetailSectionActions;
 }
 
-// TODO: Need to separate this for items and characters
 export const DetailSectionHeader: FC<DetailSectionHeaderProps> = ({ data, actions }) => {
   return (
     <DetailSectionHeaderWrap>

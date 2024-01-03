@@ -71,8 +71,6 @@ export const CharacterCards: FC = () => {
   );
 };
 
-// TODO: Add the conditions for swapping items if the item is equipped to the character
-
 interface CharacterInfo {
   character: ExtendedCharacter;
 }

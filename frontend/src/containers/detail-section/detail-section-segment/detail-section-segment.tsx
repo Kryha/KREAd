@@ -9,7 +9,6 @@ interface DetailSectionSegmentProps {
   isActivity?: boolean;
 }
 
-// TODO: Use props intead of hardcoded placeholder for image src
 export const DetailSectionSegment: FC<DetailSectionSegmentProps> = ({ children, title, sectionIndex, isActivity = false }) => {
   return (
     <DetailSectionSegmentWrap isActivity={isActivity}>
