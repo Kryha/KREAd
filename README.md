@@ -1,15 +1,14 @@
 # Kread
 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project.
+KREAd is a decentralized application deployed on Agoric, an open-source development company launching an interoperable Proof-of-Stake chain and economy. The dApp is imagined, built, and designed by Kryha. The SAGES art and comic is created by Enmanuel Heredia.
 
 ## Getting Started
 
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
+The KREAd application consists of a set of smart contracts deployed on Agoric and a frontend application to interact with them. The frontend can be accessed at [kread.app](http://kread.app/) and includes a network selector on the bottom left of the landing page to connect to different networks:
 
-1. Installation process
-2. Software dependencies
-3. Latest releases
-4. API references
+1. Mainnet: hosts the official KREAd application, you can use it to mint, customize, and view your character as well as sell and buy using the KREAd marketplace. IST is used for payments and transaction fees can be paid in BLD or IST.
+2. Emerynet: this network is meant for testing purposes and can be used to try out the application without spending real funds. The functionality is identical to Mainnet although the content may vary. You can use the [emerynet faucet](https://emerynet.faucet.agoric.net/) to get fake IST which can be used to interact with the KREAd contract.
+3. Local: the KREAd frontend can also be connected to an Agoric chain running locally, this gives you full control by allowing changes to KREAd's source code. You can find instructions on how run KREAd locally [here](./agoric/README.md)
 
 ## Build and Test
 
