@@ -75,7 +75,6 @@ harden(meta);
 export const prepare = async (zcf, privateArgs, baggage) => {
   const terms = zcf.getTerms();
 
-  // TODO: move to proposal
   const assetNames = terms.assetNames;
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
