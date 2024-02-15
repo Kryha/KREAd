@@ -8,8 +8,6 @@ import { ButtonContainer, ColorBox, ColorContainer, ColorWrapper } from "./style
 import { useViewport } from "../../hooks";
 import { COLORS } from "../../constants";
 
-// TODO: get actual colors for app
-
 interface ColorSelectorProps {
   handleChange: (selected: string) => void;
 }

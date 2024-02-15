@@ -148,7 +148,6 @@ export const useCharactersMarket = (): [CharacterInMarket[], boolean] => {
   return [filtered, isLoading];
 };
 
-// TODO: Add error management
 export const useCreateCharacter = () => {
   const service = useAgoricState();
   const instance = service.contracts.kread.instance;
@@ -167,7 +166,6 @@ export const useCreateCharacter = () => {
   });
 };
 
-// TODO: test after merge with equip/unequip fix
 export const useSellCharacter = (characterId: number) => {
   const [service] = useAgoricContext();
   const wallet = useWalletState();

@@ -395,7 +395,6 @@ export const prepareKreadKit = (
                 (({ seat: _omitSeat, ...char }) => char)(character),
               );
 
-              // TODO: consider refactoring what we put in the inventory node
               inventoryKit.recorder.write(
                 inventorySeat.getAmountAllocated('Item').value.payload,
               );

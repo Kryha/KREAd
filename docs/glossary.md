@@ -7,16 +7,15 @@ Behaves like a non-fungible token, meaning it's a digital asset that can hold ar
 
 See the table and example below for more information about the properties that make up KREAd Character SFTs:
 
-| Character | Description | Type                       | Example                                                                                                             |
-|-----------------|---------------------------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------|
-| title           | TBD                                   | string                     | 'Bounty Hunter'                                                                                                     |
-| origin          | TBD                                   | string                     | 'Arma'                                                                                                              |
-| description     | TBD                                   | string                     | 'A Bounty Hunter from Wildlands.'                                                                                   |
-| level           | TBD                                   | number                     | 51                                                                                                                  |
-| artistMetadata  | Link to the artists Instagram account | string (link to IG page)  | 'https://www.instagram.com/enmanueljrperez/'                                                                        |
-| image           | Link to the character image           | string (link to webp file) | 'https://pink-defensive-jay-557.mypinata.cloud/ipfs/Qmc55m7RrzZtB25mM9B2c9BdtXcLDbhSrErWMAa7azCet6/Citizen/images/001.webp' |
-| characterTraits | Link to the character traits          | string (link to json file) | 'https://pink-defensive-jay-557.mypinata.cloud/ipfs/Qmc55m7RrzZtB25mM9B2c9BdtXcLDbhSrErWMAa7azCet6/Citizen/metadata.json'   |
-
+| Character       	| Type                       	| Example                                                                                                                     	|
+|-----------------	|----------------------------	|-----------------------------------------------------------------------------------------------------------------------------	|
+| title           	| string                     	| 'Bounty Hunter'                                                                                                             	|
+| origin          	| string                     	| 'Arma'                                                                                                                      	|
+| description     	| string                     	| 'A Bounty Hunter from Wildlands.'                                                                                           	|
+| level           	| number                     	| 51                                                                                                                          	|
+| artistMetadata  	| string (link to IG page)   	| 'https://www.instagram.com/enmanueljrperez/'                                                                                	|
+| image           	| string (link to webp file) 	| 'https://pink-defensive-jay-557.mypinata.cloud/ipfs/Qmc55m7RrzZtB25mM9B2c9BdtXcLDbhSrErWMAa7azCet6/Citizen/images/001.webp' 	|
+| characterTraits 	| string (link to json file) 	| 'https://pink-defensive-jay-557.mypinata.cloud/ipfs/Qmc55m7RrzZtB25mM9B2c9BdtXcLDbhSrErWMAa7azCet6/Citizen/metadata.json'   	|
 ```js
 CharacterSFT = {
   "artistMetadata": "https://instagram.com/enmanueljrperez?igshid=MzRlODBiNWFlZA==",
@@ -43,21 +42,21 @@ Semi-fungible token representing items that can be equipped to and from a Charac
 
 See the table and example below for more information about the properties that make up KREAd Item SFTs:
 
-| Item           | description                                                                                                           | type                       | example                                                                                                             |
-|----------------|-----------------------------------------------------------------------------------------------------------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------|
-| name           | TODO                                                                                                                  | string                     | 'Bounty Hunter'                                                                                                     |
-| origin         | TODO                                                                                                                  | string                     | 'Arma'                                                                                                              |
-| description    | TODO                                                                                                                  | string                     | 'A Bounty Hunter from Wildlands.'                                                                                   |
-| level          | TODO                                                                                                                  | number                     | 51                                                                                                                  |
-| rarity         | number value indicating item rarity (higher is more rare)                                                             | number (TODO: range)       | 18                                                                                                                  |
-| category       | determines which inventory slot and the item can be equipped to, inventories can only hold 1 item of a given category | string                     | 'background'                                                                                                        |
-| sense          | TODO                                                                                                                  | number                     | 0                                                                                                                   |
-| weight         | TODO                                                                                                                  | number                     | 0                                                                                                                   |
-| colors         | List of colors present in the item, used for filters                                                                  | string []                  | []                                                                                                                  |
-| reserves       | TODO                                                                                                                  | number                     | 0                                                                                                                   |
-| functional     | TODO                                                                                                                  | boolean                    | false                                                                                                               |
-| artistMetadata | Link to the artists Instagram account                                                                                 | string (link to IG page)  | 'https://www.instagram.com/enmanueljrperez/'                                                                        |
-| image          | Link to the character image                                                                                           | string (link to webp file) | 'pink-defensive-jay-557.mypinata.cloud/ipfs/Qmc55m7RrzZtB25mM9B2c9BdtXcLDbhSrErWMAa7azCet6/Citizen/images/001.webp' |
+| Item           	| type                       	| example                                                                                                             	|
+|----------------	|----------------------------	|---------------------------------------------------------------------------------------------------------------------	|
+| name           	| string                     	| 'Bounty Hunter'                                                                                                     	|
+| origin         	| string                     	| 'Arma'                                                                                                              	|
+| description    	| string                     	| 'A Bounty Hunter from Wildlands.'                                                                                   	|
+| level          	| number                     	| 51                                                                                                                  	|
+| rarity         	| number       	| 18                                                                                                                  	|
+| category       	| string                     	| 'background'                                                                                                        	|
+| sense          	| number                     	| 0                                                                                                                   	|
+| weight         	| number                     	| 0                                                                                                                   	|
+| colors         	| string []                  	| []                                                                                                                  	|
+| reserves       	| number                     	| 0                                                                                                                   	|
+| functional     	| boolean                    	| false                                                                                                               	|
+| artistMetadata 	| string (link to IG page)   	| 'https://www.instagram.com/enmanueljrperez/'                                                                        	|
+| image          	| string (link to webp file) 	| 'pink-defensive-jay-557.mypinata.cloud/ipfs/Qmc55m7RrzZtB25mM9B2c9BdtXcLDbhSrErWMAa7azCet6/Citizen/images/001.webp' 	|
 
 
 ```js

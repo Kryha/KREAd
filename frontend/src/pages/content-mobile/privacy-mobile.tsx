@@ -5,7 +5,6 @@ import { KreadIcon } from "../../components/logo/styles";
 import { color } from "../../design";
 import { ContentWrapper, GeneralInfo, InfoContainer, KreadContainer, Title } from "./styles";
 
-// TODO: make content for privacy page
 export const PrivacyMobile: FC = () => {
   return (
     <>

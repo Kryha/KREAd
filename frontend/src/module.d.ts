@@ -1,4 +1,3 @@
-//TODO: determine if this is still necessary based on latest versions of the packages
 declare module "@agoric/assert";
 declare module "@endo/captp";
 declare module "@agoric/ertp";

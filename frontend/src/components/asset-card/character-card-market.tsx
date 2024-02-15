@@ -87,8 +87,6 @@ export const CharacterCardMarket: FC<Props> = ({ characterInMarket, onClick }) =
           </AssetFooter>
         </AssetInfoContainer>
       </AssetContent>
-      {/* TODO: figure out if we want to use this label for something */}
-      {/*extendedCharacter. && <BoldLabel customColor={color.black}>{text.general.forSale}</BoldLabel>*/}
     </AssetWrapper>
   );
 };

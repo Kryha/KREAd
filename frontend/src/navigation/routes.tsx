@@ -10,8 +10,8 @@ import { UseWithContext } from "../context/wrapper";
 import { MobileNotAvailable } from "../pages/mobile-not-available";
 import { useIsMobile } from "../hooks";
 import { breakpoints } from "../design";
-import { OnboardingMobile } from "../pages/onboarding-mobile/onboarding-mobile";
-import { ConnectWalletMobile } from "../pages/connect-wallet-mobile/connect-wallet-mobile";
+import { OnboardingMobile } from "../pages/onboarding-mobile";
+import { ConnectWalletMobile } from "../pages/connect-wallet-mobile";
 import { PrivacyMobile } from "../pages/content-mobile";
 
 export const InternalAppWrapper = () => {

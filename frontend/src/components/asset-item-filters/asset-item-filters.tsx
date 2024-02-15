@@ -93,9 +93,6 @@ export const AssetItemFilters: FC<Props> = ({ section }) => {
                 <ButtonText customColor={color.white}>clear all</ButtonText>
               </PrimaryButton>
             </>
-            {/* TODO: Add checkbox for equip and forsale*/}
-            {/*<Checkbox label={"for Sale"} checked={forSale} onChange={() => setForSale(!forSale)} />*/}
-            {/*<Checkbox label={"equipped"} checked={!!equippedTo} onChange={() => setEquippedTo(equippedTo)} />*/}
           </AssetSelectorContainer>
         </AssetFilterContainer>
       </AssetFilterWrapper>
