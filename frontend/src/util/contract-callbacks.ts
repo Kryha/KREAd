@@ -26,5 +26,5 @@ export const formOfferResultCallback =
         }
       }
       if (callback.setIsLoading) callback.setIsLoading(false);
-      if(callback.settled) callback.settled();
+      if (callback.settled) callback.settled();
     };
