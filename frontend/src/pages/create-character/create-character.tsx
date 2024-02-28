@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { ElephiaCitizen, text } from "../../assets";
 import { ErrorView, FadeInOut, FormHeader, LoadingPage, NotificationDetail, Overlay } from "../../components";
 import { PageContainer } from "../../components/page-container";
-import { MINTING_COST, MINT_CALL_TIMEOUT, MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
+import { MINTING_COST, MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useIsMobile, useViewport } from "../../hooks";
 import { Character, CharacterCreation, MakeOfferCallback } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -15,16 +15,14 @@ import { breakpoints } from "../../design";
 import { useUserState } from "../../context/user";
 import { useWalletState } from "../../context/wallet";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
-import { useNavigate } from "react-router-dom";
 
 export const CreateCharacter: FC = () => {
-  const navigate = useNavigate();
   const createCharacter = useCreateCharacter();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [mintedCharacter, setMintedCharacter] = useState<Character>();
+  const [error, setError] = useState<string>();
   const [showToast, setShowToast] = useState(false);
-  // const [error, setError] = useState("");
   const [characterData, setCharacterData] = useState<{ name: string }>({
     name: "",
   });
@@ -32,10 +30,9 @@ export const CreateCharacter: FC = () => {
   const isLoadingCharacters = !fetched;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
-  const [timeoutHandler, setTimeoutHandler] = useState<NodeJS.Timeout>();
   const mobile = useIsMobile(breakpoints.desktop);
   const { ist } = useWalletState();
-  
+
   const notEnoughIST = useMemo(() => {
     if (ist < MINTING_COST || !ist) {
       return true;
@@ -46,19 +43,18 @@ export const CreateCharacter: FC = () => {
   useEffect(() => {
     if (characters.map((c: any) => c.nft.name).includes(characterData.name)) {
       setIsOfferAccepted(true);
-      clearTimeout(timeoutHandler);
       const [newCharacter] = characters.filter((c: any) => c.nft.name === characterData.name);
       setMintedCharacter(newCharacter.nft);
       setIsLoading(false);
     }
-  }, [characters, characterData, notEnoughIST, timeoutHandler]);
+  }, [characters, characterData, notEnoughIST]);
 
   const changeStep = async (step: number): Promise<void> => {
     setCurrentStep(step);
   };
 
   const errorCallback = (error: string) => {
-    console.error(error);
+    setError(error);
     setShowToast(true);
   };
 
@@ -66,11 +62,6 @@ export const CreateCharacter: FC = () => {
     error: errorCallback,
     accepted: () => {
       console.info("MintCharacter call settled");
-      clearTimeout(timeoutHandler);
-    },
-    seated: () => {
-      const mintTimeout = setTimeout(() => setShowToast(true), MINT_CALL_TIMEOUT);
-      setTimeoutHandler(mintTimeout);
     }
   };
   
@@ -122,11 +113,8 @@ export const CreateCharacter: FC = () => {
         <NotificationWrapper showNotification={showToast}>
           <NotificationDetail
             title={text.error.mint.title}
-            info={text.error.mint.general}
-            closeToast={() => {
-              setShowToast(false);
-              navigate(routes.character);
-            }}
+            info={text.error.mint.invalidName}
+            closeToast={() => setShowToast(false)}
             isError
           />
         </NotificationWrapper>

@@ -31,6 +31,7 @@ export const Payment: FC<PaymentProps> = ({ submit, sendOfferHandler, isOfferAcc
   const [disable, setDisable] = useState(false);
   const sendOfferToWallet = async () => {
     setDisable(true);
+    console.info("SENDING OFFER TO WALLET");
     await sendOfferHandler();
     setSendOffer(true);
   };
