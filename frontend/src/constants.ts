@@ -171,11 +171,7 @@ export const INVENTORY_CALL_FETCH_DELAY = 10000 as const;
 
 export const PINATA_GATEWAY = import.meta.env.VITE_PINATA_GATEWAY || "https://pink-defensive-jay-557.mypinata.cloud";
 
-// Contract errors
-
-export const KREAD_CONTRACT_ERRORS = {
-  invalidName: "Offer error Error: (a string)",
-};
 export const PLATFORM_RATE = 0.03;
 export const ROYALTY_RATE = 0.1;
-export const MINT_CALL_TIMEOUT = 40000;
+
+export const MINT_CALL_TIMEOUT = 30000;

@@ -24,7 +24,7 @@ export const CreateCharacter: FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [mintedCharacter, setMintedCharacter] = useState<Character>();
   const [showToast, setShowToast] = useState(false);
-  // const [error, setError] = useState("");
+  const [error, setError] = useState<string>(text.error.mint.general);
   const [characterData, setCharacterData] = useState<{ name: string }>({
     name: "",
   });
@@ -65,21 +65,27 @@ export const CreateCharacter: FC = () => {
   const handleResult: MakeOfferCallback = {
     error: errorCallback,
     accepted: () => {
-      console.info("MintCharacter call settled");
       clearTimeout(timeoutHandler);
     },
     seated: () => {
-      const mintTimeout = setTimeout(() => setShowToast(true), MINT_CALL_TIMEOUT);
+      const mintTimeout = setTimeout(() => {
+        setError(text.error.mint.callStuck);
+        setShowToast(true);
+      }, MINT_CALL_TIMEOUT);
       setTimeoutHandler(mintTimeout);
     }
   };
   
   const sendOfferHandler = async (): Promise<void> => {
     setIsLoading(true);
-    await createCharacter.mutateAsync({
-      name: characterData.name,
-      callback: handleResult,
-    });
+    try {
+      await createCharacter.mutateAsync({
+        name: characterData.name,
+        callback: handleResult,
+      });
+    } catch(e) {
+      setShowToast(true);
+    }
   };
 
   const setData = async (data: CharacterCreation): Promise<void> => {
@@ -122,7 +128,7 @@ export const CreateCharacter: FC = () => {
         <NotificationWrapper showNotification={showToast}>
           <NotificationDetail
             title={text.error.mint.title}
-            info={text.error.mint.general}
+            info={error}
             closeToast={() => {
               setShowToast(false);
               navigate(routes.character);
