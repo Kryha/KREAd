@@ -2939,7 +2939,7 @@ buffer@^5.5.0:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
 
-"bufferfromfile@github:agoric-labs/BufferFromFile#Agoric-built":
+bufferfromfile@agoric-labs/BufferFromFile#Agoric-built:
   version "0.4.377"
   resolved "https://codeload.github.com/agoric-labs/BufferFromFile/tar.gz/691031035856fadba2603e52f4411160d7f34ed6"
   dependencies:
@@ -3961,7 +3961,7 @@ eslint@^8.47.0:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-"esm@github:agoric-labs/esm#Agoric-built":
+esm@agoric-labs/esm#Agoric-built:
   version "3.2.25"
   resolved "https://codeload.github.com/agoric-labs/esm/tar.gz/3603726ad4636b2f865f463188fcaade6375638e"
 
