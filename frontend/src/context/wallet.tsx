@@ -112,7 +112,7 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       }
     };
     watchVBankAssets().catch((err: Error) => {
-      console.error("got status watch err", err);
+      console.warn("got status watch err", err);
     });
 
     if (!walletState.fetched && chainStorageWatcher) {
