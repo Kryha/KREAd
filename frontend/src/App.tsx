@@ -1,4 +1,3 @@
-import "./installSesLockdown";
 import "./reset.css";
 import "./index.css";
 
