@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAgoricState } from "./agoric";
 import { IST_IDENTIFIER, SELL_CHARACTER_INVITATION, SELL_ITEM_INVITATION } from "../constants";
-import { watchWalletVstorage } from "../service/storage-node/watch-general";
+import { watchExistingCharacterPaths, watchWalletVstorage } from "../service/storage-node/watch-general";
 import { Item, OfferProposal } from "../interfaces";
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
-import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 
 export interface WalletContext {
   token: any;
@@ -42,46 +41,17 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
 
   useEffect(() => {
     if(!agoric.status.walletProvisioned) {
-      console.warn("Smartwallet is not provisioned");
       return;
     }
-
-    // TODO: move watcher to service
-    const watchExistingCharacterPaths = () => {
-      assert(chainStorageWatcher, "chainStorageWatcher not initialized");
-      const path = "published.kread.character";
-      chainStorageWatcher.watchLatest(
-        [Kind.Children, path],
-        async (value: any) => {
-          console.debug("got update", path, value);
-          if (!value) {
-            console.warn(`${path} returned undefined`);
-            return;
-          }
-
-          const characterNameList = value.map((char: string) => char.substring(10));
-
-          walletDispatch((prevState) => ({
-            ...prevState,
-            characterNameList,
-          }));
-        },
-        (log: any) => {
-          console.error("Error watching kread char market", log);
-        },
-      );
-    };
 
     const updateStateNonVbank = async (purses: any) => {
       console.count("💾 LOADING PURSE CHANGE 💾");
 
       // Load Purses
-      // TODO: Read IST balance
       const newCharacterPurses = purses.filter(({ brand }: any) => brand === tokenInfo.character.brand);
       const newItemPurses = purses.filter(({ brand }: any) => brand === tokenInfo.item.brand);
       const characterWallet = newCharacterPurses[newCharacterPurses.length - 1]?.balance.value.payload.map((i: any) => i[0]);
-      // FIXME: this is not going to work when a users has more than 1 item that is the same (then it will be 2n)
-      // Consider creating an array that fills an array n amount of times based onthe amount the user owns
+      
       let itemWallet = newItemPurses[newItemPurses.length - 1]?.balance.value.payload
         .map((i: any) => {
           const itemArray: any = [];
@@ -142,13 +112,13 @@ export const WalletContextProvider = (props: ProviderProps): React.ReactElement 
       }
     };
     watchVBankAssets().catch((err: Error) => {
-      console.error("got status watch err", err);
+      console.warn("got status watch err", err);
     });
 
     if (!walletState.fetched && chainStorageWatcher) {
       if (tokenInfo.character.brand && tokenInfo.item.brand)
         watchWalletVstorage(chainStorageWatcher, walletAddress, updateStateNonVbank, updateStateOffers);
-      watchExistingCharacterPaths();
+      watchExistingCharacterPaths(chainStorageWatcher, walletDispatch);
     }
   }, [
     pursesNotifier,

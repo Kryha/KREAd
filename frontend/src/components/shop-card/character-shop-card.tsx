@@ -6,7 +6,7 @@ import { color } from "../../design";
 import { BoldLabel, ButtonText, PrimaryButton, TitleText } from "../atoms";
 import { PriceInIst } from "../price-in-ist";
 import { BaseCharacter } from "../base-character";
-import { Content, Element, Footer, ImageContainer, InfoContainer, PriceContainer, Product, Tag, TitleWrapper } from "./styles";
+import { CharacterTitle, Content, Element, Footer, ImageContainer, InfoContainer, PriceContainer, Product, Tag, TitleWrapper } from "./styles";
 import { useViewport } from "../../hooks";
 import { calculateCharacterLevels } from "../../util";
 
@@ -34,7 +34,7 @@ export const CharacterShopCard: FC<CharacterShopCardProps> = ({ character, onCli
         </ImageContainer>
         <InfoContainer>
           <TitleWrapper>
-            <TitleText>{character.character.name}</TitleText>
+            <CharacterTitle>{character.character.name}</CharacterTitle>
             <BoldLabel>{(text.param.titles as any)[character.character.title]}</BoldLabel>
           </TitleWrapper>
           <Footer>

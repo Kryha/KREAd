@@ -1,6 +1,7 @@
-import { AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
+import { ChainStorageWatcher, AgoricChainStoragePathKind as Kind } from "@agoric/rpc";
 import { AgoricDispatch, TokenInfo } from "../../interfaces";
 import { ITEM_IDENTIFIER, IST_IDENTIFIER, CHARACTER_IDENTIFIER } from "../../constants";
+import { WalletContext } from "../../context/wallet";
 
 type WatcherCallback = (value: any) => void;
 type ErrorHandler = (log: any) => void;
@@ -113,4 +114,32 @@ chainStorageWatcher.watchLatest(
   (log: any) => {
     console.error("Error watching vbank assets", log);
   },)
+};
+
+export const watchExistingCharacterPaths = (
+  chainStorageWatcher: ChainStorageWatcher,
+  walletDispatch: (value: React.SetStateAction<WalletContext>) => void,
+) => {
+  assert(chainStorageWatcher, "chainStorageWatcher not initialized");
+  const path = "published.kread.character";
+  chainStorageWatcher.watchLatest(
+    [Kind.Children, path],
+    async (value: any) => {
+      console.debug("got update", path, value);
+      if (!value) {
+        console.warn(`${path} returned undefined`);
+        return;
+      }
+
+      const characterNameList = value.map((char: string) => char.substring(10));
+
+      walletDispatch((prevState) => ({
+        ...prevState,
+        characterNameList,
+      }));
+    },
+    (log: any) => {
+      console.error("Error watching kread char market", log);
+    },
+  );
 };

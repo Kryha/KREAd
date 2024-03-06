@@ -20,7 +20,6 @@ interface CharacterDetailSectionProps {
   showToast?: () => void;
 }
 
-// TODO: Make index dynamic
 export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ character, actions }) => {
   const { width } = useViewport();
   if (!character) return <LoadingPage spinner={true} />;
@@ -32,11 +31,10 @@ export const CharacterDetailSection: FC<CharacterDetailSectionProps> = ({ charac
 
       {/* story */}
       <DetailSectionSegment title={text.character.story} sectionIndex={1}>
-        {/* TODO: fetch actual creator image */}
         <DetailSectionSegmentStory
           data={{
             ...character.nft,
-            creatorImage: UnnamedCreator,
+            creatorImage: UnnamedCreator, // Hosting and serving creator "profile pictures" is yet to be implemented
             image: character.equippedItems,
             characterImage: character.nft.image,
             character: character.nft,

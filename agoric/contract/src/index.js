@@ -12,7 +12,6 @@ import { handleParamGovernance } from '@agoric/governance';
 
 import { prepareKreadKit, provideKreadKitRecorderKits } from './kreadKit.js';
 import { provide } from '@agoric/vat-data';
-import { provideRecorderKits } from './utils.js';
 
 /**
  * This contract handles the mint of KREAd characters,
@@ -25,7 +24,6 @@ import { provideRecorderKits } from './utils.js';
 /** @typedef {import('@agoric/time/src/types').Clock} Clock */
 /** @typedef {import('./type-guards.js').RatioObject} RatioObject */
 
-/** @type {ContractMeta} */
 export const meta = {
   privateArgsShape: M.splitRecord({
     initialPoserInvitation: InvitationShape,
@@ -74,10 +72,9 @@ harden(meta);
  *
  * @param {Baggage} baggage
  */
-export const start = async (zcf, privateArgs, baggage) => {
+export const prepare = async (zcf, privateArgs, baggage) => {
   const terms = zcf.getTerms();
 
-  // TODO: move to proposal
   const assetNames = terms.assetNames;
 
   // Setting up the mint capabilities here in the prepare function, as discussed with Turadg
@@ -111,6 +108,7 @@ export const start = async (zcf, privateArgs, baggage) => {
     powers.marshaller,
   );
 
+  /** @type {KreadKitRecorderKits} */
   const recorderKits = await provideKreadKitRecorderKits(
     baggage,
     powers.storageNode,
@@ -178,4 +176,4 @@ export const start = async (zcf, privateArgs, baggage) => {
   });
 };
 
-harden(start);
+harden(prepare);

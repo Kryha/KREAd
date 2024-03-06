@@ -90,6 +90,13 @@ export const KreadContainer = styled.div`
   }
 `;
 
+export const KreadContainerMobile = styled.div`
+  ${KreadIcon} {
+    width: 100px;
+    height: 24px;
+  }
+`;
+
 export const OverviewContainer = styled.div`
   position: relative;
   z-index: 0;

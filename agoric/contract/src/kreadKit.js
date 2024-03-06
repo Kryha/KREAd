@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 // @ts-check
 import { updateCollectionMetrics } from './market-metrics.js';
-import { assert, details as X } from '@agoric/assert';
+import { assert } from '@agoric/assert';
 import { AmountMath, BrandShape } from '@agoric/ertp';
 import { prepareExoClassKit, M } from '@agoric/vat-data';
 import { makeDurableZone } from '@agoric/zone/durable.js';
@@ -42,6 +42,8 @@ import { multiplyBy } from '@agoric/zoe/src/contractSupport/ratio.js';
 
 import '@agoric/zoe/exported.js';
 
+/** @typedef {import('@agoric/zoe/src/contractSupport/atomicTransfer.js').TransferPart} TransferPart */
+
 /**
  * this provides the exoClassKit for our upgradable KREAd contract
  * Utilizes capabilities from the prepare function suchs as mints
@@ -69,14 +71,7 @@ import '@agoric/zoe/exported.js';
  *   itemMint: ZCFMint<"copyBag">
  *   clock: import('@agoric/time/src/types.js').Clock
  *   makeRecorderKit: import('@agoric/zoe/src/contractSupport').MakeRecorderKit,
- *   recorderKits: {
- *     characterKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     itemKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketCharacterKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketItemKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketCharacterMetricsKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *     marketItemMetricsKit: import('@agoric/zoe/src/contractSupport/recorder.js').RecorderKit<unknown>;
- *   };
+ *   recorderKits: KreadKitRecorderKits
  * }} powers
  */
 export const prepareKreadKit = (
@@ -140,34 +135,41 @@ export const prepareKreadKit = (
       const zone = makeDurableZone(baggage);
       return {
         character: harden({
+          /** @type {MapStore<string, CharacterEntry | string[]>} */
           entries: zone.mapStore('characters', {
             keyShape: M.string(),
             valueShape: M.or(CharacterEntryGuard, M.arrayOf(M.string())),
           }),
+          /** @type {MapStore<number, BaseCharacter>} */
           bases: zone.mapStore('baseCharacters', {
             keyShape: M.number(),
             valueShape: BaseCharacterGuard,
           }),
         }),
         item: harden({
+          /** @type {MapStore<number, ItemEntry} */
           entries: zone.mapStore('items', {
             keyShape: M.number(),
             valueShape: ItemRecorderGuard,
           }),
+          /** @type {MapStore<'common' | 'uncommonToLegendary', Item[]>} */
           bases: zone.mapStore('baseItems', {
             keyShape: RarityGuard,
             valueShape: M.arrayOf(ItemGuard),
           }),
         }),
         market: harden({
+          /** @type {MapStore<string, MarketEntry>} */
           characterEntries: zone.mapStore('characterMarket', {
             keyShape: M.string(),
             valueShape: MarketEntryGuard,
           }),
+          /** @type {MapStore<number, MarketEntry>} */
           itemEntries: zone.mapStore('itemMarket', {
             keyShape: M.number(),
             valueShape: MarketEntryGuard,
           }),
+          /** @type {MapStore<'character' | 'item', MarketMetrics>} */
           metrics: zone.mapStore('marketMetrics', {
             keyShape: M.or('character', 'item'),
             valueShape: MarketMetricsGuard,
@@ -218,18 +220,35 @@ export const prepareKreadKit = (
           );
           return Array.from(characterState.bases.keys())[number];
         },
+        /**
+         *
+         * @param {Array<[number, BaseCharacter]>} baseCharacters
+         */
         initializeBaseCharacters(baseCharacters) {
           const { character: characterState } = this.state;
           if (characterState.bases.getSize() > 0) return;
           addAllToMap(characterState.bases, baseCharacters);
         },
+        /**
+         * @param {string} path
+         */
         async makeInventoryRecorderKit(path) {
           const node = await E(characterNode).makeChildNode(
             `inventory-${path}`,
           );
-          return makeRecorderKit(node, M.arrayOf([ItemGuard, M.nat()]));
+          return makeRecorderKit(
+            node,
+            /** @type {import('@agoric/zoe/src/contractSupport/recorder.js').TypedMatcher<Array<[Item, bigint]>>} */ (
+              M.arrayOf([ItemGuard, M.nat()])
+            ),
+          );
         },
         mint() {
+          /**
+           * @param {ZCFSeat} seat
+           * @param {object} offerArgs
+           * @param {string} offerArgs.name
+           */
           const handler = async (seat, offerArgs) => {
             const {
               helper,
@@ -257,8 +276,7 @@ export const prepareKreadKit = (
             !characterState.entries.get('names').includes(newCharacterName) ||
               assert.fail(errors.nameTaken(newCharacterName));
 
-            characterState.bases.getSize() > 0 ||
-              assert.fail(errors.allMinted);
+            characterState.bases.getSize() > 0 || assert.fail(errors.allMinted);
 
             const re = /^[a-zA-Z0-9_-]*$/;
             (re.test(newCharacterName) && newCharacterName !== 'names') ||
@@ -377,7 +395,6 @@ export const prepareKreadKit = (
                 (({ seat: _omitSeat, ...char }) => char)(character),
               );
 
-              // TODO: consider refactoring what we put in the inventory node
               inventoryKit.recorder.write(
                 inventorySeat.getAmountAllocated('Item').value.payload,
               );
@@ -405,6 +422,9 @@ export const prepareKreadKit = (
           );
         },
         equip() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = (seat) => {
             const { character: characterFacet } = this.facets;
             const { character: characterState } = this.state;
@@ -494,6 +514,9 @@ export const prepareKreadKit = (
           );
         },
         unequip() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { character: characterState } = this.state;
 
@@ -507,8 +530,7 @@ export const prepareKreadKit = (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            providedCharacterKey ||
-              assert.fail(errors.invalidCharacterKey);
+            providedCharacterKey || assert.fail(errors.invalidCharacterKey);
 
             // Get reference to the wanted items and key
             const { want } = seat.getProposal();
@@ -573,6 +595,9 @@ export const prepareKreadKit = (
           );
         },
         swap() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = (seat) => {
             const { character: characterFacet } = this.facets;
             const { character: characterState } = this.state;
@@ -589,8 +614,7 @@ export const prepareKreadKit = (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            providedCharacterKey ||
-              assert.fail(errors.invalidCharacterKey);
+            providedCharacterKey || assert.fail(errors.invalidCharacterKey);
 
             const { want } = seat.getProposal();
             const {
@@ -687,6 +711,9 @@ export const prepareKreadKit = (
           );
         },
         unequipAll() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = (seat) => {
             const { character: characterState } = this.state;
 
@@ -700,8 +727,7 @@ export const prepareKreadKit = (
             // Find character record entry based on provided key
             const characterRecord = characterState.entries.get(characterName);
             const inventorySeat = characterRecord.inventory;
-            providedCharacterKey ||
-              assert.fail(errors.invalidCharacterKey);
+            providedCharacterKey || assert.fail(errors.invalidCharacterKey);
 
             // Get reference to the wanted item
             const { want } = seat.getProposal();
@@ -764,6 +790,9 @@ export const prepareKreadKit = (
         },
       },
       item: {
+        /**
+         * @param {Item[]} baseItems
+         */
         initializeBaseItems(baseItems) {
           const { item: itemState } = this.state;
           if (itemState.bases.getSize() > 0) return;
@@ -782,6 +811,9 @@ export const prepareKreadKit = (
           ]);
         },
         // Mints the default set of items to a seat that doesn't exit
+        /**
+         * @param {ZCFSeat} seat
+         */
         async mintDefaultBatch(seat) {
           const { helper, market: marketFacet } = this.facets;
           const { item: itemState } = this.state;
@@ -905,6 +937,9 @@ export const prepareKreadKit = (
           return text.mintItemReturn;
         },
         mint() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { helper, market: marketFacet } = this.facets;
             const { item: itemState } = this.state;
@@ -1033,12 +1068,22 @@ export const prepareKreadKit = (
         async makeMarketItemRecorderKit(id) {
           const path = `item-${String(id)}`;
           const node = await E(marketItemNode).makeChildNode(path);
-          return makeRecorderKit(node, MarketRecorderGuard);
+          return makeRecorderKit(
+            node,
+            /** @type {import('@agoric/zoe/src/contractSupport/recorder.js').TypedMatcher<MarketRecorder>}**/ (
+              MarketRecorderGuard
+            ),
+          );
         },
         async makeMarketCharacterRecorderKit(id) {
           const path = `character-${id}`;
           const node = await E(marketCharacterNode).makeChildNode(path);
-          return makeRecorderKit(node, MarketRecorderGuard);
+          return makeRecorderKit(
+            node,
+            /** @type {import('@agoric/zoe/src/contractSupport/recorder.js').TypedMatcher<MarketRecorder>}**/ (
+              MarketRecorderGuard
+            ),
+          );
         },
         /**
          * Caveat assumes parent is either `marketCharacterNode` or
@@ -1062,6 +1107,9 @@ export const prepareKreadKit = (
           await E(deletable).setValue('');
         },
         sellItem() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { market } = this.state;
             const { market: marketFacet } = this.facets;
@@ -1133,6 +1181,9 @@ export const prepareKreadKit = (
           );
         },
         sellCharacter() {
+          /**
+           * @param {ZCFSeat} seat
+           */
           const handler = async (seat) => {
             const { market } = this.state;
             const { character: characterFacet, market: marketFacet } =
@@ -1144,6 +1195,8 @@ export const prepareKreadKit = (
 
             paymentBrand === want.Price.brand ||
               assert.fail(errors.incorrectPaymentBrand(paymentBrand));
+
+              
             const askingPrice = {
               brand: want.Price.brand,
               value: want.Price.value,
@@ -1208,14 +1261,18 @@ export const prepareKreadKit = (
           );
         },
         buyItem() {
+          /**
+           * @param {ZCFSeat} buyerSeat
+           * @param {object} offerArgs
+           * @param {number} offerArgs.entryId
+           */
           const handler = async (buyerSeat, offerArgs) => {
             const { market: marketFacet } = this.facets;
             const { market } = this.state;
 
             // Find store record based on wanted character
             const sellRecord = market.itemEntries.get(offerArgs.entryId);
-            sellRecord ||
-              assert.fail(errors.itemNotFound(offerArgs.entryId));
+            sellRecord || assert.fail(errors.itemNotFound(offerArgs.entryId));
 
             const result = await (sellRecord.isFirstSale
               ? marketFacet.buyFirstSaleItem(
@@ -1252,7 +1309,7 @@ export const prepareKreadKit = (
          *
          * @param {ZCFSeat} sellerSeat
          * @param {ZCFSeat} buyerSeat
-         * @param {ItemMarketRecord} sellRecord
+         * @param {MarketEntry} sellRecord
          * @returns {Promise<HelperFunctionReturn>}
          */
         async buyFirstSaleItem(sellerSeat, buyerSeat, sellRecord) {
@@ -1373,7 +1430,7 @@ export const prepareKreadKit = (
          *
          * @param {ZCFSeat} sellerSeat
          * @param {ZCFSeat} buyerSeat
-         * @param {ItemMarketRecord} sellRecord
+         * @param {MarketEntry} sellRecord
          * @returns {Promise<HelperFunctionReturn>}
          */
         async buySecondarySaleItem(sellerSeat, buyerSeat, sellRecord) {
@@ -1474,6 +1531,9 @@ export const prepareKreadKit = (
           };
         },
         buyCharacter() {
+          /**
+           * @param {ZCFSeat} buyerSeat
+           */
           const handler = async (buyerSeat) => {
             const { market: marketFacet } = this.facets;
             const { market, character: characterState } = this.state;
@@ -1640,7 +1700,7 @@ export const prepareKreadKit = (
         },
         /**
          *
-         * @param {Amount<nat>} price
+         * @param {Amount<"nat">} price
          * @param {[Item, bigint][]} itemsToSell
          */
         async publishItemCollection(price, itemsToSell) {
@@ -1794,7 +1854,6 @@ harden(prepareKreadKit);
  * @param {import('@agoric/vat-data').Baggage} baggage
  * @param {StorageNode} storageNode
  * @param {import('@agoric/zoe/src/contractSupport/recorder.js').MakeRecorderKit} makeRecorderKit
- * @returns
  */
 export const provideKreadKitRecorderKits = (
   baggage,

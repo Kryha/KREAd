@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
+import { breakpoints } from "../../design";
 
 export interface ImageProps {
   src?: string;
@@ -46,4 +47,19 @@ export const CharacterImgs = styled.img<CharacterImageProps>`
       return "width: 742px; ";
     }
   }};
+  }
+`;
+
+export interface CharacterImageMobileProps {
+  zIndex?: number;
+  src?: string;
+}
+
+export const CharacterImgsMobile = styled.img<CharacterImageMobileProps>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;  
 `;

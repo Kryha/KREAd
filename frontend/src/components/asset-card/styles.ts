@@ -123,9 +123,6 @@ export const AssetTitleText = styled.h3`
   font-weight: ${fontWeight.medium};
   font-size: 16px;
   line-height: 20px;
-  :first-letter {
-    text-transform: capitalize;
-  }
   @media (max-width: ${breakpoints.mobile}) {
     overflow: hidden;
     white-space: nowrap;

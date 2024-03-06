@@ -14,6 +14,7 @@ import {
   CharacterCardsWrapper,
   CharacterInfo,
   CharacterInfoCharacter,
+  CharacterName,
 } from "./styles";
 import { useMyCharacters, useSelectedCharacter } from "../../../service";
 import { useUserStateDispatch } from "../../../context/user";
@@ -70,8 +71,6 @@ export const CharacterCards: FC = () => {
   );
 };
 
-// TODO: Add the conditions for swapping items if the item is equipped to the character
-
 interface CharacterInfo {
   character: ExtendedCharacter;
 }
@@ -81,7 +80,7 @@ const CharacterInformation: FC<CharacterInfo> = ({ character }) => {
 
   return (
     <CharacterInfo>
-      <ButtonText customColor={color.black}>{character.nft.name}</ButtonText>
+      <CharacterName customColor={color.black}>{character.nft.name}</CharacterName>
       <CharacterInfoCharacter>Title: {character.nft.title}</CharacterInfoCharacter>
       <CharacterInfoCharacter>Origin: {character.nft.origin}</CharacterInfoCharacter>
       <AssetTag>

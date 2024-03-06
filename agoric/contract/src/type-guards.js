@@ -176,7 +176,6 @@ export const MarketRecorderGuard = M.or(
     }),
     asset: M.or(CharacterGuard, ItemGuard),
     isFirstSale: M.boolean(),
-    // history: M.arrayOf(HistoryGuard),
   }),
   M.string(''),
 );
@@ -184,7 +183,7 @@ export const MarketRecorderGuard = M.or(
 export const MarketEntryGuard = M.splitRecord({
   id: M.or(M.gte(0), M.string()),
   seat: M.eref(M.remotable('Seat')),
-  recorderKit: M.record(), // TODO: figure out how to type recorderkits
+  recorderKit: M.record(),
   askingPrice: M.splitRecord({
     brand: BrandShape,
     value: M.nat(),
@@ -199,7 +198,6 @@ export const MarketEntryGuard = M.splitRecord({
   }),
   asset: M.or(CharacterGuard, ItemGuard),
   isFirstSale: M.boolean(),
-  // history: M.arrayOf(HistoryGuard),
 });
 
 export const MarketI = M.interface('market', {
@@ -230,14 +228,14 @@ export const CharacterEntryGuard = M.splitRecord({
   name: M.string(),
   character: CharacterGuard,
   inventory: M.eref(M.remotable('Seat')),
-  inventoryKit: M.record(), // TODO: figure out how to type recorderkits
+  inventoryKit: M.record(),
   history: M.arrayOf(HistoryGuard),
 });
 
 export const CharacterRecorderGuard = M.splitRecord({
   name: M.string(),
   character: CharacterGuard,
-  inventoryKit: M.record(), // TODO: figure out how to type recorderkits
+  inventoryKit: M.record(),
   history: M.arrayOf(HistoryGuard),
 });
 

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
-import { color } from "../../design";
+import { breakpoints, color } from "../../design";
 import { ButtonText } from "../atoms";
 
 interface FooterProps {
@@ -17,6 +17,11 @@ export const FooterWrapper = styled.div<FooterProps>`
   width: 100%;
   z-index: 1000;
   border-radius: 100px;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    margin-left: 0px;
+    justify-content: center;
+  }
 `;
 
 export const FooterContainer = styled.div`

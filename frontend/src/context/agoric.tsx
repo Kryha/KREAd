@@ -5,7 +5,7 @@ import { AgoricKeplrConnectionErrors as Errors, makeAgoricWalletConnection } fro
 import { makeAsyncIterableFromNotifier as iterateNotifier } from "@agoric/notifier";
 import { CHARACTER_IDENTIFIER, IST_IDENTIFIER, ITEM_IDENTIFIER, KREAD_IDENTIFIER, NO_SMART_WALLET_ERROR } from "../constants";
 import { fetchChainInfo } from "./util";
-import { AgoricChainStoragePathKind as Kind, ChainStorageWatcher, makeAgoricChainStorageWatcher } from "@agoric/rpc";
+import { type ChainStorageWatcher, AgoricChainStoragePathKind as Kind, makeAgoricChainStorageWatcher } from "@agoric/rpc";
 import { useNetworkConfig } from "../hooks/useNetwork";
 
 const initialState: AgoricState = {
@@ -94,11 +94,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
   const { network } = useNetworkConfig();
   useEffect(() => {
     if (isCancelled) return;
-    // TODO: consider implementing terms agreement
-    // if (checkTerms && !areLatestTermsAgreed) {
-    //   setIsTermsDialogOpen(true);
-    //   return;
-    // }
 
     let chainStorageWatcher: ChainStorageWatcher;
     let connection: any;
@@ -141,7 +136,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchInstance = async () => {
-      // TODO: consider typing the result
       const instances: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.instance"]);
       const instance = instances.filter((instance: string[]) => instance[0] === KREAD_IDENTIFIER);
 
@@ -149,7 +143,6 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     };
 
     const fetchTokenInfo = async () => {
-      // TODO: consider typing the result
       const agoricNameBrands: any[] = await chainStorageWatcher.queryOnce([Kind.Data, "published.agoricNames.brand"]);
       const payload: TokenInfo = {
         character: {
@@ -196,13 +189,12 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
         if (e.message === NO_SMART_WALLET_ERROR) {
           dispatch({ type: "UPDATE_STATUS", payload: { walletProvisioned: false }});
         } else {
-          console.error('Error in wallet backend', e);
+          console.error("Error in wallet backend", e);
         }
         return;
       };
 
       try {
-
         const { rpc, chainName } = await fetchChainInfo(network);
         chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, backendError);
         dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
@@ -224,7 +216,7 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
     return () => {
       setIsCancelled(true);
     };
-  }, [network, isCancelled, state.chainStorageWatcher]);
+  }, [network, isCancelled, state.chainStorageWatcher, state.status.walletProvisioned]);
 
   return (
     <Context.Provider value={state}>

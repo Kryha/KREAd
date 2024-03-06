@@ -34,7 +34,7 @@ export const general = {
   aCharcterBuilderApp:
     "KREAd is a character builder dApp, where all the characters and their items are dynamic NFTs. You have the freedom to build your character and the ownership of all the equipment attached to it. So feel free to sell them, trade them, or even burn them!",
   sagesBy: "SAGES by KREAd",
-  sagesIsTheFirst: "SAGES is the first collection\nlaunched on the KREAd dApp.\nStart collecting SAGES NFTs to\nshape your own saga.",
+  sagesIsTheFirst: "SAGES is the first collection launched on the KREAd dApp.\nStart collecting SAGES NFTs to\nshape your own saga.",
   explore: "explore",
   connectWallet: "connect Keplr Wallet",
   activateWallet: "activate Wallet",
@@ -42,7 +42,7 @@ export const general = {
   ourLeadership: "Our leadership includes some of\nthe most inventive and\nexperienced executives in the technology industry.",
   isPartOfAgoric: "KREAd is a decentralized application deployed on ",
   anOpenSource:
-    ", an open-source development company launching an interoperable Proof-\nof-Stake chain and economy. The dApp is imagined, built, and\ndesigned by ",
+    ", an open-source development company launching an interoperable Proof-of-Stake chain and economy. The dApp is imagined, built, and designed by ",
   agoric: "Agoric",
   theSagesArt: "The SAGES art and comic is\ncreated by Enmanuel Heredia.",
   kryha: "Kryha",

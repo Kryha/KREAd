@@ -5,6 +5,8 @@ import { ErrorView } from "../../components";
 import { useMyCharacter, useSellCharacter } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
+import { MakeOfferCallback } from "../../interfaces";
+import { useUserStateDispatch } from "../../context/user";
 
 export const CharacterSell = () => {
   const { id } = useParams<"id">();
@@ -13,13 +15,20 @@ export const CharacterSell = () => {
   const sellCharacter = useSellCharacter(Number(idString));
   const [character] = useMyCharacter(Number(idString));
   const [characterCopy] = useState(character);
+  const userDispatch = useUserStateDispatch();
 
   const [isPlacedInShop, setIsPlacedInShop] = useState(false);
   const [data, setData] = useState<SellData>({ price: 0 });
 
+  const handleResult: MakeOfferCallback = {
+    seated: () => {
+      setIsPlacedInShop(true);
+      userDispatch({ type: "SET_SELECTED", payload: "" });
+    },
+  };
+
   const sendOfferHandler = async (data: SellData) => {
-    if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellCharacter.callback(data.price, () => setIsPlacedInShop(true));
+    await sellCharacter.sendOffer(data.price, handleResult);
   };
 
   const characterName = useMemo(() => character?.nft.name, [character]);

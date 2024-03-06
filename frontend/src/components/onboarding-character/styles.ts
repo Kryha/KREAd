@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import { margins } from "../../design";
+import { breakpoints, margins } from "../../design";
 import { CharacterImgs, SecondaryButton, sequentialFadeIn, zoomClothing, zoomIn } from "../atoms";
 import { zIndex as zIndexProps } from "../../design/spacing";
 import { EXTRA_LARGE_SCREEN_SIZE, LARGE_SCREEN_SIZE, MEDIUM_SCREEN_SIZE, SMALL_SCREEN_SIZE } from "../../constants";
@@ -153,6 +153,11 @@ export const CharacterContainer = styled.div<ImageProps>`
           animation: ${zoomClothing} 5s ease-out 1 forwards;
         `
       : css``};
+
+  @media (max-width: ${breakpoints.tablet}) {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const CharacterSwitchIcon = styled(CharacterImgs)`

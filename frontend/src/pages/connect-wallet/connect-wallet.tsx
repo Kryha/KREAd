@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { KeplerIcon, text } from "../../assets";
 import { breakpoints, color } from "../../design";
@@ -44,6 +44,10 @@ export const ConnectWallet: FC = () => {
   const [showWidget, setShowWidget] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
+  useEffect(()=>{
+    if (service.status.walletProvisioned) navigate(routes.character);
+  },[service.status.walletProvisioned, navigate]);
+
   const toggleWidget = () => {
     setShowWidget(!showWidget);
   };
@@ -60,7 +64,6 @@ export const ConnectWallet: FC = () => {
   };
 
   if (!service.walletConnection.address) return <LoadingPage spinner={false} />;
-  if (service.status.walletProvisioned) navigate(routes.character);
 
   return (
     <>

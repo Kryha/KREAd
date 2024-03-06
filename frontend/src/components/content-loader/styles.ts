@@ -65,6 +65,33 @@ export const LoadingPageContainer = styled.div<SpinnerProps>`
       `;
   }};
 `;
+
+export const LoadingPageContainerMobile = styled.div<SpinnerProps>`
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30vw;
+  ${({ isSpinner }): string => {
+    return isSpinner
+      ? `
+      width: fit-content;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 46vh 46vw;
+      `
+      : `
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      `;
+  }};
+`;
+
 interface AnimationProps {
   iteration?: number;
 }

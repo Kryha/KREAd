@@ -87,6 +87,10 @@ clean:
 # 5. make provision-fee-collector
 # 6. start the KREAd contract using 'KREAD_COMMITTEE_NAME='kread' KREAD_COMMITTEE_ADDRESSES='{"voter": "agoric1ersatz"}' make start-kread'
 kread-committee: dist/kread-committee-info.json
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-acct ACCT_ADDR=$$(head t1/8000/ag-cosmos-helper-address) FUNDS=1000000000000uist; \
+	make fund-acct ACCT_ADDR=$$(head t1/8000/ag-cosmos-helper-address) FUNDS=1000000000000ubld; \
+	cd $(AG_DIR); \
 	jq -r '.bundles[]' dist/kread-committee-info.json | sort -u > kread-committee-bundles.out
 	for b in `cat kread-committee-bundles.out` ; do \
 	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
@@ -98,13 +102,17 @@ kread-committee: dist/kread-committee-info.json
 start-kread: dist/start-kread-info.json
 	jq -r '.bundles[]' dist/start-kread-info.json | sort -u > start-kread-bundles.out
 	for b in `cat start-kread-bundles.out` ; do \
-	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \
+	   node contract/scripts/installBundles.js $(COSMIC_SWINGSET_PATH) $$b ; \
 	done
 	cd $(COSMIC_SWINGSET_PATH); \
 	make scenario2-core-eval EVAL_PERMIT=$(AG_DIR)/dist/start-kread-permit.json \
 	   EVAL_CODE=$(AG_DIR)/dist/start-kread.js EVAL_CLEAN=$(AG_DIR)/dist/start-kread.js.t scenario2-vote VOTE_PROPOSAL=$(NEXT_PROPOSAL) \
 
 kread-committee-no-build:
+	cd $(COSMIC_SWINGSET_PATH); \
+	make fund-acct ACCT_ADDR=$$(head t1/8000/ag-cosmos-helper-address) FUNDS=1000000000000uist; \
+	make fund-acct ACCT_ADDR=$$(head t1/8000/ag-cosmos-helper-address) FUNDS=1000000000000ubld; \
+	cd $(AG_DIR); \
 	jq -r '.bundles[]' dist/kread-committee-info.json | sort -u > kread-committee-bundles.out
 	for b in `cat kread-committee-bundles.out` ; do \
 	   $(AGORIC_CMD) publish --node 127.0.0.1:26657 $$b --chain-id agoriclocal --home $(COSMIC_SWINGSET_PATH)/t1/8000 ; \

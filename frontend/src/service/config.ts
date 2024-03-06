@@ -1,5 +1,3 @@
-//TODO: consider deleting if unneeded
-export const a = "";
 import axios from "axios";
 import { QueryClient } from "react-query";
 

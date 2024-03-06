@@ -5,7 +5,6 @@ import { KreadIcon } from "../../components/logo/styles";
 import { color } from "../../design";
 import { ContentWrapper, FooterContainer, GeneralInfo, InfoContainer, KreadContainer, Title } from "./styles";
 
-// TODO: make content for privacy page
 export const Privacy: FC = () => {
   return (
     <ContentWrapper>
@@ -18,8 +17,6 @@ export const Privacy: FC = () => {
         <GeneralInfo>
           <Title>{text.content.whatInformationDoWe}</Title>
           <FormText customColor={color.darkGrey}>{text.content.weCollectPersonal}</FormText>
-          <Title>{text.content.whatInformationDoWe}</Title>
-          <FormText customColor={color.darkGrey}>{text.content.weUseTheInformation}</FormText>
         </GeneralInfo>
       </InfoContainer>
       <FooterContainer>

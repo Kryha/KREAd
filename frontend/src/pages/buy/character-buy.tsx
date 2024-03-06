@@ -24,15 +24,13 @@ export const CharacterBuy = () => {
   }, [characterInMarket]);
 
   useEffect(() => {
-    // TODO: handle declining character and error
     if (boughtCharacter) setIsAwaitingApproval(false);
   }, [boughtCharacter]);
 
-  // TODO: handle offer denied and error
   const handleSubmit = async () => {
     if (!id) return;
     setIsAwaitingApproval(true);
-    await buyCharacter.callback();
+    await buyCharacter.sendOffer({});
   };
 
   if (isLoadingCharacter) return <LoadingPage spinner={false} />;
@@ -58,19 +56,3 @@ export const CharacterBuy = () => {
     />
   );
 };
-
-//TODO: Might add this back as a more info
-// <FadeInOut show>
-//   <CharacterDetailSection character={{ nft: data.character, equippedItems: data.equippedItems }} showToast={displayToast} />
-// </FadeInOut>
-// <FadeInOut show={showToast} exiting={!showToast}>
-//   {showToast && <Overlay isOnTop={true} />}
-//   <NotificationWrapper showNotification={showToast}>
-//     <NotificationDetail
-//       title={text.general.goToYourWallet}
-//       info={text.general.yourActionIsPending}
-//       closeToast={() => setShowToast(false)}
-//       isError
-//     />
-//   </NotificationWrapper>
-// </FadeInOut>

@@ -16,14 +16,11 @@ interface RowProps {
   event: ActivityEvent;
 }
 
-// TODO: implement to and from if/when possible
 const Header: FC = () => {
   return (
     <>
       <Cell>{text.item.event}</Cell>
       <Cell>{text.item.price}</Cell>
-      {/* <Cell>{text.item.from}</Cell>
-      <Cell>{text.item.to}</Cell> */}
       <Cell>{text.item.date}</Cell>
     </>
   );
@@ -38,8 +35,6 @@ const Row: FC<RowProps> = ({ event }) => {
       <Cell>
         <BoldLabel customColor={color.black}>{!!event.price && text.param.istPrice && event.price}</BoldLabel>
       </Cell>
-      {/* <Cell>{event.from}</Cell>
-      <Cell>{event.to}</Cell> */}
       <Cell>{getDatefromEpoch(Number(event.date))}</Cell>
     </>
   );

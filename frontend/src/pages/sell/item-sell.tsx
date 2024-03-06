@@ -5,7 +5,7 @@ import { ErrorView } from "../../components";
 import { useSellItem } from "../../service";
 import { Sell } from "./sell";
 import { SellData } from "./types";
-import { Category, isItemCategory } from "../../interfaces";
+import { Category, MakeOfferCallback, isItemCategory } from "../../interfaces";
 
 export const ItemSell = () => {
   const { name, category } = useParams<"category" | "name">();
@@ -13,9 +13,13 @@ export const ItemSell = () => {
   const sellItem = useSellItem(name, category as Category);
   const [data, setData] = useState<SellData>({ price: 0 });
 
+  const handleResult: MakeOfferCallback = {
+    settled:  () => setIsPlacedInShop(true),
+  };
+
   const sendOfferHandler = async (data: SellData) => {
     if (data.price < 1) return; // We don't want to sell for free in case someone managed to fool the frontend
-    await sellItem.callback(data.price, () => setIsPlacedInShop(true) );
+    await sellItem.sendOffer(data.price, handleResult);
   };
 
   if (!data || !isItemCategory(category)) return <ErrorView />;

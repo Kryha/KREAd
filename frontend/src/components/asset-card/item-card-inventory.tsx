@@ -41,13 +41,13 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
   const equipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(true);
-    equipItem.mutate({ item });
+    equipItem.mutate({ item, callback: {} });
   };
 
   const unequipAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setShowToast(true);
-    unequipItem.mutate({ item });
+    unequipItem.mutate({ item, callback: {} });
   };
 
   const sellAsset = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -80,7 +80,7 @@ export const ItemCardInventory: FC<Props> = ({ item, selectItem }) => {
                   <Equipped>
                     <EquippedIcon />
                   </Equipped>
-                  <BoldLabel>{item.equippedTo}</BoldLabel>
+                  <BoldLabel preserveCase>{item.equippedTo}</BoldLabel>
                 </AssetSubTitle>
               )}
             </AssetSubTitle>
