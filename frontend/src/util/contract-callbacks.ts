@@ -20,11 +20,11 @@ export const formOfferResultCallback =
           break;
         }
         case OFFER_STATUS.seated: {
-          console.log("Offer seated");
+          console.info("Offer seated", JSON.stringify(data));
           if(callback.seated) callback.seated();
           break;
         }
       }
       if (callback.setIsLoading) callback.setIsLoading(false);
-      if(callback.settled) callback.settled();
+      if (callback.settled) callback.settled();
     };

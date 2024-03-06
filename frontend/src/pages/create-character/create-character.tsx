@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import { ElephiaCitizen, text } from "../../assets";
 import { ErrorView, FadeInOut, FormHeader, LoadingPage, NotificationDetail, Overlay } from "../../components";
 import { PageContainer } from "../../components/page-container";
-import { MINTING_COST, MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
+import { MINTING_COST, MINT_CALL_TIMEOUT, MINT_CHARACTER_FLOW_STEPS, WALLET_INTERACTION_STEP } from "../../constants";
 import { useIsMobile, useViewport } from "../../hooks";
 import { Character, CharacterCreation, MakeOfferCallback } from "../../interfaces";
 import { routes } from "../../navigation";
@@ -15,14 +15,16 @@ import { breakpoints } from "../../design";
 import { useUserState } from "../../context/user";
 import { useWalletState } from "../../context/wallet";
 import { NotificationWrapper } from "../../components/notification-detail/styles";
+import { useNavigate } from "react-router-dom";
 
 export const CreateCharacter: FC = () => {
+  const navigate = useNavigate();
   const createCharacter = useCreateCharacter();
   const { width, height } = useViewport();
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [mintedCharacter, setMintedCharacter] = useState<Character>();
-  const [error, setError] = useState<string>();
   const [showToast, setShowToast] = useState(false);
+  const [error, setError] = useState<string>(text.error.mint.general);
   const [characterData, setCharacterData] = useState<{ name: string }>({
     name: "",
   });
@@ -30,9 +32,10 @@ export const CreateCharacter: FC = () => {
   const isLoadingCharacters = !fetched;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOfferAccepted, setIsOfferAccepted] = useState<boolean>(false);
+  const [timeoutHandler, setTimeoutHandler] = useState<NodeJS.Timeout>();
   const mobile = useIsMobile(breakpoints.desktop);
   const { ist } = useWalletState();
-
+  
   const notEnoughIST = useMemo(() => {
     if (ist < MINTING_COST || !ist) {
       return true;
@@ -43,34 +46,46 @@ export const CreateCharacter: FC = () => {
   useEffect(() => {
     if (characters.map((c: any) => c.nft.name).includes(characterData.name)) {
       setIsOfferAccepted(true);
+      clearTimeout(timeoutHandler);
       const [newCharacter] = characters.filter((c: any) => c.nft.name === characterData.name);
       setMintedCharacter(newCharacter.nft);
       setIsLoading(false);
     }
-  }, [characters, characterData, notEnoughIST]);
+  }, [characters, characterData, notEnoughIST, timeoutHandler]);
 
   const changeStep = async (step: number): Promise<void> => {
     setCurrentStep(step);
   };
 
   const errorCallback = (error: string) => {
-    setError(error);
+    console.error(error);
     setShowToast(true);
   };
 
   const handleResult: MakeOfferCallback = {
     error: errorCallback,
     accepted: () => {
-      console.info("MintCharacter call settled");
+      clearTimeout(timeoutHandler);
+    },
+    seated: () => {
+      const mintTimeout = setTimeout(() => {
+        setError(text.error.mint.callStuck);
+        setShowToast(true);
+      }, MINT_CALL_TIMEOUT);
+      setTimeoutHandler(mintTimeout);
     }
   };
   
   const sendOfferHandler = async (): Promise<void> => {
     setIsLoading(true);
-    await createCharacter.mutateAsync({
-      name: characterData.name,
-      callback: handleResult,
-    });
+    try {
+      await createCharacter.mutateAsync({
+        name: characterData.name,
+        callback: handleResult,
+      });
+    } catch(e) {
+      setShowToast(true);
+    }
   };
 
   const setData = async (data: CharacterCreation): Promise<void> => {
@@ -113,8 +128,11 @@ export const CreateCharacter: FC = () => {
         <NotificationWrapper showNotification={showToast}>
           <NotificationDetail
             title={text.error.mint.title}
-            info={text.error.mint.invalidName}
-            closeToast={() => setShowToast(false)}
+            info={error}
+            closeToast={() => {
+              setShowToast(false);
+              navigate(routes.character);
+            }}
             isError
           />
         </NotificationWrapper>

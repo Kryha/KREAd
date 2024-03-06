@@ -11,10 +11,12 @@ export const error = {
   goHome: "go home",
   downloadFailed: "an error occurred while downloading the character",
   mint: {
+    general: "An error occurred while minting the character, please try again later",
     invalidName: "Name is already taken",
     nameTaken: "Name taken",
     title: "Mint failed",
     insufficientFunds: (ist: bigint) => `Insufficient funds (current balance: ${uISTToIST(Number(ist))} IST)`,
+    callStuck: "The call seems to be taking too long, please try again later",
   },
   youHaveNotEquipped: "Oops..you have not equipped your item!",
   categoryAlreadyEquipped: {
