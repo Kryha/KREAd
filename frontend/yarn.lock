@@ -9190,11 +9190,6 @@ semver@^7.3.5, semver@^7.3.7, semver@^7.5.3, semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
-ses@^0.16:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/ses/-/ses-0.16.1.tgz#b447aa8a6f7f5826e2ba8ff66a566f1e1a74cca6"
-  integrity sha512-yLgBL+IC7cfMz7DWlTAbZaZUVavO3U14G8gqKPE0jqQgxkvN1KDx3c1UW9q/YgU3UpxuhxnjUMOfyAfEF9pNxA==
-
 ses@^0.18.4, ses@^0.18.5, ses@^0.18.8:
   version "0.18.8"
   resolved "https://registry.yarnpkg.com/ses/-/ses-0.18.8.tgz#88036511ac3b3c07e4d82dd8cfc6e5f3788205b6"

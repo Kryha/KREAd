@@ -29,7 +29,7 @@
     "react-query": "^3.39.0",
     "react-router-dom": "^6.3.0",
     "react-vis": "^1.12.1",
-    "ses": "^0.16",
+    "ses": "^1.3.0",
     "three": "^0.144.0",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4",
