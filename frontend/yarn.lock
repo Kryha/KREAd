@@ -84,7 +84,7 @@
     "@endo/promise-kit" "^0.2.56"
     node-fetch "^2.6.0"
 
-"@agoric/casting@^0.4.3-u12.0", "@agoric/casting@^0.4.3-u14.0":
+"@agoric/casting@^0.4.3-u12.0", "@agoric/casting@^0.4.3-u13.0", "@agoric/casting@^0.4.3-u14.0":
   version "0.4.3-u14.0"
   resolved "https://registry.yarnpkg.com/@agoric/casting/-/casting-0.4.3-u14.0.tgz#77206ca6aad3f62acbdc48ab913f65ec3b30e70a"
   integrity sha512-LzbtDYIBowClaib/rwjoMZQXa0s2V9MSOC/fa7XDjVRva2CXcUoYGNJn5DoyfIcWq/D8KFMKRRl0r8CBO45b2g==
@@ -344,12 +344,14 @@
     "@endo/marshal" "0.8.5"
     "@endo/promise-kit" "0.2.56"
 
-"@agoric/rpc@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@agoric/rpc/-/rpc-0.6.0.tgz#67a7a67a7053640fc942edf25834db53b8eeb5dd"
-  integrity sha512-gachE+oO5Iz9q8my9PWmiO1u38Lfsk/327OwuE/W8+4MoWcggtKXofQHLPoXRAE7ZYE6lz/ExW+fNm9TOBpoUA==
+"@agoric/rpc@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@agoric/rpc/-/rpc-0.9.0.tgz#bf43046fa855b666089797315af1085cb84d44a6"
+  integrity sha512-mJ7akVnEC/Gu0Gc/X0+NrVZ3/SC5QawcrWjyTkIBGZ+2geEmyPQ9euAEJ3Luq3cmcqi2XxF2NEHzU/0VU0SKng==
   dependencies:
-    "@endo/marshal" "^0.8.8"
+    "@endo/marshal" "^0.8.9"
+    axios "^1.6.2"
+    axios-retry "^4.0.0"
     vite "^4.3.2"
     vite-tsconfig-paths "^4.2.0"
 
@@ -841,14 +843,14 @@
     eslint-plugin-eslint-comments "^3.1.2"
     import-meta-resolve "^2.2.1"
 
-"@agoric/web-components@0.12.1-dev-7c365a1.0":
-  version "0.12.1-dev-7c365a1.0"
-  resolved "https://registry.yarnpkg.com/@agoric/web-components/-/web-components-0.12.1-dev-7c365a1.0.tgz#39538b83110faeeb48c87c58b8416ee309962fce"
-  integrity sha512-cCvdKFWX1D7abbnoSP10FJmM+Lg5A7m1G1ZIJMm6lxZZPtHkl3tS1tPWE/j68xomNHe/rid6iLP9eAfINIENdQ==
+"@agoric/web-components@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@agoric/web-components/-/web-components-0.15.0.tgz#477317ccf9e0c967ff394add7efaca63546026ce"
+  integrity sha512-G1hl0NSgOuXE+9+SsyUpCHubhFJsrmFO7zo832EeJDUcO5d/V4M0YyrtIwFHKR2bH+IUl7JouasDO4fYEE8WYA==
   dependencies:
     "@agoric/assert" "^0.6.0"
     "@agoric/cache" "^0.3.2"
-    "@agoric/casting" "^0.4.2"
+    "@agoric/casting" "^0.4.3-u13.0"
     "@agoric/ertp" "^0.16.2"
     "@agoric/notifier" "^0.6.3-dev-8c14632.0"
     "@agoric/smart-wallet" "^0.5.3"
@@ -2816,7 +2818,7 @@
     "@endo/nat" "^4.1.14"
     "@endo/promise-kit" "^0.2.43"
 
-"@endo/marshal@^0.8.2", "@endo/marshal@^0.8.5", "@endo/marshal@^0.8.8", "@endo/marshal@^0.8.9":
+"@endo/marshal@^0.8.2", "@endo/marshal@^0.8.5", "@endo/marshal@^0.8.9":
   version "0.8.9"
   resolved "https://registry.yarnpkg.com/@endo/marshal/-/marshal-0.8.9.tgz#f6fcaf23ecad828f6d086657f1d1590ea8ef3840"
   integrity sha512-wzYlY5/JFzY/wAVxZ6h0BxlRaAS/9KKnhircKO/tGw5bZYHFvLeSeMCBZ4VCSZg5aNgDlhuvB0S6iCwS5MYqcg==
@@ -4521,6 +4523,13 @@ axe-core@^4.6.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.8.2.tgz#2f6f3cde40935825cf4465e3c1c9e77b240ff6ae"
   integrity sha512-/dlp0fxyM3R8YW7MFzaHWXrf4zzbr0vaYb23VBFCl83R7nWNPg/yaQw2Dc8jzCMmDVLhSdzH8MjrsuIUuvX+6g==
 
+axios-retry@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/axios-retry/-/axios-retry-4.1.0.tgz#aac5a9657213913048201152ef14090f7111608f"
+  integrity sha512-svdth4H00yhlsjBbjfLQ/sMLkXqeLxhiFC1nE1JtkN/CIssGxqk0UwTEdrVjwA2gr3yJkAulwvDSIm4z4HyPvg==
+  dependencies:
+    is-retry-allowed "^2.2.0"
+
 axios@0.21.4, axios@^0.21.2:
   version "0.21.4"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
@@ -4534,6 +4543,15 @@ axios@^1.6.0:
   integrity sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==
   dependencies:
     follow-redirects "^1.15.4"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
+axios@^1.6.2:
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
+  integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
+  dependencies:
+    follow-redirects "^1.15.6"
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
@@ -6450,6 +6468,11 @@ follow-redirects@^1.15.4:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
   integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
 
+follow-redirects@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
+  integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
+
 for-each@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/for-each/-/for-each-0.3.3.tgz#69b447e88a0a5d32c3e7084f3f1710034b21376e"
@@ -7082,6 +7105,11 @@ is-regex@^1.1.4:
   dependencies:
     call-bind "^1.0.2"
     has-tostringtag "^1.0.0"
+
+is-retry-allowed@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-2.2.0.tgz#88f34cbd236e043e71b6932d09b0c65fb7b4d71d"
+  integrity sha512-XVm7LOeLpTW4jV19QSH38vkswxoLud8sQ57YwJVTPWdiaI9I8keEhGFpBlslyVsgdQy4Opg8QOLb8YRgsyZiQg==
 
 is-set@^2.0.1:
   version "2.0.2"
