@@ -100,7 +100,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
 
     const connectAgoric = async () => {
       try {
-        connection = await makeAgoricWalletConnection(chainStorageWatcher);
+        const { rpc } = await fetchChainInfo(network);
+        connection = await makeAgoricWalletConnection(chainStorageWatcher, rpc);
         connection = { ...connection };
         dispatch({ type: "SET_WALLET_CONNECTION", payload: connection });
         await updateSmartWalletStatus();
@@ -195,8 +196,8 @@ export const AgoricStateProvider = (props: ProviderProps): React.ReactElement =>
       };
 
       try {
-        const { rpc, chainName } = await fetchChainInfo(network);
-        chainStorageWatcher = makeAgoricChainStorageWatcher(rpc, chainName, backendError);
+        const { api, chainName } = await fetchChainInfo(network);
+        chainStorageWatcher = makeAgoricChainStorageWatcher(api, chainName, backendError);
         dispatch({ type: "SET_CHAIN_STORAGE_WATCHER", payload: chainStorageWatcher });
         dispatch({ type: "UPDATE_STATUS", payload: { walletProvisioned: true }});
         connectAgoric();
