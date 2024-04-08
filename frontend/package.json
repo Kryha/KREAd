@@ -2,11 +2,11 @@
   "name": "@builder/frontend",
   "version": "0.1.0",
   "dependencies": {
-    "@agoric/rpc": "^0.6.0",
+    "@agoric/rpc": "^0.9.0",
     "@agoric/smart-wallet": "^0.5.4-u12.0",
     "@agoric/store": "^0.9.3-u12.0",
     "@agoric/wallet-connection": "^0.1.18-u12.0",
-    "@agoric/web-components": "0.12.1-dev-7c365a1.0",
+    "@agoric/web-components": "^0.15.0",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@testing-library/jest-dom": "^5.16.1",

@@ -31,10 +31,7 @@ export const watchItemMarketMetrics = async (chainStorageWatcher: any, parseItem
         return;
       }
       await parseItemMarketMetricsUpdate(value);
-    },
-    (log: any) => {
-      console.error("Error watching kread char market", log);
-    },
+    }
   );
 };
 
@@ -49,10 +46,7 @@ export const watchCharacterMarketMetrics = async (chainStorageWatcher: any, pars
         return;
       }
       await parseCharacterMarketMetricsUpdate(value);
-    },
-    (log: any) => {
-      console.error("Error watching kread char market", log);
-    },
+    }
   );
 };
 
@@ -68,10 +62,7 @@ export const watchCharacterMarketPaths = (chainStorageWatcher: any, addMarketCha
         return;
       }
       await addMarketCharacterPaths(value);
-    },
-    (log: any) => {
-      console.error("Error watching kread char market", log);
-    },
+    }
   );
 };
 
@@ -87,9 +78,6 @@ export const watchItemMarketPaths = (chainStorageWatcher: any, addMarketItemPath
         return;
       }
       await addMarketItemPaths(value);
-    },
-    (log: any) => {
-      console.error("Error watching kread item market", log);
-    },
+    }
   );
 };

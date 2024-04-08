@@ -10,7 +10,6 @@ export const createWatcher = (
   chainStorageWatcher: any,
   path: string,
   onValueUpdate: WatcherCallback,
-  onError: ErrorHandler
 ) => {
   assert(chainStorageWatcher, "chainStorageWatcher not initialized");
 
@@ -23,8 +22,7 @@ export const createWatcher = (
         return;
       }
       onValueUpdate(value);
-    },
-    onError
+    }
   );
 };
 
@@ -68,9 +66,6 @@ export const watchBrandsVBank = (chainStorageWatcher: any, agoricDispatch: Agori
         }
       }
       agoricDispatch({ type: "SET_TOKEN_INFO", payload });
-    },
-    (log: any) => {
-      console.error("Error watching vbank assets", log);
     }
   );
 };
@@ -90,10 +85,7 @@ export const watchWalletVstorage = (
     (value) => {
       updateStateOffers(value.liveOffers);
       updateStatePurses(value.purses);
-    },
-    (log: any) => {
-      console.error("Error watching vbank assets", log);
-    },
+    }
   );
 };
 
@@ -110,10 +102,7 @@ chainStorageWatcher.watchLatest(
     }
     const instance = value.filter((i: any) => i[0] === "kread");
     agoricDispatch({ type: "SET_KREAD_INSTANCE", payload: instance[0][1] });
-  },
-  (log: any) => {
-    console.error("Error watching vbank assets", log);
-  },)
+  })
 };
 
 export const watchExistingCharacterPaths = (
@@ -137,9 +126,6 @@ export const watchExistingCharacterPaths = (
         ...prevState,
         characterNameList,
       }));
-    },
-    (log: any) => {
-      console.error("Error watching kread char market", log);
-    },
+    }
   );
 };
